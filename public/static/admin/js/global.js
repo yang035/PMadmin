@@ -20,7 +20,7 @@ layui.define(['element', 'form', 'table'], function(exports) {
             if (pwd == '') {
                 return false;
             }
-            $.post(ADMIN_PATH+'/admin/publics/unlocked', {password:pwd}, function(res) {
+            $.post('/admin/publics/unlocked', {password:pwd}, function(res) {
                 if (res.code == 1) {
                     window.sessionStorage.setItem("lockscreen", false);
                     layer.closeAll();
