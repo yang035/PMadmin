@@ -38,7 +38,7 @@
                     <div class="icon rate-icon  "> <img src="__ADMIN_JS__/home/images/{$vo.img}" alt="Borrow - Loan Company Website Template" class="icon-svg-1x"></div>
                     <div class="rate-box">
                         <h1 class="loan-rate">{$vo.title}</h1>
-                        <small class="rate-title">1000人</small>
+<!--                        <small class="rate-title">1000人</small>-->
                     </div>
                 </div>
                 </a>
@@ -100,204 +100,204 @@
         </div>
     </div>
 </div>
-<div class="section-space80">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-offset-2 col-md-8 col-xs-12">
-                <div class="mb100 text-center section-title">
+<!--<div class="section-space80">-->
+<!--    <div class="container">-->
+<!--        <div class="row">-->
+<!--            <div class="col-md-offset-2 col-md-8 col-xs-12">-->
+<!--                <div class="mb100 text-center section-title">-->
                     <!-- section title start-->
-                    <h1>生活区介绍</h1>
-                    <p>生活区介绍生活区介绍生活区介绍生活区介绍生活区介绍</p>
-                </div>
+<!--                    <h1>生活区介绍</h1>-->
+<!--                    <p>生活区介绍生活区介绍生活区介绍生活区介绍生活区介绍</p>-->
+<!--                </div>-->
                 <!-- /.section title start-->
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4 col-sm-4 col-xs-12">
-                <div class="bg-white pinside40 number-block outline mb60 bg-boxshadow">
-                    <div class="circle"><span class="number">1</span></div>
-                    <h3 class="number-title">生活区</h3>
-                    <p>生活区生活区生活区生活区生活区生活区</p>
-                </div>
-            </div>
-            <div class="col-md-4 col-sm-4 col-xs-12">
-                <div class="bg-white pinside40 number-block outline mb60 bg-boxshadow">
-                    <div class="circle"><span class="number">2</span></div>
-                    <h3 class="number-title">生活区</h3>
-                    <p>生活区生活区生活区生活区生活区生活区.</p>
-                </div>
-            </div>
-            <div class="col-md-4 col-sm-4 col-xs-12">
-                <div class="bg-white pinside40 number-block outline mb60 bg-boxshadow">
-                    <div class="circle"><span class="number">3</span></div>
-                    <h3 class="number-title">生活区</h3>
-                    <p>生活区生活区生活区生活区生活区生活区.</p>
-                </div>
-            </div>
-            <div class="col-md-4 col-sm-4 col-xs-12">
-                <div class="bg-white pinside40 number-block outline mb60 bg-boxshadow">
-                    <div class="circle"><span class="number">4</span></div>
-                    <h3 class="number-title">生活区</h3>
-                    <p>生活区生活区生活区生活区生活区生活区</p>
-                </div>
-            </div>
-            <div class="col-md-4 col-sm-4 col-xs-12">
-                <div class="bg-white pinside40 number-block outline mb60 bg-boxshadow">
-                    <div class="circle"><span class="number">5</span></div>
-                    <h3 class="number-title">生活区</h3>
-                    <p>生活区生活区生活区生活区生活区生活区.</p>
-                </div>
-            </div>
-            <div class="col-md-4 col-sm-4 col-xs-12">
-                <div class="bg-white pinside40 number-block outline mb60 bg-boxshadow">
-                    <div class="circle"><span class="number">6</span></div>
-                    <h3 class="number-title">生活区</h3>
-                    <p>生活区生活区生活区生活区生活区生活区.</p>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-offset-2 col-md-8 col-sm-offset-2 col-sm-8 text-center"> <a href="#" class="btn btn-default">更多</a> </div>
-        </div>
-    </div>
-</div>
-<div class="section-space80">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-offset-2 col-md-8">
-                <div class="mb60 text-center section-title">
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="row">-->
+<!--            <div class="col-md-4 col-sm-4 col-xs-12">-->
+<!--                <div class="bg-white pinside40 number-block outline mb60 bg-boxshadow">-->
+<!--                    <div class="circle"><span class="number">1</span></div>-->
+<!--                    <h3 class="number-title">生活区</h3>-->
+<!--                    <p>生活区生活区生活区生活区生活区生活区</p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-4 col-sm-4 col-xs-12">-->
+<!--                <div class="bg-white pinside40 number-block outline mb60 bg-boxshadow">-->
+<!--                    <div class="circle"><span class="number">2</span></div>-->
+<!--                    <h3 class="number-title">生活区</h3>-->
+<!--                    <p>生活区生活区生活区生活区生活区生活区.</p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-4 col-sm-4 col-xs-12">-->
+<!--                <div class="bg-white pinside40 number-block outline mb60 bg-boxshadow">-->
+<!--                    <div class="circle"><span class="number">3</span></div>-->
+<!--                    <h3 class="number-title">生活区</h3>-->
+<!--                    <p>生活区生活区生活区生活区生活区生活区.</p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-4 col-sm-4 col-xs-12">-->
+<!--                <div class="bg-white pinside40 number-block outline mb60 bg-boxshadow">-->
+<!--                    <div class="circle"><span class="number">4</span></div>-->
+<!--                    <h3 class="number-title">生活区</h3>-->
+<!--                    <p>生活区生活区生活区生活区生活区生活区</p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-4 col-sm-4 col-xs-12">-->
+<!--                <div class="bg-white pinside40 number-block outline mb60 bg-boxshadow">-->
+<!--                    <div class="circle"><span class="number">5</span></div>-->
+<!--                    <h3 class="number-title">生活区</h3>-->
+<!--                    <p>生活区生活区生活区生活区生活区生活区.</p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-4 col-sm-4 col-xs-12">-->
+<!--                <div class="bg-white pinside40 number-block outline mb60 bg-boxshadow">-->
+<!--                    <div class="circle"><span class="number">6</span></div>-->
+<!--                    <h3 class="number-title">生活区</h3>-->
+<!--                    <p>生活区生活区生活区生活区生活区生活区.</p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="row">-->
+<!--            <div class="col-md-offset-2 col-md-8 col-sm-offset-2 col-sm-8 text-center"> <a href="#" class="btn btn-default">更多</a> </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<div class="section-space80">-->
+<!--    <div class="container">-->
+<!--        <div class="row">-->
+<!--            <div class="col-md-offset-2 col-md-8">-->
+<!--                <div class="mb60 text-center section-title">-->
                     <!-- section title start-->
-                    <h1>学习区</h1>
-                    <p>学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区.</p>
-                </div>
+<!--                    <h1>学习区</h1>-->
+<!--                    <p>学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区.</p>-->
+<!--                </div>-->
                 <!-- /.section title start-->
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="bg-white bg-boxshadow">
-                    <div class="row">
-                        <div class="col-md-4 col-sm-6 nopadding col-xs-12">
-                            <div class="bg-white pinside60 number-block outline">
-                                <div class="mb20"><i class="icon-command  icon-4x icon-primary"></i></div>
-                                <h3>学习区</h3>
-                                <p>学习区学习区学习区学习区学习区学习区.</p>
-                                <a href="#" class="btn btn-outline mt20">加入我们</a> </div>
-                        </div>
-                        <div class="col-md-4 col-sm-6 nopadding col-xs-12">
-                            <div class="bg-white pinside60 number-block outline">
-                                <div class="mb20"><i class="icon-cup  icon-4x icon-primary"></i></div>
-                                <h3>学习区</h3>
-                                <p>学习区学习区学习区学习区学习区学习区.</p>
-                                <a href="#" class="btn btn-outline mt20">加入我们</a> </div>
-                        </div>
-                        <div class="col-md-4 col-sm-12 nopadding col-xs-12">
-                            <div class="bg-white pinside60 number-block outline">
-                                <div class="mb20"><i class="icon-calculator  icon-4x icon-primary"></i></div>
-                                <h3>学习区</h3>
-                                <p>学习区学习区学习区学习区学习区学习区.</p>
-                                <a href="#" class="btn btn-outline mt20">加入我们</a> </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="section-space80 bg-default">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-offset-2 col-md-8 col-sm-offset-2 col-sm-8">
-                <div class="mb60 text-center section-title">
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="row">-->
+<!--            <div class="col-md-12 col-sm-12 col-xs-12">-->
+<!--                <div class="bg-white bg-boxshadow">-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-4 col-sm-6 nopadding col-xs-12">-->
+<!--                            <div class="bg-white pinside60 number-block outline">-->
+<!--                                <div class="mb20"><i class="icon-command  icon-4x icon-primary"></i></div>-->
+<!--                                <h3>学习区</h3>-->
+<!--                                <p>学习区学习区学习区学习区学习区学习区.</p>-->
+<!--                                <a href="#" class="btn btn-outline mt20">加入我们</a> </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-md-4 col-sm-6 nopadding col-xs-12">-->
+<!--                            <div class="bg-white pinside60 number-block outline">-->
+<!--                                <div class="mb20"><i class="icon-cup  icon-4x icon-primary"></i></div>-->
+<!--                                <h3>学习区</h3>-->
+<!--                                <p>学习区学习区学习区学习区学习区学习区.</p>-->
+<!--                                <a href="#" class="btn btn-outline mt20">加入我们</a> </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-md-4 col-sm-12 nopadding col-xs-12">-->
+<!--                            <div class="bg-white pinside60 number-block outline">-->
+<!--                                <div class="mb20"><i class="icon-calculator  icon-4x icon-primary"></i></div>-->
+<!--                                <h3>学习区</h3>-->
+<!--                                <p>学习区学习区学习区学习区学习区学习区.</p>-->
+<!--                                <a href="#" class="btn btn-outline mt20">加入我们</a> </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<div class="section-space80 bg-default">-->
+<!--    <div class="container">-->
+<!--        <div class="row">-->
+<!--            <div class="col-md-offset-2 col-md-8 col-sm-offset-2 col-sm-8">-->
+<!--                <div class="mb60 text-center section-title">-->
                     <!-- section title start-->
-                    <h1 class="title-white">专业人才</h1>
-                    <p> 专业人才</p>
-                </div>
+<!--                    <h1 class="title-white">专业人才</h1>-->
+<!--                    <p> 专业人才</p>-->
+<!--                </div>-->
                 <!-- /.section title start-->
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4 col-sm-4 clearfix col-xs-12">
-                <div class="testimonial-block mb30">
-                    <div class="bg-white pinside30 mb5">
-                        <p class="testimonial-text"> “人员简介”</p>
-                    </div>
-                    <div class="testimonial-autor-box mb90">
-                        <div class="testimonial-img pull-left"> <img src="__ADMIN_JS__/home/images/testimonial-img.jpg" alt="Borrow - Loan Company Website Template"> </div>
-                        <div class="testimonial-autor pull-left">
-                            <h4 class="testimonial-name">张三</h4>
-                            <span class="testimonial-meta">职称</span> </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 col-sm-4 clearfix col-xs-12">
-                <div class="testimonial-block mb30">
-                    <div class="bg-white pinside30 mb5">
-                        <p class="testimonial-text"> “人员简介”</p>
-                    </div>
-                    <div class="testimonial-autor-box mb90">
-                        <div class="testimonial-img pull-left"> <img src="__ADMIN_JS__/home/images/testimonial-img.jpg" alt="Borrow - Loan Company Website Template"> </div>
-                        <div class="testimonial-autor pull-left">
-                            <h4 class="testimonial-name">张三</h4>
-                            <span class="testimonial-meta">职称</span> </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 col-sm-4 clearfix col-xs-12">
-                <div class="testimonial-block mb30">
-                    <div class="bg-white pinside30 mb5">
-                        <p class="testimonial-text"> “人员简介”</p>
-                    </div>
-                    <div class="testimonial-autor-box mb90">
-                        <div class="testimonial-img pull-left"> <img src="__ADMIN_JS__/home/images/testimonial-img.jpg" alt="Borrow - Loan Company Website Template"> </div>
-                        <div class="testimonial-autor pull-left">
-                            <h4 class="testimonial-name">张三</h4>
-                            <span class="testimonial-meta">职称</span> </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 col-sm-4 clearfix col-xs-12">
-                <div class="testimonial-block mb30">
-                    <div class="bg-white pinside30 mb5">
-                        <p class="testimonial-text"> “人员简介”</p>
-                    </div>
-                    <div class="testimonial-autor-box mb90">
-                        <div class="testimonial-img pull-left"> <img src="__ADMIN_JS__/home/images/testimonial-img.jpg" alt="Borrow - Loan Company Website Template"> </div>
-                        <div class="testimonial-autor pull-left">
-                            <h4 class="testimonial-name">张三</h4>
-                            <span class="testimonial-meta">职称</span> </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 col-sm-4 clearfix col-xs-12">
-                <div class="testimonial-block mb30">
-                    <div class="bg-white pinside30 mb5">
-                        <p class="testimonial-text"> “人员简介”</p>
-                    </div>
-                    <div class="testimonial-autor-box mb90">
-                        <div class="testimonial-img pull-left"> <img src="__ADMIN_JS__/home/images/testimonial-img.jpg" alt="Borrow - Loan Company Website Template"> </div>
-                        <div class="testimonial-autor pull-left">
-                            <h4 class="testimonial-name">张三</h4>
-                            <span class="testimonial-meta">职称</span> </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 col-sm-4 clearfix col-xs-12">
-                <div class="testimonial-block mb30">
-                    <div class="bg-white pinside30 mb5">
-                        <p class="testimonial-text"> “人员简介”</p>
-                    </div>
-                    <div class="testimonial-autor-box mb90">
-                        <div class="testimonial-img pull-left"> <img src="__ADMIN_JS__/home/images/testimonial-img.jpg" alt="Borrow - Loan Company Website Template"> </div>
-                        <div class="testimonial-autor pull-left">
-                            <h4 class="testimonial-name">张三</h4>
-                            <span class="testimonial-meta">职称</span> </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="row">-->
+<!--            <div class="col-md-4 col-sm-4 clearfix col-xs-12">-->
+<!--                <div class="testimonial-block mb30">-->
+<!--                    <div class="bg-white pinside30 mb5">-->
+<!--                        <p class="testimonial-text"> “人员简介”</p>-->
+<!--                    </div>-->
+<!--                    <div class="testimonial-autor-box mb90">-->
+<!--                        <div class="testimonial-img pull-left"> <img src="__ADMIN_JS__/home/images/testimonial-img.jpg" alt="Borrow - Loan Company Website Template"> </div>-->
+<!--                        <div class="testimonial-autor pull-left">-->
+<!--                            <h4 class="testimonial-name">张三</h4>-->
+<!--                            <span class="testimonial-meta">职称</span> </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-4 col-sm-4 clearfix col-xs-12">-->
+<!--                <div class="testimonial-block mb30">-->
+<!--                    <div class="bg-white pinside30 mb5">-->
+<!--                        <p class="testimonial-text"> “人员简介”</p>-->
+<!--                    </div>-->
+<!--                    <div class="testimonial-autor-box mb90">-->
+<!--                        <div class="testimonial-img pull-left"> <img src="__ADMIN_JS__/home/images/testimonial-img.jpg" alt="Borrow - Loan Company Website Template"> </div>-->
+<!--                        <div class="testimonial-autor pull-left">-->
+<!--                            <h4 class="testimonial-name">张三</h4>-->
+<!--                            <span class="testimonial-meta">职称</span> </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-4 col-sm-4 clearfix col-xs-12">-->
+<!--                <div class="testimonial-block mb30">-->
+<!--                    <div class="bg-white pinside30 mb5">-->
+<!--                        <p class="testimonial-text"> “人员简介”</p>-->
+<!--                    </div>-->
+<!--                    <div class="testimonial-autor-box mb90">-->
+<!--                        <div class="testimonial-img pull-left"> <img src="__ADMIN_JS__/home/images/testimonial-img.jpg" alt="Borrow - Loan Company Website Template"> </div>-->
+<!--                        <div class="testimonial-autor pull-left">-->
+<!--                            <h4 class="testimonial-name">张三</h4>-->
+<!--                            <span class="testimonial-meta">职称</span> </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-4 col-sm-4 clearfix col-xs-12">-->
+<!--                <div class="testimonial-block mb30">-->
+<!--                    <div class="bg-white pinside30 mb5">-->
+<!--                        <p class="testimonial-text"> “人员简介”</p>-->
+<!--                    </div>-->
+<!--                    <div class="testimonial-autor-box mb90">-->
+<!--                        <div class="testimonial-img pull-left"> <img src="__ADMIN_JS__/home/images/testimonial-img.jpg" alt="Borrow - Loan Company Website Template"> </div>-->
+<!--                        <div class="testimonial-autor pull-left">-->
+<!--                            <h4 class="testimonial-name">张三</h4>-->
+<!--                            <span class="testimonial-meta">职称</span> </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-4 col-sm-4 clearfix col-xs-12">-->
+<!--                <div class="testimonial-block mb30">-->
+<!--                    <div class="bg-white pinside30 mb5">-->
+<!--                        <p class="testimonial-text"> “人员简介”</p>-->
+<!--                    </div>-->
+<!--                    <div class="testimonial-autor-box mb90">-->
+<!--                        <div class="testimonial-img pull-left"> <img src="__ADMIN_JS__/home/images/testimonial-img.jpg" alt="Borrow - Loan Company Website Template"> </div>-->
+<!--                        <div class="testimonial-autor pull-left">-->
+<!--                            <h4 class="testimonial-name">张三</h4>-->
+<!--                            <span class="testimonial-meta">职称</span> </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-4 col-sm-4 clearfix col-xs-12">-->
+<!--                <div class="testimonial-block mb30">-->
+<!--                    <div class="bg-white pinside30 mb5">-->
+<!--                        <p class="testimonial-text"> “人员简介”</p>-->
+<!--                    </div>-->
+<!--                    <div class="testimonial-autor-box mb90">-->
+<!--                        <div class="testimonial-img pull-left"> <img src="__ADMIN_JS__/home/images/testimonial-img.jpg" alt="Borrow - Loan Company Website Template"> </div>-->
+<!--                        <div class="testimonial-autor pull-left">-->
+<!--                            <h4 class="testimonial-name">张三</h4>-->
+<!--                            <span class="testimonial-meta">职称</span> </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 <div class="section-space40">
     <div class="container">
         <div class="row">

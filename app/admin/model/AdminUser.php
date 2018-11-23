@@ -173,6 +173,7 @@ class AdminUser extends Model
         }
 
         $dep_role = AdminDepartment::where('id', $user->company_id)->find()->toArray();
+        $company = AdminCompany::where('id', $user->company_id)->find()->toArray();
 
         // 更新登录信息
         $user->last_login_time = time();
@@ -187,6 +188,7 @@ class AdminUser extends Model
             $login['role_name'] = $role['name'];
             $login['nick'] = $user->nick;
             $login['username'] = $user->username;
+            $login['company'] = $company['name'];
             cookie('hisi_iframe', $user->iframe);
             // 主题设置
             self::setTheme(isset($user->theme) ? $user->theme : 0);

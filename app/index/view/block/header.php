@@ -7,7 +7,7 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="keywords" content="">
-    <title>Home</title>
+    <title>首页</title>
     <!-- Bootstrap -->
     <link href="__ADMIN_JS__/home/css/bootstrap.min.css" rel="stylesheet">
     <link href="__ADMIN_JS__/home/css/style.css" rel="stylesheet">

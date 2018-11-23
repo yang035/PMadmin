@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-                <p>Copyright &copy; 2017.版权所有者   备案号 | 网警</p>
+                <p>Copyright &copy; 2018.版权所有者   <a href="http://www.miitbeian.gov.cn" style="color: #778191">鲁ICP备18050320号</a> | 网警</p>
             </div>
         </div>
     </div>

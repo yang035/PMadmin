@@ -33,10 +33,10 @@
                 <tr>
                     <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
                     <th>员工</th>
-                    <th>ML加分</th>
-                    <th>ML扣分</th>
-                    <th>GL加分</th>
-                    <th>GL扣分</th>
+                    <th>ML+</th>
+                    <th>ML-</th>
+                    <th>GL+</th>
+                    <th>GL-</th>
                     <th>操作</th>
                 </tr>
                 </thead>

@@ -4,11 +4,11 @@
         height: 60px;
         text-indent: 30px;
         color: #c2c2c2;
-        font-size: 25px;
+        font-size: 20px;
     }
 </style>
 <div class="layui-header" style="z-index:999!important;">
-    <div class="fl header-logo1"><span>项目中心</span><br><span id="date_clock" style="font-size: 15px;"></span></div>
+    <div class="fl header-logo1"><span>{$admin_user['company']}</span><br><span id="date_clock" style="font-size: 15px;"></span></div>
     <div class="fl header-fold"><a href="javascript:;" title="打开/关闭左侧导航" class="aicon ai-caidan" id="foldSwitch"></a></div>
     <ul class="layui-nav fl nobg main-nav">
         {volist name="_admin_menu" id="vo"}

@@ -16,8 +16,6 @@ class Company extends Admin
 {
     public function index($q = '')
     {
-        echo date('Ymd',strtotime("-3248 day"));
-        exit();
         $map = [];
         if (1 != session('admin_user.role_id')){
             $map['id'] = session('admin_user.cid');
