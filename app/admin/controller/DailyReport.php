@@ -222,7 +222,7 @@ class DailyReport extends Admin
             $data_info = [];
         }
 //        print_r($data_info);
-        $this->assign('data_info', $data_info);
+        $this->assign('row', $data_info);
         $this->assign('leave_type', DailyReportModel::getOption());
         $this->assign('mytask', ProjectModel::getMyTask(0));
         return $this->fetch();

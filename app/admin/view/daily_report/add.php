@@ -38,10 +38,10 @@
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-form-item">
         <label class="layui-form-label">昨日计划</label>
-        {notempty name="data_info"}
+        {notempty name="row"}
         <div class="layui-form-mid1">
-            ({$data_info['create_time']})
-            {volist name="data_info['plan']" id="vo"}
+            ({$row['create_time']})
+            {volist name="row['plan']" id="vo"}
             {$i}.{$vo};
             {/volist}
         </div>
