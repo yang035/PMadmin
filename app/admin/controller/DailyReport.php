@@ -156,6 +156,7 @@ class DailyReport extends Admin
 
     public function add()
     {
+        $d_model = new DailyReportModel();
         if ($this->request->isPost()) {
             $data = $this->request->post();
             // 验证
@@ -187,7 +188,7 @@ class DailyReport extends Admin
                 $tmp[$k]['real_per'] = $v;
                 $ins_data_all[$k] = array_merge($tmp[$k],$ins_data);
             }
-            $d_model = new DailyReportModel();
+
             //批量添加
             if (!$d_model->saveAll($ins_data_all)) {
                 return $this->error('添加失败！');
@@ -209,6 +210,19 @@ class DailyReport extends Admin
             }
             return $this->success('添加成功。','index');
         }
+
+        $where = [
+            'user_id'=>session('admin_user.uid'),
+        ];
+        $row = $d_model->where($where)->order('id desc')->limit(1)->select();
+        if ($row){
+            $data_info['plan'] = json_decode($row[0]['plan'],true);
+            $data_info['create_time'] = explode(' ',$row[0]['create_time'])[0];
+        }else{
+            $data_info = [];
+        }
+//        print_r($data_info);
+        $this->assign('data_info', $data_info);
         $this->assign('leave_type', DailyReportModel::getOption());
         $this->assign('mytask', ProjectModel::getMyTask(0));
         return $this->fetch();

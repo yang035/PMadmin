@@ -15,7 +15,7 @@ class Publics extends Common
             if (!$model->login($username, $password)) {
                 return $this->error($model->getError(), url('index'));
             }
-            return $this->success('登陆成功，页面跳转中...', url('index/index'));
+            return $this->success('登陆成功，页面跳转中...', url('index/index'),'',1);
         }
 
         if ($model->isLogin()) {

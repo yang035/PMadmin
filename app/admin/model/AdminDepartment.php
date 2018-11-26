@@ -1,29 +1,38 @@
 <?php
+
 namespace app\admin\model;
+
 use think\Model;
 use think\Loader;
 use app\admin\model\AdminRole as RoleModel;
 use think\Db;
+
 class AdminDepartment extends Model
 {
     // 自动写入时间戳
     protected $autoWriteTimestamp = true;
 
-    public static function index($cid=1){
-        $where = ['cid'=>$cid];
+    public static function index($cid = 1)
+    {
+        $where = ['cid' => $cid];
         $result = self::where($where)->select();
         return $result;
     }
 
-    public static function getDepUser($cid=1){
-        $where = ['cid'=>$cid];
+    public static function getDepUser($cid = 1)
+    {
+        $where = ['cid' => $cid];
         $result = self::where($where)->select();
-        $map = ['company_id'=>$cid];
+        $map = [
+            'company_id' => $cid,
+            'department_id'=>['>',0],
+            'status'=>1,
+        ];
         $user = AdminUser::where($map)->select();
-        foreach ($user as $k=>$v){
-            $user[$k]['uid'] = '10000'.$v->id;
+        foreach ($user as $k => $v) {
+            $user[$k]['uid'] = '10000' . $v->id;
         }
-        $data = array_merge($user,$result);
+        $data = array_merge($user, $result);
         return $data;
     }
 
@@ -35,7 +44,7 @@ class AdminDepartment extends Model
         }
     }
 
-    public static function getRowById($id=1)
+    public static function getRowById($id = 1)
     {
         $map['cid'] = session('admin_user.cid');
         $map['id'] = $id;
@@ -52,7 +61,7 @@ class AdminDepartment extends Model
             $map['status'] = 1;
         }
         $data = self::where($map)->order('id asc')->column($field);
-        if ($data){
+        if ($data) {
             foreach ($data as $k => $v) {
                 $data[$k]['child'] = self::getAllChild($v['id'], $status, $field, $data);
             }
@@ -62,7 +71,7 @@ class AdminDepartment extends Model
 
     public static function getMainMenu($update = false, $pid = 0, $level = 0, $data = [])
     {
-        $cache_tag = '_admin_menu'.ADMIN_ID.dblang('admin');
+        $cache_tag = '_admin_menu' . ADMIN_ID . dblang('admin');
         $trees = [];
         if (config('develop.app_debug') == 0 && $level == 0 && $update == false) {
             $trees = cache($cache_tag);
@@ -72,9 +81,9 @@ class AdminDepartment extends Model
                 $map = [];
                 $map['status'] = 1;
                 $map['nav'] = 1;
-                $map['uid'] = ['in', '0,'.ADMIN_ID];
+                $map['uid'] = ['in', '0,' . ADMIN_ID];
                 $data = self::where($map)->order('sort asc')->column('id,pid,module,title,url,param,target,icon');
-                $data = array_values($data); 
+                $data = array_values($data);
             }
 
             foreach ($data as $k => $v) {
@@ -95,7 +104,7 @@ class AdminDepartment extends Model
                         }
                     }
                     unset($data[$k]);
-                    $v['childs'] = self::getMainMenu($update, $v['id'], $level+1, $data);
+                    $v['childs'] = self::getMainMenu($update, $v['id'], $level + 1, $data);
                     $trees[] = $v;
                 }
             }
@@ -133,10 +142,10 @@ class AdminDepartment extends Model
     {
         $map = [];
         if (empty($id)) {
-            $model      = request()->module();
+            $model = request()->module();
             $controller = request()->controller();
-            $action     = request()->action();
-            $map['url'] = $model.'/'.$controller.'/'.$action;
+            $action = request()->action();
+            $map['url'] = $model . '/' . $controller . '/' . $action;
         } else {
             $map['id'] = (int)$id;
         }
@@ -168,7 +177,7 @@ class AdminDepartment extends Model
                     }
                     $sqlmap = [];
                     $sqlmap['param'] = http_build_query($param_arr);
-                    $sqlmap['url'] =  $map['url'];
+                    $sqlmap['url'] = $map['url'];
                     $res = self::where($sqlmap)->field('id,title,url,param')->find();
                     if ($res) {
                         return $res;
@@ -190,10 +199,10 @@ class AdminDepartment extends Model
     {
         $map = [];
         if (empty($id)) {
-            $model      = request()->module();
+            $model = request()->module();
             $controller = request()->controller();
-            $action     = request()->action();
-            $map['url'] = $model.'/'.$controller.'/'.$action;
+            $action = request()->action();
+            $map['url'] = $model . '/' . $controller . '/' . $action;
         } else {
             $map['id'] = (int)$id;
         }
@@ -206,7 +215,8 @@ class AdminDepartment extends Model
         return $id;
     }
 
-    public function del($ids = '') {
+    public function del($ids = '')
+    {
         if (is_array($ids)) {
             $error = '';
             foreach ($ids as $k => $v) {
@@ -215,11 +225,11 @@ class AdminDepartment extends Model
                 $map['cid'] = session('admin_user.cid');
                 $row = self::where($map)->find();
                 if (self::where('pid', $row['id'])->find()) {
-                    $error .= '['.$row['name'].']请先删除下级菜单<br>';
+                    $error .= '[' . $row['name'] . ']请先删除下级菜单<br>';
                     continue;
                 }
                 if (AdminUser::where('department_id', $row['id'])->find()) {
-                    $error .= '['.$row['name'].']请先删除部门下用户<br>';
+                    $error .= '[' . $row['name'] . ']请先删除部门下用户<br>';
                     continue;
                 }
                 self::where($map)->delete();
@@ -234,7 +244,8 @@ class AdminDepartment extends Model
         return false;
     }
 
-    public function delUser($uid = 0) {
+    public function delUser($uid = 0)
+    {
         $uid = (int)$uid;
         if ($uid <= 0) {
             $this->error = '参数传递错误';
@@ -258,7 +269,7 @@ class AdminDepartment extends Model
         if ($type == 'module') {// 模型菜单
             foreach ($data as $v) {
                 if (!isset($v['pid'])) {
-                    $v['pid'] = $pid;  
+                    $v['pid'] = $pid;
                 }
 
                 $childs = '';
@@ -273,7 +284,7 @@ class AdminDepartment extends Model
                 if (!empty($childs)) {
                     self::importMenu($childs, $mod, $type, $res['id']);
                 }
-            } 
+            }
         } else {// 插件菜单
             if ($pid == 0) {
                 $pid = 3;
@@ -286,7 +297,7 @@ class AdminDepartment extends Model
                     return false;
                 }
                 if (!isset($v['pid'])) {
-                    $v['pid'] = $pid;  
+                    $v['pid'] = $pid;
                 }
                 $v['module'] = $mod;
                 $childs = '';
@@ -301,7 +312,7 @@ class AdminDepartment extends Model
                 if (!empty($childs)) {
                     self::importMenu($childs, $mod, $type, $res['id']);
                 }
-            } 
+            }
         }
         self::getMainMenu(true);
         return true;

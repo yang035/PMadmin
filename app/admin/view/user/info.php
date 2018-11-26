@@ -55,6 +55,12 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">个性签名</label>
+        <div class="layui-input-inline">
+            <textarea type="text" class="layui-textarea field-signature" name="signature" lay-verify="" maxlength="50" autocomplete="off" placeholder="请输入个性签名"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">登录时间</label>
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-last_login_time" name="last_login_time" lay-verify="required" autocomplete="off" placeholder="请输入用户名" readonly="">

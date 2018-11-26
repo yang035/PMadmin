@@ -25,7 +25,7 @@
         <li class="layui-nav-item"><a href="{:url('admin/index/clear')}" class="j-ajax aicon ai-qingchu" refresh="yes" title="清缓存"></a></li>
         <li class="layui-nav-item"><a href="javascript:void(0);" class="aicon ai-suo" id="lockScreen" title="锁屏"></a></li>
         <li class="layui-nav-item">
-            <a href="{:url('admin/user/setTheme')}" id="admin-theme-setting" class="aicon ai-theme"></a>
+            <a href="{:url('admin/user/setTheme')}" id="admin-theme-setting" class="aicon ai-theme" title="切换主题颜色"></a>
         </li>
         <li class="layui-nav-item">
             <a href="javascript:void(0);">{$admin_user['username']}&nbsp;&nbsp;</a>

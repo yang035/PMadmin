@@ -15,7 +15,7 @@
     }
 </style>
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
-        {notempty name="Request.param.id"}
+        {notempty name="Request.param.pid"}
     <div class="layui-form-item">
         <label class="layui-form-label">上级标题</label>
         <div class="layui-input-inline">
@@ -38,9 +38,9 @@
     <div class="layui-form-item">
         <label class="layui-form-label">预设分<span style="color: red">*</span></label>
         <div class="layui-input-inline">
-            <input type="number" class="layui-input field-score" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="score" lay-verify="required" autocomplete="off" placeholder="请输入预设分">
+            <input type="number" class="layui-input field-score" name="score" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" lay-verify="required" autocomplete="off" placeholder="请输入预设分">
         </div>
-        {notempty name="Request.param.id"}
+        {notempty name="Request.param.pid"}
         <div class="layui-form-mid">不能超过<span id="max_score" style="color: red;">{$max_score}</span>分</div>
         {/notempty}
     </div>
@@ -57,19 +57,18 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">历时</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-time_long" name="time_long" readonly autocomplete="off">
+        </div>天
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">紧急程度</label>
         <div class="layui-input-inline">
             <select name="grade" class="field-grade" type="select" lay-filter="grade">
                 {$grade_type}
             </select>
         </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">历时</label>
-        <div class="layui-input-inline">
-            <input type="text" class="layui-input field-time_long" name="time_long" readonly autocomplete="off">
-        </div>
-        <div class="layui-form-mid">天</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">附件说明</label>
@@ -107,32 +106,32 @@
         <label class="layui-form-label">负责人</label>
         <div class="layui-input-inline">
             <button type="button" class="layui-btn" id="manager_user_id">选择负责人</button>(此任务由谁负责)
-            <div id="manager_select_id"></div>
-            <input type="hidden" name="manager_user" id="manager_user" value="">
+            <div id="manager_select_id">{$data_info['manager_user_id']|default=''}</div>
+            <input type="hidden" name="manager_user" id="manager_user" value="{$data_info['manager_user']|default=''}">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">参与人</label>
         <div class="layui-input-inline">
             <button type="button" class="layui-btn" id="deal_user_id">选择参与人</button>(此任务具体哪些人做)
-            <div id="deal_select_id"></div>
-            <input type="hidden" name="deal_user" id="deal_user" value="">
+            <div id="deal_select_id">{$data_info['deal_user_id']|default=''}</div>
+            <input type="hidden" name="deal_user" id="deal_user" value="{$data_info['deal_user']|default=''}">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">审批人<span style="color: red">*</span></label>
+        <label class="layui-form-label">审批人</label>
         <div class="layui-input-inline">
             <button type="button" class="layui-btn" id="send_user_id">选择审批人</button>(此任务需要谁来审批)
-            <div id="send_select_id"></div>
-            <input type="hidden" name="send_user" id="send_user" value="">
+            <div id="send_select_id">{$data_info['send_user_id']|default=''}</div>
+            <input type="hidden" name="send_user" id="send_user" value="{$data_info['send_user']}">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">抄送人</label>
         <div class="layui-input-inline">
             <button type="button" class="layui-btn" id="copy_user_id">选择抄送人</button>(此任务需要抄送给谁)
-            <div id="copy_select_id"></div>
-            <input type="hidden" name="copy_user" id="copy_user" value="">
+            <div id="copy_select_id">{$data_info['copy_user_id']|default=''}</div>
+            <input type="hidden" name="copy_user" id="copy_user" value="{$data_info['copy_user']}">
         </div>
     </div>
     <div class="layui-form-item">
@@ -140,7 +139,7 @@
             <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
             <input type="hidden" class="field-pid" name="pid" value="{$Request.param.pid}">
             <input type="hidden" class="field-code" name="code" value="{$Request.param.code}">
-            {notempty name="Request.param.id"}
+            {notempty name="Request.param.pid"}
             <input type="hidden" class="field-max_score" name="max_score" value="{$max_score}">
             {/notempty}
             <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>

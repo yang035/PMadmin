@@ -78,6 +78,7 @@ class Project extends Admin
         }
         $cid = session('admin_user.cid');
         $map['cid'] = $cid;
+        $map['t_type'] = 1;
         $list = ProjectModel::index($map);
 //        $aa = new ProjectModel();
 //        echo $aa->getLastSql();exit();
@@ -271,6 +272,7 @@ class Project extends Admin
         $map = [];
         $cid = session('admin_user.cid');
         $map['cid'] = $cid;
+        $map['t_type'] = 1;
         if ($params){
             if (!empty($params['name'])){
                 $map['name'] = ['like', '%'.$params['name'].'%'];
@@ -334,6 +336,7 @@ class Project extends Admin
         $map = [];
         $cid = session('admin_user.cid');
         $map['cid'] = $cid;
+        $map['t_type'] = 1;
         if ($params){
             if (!empty($params['name'])){
                 $map['name'] = ['like', '%'.$params['name'].'%'];

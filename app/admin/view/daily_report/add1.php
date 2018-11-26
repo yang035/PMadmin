@@ -13,44 +13,15 @@
     input[type="number"] {
         -moz-appearance: textfield;
     }
-    .layui-input,.layui-input-block{
+    .layui-input{
         width: 519px;
     }
     .layui-form-select  {
 
     }
-    .layui-form-item{
-        margin-bottom: 5px;
-    }
-    .new_task{
-        margin-left: 630px;
-    }
-    .layui-form-mid1 {
-        float: left;
-        display: block;
-        padding: 9px 0!important;
-        line-height: 20px;
-        margin-right: 10px;
-        font-size: 15px;
-        color: grey;
-    }
 </style>
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
-    <div class="layui-form-item">
-        <label class="layui-form-label">昨日计划</label>
-        {notempty name="data_info"}
-        <div class="layui-form-mid1">
-            ({$data_info['create_time']})
-            {volist name="data_info['plan']" id="vo"}
-            {$i}.{$vo};
-            {/volist}
-        </div>
-        {else/}
-        <div class="layui-form-mid">无</div>
-        {/notempty}
-
-    </div>
-    <div class="layui-form-item">
+    <div class="layui-form-item fl">
         <label class="layui-form-label">任务名</label>
         <div class="layui-input-inline">
             <select name="project_id[]" class="layui-input field-project_id" type="select">
@@ -62,13 +33,21 @@
             <input type="number" class="layui-input field-real_per" style="width: 100px" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="real_per[]" autocomplete="off" placeholder="请输入整数">
         </div>
     </div>
-    <div class="layui-form-item">
-        <div class="layui-input-block">
-            <textarea type="text" class="layui-textarea field-content" name="content[]" autocomplete="off" placeholder="工作内容"></textarea>
-        </div>
-    </div>
-    <div class="new_task">
+    <div class="fl new_task">
         <a href="javascript:void(0);" class="aicon ai-tianjia field-task-add" style="float: left;font-size: 30px;"></a>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">工作内容</label>
+        <div class="layui-input-block">
+            <input type="text" class="layui-input field-content" name="content[]" autocomplete="off" placeholder="内容1">
+        </div>
+        <div class="layui-input-block">
+            <input type="text" class="layui-input field-content" name="content[]" autocomplete="off" placeholder="内容2">
+        </div>
+        <div class="layui-input-block">
+            <input type="text" class="layui-input fl field-content" name="content[]" autocomplete="off" placeholder="内容3">
+        </div>
+        <a href="javascript:void(0);" class="aicon ai-tianjia field-content-add" style="float: left;font-size: 30px;"></a>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">明日计划</label>
@@ -302,21 +281,16 @@
         });
 
         $(".field-task-add").click(function(){
-            $(".new_task").before("<div class=\"layui-form-item\">\n" +
+            $(".new_task").before("<div class=\"layui-form-item fl\">\n" +
                 "        <label class=\"layui-form-label\">任务名</label>\n" +
                 "        <div class=\"layui-input-inline\">\n" +
-                "            <select name=\"project_id[]\" class=\"layui-input field-project_id\" type=\"select\">\n" +
+                "            <select name=\"project_id[]\" class=\"layui-input field-project_id\" type=\"select\" >\n" +
                 "                {$mytask}\n" +
                 "            </select>\n" +
                 "        </div>\n" +
                 "        <label class=\"layui-form-label\">完成百分比</label>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
                 "            <input type=\"number\" class=\"layui-input field-real_per\" style=\"width: 100px\" onkeypress=\"return (/[\\d]/.test(String.fromCharCode(event.keyCode)))\" name=\"real_per[]\" autocomplete=\"off\" placeholder=\"请输入整数\">\n" +
-                "        </div>\n" +
-                "    </div>\n" +
-                "    <div class=\"layui-form-item\">\n" +
-                "        <div class=\"layui-input-block\">\n" +
-                "            <textarea type=\"text\" class=\"layui-textarea field-content\" name=\"content[]\" autocomplete=\"off\" placeholder=\"工作内容\"></textarea>\n" +
                 "        </div>\n" +
                 "    </div>");
             form.render();

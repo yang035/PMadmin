@@ -15,7 +15,7 @@
     }
 </style>
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
-        {notempty name="Request.param.id"}
+        {notempty name="Request.param.pid"}
     <div class="layui-form-item">
         <label class="layui-form-label">上级标题</label>
         <div class="layui-input-inline">
@@ -26,35 +26,39 @@
     <div class="layui-form-item">
         <label class="layui-form-label">名称<span style="color: red">*</span></label>
         <div class="layui-input-inline">
-            <input type="text" class="layui-input field-name" name="name" lay-verify="required" autocomplete="off" placeholder="请输入名称">
+            <input type="text" class="layui-input field-name" name="name" lay-verify="required" readonly autocomplete="off" placeholder="请输入名称">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">描述<span style="color: red">*</span></label>
         <div class="layui-input-inline">
-            <textarea type="text" class="layui-textarea field-remark" name="remark" lay-verify="required" autocomplete="off" placeholder="请输入描述"></textarea>
+            <textarea type="text" class="layui-textarea field-remark" name="remark" lay-verify="required" readonly autocomplete="off" placeholder="请输入描述"></textarea>
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">预设分<span style="color: red">*</span></label>
         <div class="layui-input-inline">
-            <input type="number" class="layui-input field-score" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="score" lay-verify="required" autocomplete="off" placeholder="请输入预设分">
+            <input type="number" class="layui-input field-score" name="score" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" lay-verify="required" readonly autocomplete="off" placeholder="请输入预设分">
         </div>
-        {notempty name="Request.param.id"}
-        <div class="layui-form-mid">不能超过<span id="max_score" style="color: red;">{$max_score}</span>分</div>
-        {/notempty}
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">开始时间<span style="color: red">*</span></label>
         <div class="layui-input-inline">
-            <input type="text" class="layui-input field-start_time" name="start_time" lay-verify="required" autocomplete="off" placeholder="选择开始时间">
+            <input type="text" class="layui-input field-start_time" name="start_time" lay-verify="required" autocomplete="off" readonly placeholder="选择开始时间">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">结束时间<span style="color: red">*</span></label>
         <div class="layui-input-inline">
-            <input type="text" class="layui-input field-end_time" name="end_time" lay-verify="required" autocomplete="off" placeholder="选择结束时间">
+            <input type="text" class="layui-input field-end_time" name="end_time" lay-verify="required" autocomplete="off" readonly placeholder="选择结束时间">
         </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">历时</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-time_long" name="time_long" readonly autocomplete="off" readonly>
+        </div>
+        <div class="layui-form-mid layui-word-aux">天</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">紧急程度</label>
@@ -63,13 +67,6 @@
                 {$grade_type}
             </select>
         </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">历时</label>
-        <div class="layui-input-inline">
-            <input type="text" class="layui-input field-time_long" name="time_long" readonly autocomplete="off">
-        </div>
-        <div class="layui-form-mid">天</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">附件说明</label>
@@ -82,7 +79,7 @@
 <!--                </div>-->
 <!--            </div>-->
             <div class="layui-upload">
-                <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
+                <button type="button" class="layui-btn layui-btn-normal" id="testList" style="display: none;">选择多文件</button>
                 <div class="other-div" style="display: none">
                     <div class="layui-upload-list">
                         <table class="layui-table">
@@ -106,33 +103,33 @@
     <div class="layui-form-item">
         <label class="layui-form-label">负责人</label>
         <div class="layui-input-inline">
-            <button type="button" class="layui-btn" id="manager_user_id">选择负责人</button>(此任务由谁负责)
-            <div id="manager_select_id"></div>
-            <input type="hidden" name="manager_user" id="manager_user" value="">
+            <button type="button" class="layui-btn" id="manager_user_id" style="display: none;">选择负责人</button>(此任务由谁负责)
+            <div id="manager_select_id">{$data_info['manager_user_id']|default=''}</div>
+            <input type="hidden" name="manager_user" id="manager_user" value="{$data_info['manager_user']|default=''}">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">参与人</label>
         <div class="layui-input-inline">
-            <button type="button" class="layui-btn" id="deal_user_id">选择参与人</button>(此任务具体哪些人做)
-            <div id="deal_select_id"></div>
-            <input type="hidden" name="deal_user" id="deal_user" value="">
+            <button type="button" class="layui-btn" id="deal_user_id" style="display: none;">选择参与人</button>(此任务具体哪些人做)
+            <div id="deal_select_id">{$data_info['deal_user_id']|default=''}</div>
+            <input type="hidden" name="deal_user" id="deal_user" value="{$data_info['deal_user']|default=''}">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">审批人<span style="color: red">*</span></label>
+        <label class="layui-form-label">审批人</label>
         <div class="layui-input-inline">
-            <button type="button" class="layui-btn" id="send_user_id">选择审批人</button>(此任务需要谁来审批)
-            <div id="send_select_id"></div>
-            <input type="hidden" name="send_user" id="send_user" value="">
+            <button type="button" class="layui-btn" id="send_user_id" style="display: none;">选择审批人</button>(此任务需要谁来审批)
+            <div id="send_select_id">{$data_info['send_user_id']|default=''}</div>
+            <input type="hidden" name="send_user" id="send_user" value="{$data_info['send_user']}">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">抄送人</label>
         <div class="layui-input-inline">
-            <button type="button" class="layui-btn" id="copy_user_id">选择抄送人</button>(此任务需要抄送给谁)
-            <div id="copy_select_id"></div>
-            <input type="hidden" name="copy_user" id="copy_user" value="">
+            <button type="button" class="layui-btn" id="copy_user_id" style="display: none;">选择抄送人</button>(此任务需要抄送给谁)
+            <div id="copy_select_id">{$data_info['copy_user_id']|default=''}</div>
+            <input type="hidden" name="copy_user" id="copy_user" value="{$data_info['copy_user']}">
         </div>
     </div>
     <div class="layui-form-item">
@@ -140,10 +137,6 @@
             <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
             <input type="hidden" class="field-pid" name="pid" value="{$Request.param.pid}">
             <input type="hidden" class="field-code" name="code" value="{$Request.param.code}">
-            {notempty name="Request.param.id"}
-            <input type="hidden" class="field-max_score" name="max_score" value="{$max_score}">
-            {/notempty}
-            <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
             <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
         </div>
     </div>
@@ -206,8 +199,7 @@ layui.use(['jquery', 'laydate','upload'], function() {
     });
 
     $('#manager_user_id').on('click', function(){
-        var manager_user = $('#manager_user').val();
-        var open_url = "{:url('Tool/getTreeUser')}?m=manager&u="+manager_user;
+        var open_url = "{:url('Tool/getTreeUser')}?m=manager";
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {
@@ -226,8 +218,7 @@ layui.use(['jquery', 'laydate','upload'], function() {
     });
 
     $('#deal_user_id').on('click', function(){
-        var deal_user = $('#deal_user').val();
-        var open_url = "{:url('Tool/getTreeUser')}?m=deal&u="+deal_user;
+        var open_url = "{:url('Tool/getTreeUser')}?m=deal";
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {
@@ -246,8 +237,7 @@ layui.use(['jquery', 'laydate','upload'], function() {
     });
 
     $('#send_user_id').on('click', function(){
-        var send_user = $('#send_user').val();
-        var open_url = "{:url('Tool/getTreeUser')}?m=send&u="+send_user;
+        var open_url = "{:url('Tool/getTreeUser')}?m=send";
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {
@@ -266,8 +256,7 @@ layui.use(['jquery', 'laydate','upload'], function() {
     });
 
     $('#copy_user_id').on('click', function(){
-        var copy_user = $('#copy_user').val();
-        var open_url = "{:url('Tool/getTreeUser')}?m=copy&u="+copy_user;
+        var open_url = "{:url('Tool/getTreeUser')}?m=copy";
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {

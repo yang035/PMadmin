@@ -49,15 +49,15 @@
     <!-- top-bar -->
     <div class="container">
         <div class="row">
-            <div class="col-md-10 hidden-xs hidden-sm">
+            <div class="col-md-10 col-sm-8 col-xs-8">
                 <p class="mail-text">祝您在此学习和生活愉快！</p>
             </div>
-            <div class="col-md-2 col-sm-12 col-xs-12">
-                <div class="top-nav"> <span class="top-text hidden-xs">
+            <div class="col-md-2 col-sm-4 col-xs-4">
+                <div class="top-nav"> <span class="top-text">
                         {empty name="$Think.session.admin_user"}
                         <a target="_blank" href="/admin.php">登录</a>&nbsp;&nbsp;/&nbsp;&nbsp;<a href="#">注册</a>
                         {else/}
-                        <a data-toggle="dropdown">用户名：{$Think.session.admin_user.username}<span class="caret"></span></a>
+                        <a data-toggle="dropdown">{$Think.session.admin_user.username}<span class="caret"></span></a>
                         <ul class="dropdown-menu" style="min-width: 110px;" role="menu">
                             <li role="presentation">
                                 <a role="menuitem" tabindex="-1" href="#">总积分</a>
