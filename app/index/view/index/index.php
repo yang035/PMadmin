@@ -160,11 +160,11 @@
 <!--        </div>-->
 <!--    </div>-->
 <!--</div>-->
-<div class="section-space80">
+<div class="section-space50">
     <div class="container">
         <div class="row">
             <div class="col-md-offset-2 col-md-8">
-                <div class="mb60 text-center section-title">
+                <div class="mb30 text-center section-title">
                     <h1>企业宣传</h1>
                 </div>
             </div>
@@ -173,42 +173,15 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="bg-white bg-boxshadow">
                     <div class="row">
+                        {volist name="data_video" id="vo"}
                         <div class="col-md-4 col-sm-6 nopadding col-xs-12">
-                            <div class="bg-white pinside10 number-block outline">
-                                <img src="__ADMIN_JS__/home/images/1.png" data-toggle="modal" data-target=".bs-example-modal-lg"/>
-                                <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-                                    <div class="modal-dialog modal-lg" role="document">
-                                        <div class="modal-content">
-                                            <video src="__ADMIN_JS__/home/images/tt.mp4" height="500" controls preload="metadata"></video>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="bg-white pinside20 number-block outline">
+                                <video src="{$vo['attachment']}" poster="{$vo['thumb']}"  width="280" height="180" controls="controls" preload="metadata">
+                                    您的浏览器不支持 video 标签
+                                </video>
                             </div>
                         </div>
-                        <div class="col-md-4 col-sm-6 nopadding col-xs-12">
-                            <div class="bg-white pinside10 number-block outline">
-                                <img src="__ADMIN_JS__/home/images/1.png" data-toggle="modal" data-target=".bs-example-modal-lg"/>
-                                <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-                                    <div class="modal-dialog modal-lg" role="document">
-                                        <div class="modal-content">
-                                            <video src="__ADMIN_JS__/home/images/tt.mp4" height="500" controls preload="metadata"></video>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-12 nopadding col-xs-12">
-                            <div class="bg-white pinside10 number-block outline">
-                                <img src="__ADMIN_JS__/home/images/1.png" data-toggle="modal" data-target=".bs-example-modal-lg"/>
-                                <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-                                    <div class="modal-dialog modal-lg" role="document">
-                                        <div class="modal-content">
-                                            <video src="__ADMIN_JS__/home/images/tt.mp4" height="500" controls preload="metadata"></video>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {/volist}
                     </div>
                 </div>
             </div>

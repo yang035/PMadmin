@@ -144,6 +144,11 @@ return [
             'href'=>'index/index/lists/id/8',
             'img'=>'tuandui.svg',
         ],
+        9=>[
+            'title'=>'视频',
+            'href'=>'index/index/lists/id/9',
+            'img'=>'tuandui.svg',
+        ],
     ],
 
 ];
