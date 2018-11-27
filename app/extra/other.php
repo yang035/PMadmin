@@ -107,42 +107,42 @@ return [
         1=>[
             'title'=>'记事',
             'href'=>'index/index/lists/id/1',
-            'img'=>'mortgage.svg',
+            'img'=>'jishi.svg',
         ],
         2=>[
             'title'=>'推荐',
             'href'=>'index/index/lists/id/2',
-            'img'=>'loan.svg',
+            'img'=>'tuijian.svg',
         ],
         3=>[
             'title'=>'排名',
             'href'=>'index/index/lists/id/3',
-            'img'=>'car.svg',
+            'img'=>'paiming.svg',
         ],
         4=>[
             'title'=>'ML/GL',
             'href'=>'index/index/lists/id/4',
-            'img'=>'credit-card.svg',
+            'img'=>'mg.svg',
         ],
         5=>[
             'title'=>'工作',
             'href'=>'index/index/lists/id/5',
-            'img'=>'mortgage.svg',
+            'img'=>'gongzuo.svg',
         ],
         6=>[
             'title'=>'学习',
             'href'=>'index/index/lists/id/6',
-            'img'=>'loan.svg',
+            'img'=>'xuexi.svg',
         ],
         7=>[
             'title'=>'生活',
             'href'=>'index/index/lists/id/7',
-            'img'=>'car.svg',
+            'img'=>'shenghuo.svg',
         ],
         8=>[
             'title'=>'团队',
             'href'=>'index/index/lists/id/8',
-            'img'=>'credit-card.svg',
+            'img'=>'tuandui.svg',
         ],
     ],
 

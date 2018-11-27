@@ -105,11 +105,10 @@
 <!--        <div class="row">-->
 <!--            <div class="col-md-offset-2 col-md-8 col-xs-12">-->
 <!--                <div class="mb100 text-center section-title">-->
-                    <!-- section title start-->
+<!--                     section title start-->
 <!--                    <h1>生活区介绍</h1>-->
 <!--                    <p>生活区介绍生活区介绍生活区介绍生活区介绍生活区介绍</p>-->
 <!--                </div>-->
-                <!-- /.section title start-->
 <!--            </div>-->
 <!--        </div>-->
 <!--        <div class="row">-->
@@ -161,49 +160,61 @@
 <!--        </div>-->
 <!--    </div>-->
 <!--</div>-->
-<!--<div class="section-space80">-->
-<!--    <div class="container">-->
-<!--        <div class="row">-->
-<!--            <div class="col-md-offset-2 col-md-8">-->
-<!--                <div class="mb60 text-center section-title">-->
-                    <!-- section title start-->
-<!--                    <h1>学习区</h1>-->
-<!--                    <p>学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区学习区.</p>-->
-<!--                </div>-->
-                <!-- /.section title start-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="row">-->
-<!--            <div class="col-md-12 col-sm-12 col-xs-12">-->
-<!--                <div class="bg-white bg-boxshadow">-->
-<!--                    <div class="row">-->
-<!--                        <div class="col-md-4 col-sm-6 nopadding col-xs-12">-->
-<!--                            <div class="bg-white pinside60 number-block outline">-->
-<!--                                <div class="mb20"><i class="icon-command  icon-4x icon-primary"></i></div>-->
-<!--                                <h3>学习区</h3>-->
-<!--                                <p>学习区学习区学习区学习区学习区学习区.</p>-->
-<!--                                <a href="#" class="btn btn-outline mt20">加入我们</a> </div>-->
-<!--                        </div>-->
-<!--                        <div class="col-md-4 col-sm-6 nopadding col-xs-12">-->
-<!--                            <div class="bg-white pinside60 number-block outline">-->
-<!--                                <div class="mb20"><i class="icon-cup  icon-4x icon-primary"></i></div>-->
-<!--                                <h3>学习区</h3>-->
-<!--                                <p>学习区学习区学习区学习区学习区学习区.</p>-->
-<!--                                <a href="#" class="btn btn-outline mt20">加入我们</a> </div>-->
-<!--                        </div>-->
-<!--                        <div class="col-md-4 col-sm-12 nopadding col-xs-12">-->
-<!--                            <div class="bg-white pinside60 number-block outline">-->
-<!--                                <div class="mb20"><i class="icon-calculator  icon-4x icon-primary"></i></div>-->
-<!--                                <h3>学习区</h3>-->
-<!--                                <p>学习区学习区学习区学习区学习区学习区.</p>-->
-<!--                                <a href="#" class="btn btn-outline mt20">加入我们</a> </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+<div class="section-space80">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-2 col-md-8">
+                <div class="mb60 text-center section-title">
+                    <h1>企业宣传</h1>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="bg-white bg-boxshadow">
+                    <div class="row">
+                        <div class="col-md-4 col-sm-6 nopadding col-xs-12">
+                            <div class="bg-white pinside10 number-block outline">
+                                <img src="__ADMIN_JS__/home/images/1.png" data-toggle="modal" data-target=".bs-example-modal-lg"/>
+                                <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <video src="__ADMIN_JS__/home/images/tt.mp4" height="500" controls preload="metadata"></video>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6 nopadding col-xs-12">
+                            <div class="bg-white pinside10 number-block outline">
+                                <img src="__ADMIN_JS__/home/images/1.png" data-toggle="modal" data-target=".bs-example-modal-lg"/>
+                                <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <video src="__ADMIN_JS__/home/images/tt.mp4" height="500" controls preload="metadata"></video>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-12 nopadding col-xs-12">
+                            <div class="bg-white pinside10 number-block outline">
+                                <img src="__ADMIN_JS__/home/images/1.png" data-toggle="modal" data-target=".bs-example-modal-lg"/>
+                                <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <video src="__ADMIN_JS__/home/images/tt.mp4" height="500" controls preload="metadata"></video>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <!--<div class="section-space80 bg-default">-->
 <!--    <div class="container">-->
 <!--        <div class="row">-->
@@ -213,7 +224,6 @@
 <!--                    <h1 class="title-white">专业人才</h1>-->
 <!--                    <p> 专业人才</p>-->
 <!--                </div>-->
-                <!-- /.section title start-->
 <!--            </div>-->
 <!--        </div>-->
 <!--        <div class="row">-->
@@ -298,27 +308,6 @@
 <!--        </div>-->
 <!--    </div>-->
 <!--</div>-->
-<div class="section-space40">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-offset-2 col-md-8 col-sm-offset-2 col-sm-8">
-                <div class="mb60 text-center section-title">
-                    <!-- section title start-->
-                    <h1>合作企业</h1>
-                </div>
-                <!-- /.section title start-->
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img src="__ADMIN_JS__/home/images/logo-1.jpg" alt="Borrow - Loan Company Website Template"> </div>
-            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img src="__ADMIN_JS__/home/images/logo-2.jpg" alt="Borrow - Loan Company Website Template"> </div>
-            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img src="__ADMIN_JS__/home/images/logo-3.jpg" alt="Borrow - Loan Company Website Template"> </div>
-            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img src="__ADMIN_JS__/home/images/logo-4.jpg" alt="Borrow - Loan Company Website Template"> </div>
-            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img src="__ADMIN_JS__/home/images/logo-5.jpg" alt="Borrow - Loan Company Website Template"> </div>
-            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img src="__ADMIN_JS__/home/images/logo-1.jpg" alt="Borrow - Loan Company Website Template"> </div>
-        </div>
-    </div>
-</div>
 <div class="section-space80">
     <div class="container">
         <div class="row">
@@ -371,6 +360,27 @@
         </div>
     </div>
 </div>
+<div class="section-space40">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-2 col-md-8 col-sm-offset-2 col-sm-8">
+                <div class="mb60 text-center section-title">
+                    <!-- section title start-->
+                    <h1>合作企业</h1>
+                </div>
+                <!-- /.section title start-->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img src="__ADMIN_JS__/home/images/logo-1.jpg" alt="Borrow - Loan Company Website Template"> </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img src="__ADMIN_JS__/home/images/logo-2.jpg" alt="Borrow - Loan Company Website Template"> </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img src="__ADMIN_JS__/home/images/logo-3.jpg" alt="Borrow - Loan Company Website Template"> </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img src="__ADMIN_JS__/home/images/logo-4.jpg" alt="Borrow - Loan Company Website Template"> </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img src="__ADMIN_JS__/home/images/logo-5.jpg" alt="Borrow - Loan Company Website Template"> </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img src="__ADMIN_JS__/home/images/logo-1.jpg" alt="Borrow - Loan Company Website Template"> </div>
+        </div>
+    </div>
+</div>
 <div class="section-space80">
     <div class="container">
         <div class="row">
@@ -395,8 +405,8 @@
                 <div class="bg-white bg-boxshadow pinside40 outline text-center mb30">
                     <div class="mb40"><i class="icon-phone-call icon-2x icon-default"></i></div>
                     <h2 class="capital-title">联系方式</h2>
-                    <h1 class="text-big">123456789</h1>
-                    <p>lnfo@123456.com</p>
+                    <h1 class="text-big">027-87747658</h1>
+                    <p>27665567@qq.com</p>
                     <a href="#" class="btn-link">联系</a> </div>
             </div>
             <div class="col-md-4 col-sm-12 col-xs-12">

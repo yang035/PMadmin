@@ -79,14 +79,20 @@
 <div class="header">
     <div class="container">
         <div class="row">
-            <div class="col-md-2 col-sm-12 col-xs-6">
+            <div class="col-md-2 col-sm-6 col-xs-6">
                 <!-- logo -->
                 <div class="logo">
-                    <a href="/admin.php"><img src="__ADMIN_JS__/home/images/logo.png" alt="Borrow - Loan Company Website Template"></a>
+                    <a href=#"><img src="__ADMIN_JS__/home/images/logo.png" alt="Borrow - Loan Company Website Template"></a>
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-6 col-xs-6">
+                <!-- logo -->
+                <div style="margin: 12px">
+                    <a href="/admin.php" target="_blank" class="btn-sm btn-default">进入工作</a>
                 </div>
             </div>
             <!-- logo -->
-            <div class="col-md-9 col-sm-12 col-xs-12">
+            <div class="col-md-8 col-sm-12 col-xs-12">
                 <div id="navigation">
                     <!-- navigation start-->
                     <ul>
