@@ -51,52 +51,25 @@
     <div class="container">
         <div class="row">
             <div class="col-md-offset-2 col-md-8 col-sm-12 col-xs-12">
-                <div class="mb60 text-center section-title">
-                    <!-- section title start-->
-                    <h1>工作区介绍</h1>
-                    <p>工作区介绍工作区介绍工作区介绍工作区介绍工作区介绍工作区介绍工作区介绍工作区介绍<strong>within 24 hours of application.</strong></p>
+                <div class="mb30 text-center section-title">
+                    <h1>项目案例</h1>
                 </div>
-                <!-- /.section title start-->
             </div>
         </div>
         <div class="row">
-            <div class="service" id="service">
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="bg-white pinside40 service-block outline mb30">
-                        <div class="icon mb40"> <img src="__ADMIN_JS__/home/images/loan.svg" alt="Borrow - Loan Company Website Template" class="icon-svg-2x"> </div>
-                        <h2><a href="#" class="title">项目案例</a></h2>
-                        <p>项目案例介绍</p>
-                        <a href="#" class="btn-link">更多</a> </div>
-                </div>
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="bg-white pinside40 service-block outline mb30">
-                        <div class="icon mb40"> <img src="__ADMIN_JS__/home/images/mortgage.svg" alt="Borrow - Loan Company Website Template" class="icon-svg-2x"></div>
-                        <h2><a href="#" class="title">项目案例</a></h2>
-                        <p>项目案例介绍</p>
-                        <a href="#" class="btn-link">更多</a> </div>
-                </div>
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="bg-white pinside40 service-block outline mb30">
-                        <div class="icon mb40"> <img src="__ADMIN_JS__/home/images/piggy-bank.svg" alt="Borrow - Loan Company Website Template" class="icon-svg-2x"></div>
-                        <h2><a href="#" class="title">项目案例</a></h2>
-                        <p>项目案例介绍</p>
-                        <a href="#" class="btn-link">更多</a> </div>
-                </div>
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="bg-white pinside40 service-block outline mb30">
-                        <div class="icon mb40"> <img src="__ADMIN_JS__/home/images/loan.svg" alt="Borrow - Loan Company Website Template" class="icon-svg-2x"></div>
-                        <h2><a href="#" class="title">项目案例</a></h2>
-                        <p>项目案例介绍</p>
-                        <a href="#" class="btn-link">更多</a> </div>
-                </div>
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="bg-white pinside40 service-block outline mb30">
-                        <div class="icon mb40"> <img src="__ADMIN_JS__/home/images/car.svg" alt="Borrow - Loan Company Website Template" class="icon-svg-2x"></div>
-                        <h2><a href="#" class="title">项目案例</a></h2>
-                        <p>项目案例介绍</p>
-                        <a href="#" class="btn-link">更多</a> </div>
+            {volist name="data_project" id="vo"}
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="post-block mb30">
+                    <div class="post-img">
+                        <a href="{:url('detail',['id'=>$vo['id']])}" class="imghover"><img src="{$vo['thumb']}" alt="{$vo['title']}" class="img-responsive"></a>
+                    </div>
+                    <div class="bg-white pinside20 outline">
+                        <h2><a href="{:url('detail',['id'=>$vo['id']])}" class="title">{$vo['title']}</a></h2>
+                        <p>{$vo['summarize']}</p>
+                    </div>
                 </div>
             </div>
+            {/volist}
         </div>
     </div>
 </div>
@@ -165,12 +138,13 @@
         <div class="row">
             <div class="col-md-offset-2 col-md-8">
                 <div class="mb30 text-center section-title">
-                    <h1>企业宣传</h1>
+                    <h1>视频宣传</h1>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="post-block mb30">
                 <div class="bg-white bg-boxshadow">
                     <div class="row">
                         {volist name="data_video" id="vo"}
@@ -183,6 +157,7 @@
                         </div>
                         {/volist}
                     </div>
+                </div>
                 </div>
             </div>
         </div>
@@ -285,51 +260,25 @@
     <div class="container">
         <div class="row">
             <div class="col-md-offset-2 col-md-8 col-sm-offset-2 col-sm-8">
-                <div class="mb60 text-center section-title">
-                    <!-- section title start-->
-                    <h1>最新播报</h1>
-                    <p> 最新播报最新播报最新播报最新播报最新播报.</p>
+                <div class="mb30 text-center section-title">
+                    <h1>新材料</h1>
                 </div>
-                <!-- /.section title start-->
             </div>
         </div>
         <div class="row">
+            {volist name="data_tpo" id="vo"}
             <div class="col-md-4 col-sm-6 col-xs-12">
                 <div class="post-block mb30">
                     <div class="post-img">
-                        <a href="blog-single.html" class="imghover"><img src="__ADMIN_JS__/home/images/blog-img.jpg" alt="Borrow - Loan Company Website Template" class="img-responsive"></a>
+                        <a href="{:url('detail',['id'=>$vo['id']])}" class="imghover"><img src="{$vo['thumb']}" alt="{$vo['title']}" class="img-responsive"></a>
                     </div>
-                    <div class="bg-white pinside40 outline">
-                        <h2><a href="blog-single.html" class="title">Couples Buying New Home Loan</a></h2>
-                        <p class="meta"><span class="meta-date">Aug 25, 2017</span><span class="meta-author">By<a href="#"> Admin</a></span></p>
-                        <p>Fusce sed erat libasellus id orci quis ligula pret do lectus velit, a malesuada urna sodales eu.</p>
-                        <a href="blog-single.html" class="btn-link">Read More</a> </div>
+                    <div class="bg-white pinside20 outline">
+                        <h2><a href="{:url('detail',['id'=>$vo['id']])}" class="title">{$vo['title']}</a></h2>
+                        <p>{$vo['summarize']}</p>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-4 col-sm-6 col-xs-12">
-                <div class="post-block mb30">
-                    <div class="post-img">
-                        <a href="blog-single.html" class="imghover"><img src="__ADMIN_JS__/home/images/blog-img-1.jpg" alt="Borrow - Loan Company Website Template" class="img-responsive"></a>
-                    </div>
-                    <div class="bg-white pinside40 outline">
-                        <h2><a href="blog-single.html" class="title">Business Man Thinking for Loan</a></h2>
-                        <p class="meta"><span class="meta-date">Aug 24, 2017</span><span class="meta-author">By<a href="#"> Admin</a></span></p>
-                        <p>Nulla vehicula nibh vel malesuada dapibus ringilla nunc mi sit amet fbendum sapierttitor nibh. </p>
-                        <a href="blog-single.html" class="btn-link">Read More</a> </div>
-                </div>
-            </div>
-            <div class="col-md-4 col-sm-6 col-xs-12">
-                <div class="post-block mb30">
-                    <div class="post-img">
-                        <a href="blog-single.html" class="imghover"><img src="__ADMIN_JS__/home/images/blog-img-2.jpg" alt="Borrow - Loan Company Website Templates" class="img-responsive"></a>
-                    </div>
-                    <div class="bg-white pinside40 outline">
-                        <h2><a href="blog-single.html" class="title">Are you students looking for loan ?</a></h2>
-                        <p class="meta"><span class="meta-date">Aug 23, 2017</span><span class="meta-author">By<a href="#"> Admin</a></span></p>
-                        <p>Malesuada urna sodales euusce sed erat libasellus id orci quis ligula pretium co ctus velit.</p>
-                        <a href="blog-single.html" class="btn-link">Read More</a> </div>
-                </div>
-            </div>
+            {/volist}
         </div>
     </div>
 </div>
@@ -337,58 +286,18 @@
     <div class="container">
         <div class="row">
             <div class="col-md-offset-2 col-md-8 col-sm-offset-2 col-sm-8">
-                <div class="mb60 text-center section-title">
-                    <!-- section title start-->
+                <div class="mb30 text-center section-title">
                     <h1>合作企业</h1>
                 </div>
-                <!-- /.section title start-->
             </div>
         </div>
         <div class="row">
-            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img src="__ADMIN_JS__/home/images/logo-1.jpg" alt="Borrow - Loan Company Website Template"> </div>
-            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img src="__ADMIN_JS__/home/images/logo-2.jpg" alt="Borrow - Loan Company Website Template"> </div>
-            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img src="__ADMIN_JS__/home/images/logo-3.jpg" alt="Borrow - Loan Company Website Template"> </div>
-            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img src="__ADMIN_JS__/home/images/logo-4.jpg" alt="Borrow - Loan Company Website Template"> </div>
-            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img src="__ADMIN_JS__/home/images/logo-5.jpg" alt="Borrow - Loan Company Website Template"> </div>
-            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img src="__ADMIN_JS__/home/images/logo-1.jpg" alt="Borrow - Loan Company Website Template"> </div>
-        </div>
-    </div>
-</div>
-<div class="section-space80">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-offset-2 col-md-8 col-sm-offset-2 col-sm-8">
-                <div class="mb60 text-center section-title">
-                    <!-- section title-->
-                    <h1>联系我们</h1>
-                    <p>联系我们联系我们联系我们联系我们联系我们.</p>
-                </div>
-                <!-- /.section title-->
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4 col-sm-6 col-xs-12">
-                <div class="bg-white bg-boxshadow pinside40 outline text-center mb30">
-                    <div class="mb40"><i class="icon-calendar-3 icon-2x icon-default"></i></div>
-                    <h2 class="capital-title">贷款</h2>
-                    <p>买车或买房需要用钱.</p>
-                    <a href="#" class="btn-link">提供资料</a> </div>
-            </div>
-            <div class="col-md-4 col-sm-6 col-xs-12">
-                <div class="bg-white bg-boxshadow pinside40 outline text-center mb30">
-                    <div class="mb40"><i class="icon-phone-call icon-2x icon-default"></i></div>
-                    <h2 class="capital-title">联系方式</h2>
-                    <h1 class="text-big">027-87747658</h1>
-                    <p>27665567@qq.com</p>
-                    <a href="#" class="btn-link">联系</a> </div>
-            </div>
-            <div class="col-md-4 col-sm-12 col-xs-12">
-                <div class="bg-white bg-boxshadow pinside40 outline text-center mb30">
-                    <div class="mb40"> <i class="icon-users icon-2x icon-default"></i></div>
-                    <h2 class="capital-title">项目合作</h2>
-                    <p>项目合作项目合作项目合作项目合作.</p>
-                    <a href="#" class="btn-link">项目合作</a> </div>
-            </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img src="__ADMIN_JS__/home/images/dc.png" alt="Borrow - Loan Company Website Template"> </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img src="__ADMIN_JS__/home/images/jz.png" alt="Borrow - Loan Company Website Template"> </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img src="__ADMIN_JS__/home/images/sz.png" alt="Borrow - Loan Company Website Template"> </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img src="__ADMIN_JS__/home/images/tc.png" alt="Borrow - Loan Company Website Template"> </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img src="__ADMIN_JS__/home/images/zn.png" alt="Borrow - Loan Company Website Template"> </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img src="__ADMIN_JS__/home/images/zn.png" alt="Borrow - Loan Company Website Template"> </div>
         </div>
     </div>
 </div>

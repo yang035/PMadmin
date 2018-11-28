@@ -27,6 +27,8 @@ class Index extends Controller
 //        print_r($this->getVideo());
         $this->assign('data_video',$this->getVideo());
         $this->assign('ispush',$this->isPush());
+        $this->assign('data_project',$this->getProject());
+        $this->assign('data_tpo',$this->getTpo());
         return $this->fetch();
     }
 
@@ -90,6 +92,26 @@ class Index extends Controller
                 $data_list[$k]['attachment'] = explode(',',$v['attachment'])[0];
             }
         }
+        return $data_list;
+    }
+    public function getProject(){
+        $map = [];
+        if (session('admin_user') && 1 != session('admin_user.role_id')) {
+            $map['cid'] = session('admin_user.cid');
+        }
+        $map['status'] = 1;
+        $map['cat_id'] = 10;
+        $data_list = ItemModel::where($map)->order('id desc')->paginate(3, false, ['query' => input('get.')]);
+        return $data_list;
+    }
+    public function getTpo(){
+        $map = [];
+        if (session('admin_user') && 1 != session('admin_user.role_id')) {
+            $map['cid'] = session('admin_user.cid');
+        }
+        $map['status'] = 1;
+        $map['cat_id'] = 11;
+        $data_list = ItemModel::where($map)->order('id desc')->paginate(3, false, ['query' => input('get.')]);
         return $data_list;
     }
 

@@ -149,6 +149,16 @@ return [
             'href'=>'index/index/lists/id/9',
             'img'=>'tuandui.svg',
         ],
+        10=>[
+            'title'=>'项目案例',
+            'href'=>'index/index/lists/id/10',
+            'img'=>'tuandui.svg',
+        ],
+        11=>[
+            'title'=>'TPO',
+            'href'=>'index/index/lists/id/11',
+            'img'=>'tuandui.svg',
+        ],
     ],
 
 ];
