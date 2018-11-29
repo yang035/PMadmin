@@ -64,6 +64,13 @@
         .login-box .copyright a {
             color: #ccc;
         }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
     </style>
 </head>
 <body>
@@ -71,7 +78,7 @@
     <div class="login-box">
         <form action="{:url()}" method="post" class="layui-form layui-form-pane">
             <fieldset class="layui-elem-field layui-field-title">
-                <legend>账号登录</legend>
+                <legend>账号注册</legend>
             </fieldset>
             <div class="layui-form-item">
                 <label class="layui-form-label">选择公司</label>
@@ -100,7 +107,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">联系手机</label>
                 <div class="layui-input-inline">
-                    <input type="text" class="layui-input field-mobile" name="mobile" lay-verify="required"
+                    <input type="text" class="layui-input field-mobile" name="mobile" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" lay-verify="required" maxlength="11"
                            autocomplete="off" placeholder="请输入手机号码">
                 </div>
                 <div class="layui-form-mid" style="color: red">*</div>
@@ -142,15 +149,10 @@
 </div>
 <script src="__ADMIN_JS__/layui/layui.js"></script>
 
-<script>
-    layui.config({
-        base: '__ADMIN_JS__/'
-    }).use('global');
-</script>
 <script type="text/javascript">
     layui.define('form', function (exports) {
         var $ = layui.jquery, layer = layui.layer, form = layui.form;
-        form.on('submit(formLogin)', function (data) {
+        form.on('submit(formSubmit)', function (data) {
             var _form = $(this).parents('form');
             layer.msg('数据提交中...', {time: 3000});
             $.ajax({

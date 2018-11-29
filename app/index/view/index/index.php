@@ -301,12 +301,10 @@
             </div>
         </div>
         <div class="row mb30">
-            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img style="width: 110px;height: 45px;" src="__ADMIN_JS__/home/images/dc.png" alt="Borrow - Loan Company Website Template"> </div>
-            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img style="width: 110px;height: 45px;" src="__ADMIN_JS__/home/images/jz.png" alt="Borrow - Loan Company Website Template"> </div>
-            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img style="width: 110px;height: 45px;" src="__ADMIN_JS__/home/images/sz.png" alt="Borrow - Loan Company Website Template"> </div>
-            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img style="width: 110px;height: 45px;" src="__ADMIN_JS__/home/images/tc.png" alt="Borrow - Loan Company Website Template"> </div>
-            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img style="width: 110px;height: 45px;" src="__ADMIN_JS__/home/images/zn.png" alt="Borrow - Loan Company Website Template"> </div>
-            <div class="col-md-2 col-sm-4 col-xs-6 mb5"> <img style="width: 110px;height: 45px;" src="__ADMIN_JS__/home/images/zn.png" alt="Borrow - Loan Company Website Template"> </div>
+            <div class="col-md-3 col-sm-4 col-xs-6 mb5"><a href="/" title="大成易景"><img style="width: 110px;height: 45px;" src="__ADMIN_JS__/home/images/dc.png" alt="大成易景"></a></div>
+            <div class="col-md-3 col-sm-4 col-xs-6 mb5"><a href="/" title="集智圈点"><img style="width: 110px;height: 45px;" src="__ADMIN_JS__/home/images/jz.png" alt="集智圈点"></a></div>
+            <div class="col-md-3 col-sm-4 col-xs-6 mb5"><a href="/" title="深圳建筑设计院"><img style="width: 110px;height: 45px;" src="__ADMIN_JS__/home/images/sz.png" alt="深圳建筑设计院"></a></div>
+            <div class="col-md-3 col-sm-4 col-xs-6 mb5"><a href="/" title="天成易创"><img style="width: 110px;height: 45px;" src="__ADMIN_JS__/home/images/tc.png" alt="天成易创"></a></div>
         </div>
     </div>
 </div>

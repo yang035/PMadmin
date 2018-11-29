@@ -99,7 +99,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">登陆密码</label>
             <div class="layui-input-inline">
-                <input type="password" class="layui-input" name="password" lay-verify="required" autocomplete="off"
+                <input type="password" class="layui-input" name="password" autocomplete="off"
                        placeholder="******">
             </div>
             <div class="layui-form-mid" style="color: red">*</div>
@@ -107,7 +107,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">确认密码</label>
             <div class="layui-input-inline">
-                <input type="password" class="layui-input" name="password_confirm" lay-verify="required"
+                <input type="password" class="layui-input" name="password_confirm"
                        autocomplete="off" placeholder="******">
             </div>
             <div class="layui-form-mid" style="color: red">*</div>

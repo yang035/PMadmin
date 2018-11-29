@@ -55,7 +55,7 @@
             <div class="col-md-2 col-sm-4 col-xs-4">
                 <div class="top-nav"> <span class="top-text">
                         {empty name="$Think.session.admin_user"}
-                        <a target="_blank" href="/admin.php">登录</a>&nbsp;&nbsp;/&nbsp;&nbsp;<a href="#">注册</a>
+                        <a target="_blank" href="/admin.php">登录</a>&nbsp;&nbsp;/&nbsp;&nbsp;<a href="{:url('admin.php/publics/register')}" target="_blank">注册</a>
                         {else/}
                         <a data-toggle="dropdown">{$Think.session.admin_user.username}<span class="caret"></span></a>
                         <ul class="dropdown-menu" style="min-width: 110px;" role="menu">
@@ -82,7 +82,7 @@
             <div class="col-md-2 col-sm-6 col-xs-6">
                 <!-- logo -->
                 <div class="logo">
-                    <a href=#"><img src="__ADMIN_JS__/home/images/logo.png" alt="Borrow - Loan Company Website Template"></a>
+                    <a href=''><img src="__ADMIN_JS__/home/images/logo.png" alt="Borrow - Loan Company Website Template"></a>
                 </div>
             </div>
             <div class="col-md-2 col-sm-6 col-xs-6">
@@ -96,11 +96,11 @@
                 <div id="navigation">
                     <!-- navigation start-->
                     <ul>
-                        <li class="active"><a href="#" class="animsition-link">首页</a></li>
-                        <li><a href="#" class="animsition-link">生活区</a></li>
-                        <li><a href="/admin.php" class="animsition-link">学习区</a></li>
+                        <li class="active"><a href="/" class="animsition-link">首页</a></li>
+                        <li><a href="/" class="animsition-link">生活区</a></li>
+                        <li><a href="/" class="animsition-link">学习区</a></li>
                         <li><a href="/admin.php" target="_blank">工作区</a></li>
-                        <li><a href="#" title="Contact us" class="animsition-link">联系我们</a></li>
+                        <li><a href="/" title="Contact us" class="animsition-link">联系我们</a></li>
                     </ul>
                 </div>
                 <!-- /.navigation start-->

@@ -114,7 +114,7 @@
 {include file="block/layui" /}
 <script>
     var formData = {:json_encode($data_info)};
-    var open_url = "{:url('ProjectScore/add',['id'=>$vo['id'],'pid'=>$vo['pid'],'type'=>$type])}";
+    // var open_url = "{:url('ProjectScore/add',['id'=>$vo['id'],'pid'=>$vo['pid'],'type'=>$type])}";
     layui.use(['jquery', 'laydate'], function() {
         var $ = layui.jquery, laydate = layui.laydate;
         laydate.render({
