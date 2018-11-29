@@ -96,11 +96,11 @@
                 <div id="navigation">
                     <!-- navigation start-->
                     <ul>
-                        <li class="active"><a href="/admin.php" class="animsition-link">首页</a></li>
-                        <li><a href="about.html" class="animsition-link">生活区</a></li>
+                        <li class="active"><a href="#" class="animsition-link">首页</a></li>
+                        <li><a href="#" class="animsition-link">生活区</a></li>
                         <li><a href="/admin.php" class="animsition-link">学习区</a></li>
                         <li><a href="/admin.php" target="_blank">工作区</a></li>
-                        <li><a href="contact-us.html" title="Contact us" class="animsition-link">联系我们</a></li>
+                        <li><a href="#" title="Contact us" class="animsition-link">联系我们</a></li>
                     </ul>
                 </div>
                 <!-- /.navigation start-->
