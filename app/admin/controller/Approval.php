@@ -14,6 +14,7 @@ use app\admin\model\ApprovalBusiness as BusinessModel;
 use app\admin\model\ApprovalProcurement as ProcurementModel;
 use app\admin\model\ApprovalOvertime as OvertimeModel;
 use app\admin\model\ApprovalGoout as GooutModel;
+use app\admin\model\ApprovalUsecar as CarModel;
 use app\admin\model\AdminUser;
 use app\admin\model\AssetItem as ItemModel;
 
@@ -363,7 +364,43 @@ class Approval extends Admin
 
     public function useCar()
     {
-        
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            // 验证
+            $result = $this->validate($data, 'ApprovalUsecar');
+            if($result !== true) {
+                return $this->error($result);
+            }
+            unset($data['id']);
+            $approve = [
+                'class_type'=>$data['class_type'],
+                'cid'=>session('admin_user.cid'),
+                'start_time'=>$data['start_time'],
+                'end_time'=>$data['end_time'],
+                'user_id'=>session('admin_user.uid'),
+                'send_user'=>json_encode(user_array($data['send_user'])),
+                'copy_user'=>json_encode(user_array($data['copy_user'])),
+            ];
+            $res = ApprovalModel::create($approve);
+            if ($res) {
+                $leave = [
+                    'aid'=>$res['id'],
+                    'address'=>$data['address'],
+                    'reason'=>$data['reason'],
+                    'car_type'=>$data['car_type'],
+                    'time_long'=>$data['time_long'],
+                    'attachment'=>$data['attachment'],
+                ];
+                if (!CarModel::create($leave)){
+                    return $this->error('添加失败！');
+                }
+            }else{
+                return $this->error('添加失败！');
+            }
+            return $this->success('添加成功。','index');
+        }
+        $this->assign('car_type', CarModel::getOption());
+        return $this->fetch();
     }
 
     public function useSeal(){
@@ -414,6 +451,10 @@ class Approval extends Admin
                 $table = 'tb_approval_goout';
                 $f = 'b.reason,b.address,b.time_long,b.attachment';
                 break;
+            case 8:
+                $table = 'tb_approval_usecar';
+                $f = 'b.reason,b.address,b.time_long,b.attachment,b.car_type';
+                break;
             default:
                 $table = 'tb_approval_leave';
                 $f = 'b.type,b.reason,b.attachment';
@@ -446,6 +487,9 @@ class Approval extends Admin
                 break;
             case 7:
                 break;
+            case 8:
+                $car_type = config('other.car_type');
+                $this->assign('car_type',$car_type);
             default:
                 break;
         }

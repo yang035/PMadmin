@@ -56,6 +56,9 @@
             外出地点：{$data_list['address']}<br>
             外出时长：{$data_list['time_long']}小时<br>
             {/case}
+            {case value="8"}
+            车辆类型：{$car_type[$data_list['car_type']]}<br>
+            {/case}
             {/switch}
             事由：{$data_list['reason']}<br>
             附件说明：

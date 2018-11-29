@@ -76,18 +76,24 @@ return [
             'title'=>'外出',
             'href'=>'admin/Approval/goout'
         ],
-//        8=>[
-//            'title'=>'用车',
-//            'href'=>'admin/Approval/useCar'
-//        ],
-//        9=>[
-//            'title'=>'用章',
-//            'href'=>'admin/Approval/useSeal'
-//        ],
-//        10=>[
-//            'title'=>'打卡补卡',
-//            'href'=>'admin/Approval/clockIn'
-//        ],
+        8=>[
+            'title'=>'用车',
+            'href'=>'admin/Approval/useCar'
+        ],
+        9=>[
+            'title'=>'用章',
+            'href'=>'admin/Approval/useSeal'
+        ],
+        10=>[
+            'title'=>'打卡补卡',
+            'href'=>'admin/Approval/clockIn'
+        ],
+    ],
+    'car_type' => [
+        1 =>'车辆1',
+        2 =>'车辆2',
+        3 =>'车辆3',
+        4 =>'车辆4',
     ],
     'report_type' => [
         1=>[
