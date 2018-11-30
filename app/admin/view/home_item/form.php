@@ -113,11 +113,13 @@ layui.use(['jquery', 'laydate', 'upload'], function() {
     var $ = layui.jquery, laydate = layui.laydate, layer = layui.layer, upload = layui.upload;
     var uploadOneIns = upload.render({
         elem: '#oneImage',
-        url: '{:url("admin/UploadFile/upload?thumb=no&water=no")}'
-        ,method: 'post'
-        ,before: function(input) {
+        url: '{:url("admin/UploadFile/upload?group=front")}',
+        method: 'post',
+        size:60,
+        before: function(input) {
             layer.msg('文件上传中...', {time:3000000});
-        },done: function(res, index, upload) {
+        },
+        done: function(res, index, upload) {
             var obj = this.item;
             if (res.code == 0) {
                 layer.msg(res.msg);
@@ -136,7 +138,7 @@ layui.use(['jquery', 'laydate', 'upload'], function() {
     //多文件列表示例
     var demoListView = $('#demoList'),uploadListIns = upload.render({
         elem: '#testList',
-        url: '{:url("admin/UploadFile/upload?thumb=no&water=no")}',
+        url: '{:url("admin/UploadFile/upload?group=front")}',
         accept: 'file',
         size:"{:config('upload.upload_file_size')}",
         multiple: true,
