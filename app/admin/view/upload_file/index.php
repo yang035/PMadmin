@@ -25,9 +25,11 @@
             <thead>
             <tr>
                 <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
+                <th>文件名</th>
                 <th>文件</th>
                 <th>大小(KB)</th>
                 <th>状态</th>
+                <th>操作人</th>
                 <th>添加时间</th>
                 <th>操作</th>
             </tr>
@@ -37,10 +39,12 @@
             <tr>
                 <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
                 <td class="font12">
-                    <strong class="mcolor">{$vo['file']}</strong>
+                    <strong class="mcolor">{$vo['name']}</strong>
                 </td>
+                <td class="font12">{$vo['file']}</td>
                 <td class="font12">{$vo['size']}</td>
                 <td><input type="checkbox" name="status" {if condition="$vo['status'] eq 1"}checked=""{/if} value="{$vo['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="{:url('status?table=admin_company&ids='.$vo['id'])}"></td>
+                <td class="font12">{$vo['user_id']}</td>
                 <td class="font12">{$vo['ctime']}</td>
                 <td>
                     <div class="layui-btn-group">

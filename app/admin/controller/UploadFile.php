@@ -1,6 +1,7 @@
 <?php
 namespace app\admin\controller;
 
+use app\admin\model\AdminUser;
 use app\common\model\UploadFile as UploadFileModel;
 use think\Request;
 
@@ -20,7 +21,7 @@ class UploadFile extends Admin
             } elseif (preg_match("/^1\d{10}$/", $q)) {// 手机号
                 $map['cellphone'] = $q;
             } else {// 用户名、昵称
-                $map['file'] = ['like', '%'.$q.'%'];
+                $map['name'] = ['like', '%'.$q.'%'];
             }
         }
 
@@ -37,9 +38,14 @@ class UploadFile extends Admin
                     case 'GIF':
                          break;
                 }
-//                $data_list[$k]['file'] =
+
+                if ($v['user_id']){
+                    $v['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
+                }
             }
         }
+
+//        print_r($data_list);
         // 分页
         $pages = $data_list->render();
         $this->assign('data_list', $data_list);

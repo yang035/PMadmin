@@ -11,6 +11,7 @@
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-address" name="address" lay-verify="required" autocomplete="off" placeholder="请输入地址">
         </div>
+        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">法人</label>
@@ -27,31 +28,31 @@
     <div class="layui-form-item">
         <label class="layui-form-label">工商营业执照</label>
         <div class="layui-input-inline">
-            <input type="text" class="layui-input field-business_license" name="business_license" autocomplete="off" placeholder="请输入邮箱地址">
+            <input type="text" class="layui-input field-business_license" name="business_license" autocomplete="off" placeholder="请输入工商营业执照">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">营业许可证</label>
         <div class="layui-input-inline">
-            <input type="text" class="layui-input field-license" name="license" autocomplete="off" placeholder="请输入邮箱地址">
+            <input type="text" class="layui-input field-license" name="license" autocomplete="off" placeholder="请输入营业许可证">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">社会信用代码</label>
         <div class="layui-input-inline">
-            <input type="text" class="layui-input field-credit_code" name="credit_code" autocomplete="off" placeholder="请输入邮箱地址">
+            <input type="text" class="layui-input field-credit_code" name="credit_code" autocomplete="off" placeholder="请输入社会信用代码">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">网站域名</label>
         <div class="layui-input-inline">
-            <input type="text" class="layui-input field-domain_name" name="domain_name" autocomplete="off" placeholder="请输入邮箱地址">
+            <input type="text" class="layui-input field-domain_name" name="domain_name" autocomplete="off" placeholder="请输入网站域名">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">网站备案号</label>
         <div class="layui-input-inline">
-            <input type="text" class="layui-input field-record_number" name="record_number" autocomplete="off" placeholder="请输入邮箱地址">
+            <input type="text" class="layui-input field-record_number" name="record_number" autocomplete="off" placeholder="请输入网站备案号">
         </div>
     </div>
     <div class="layui-form-item">

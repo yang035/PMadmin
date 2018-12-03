@@ -52,6 +52,8 @@ class User extends Admin
                 }
             }
             $where['id'] = ['neq', 1];
+            $where['is_show'] = ['eq', 0];
+
             if (1 != session('admin_user.role_id')){
                 $where['company_id'] = session('admin_user.cid');
             }
@@ -368,12 +370,14 @@ class User extends Admin
 
         $fields = 'cid,manager_user,send_user,deal_user,copy_user,finance_user,hr_user';
         $row = AdminUserDefault::field($fields)->where('cid',$cid)->find();
-        $row['manager_user_id'] = $this->deal_user($row['manager_user']);
-        $row['send_user_id'] = $this->deal_user($row['send_user']);
-        $row['deal_user_id'] = $this->deal_user($row['deal_user']);
-        $row['copy_user_id'] = $this->deal_user($row['copy_user']);
-        $row['finance_user_id'] = $this->deal_user($row['finance_user']);
-        $row['hr_user_id'] = $this->deal_user($row['hr_user']);
+        if ($row){
+            $row['manager_user_id'] = $this->deal_user($row['manager_user']);
+            $row['send_user_id'] = $this->deal_user($row['send_user']);
+            $row['deal_user_id'] = $this->deal_user($row['deal_user']);
+            $row['copy_user_id'] = $this->deal_user($row['copy_user']);
+            $row['finance_user_id'] = $this->deal_user($row['finance_user']);
+            $row['hr_user_id'] = $this->deal_user($row['hr_user']);
+        }
 
         if ($row){
             $redis = \service('Redis');

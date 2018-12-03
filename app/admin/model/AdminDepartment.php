@@ -27,6 +27,7 @@ class AdminDepartment extends Model
             'company_id' => $cid,
             'department_id'=>['>',0],
             'status'=>1,
+            'is_show'=>0,
         ];
         $user = AdminUser::where($map)->select();
         foreach ($user as $k => $v) {

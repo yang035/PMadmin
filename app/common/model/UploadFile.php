@@ -54,6 +54,7 @@ class UploadFile extends Model
                 break;
         }
         $file = request()->file($input);
+//        print_r($file);exit();
         $data = [];
         if (empty($file)) {
             return self::result('未找到上传的文件(文件大小可能超过php.ini默认2M限制)！', $from);
@@ -88,20 +89,24 @@ class UploadFile extends Model
          }
 
         // 移动到upload 目录下
-//        $upfile = $file->rule('md5')->move($_upload_path);//以md5方式命名
-        $upfile = $file->move($_upload_path,false);//保留原文件名
+        $upfile = $file->rule('md5')->move($_upload_path);//以md5方式命名
+//        print_r($upfile->getInfo('name'));exit();
+//        $upfile = $file->move($_upload_path,false);//保留原文件名
         if (!is_file($_upload_path.$upfile->getSaveName())) {
             return self::result('文件上传失败！', $from);
         }
         $file_count = 1;
         $file_size = round($upfile->getInfo('size')/1024, 2);
+        $file_name = explode('.',$upfile->getInfo('name'))[0];
         $data = [
+            'name'  => $file_name,
             'file'  => $_file_path.str_replace('\\', '/', $upfile->getSaveName()),
             'hash'  => $upfile->hash(),
             'data_id' => input('param.data_id', 0),
             'type'  => $type,
             'size'  => $file_size,
             'group' => $group,
+            'user_id' => ADMIN_ID,
             'ctime' => request()->time(),
         ];
 
@@ -265,4 +270,5 @@ class UploadFile extends Model
         }
         return $arr;
     }
+
 }

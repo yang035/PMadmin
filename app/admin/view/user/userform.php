@@ -34,6 +34,7 @@
     <div class="layui-tab-item layui-form layui-show">
         <div class="layui-form-item">
             <label class="layui-form-label">选择部门</label>
+            {neq name="ADMIN_ROLE" value="1"}
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-dep_name" id="menu_parent_name" lay-verify="required"
                        name="dep_name" autocomplete="off">
@@ -62,6 +63,13 @@
                     </script>
                 </div>
             </div>
+            {else/}
+            <div class="layui-input-inline">
+                <select name="company_id" class="field-company_id" type="select">
+                    {$company_option}
+                </select>
+            </div>
+            {/neq}
             <div class="layui-form-mid" style="color: red">*</div>
         </div>
         <div class="layui-form-item">
@@ -91,7 +99,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">联系手机</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input field-mobile" name="mobile" lay-verify="required"
+                <input type="text" class="layui-input field-mobile" name="mobile" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" lay-verify="required" maxlength="11"
                        autocomplete="off" placeholder="请输入手机号码">
             </div>
             <div class="layui-form-mid" style="color: red">*</div>
@@ -126,6 +134,15 @@
                 <input type="radio" class="field-status" name="status" value="0" title="禁用">
             </div>
         </div>
+        {eq name="ADMIN_ROLE" value="1"}
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否虚拟账号</label>
+            <div class="layui-input-inline">
+                <input type="radio" class="field-is_show" name="is_show" value="1" title="是" checked>
+                <input type="radio" class="field-is_show" name="is_show" value="0" title="否">
+            </div>
+        </div>
+        {/eq}
     </div>
     <div class="layui-tab-item layui-form">
         <div class="layui-collapse page-tips">

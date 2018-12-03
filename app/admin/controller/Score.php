@@ -39,6 +39,8 @@ class Score extends Admin
                 $map['project_code'] = ['like', '%'.$params['project_code'].'%'];
             }
         }
+        $map1['id'] = ['neq', 1];
+        $map1['is_show'] = ['eq', 0];
 
         $fields = "`Score`.id,`Score`.user,sum(`Score`.ml_add_score) as ml_add_sum,sum(`Score`.ml_sub_score) as ml_sub_sum,sum(`Score`.gl_add_score) as gl_add_sum,sum(`Score`.gl_sub_score) as gl_sub_sum,`AdminUser`.realname";
         $data_list = ScoreModel::hasWhere('adminUser',$map1)->field($fields)->where($map)->group('`Score`.user')->paginate(30, false, ['query' => input('get.')]);
