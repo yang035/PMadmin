@@ -43,7 +43,7 @@
                         if (typeof (data[i].role_id) == 'undefined'){
                             d.add(data[i].id,data[i].pid,'authority',data[i].id,data[i].name,true,false);
                         } else {
-                            d.add(data[i].uid,data[i].department_id,'authority',data[i].id,data[i].username,false,false);
+                            d.add(data[i].uid,data[i].department_id,'authority',data[i].id,data[i].username+'['+data[i].realname+']',false,false);
                         }
 
                     }

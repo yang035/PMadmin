@@ -47,10 +47,41 @@ class Approval extends Admin
                 'url' => 'admin/approval/index',
                 'params' =>['atype'=>4],
             ],
+            [
+                'title' => '我参与的',
+                'url' => 'admin/approval/index',
+                'params' =>['atype'=>5],
+            ],
         ];
         $tab_data['current'] = url('index',['atype'=>1]);
         $this->tab_data = $tab_data;
     }
+
+    public function deal_data($x_user)
+    {
+        $x_user_arr = json_decode($x_user,true);
+        $x_user = [];
+        if ($x_user_arr){
+            foreach ($x_user_arr as $key=>$val){
+                $real_name = AdminUser::getUserById($key)['realname'];
+                if ('a' == $val){
+                    $real_name = "<font style='color: blue'>".$real_name."</font>";
+                }
+                $x_user[] = $real_name;
+            }
+            return implode(',',$x_user);
+        }
+    }
+
+    public function deal_data_id($x_user){
+        $x_user_arr = json_decode($x_user,true);
+        if ($x_user_arr){
+            $tmp = array_keys($x_user_arr);
+            return implode(',',$tmp);
+        }
+        return '';
+    }
+
     public function index()
     {
         $params = $this->request->param();
@@ -89,6 +120,9 @@ class Approval extends Admin
                 break;
             case 4:
                 $con = "JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"')";
+                break;
+            case 5:
+                $con = "JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"')";
                 break;
             default:
                 $con = "";
@@ -378,6 +412,7 @@ class Approval extends Admin
                 'start_time'=>$data['start_time'],
                 'end_time'=>$data['end_time'],
                 'user_id'=>session('admin_user.uid'),
+                'deal_user'=>json_encode(user_array($data['deal_user'])),
                 'send_user'=>json_encode(user_array($data['send_user'])),
                 'copy_user'=>json_encode(user_array($data['copy_user'])),
             ];
@@ -416,7 +451,26 @@ class Approval extends Admin
         $params = $this->request->param();
         if ($this->request->isPost()){
             $data = $this->request->post();
-            $res= ApprovalModel::where('id',$data['id'])->setField('status',$data['status']);
+            if (5 == $data['atype'] && 8 == $data['class_type']){
+                if (isset($data['before_img'])){
+                    $data['before_img'] = array_filter($data['before_img']);
+                    if (count($data['before_img']) < 4){
+                        return $this->error('照片上传数量不够！');
+                    }
+                    $tmp['before_img'] = json_encode($data['before_img']);
+                }
+                if (isset($data['after_img'])){
+                    $data['after_img'] = array_filter($data['after_img']);
+                    if (count($data['after_img']) < 4){
+                        return $this->error('照片上传数量不够！');
+                    }
+                    $tmp['after_img'] = json_encode($data['after_img']);
+                }
+
+                $res= CarModel::where('aid',$data['id'])->update($tmp);
+            }elseif (3 == $data['atype']){
+                $res= ApprovalModel::where('id',$data['id'])->setField('status',$data['status']);
+            }
             if (!$res){
                 return $this->error('处理失败！');
             }
@@ -453,7 +507,7 @@ class Approval extends Admin
                 break;
             case 8:
                 $table = 'tb_approval_usecar';
-                $f = 'b.reason,b.address,b.time_long,b.attachment,b.car_type';
+                $f = 'b.reason,b.address,b.time_long,b.attachment,b.car_type,b.before_img,b.after_img';
                 break;
             default:
                 $table = 'tb_approval_leave';
@@ -488,6 +542,8 @@ class Approval extends Admin
             case 7:
                 break;
             case 8:
+                $list['before_img'] = json_decode($list['before_img'],true);
+                $list['after_img'] = json_decode($list['after_img'],true);
                 $car_type = config('other.car_type');
                 $this->assign('car_type',$car_type);
             default:
@@ -495,6 +551,8 @@ class Approval extends Admin
         }
         $list['attachment'] = explode(',',substr($list['attachment'],0,-1));
         $list['real_name'] = AdminUser::getUserById($list['user_id'])['realname'];
+        $list['deal_user'] = $this->deal_data($list['deal_user']);
+//        print_r($list);
         $approval_status = config('other.approval_status');
         $this->assign('data_list',$list);
         $this->assign('approval_status',$approval_status);
