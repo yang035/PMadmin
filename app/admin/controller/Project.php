@@ -25,10 +25,27 @@ class Project extends Admin
 
         $tab_data['menu'] = [
             [
-                'title' => '计划管理',
+                'title' => '市政',
                 'url' => 'admin/Project/index',
+                'params' =>['atype'=>1],
+            ],
+            [
+                'title' => '住宅',
+                'url' => 'admin/Project/index',
+                'params' =>['atype'=>2],
+            ],
+            [
+                'title' => '旅游',
+                'url' => 'admin/Project/index',
+                'params' =>['atype'=>3],
+            ],
+            [
+                'title' => '全部',
+                'url' => 'admin/Project/index',
+                'params' =>['atype'=>4],
             ],
         ];
+        $tab_data['current'] = url('index',['atype'=>1]);
         $this->tab_data = $tab_data;
     }
 
@@ -56,22 +73,41 @@ class Project extends Admin
         }
         return '';
     }
-    public function index($q = '')
+    public function index()
     {
         $map = [];
         $params = $this->request->param();
+//        print_r($params['atype']);exit();
+        switch ($params['atype']) {
+            case 1:
+                $map['p_type'] = 1;
+                break;
+            case 2:
+                $map['p_type'] = 2;
+                break;
+            case 3:
+                $map['p_type'] = 3;
+                break;
+            case 4:
+                break;
+            default:
+                $map['p_type'] = 1;
+                break;
+        }
+
         if ($params){
-            if ($params['name']){
+            if (isset($params['name']) && !empty($params['name'])){
                 $map['name'] = ['like', '%'.$params['name'].'%'];
             }
 
-            $start_time = $params['start_time'];
-            if ($start_time){
+            if (isset($params['start_time']) && !empty($params['start_time'])){
+                $start_time = $params['start_time'];
                 $start_time_arr = explode(' - ',$start_time);//这里分隔符两边加空格
                 $map['start_time'] = ['between', [$start_time_arr['0'],$start_time_arr['1']]];
             }
-            $end_time = $params['end_time'];
-            if ($end_time){
+
+            if (isset($params['end_time']) && !empty($params['end_time'])){
+                $end_time = $params['end_time'];
                 $end_time_arr = explode(' - ',$end_time);//这里分隔符两边加空格
                 $map['end_time'] = ['between', [$end_time_arr['0'],$end_time_arr['1']]];
             }
@@ -99,7 +135,10 @@ class Project extends Admin
             return json($data);
         }
         $this->assign('tab_data', $this->tab_data);
-        $this->assign('tab_type', 2);
+        $this->assign('tab_type', 1);
+        $this->assign('tab_url', url('index',['atype'=>$params['atype']]));
+        $this->assign('isparams', 1);
+        $this->assign('atype', $params['atype']);
         return $this->fetch();
     }
 
@@ -172,6 +211,8 @@ class Project extends Admin
             $this->assign('max_score',$max_score);
         }
         $this->assign('grade_type',ProjectModel::getGrade());
+        $this->assign('p_type',ProjectModel::getPtype());
+        $this->assign('p_source',ProjectModel::getPsource());
         return $this->fetch('form');
     }
 
@@ -203,10 +244,10 @@ class Project extends Admin
             }
             unset($data['pname'],$data['max_score']);
             $data['user_id'] = session('admin_user.uid');
-            $data['manager_user'] = json_encode(user_array($data['manager_user'],$row['manager_user']));
-            $data['deal_user'] = json_encode(user_array($data['deal_user'],$row['deal_user']));
-            $data['send_user'] = json_encode(user_array($data['send_user'],$row['send_user']));
-            $data['copy_user'] = json_encode(user_array($data['copy_user'],$row['copy_user']));
+            $data['manager_user'] = json_encode(user_array($data['manager_user']));
+            $data['deal_user'] = json_encode(user_array($data['deal_user']));
+            $data['send_user'] = json_encode(user_array($data['send_user']));
+            $data['copy_user'] = json_encode(user_array($data['copy_user']));
             if (!ProjectModel::update($data)) {
                 return $this->error('修改失败！');
             }
@@ -238,6 +279,8 @@ class Project extends Admin
         }
         $this->assign('data_info', $row);
         $this->assign('grade_type',ProjectModel::getGrade($row['grade']));
+        $this->assign('p_type',ProjectModel::getPtype($row['p_type']));
+        $this->assign('p_source',ProjectModel::getPsource($row['p_source']));
         return $this->fetch();
     }
 

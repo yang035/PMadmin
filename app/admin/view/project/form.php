@@ -35,6 +35,55 @@
             <textarea type="text" class="layui-textarea field-remark" name="remark" lay-verify="required" autocomplete="off" placeholder="请输入描述"></textarea>
         </div>
     </div>
+    {empty name="Request.param.id"}
+    <div class="layui-form-item">
+        <label class="layui-form-label">建设单位</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-development" name="development" autocomplete="off" placeholder="请输入建设单位">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">甲方联系人</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-contact" name="contact" autocomplete="off" placeholder="请输入甲方联系人">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">甲方电话</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-phone" name="phone" autocomplete="off" placeholder="请输入甲方电话">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">项目地址</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-address" name="address" autocomplete="off" placeholder="请输入项目地址">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">项目面积</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-area" name="area" autocomplete="off" placeholder="请输入项目面积">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">项目类别</label>
+        <div class="layui-input-inline">
+            <select name="p_type" class="field-p_type" type="select" lay-filter="p_type">
+                {$p_type}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">项目来源</label>
+        <div class="layui-input-inline">
+            <select name="p_source" class="field-p_source" type="select" lay-filter="p_source">
+                {$p_source}
+            </select>
+        </div>
+    </div>
+    <hr>
+    {/empty}
     <div class="layui-form-item">
         <label class="layui-form-label">预设分<span style="color: red">*</span></label>
         <div class="layui-input-inline">

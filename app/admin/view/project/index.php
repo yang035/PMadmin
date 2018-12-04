@@ -1,5 +1,4 @@
 {include file="block/layui" /}
-<div class="layui-tab-item layui-form menu-dl {if condition="$k eq 1"}layui-show{/if}">
 <style>
     .layui-form-item .layui-input-inline {
         float: left;
@@ -29,6 +28,7 @@
                     </div>
                 </div>
                 <div class="layui-inline">
+                    <input type="hidden" name="atype" value="{$Request.param.atype}">
                     <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
                 </div>
                 <div class="layui-inline fr">
@@ -60,7 +60,8 @@
     var  name=$("input[name='name']").val();
     var  start_time=$("input[name='start_time']").val();
     var  end_time=$("input[name='end_time']").val();
-    var _url = "{:url('admin/project/index')}?name="+name+"&start_time="+start_time+"&end_time="+end_time;
+    var  atype=$("input[name='atype']").val();
+    var _url = "{:url('admin/project/index')}?name="+name+"&start_time="+start_time+"&end_time="+end_time+"&atype="+atype;
 
     layui.config({
         base: '/../../static/js/'

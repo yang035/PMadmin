@@ -91,4 +91,32 @@ class Project extends Model
         $data = self::field('code,name')->select();
         return json_encode($data);
     }
+
+    public static function getPtype($grade = 0)
+    {
+        $grade_type = config('other.p_type');
+        $str = '';
+        foreach ($grade_type as $k => $v) {
+            if ($grade == $k) {
+                $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+            } else {
+                $str .= '<option value="'.$k.'">'.$v.'</option>';
+            }
+        }
+        return $str;
+    }
+
+    public static function getPsource($grade = 0)
+    {
+        $grade_type = config('other.p_source');
+        $str = '';
+        foreach ($grade_type as $k => $v) {
+            if ($grade == $k) {
+                $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+            } else {
+                $str .= '<option value="'.$k.'">'.$v.'</option>';
+            }
+        }
+        return $str;
+    }
 }

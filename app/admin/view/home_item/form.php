@@ -80,7 +80,6 @@
         <div class="layui-input-block">
             <textarea id="ckeditor" name="content" class="field-content"></textarea>
         </div>
-        <div class="layui-form-mid" style="color: red">*(上传图片不能为中文名)</div>
     </div>
     {:editor(['ckeditor', 'ckeditor2'],'kindeditor')}
     <div class="layui-form-item">
