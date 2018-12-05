@@ -135,12 +135,17 @@ class User extends Admin
         if ($id == 1 && ADMIN_ID != $id) {
             return $this->error('禁止修改超级管理员');
         }
+
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
             if (!isset($data['auth'])) {
                 $data['auth'] = '';
             }
-            
+            //为0不变更权限
+            if (0 == $data['is_auth']){
+                $data['auth'] = '';
+            }
             $row = UserModel::where('id', $id)->field('role_id,auth')->find();
             if ($data['id'] == 1 || ADMIN_ID == $id) {// 禁止更改超管角色，当前登陆用户不可更改自己的角色和自定义权限
                 unset($data['role_id'], $data['auth']);
@@ -163,7 +168,7 @@ class User extends Admin
             if ($data['password'] == '') {
                 unset($data['password']);
             }
-            unset($data['password_confirm'],$data['dep_name']);
+            unset($data['password_confirm'],$data['dep_name'],$data['is_auth']);
             $data['company_id'] = session('admin_user.cid');
             if (!UserModel::update($data)) {
                 return $this->error('修改失败');

@@ -114,7 +114,7 @@ layui.use(['jquery', 'laydate', 'upload'], function() {
         elem: '#oneImage',
         url: '{:url("admin/UploadFile/upload?group=front")}',
         method: 'post',
-        size:60,
+        size:120,
         before: function(input) {
             layer.msg('文件上传中...', {time:3000000});
         },

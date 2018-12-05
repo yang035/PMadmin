@@ -64,7 +64,7 @@
             <div class="col-md-4 col-sm-6 col-xs-12">
                 <div class="post-block">
                     <div class="post-img">
-                        <a href="{:url('detail',['id'=>$vo['id']])}" class="imghover"><img src="{$vo['thumb']}" alt="{$vo['title']}" class="img-responsive"></a>
+                        <a href="{:url('detail',['id'=>$vo['id']])}" class="imghover"><img style="height: 200px" src="{$vo['thumb']}" alt="{$vo['title']}" class="img-responsive"></a>
                     </div>
                     <div class="bg-white pinside20 outline">
                         <h2><a href="{:url('detail',['id'=>$vo['id']])}" class="title">{$vo['title']}</a></h2>

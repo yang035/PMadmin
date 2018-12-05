@@ -16,13 +16,13 @@
                                 <div class="panel-body">
                                 <h1>{$data_list['title']}</h1>
                                     <br>
-                                作者：{$data_list['author']}
-                                时间：{$data_list['update_time']}
+<!--                                作者：{$data_list['author']}-->
+                                时间：{$data_list['sub_date']}
                                     <br>
-                                摘要：{$data_list['summarize']}
-                                    <br>
-                                标签：{$data_list['tags']}
-                                    <br>
+<!--                                摘要：{$data_list['summarize']}-->
+<!--                                    <br>-->
+<!--                                标签：{$data_list['tags']}-->
+<!--                                    <br>-->
                                 </div>
                                 {$data_list['content']}
                             </div>

@@ -71,6 +71,9 @@ class Index extends Controller
         }
         $row = ItemModel::where($map)->find();
         $row['content'] = htmlspecialchars_decode($row['content']);
+//        print_r();
+        $sub_date= explode(' ',$row['update_time'])[0];
+        $row['sub_date'] = $sub_date;
         $this->assign('data_list', $row);
         return $this->fetch();
     }

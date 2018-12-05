@@ -143,6 +143,13 @@
             </div>
         </div>
         {/eq}
+        <div class="layui-form-item">
+            <label class="layui-form-label">变更权限</label>
+            <div class="layui-input-inline">
+                <input type="radio" class="field-is_auth" name="is_auth" value="1" title="是">
+                <input type="radio" class="field-is_auth" name="is_auth" value="0" title="否" checked>
+            </div>
+        </div>
     </div>
     <div class="layui-tab-item layui-form">
         <div class="layui-collapse page-tips">
