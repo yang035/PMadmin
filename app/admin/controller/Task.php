@@ -204,10 +204,10 @@ class Task extends Admin
             }
             unset($data['pname'],$data['max_score']);
             $data['user_id'] = session('admin_user.uid');
-            $data['manager_user'] = json_encode(user_array($data['manager_user'],$row['manager_user']));
-            $data['deal_user'] = json_encode(user_array($data['deal_user'],$row['deal_user']));
-            $data['send_user'] = json_encode(user_array($data['send_user'],$row['send_user']));
-            $data['copy_user'] = json_encode(user_array($data['copy_user'],$row['copy_user']));
+            $data['manager_user'] = json_encode(user_array($data['manager_user']));
+            $data['deal_user'] = json_encode(user_array($data['deal_user']));
+            $data['send_user'] = json_encode(user_array($data['send_user']));
+            $data['copy_user'] = json_encode(user_array($data['copy_user']));
             if (!ProjectModel::update($data)) {
                 return $this->error('修改失败！');
             }

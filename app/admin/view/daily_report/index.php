@@ -49,7 +49,7 @@
                 <tr>
                     <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
                     <td class="font12">
-                        <strong class="mcolor">{$mytask[$vo['project_id']]}</strong>
+                        <strong class="mcolor">{$vo['project_name']}</strong>
                     </td>
                     <td class="font12">{$vo['per']}</td>
                     <td class="font12">{$vo['real_per']}</td>

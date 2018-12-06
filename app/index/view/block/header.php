@@ -88,7 +88,7 @@
             <div class="col-md-2 col-sm-6 col-xs-6">
                 <!-- logo -->
                 <div style="margin: 12px;text-align: right">
-                    <a href="/admin.php" target="_blank" class="btn-sm btn-default" style="background-color: #ff6b00">进入工作</a>
+                    <a href="/admin.php" target="_blank" class="btn-xs btn-default" style="background-color: #ff6b00;color: #fff">我的工作</a>
                 </div>
             </div>
             <!-- logo -->

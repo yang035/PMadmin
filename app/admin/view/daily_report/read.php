@@ -31,7 +31,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">任务名</label>
         <div class="layui-input-inline">
-            <span>{$mytask[$data_list['project_id']]}</span>
+            <span>{$data_list['project_name']}</span>
         </div>
     </div>
     <div class="layui-form-item">

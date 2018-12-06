@@ -11,6 +11,7 @@ use app\admin\model\AdminUser;
 use app\admin\model\DailyReport as DailyReportModel;
 use app\admin\model\Project as ProjectModel;
 use app\admin\model\Score as ScoreModel;
+use think\Db;
 
 
 class DailyReport extends Admin
@@ -87,11 +88,15 @@ class DailyReport extends Admin
         }
 
         $list = DailyReportModel::where($map)->where($con)->order('create_time desc')->paginate(10, false, ['query' => input('get.')]);
+        foreach ($list as $k=>$v){
+            $v['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
+            $v['project_name'] = ProjectModel::index(['id'=>$v['project_id']])[0]['name'];
+        }
+//        print_r($list);
         $this->assign('tab_data', $this->tab_data);
         $this->assign('tab_type', 1);
         $this->assign('isparams', 1);
         $this->assign('atype', $params['atype']);
-        $this->assign('mytask', ProjectModel::getMyTask(0,0));
         $pages = $list->render();
         $this->assign('tab_url', url('index',['atype'=>$params['atype']]));
         $this->assign('data_list', $list);
@@ -131,8 +136,7 @@ class DailyReport extends Admin
         }
         ProjectModel::execute($sql);
         $coment = ReportReply::getAll($params['id'],5);
-
-        $this->assign('mytask', ProjectModel::getMyTask(0,0));
+        $row['project_name'] = ProjectModel::index(['id'=>$row['project_id']])[0]['name'];
         $this->assign('data_list', $row);
         $this->assign('coment', $coment);
         return $this->fetch();
@@ -231,6 +235,23 @@ class DailyReport extends Admin
         return $this->fetch();
     }
     public function annualPlan(){
+        return $this->fetch();
+    }
+
+    public function statistics(){
+        $params = $this->request->param();
+        $cid = session('admin_user.cid');
+        $sql = "SELECT u.id,u.realname,tmp.num FROM tb_admin_user u LEFT JOIN (SELECT user_id,COUNT(id) AS num FROM tb_daily_report WHERE cid={$cid} GROUP BY user_id) tmp 
+ON u.id=tmp.user_id WHERE u.company_id={$cid} AND u.role_id<>1 AND u.role_id<>2 AND u.status=1 ";
+
+        if ($params){
+            if (!empty($params['realname'])){
+                $sql.=" and u.realname like '%{$params['realname']}%' ";
+            }
+        }
+
+        $res = Db::query($sql);
+        $this->assign('data_list', $res);
         return $this->fetch();
     }
 
