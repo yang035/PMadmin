@@ -19,18 +19,21 @@
         <div class="layui-input-inline">
             <textarea type="text" class="layui-textarea field-reason" name="reason" lay-verify="required" autocomplete="off" placeholder="请输入申请事由"></textarea>
         </div>
+        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">开始时间</label>
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-start_time" name="start_time" lay-verify="required" autocomplete="off" placeholder="选择开始时间">
         </div>
+        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">结束时间</label>
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-end_time" name="end_time" lay-verify="required" autocomplete="off" placeholder="选择结束时间">
         </div>
+        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">资产类型</label>
@@ -45,12 +48,14 @@
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-name" lay-verify="required" name="name" autocomplete="off" placeholder="请输入物品名称">
         </div>
+        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">数量</label>
         <div class="layui-input-inline">
             <input type="number" class="layui-input field-number" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" lay-verify="required" name="number" autocomplete="off" placeholder="请输入数量">
         </div>
+        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">合计总价</label>
@@ -58,6 +63,7 @@
             <input type="number" class="layui-input field-amount" lay-verify="required" name="amount" autocomplete="off" placeholder="请输入合计总价">
         </div>
         <div class="layui-form-mid">元</div>
+        <div class="layui-form-mid" style="color: red">*</div>
     </div>
 
     <div class="layui-form-item">
@@ -97,8 +103,9 @@
         <div class="layui-input-inline">
             <button type="button" class="layui-btn" id="send_user_id">选择汇报人</button>
             <div id="send_select_id"></div>
-            <input type="hidden" name="send_user" id="send_user" value="">
+            <input type="hidden" name="send_user" id="send_user" value="" lay-verify="required">
         </div>
+        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">抄送人</label>

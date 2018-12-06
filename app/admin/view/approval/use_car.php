@@ -12,24 +12,28 @@
         <div class="layui-input-inline">
             <textarea type="text" class="layui-textarea field-reason" name="reason" lay-verify="required" autocomplete="off" placeholder="请输入外出事由"></textarea>
         </div>
+        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">目的地</label>
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-address" lay-verify="required" name="address" autocomplete="off" placeholder="请输入外出地点">
         </div>
+        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">开始时间</label>
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-start_time" name="start_time" lay-verify="required" autocomplete="off" placeholder="选择开始时间">
         </div>
+        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">结束时间</label>
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-end_time" name="end_time" lay-verify="required" autocomplete="off" placeholder="选择结束时间">
         </div>
+        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">用车时长</label>
@@ -83,16 +87,18 @@
         <div class="layui-input-inline">
             <button type="button" class="layui-btn" id="deal_user_id">选择司机</button>
             <div id="deal_select_id"></div>
-            <input type="hidden" name="deal_user" id="deal_user" value="">
+            <input type="hidden" name="deal_user" id="deal_user" value="" lay-verify="required">
         </div>
+        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">审批人</label>
         <div class="layui-input-inline">
             <button type="button" class="layui-btn" id="send_user_id">选择汇报人</button>
             <div id="send_select_id"></div>
-            <input type="hidden" name="send_user" id="send_user" value="">
+            <input type="hidden" name="send_user" id="send_user" value="" lay-verify="required">
         </div>
+        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">抄送人</label>

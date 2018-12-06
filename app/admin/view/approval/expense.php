@@ -33,18 +33,21 @@
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-start_time" name="start_time" lay-verify="required" autocomplete="off" placeholder="选择开始时间">
         </div>
+        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">结束时间</label>
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-end_time" name="end_time" lay-verify="required" autocomplete="off" placeholder="选择结束时间">
         </div>
+        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">事由</label>
         <div class="layui-input-inline">
-            <textarea type="text" class="layui-textarea field-reason" name="reason" autocomplete="off" placeholder="请输入报销事由"></textarea>
+            <textarea type="text" class="layui-textarea field-reason" name="reason" autocomplete="off" placeholder="请输入报销事由" lay-verify="required"></textarea>
         </div>
+        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">报销明细</label>
@@ -98,8 +101,9 @@
         <div class="layui-input-inline">
             <button type="button" class="layui-btn" id="send_user_id">选择汇报人</button>
             <div id="send_select_id"></div>
-            <input type="hidden" name="send_user" id="send_user" value="">
+            <input type="hidden" name="send_user" id="send_user" value="" lay-verify="required">
         </div>
+        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">抄送人</label>
