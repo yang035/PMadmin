@@ -59,8 +59,9 @@
         </div>
         <label class="layui-form-label">完成百分比</label>
         <div class="layui-input-inline" style="width: 100px">
-            <input type="number" class="layui-input field-real_per" style="width: 100px" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="real_per[]" autocomplete="off" placeholder="请输入整数">
+            <input type="number" class="layui-input field-real_per" style="width: 100px" lay-verify="required" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="real_per[]" autocomplete="off" placeholder="请输入整数">
         </div>
+        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">

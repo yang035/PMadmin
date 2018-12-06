@@ -89,4 +89,22 @@ class HomeCat extends Admin
         return $this->success('删除成功');
     }
 
+    public function setSignWord(){
+        $redis = service('Redis');
+        if ($this->request->isPost()){
+            $data = $this->request->post();
+            $res = $redis->set("pm:home:signword",$data['title']);
+            if (!$res) {
+                return $this->error('添加失败！');
+            }
+            return $this->success('添加成功。', url('index'));
+        }
+        $signword = $redis->get("pm:home:signword");
+        if (!$signword){
+            $signword='好好学习，天天向上！';
+        }
+        $this->assign('data_info', $signword);
+        return $this->fetch('signword');
+    }
+
 }

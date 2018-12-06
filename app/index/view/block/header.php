@@ -50,7 +50,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-10 col-sm-8 col-xs-8">
-                <p class="mail-text">祝您在此学习和生活愉快！</p>
+                <p class="mail-text">{$signword}</p>
             </div>
             <div class="col-md-2 col-sm-4 col-xs-4">
                 <div class="top-nav"> <span class="top-text">
@@ -87,8 +87,8 @@
             </div>
             <div class="col-md-2 col-sm-6 col-xs-6">
                 <!-- logo -->
-                <div style="margin: 12px">
-                    <a href="/admin.php" target="_blank" class="btn-sm btn-default">进入工作</a>
+                <div style="margin: 12px;text-align: right">
+                    <a href="/admin.php" target="_blank" class="btn-sm btn-default" style="background-color: #ff6b00">进入工作</a>
                 </div>
             </div>
             <!-- logo -->
