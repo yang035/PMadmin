@@ -261,7 +261,7 @@ class DailyReport extends Admin
             }
         }
         $data_list = Db::table('tb_admin_user u')->field($fields)
-            ->join("(SELECT user_id,COUNT(id) AS num FROM tb_daily_report WHERE cid={$cid} and create_time like '{$d}%' GROUP BY user_id) tmp",'u.id=tmp.user_id','left')
+            ->join("(SELECT user_id,COUNT(DISTINCT create_time) AS num FROM tb_daily_report WHERE cid={$cid} and create_time like '{$d}%' GROUP BY user_id) tmp",'u.id=tmp.user_id','left')
             ->where($where)->paginate(30, false, ['query' => input('get.')]);
 //        $data_list = Db::table('tb_admin_user u')->field($fields)
 //            ->join("(SELECT user_id,COUNT(id) AS num FROM tb_daily_report WHERE cid={$cid} and create_time like '{$d}%' GROUP BY user_id) tmp",'u.id=tmp.user_id','left')
@@ -283,13 +283,60 @@ class DailyReport extends Admin
         $fields = 'r.*,u.realname';
         $data_list = Db::table('tb_daily_report r')->field($fields)
             ->join('tb_admin_user u','r.user_id=u.id','left')
-            ->where($where)->paginate(30, false, ['query' => input('get.')]);
-//        print_r($data_list);
+            ->where($where)->group('r.create_time')->paginate(30, false, ['query' => input('get.')]);
         // 分页
         $pages = $data_list->render();
         $this->assign('data_list', $data_list);
         $this->assign('pages', $pages);
         $this->assign('d', $params['search_date']);
+        return $this->fetch();
+    }
+
+    //同一个日报的多个项目
+    public function tRead(){
+        $params = $this->request->param();
+        $where =[
+            'user_id'=>$params['user_id'],
+            'create_time'=>$params['create_time'],
+        ];
+        $row = DailyReportModel::where($where)->select();
+        $data_list = [];
+        if ($row){
+            $content = json_decode($row[0]['content'],true);
+            foreach ($row as $k=>$v){
+                $data_list['arr'][$k]['project_name'] = ProjectModel::index(['id'=>$v['project_id']])[0]['name'];
+                $data_list['arr'][$k]['real_per'] = $v['real_per'];
+                $data_list['arr'][$k]['content'] = $content[$k];
+            }
+            $data_list['plan'] = json_decode($row[0]['plan'],true);
+            $data_list['question'] = json_decode($row[0]['question'],true);
+            $data_list['tips'] = json_decode($row[0]['tips'],true);
+            $data_list['attachment'] = json_decode($row[0]['attachment'],true);
+            $data_list['send_user'] = $this->deal_data($row[0]['send_user']);
+            $data_list['copy_user'] = $this->deal_data($row[0]['copy_user']);
+        }
+//        print_r($data_list);
+        //标记已读
+//        $uid = session('admin_user.uid');
+//        if (isset($params['atype'])){
+//            switch ($params['atype']){
+//                case 3:
+//                    $sql = "UPDATE tb_daily_report SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
+//                    break;
+//                case 4:
+//                    $sql = "UPDATE tb_daily_report SET copy_user = JSON_SET(copy_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
+//                    break;
+//                default:
+//                    $sql = "UPDATE tb_daily_report SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
+//                    break;
+//            }
+//            ProjectModel::execute($sql);
+//        }
+
+//        $coment = ReportReply::getAll($params['id'],5);
+//        $row['project_name'] = ProjectModel::index(['id'=>$row['project_id']])[0]['name'];
+        $this->assign('data_list', $data_list);
+//        $this->assign('coment', $coment);
         return $this->fetch();
     }
 

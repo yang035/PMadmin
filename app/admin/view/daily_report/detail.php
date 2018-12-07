@@ -45,7 +45,7 @@
                         <strong class="mcolor">{$vo['realname']}</strong>
                     </td>
                     <td class="font12">{$vo['create_time']}</td>
-                    <td><a href="{:url('read',['id'=>$vo['id']])}" class="layui-btn layui-btn-normal layui-btn-xs">明细</a></td>
+                    <td><a href="{:url('tRead',['id'=>$vo['id'],'user_id'=>$vo['user_id'],'create_time'=>$vo['create_time']])}" class="layui-btn layui-btn-normal layui-btn-xs">明细</a></td>
                 </tr>
                 {/volist}
                 </tbody>
