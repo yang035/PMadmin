@@ -123,18 +123,21 @@ class DailyReport extends Admin
         }
         //标记已读
         $uid = session('admin_user.uid');
-        switch ($params['atype']){
-            case 3:
-                $sql = "UPDATE tb_daily_report SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
-                break;
-            case 4:
-                $sql = "UPDATE tb_daily_report SET copy_user = JSON_SET(copy_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
-                break;
-            default:
-                $sql = "UPDATE tb_daily_report SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
-                break;
+        if (isset($params['atype'])){
+            switch ($params['atype']){
+                case 3:
+                    $sql = "UPDATE tb_daily_report SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
+                    break;
+                case 4:
+                    $sql = "UPDATE tb_daily_report SET copy_user = JSON_SET(copy_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
+                    break;
+                default:
+                    $sql = "UPDATE tb_daily_report SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
+                    break;
+            }
+            ProjectModel::execute($sql);
         }
-        ProjectModel::execute($sql);
+
         $coment = ReportReply::getAll($params['id'],5);
         $row['project_name'] = ProjectModel::index(['id'=>$row['project_id']])[0]['name'];
         $this->assign('data_list', $row);
@@ -241,17 +244,52 @@ class DailyReport extends Admin
     public function statistics(){
         $params = $this->request->param();
         $cid = session('admin_user.cid');
-        $sql = "SELECT u.id,u.realname,tmp.num FROM tb_admin_user u LEFT JOIN (SELECT user_id,COUNT(id) AS num FROM tb_daily_report WHERE cid={$cid} GROUP BY user_id) tmp 
-ON u.id=tmp.user_id WHERE u.company_id={$cid} AND u.role_id<>1 AND u.role_id<>2 AND u.status=1 ";
+        $d = date('Y-m-d',strtotime('-1 day'));
+        if (isset($params['search_date']) && !empty($params['search_date'])){
+            $d = $params['search_date'];
+        }
+        $fields = 'u.id,u.realname,tmp.num';
+        $where =[
+            'u.company_id'=>$cid,
+            'u.role_id'=>['not in',[1,2]],
+            'u.status'=>1,
+        ];
 
         if ($params){
             if (!empty($params['realname'])){
-                $sql.=" and u.realname like '%{$params['realname']}%' ";
+                $where['u.realname'] = ['like', '%'.$params['realname'].'%'];
             }
         }
+        $data_list = Db::table('tb_admin_user u')->field($fields)
+            ->join("(SELECT user_id,COUNT(id) AS num FROM tb_daily_report WHERE cid={$cid} and create_time like '{$d}%' GROUP BY user_id) tmp",'u.id=tmp.user_id','left')
+            ->where($where)->paginate(30, false, ['query' => input('get.')]);
+//        $data_list = Db::table('tb_admin_user u')->field($fields)
+//            ->join("(SELECT user_id,COUNT(id) AS num FROM tb_daily_report WHERE cid={$cid} and create_time like '{$d}%' GROUP BY user_id) tmp",'u.id=tmp.user_id','left')
+//            ->where($where)->buildSql();
+        // 分页
+        $pages = $data_list->render();
+        $this->assign('data_list', $data_list);
+        $this->assign('pages', $pages);
+        $this->assign('d', $d);
+        return $this->fetch();
+    }
 
-        $res = Db::query($sql);
-        $this->assign('data_list', $res);
+    public function detail(){
+        $params = $this->request->param();
+        $where =[
+            'r.user_id'=>$params['uid'],
+            'r.create_time'=>['like', '%'.$params['search_date'].'%'],
+        ];
+        $fields = 'r.*,u.realname';
+        $data_list = Db::table('tb_daily_report r')->field($fields)
+            ->join('tb_admin_user u','r.user_id=u.id','left')
+            ->where($where)->paginate(30, false, ['query' => input('get.')]);
+//        print_r($data_list);
+        // 分页
+        $pages = $data_list->render();
+        $this->assign('data_list', $data_list);
+        $this->assign('pages', $pages);
+        $this->assign('d', $params['search_date']);
         return $this->fetch();
     }
 

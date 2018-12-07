@@ -13,6 +13,8 @@ use think\Model;
 
 class DailyReport extends Model
 {
+    protected $autoWriteTimestamp = 'datetime';
+
     public static function getOption($type = 0)
     {
         $leaveType = config('other.leave_type');

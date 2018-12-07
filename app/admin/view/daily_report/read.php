@@ -117,7 +117,11 @@
     <div class="layui-form-item">
         <div class="layui-input-block">
             <a onclick="open_reply(0,{$data_list['id']},{$data_list['project_id']})" class="layui-btn layui-btn-normal">留言</a>
+            {notempty name="Request.param.atype"}
             <a href="{:url('index',['atype'=>$Request.param.atype])}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
+            {else/}
+            <a href="javascript:history.back()" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
+            {/notempty}
         </div>
     </div>
     <hr>

@@ -14,12 +14,12 @@
                         <input type="text" name="realname" value="{:input('get.realname')}" placeholder="真实姓名" autocomplete="off" class="layui-input">
                     </div>
                 </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">日期</label>
-                        <div class="layui-input-inline">
-                            <input type="text" class="layui-input" id="test2" name="search_date" placeholder="选择日期" value="{$d}">
-                        </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">日期</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" id="test2" name="search_date" placeholder="选择日期" value="{$d}">
                     </div>
+                </div>
                 <input type="hidden" name="type" value="{$Request.param.type}">
                 <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
             </div>
@@ -33,7 +33,8 @@
                 <tr>
                     <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
                     <th>姓名</th>
-                    <th>数量</th>
+                    <th>时间</th>
+                    <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -41,14 +42,10 @@
                 <tr>
                     <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
                     <td class="font12">
-                        {$vo['realname']}
+                        <strong class="mcolor">{$vo['realname']}</strong>
                     </td>
-                    <td class="font12">
-                        {empty name="vo['num']"}0
-                        {else/}
-                        <a href="{:url('detail',['uid'=>$vo['id'],'search_date'=>$d])}"><strong class="mcolor">{$vo['num']}</strong></a>
-                        {/empty}
-                    </td>
+                    <td class="font12">{$vo['create_time']}</td>
+                    <td><a href="{:url('read',['id'=>$vo['id']])}" class="layui-btn layui-btn-normal layui-btn-xs">明细</a></td>
                 </tr>
                 {/volist}
                 </tbody>
