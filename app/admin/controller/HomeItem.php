@@ -60,6 +60,11 @@ class HomeItem extends Admin
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
             unset($data['id']);
+            if (1 == $data['is_push']){
+                if (empty($data['tuijian'])){
+                    return $this->error('推荐位图片必填！');
+                }
+            }
             if (!ItemModel::create($data)) {
                 return $this->error('添加失败！');
             }
@@ -79,6 +84,11 @@ class HomeItem extends Admin
             }
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
+            if (1 == $data['is_push']){
+                if (empty($data['tuijian'])){
+                    return $this->error('推荐位图片必填！');
+                }
+            }
             if (!ItemModel::update($data)) {
                 return $this->error('修改失败！');
             }

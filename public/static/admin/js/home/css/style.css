@@ -7,16 +7,16 @@ General css class
 -----------------------------------*/
 
 body { font-size: 15px; font-family: 'Poppins', sans-serif; line-height: 1.4; color: #778191; background-color: #f4f6f8; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-h1, h2, h3, h4, h5, h6 { margin: 0px 0px 10px 0px; color: #3c4d6b; font-weight: 500; }
+h1, h2, h3, h4, h5, h6 { margin: 0px 0px 10px 0px; color: #333333; font-weight: 500; }
 h1 { font-size: 32px; line-height: 44px; letter-spacing: -1px; }
 h2 { font-size: 24px; line-height: 32px; }
 h3 { font-size: 20px; }
 h4 { font-size: 16px; line-height: 1.6; }
-p { margin: 0 0 26px; line-height: 1.6; font-weight: 400; }
+p { margin: 0 0 26px; line-height: 1.6; font-weight: 400; color: #666666;}
 ul, ol { }
 ul li, ol li { }
 a { color: #ff6b00; text-decoration: none; -webkit-transition: all 0.3s ease-in-out; -moz-transition: all 0.3s ease-in-out; transition: all 0.3s ease-in-out; }
-a:focus, a:hover { text-decoration: none; color: #15549a; }
+a:focus, a:hover { text-decoration: none; color: #ff6b00; }
 strong { }
 blockquote { padding: 10px 20px; margin: 0 0 0px; font-size: 21px; border-left: 5px solid #eff1f4; color: #414346; font-style: italic; line-height: 35px; font-family: 'Merriweather', serif; font-weight: 700; }
 blockquote.alignright { max-width: 50%; }
@@ -34,7 +34,7 @@ p:last-child { margin-bottom: 0px; }
 .section-title { }
 .text-white { color: #fff; }
 .title-white { color: #fff; }
-.title { color: #3c4d6b; line-height: 32px; }
+.title { color: #333333; line-height: 32px; }
 .tlinks{text-indent:-9999px;height:0;line-height:0;font-size:0;overflow:hidden;}
 /*-----------------------------------
 Space css class
@@ -312,7 +312,7 @@ index-1
 ------------------------------------------*/
 .mail-text { border-right: 2px solid #ff6b00; color: #fff}
 .rate-table { background-color: #fff; border-top: 1px solid #dee7f2; border-bottom: 1px solid #dee7f2; margin-top: -21px; }
-.loan-rate { font-size: 24px; color: #414855; margin-bottom: 0px; font-weight: 600; line-height: 1; }
+.loan-rate { font-size: 24px; color: #333333; margin-bottom: 0px; font-weight: 600; line-height: 1; }
 .rate-counter-block { border-right: 1px solid #dee7f2; padding-top: 20px; padding-bottom: 20px; }
 .rate-counter-block:first-child { }
 .rate-icon { float: left; padding-top: 0px; padding-right: 20px; padding-left: 20px; }

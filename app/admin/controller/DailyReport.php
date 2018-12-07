@@ -262,7 +262,7 @@ class DailyReport extends Admin
         }
         $data_list = Db::table('tb_admin_user u')->field($fields)
             ->join("(SELECT user_id,COUNT(DISTINCT create_time) AS num FROM tb_daily_report WHERE cid={$cid} and create_time like '{$d}%' GROUP BY user_id) tmp",'u.id=tmp.user_id','left')
-            ->where($where)->paginate(30, false, ['query' => input('get.')]);
+            ->where($where)->order('u.id asc')->paginate(30, false, ['query' => input('get.')]);
 //        $data_list = Db::table('tb_admin_user u')->field($fields)
 //            ->join("(SELECT user_id,COUNT(id) AS num FROM tb_daily_report WHERE cid={$cid} and create_time like '{$d}%' GROUP BY user_id) tmp",'u.id=tmp.user_id','left')
 //            ->where($where)->buildSql();

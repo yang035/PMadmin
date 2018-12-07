@@ -40,7 +40,7 @@
         <div class="layui-input-inline upload">
             <button type="button" name="upload" class="layui-btn layui-btn-primary layui-upload" lay-type="image" lay-data="{exts:'{:str_replace(',', '|', config('upload.upload_image_ext'))}', accept:'file'}" id="oneImage">请上传首页缩略图</button>
             <input type="hidden" class="upload-input field-thumb" name="thumb" value="">
-            <img src="" style="display:none;border-radius:5px;border:1px solid #ccc" width="36" height="36">
+            <img id="thumb" src="" style="display:none;border-radius:5px;border:1px solid #ccc" width="36" height="36">
         </div>
     </div>
     <div class="layui-form-item">
@@ -85,8 +85,16 @@
     <div class="layui-form-item">
         <label class="layui-form-label">推&nbsp;&nbsp;&nbsp;&nbsp;荐</label>
         <div class="layui-input-inline">
-            <input type="radio" class="field-is_push" name="is_push" value="1" title="是">
-            <input type="radio" class="field-is_push" name="is_push" value="0" title="否" checked>
+            <input type="radio" class="field-is_push" name="is_push" value="1" title="是" lay-filter="is_push">
+            <input type="radio" class="field-is_push" name="is_push" value="0" title="否" checked lay-filter="is_push">
+        </div>
+    </div>
+    <div class="layui-form-item" style="display: none" id="tuijian_div">
+        <label class="layui-form-label">推荐位图片</label>
+        <div class="layui-input-inline upload">
+            <button type="button" name="upload" class="layui-btn layui-btn-primary layui-upload" lay-type="image" lay-data="{exts:'{:str_replace(',', '|', config('upload.upload_image_ext'))}', accept:'file'}" id="tuijianImage">请上传首页缩略图</button>
+            <input type="hidden" class="upload-input field-tuijian" name="tuijian" value="">
+            <img src="" id="tuijian" style="display:none;border-radius:5px;border:1px solid #ccc" width="36" height="36">
         </div>
     </div>
     <div class="layui-form-item">
@@ -108,8 +116,8 @@
 <script>
 var formData = {:json_encode($data_info)};
 
-layui.use(['jquery', 'laydate', 'upload'], function() {
-    var $ = layui.jquery, laydate = layui.laydate, layer = layui.layer, upload = layui.upload;
+layui.use(['jquery', 'laydate', 'upload','form'], function() {
+    var $ = layui.jquery, laydate = layui.laydate, layer = layui.layer, upload = layui.upload, form = layui.form;
     var uploadOneIns = upload.render({
         elem: '#oneImage',
         url: '{:url("admin/UploadFile/upload?group=front")}',
@@ -132,7 +140,39 @@ layui.use(['jquery', 'laydate', 'upload'], function() {
             input.val(res.data.file);
         }
     });
-    $('.upload img').attr('src', $('.field-thumb').val()).show();
+    $('#thumb').attr('src', $('.field-thumb').val()).show();
+
+    form.on('radio(is_push)', function(data){
+        if(1 == data.value){
+            $('#tuijian_div').show();
+        }else {
+            $('#tuijian_div').hide();
+        }
+    });
+    var uploadOneIns = upload.render({
+        elem: '#tuijianImage',
+        url: '{:url("admin/UploadFile/upload?group=front")}',
+        method: 'post',
+        size:120,
+        before: function(input) {
+            layer.msg('文件上传中...', {time:3000000});
+        },
+        done: function(res, index, upload) {
+            var obj = this.item;
+            if (res.code == 0) {
+                layer.msg(res.msg);
+                return false;
+            }
+            layer.closeAll();
+            var input = $(obj).parents('.upload').find('.upload-input');
+            if ($(obj).attr('lay-type') == 'image') {
+                input.siblings('img').attr('src', res.data.file).show();
+            }
+            input.val(res.data.file);
+        }
+    });
+    $('#tuijian').attr('src', $('.field-tuijian').val()).show();
+
 
     //多文件列表示例
     var demoListView = $('#demoList'),uploadListIns = upload.render({

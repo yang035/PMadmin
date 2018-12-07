@@ -8,7 +8,7 @@
 <div class="slider" id="slider">
     <!-- slider -->
     {volist name="ispush" id="vo"}
-    <div class="slider-img"><img style="height: 400px" src="{$vo.thumb}" alt="Borrow - Loan Company Website Template" class="">
+    <div class="slider-img"><img style="height: 400px" src="{$vo.tuijian}" alt="Borrow - Loan Company Website Template" class="">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
@@ -281,7 +281,7 @@
                     <div class="post-img">
                         <a href="{:url('detail',['id'=>$vo['id']])}" class="imghover"><img src="{$vo['thumb']}" alt="{$vo['title']}" class="img-responsive"></a>
                     </div>
-                    <div class="bg-white pinside20 outline">
+                    <div class="bg-white pinside20 outline" style="height: 140px">
                         <h2><a href="{:url('detail',['id'=>$vo['id']])}" class="title">{$vo['title']}</a></h2>
                         <p>{$vo['summarize']}</p>
                     </div>
