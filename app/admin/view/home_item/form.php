@@ -142,6 +142,10 @@ layui.use(['jquery', 'laydate', 'upload','form'], function() {
     });
     $('#thumb').attr('src', $('.field-thumb').val()).show();
 
+    if(1 == formData.is_push){
+        $('#tuijian_div').show();
+    }
+
     form.on('radio(is_push)', function(data){
         if(1 == data.value){
             $('#tuijian_div').show();
@@ -235,6 +239,7 @@ layui.use(['jquery', 'laydate', 'upload','form'], function() {
     });
     // 日期渲染
     laydate.render({elem: '.layui-date'});
+    form.render();
 });
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>
