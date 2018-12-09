@@ -210,6 +210,15 @@ class Project extends Admin
             $this->assign('pname',$params['pname']);
             $this->assign('max_score',$max_score);
         }
+
+        $cid = session('admin_user.cid');
+        $redis = service('Redis');
+        $default_user = $redis->get("pm:user:{$cid}");
+        if ($default_user){
+            $user = json_decode($default_user);
+            $this->assign('data_info', (array)$user);
+        }
+
         $this->assign('grade_type',ProjectModel::getGrade());
         $this->assign('p_type',ProjectModel::getPtype());
         $this->assign('p_source',ProjectModel::getPsource());

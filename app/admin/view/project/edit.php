@@ -172,7 +172,7 @@
         <div class="layui-input-inline">
             <button type="button" class="layui-btn" id="send_user_id">选择审批人</button>(此任务需要谁来审批)
             <div id="send_select_id">{$data_info['send_user_id']|default=''}</div>
-            <input type="hidden" name="send_user" id="send_user" value="{$data_info['send_user']}">
+            <input type="hidden" name="send_user" id="send_user" value="{$data_info['send_user']|default=''}">
         </div>
     </div>
     <div class="layui-form-item">
@@ -180,7 +180,7 @@
         <div class="layui-input-inline">
             <button type="button" class="layui-btn" id="copy_user_id">选择抄送人</button>(此任务需要抄送给谁)
             <div id="copy_select_id">{$data_info['copy_user_id']|default=''}</div>
-            <input type="hidden" name="copy_user" id="copy_user" value="{$data_info['copy_user']}">
+            <input type="hidden" name="copy_user" id="copy_user" value="{$data_info['copy_user']|default=''}">
         </div>
     </div>
     <div class="layui-form-item">

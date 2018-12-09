@@ -219,18 +219,26 @@ class DailyReport extends Admin
             return $this->success('添加成功。','index');
         }
 
+        $cid = session('admin_user.cid');
+        $redis = service('Redis');
+        $default_user = $redis->get("pm:user:{$cid}");
+        if ($default_user){
+            $user = json_decode($default_user);
+            $this->assign('data_info', (array)$user);
+        }
+
         $where = [
             'user_id'=>session('admin_user.uid'),
         ];
         $row = $d_model->where($where)->order('id desc')->limit(1)->select();
         if ($row){
-            $data_info['plan'] = json_decode($row[0]['plan'],true);
-            $data_info['create_time'] = explode(' ',$row[0]['create_time'])[0];
+            $row1['plan'] = json_decode($row[0]['plan'],true);
+            $row1['create_time'] = explode(' ',$row[0]['create_time'])[0];
         }else{
-            $data_info = [];
+            $row1 = [];
         }
 //        print_r($data_info);
-        $this->assign('row', $data_info);
+        $this->assign('row', $row1);
         $this->assign('leave_type', DailyReportModel::getOption());
         $this->assign('mytask', ProjectModel::getMyTask(0));
         return $this->fetch();

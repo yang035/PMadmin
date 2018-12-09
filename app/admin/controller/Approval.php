@@ -55,6 +55,14 @@ class Approval extends Admin
         ];
         $tab_data['current'] = url('index',['atype'=>1]);
         $this->tab_data = $tab_data;
+
+        $cid = session('admin_user.cid');
+        $redis = service('Redis');
+        $default_user = $redis->get("pm:user:{$cid}");
+        if ($default_user){
+            $user = json_decode($default_user);
+            $this->assign('data_info', (array)$user);
+        }
     }
 
     public function deal_data($x_user)

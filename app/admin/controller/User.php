@@ -359,6 +359,7 @@ class User extends Admin
             $data['copy_user'] = trim($data['copy_user'],',');
             $data['finance_user'] = trim($data['finance_user'],',');
             $data['hr_user'] = trim($data['hr_user'],',');
+            $data['hr_finance_user'] = trim($data['hr_finance_user'],',');
             $row = AdminUserDefault::where('cid',$cid)->find();
             if ($row){
                 $data['id'] = $row['id'];
@@ -373,7 +374,7 @@ class User extends Admin
             return $this->success('操作成功');
         }
 
-        $fields = 'cid,manager_user,send_user,deal_user,copy_user,finance_user,hr_user';
+        $fields = 'cid,manager_user,send_user,deal_user,copy_user,finance_user,hr_user,hr_finance_user';
         $row = AdminUserDefault::field($fields)->where('cid',$cid)->find();
         if ($row){
             $row['manager_user_id'] = $this->deal_user($row['manager_user']);
@@ -382,6 +383,7 @@ class User extends Admin
             $row['copy_user_id'] = $this->deal_user($row['copy_user']);
             $row['finance_user_id'] = $this->deal_user($row['finance_user']);
             $row['hr_user_id'] = $this->deal_user($row['hr_user']);
+            $row['hr_finance_user_id'] = $this->deal_user($row['hr_finance_user']);
         }
 
         if ($row){
@@ -400,14 +402,19 @@ class User extends Admin
 
     public function deal_user($x_user)
     {
-        $x_user_arr = explode(',',$x_user);
-        $x_user = [];
-        if ($x_user_arr){
-            foreach ($x_user_arr as $key=>$val){
-                $x_user[] = UserModel::getUserById($val)['realname'];
+        if (!empty($x_user)){
+            $x_user_arr = explode(',',$x_user);
+            $x_user = [];
+            if ($x_user_arr){
+                foreach ($x_user_arr as $key=>$val){
+                    $x_user[] = UserModel::getUserById($val)['realname'];
+                }
+                return implode(',',$x_user);
             }
-            return implode(',',$x_user);
+        }else{
+            return '';
         }
+
     }
 
 }
