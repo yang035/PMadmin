@@ -61,7 +61,7 @@
                     }},
                 {field: 'name', title: '名称'},
                 {field: 'amount', title: '数量'},
-                {field: 'owner_id', title: '拥有者'},
+                {field: 'realname', title: '拥有者'},
                 {field: 'status', title: '状态', templet: '#statusTpl'},
                 {title: '操作', templet: '#buttonTpl'}
             ]]

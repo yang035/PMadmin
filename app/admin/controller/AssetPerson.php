@@ -7,11 +7,12 @@
  */
 
 namespace app\admin\controller;
+use app\admin\model\AdminUser;
 use app\admin\model\AssetCat as CatModel;
-use app\admin\model\AssetItem as ItemModel;
+use app\admin\model\AssetPerson as ItemModel;
 
 
-class Asset extends Admin
+class AssetPerson extends Admin
 {
     public $tab_data = [];
     protected function _initialize()
@@ -20,12 +21,8 @@ class Asset extends Admin
 
         $tab_data['menu'] = [
             [
-                'title' => '资产类型',
-                'url' => 'admin/Asset/cat',
-            ],
-            [
-                'title' => '我的资产',
-                'url' => 'admin/Asset/index',
+                'title' => '个人资产',
+                'url' => 'admin/AssetPerson/index',
             ],
         ];
         $this->tab_data = $tab_data;
@@ -48,6 +45,12 @@ class Asset extends Admin
             }
             $where['cid'] = session('admin_user.cid');
             $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->select();
+            $realname = AdminUser::getUserById(session('admin_user.uid'))['realname'];
+            if ($data['data']){
+                foreach ($data['data'] as $k=>$v){
+                    $data['data'][$k]['realname'] = $realname;
+                }
+            }
             $data['count'] = ItemModel::where($where)->count('id');
             $data['code'] = 0;
             $data['msg'] = '';
@@ -68,7 +71,7 @@ class Asset extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
             // 验证
-            $result = $this->validate($data, 'AssetItem');
+            $result = $this->validate($data, 'AssetPerson');
             if($result !== true) {
                 return $this->error($result);
             }
@@ -91,7 +94,7 @@ class Asset extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
             // 验证
-            $result = $this->validate($data, 'AssetItem');
+            $result = $this->validate($data, 'AssetPerson');
             if($result !== true) {
                 return $this->error($result);
             }

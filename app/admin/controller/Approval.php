@@ -89,6 +89,7 @@ class Approval extends Admin
         $cid = session('admin_user.cid');
         $map['cid'] = $cid;
         $panel_type = config('other.panel_type');
+        $params['atype'] = isset($params['atype']) ? $params['atype'] : 1;
         if (1 == $params['atype']){
             $this->assign('tab_data', $this->tab_data);
             $this->assign('tab_type', 1);
@@ -234,7 +235,7 @@ class Approval extends Admin
 
     public function cost()
     {
-        
+
     }
 
     public function business()
@@ -444,7 +445,7 @@ class Approval extends Admin
 
     public function clockIn()
     {
-        
+
     }
 
     public function read(){

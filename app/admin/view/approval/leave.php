@@ -10,7 +10,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">请假类型</label>
         <div class="layui-input-inline">
-            <select name="type" class="field-type" type="select">
+            <select name="type" class="field-type" type="select" lay-filter="leave_type">
                 {$leave_type}
             </select>
         </div>
@@ -21,6 +21,7 @@
             <input type="text" class="layui-input field-start_time" name="start_time" lay-verify="required" autocomplete="off" placeholder="选择开始时间">
         </div>
         <div class="layui-form-mid" style="color: red">*</div>
+        <div id="alert" class="layui-form-mid" style="color: red">年假需要提前一周申请</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">结束时间</label>
@@ -104,15 +105,28 @@
 <script>
 var formData = {:json_encode($data_info)};
 
-layui.use(['jquery', 'laydate','upload'], function() {
-    var $ = layui.jquery, laydate = layui.laydate,upload = layui.upload;
+layui.use(['jquery', 'laydate','upload','form'], function() {
+    var $ = layui.jquery, laydate = layui.laydate,upload = layui.upload,form = layui.form;
+
+    form.on('select(leave_type)', function(data){
+        if(1 == data.value){
+            $('#alert').html('年假需要提前一周申请');
+        }else {
+            $('#alert').html('正常都需要提前一天申请');
+        };
+    });
+
     laydate.render({
         elem: '.field-start_time',
-        type: 'datetime'
+        type: 'datetime',
+        calendar: true,
+        min: -1,
     });
     laydate.render({
         elem: '.field-end_time',
         type: 'datetime',
+        calendar: true,
+        min: -1,
         done: function(value, date, endDate){
             getTimeLong(value);
         },

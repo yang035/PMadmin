@@ -56,10 +56,10 @@ return [
             'title'=>'报销',
             'href'=>'admin/Approval/expense'
         ],
-        3=>[
-            'title'=>'费用',
-            'href'=>'admin/Approval/cost'
-        ],
+//        3=>[
+//            'title'=>'费用',
+//            'href'=>'admin/Approval/cost'
+//        ],
         4=>[
             'title'=>'出差',
             'href'=>'admin/Approval/business'
@@ -80,14 +80,14 @@ return [
             'title'=>'用车',
             'href'=>'admin/Approval/useCar'
         ],
-        9=>[
-            'title'=>'用章',
-            'href'=>'admin/Approval/useSeal'
-        ],
-        10=>[
-            'title'=>'打卡补卡',
-            'href'=>'admin/Approval/clockIn'
-        ],
+//        9=>[
+//            'title'=>'用章',
+//            'href'=>'admin/Approval/useSeal'
+//        ],
+//        10=>[
+//            'title'=>'打卡补卡',
+//            'href'=>'admin/Approval/clockIn'
+//        ],
     ],
     'car_type' => [
         1 =>'车辆1',

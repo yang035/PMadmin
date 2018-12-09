@@ -52,6 +52,7 @@ class DailyReport extends Admin
         $map = [];
         $cid = session('admin_user.cid');
         $map['cid'] = $cid;
+        $params['atype'] = isset($params['atype']) ? $params['atype'] : 1;
         if (1 == $params['atype']){
             $panel_type = config('other.report_type');
             $this->assign('tab_data', $this->tab_data);

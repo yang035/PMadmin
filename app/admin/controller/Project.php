@@ -311,6 +311,12 @@ class Project extends Admin
     }
 
     public function schedule(){
+        $tab_data['menu'] = [
+            [
+                'title' => '计划管理',
+                'url' => 'admin/Project/schedule',
+            ],
+        ];
         $params = $this->request->param();
         $map = [];
         $cid = session('admin_user.cid');
@@ -345,7 +351,7 @@ class Project extends Admin
             }
         }
         $this->assign('data_list', json_encode(array_values($data)));
-        $this->assign('tab_data', $this->tab_data);
+        $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 2);
         return $this->fetch();
     }
