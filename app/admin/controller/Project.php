@@ -40,6 +40,11 @@ class Project extends Admin
                 'params' =>['atype'=>3],
             ],
             [
+                'title' => '其他',
+                'url' => 'admin/Project/index',
+                'params' =>['atype'=>5],
+            ],
+            [
                 'title' => '全部',
                 'url' => 'admin/Project/index',
                 'params' =>['atype'=>4],
@@ -89,6 +94,9 @@ class Project extends Admin
                 $map['p_type'] = 3;
                 break;
             case 4:
+                break;
+            case 5:
+                $map['p_type'] = 5;
                 break;
             default:
                 $map['p_type'] = 1;

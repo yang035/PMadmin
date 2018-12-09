@@ -35,6 +35,15 @@
             <textarea type="text" class="layui-textarea field-remark" name="remark" lay-verify="required" autocomplete="off" placeholder="请输入描述"></textarea>
         </div>
     </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">项目类别</label>
+        <div class="layui-input-inline">
+            <select name="p_type" class="field-p_type" type="select" lay-filter="p_type">
+                {$p_type}
+            </select>
+        </div>
+    </div>
+    <div id="div_show">
     {empty name="Request.param.id"}
     <div class="layui-form-item">
         <label class="layui-form-label">建设单位</label>
@@ -66,14 +75,7 @@
             <input type="text" class="layui-input field-area" name="area" autocomplete="off" placeholder="请输入项目面积">
         </div>
     </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">项目类别</label>
-        <div class="layui-input-inline">
-            <select name="p_type" class="field-p_type" type="select" lay-filter="p_type">
-                {$p_type}
-            </select>
-        </div>
-    </div>
+
     <div class="layui-form-item">
         <label class="layui-form-label">项目来源</label>
         <div class="layui-input-inline">
@@ -84,6 +86,7 @@
     </div>
     <hr>
     {/empty}
+    </div>
     <div class="layui-form-item">
         <label class="layui-form-label">预设分<span style="color: red">*</span></label>
         <div class="layui-input-inline">
@@ -201,8 +204,17 @@
 <script>
 var formData = {:json_encode($data_info)};
 
-layui.use(['jquery', 'laydate','upload'], function() {
-    var $ = layui.jquery, laydate = layui.laydate,upload = layui.upload;
+layui.use(['jquery', 'laydate','upload','form'], function() {
+    var $ = layui.jquery, laydate = layui.laydate,upload = layui.upload,form = layui.form;
+
+    form.on('select(p_type)', function(data){
+        if(5 == data.value){
+            $('#div_show').hide();
+        }else {
+            $('#div_show').show();
+        };
+    });
+
     laydate.render({
         elem: '.field-start_time',
         type: 'date'
