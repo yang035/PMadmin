@@ -56,14 +56,16 @@
             }
             ,cols: [[ //表头
                 {type:'checkbox'},
-                {field: 'cat_id', title: '类型', templet:function(d){
+                {field: 'cat_id', title: '类型',width:'100',templet:function(d){
                         return d.cat.name;
                     }},
-                {field: 'name', title: '名称'},
-                {field: 'amount', title: '数量'},
-                {field: 'realname', title: '拥有者'},
-                {field: 'status', title: '状态', templet: '#statusTpl'},
-                {title: '操作', templet: '#buttonTpl'}
+                {field: 'name', title: '名称',width:'150'},
+                {field: 'amount', title: '数量',width:'80'},
+                {field: 'realname', title: '拥有者',width:'100'},
+                {field: 'remind_time', title: '提醒时间',width:'200'},
+                {field: 'remind_content', title: '提醒内容',width:'200'},
+                {field: 'status', title: '状态', templet: '#statusTpl',width:'100'},
+                {title: '操作', templet: '#buttonTpl',width:'197'}
             ]]
         });
     });

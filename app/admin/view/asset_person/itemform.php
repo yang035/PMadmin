@@ -43,6 +43,19 @@
             </div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label">提醒时间</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input field-remind_time" name="remind_time" autocomplete="off" placeholder="提醒时间">
+            </div>
+            <div class="layui-form-mid" style="color: red">(系统提醒只精确到小时)</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">提醒内容</label>
+            <div class="layui-input-inline">
+                <textarea  class="layui-textarea field-remind_content" name="remind_content" autocomplete="off" placeholder="提醒内容"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">存储人</label>
             <div class="layui-input-inline">
                 <button type="button" class="layui-btn" id="manager_user_id">选择存储人</button>(由谁管理)
@@ -74,7 +87,9 @@
     layui.use(['jquery', 'laydate'], function() {
         var $ = layui.jquery, laydate = layui.laydate;
         laydate.render({
-            elem: '.field-expire_time',
+            elem: '.field-remind_time',
+            type: 'datetime',
+            value: new Date(),
             min:'0'
         });
 

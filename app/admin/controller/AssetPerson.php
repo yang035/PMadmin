@@ -49,6 +49,7 @@ class AssetPerson extends Admin
             if ($data['data']){
                 foreach ($data['data'] as $k=>$v){
                     $data['data'][$k]['realname'] = $realname;
+                    $v['remind_time'] = substr($v['remind_time'],0,14).'00:00';
                 }
             }
             $data['count'] = ItemModel::where($where)->count('id');
