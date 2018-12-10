@@ -19,13 +19,13 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">开始时段</label>
                     <div class="layui-input-inline">
-                        <input type="text" class="layui-input field-start_time" name="start_time" value="{:input('get.start_time')}" autocomplete="off" placeholder="选择开始日期段">
+                        <input type="text" class="layui-input field-start_time" name="start_time" value="{:input('get.start_time')}" readonly autocomplete="off" placeholder="选择开始日期段">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">结束时段</label>
                     <div class="layui-input-inline">
-                        <input type="text" class="layui-input field-end_time" name="end_time" value="{:input('get.end_time')}" autocomplete="off" placeholder="选择结束日期段">
+                        <input type="text" class="layui-input field-end_time" name="end_time" value="{:input('get.end_time')}" readonly autocomplete="off" placeholder="选择结束日期段">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -97,7 +97,7 @@
                     {field: 'manager_user', title: '负责人'},
                     {field: 'send_user', title: '审批人'},
                     // {field: 'user_id', title: '添加人',width: 80},
-                    {templet: '#oper-col', title: '操作',width: 220,}
+                    {templet: '#oper-col', title: '操作',width: 250,}
                 ]],
                 done: function () {
                     layer.closeAll('loading');

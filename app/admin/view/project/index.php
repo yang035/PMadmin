@@ -18,13 +18,13 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">开始时段</label>
                     <div class="layui-input-inline">
-                        <input type="text" class="layui-input field-start_time" name="start_time" value="{:input('get.start_time')}" autocomplete="off" placeholder="选择开始日期段">
+                        <input type="text" class="layui-input field-start_time" name="start_time" value="{:input('get.start_time')}" readonly autocomplete="off" placeholder="选择开始日期段">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">结束时段</label>
                     <div class="layui-input-inline">
-                        <input type="text" class="layui-input field-end_time" name="end_time" value="{:input('get.end_time')}" autocomplete="off" placeholder="选择结束日期段">
+                        <input type="text" class="layui-input field-end_time" name="end_time" value="{:input('get.end_time')}" readonly autocomplete="off" placeholder="选择结束日期段">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -40,7 +40,7 @@
             </div>
         </form>
         <div class="layui-btn-group fl">
-            <a href="{:url('add')}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加项目</a>
+            <a href="{:url('add',['atype'=>$Request.param.atype])}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加项目</a>
             <button class="layui-btn" id="btn-expand">全部展开</button>
             <button class="layui-btn" id="btn-fold">全部折叠</button>
             <button class="layui-btn" id="btn-refresh">刷新表格</button>
@@ -98,7 +98,7 @@
                     {field: 'manager_user', title: '负责人'},
                     {field: 'send_user', title: '审批人'},
                     {field: 'user_id', title: '添加人',width: 80},
-                    {templet: '#oper-col', title: '操作',width: 200,}
+                    {templet: '#oper-col', title: '操作',width: 250,}
                 ]],
                 done: function () {
                     layer.closeAll('loading');
@@ -164,13 +164,13 @@
                     layer.close(index);
                 });
             }else if (layEvent === 'read') {
-                var open_url = "{:url('read')}?id="+id+"&pid="+pid+"&code="+code+"&pname="+pname;
+                var open_url = "{:url('read')}?id="+id+"&pid="+pid+"&code="+code+"&pname="+pname+"&atype="+atype;
                 window.location.href = open_url;
             } else if (layEvent === 'add') {
-                var open_url = "{:url('add')}?id="+id+"&pid="+pid+"&code="+code+"&pname="+pname+"&pscore="+pscore;
+                var open_url = "{:url('add')}?id="+id+"&pid="+pid+"&code="+code+"&pname="+pname+"&pscore="+pscore+"&atype="+atype;
                 window.location.href = open_url;
             } else if (layEvent === 'edit') {
-                var open_url = "{:url('edit')}?id="+id+"&pid="+pid+"&code="+code;
+                var open_url = "{:url('edit')}?id="+id+"&pid="+pid+"&code="+code+"&atype="+atype;
                 window.location.href = open_url;
             } else if (layEvent === 'dep_auth') {
                 var open_url = "{:url('depAuth')}?id=" + id;
@@ -184,10 +184,12 @@
         laydate.render({
             elem: '.field-start_time',
             range: true,
+            trigger: 'click',
         });
         laydate.render({
             elem: '.field-end_time',
             range: true,
+            trigger: 'click',
         });
     });
 </script>

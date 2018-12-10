@@ -17,7 +17,7 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">日期</label>
                         <div class="layui-input-inline">
-                            <input type="text" class="layui-input" id="test2" name="search_date" placeholder="选择日期" value="{$d}">
+                            <input type="text" class="layui-input" id="test2" name="search_date" placeholder="选择日期" readonly value="{$d}">
                         </div>
                     </div>
                 <input type="hidden" name="type" value="{$Request.param.type}">

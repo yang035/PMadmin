@@ -83,6 +83,7 @@ class Project extends Admin
         $map = [];
         $params = $this->request->param();
 //        print_r($params['atype']);exit();
+        $params['atype'] = isset($params['atype']) ? $params['atype'] : 1;
         switch ($params['atype']) {
             case 1:
                 $map['p_type'] = 1;
@@ -157,7 +158,7 @@ class Project extends Admin
         $map['cid'] = $cid;
         $map['id'] = $params['id'];
         $row = ProjectModel::where($map)->find()->toArray();
-        $row['time_long'] = floor((strtotime($row['end_time'])-strtotime($row['start_time']))/86400);
+//        $row['time_long'] = floor((strtotime($row['end_time'])-strtotime($row['start_time']))/86400);
         $row['manager_user_id'] = $this->deal_data($row['manager_user']);
         $row['deal_user_id'] = $this->deal_data($row['deal_user']);
         $row['copy_user_id'] = $this->deal_data($row['copy_user']);
@@ -271,7 +272,7 @@ class Project extends Admin
             return $this->success("修改成功{$this->score_value}",url('index'));
         }
 
-        $row['time_long'] = floor((strtotime($row['end_time'])-strtotime($row['start_time']))/86400);
+//        $row['time_long'] = floor((strtotime($row['end_time'])-strtotime($row['start_time']))/86400);
         $row['manager_user_id'] = $this->deal_data($row['manager_user']);
         $row['deal_user_id'] = $this->deal_data($row['deal_user']);
         $row['copy_user_id'] = $this->deal_data($row['copy_user']);
@@ -294,6 +295,7 @@ class Project extends Admin
         }else{
             $this->assign('pname','顶级项目');
         }
+//        print_r($row);
         $this->assign('data_info', $row);
         $this->assign('grade_type',ProjectModel::getGrade($row['grade']));
         $this->assign('p_type',ProjectModel::getPtype($row['p_type']));

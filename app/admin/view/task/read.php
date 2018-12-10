@@ -58,12 +58,11 @@
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-time_long" name="time_long" readonly autocomplete="off" readonly>
         </div>
-        <div class="layui-form-mid layui-word-aux">天</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">紧急程度</label>
         <div class="layui-input-inline">
-            <select name="grade" class="field-grade" type="select" lay-filter="grade">
+            <select name="grade" class="field-grade" type="select" lay-filter="grade" readonly="">
                 {$grade_type}
             </select>
         </div>
@@ -147,25 +146,6 @@ var formData = {:json_encode($data_info)};
 
 layui.use(['jquery', 'laydate','upload'], function() {
     var $ = layui.jquery, laydate = layui.laydate,upload = layui.upload;
-    laydate.render({
-        elem: '.field-start_time',
-        type: 'date'
-    });
-    laydate.render({
-        elem: '.field-end_time',
-        type: 'date',
-        done: function(value, date, endDate){
-            getTimeLong(value);
-        },
-    });
-    //计算两个时间差
-    function getTimeLong(value) {
-        var timeLong,time1 = $('.field-start_time').val();
-        var date3 = new Date(value).getTime() - new Date(time1).getTime();   //时间差的毫秒数
-        //计算出相差天数
-        var days=Math.floor(date3/(24*3600*1000));
-        $('.field-time_long').val(days);
-    }
     var uploadInst = upload.render({
         elem: '#attachment-upload'
         ,url: '/upload/'

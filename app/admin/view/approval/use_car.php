@@ -8,6 +8,33 @@
 </style>
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-form-item">
+        <label class="layui-form-label">开始时间</label>
+        <div class="layui-input-inline" style="width: 250px">
+            <input type="text" class="layui-input field-start_time" name="start_time" lay-verify="required" autocomplete="off" readonly placeholder="选择开始时间">
+        </div>
+        <div class="layui-input-inline" style="width: 100px">
+            <input type="text" class="layui-input field-start_time1" name="start_time1" autocomplete="off" readonly placeholder="选择开始时间">
+        </div>
+        <div class="layui-form-mid" style="color: red">*</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">结束时间</label>
+        <div class="layui-input-inline" style="width: 250px">
+            <input type="text" class="layui-input field-end_time" name="end_time" lay-verify="required" autocomplete="off" readonly placeholder="选择结束时间">
+        </div>
+        <div class="layui-input-inline" style="width: 100px">
+            <input type="text" class="layui-input field-end_time1" name="end_time1" autocomplete="off" readonly placeholder="选择开始时间">
+        </div>
+        <div class="layui-form-mid" style="color: red">*</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">历时</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-time_long" readonly name="time_long" autocomplete="off">
+            <input type="hidden" class="layui-input field-time_long1" name="time_long1" value="">
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">用车事由</label>
         <div class="layui-input-inline">
             <textarea type="text" class="layui-textarea field-reason" name="reason" lay-verify="required" autocomplete="off" placeholder="请输入外出事由"></textarea>
@@ -20,27 +47,6 @@
             <input type="text" class="layui-input field-address" lay-verify="required" name="address" autocomplete="off" placeholder="请输入外出地点">
         </div>
         <div class="layui-form-mid" style="color: red">*</div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">开始时间</label>
-        <div class="layui-input-inline">
-            <input type="text" class="layui-input field-start_time" name="start_time" lay-verify="required" autocomplete="off" placeholder="选择开始时间">
-        </div>
-        <div class="layui-form-mid" style="color: red">*</div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">结束时间</label>
-        <div class="layui-input-inline">
-            <input type="text" class="layui-input field-end_time" name="end_time" lay-verify="required" autocomplete="off" placeholder="选择结束时间">
-        </div>
-        <div class="layui-form-mid" style="color: red">*</div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">用车时长</label>
-        <div class="layui-input-inline">
-            <input type="text" class="layui-input field-time_long" readonly name="time_long" autocomplete="off">
-        </div>
-        <div class="layui-form-mid">小时</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">车辆类型</label>
@@ -125,19 +131,65 @@
         var $ = layui.jquery, laydate = layui.laydate,upload = layui.upload;
         laydate.render({
             elem: '.field-start_time',
-            type: 'datetime'
+            type: 'date',
+            calendar: true,
+            trigger: 'click',
+            value: new Date(),
+            showBottom: false,
+            done: function (value, date, endDate) {
+                $("input[name='end_time']").val(value);
+            }
+        });
+        laydate.render({
+            elem: '.field-start_time1',
+            type: 'time',
+            // format: 'HH',
+            trigger: 'click',
+            value: '00:00:00',
         });
         laydate.render({
             elem: '.field-end_time',
-            type: 'datetime',
-            done: function(value, date, endDate){
-                getTimeLong(value);
-            },
+            type: 'date',
+            calendar: true,
+            trigger: 'click',
+            value: new Date(),
+        });
+        laydate.render({
+            elem: '.field-end_time1',
+            type: 'time',
+            // format: 'HH',
+            trigger: 'click',
+            value: '23:59:59',
+        });
+        $('.field-reason').focus(function () {
+            var time1 = $('.field-start_time').val()+' '+$('.field-start_time1').val();
+            var time2 = $('.field-end_time').val()+' '+$('.field-end_time1').val();
+            getTimeLong(time1,time2);
         });
         //计算两个时间差
-        function getTimeLong(value) {
-            var timeLong,time1 = $('.field-start_time').val();
-            var date3 = new Date(value).getTime() - new Date(time1).getTime();   //时间差的毫秒数
+        function getTimeLong(value1,value2) {
+            var timeLong,timeLong1;
+            var date3 = new Date(value2).getTime() - new Date(value1).getTime();   //时间差的毫秒数
+            //计算出相差天数
+            var days=Math.floor(date3/(24*3600*1000));
+            //计算出小时数
+            var leave1=date3%(24*3600*1000);   //计算天数后剩余的毫秒数
+            var hours=Math.floor(leave1/(3600*1000));
+            //计算相差分钟数
+            var leave2=leave1%(3600*1000);      //计算小时数后剩余的毫秒数
+            var minutes=Math.floor(leave2/(60*1000));
+            //计算相差秒数
+            var leave3=leave2%(60*1000);      //计算分钟数后剩余的毫秒数
+            var seconds=Math.round(leave3/1000);
+            timeLong = days+"天"+hours+"小时"+minutes+"分钟"+seconds+"秒";
+            $('.field-time_long').val(timeLong);
+            timeLong1 = days*24+hours;
+            $('.field-time_long1').val(timeLong1);
+        }
+        //计算两个时间差
+        function getTimeLong1(value1,value2) {
+            var timeLong;
+            var date3 = new Date(value2).getTime() - new Date(value1).getTime();   //时间差的毫秒数
             //计算出相差天数
             var days=Math.floor(date3/(24*3600*1000));
             //计算出小时数

@@ -17,23 +17,29 @@
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">开始时间</label>
-        <div class="layui-input-inline">
-            <input type="text" class="layui-input field-start_time" name="start_time" lay-verify="required" autocomplete="off" placeholder="选择开始时间">
+        <div class="layui-input-inline" style="width: 250px">
+            <input type="text" class="layui-input field-start_time" name="start_time" lay-verify="required" autocomplete="off" readonly placeholder="选择开始时间">
+        </div>
+        <div class="layui-input-inline" style="width: 100px">
+            <input type="text" class="layui-input field-start_time1" name="start_time1" autocomplete="off" readonly placeholder="选择开始时间">
         </div>
         <div class="layui-form-mid" style="color: red">*</div>
         <div id="alert" class="layui-form-mid" style="color: red">年假需要提前一周申请</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">结束时间</label>
-        <div class="layui-input-inline">
-            <input type="text" class="layui-input field-end_time" name="end_time" lay-verify="required" autocomplete="off" placeholder="选择结束时间">
+        <div class="layui-input-inline" style="width: 250px">
+            <input type="text" class="layui-input field-end_time" name="end_time" lay-verify="required" autocomplete="off" readonly placeholder="选择结束时间">
+        </div>
+        <div class="layui-input-inline" style="width: 100px">
+            <input type="text" class="layui-input field-end_time1" name="end_time1" autocomplete="off" readonly placeholder="选择开始时间">
         </div>
         <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">请假时长</label>
         <div class="layui-input-inline">
-            <input type="text" class="layui-input field-time_long" disabled name="time_long" autocomplete="off">
+            <input type="text" class="layui-input field-time_long" readonly name="time_long" autocomplete="off">
         </div>
     </div>
     <div class="layui-form-item">
@@ -118,23 +124,49 @@ layui.use(['jquery', 'laydate','upload','form'], function() {
 
     laydate.render({
         elem: '.field-start_time',
-        type: 'datetime',
+        type: 'date',
         calendar: true,
-        min: -1,
+        min: 0,
+        trigger: 'click',
+        value: new Date(),
+        showBottom: false,
+        done: function (value, date, endDate) {
+            $("input[name='end_time']").val(value);
+        }
+    });
+    laydate.render({
+        elem: '.field-start_time1',
+        type: 'time',
+        // format: 'HH',
+        trigger: 'click',
+        min: '08:00:00',
+        value: '00:00:00',
     });
     laydate.render({
         elem: '.field-end_time',
-        type: 'datetime',
+        type: 'date',
         calendar: true,
-        min: -1,
-        done: function(value, date, endDate){
-            getTimeLong(value);
-        },
+        trigger: 'click',
+        value: new Date(),
+        min: 0,
+    });
+    laydate.render({
+        elem: '.field-end_time1',
+        type: 'time',
+        // format: 'HH',
+        trigger: 'click',
+        min: '08:00:00',
+        value: '23:59:59',
+    });
+    $('.field-reason').focus(function () {
+        var time1 = $('.field-start_time').val()+' '+$('.field-start_time1').val();
+        var time2 = $('.field-end_time').val()+' '+$('.field-end_time1').val();
+        getTimeLong(time1,time2);
     });
     //计算两个时间差
-    function getTimeLong(value) {
-        var timeLong,time1 = $('.field-start_time').val();
-        var date3 = new Date(value).getTime() - new Date(time1).getTime();   //时间差的毫秒数
+    function getTimeLong(value1,value2) {
+        var timeLong;
+        var date3 = new Date(value2).getTime() - new Date(value1).getTime();   //时间差的毫秒数
         //计算出相差天数
         var days=Math.floor(date3/(24*3600*1000));
         //计算出小时数
@@ -146,7 +178,7 @@ layui.use(['jquery', 'laydate','upload','form'], function() {
         //计算相差秒数
         var leave3=leave2%(60*1000);      //计算分钟数后剩余的毫秒数
         var seconds=Math.round(leave3/1000);
-        timeLong = days+"天 "+hours+"小时 "+minutes+" 分钟"+seconds+" 秒";
+        timeLong = days+"天"+hours+"小时"+minutes+"分钟"+seconds+"秒";
         $('.field-time_long').val(timeLong);
     }
     var uploadInst = upload.render({

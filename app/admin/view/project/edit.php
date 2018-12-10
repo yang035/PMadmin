@@ -35,6 +35,15 @@
             <textarea type="text" class="layui-textarea field-remark" name="remark" lay-verify="required" autocomplete="off" placeholder="请输入描述"></textarea>
         </div>
     </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">项目类别</label>
+        <div class="layui-input-inline">
+            <select name="p_type" class="field-p_type" type="select" lay-filter="p_type">
+                {$p_type}
+            </select>
+        </div>
+    </div>
+    <div id="div_show">
     {empty name="Request.param.pid"}
     <div class="layui-form-item">
         <label class="layui-form-label">建设单位</label>
@@ -67,14 +76,6 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">项目类别</label>
-        <div class="layui-input-inline">
-            <select name="p_type" class="field-p_type" type="select" lay-filter="p_type">
-                {$p_type}
-            </select>
-        </div>
-    </div>
-    <div class="layui-form-item">
         <label class="layui-form-label">项目来源</label>
         <div class="layui-input-inline">
             <select name="p_source" class="field-p_source" type="select" lay-filter="p_source">
@@ -84,6 +85,7 @@
     </div>
     <hr>
     {/empty}
+    </div>
     <div class="layui-form-item">
         <label class="layui-form-label">预设分<span style="color: red">*</span></label>
         <div class="layui-input-inline">
@@ -96,20 +98,20 @@
     <div class="layui-form-item">
         <label class="layui-form-label">开始时间<span style="color: red">*</span></label>
         <div class="layui-input-inline">
-            <input type="text" class="layui-input field-start_time" name="start_time" lay-verify="required" autocomplete="off" placeholder="选择开始时间">
+            <input type="text" class="layui-input field-start_time" name="start_time" lay-verify="required" readonly autocomplete="off" placeholder="选择开始时间">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">结束时间<span style="color: red">*</span></label>
         <div class="layui-input-inline">
-            <input type="text" class="layui-input field-end_time" name="end_time" lay-verify="required" autocomplete="off" placeholder="选择结束时间">
+            <input type="text" class="layui-input field-end_time" name="end_time" lay-verify="required" readonly autocomplete="off" placeholder="选择结束时间">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">历时</label>
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-time_long" name="time_long" readonly autocomplete="off">
-        </div>天
+        </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">紧急程度</label>
@@ -192,7 +194,7 @@
             <input type="hidden" class="field-max_score" name="max_score" value="{$max_score}">
             {/notempty}
             <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
-            <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
+            <a href="{:url('index',['atype'=>$Request.param.atype])}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
         </div>
     </div>
 </form>
@@ -200,15 +202,36 @@
 <script>
 var formData = {:json_encode($data_info)};
 
-layui.use(['jquery', 'laydate','upload'], function() {
-    var $ = layui.jquery, laydate = layui.laydate,upload = layui.upload;
+layui.use(['jquery', 'laydate','upload','form'], function() {
+    var $ = layui.jquery, laydate = layui.laydate,upload = layui.upload,form = layui.form;
+
+    form.on('select(p_type)', function(data){
+        if(5 == data.value){
+            $('#div_show').hide();
+        }else {
+            $('#div_show').show();
+        };
+    });
+
     laydate.render({
         elem: '.field-start_time',
-        type: 'date'
+        type: 'datetime',
+        trigger: 'click',
+        change: function(value){
+            $(".laydate-btns-time").click();
+        },
+        done: function (value, date, endDate) {
+            $("input[name='end_time']").val(value);
+        }
     });
     laydate.render({
         elem: '.field-end_time',
-        type: 'date',
+        type: 'datetime',
+        trigger: 'click',
+        min: $("input[name='start_time']").val(),
+        change: function(value){
+            $(".laydate-btns-time").click();
+        },
         done: function(value, date, endDate){
             getTimeLong(value);
         },
@@ -219,7 +242,17 @@ layui.use(['jquery', 'laydate','upload'], function() {
         var date3 = new Date(value).getTime() - new Date(time1).getTime();   //时间差的毫秒数
         //计算出相差天数
         var days=Math.floor(date3/(24*3600*1000));
-        $('.field-time_long').val(days);
+        //计算出小时数
+        var leave1=date3%(24*3600*1000);   //计算天数后剩余的毫秒数
+        var hours=Math.floor(leave1/(3600*1000));
+        //计算相差分钟数
+        var leave2=leave1%(3600*1000);      //计算小时数后剩余的毫秒数
+        var minutes=Math.floor(leave2/(60*1000));
+        //计算相差秒数
+        var leave3=leave2%(60*1000);      //计算分钟数后剩余的毫秒数
+        var seconds=Math.round(leave3/1000);
+        timeLong = days+"天"+hours+"小时"+minutes+"分钟"+seconds+"秒";
+        $('.field-time_long').val(timeLong);
     }
     var uploadInst = upload.render({
         elem: '#attachment-upload'

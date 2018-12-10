@@ -169,12 +169,14 @@ class Approval extends Admin
             $approve = [
                 'class_type'=>$data['class_type'],
                 'cid'=>session('admin_user.cid'),
-                'start_time'=>$data['start_time'],
-                'end_time'=>$data['end_time'],
+                'start_time'=>$data['start_time'].' '.$data['start_time1'],
+                'end_time'=>$data['end_time'].' '.$data['end_time1'],
+                'time_long'=>$data['time_long'],
                 'user_id'=>session('admin_user.uid'),
                 'send_user'=>json_encode(user_array($data['send_user'])),
                 'copy_user'=>json_encode(user_array($data['copy_user'])),
             ];
+
             $res = ApprovalModel::create($approve);
             if ($res) {
                 $leave = [
@@ -207,8 +209,9 @@ class Approval extends Admin
             $approve = [
                 'class_type'=>$data['class_type'],
                 'cid'=>session('admin_user.cid'),
-                'start_time'=>$data['start_time'],
-                'end_time'=>$data['end_time'],
+                'start_time'=>$data['start_time'].' '.$data['start_time1'],
+                'end_time'=>$data['end_time'].' '.$data['end_time1'],
+                'time_long'=>$data['time_long'],
                 'user_id'=>session('admin_user.uid'),
                 'send_user'=>json_encode(user_array($data['send_user'])),
                 'copy_user'=>json_encode(user_array($data['copy_user'])),
@@ -259,8 +262,9 @@ class Approval extends Admin
             $approve = [
                 'class_type'=>$data['class_type'],
                 'cid'=>session('admin_user.cid'),
-                'start_time'=>$data['start_time'],
-                'end_time'=>$data['end_time'],
+                'start_time'=>$data['start_time'].' '.$data['start_time1'],
+                'end_time'=>$data['end_time'].' '.$data['end_time1'],
+                'time_long'=>$data['time_long'],
                 'user_id'=>session('admin_user.uid'),
                 'send_user'=>json_encode(user_array($data['send_user'])),
                 'copy_user'=>json_encode(user_array($data['copy_user'])),
@@ -298,8 +302,9 @@ class Approval extends Admin
             $approve = [
                 'class_type'=>$data['class_type'],
                 'cid'=>session('admin_user.cid'),
-                'start_time'=>$data['start_time'],
-                'end_time'=>$data['end_time'],
+                'start_time'=>$data['start_time'].' '.$data['start_time1'],
+                'end_time'=>$data['end_time'].' '.$data['end_time1'],
+                'time_long'=>$data['time_long'],
                 'user_id'=>session('admin_user.uid'),
                 'send_user'=>json_encode(user_array($data['send_user'])),
                 'copy_user'=>json_encode(user_array($data['copy_user'])),
@@ -341,8 +346,9 @@ class Approval extends Admin
             $approve = [
                 'class_type'=>$data['class_type'],
                 'cid'=>session('admin_user.cid'),
-                'start_time'=>$data['start_time'],
-                'end_time'=>$data['end_time'],
+                'start_time'=>$data['start_time'].' '.$data['start_time1'],
+                'end_time'=>$data['end_time'].' '.$data['end_time1'],
+                'time_long'=>$data['time_long'],
                 'user_id'=>session('admin_user.uid'),
                 'send_user'=>json_encode(user_array($data['send_user'])),
                 'copy_user'=>json_encode(user_array($data['copy_user'])),
@@ -351,7 +357,7 @@ class Approval extends Admin
             if ($res) {
                 $leave = [
                     'aid'=>$res['id'],
-                    'time_long'=>$data['time_long'],
+                    'time_long1'=>$data['time_long1'],
                     'reason'=>$data['reason'],
                     'attachment'=>$data['attachment'],
                 ];
@@ -379,8 +385,9 @@ class Approval extends Admin
             $approve = [
                 'class_type'=>$data['class_type'],
                 'cid'=>session('admin_user.cid'),
-                'start_time'=>$data['start_time'],
-                'end_time'=>$data['end_time'],
+                'start_time'=>$data['start_time'].' '.$data['start_time1'],
+                'end_time'=>$data['end_time'].' '.$data['end_time1'],
+                'time_long'=>$data['time_long'],
                 'user_id'=>session('admin_user.uid'),
                 'send_user'=>json_encode(user_array($data['send_user'])),
                 'copy_user'=>json_encode(user_array($data['copy_user'])),
@@ -391,7 +398,7 @@ class Approval extends Admin
                     'aid'=>$res['id'],
                     'address'=>$data['address'],
                     'reason'=>$data['reason'],
-                    'time_long'=>$data['time_long'],
+                    'time_long1'=>$data['time_long1'],
                     'attachment'=>$data['attachment'],
                 ];
                 if (!GooutModel::create($leave)){
@@ -418,8 +425,9 @@ class Approval extends Admin
             $approve = [
                 'class_type'=>$data['class_type'],
                 'cid'=>session('admin_user.cid'),
-                'start_time'=>$data['start_time'],
-                'end_time'=>$data['end_time'],
+                'start_time'=>$data['start_time'].' '.$data['start_time1'],
+                'end_time'=>$data['end_time'].' '.$data['end_time1'],
+                'time_long'=>$data['time_long'],
                 'user_id'=>session('admin_user.uid'),
                 'deal_user'=>json_encode(user_array($data['deal_user'])),
                 'send_user'=>json_encode(user_array($data['send_user'])),
@@ -432,7 +440,7 @@ class Approval extends Admin
                     'address'=>$data['address'],
                     'reason'=>$data['reason'],
                     'car_type'=>$data['car_type'],
-                    'time_long'=>$data['time_long'],
+                    'time_long1'=>$data['time_long1'],
                     'attachment'=>$data['attachment'],
                 ];
                 if (!CarModel::create($leave)){

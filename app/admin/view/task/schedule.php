@@ -13,6 +13,10 @@
         float: left;
         width: auto;
     }
+    a {
+        color: #333;
+        text-decoration: none;
+    }
 </style>
 <div class="page-toolbar">
     <div class="page-filter">
@@ -27,13 +31,13 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">开始时间</label>
                     <div class="layui-input-inline">
-                        <input type="text" class="layui-input field-start_time" name="start_time" value="{:input('get.start_time')}" autocomplete="off" placeholder="选择开始时间">
+                        <input type="text" class="layui-input field-start_time" name="start_time" value="{:input('get.start_time')}" readonly autocomplete="off" placeholder="选择开始时间">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">结束时间</label>
                     <div class="layui-input-inline">
-                        <input type="text" class="layui-input field-end_time" name="end_time" value="{:input('get.end_time')}" autocomplete="off" placeholder="选择结束时间">
+                        <input type="text" class="layui-input field-end_time" name="end_time" value="{:input('get.end_time')}" autocomplete="off" readonly placeholder="选择结束时间">
                     </div>
                 </div>
                 <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
