@@ -11,6 +11,7 @@ namespace app\admin\controller;
 
 use app\admin\model\AdminCompany;
 use app\admin\model\AdminDepartment;
+use app\admin\model\Category;
 
 class Company extends Admin
 {
@@ -63,6 +64,18 @@ class Company extends Admin
                 if (!AdminDepartment::create($dep_data)){
                     return $this->error('添加失败！');
                 }
+
+                $categoty_data = [
+                    'code'=>$cid.'g',
+                    'cid'=>$cid,
+                    'user_id' => session('admin_user.uid'),
+                    'name'=>$result_arr['name'],
+                    'remark'=>$result_arr['name']
+                ];
+                if (!Category::create($categoty_data)){
+                    return $this->error('添加失败！');
+                }
+
             }
             return $this->success('添加成功。',url('index'));
         }

@@ -10,6 +10,7 @@ namespace app\admin\controller;
 
 
 use app\admin\model\AdminDepartment;
+use app\admin\model\Category;
 use think\Controller;
 
 class Tool extends Admin
@@ -40,9 +41,19 @@ class Tool extends Admin
         if (1 != session('admin_user.role_id')){
             $cid = session('admin_user.cid');
         }else{
-            $cid = 3;
+            $cid = session('admin_user.cid');
         }
         $result = AdminDepartment::index($cid);
+        return $result;
+    }
+
+    public function getTreeCat(){
+        if (1 != session('admin_user.role_id')){
+            $cid = session('admin_user.cid');
+        }else{
+            $cid = session('admin_user.cid');
+        }
+        $result = Category::index($cid);
         return $result;
     }
 }
