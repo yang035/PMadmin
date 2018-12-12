@@ -319,4 +319,21 @@ class Category extends Model
         self::getMainMenu(true);
         return true;
     }
+
+    public static function getDepGood($cid = 1)
+    {
+        $where = ['cid' => $cid];
+        $result = self::where($where)->select();
+        $map = [
+            'cid' => $cid,
+            'cat_id'=>['>',0],
+            'status'=>1,
+        ];
+        $goods = Goods::where($map)->select();
+        foreach ($goods as $k => $v) {
+            $goods[$k]['gid'] = '10000' . $v->id;
+        }
+        $data = array_merge($goods, $result);
+        return $data;
+    }
 }

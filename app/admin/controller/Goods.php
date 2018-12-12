@@ -2,7 +2,9 @@
 namespace app\admin\controller;
 
 use app\admin\model\Goods as GoodsModel;
+use think\Db;
 use think\Validate;
+use app\admin\model\AdminUser;
 
 class Goods extends Admin
 {
@@ -129,6 +131,122 @@ class Goods extends Admin
         $data_info['content'] = htmlspecialchars_decode($data_info['content']);
         $this->assign('unit_option', GoodsModel::getOption());
         $this->assign('data_info', $data_info);
+        return $this->fetch();
+    }
+
+    public function apply(){
+        $params = $this->request->param();
+        if ($this->request->isAjax()) {
+            $where = $data = [];
+
+            $page = input('param.page/d', 1);
+            $limit = input('param.limit/d', 15);
+
+            if (1 != session('admin_user.role_id')){
+                $where['a.cid'] = session('admin_user.cid');
+            }
+            $where['a.class_type'] = 11;
+            $where['a.status'] = ['<',3];
+
+            if (isset($params['name']) && !empty($params['name'])){
+                $where['u.realname'] = ['like',"%{$params['name']}%"];
+            }
+            $fields = 'a.user_id,a.send_user,a.status,g.*,u.realname';
+            $data['data'] = Db::table('tb_approval a')
+                ->field($fields)
+                ->join('tb_approval_goods g','a.id=g.aid','right')
+                ->join('tb_admin_user u','a.user_id=u.id','left')
+                ->where($where)
+                ->order('a.status desc')
+                ->page($page)
+                ->limit($limit)
+                ->select();
+            $approval_status = config('other.approval_status');
+            if ($data['data']){
+                foreach ($data['data'] as $k=>$v) {
+                    $data['data'][$k]['send_user'] = $this->deal_data($v['send_user']);
+                    $data['data'][$k]['goods'] = json_decode($v['goods'],true);
+                    $data['data'][$k]['status'] = $approval_status[$v['status']];
+                    $data['data'][$k]['create_time'] = date('Y-m-d H:i:s',$v['create_time']);
+                }
+            }
+
+            $data['count'] = Db::table('tb_approval a')
+                ->field($fields)
+                ->join('tb_approval_goods g','a.id=g.aid','right')
+                ->join('tb_admin_user u','a.user_id=u.id','left')
+                ->where($where)
+                ->order('a.status desc')
+                ->page($page)
+                ->limit($limit)
+                ->count();
+            $data['code'] = 0;
+            $data['msg'] = '';
+//            print_r($data);
+            return json($data);
+        }
+
+        // 分页
+        $tab_data = $this->tab_data;
+        $tab_data['current'] = url('');
+
+        $this->assign('unit_option', config('other.unit'));
+        $this->assign('tab_data', $tab_data);
+        $this->assign('tab_type', 1);
+        return $this->fetch();
+    }
+    public function deal_data($x_user)
+    {
+        $x_user_arr = json_decode($x_user,true);
+        $x_user = [];
+        if ($x_user_arr){
+            foreach ($x_user_arr as $key=>$val){
+                $real_name = AdminUser::getUserById($key)['realname'];
+                if ('a' == $val){
+                    $real_name = "<font style='color: blue'>".$real_name."</font>";
+                }
+                $x_user[] = $real_name;
+            }
+            return implode(',',$x_user);
+        }
+    }
+
+    public function hand(){
+        $params = $this->request->param();
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            // 验证
+            $result = $this->validate($data, 'Goods');
+            if($result !== true) {
+                return $this->error($result);
+            }
+            unset($data['cat_name']);
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
+//            print_r($data);exit();
+            if (!GoodsModel::update($data)) {
+                return $this->error('修改失败');
+            }
+            return $this->success('修改成功',url('index'));
+        }
+        $approval_status = config('other.approval_status');
+        $where = [
+            'g.id'=>$params['id'],
+        ];
+        $fields = 'a.user_id,a.send_user,a.status,g.*,u.realname';
+        $row = Db::table('tb_approval a')
+            ->field($fields)
+            ->join('tb_approval_goods g','a.id=g.aid','right')
+            ->join('tb_admin_user u','a.user_id=u.id','left')
+            ->where($where)
+            ->find();
+        if ($row){
+            $row['send_user'] = $this->deal_data($row['send_user']);
+            $row['goods'] = json_decode($row['goods'],true);
+            $row['status'] = $approval_status[$row['status']];
+            $row['create_time'] = date('Y-m-d H:i:s',$row['create_time']);
+        }
+        $this->assign('data_info', $row);
         return $this->fetch();
     }
 }

@@ -33,6 +33,19 @@ class Tool extends Admin
         return $this->fetch();
     }
 
+    public function getTreeGood(){
+        if ($this->request->isPost()){
+            if (1 != session('admin_user.role_id')){
+                $cid = session('admin_user.cid');
+            }else{
+                $cid = session('admin_user.cid');
+            }
+            $result = Category::getDepGood($cid);
+            return $result;
+        }
+        return $this->fetch();
+    }
+
     public function getTreeUser1(){
         return $this->fetch();
     }

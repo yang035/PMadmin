@@ -88,6 +88,10 @@ return [
 //            'title'=>'打卡补卡',
 //            'href'=>'admin/Approval/clockIn'
 //        ],
+        11=>[
+            'title'=>'申领用品',
+            'href'=>'admin/Approval/officeGood'
+        ],
     ],
     'car_type' => [
         1 =>'车辆1',

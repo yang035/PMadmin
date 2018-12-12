@@ -95,6 +95,22 @@
             <span>无</span>
             {/notempty}
             {/case}
+            {case value="9"}
+            {/case}
+            {case value="10"}
+            {/case}
+            {case value="11"}
+            {notempty name="data_list['goods']"}
+            物品清单：
+            <div>
+                {volist name="data_list['goods']" id="vo"}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$vo['name']}:{$vo['number']}<br>
+                {/volist}
+            </div>
+            {else/}
+            <span>无</span>
+            {/notempty}
+            {/case}
             {/switch}
             事由：{$data_list['reason']}<br>
             附件说明：

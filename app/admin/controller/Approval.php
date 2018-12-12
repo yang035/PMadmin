@@ -17,6 +17,7 @@ use app\admin\model\ApprovalGoout as GooutModel;
 use app\admin\model\ApprovalUsecar as CarModel;
 use app\admin\model\AdminUser;
 use app\admin\model\AssetItem as ItemModel;
+use app\admin\model\ApprovalGoods;
 
 
 class Approval extends Admin
@@ -464,6 +465,55 @@ class Approval extends Admin
 
     }
 
+    public function officeGood()
+    {
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            // 验证
+            $result = $this->validate($data, 'ApprovalGoods');
+            if($result !== true) {
+                return $this->error($result);
+            }
+            $good_arr =[];
+            if (isset($data['number']) && !empty($data['number'])){
+                foreach ($data['number'] as $k=>$v){
+                    $good_arr[$k]['id'] = $data['good_id'][$k];
+                    $good_arr[$k]['name'] = $data['name'][$k];
+                    $good_arr[$k]['number'] = $v;
+                }
+            }
+            $goods = json_encode($good_arr);
+            unset($data['id']);
+            $approve = [
+                'class_type'=>$data['class_type'],
+                'cid'=>session('admin_user.cid'),
+                'start_time'=>$data['start_time'].' '.$data['start_time1'],
+                'end_time'=>$data['end_time'].' '.$data['end_time1'],
+                'time_long'=>$data['time_long'],
+                'user_id'=>session('admin_user.uid'),
+                'send_user'=>json_encode(user_array($data['send_user'])),
+                'copy_user'=>json_encode(user_array($data['copy_user'])),
+            ];
+            $res = ApprovalModel::create($approve);
+            if ($res) {
+                $leave = [
+                    'aid'=>$res['id'],
+                    'goods'=>$goods,
+                    'reason'=>$data['reason'],
+                    'attachment'=>$data['attachment'],
+                ];
+                if (!ApprovalGoods::create($leave)){
+                    return $this->error('添加失败！');
+                }
+            }else{
+                return $this->error('添加失败！');
+            }
+            return $this->success('添加成功。','index');
+        }
+//        $this->assign('cat_option',ItemModel::getOption());
+        return $this->fetch();
+    }
+
     public function read(){
         $params = $this->request->param();
         if ($this->request->isPost()){
@@ -516,15 +566,23 @@ class Approval extends Admin
                 break;
             case 6:
                 $table = 'tb_approval_overtime';
-                $f = 'b.reason,b.time_long,b.attachment';
+                $f = 'b.reason,b.time_long1,b.attachment';
                 break;
             case 7:
                 $table = 'tb_approval_goout';
-                $f = 'b.reason,b.address,b.time_long,b.attachment';
+                $f = 'b.reason,b.address,b.time_long1,b.attachment';
                 break;
             case 8:
                 $table = 'tb_approval_usecar';
-                $f = 'b.reason,b.address,b.time_long,b.attachment,b.car_type,b.before_img,b.after_img';
+                $f = 'b.reason,b.address,b.time_long1,b.attachment,b.car_type,b.before_img,b.after_img';
+                break;
+            case 9:
+                break;
+            case 10:
+                break;
+            case 11:
+                $table = 'tb_approval_goods';
+                $f = 'b.reason,b.goods,b.attachment';
                 break;
             default:
                 $table = 'tb_approval_leave';
@@ -563,6 +621,14 @@ class Approval extends Admin
                 $list['after_img'] = json_decode($list['after_img'],true);
                 $car_type = config('other.car_type');
                 $this->assign('car_type',$car_type);
+                break;
+            case 9:
+                break;
+            case 10:
+                break;
+            case 11:
+                $list['goods'] = json_decode($list['goods'],true);
+                break;
             default:
                 break;
         }
