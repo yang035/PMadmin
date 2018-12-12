@@ -327,4 +327,5 @@ class Goods extends Model
     public function category(){
         return $this->hasOne('Category', 'id', 'cat_id');
     }
+
 }

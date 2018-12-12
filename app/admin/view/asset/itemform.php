@@ -17,30 +17,15 @@
 <form class="layui-form" action="{:url()}" method="post">
     <div class="layui-tab-item layui-show layui-form-pane">
         <div class="layui-form-item">
-            <label class="layui-form-label">资产类型</label>
+            <label class="layui-form-label">办公用品</label>
             <div class="layui-input-inline">
-                <select name="cat_id" class="field-cat_id" type="select">
-                    {$cat_option}
-                </select>
+                <button type="button" class="layui-btn" id="good_cat_id">选择办公用品</button>
+                <div id="good_select_id"></div>
+                <input type="hidden" name="good_cat" id="good_cat" value="" lay-verify="required">
+                <div id="show_div">
+                </div>
             </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">名称<span style="color: red">*</span></label>
-            <div class="layui-input-inline">
-                <input type="text" class="layui-input field-name" name="name" lay-verify="required" autocomplete="off" placeholder="请输入资产名称">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">说明</label>
-            <div class="layui-input-inline">
-                <textarea  class="layui-textarea field-remark" name="remark" lay-verify="" autocomplete="off" placeholder="[选填]备注"></textarea>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">数量<span style="color: red">*</span></label>
-            <div class="layui-input-inline">
-                <input type="number" class="layui-input field-amount" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="amount" lay-verify="required" autocomplete="off" placeholder="请输入数量">
-            </div>
+            <div class="layui-form-mid" style="color: red">*</div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">存储人</label>
@@ -80,6 +65,26 @@
 
         $('#reset_expire').on('click', function(){
             $('input[name="expire_time"]').val(0);
+        });
+
+        $('#good_cat_id').on('click', function(){
+            var good_cat = $('#good_cat').val();
+            var open_url = "{:url('Tool/getTreeGood')}?m=good&u="+good_cat;
+            if (open_url.indexOf('?') >= 0) {
+                open_url += '&hisi_iframe=yes';
+            } else {
+                open_url += '?hisi_iframe=yes';
+            }
+            layer.open({
+                type:2,
+                title :'物品列表',
+                maxmin: true,
+                area: ['800px', '500px'],
+                content: open_url,
+                success:function (layero, index) {
+                    var body = layer.getChildFrame('body', index);  //巧妙的地方在这里哦
+                }
+            });
         });
 
         $('#manager_user_id').on('click', function(){

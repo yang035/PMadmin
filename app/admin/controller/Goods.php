@@ -5,6 +5,7 @@ use app\admin\model\Goods as GoodsModel;
 use think\Db;
 use think\Validate;
 use app\admin\model\AdminUser;
+use app\admin\model\Approval as ApprovalModel;
 
 class Goods extends Admin
 {
@@ -214,20 +215,28 @@ class Goods extends Admin
     public function hand(){
         $params = $this->request->param();
         if ($this->request->isPost()) {
-            $data = $this->request->post();
-            // 验证
-            $result = $this->validate($data, 'Goods');
-            if($result !== true) {
-                return $this->error($result);
-            }
-            unset($data['cat_name']);
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
-//            print_r($data);exit();
-            if (!GoodsModel::update($data)) {
-                return $this->error('修改失败');
-            }
-            return $this->success('修改成功',url('index'));
+            Db::transaction(function () {
+                $data = $this->request->post();
+                if (!empty($data['number'])) {
+                    foreach ($data['number'] as $k => $v) {
+                        $good = GoodsModel::getRowById($data['good_id'][$k]);
+                        $free = $good['total'] - $good['sales'];
+                        if ($v > $free) {
+                            return $this->error('库存不足，请刷新查看最新库存');
+                        }
+                        $gd = [
+                            'total' => $good['total'] - $v,
+                            'sales' => $good['sales'] + $v,
+                        ];
+                        GoodsModel::where('id', $data['good_id'][$k])->save($gd);
+                        $flag = ApprovalModel::where('id', $data['aid'])->setField('status', 5);//已发放
+                        if (!$flag) {
+                            return $this->error('物品发放失败');
+                        }
+                        return $this->success('物品发放成功', url('index'));
+                    }
+                }
+            });
         }
         $approval_status = config('other.approval_status');
         $where = [
@@ -245,7 +254,12 @@ class Goods extends Admin
             $row['goods'] = json_decode($row['goods'],true);
             $row['status'] = $approval_status[$row['status']];
             $row['create_time'] = date('Y-m-d H:i:s',$row['create_time']);
+            foreach ($row['goods'] as $k=>$v){
+                $good = GoodsModel::getRowById($v['id']);
+                $row['goods'][$k]['free'] = $good['total']-$good['sales'];
+            }
         }
+
         $this->assign('data_info', $row);
         return $this->fetch();
     }
