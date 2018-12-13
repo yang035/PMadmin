@@ -188,6 +188,7 @@ class AdminUser extends Model
             $login['role_name'] = $role['name'];
             $login['nick'] = $user->nick;
             $login['username'] = $user->username;
+            $login['realname'] = $user->realname;
             $login['signature'] = $user->signature;
             $login['company'] = $company['name'];
             cookie('hisi_iframe', $user->iframe);

@@ -39,8 +39,8 @@
             <label class="layui-form-label">使用人</label>
             <div class="layui-input-inline">
                 <button type="button" class="layui-btn" id="deal_user_id">选择使用人</button>(办公器材由谁使用)
-                <div id="deal_select_id"></div>
-                <input type="hidden" name="deal_user" id="deal_user" value="">
+                <div id="deal_select_id">{$data_info['self_user_id']|default=''}</div>
+                <input type="hidden" name="deal_user" id="deal_user" value="{$data_info['self_user']|default=''}">
             </div>
         </div>
     </div>
