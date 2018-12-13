@@ -35,6 +35,7 @@
             <textarea type="text" class="layui-textarea field-remark" name="remark" lay-verify="required" autocomplete="off" placeholder="请输入描述"></textarea>
         </div>
     </div>
+    {empty name="Request.param.pid"}
     <div class="layui-form-item">
         <label class="layui-form-label">项目类别</label>
         <div class="layui-input-inline">
@@ -44,7 +45,6 @@
         </div>
     </div>
     <div id="div_show">
-    {empty name="Request.param.pid"}
     <div class="layui-form-item">
         <label class="layui-form-label">建设单位</label>
         <div class="layui-input-inline">
@@ -83,9 +83,10 @@
             </select>
         </div>
     </div>
+    </div>
     <hr>
     {/empty}
-    </div>
+
     <div class="layui-form-item">
         <label class="layui-form-label">预设分<span style="color: red">*</span></label>
         <div class="layui-input-inline">

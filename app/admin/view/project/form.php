@@ -35,6 +35,7 @@
             <textarea type="text" class="layui-textarea field-remark" name="remark" lay-verify="required" autocomplete="off" placeholder="请输入描述"></textarea>
         </div>
     </div>
+    {empty name="Request.param.id"}
     <div class="layui-form-item">
         <label class="layui-form-label">项目类别</label>
         <div class="layui-input-inline">
@@ -43,6 +44,9 @@
             </select>
         </div>
     </div>
+    {else/}
+    <input type="hidden" class="layui-input field-p_type" name="p_type" value="{$parent_type}">
+    {/empty}
     <div id="div_show">
     {empty name="Request.param.id"}
     <div class="layui-form-item">

@@ -216,7 +216,10 @@ class Project extends Admin
         if (!empty($params['pname'])){
             $sub_total_score = ProjectModel::where('pid',$params['id'])->column('sum(score)');
             $max_score = $params['pscore'] - $sub_total_score[0];
+            $p_res = ProjectModel::where('name',$params['pname'])->limit(1)->select();
+//            print_r($p_res[0]['p_type']);
             $this->assign('pname',$params['pname']);
+            $this->assign('parent_type',$p_res[0]['p_type']);
             $this->assign('max_score',$max_score);
         }
 
