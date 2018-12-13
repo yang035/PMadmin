@@ -31,8 +31,8 @@
             <label class="layui-form-label">存储人</label>
             <div class="layui-input-inline">
                 <button type="button" class="layui-btn" id="manager_user_id">选择存储人</button>(办公器材由谁管理)
-                <div id="manager_select_id"></div>
-                <input type="hidden" name="manager_user" id="manager_user" value="">
+                <div id="manager_select_id">{$data_info['own_user_id']|default=''}</div>
+                <input type="hidden" name="manager_user" id="manager_user" value="{$data_info['own_user']|default=''}">
             </div>
         </div>
         <div class="layui-form-item">

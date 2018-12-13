@@ -82,6 +82,15 @@ class Asset extends Admin
             }
             return $this->success('添加成功');
         }
+
+        $cid = session('admin_user.cid');
+        $redis = service('Redis');
+        $default_user = $redis->get("pm:user:{$cid}");
+        if ($default_user){
+            $user = json_decode($default_user);
+            $this->assign('data_info', (array)$user);
+        }
+
         $this->assign('cat_option',ItemModel::getOption());
         return $this->fetch('itemform');
     }

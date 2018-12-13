@@ -44,8 +44,9 @@ class AssetPerson extends Admin
                 $where['name'] = ['like', "%{$name}%"];
             }
             $where['cid'] = session('admin_user.cid');
+            $where['user_id'] = session('admin_user.uid');
             $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->select();
-            $realname = AdminUser::getUserById(session('admin_user.uid'))['realname'];
+            $realname = AdminUser::getUserById($where['user_id'])['realname'];
             if ($data['data']){
                 foreach ($data['data'] as $k=>$v){
                     $data['data'][$k]['realname'] = $realname;
