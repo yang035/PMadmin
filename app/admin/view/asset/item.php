@@ -40,8 +40,10 @@
     <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=asset_item&id={{ d.id }}">
 </script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
-    <a href="{:url('editItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
-    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>
+    {eq name="$Think.session.admin_user.role_id" value='3'}
+    <a href="{:url('editItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a>
+<!--    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
+    {/eq}
 </script>
 <script type="text/javascript">
     layui.use(['table'], function() {
@@ -56,12 +58,12 @@
             }
             ,cols: [[ //表头
                 {type:'checkbox'},
-                {field: 'cat_id', title: '类型', templet:function(d){
-                        return d.cat.name;
-                    }},
-                {field: 'name', title: '名称'},
-                {field: 'amount', title: '数量'},
-                {field: 'owner_id', title: '拥有者'},
+                {field: 'title', title: '名称'},
+                {field: 'number', title: '数量'},
+                {field: 'manager_user', title: '存储人'},
+                {field: 'deal_user', title: '使用人'},
+                {field: 'realname', title: '操作员'},
+                {field: 'update_time', title: '操作时间'},
                 {field: 'status', title: '状态', templet: '#statusTpl'},
                 {title: '操作', templet: '#buttonTpl'}
             ]]

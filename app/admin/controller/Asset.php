@@ -9,6 +9,8 @@
 namespace app\admin\controller;
 use app\admin\model\AssetCat as CatModel;
 use app\admin\model\AssetItem as ItemModel;
+use app\admin\model\AdminUser;
+use think\Db;
 
 
 class Asset extends Admin
@@ -33,24 +35,55 @@ class Asset extends Admin
 
     public function index($q = '')
     {
+//        print_r(session('admin_user'));
+        $params = $this->request->param();
         if ($this->request->isAjax()) {
             $where = $data = [];
-            $page = input('param.page/d', 1);
-            $limit = input('param.limit/d', 20);
 
-            $cat_id = input('param.cat_id/d');
-            if ($cat_id){
-                $where['cat_id'] = $cat_id;
+            $page = input('param.page/d', 1);
+            $limit = input('param.limit/d', 15);
+
+            if (1 != session('admin_user.role_id')){
+                $where['a.cid'] = session('admin_user.cid');
             }
-            $name = input('param.name');
-            if ($name) {
-                $where['name'] = ['like', "%{$name}%"];
+            if (session('admin_user.role_id') > 3){
+                $where['a.user_id'] = session('admin_user.uid');
             }
-            $where['cid'] = session('admin_user.cid');
-            $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->select();
-            $data['count'] = ItemModel::where($where)->count('id');
+
+            if (isset($params['name']) && !empty($params['name'])){
+                $where['g.title'] = ['like',"%{$params['name']}%"];
+            }
+
+            $fields = 'a.*,g.cat_id,g.title,u.realname';
+            $data['data'] = Db::table('tb_asset_item a')
+                ->field($fields)
+                ->join('tb_shopping_goods g','a.good_id=g.id','left')
+                ->join('tb_admin_user u','a.user_id=u.id','left')
+                ->where($where)
+                ->order('a.id desc')
+                ->page($page)
+                ->limit($limit)
+                ->select();
+            if ($data['data']){
+                foreach ($data['data'] as $k=>$v) {
+                    $data['data'][$k]['manager_user'] = $this->deal_data($v['manager_user']);
+                    $data['data'][$k]['deal_user'] = $this->deal_data($v['deal_user']);
+                    $data['data'][$k]['update_time'] = date('Y-m-d H:i:s',$v['update_time']);
+                }
+            }
+
+            $data['count'] = Db::table('tb_asset_item a')
+                ->field($fields)
+                ->join('tb_shopping_goods g','a.good_id=g.id','left')
+                ->join('tb_admin_user u','a.user_id=u.id','left')
+                ->where($where)
+                ->order('a.create_time desc')
+                ->page($page)
+                ->limit($limit)
+                ->count();
             $data['code'] = 0;
             $data['msg'] = '';
+//            print_r($data);
             return json($data);
         }
 
@@ -63,21 +96,49 @@ class Asset extends Admin
         $this->assign('cat_option',ItemModel::getOption());
         return $this->fetch('item');
     }
+
+    public function deal_data($x_user)
+    {
+        $x_user_arr = json_decode($x_user,true);
+        $x_user = [];
+        if ($x_user_arr){
+            foreach ($x_user_arr as $key=>$val){
+                $real_name = AdminUser::getUserById($key)['realname'];
+                if ('a' == $val){
+                    $real_name = "<font style='color: blue'>".$real_name."</font>";
+                }
+                $x_user[] = $real_name;
+            }
+            return implode(',',$x_user);
+        }
+    }
+
     public function addItem()
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
             // 验证
             $result = $this->validate($data, 'AssetItem');
             if($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
-            $data['manager_user'] = json_encode(user_array($data['manager_user']));
-            $data['deal_user'] = json_encode(user_array($data['deal_user']));
-            unset($data['id']);
-            if (!ItemModel::create($data)) {
+            $tmp = $tmp1 =[];
+            $tmp1['cid'] = session('admin_user.cid');
+            $tmp1['user_id'] = session('admin_user.uid');
+            $tmp1['manager_user'] = json_encode(user_array($data['manager_user']));
+            $tmp1['deal_user'] = json_encode(user_array($data['deal_user']));
+            $tmp1['create_time'] = date('Y-m-d H:i:s');
+            $tmp1['update_time'] = date('Y-m-d H:i:s');
+            if ($data['good_id']){
+                foreach ($data['good_id'] as $k => $v) {
+                    $tmp[$k] = $tmp1;
+                    $tmp[$k]['good_id'] = $v;
+                    $tmp[$k]['number'] = $data['number'][$k];
+                }
+            }
+            $a_model = new ItemModel();
+            if (!$a_model->insertAll($tmp)) {
                 return $this->error('添加失败');
             }
             return $this->success('添加成功');
@@ -112,16 +173,37 @@ class Asset extends Admin
             $data['user_id'] = session('admin_user.uid');
             $data['manager_user'] = json_encode(user_array($data['manager_user']));
             $data['deal_user'] = json_encode(user_array($data['deal_user']));
+            unset($data['title']);
             if (!ItemModel::update($data)) {
                 return $this->error('修改失败');
             }
             return $this->success('修改成功');
         }
 
-        $row = ItemModel::where('id', $id)->find()->toArray();
+        $where = [
+            'a.id'=>$id
+        ];
+        $row = Db::table('tb_asset_item a')
+            ->field('a.*,g.title')
+            ->join('tb_shopping_goods g','a.good_id=g.id','left')
+            ->where($where)
+            ->find();
+        $row['manager_user_id'] = $this->deal_data($row['manager_user']);
+        $row['deal_user_id'] = $this->deal_data($row['deal_user']);
+        $row['manager_user'] = $this->deal_data_id($row['manager_user']);
+        $row['deal_user'] = $this->deal_data_id($row['deal_user']);
+//        print_r($row);
         $this->assign('data_info', $row);
         $this->assign('cat_option',ItemModel::getOption());
-        return $this->fetch('itemform');
+        return $this->fetch('itemedit');
+    }
+    public function deal_data_id($x_user){
+        $x_user_arr = json_decode($x_user,true);
+        if ($x_user_arr){
+            $tmp = array_keys($x_user_arr);
+            return implode(',',$tmp);
+        }
+        return '';
     }
 
     public function delItem()

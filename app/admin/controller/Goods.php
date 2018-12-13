@@ -6,6 +6,7 @@ use think\Db;
 use think\Validate;
 use app\admin\model\AdminUser;
 use app\admin\model\Approval as ApprovalModel;
+use app\admin\model\AssetItem;
 
 class Goods extends Admin
 {
@@ -217,6 +218,7 @@ class Goods extends Admin
         if ($this->request->isPost()) {
             Db::transaction(function () {
                 $data = $this->request->post();
+//                print_r($data);exit();
                 if (!empty($data['number'])) {
                     foreach ($data['number'] as $k => $v) {
                         $good = GoodsModel::getRowById($data['good_id'][$k]);
@@ -228,15 +230,35 @@ class Goods extends Admin
                             'total' => $good['total'] - $v,
                             'sales' => $good['sales'] + $v,
                         ];
-                        GoodsModel::where('id', $data['good_id'][$k])->save($gd);
-                        $flag = ApprovalModel::where('id', $data['aid'])->setField('status', 5);//已发放
-                        if (!$flag) {
-                            return $this->error('物品发放失败');
+                        GoodsModel::where('id', $data['good_id'][$k])->update($gd);
+
+                        $tmp = $tmp1 =[];
+                        $tmp1['cid'] = session('admin_user.cid');
+                        $tmp1['user_id'] = session('admin_user.uid');
+                        $tmp1['manager_user'] = json_encode(user_array($data['manager_user']));
+                        $tmp1['deal_user'] = json_encode(user_array($data['deal_user']));
+                        $tmp1['create_time'] = date('Y-m-d H:i:s');
+                        $tmp1['update_time'] = date('Y-m-d H:i:s');
+                        if ($data['good_id']){
+                            foreach ($data['good_id'] as $k => $v) {
+                                $tmp[$k] = $tmp1;
+                                $tmp[$k]['good_id'] = $v;
+                                $tmp[$k]['number'] = $data['number'][$k];
+                            }
                         }
-                        return $this->success('物品发放成功', url('index'));
+                        $a_model = new AssetItem();
+                        $a_model->insertAll($tmp);
+
+                        $flag = ApprovalModel::where('id', $data['aid'])->setField('status', 5);//已发放
+//                        if (!$flag) {
+//                            return $this->error('物品发放失败');
+//                        }else{
+//                            return $this->success('物品发放成功', url('index'));
+//                        }
                     }
                 }
             });
+            return $this->success('物品发放成功', url('index'));
         }
         $approval_status = config('other.approval_status');
         $where = [
@@ -260,7 +282,13 @@ class Goods extends Admin
             }
         }
 
-        $this->assign('data_info', $row);
+        $cid = session('admin_user.cid');
+        $redis = service('Redis');
+        $default_user = $redis->get("pm:user:{$cid}");
+        if ($default_user){
+            $user = (array)json_decode($default_user);
+        }
+        $this->assign('data_info', array_merge($row,$user));
         return $this->fetch();
     }
 }

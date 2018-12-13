@@ -15,14 +15,16 @@ class AssetItem extends Validate
 {
     //定义验证规则
     protected $rule = [
-        'name|名称' => 'require',
-        'deal_user|审批人'   => 'require',
+        'number|数量' => 'require',
+        'manager_user|存储人' => 'require',
+        'deal_user|使用人'   => 'require',
     ];
 
     //定义验证提示
     protected $message = [
-        'name.require' => '请输入名称',
-        'deal_user|审批人'   => 'require',
+        'number.require' => '物品数量不能为空',
+        'manager_user.require' => '存储人不能为空',
+        'deal_user.require'   => '使用人不能为空',
     ];
 
 }
