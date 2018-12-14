@@ -33,7 +33,7 @@
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">审批人</label>
-        <div class="layui-form-mid">{$data_info['send_user']|default=''}</div>
+        <div class="layui-form-mid">{$data_info['send_user1']|default=''}</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">状态</label>

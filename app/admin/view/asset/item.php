@@ -19,7 +19,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">名称</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="name" value="{:input('get.name')}" placeholder="资产名称关键字" autocomplete="off" class="layui-input">
+                    <input type="text" name="name" value="{:input('get.name')}" placeholder="名称关键字" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <button type="submit" class="layui-btn layui-btn-normal">搜索</button>

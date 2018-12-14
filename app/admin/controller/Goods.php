@@ -226,29 +226,18 @@ class Goods extends Admin
                         if ($v > $free) {
                             return $this->error('库存不足，请刷新查看最新库存');
                         }
-                        $gd = [
-                            'total' => $good['total'] - $v,
-                            'sales' => $good['sales'] + $v,
-                        ];
-                        GoodsModel::where('id', $data['good_id'][$k])->update($gd);
+                        GoodsModel::where('id', $data['good_id'][$k])->setInc('sales',$v);
 
-                        $tmp = $tmp1 =[];
+                        $tmp1 =[];
+                        $tmp1['good_id'] = $data['good_id'][$k];
+                        $tmp1['number'] = $v;
                         $tmp1['cid'] = session('admin_user.cid');
                         $tmp1['user_id'] = session('admin_user.uid');
                         $tmp1['manager_user'] = json_encode(user_array($data['manager_user']));
                         $tmp1['deal_user'] = json_encode(user_array($data['deal_user']));
-                        $tmp1['create_time'] = date('Y-m-d H:i:s');
-                        $tmp1['update_time'] = date('Y-m-d H:i:s');
-                        if ($data['good_id']){
-                            foreach ($data['good_id'] as $k => $v) {
-                                $tmp[$k] = $tmp1;
-                                $tmp[$k]['good_id'] = $v;
-                                $tmp[$k]['number'] = $data['number'][$k];
-                            }
-                        }
-                        $a_model = new AssetItem();
-                        $a_model->insertAll($tmp);
-
+                        $tmp1['create_time'] = time();
+                        $tmp1['update_time'] = time();
+                        AssetItem::create($tmp1);
                         $flag = ApprovalModel::where('id', $data['aid'])->setField('status', 5);//已发放
 //                        if (!$flag) {
 //                            return $this->error('物品发放失败');
@@ -272,7 +261,7 @@ class Goods extends Admin
             ->where($where)
             ->find();
         if ($row){
-            $row['send_user'] = $this->deal_data($row['send_user']);
+            $row['send_user1'] = $this->deal_data($row['send_user']);
             $row['goods'] = json_decode($row['goods'],true);
             $row['status'] = $approval_status[$row['status']];
             $row['create_time'] = date('Y-m-d H:i:s',$row['create_time']);
@@ -281,7 +270,7 @@ class Goods extends Admin
                 $row['goods'][$k]['free'] = $good['total']-$good['sales'];
             }
         }
-
+//print_r($row);exit();
         $cid = session('admin_user.cid');
         $redis = service('Redis');
         $default_user = $redis->get("pm:user:{$cid}");

@@ -89,10 +89,10 @@
             <div class="layui-form-mid" style="color: red">*</div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">市场价格</label>
+            <label class="layui-form-label">采购单价</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-marketprice" name="marketprice" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" lay-verify="required" maxlength="11"
-                       autocomplete="off" placeholder="请输入市场价格">
+                       autocomplete="off" placeholder="请输入采购单价">
             </div>
             <div class="layui-form-mid" style="color: red">*</div>
         </div>
@@ -100,7 +100,7 @@
             <label class="layui-form-label">库存数</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-total" name="total" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" lay-verify="required" maxlength="11"
-                       autocomplete="off" placeholder="请输入市场价格">
+                       autocomplete="off" placeholder="请输入库存数">
             </div>
             <div class="layui-form-mid" style="color: red">*</div>
         </div>
