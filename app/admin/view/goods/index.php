@@ -99,7 +99,7 @@
 </script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
     <a href="{:url('edit')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a>
-    <a href="{:url('del')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>
+<!--    <a href="{:url('del')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
 </script>
 <script type="text/javascript">
     var unit_option = {:json_encode($unit_option)};

@@ -45,7 +45,7 @@
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
     <a href="{:url('home/detail')}?id={{ d.id }}&yulan=1" class="layui-btn layui-btn-xs layui-btn-normal">预览</a>
     <a href="{:url('edit')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
-    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>
+<!--    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
 </script>
 <script type="text/javascript">
     layui.use(['table'], function() {

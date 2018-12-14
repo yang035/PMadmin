@@ -51,7 +51,7 @@
             <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="read">查看</a>
             <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="add">添加任务</a>
             <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">编辑</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+<!--            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
         </script>
     </div>
 </div>
