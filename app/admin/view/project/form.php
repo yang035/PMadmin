@@ -224,7 +224,7 @@ layui.use(['jquery', 'laydate','upload','form'], function() {
         trigger: 'click',
         value: new Date(),
         change: function(value){
-            $(".laydate-btns-time").click();
+            // $(".laydate-btns-time").click();
         },
         done: function (value, date, endDate) {
             $("input[name='end_time']").val(value);
@@ -237,7 +237,7 @@ layui.use(['jquery', 'laydate','upload','form'], function() {
         value: new Date(),
         min: $("input[name='start_time']").val(),
         change: function(value){
-            $(".laydate-btns-time").click();
+            // $(".laydate-btns-time").click();
         },
         done: function(value, date, endDate){
             getTimeLong(value);
