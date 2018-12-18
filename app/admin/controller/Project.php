@@ -163,10 +163,10 @@ class Project extends Admin
         $row['deal_user_id'] = $this->deal_data($row['deal_user']);
         $row['copy_user_id'] = $this->deal_data($row['copy_user']);
         $row['send_user_id'] = $this->deal_data($row['send_user']);
-        if ($params['pid']){
+        if ($row['pid']){
             $map = [];
             $map['cid'] = $cid;
-            $map['id'] = $params['pid'];
+            $map['id'] = $row['pid'];
             $res = ProjectModel::where($map)->find()->toArray();
             $this->assign('pname',$res['name']);
         }else{
@@ -178,6 +178,68 @@ class Project extends Admin
     }
 
     public function add()
+    {
+        $params = $this->request->param();
+        if (!empty($params['id'])){
+            $p_res = ProjectModel::where('id',$params['id'])->find();
+            if (!$p_res){
+                return $this->error('计划编号不存在');
+            }
+            $sub_total_score = ProjectModel::where('pid',$params['id'])->column('sum(score)');
+            $p_res['max_score'] = $p_res['score'] - $sub_total_score[0];
+            $this->assign('p_res',$p_res);
+        }
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            // 验证
+            $result = $this->validate($data, 'Project');
+            if($result !== true) {
+                return $this->error($result);
+            }
+            if (isset($data['max_score']) && $data['score'] > $data['max_score']){
+                return $this->error('预设分超过最大分值！');
+            }
+            $data['cid'] = session('admin_user.cid');
+            if ($data['pid'] == ''){
+                $data['pid'] = 0;
+            }else{
+                $data['pid'] = $data['id'];
+            }
+            if (empty($data['code'])){
+                $data['code'] = $data['cid'].'p';
+            }else{
+                $data['code'] = $this->getCode($data['code'],$data['pid']);
+            }
+            $data['manager_user'] = json_encode(user_array($data['manager_user']));
+            $data['deal_user'] = json_encode(user_array($data['deal_user']));
+            $data['send_user'] = json_encode(user_array($data['send_user']));
+            $data['copy_user'] = json_encode(user_array($data['copy_user']));
+
+            unset($data['id'],$data['pname'],$data['max_score']);
+            $data['user_id'] = session('admin_user.uid');
+//            print_r($data);exit();
+            if (!ProjectModel::create($data)) {
+                return $this->error('添加失败！');
+            }
+            return $this->success('添加成功。',url('index'));
+        }
+
+
+        $cid = session('admin_user.cid');
+        $redis = service('Redis');
+        $default_user = $redis->get("pm:user:{$cid}");
+        if ($default_user){
+            $user = json_decode($default_user);
+            $this->assign('data_info', (array)$user);
+        }
+
+        $this->assign('grade_type',ProjectModel::getGrade());
+        $this->assign('p_type',ProjectModel::getPtype());
+        $this->assign('p_source',ProjectModel::getPsource());
+        return $this->fetch('form');
+    }
+
+    public function add1()
     {
         $params = $this->request->param();
         if ($this->request->isPost()) {
@@ -286,12 +348,12 @@ class Project extends Admin
         $row['copy_user'] = $this->deal_data_id($row['copy_user']);
         $row['send_user'] = $this->deal_data_id($row['send_user']);
 
-        if ($params['pid']){
+        if ($row['pid']){
             $map = [];
             $map['cid'] = $cid;
-            $map['id'] = $params['pid'];
+            $map['id'] = $row['pid'];
             $res = ProjectModel::where($map)->find()->toArray();
-            $sub_total_score = ProjectModel::where("pid = {$params['pid']} and id <> {$params['id']}")->column('sum(score)');
+            $sub_total_score = ProjectModel::where("pid = {$row['pid']} and id <> {$row['id']}")->column('sum(score)');
             $max_score = $res['score'] - $sub_total_score[0];
             $this->assign('max_score',$max_score);
             $this->assign('pname',$res['name']);

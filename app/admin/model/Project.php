@@ -49,11 +49,19 @@ class Project extends Model
             return $str;
     }
 
-    public static function getRowById($id=1)
+    public static function getRowById($id=1,$fields='*')
     {
         $map['cid'] = session('admin_user.cid');
         $map['id'] = $id;
-        $data = self::where($map)->find()->toArray();
+        $data = self::where($map)->field($fields)->find()->toArray();
+        return $data;
+    }
+
+    public static function getRowByCode($code='2p',$fields='*')
+    {
+        $map['cid'] = session('admin_user.cid');
+        $map['code'] = ['like',"$code%"];
+        $data = self::where($map)->field($fields)->select();
         return $data;
     }
 

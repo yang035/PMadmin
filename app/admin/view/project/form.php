@@ -19,7 +19,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">上级标题</label>
         <div class="layui-input-inline">
-            <input type="text" class="layui-input field-pname" name="pname" value="{$pname}" readonly lay-verify="required" autocomplete="off" placeholder="请输入名称">
+            <input type="text" class="layui-input field-pname" name="pname" value="{$p_res.name}" readonly lay-verify="required" autocomplete="off" placeholder="请输入名称">
         </div>
     </div>
         {/notempty}
@@ -45,7 +45,7 @@
         </div>
     </div>
     {else/}
-    <input type="hidden" class="layui-input field-p_type" name="p_type" value="{$parent_type}">
+    <input type="hidden" class="layui-input field-p_type" name="p_type" value="{$p_res.p_type}">
     {/empty}
     <div id="div_show">
     {empty name="Request.param.id"}
@@ -97,7 +97,7 @@
             <input type="number" class="layui-input field-score" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="score" lay-verify="required" autocomplete="off" placeholder="请输入预设分">
         </div>
         {notempty name="Request.param.id"}
-        <div class="layui-form-mid">不能超过<span id="max_score" style="color: red;">{$max_score}</span>分</div>
+        <div class="layui-form-mid">不能超过<span id="max_score" style="color: red;">{$p_res.max_score}</span>分</div>
         {/notempty}
     </div>
     <div class="layui-form-item">
@@ -192,14 +192,14 @@
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
-            <input type="hidden" class="field-pid" name="pid" value="{$Request.param.pid}">
-            <input type="hidden" class="field-code" name="code" value="{$Request.param.code}">
+            <input type="hidden" class="field-id" name="id" value="{$p_res.id|default='0'}">
+            <input type="hidden" class="field-pid" name="pid" value="{$p_res.pid|default='0'}">
+            <input type="hidden" class="field-code" name="code" value="{$p_res.code|default=''}">
             {notempty name="Request.param.id"}
-            <input type="hidden" class="field-max_score" name="max_score" value="{$max_score}">
+            <input type="hidden" class="field-max_score" name="max_score" value="{$p_res.max_score}">
             {/notempty}
             <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
-            <a href="{:url('index',['atype'=>$Request.param.atype])}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
+            <a href="javascript:history.back();" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
         </div>
     </div>
 </form>

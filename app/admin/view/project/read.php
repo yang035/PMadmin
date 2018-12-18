@@ -136,7 +136,7 @@
             <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
             <input type="hidden" class="field-pid" name="pid" value="{$Request.param.pid}">
             <input type="hidden" class="field-code" name="code" value="{$Request.param.code}">
-            <a href="{:url('index',['atype'=>$Request.param.atype])}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
+            <a href="javascript:history.back();" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
         </div>
     </div>
 </form>

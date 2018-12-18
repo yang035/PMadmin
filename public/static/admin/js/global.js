@@ -249,11 +249,15 @@ layui.define(['element', 'form', 'table'], function(exports) {
                     if (res.code == 1) {
                         if (typeof(res.url) != 'undefined' && res.url != null && res.url != '') {
                             var index = parent.layer.getFrameIndex(window.name);//获取窗口索引
-                            parent.layer.close(index);//关闭layer
-                            if (res.url){
-                                window.location.href = res.url;
+                            if (index > 1000) {
+                                parent.layer.close(index);//关闭layer
+                                if (res.url){
+                                    window.location.href = res.url;
+                                }
+                                window.parent.location.reload();//刷新父页面
+                            }else {
+                                window.history.back(-1);
                             }
-                            window.parent.location.reload();//刷新父页面
                         } else {
                             location.href = res.url;
                             location.reload();

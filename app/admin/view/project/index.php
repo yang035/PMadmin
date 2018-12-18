@@ -164,13 +164,13 @@
                     layer.close(index);
                 });
             }else if (layEvent === 'read') {
-                var open_url = "{:url('read')}?id="+id+"&pid="+pid+"&code="+code+"&pname="+pname+"&atype="+atype;
+                var open_url = "{:url('read')}?id="+id+"&atype="+atype;
                 window.location.href = open_url;
             } else if (layEvent === 'add') {
-                var open_url = "{:url('add')}?id="+id+"&pid="+pid+"&code="+code+"&pname="+pname+"&pscore="+pscore+"&atype="+atype;
+                var open_url = "{:url('add')}?id="+id+"&atype="+atype;
                 window.location.href = open_url;
             } else if (layEvent === 'edit') {
-                var open_url = "{:url('edit')}?id="+id+"&pid="+pid+"&code="+code+"&atype="+atype;
+                var open_url = "{:url('edit')}?id="+id+"&atype="+atype;
                 window.location.href = open_url;
             } else if (layEvent === 'dep_auth') {
                 var open_url = "{:url('depAuth')}?id=" + id;
