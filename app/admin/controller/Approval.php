@@ -390,6 +390,7 @@ class Approval extends Admin
                 'end_time'=>$data['end_time'].' '.$data['end_time1'],
                 'time_long'=>$data['time_long'],
                 'user_id'=>session('admin_user.uid'),
+                'fellow_user'=>json_encode(user_array($data['fellow_user'])),
                 'send_user'=>json_encode(user_array($data['send_user'])),
                 'copy_user'=>json_encode(user_array($data['copy_user'])),
             ];
