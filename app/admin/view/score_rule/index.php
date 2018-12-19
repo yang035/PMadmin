@@ -14,6 +14,7 @@
 </div>
 <!-- 内容主体区域 -->
 <div class="layui-btn-group">
+    <a href="javascript:add();" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加</a>
     <button class="layui-btn" id="btn-expand">全部展开</button>
     <button class="layui-btn" id="btn-fold">全部折叠</button>
     <button class="layui-btn" id="btn-refresh">刷新表格</button>
@@ -21,13 +22,13 @@
 <table id="table1" class="layui-table" lay-filter="table1"></table>
 <!-- 操作列 -->
 <script type="text/html" id="oper-col">
-    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="add">添加</a>
+<!--    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="add">添加</a>-->
     <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">修改</a>
-<!--    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
-    <a class="layui-btn layui-btn-xs" lay-event="dep_auth">设置权限</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+<!--    <a class="layui-btn layui-btn-xs" lay-event="dep_auth">设置权限</a>-->
 </script>
 <script>
-    var _url = "{:url('admin/department/index')}";
+    var _url = "{:url('admin/ScoreRule/index')}";
 
     layui.config({
         base: '/../../static/js/'
@@ -55,8 +56,7 @@
                 cols: [[
                     {type: 'numbers'},
                     {field: 'name', title: '名称'},
-                    {field: 'code', title: '编码'},
-                    {field: 'remark', title: '说明'},
+                    {field: 'score', title: '分值'},
                     {templet: '#oper-col', title: '操作'}
                 ]],
                 done: function () {
@@ -123,7 +123,7 @@
                     layer.close(index);
                 });
             }else if (layEvent === 'add') {
-                var open_url = "{:url('add')}?id="+id+"&pid="+pid+"&code="+code+"&pname="+name;
+                var open_url = "{:url('add')}?id="+id;
                 if (open_url.indexOf('?') >= 0) {
                     open_url += '&hisi_iframe=yes';
                 } else {
@@ -144,7 +144,7 @@
                     }
                 });
             } else if (layEvent === 'edit') {
-                var open_url = "{:url('edit')}?id="+id+"&pid="+pid+"&code="+code+"&pname="+name;
+                var open_url = "{:url('edit')}?id="+id;
                 if (open_url.indexOf('?') >= 0) {
                     open_url += '&hisi_iframe=yes';
                 } else {
@@ -168,6 +168,24 @@
                 window.location.href = open_url;
             }
         });
+
     });
+    function add() {
+        var open_url = "{:url('add')}";
+        if (open_url.indexOf('?') >= 0) {
+            open_url += '&hisi_iframe=yes';
+        } else {
+            open_url += '?hisi_iframe=yes';
+        }
+        layer.open({
+            type:2,
+            title :'添加',
+            maxmin: true,
+            area: ['800px', '500px'],
+            content: open_url,
+            success:function (layero, index) {
+            }
+        });
+    }
 </script>
 </div>
