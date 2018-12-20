@@ -56,7 +56,7 @@
                 page: false,
                 cols: [[
                     {type: 'numbers'},
-                    {field: 'name', title: '名称'},
+                    {field: 'name', title: '名称',width:700},
                     {field: 'score', title: '分值'},
                     {templet: '#oper-col', title: '操作'}
                 ]],
