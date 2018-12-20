@@ -135,4 +135,150 @@ class ScoreRule extends Admin
         }
         return $this->error($model->getError());
     }
+
+    public function doimport(){
+        if ($this->request->isAjax()) {
+            $file = request()->file('file');
+            // 上传附件路径
+            $_upload_path = ROOT_PATH . 'public/upload' . DS . 'excel' . DS . date('Ymd') . DS;
+            // 附件访问路径
+            $_file_path = ROOT_DIR . 'upload/excel/' . date('Ymd') . '/';
+
+            // 移动到upload 目录下
+            $upfile = $file->rule('md5')->move($_upload_path);//以md5方式命名
+            if (!is_file($_upload_path . $upfile->getSaveName())) {
+                return self::result('文件上传失败！');
+            }
+            $file_name = $_upload_path . $upfile->getSaveName();
+//            print_r($file_name);exit();
+            set_time_limit(0);
+            $excel = \service('Excel');
+            $format = array('A' => 'line', 'B' => 'pid', 'C' => 'name', 'D' => 'score');
+            $checkformat = array('A' => '序号', 'B' => '类别', 'C' => '项目', 'D' => '分数');
+            $res = $excel->readUploadFile($file_name, $format, 8050, $checkformat);
+            if ($res['status'] == 0) {
+                $this->error($res['data']);
+            } else {
+                $rule_type = array_unique(array_column($res['data'], 'B'));
+                if ($rule_type) {
+                    foreach ($rule_type as $k => $v) {
+                        $where = [
+                            'cid' => session('admin_user.cid'),
+                            'name' => $v,
+                        ];
+                        $f = RuleModel::where($where)->find();
+                        if (!$f) {
+                            $tmp = [
+                                'code' => session('admin_user.cid') . 'r',
+                                'pid' => 1,
+                                'cid' => session('admin_user.cid'),
+                                'name' => $v,
+                                'score' => 0,
+                                'user_id' => session('admin_user.uid'),
+                            ];
+                            RuleModel::create($tmp);
+                        }
+                    }
+                }
+                $where = [
+                    'cid' => session('admin_user.cid'),
+                    'code' => session('admin_user.cid') . 'r',
+                ];
+                $r_t = RuleModel::where($where)->select();
+                $t = [];
+                if ($r_t) {
+                    foreach ($r_t as $k => $v) {
+                        $t[$v['name']] = $v['id'];
+                    }
+                }
+                foreach ($res['data'] as $k => $v) {
+                    $where = [
+                        'cid' => session('admin_user.cid'),
+                        'name' => $v['C'],
+                    ];
+                    $f = RuleModel::where($where)->find();
+                    if (!$f) {
+                        $tmp = [
+                            'code' => session('admin_user.cid') . 'r' . $t[$v['B']] . 'r',
+                            'pid' => $t[$v['B']],
+                            'cid' => session('admin_user.cid'),
+                            'name' => $v['C'],
+                            'score' => $v['D'],
+                            'user_id' => session('admin_user.uid'),
+                        ];
+                        RuleModel::create($tmp);
+                    }else{
+                        $tmp = [
+                            'id'=>$f['id'],
+                            'code' => session('admin_user.cid') . 'r' . $t[$v['B']] . 'r',
+                            'pid' => $t[$v['B']],
+                            'cid' => session('admin_user.cid'),
+                            'name' => $v['C'],
+                            'score' => $v['D'],
+                            'user_id' => session('admin_user.uid'),
+                        ];
+                        RuleModel::update($tmp);
+                    }
+                }
+            }
+            return $this->success('导入成功。',url('index'));
+        }
+
+//            $types = D('Ptype')->getCacheAll();
+//            $types = array_flip($types);
+//            $data = $res['data'];
+//            $addData = array();
+//            $errLog = '';
+//            // $branch = array_flip($branch);
+//$model ='';
+//$count=0;
+//            // die;
+//            $bid =array() ;
+//            foreach($data as $v){
+//                $tmp = array();
+//                $res = '';
+//                foreach($v as $k=>$vo){
+//                    $tmp[$format[$k]] = $vo;
+//                }
+//                $tmp['pid'] = empty($types[$tmp['pid']]) ? 0 : $types[$tmp['pid']];
+//                $line = $tmp['line'];
+//                unset($tmp['line']);
+//
+//                $res = $model->create($tmp);
+//                if(!$model->create($tmp)){
+//
+//                    $errLog .= "第{$line}行数据检查异常:".$model->getError()."<br/>";
+//                }else{
+//
+//
+//                    $res = $model->add($tmp);
+//
+//                    if($res){
+//                        $count++;
+//                    }
+//                    //echo $this->model->_sql();
+//                }
+//            }
+//
+//            $str = "导入结果：<br/>";
+//            $str .= "<span style='color:green'>成功导入:".$count.'条数据></span><br/>';
+//
+//
+//
+//
+//            if($errLog){
+//
+//                $str .= "<span style='color:red'>导入失败记录：<br/>".$errLog.'</span>';
+//            }
+//
+//            if($res){
+//                $this->success($str);
+//            }else{
+//                $this->error($str);
+//            }
+//        }
+        return $this->fetch();
+    }
+
+
 }

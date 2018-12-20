@@ -18,6 +18,7 @@
     <button class="layui-btn" id="btn-expand">全部展开</button>
     <button class="layui-btn" id="btn-fold">全部折叠</button>
     <button class="layui-btn" id="btn-refresh">刷新表格</button>
+    <a href="javascript:import_excel();" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;导入</a>
 </div>
 <table id="table1" class="layui-table" lay-filter="table1"></table>
 <!-- 操作列 -->
@@ -187,5 +188,24 @@
             }
         });
     }
+
+    function import_excel() {
+        var open_url = "{:url('doimport')}";
+        if (open_url.indexOf('?') >= 0) {
+            open_url += '&hisi_iframe=yes';
+        } else {
+            open_url += '?hisi_iframe=yes';
+        }
+        layer.open({
+            type:2,
+            title :'导入',
+            maxmin: true,
+            area: ['800px', '500px'],
+            content: open_url,
+            success:function (layero, index) {
+            }
+        });
+    }
+
 </script>
 </div>
