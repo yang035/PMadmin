@@ -53,6 +53,11 @@ class Approval extends Admin
                 'url' => 'admin/approval/index',
                 'params' =>['atype'=>5],
             ],
+            [
+                'title' => '已审批',
+                'url' => 'admin/approval/index',
+                'params' =>['atype'=>6],
+            ],
         ];
         $tab_data['current'] = url('index',['atype'=>1]);
         $this->tab_data = $tab_data;
@@ -127,12 +132,17 @@ class Approval extends Admin
                 break;
             case 3:
                 $con = "JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"')";
+                $map['status'] = 1;
                 break;
             case 4:
                 $con = "JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"')";
                 break;
             case 5:
                 $con = "JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"')";
+                break;
+            case 6:
+                $con = "JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"')";
+                $map['status'] = ['>',1];
                 break;
             default:
                 $con = "";
@@ -537,7 +547,9 @@ class Approval extends Admin
 
                 $res= CarModel::where('aid',$data['id'])->update($tmp);
             }elseif (3 == $data['atype']){
-                $res= ApprovalModel::where('id',$data['id'])->setField('status',$data['status']);
+                unset($data['atype'],$data['class_type']);
+//                $res= ApprovalModel::where('id',$data['id'])->setField('status',$data['status']);
+                $res = ApprovalModel::update($data);
             }
             if (!$res){
                 return $this->error('处理失败！');

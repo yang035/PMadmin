@@ -11,7 +11,7 @@ namespace app\admin\model;
 
 use think\Model;
 
-class ScoreRule extends Model
+class ScoreDeal extends Model
 {
     // 自动写入时间戳
     protected $autoWriteTimestamp = true;
@@ -44,71 +44,12 @@ class ScoreRule extends Model
         return $str;
     }
 
-    public static function getOption1($type = 0)
-    {
-        $map = [
-            'cid'=>session('admin_user.cid'),
-            'status'=>1,
-            'code'=>session('admin_user.cid').'r',
-            'pid'=>['<>',0],
-        ];
-        $data = self::where($map)->select();
-        $str = '';
-        if ($data){
-            foreach ($data as $k => $v) {
-                if ($type == $v['id']) {
-                    $str .= "<option value='".$v['id']."' selected>".$v['name']."</option>";
-                } else {
-                    $str .= "<option value='".$v['id']."'>".$v['name']."</option>";
-                }
-            }
-        }
-        return $str;
-    }
-
-    public static function getChilds($id=1,$type = 0)
-    {
-        $map = [
-            'cid'=>session('admin_user.cid'),
-            'status'=>1,
-            'pid'=>$id,
-        ];
-        $data = self::where($map)->select();
-        $str = '';
-        if ($data){
-            foreach ($data as $k => $v) {
-                if ($type == $v['id']) {
-                    $str .= '<option value="'.$v['id'].'" selected>'.$v['name'].'</option>';
-                } else {
-                    $str .= '<option value="'.$v['id'].'">'.$v['name'].'</option>';
-                }
-            }
-        }
-        return $str;
-    }
-
     public static function getRowById($id = 1)
     {
         $map['cid'] = session('admin_user.cid');
         $map['id'] = $id;
         $data = self::where($map)->find()->toArray();
         return $data;
-    }
-
-    public static function getFullName($id = 1)
-    {
-        $map['cid'] = session('admin_user.cid');
-        $map['id'] = $id;
-        $data = self::where($map)->find()->toArray();
-        $str = '';
-        if ($data){
-            $p_data = self::where('id',$data['pid'])->find()->toArray();
-            if ($p_data){
-                $str .= "[".$p_data['name']."]";
-            }
-            $str .= $data['name'];
-        }
-        return $str;
     }
 
     public function del($ids = '')
