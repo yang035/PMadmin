@@ -4,7 +4,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">搜索</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="q" value="{:input('get.q')}" lay-verify="required" placeholder="用户名、邮箱、手机、昵称" autocomplete="off" class="layui-input">
+                    <input type="text" name="q" value="{:input('get.q')}" lay-verify="required" placeholder="文件名" autocomplete="off" class="layui-input">
                 </div>
             </div>
         </form>
@@ -27,6 +27,7 @@
                 <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
                 <th>文件名</th>
                 <th>文件</th>
+                <th>类型</th>
                 <th>大小(KB)</th>
                 <th>状态</th>
                 <th>操作人</th>
@@ -38,10 +39,11 @@
             {volist name="data_list" id="vo"}
             <tr>
                 <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
+                <td class="font12">{$vo['name']}</td>
                 <td class="font12">
-                    <strong class="mcolor">{$vo['name']}</strong>
+                    <a href="{$vo['file']}" target="_blank"><strong class="mcolor">{$vo['name']}</strong></a>
                 </td>
-                <td class="font12">{$vo['file']}</td>
+                <td class="font12">{$vo['type']}</td>
                 <td class="font12">{$vo['size']}</td>
                 <td><input type="checkbox" name="status" {if condition="$vo['status'] eq 1"}checked=""{/if} value="{$vo['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="{:url('status?table=admin_company&ids='.$vo['id'])}"></td>
                 <td class="font12">{$vo['user_id']}</td>
