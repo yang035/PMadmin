@@ -22,12 +22,17 @@ class Tool extends Admin
 
     public function getTreeUser(){
         if ($this->request->isPost()){
+            $data = $this->request->post();
             if (1 != session('admin_user.role_id')){
                 $cid = session('admin_user.cid');
             }else{
                 $cid = session('admin_user.cid');
             }
-            $result = AdminDepartment::getDepUser($cid);
+            if ($data['path']){
+                $result = AdminDepartment::getDepUser($cid,1);
+            }else{
+                $result = AdminDepartment::getDepUser($cid);
+            }
             return $result;
         }
         return $this->fetch();

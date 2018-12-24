@@ -66,6 +66,8 @@ class Department extends Admin
             $data['cid'] = session('admin_user.cid');
             $data['pid'] = $data['id'];
             $data['code'] = $this->getCode($data['code'],$data['pid']);
+            $code_arr = array_slice(explode('d','0d'.$data['code']),0,-2);
+            $data['path'] = implode(',',array_unique($code_arr));
             unset($data['id']);
             // 验证
             $result = $this->validate($data, 'AdminDepartment');
@@ -98,6 +100,8 @@ class Department extends Admin
             $data = $this->request->post();
             $data['cid'] = session('admin_user.cid');
             $data['code'] = $this->getCode($data['code'],$data['pid']);
+            $code_arr = array_slice(explode('d','0d'.$data['code']),0,-2);
+            $data['path'] = implode(',',array_unique($code_arr));
             // 验证
             $result = $this->validate($data, 'AdminDepartment');
             if($result !== true) {

@@ -28,12 +28,13 @@
         <script type="text/javascript">
             d = new dTree('d', true);
             var ajax_url = "{:url('admin/tool/getTreeUser')}";
-            // var jsonstr={"cid":1};
+            var path = "{$Request.param.path}";
+            var jsonstr={"path":path};
             $.ajax({
                 url:ajax_url,
                 async : false,
                 type:"post",
-                // data:jsonstr,
+                data:jsonstr,
                 dataType:"json",
                 success:function(data){
                     // alert(JSON.stringify(data));

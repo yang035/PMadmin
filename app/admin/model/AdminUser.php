@@ -172,7 +172,7 @@ class AdminUser extends Model
             return false;
         }
 
-        $dep_role = AdminDepartment::where('id', $user->company_id)->find()->toArray();
+        $dep_role = AdminDepartment::where('id', $user->department_id)->find()->toArray();
         $company = AdminCompany::where('id', $user->company_id)->find()->toArray();
 
         // 更新登录信息
@@ -184,6 +184,7 @@ class AdminUser extends Model
             $login['uid'] = $user->id;
             $login['cid'] = $user->company_id;
             $login['depid'] = $user->department_id;
+            $login['path'] = $dep_role['path'];
             $login['role_id'] = $user->role_id;
             $login['role_name'] = $role['name'];
             $login['nick'] = $user->nick;

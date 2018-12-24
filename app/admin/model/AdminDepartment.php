@@ -19,9 +19,12 @@ class AdminDepartment extends Model
         return $result;
     }
 
-    public static function getDepUser($cid = 1)
+    public static function getDepUser($cid = 1,$path=0)
     {
-        $where = ['cid' => $cid];
+        $where['cid'] = $cid;
+        if ($path){
+            $where['pid'] = ['in',session('admin_user.path')];
+        }
         $result = self::where($where)->select();
         $map = [
             'company_id' => $cid,

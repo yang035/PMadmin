@@ -213,7 +213,7 @@
         });
 
         $('#send_user_id').on('click', function(){
-            var open_url = "{:url('Tool/getTreeUser')}?m=send";
+            var open_url = "{:url('Tool/getTreeUser')}?m=send"+'&path=1';
             if (open_url.indexOf('?') >= 0) {
                 open_url += '&hisi_iframe=yes';
             } else {
