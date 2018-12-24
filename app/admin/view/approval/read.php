@@ -248,7 +248,7 @@
             elem: '#img1',
             url: '{:url("admin/UploadFile/upload?group=sys")}',
             method: 'post',
-            size:60,
+            size:"{:config('upload.upload_image_size')}",
             before: function(input) {
                 layer.msg('文件上传中...', {time:3000000});
             },
@@ -270,7 +270,7 @@
             elem: '#img2',
             url: '{:url("admin/UploadFile/upload?group=sys")}',
             method: 'post',
-            size:60,
+            size:"{:config('upload.upload_image_size')}",
             before: function(input) {
                 layer.msg('文件上传中...', {time:3000000});
             },
@@ -292,7 +292,7 @@
             elem: '#img3',
             url: '{:url("admin/UploadFile/upload?group=sys")}',
             method: 'post',
-            size:60,
+            size:"{:config('upload.upload_image_size')}",
             before: function(input) {
                 layer.msg('文件上传中...', {time:3000000});
             },
@@ -314,7 +314,7 @@
             elem: '#img4',
             url: '{:url("admin/UploadFile/upload?group=sys")}',
             method: 'post',
-            size:60,
+            size:"{:config('upload.upload_image_size')}",
             before: function(input) {
                 layer.msg('文件上传中...', {time:3000000});
             },
@@ -336,7 +336,7 @@
             elem: '#img11',
             url: '{:url("admin/UploadFile/upload?group=sys")}',
             method: 'post',
-            size:60,
+            size:"{:config('upload.upload_image_size')}",
             before: function(input) {
                 layer.msg('文件上传中...', {time:3000000});
             },
@@ -358,7 +358,7 @@
             elem: '#img22',
             url: '{:url("admin/UploadFile/upload?group=sys")}',
             method: 'post',
-            size:60,
+            size:"{:config('upload.upload_image_size')}",
             before: function(input) {
                 layer.msg('文件上传中...', {time:3000000});
             },
@@ -380,7 +380,7 @@
             elem: '#img33',
             url: '{:url("admin/UploadFile/upload?group=sys")}',
             method: 'post',
-            size:60,
+            size:"{:config('upload.upload_image_size')}",
             before: function(input) {
                 layer.msg('文件上传中...', {time:3000000});
             },
@@ -402,7 +402,7 @@
             elem: '#img44',
             url: '{:url("admin/UploadFile/upload?group=sys")}',
             method: 'post',
-            size:60,
+            size:"{:config('upload.upload_image_size')}",
             before: function(input) {
                 layer.msg('文件上传中...', {time:3000000});
             },

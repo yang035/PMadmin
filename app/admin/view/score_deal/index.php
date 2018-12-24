@@ -11,10 +11,10 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">类型</label>
                     <div class="layui-input-inline">
-                        <select name="class_type" class="field-class_type" type="select">
+                        <select name="status" class="field-status" type="select">
                             <option value="0">全部</option>
-                            {volist name="panel_type" id="vo"}
-                            <option value="{$key}" {eq name="$Request.param.class_type" value="$key"} selected {/eq}>{$vo['title']}</option>
+                            {volist name="approval_status" id="vo"}
+                            <option value="{$key}" {eq name="$Request.param.status" value="$key"} selected {/eq}>{$vo}</option>
                             {/volist}
                         </select>
                     </div>
@@ -94,11 +94,13 @@
     layui.use(['jquery', 'laydate'], function() {
         var $ = layui.jquery, laydate = layui.laydate;
         laydate.render({
-            elem: '.field-expire_time',
-            min:'0'
+            elem: '.field-start_time',
+            trigger: 'click',
         });
-
-
+        laydate.render({
+            elem: '.field-end_time',
+            trigger: 'click',
+        });
     });
 
     function deal_read(id,atype){

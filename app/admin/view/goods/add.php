@@ -261,7 +261,7 @@
             elem: '#testList',
             url: '{:url("admin/UploadFile/upload?group=sys")}',
             accept: 'file',
-            size:"{:config('upload.upload_file_size')}",
+            size:"{:config('upload.upload_image_size')}",
             multiple: true,
             auto: false,
             bindAction: '#testListAction',

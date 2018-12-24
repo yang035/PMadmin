@@ -34,8 +34,8 @@
         <label class="layui-form-label">奖扣人</label>
         <div class="layui-input-inline">
             <button type="button" class="layui-btn" id="score_user_id">选择奖扣人</button>
-            <div id="score_select_id"></div>
-            <input type="hidden" name="score_user" id="score_user" value="" lay-verify="required">
+            <div id="score_select_id">{$data_info['self_user_id']|default=''}</div>
+            <input type="hidden" name="score_user" id="score_user" value="{$data_info['self_user']|default=''}" lay-verify="required">
         </div>
         <div class="layui-form-mid" style="color: red">*</div>
     </div>

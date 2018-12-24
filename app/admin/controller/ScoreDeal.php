@@ -48,10 +48,15 @@ class ScoreDeal extends Admin
         $cid = session('admin_user.cid');
         $redis = service('Redis');
         $default_user = $redis->get("pm:user:{$cid}");
+        $o = [
+            'self_user' => session('admin_user.uid'),
+            'self_user_id' => session('admin_user.realname'),
+        ];
         if ($default_user){
-            $user = json_decode($default_user);
-            $this->assign('data_info', (array)$user);
+            $user = (array)json_decode($default_user);
         }
+
+        $this->assign('data_info', array_merge($user,$o));
     }
 
     public function deal_data($x_user)
@@ -88,16 +93,17 @@ class ScoreDeal extends Admin
         $panel_type = config('other.panel_type');
         $params['atype'] = isset($params['atype']) ? $params['atype'] : 1;
         if ($params){
-            if (!empty($params['class_type'])){
-                $map['class_type'] = $params['class_type'];
+            if (!empty($params['status'])){
+                $map['status'] = $params['status'];
             }
-            if (!empty($params['start_time'])){
-                $map['create_time'] = ['egt', $params['start_time']];
-            }
-            if (!empty($params['end_time'])){
-                $map['create_time'] = ['elt', $params['end_time']];
+
+            if (!empty($params['start_time']) || !empty($params['end_time'])){
+                $start_time = !empty($params['start_time']) ? $params['start_time'].' 00:00:00' : '1970-01-01 00:00:00';
+                $end_time = !empty($params['end_time']) ? $params['end_time'].' 23:59:59' : date('Y-m-d H:i:s',time());
+                $map['create_time'] = ['between time', [$start_time,$end_time]];
             }
         }
+//        print_r($map);
         $uid = session('admin_user.uid');
         $con = '';
         switch ($params['atype']){
@@ -183,15 +189,36 @@ class ScoreDeal extends Admin
 
     public function read(){
         $params = $this->request->param();
+        $list = DealModel::getRowById($params['id']);
         if ($this->request->isPost()){
             $data = $this->request->post();
             unset($data['atype']);
+//            Db::transaction(function(){
+//                DealModel::update($data)
+//            });
+
             if (!DealModel::update($data)){
                 return $this->error('处理失败！');
             }
+            $score_user = json_decode($list['score_user'],true);
+            $score = [];
+            $realname = session('admin_user.realname');
+            $rule_row = RuleModel::getRowById($list['rid']);
+            foreach ($score_user as $k=>$v) {
+                $score[$k]['user'] = $k;
+                $score[$k]['url'] = $list['id'];
+                $score[$k]['remark'] = "事件积分({$realname})审批";
+                $score[$k]['user_id'] = session('admin_user.uid');
+                if ($rule_row['score'] > 0){
+                    $score[$k]['gl_add_score'] = $rule_row['score'];
+                }else{
+                    $score[$k]['gl_sub_score'] = abs($rule_row['score']);
+                }
+            }
             return $this->success('处理成功。');
         }
-        $list = DealModel::getRowById($params['id']);
+
+//        print_r($score);exit();
         if ($list){
             $list['rid'] = RuleModel::getFullName($list['rid']);
             $list['score_user'] = $this->deal_data($list['score_user']);
