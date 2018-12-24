@@ -128,8 +128,8 @@ class Asset extends Admin
             $tmp1['user_id'] = session('admin_user.uid');
             $tmp1['manager_user'] = json_encode(user_array($data['manager_user']));
             $tmp1['deal_user'] = json_encode(user_array($data['deal_user']));
-            $tmp1['create_time'] = date('Y-m-d H:i:s');
-            $tmp1['update_time'] = date('Y-m-d H:i:s');
+            $tmp1['create_time'] = time();
+            $tmp1['update_time'] = time();
             if ($data['good_id']){
                 foreach ($data['good_id'] as $k => $v) {
                     $tmp[$k] = $tmp1;
