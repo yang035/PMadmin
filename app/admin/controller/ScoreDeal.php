@@ -180,7 +180,7 @@ class ScoreDeal extends Admin
             if (!$model->insertAll($tmp)){
                 return $this->error('添加失败！');
             }else{
-                return $this->success('添加成功。','index');
+                return $this->success("操作成功{$this->score_value}",'index');
             }
         }
         $this->assign('rule_option',RuleModel::getOption1());

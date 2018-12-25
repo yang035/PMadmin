@@ -67,40 +67,42 @@ class Admin extends Controller
                     'url' => $c_menu['url'],
                 ];
                 if (ScoreModel::addScore($sc)) {
-                    $this->score_value = ",得分{$score_add_edit_del['score_add']}GL";
-                }
-            }elseif (strpos($c_menu['url'],'edit') !== false){
-                $score_add_edit_del = config('score.score_add_edit_del');
-                $sc = [
-                    'project_id' => 0,
-                    'user' => session('admin_user.uid'),
-                    'ml_add_score' => 0,
-                    'ml_sub_score' => 0,
-                    'gl_add_score' => $score_add_edit_del['score_edit'],
-                    'gl_sub_score' => 0,
-                    'remark' => $c_menu['title'],
-                    'url' => $c_menu['url'],
-                ];
-
-                if (ScoreModel::addScore($sc)) {
-                    $this->score_value = ",得分{$score_add_edit_del['score_edit']}GL";
-                }
-            }elseif (strpos($c_menu['url'],'del') !== false){
-                $score_add_edit_del = config('score.score_add_edit_del');
-                $sc = [
-                    'project_id' => 0,
-                    'user' => session('admin_user.uid'),
-                    'ml_add_score' => 0,
-                    'ml_sub_score' => 0,
-                    'gl_add_score' => $score_add_edit_del['score_del'],
-                    'gl_sub_score' => 0,
-                    'remark' => $c_menu['title'],
-                    'url' => $c_menu['url'],
-                ];
-                if (ScoreModel::addScore($sc)) {
-                    $this->score_value = ",得分{$score_add_edit_del['score_del']}GL";
+                    $this->score_value = ",鼓励{$score_add_edit_del['score_add']}GL";
                 }
             }
+            //暂时只算添加鼓励分
+//            elseif (strpos($c_menu['url'],'edit') !== false){
+//                $score_add_edit_del = config('score.score_add_edit_del');
+//                $sc = [
+//                    'project_id' => 0,
+//                    'user' => session('admin_user.uid'),
+//                    'ml_add_score' => 0,
+//                    'ml_sub_score' => 0,
+//                    'gl_add_score' => $score_add_edit_del['score_edit'],
+//                    'gl_sub_score' => 0,
+//                    'remark' => $c_menu['title'],
+//                    'url' => $c_menu['url'],
+//                ];
+//
+//                if (ScoreModel::addScore($sc)) {
+//                    $this->score_value = ",鼓励{$score_add_edit_del['score_edit']}GL";
+//                }
+//            }elseif (strpos($c_menu['url'],'del') !== false){
+//                $score_add_edit_del = config('score.score_add_edit_del');
+//                $sc = [
+//                    'project_id' => 0,
+//                    'user' => session('admin_user.uid'),
+//                    'ml_add_score' => 0,
+//                    'ml_sub_score' => 0,
+//                    'gl_add_score' => $score_add_edit_del['score_del'],
+//                    'gl_sub_score' => 0,
+//                    'remark' => $c_menu['title'],
+//                    'url' => $c_menu['url'],
+//                ];
+//                if (ScoreModel::addScore($sc)) {
+//                    $this->score_value = ",鼓励{$score_add_edit_del['score_del']}GL";
+//                }
+//            }
 
         }
 //        $log_result = LogModel::where($log)->find();

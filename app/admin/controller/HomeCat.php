@@ -51,7 +51,7 @@ class HomeCat extends Admin
             if (!CatModel::create($data)) {
                 return $this->error('添加失败！');
             }
-            return $this->success('添加成功。', url('index'));
+            return $this->success("操作成功{$this->score_value}", url('index'));
         }
 
         return $this->fetch('form');
@@ -97,7 +97,7 @@ class HomeCat extends Admin
             if (!$res) {
                 return $this->error('添加失败！');
             }
-            return $this->success('添加成功。', url('index'));
+            return $this->success('修改成功。', url('index'));
         }
         $signword = $redis->get("pm:home:signword");
         if (!$signword){

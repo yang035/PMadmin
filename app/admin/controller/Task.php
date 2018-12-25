@@ -164,7 +164,7 @@ class Task extends Admin
             if (!ProjectModel::create($data)) {
                 return $this->error('添加失败！');
             }
-            return $this->success('添加成功。',url('index'));
+            return $this->success("操作成功{$this->score_value}",url('index'));
         }
         if (!empty($params['pname'])){
             $sub_total_score = ProjectModel::where('pid',$params['id'])->column('sum(score)');
@@ -220,7 +220,7 @@ class Task extends Admin
             if (!ProjectModel::update($data)) {
                 return $this->error('修改失败！');
             }
-            return $this->success("修改成功{$this->score_value}",url('index'));
+            return $this->success("修改成功",url('index'));
         }
 
 //        $row['time_long'] = floor((strtotime($row['end_time'])-strtotime($row['start_time']))/86400);

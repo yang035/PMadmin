@@ -141,7 +141,7 @@ class Asset extends Admin
             if (!$a_model->insertAll($tmp)) {
                 return $this->error('添加失败');
             }
-            return $this->success('添加成功');
+            return $this->success("操作成功{$this->score_value}");
         }
 
         $cid = session('admin_user.cid');
@@ -256,7 +256,7 @@ class Asset extends Admin
             if (!CatModel::create($data)) {
                 return $this->error('添加失败');
             }
-            return $this->success('添加成功');
+            return $this->success("操作成功{$this->score_value}");
         }
         return $this->fetch('catform');
     }

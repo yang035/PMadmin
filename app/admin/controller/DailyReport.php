@@ -216,7 +216,6 @@ class DailyReport extends Admin
                 }
 
             }
-            return $this->success('添加成功。','index');
         }
 
         $cid = session('admin_user.cid');

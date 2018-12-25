@@ -53,7 +53,7 @@ class Category extends Admin
             if (!CategoryModel::create($data)) {
                 return $this->error('添加失败！');
             }
-            return $this->success('添加成功。');
+            return $this->success("操作成功{$this->score_value}");
         }
         $this->assign('menu_option', self::departmentOption($pid));
         $this->view->engine->layout(true);

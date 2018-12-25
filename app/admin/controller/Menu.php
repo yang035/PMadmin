@@ -37,7 +37,7 @@ class Menu extends Admin
             if (!$model->storage()) {
                 return $this->error($model->getError());
             }
-            return $this->success('保存成功。', url('index'));
+            return $this->success("操作成功{$this->score_value}", url('index'));
         }
         $this->assign('module_option', model('AdminModule')->getOption($mod));
         $this->assign('menu_option', self::menuOption($pid));

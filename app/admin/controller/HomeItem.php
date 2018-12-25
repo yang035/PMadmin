@@ -68,7 +68,7 @@ class HomeItem extends Admin
             if (!ItemModel::create($data)) {
                 return $this->error('添加失败！');
             }
-            return $this->success('添加成功。', url('index'));
+            return $this->success("操作成功{$this->score_value}", url('index'));
         }
         return $this->fetch('form');
     }

@@ -202,7 +202,7 @@ class Approval extends Admin
             }else{
                 return $this->error('添加失败！');
             }
-            return $this->success('添加成功。','index');
+            return $this->success("操作成功{$this->score_value}",'index');
         }
         $this->assign('leave_type', LeaveModel::getOption());
         return $this->fetch();
@@ -249,7 +249,7 @@ class Approval extends Admin
             }else{
                 return $this->error('添加失败！');
             }
-            return $this->success('添加成功。','index');
+            return $this->success("操作成功{$this->score_value}",'index');
         }
         $this->assign('expense_type', ExpenseModel::getOption());
         return $this->fetch();
@@ -294,7 +294,7 @@ class Approval extends Admin
             }else{
                 return $this->error('添加失败！');
             }
-            return $this->success('添加成功。','index');
+            return $this->success("操作成功{$this->score_value}",'index');
         }
         return $this->fetch();
         
@@ -337,7 +337,7 @@ class Approval extends Admin
             }else{
                 return $this->error('添加失败！');
             }
-            return $this->success('添加成功。','index');
+            return $this->success("操作成功{$this->score_value}",'index');
         }
         $this->assign('cat_option',ItemModel::getOption());
         return $this->fetch();
@@ -378,7 +378,7 @@ class Approval extends Admin
             }else{
                 return $this->error('添加失败！');
             }
-            return $this->success('添加成功。','index');
+            return $this->success("操作成功{$this->score_value}",'index');
         }
         return $this->fetch();
     }
@@ -419,7 +419,7 @@ class Approval extends Admin
             }else{
                 return $this->error('添加失败！');
             }
-            return $this->success('添加成功。','index');
+            return $this->success("操作成功{$this->score_value}",'index');
         }
         return $this->fetch();
     }
@@ -461,7 +461,7 @@ class Approval extends Admin
             }else{
                 return $this->error('添加失败！');
             }
-            return $this->success('添加成功。','index');
+            return $this->success("操作成功{$this->score_value}",'index');
         }
         $this->assign('car_type', CarModel::getOption());
         return $this->fetch();
@@ -519,7 +519,7 @@ class Approval extends Admin
             }else{
                 return $this->error('添加失败！');
             }
-            return $this->success('添加成功。','index');
+            return $this->success("操作成功{$this->score_value}",'index');
         }
 //        $this->assign('cat_option',ItemModel::getOption());
         return $this->fetch();
@@ -554,7 +554,7 @@ class Approval extends Admin
             if (!$res){
                 return $this->error('处理失败！');
             }
-            return $this->success('处理成功。');
+            return $this->success("操作成功{$this->score_value}");
         }
         switch ($params['class_type']){
             case 1:

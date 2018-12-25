@@ -107,7 +107,7 @@ class User extends Admin
             if($result !== true) {
                 return $this->error($result);
             }
-            unset($data['id'], $data['password_confirm'],$data['dep_name']);
+            unset($data['id'], $data['password_confirm'],$data['dep_name'],$data['is_auth']);
             $data['last_login_ip'] = '';
             $data['auth'] = '';
             $data['company_id'] = session('admin_user.cid');
@@ -115,7 +115,7 @@ class User extends Admin
             if (!UserModel::create($data)) {
                 return $this->error('添加失败');
             }
-            return $this->success('添加成功',url('index'));
+            return $this->success("操作成功{$this->score_value}",url('index'));
         }
 
         $tab_data = [];
@@ -282,7 +282,7 @@ class User extends Admin
             if (!RoleModel::create($data)) {
                 return $this->error('添加失败');
             }
-            return $this->success('添加成功');
+            return $this->success("操作成功{$this->score_value}");
         }
         $tab_data = [];
         $tab_data['menu'] = [

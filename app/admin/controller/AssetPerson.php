@@ -85,7 +85,7 @@ class AssetPerson extends Admin
             if (!ItemModel::create($data)) {
                 return $this->error('添加失败');
             }
-            return $this->success('添加成功');
+            return $this->success("操作成功{$this->score_value}");
         }
         $this->assign('cat_option',ItemModel::getOption());
         return $this->fetch('itemform');
@@ -166,7 +166,7 @@ class AssetPerson extends Admin
             if (!CatModel::create($data)) {
                 return $this->error('添加失败');
             }
-            return $this->success('添加成功');
+            return $this->success("操作成功{$this->score_value}");
         }
         return $this->fetch('catform');
     }

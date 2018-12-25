@@ -71,7 +71,7 @@ class Plan extends Admin
             if (!PlanModel::create($data)) {
                 return $this->error('添加失败！');
             }
-            return $this->success('添加成功。','index');
+            return $this->success("操作成功{$this->score_value}",'index');
         }
         return $this->fetch('form');
     }
