@@ -190,5 +190,6 @@ return [
         6=>'盒',
         7=>'箱',
     ],
+    'bbs_url' => 'http://bbs.imlgl.com/?user-login.htm',
 
 ];

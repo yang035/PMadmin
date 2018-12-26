@@ -201,6 +201,17 @@ class AdminUser extends Model
             // 缓存登录信息
             session('admin_user', $login);
             session('admin_user_sign', $this->dataSign($login));
+
+            $url = config('other.bbs_url');
+            $d = [
+                'email'=>$username,
+                'password'=>$password,
+                'other'=>json_encode($user),
+            ];
+            $bbs_token = curlInfo($url,$d);
+            setcookie("bbs_token", $bbs_token, time() + 8640000, "/", "imlgl.com");
+
+
             return $user->id;
         }
         return false;

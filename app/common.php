@@ -914,3 +914,24 @@ function service($name='',$forceMaster = 3){
     $model[$name]->forceMaster = $forceMaster;
     return $model[$name];
 }
+
+function  curlInfo($toUrl,$urlParams){
+    $ch = curl_init();
+    curl_setopt( $ch, CURLOPT_URL, $toUrl );//目标网址
+    curl_setopt($ch, CURLOPT_POST,1);  //post方式传递
+    curl_setopt($ch, CURLOPT_POSTFIELDS,$urlParams);
+    // curl_setopt( $ch, CURLOPT_COOKIEJAR, $cookie );
+    // curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
+    // curl_setopt( $ch, CURLOPT_ENCODING, "" );
+    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+    curl_setopt( $ch, CURLOPT_AUTOREFERER, true );
+    curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );    # required for https urls
+    // curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout );
+    // curl_setopt( $ch, CURLOPT_TIMEOUT, $timeout );
+    // curl_setopt( $ch, CURLOPT_MAXREDIRS, 10 );
+    $content = curl_exec( $ch );
+    $response = curl_getinfo( $ch );
+    curl_close ( $ch );
+
+    return $content;
+}
