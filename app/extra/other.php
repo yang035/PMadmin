@@ -23,6 +23,16 @@ return [
         7=>'陪产假',
         8=>'其他',
     ],
+    'cost_type' =>[
+        1=>'差旅费',
+        2=>'办公费',
+        3=>'招待费',
+        4=>'市内交通费',
+        5=>'通讯费',
+        6=>'采购付款',
+        7=>'预支款',
+        8=>'其他',
+    ],
     'expense_type' =>[
         1=>'差旅费',
         2=>'交通费',
@@ -57,10 +67,10 @@ return [
             'title'=>'报销',
             'href'=>'admin/Approval/expense'
         ],
-//        3=>[
-//            'title'=>'费用',
-//            'href'=>'admin/Approval/cost'
-//        ],
+        3=>[
+            'title'=>'费用',
+            'href'=>'admin/Approval/cost'
+        ],
         4=>[
             'title'=>'出差',
             'href'=>'admin/Approval/business'

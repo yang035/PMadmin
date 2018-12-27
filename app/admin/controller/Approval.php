@@ -15,6 +15,7 @@ use app\admin\model\ApprovalProcurement as ProcurementModel;
 use app\admin\model\ApprovalOvertime as OvertimeModel;
 use app\admin\model\ApprovalGoout as GooutModel;
 use app\admin\model\ApprovalUsecar as CarModel;
+use app\admin\model\ApprovalCost as CostModel;
 use app\admin\model\AdminUser;
 use app\admin\model\AssetItem as ItemModel;
 use app\admin\model\ApprovalGoods;
@@ -257,7 +258,43 @@ class Approval extends Admin
 
     public function cost()
     {
-
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            // 验证
+            $result = $this->validate($data, 'ApprovalCost');
+            if($result !== true) {
+                return $this->error($result);
+            }
+            unset($data['id']);
+            $approve = [
+                'class_type'=>$data['class_type'],
+                'cid'=>session('admin_user.cid'),
+                'start_time'=>$data['start_time'].' '.$data['start_time1'],
+                'end_time'=>$data['end_time'].' '.$data['end_time1'],
+                'time_long'=>$data['time_long'],
+                'user_id'=>session('admin_user.uid'),
+                'send_user'=>json_encode(user_array($data['send_user'])),
+                'copy_user'=>json_encode(user_array($data['copy_user'])),
+            ];
+            $res = ApprovalModel::create($approve);
+            if ($res) {
+                $leave = [
+                    'aid'=>$res['id'],
+                    'type'=>$data['type'],
+                    'reason'=>$data['reason'],
+                    'attachment'=>$data['attachment'],
+                    'money'=>$data['money'],
+                ];
+                if (!CostModel::create($leave)){
+                    return $this->error('添加失败！');
+                }
+            }else{
+                return $this->error('添加失败！');
+            }
+            return $this->success("操作成功{$this->score_value}",'index');
+        }
+        $this->assign('cost_option',CostModel::getOption());
+        return $this->fetch();
     }
 
     public function business()
@@ -567,7 +604,7 @@ class Approval extends Admin
                 break;
             case 3:
                 $table = 'tb_approval_cost';
-                $f = 'b.type,b.reason,b.attachment';
+                $f = 'b.type,b.reason,b.money,b.attachment';
                 break;
             case 4:
                 $table = 'tb_approval_business';
@@ -620,6 +657,8 @@ class Approval extends Admin
                 $this->assign('expense_type',$expense_type);
                 break;
             case 3:
+                $cost_type = config('other.cost_type');
+                $this->assign('cost_type',$cost_type);
                 break;
             case 4:
                 break;

@@ -16,7 +16,7 @@
 <!--        <a data-href="{:url('delUser')}" class="layui-btn layui-btn-primary j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>-->
     </div>
 </div>
-<table id="dataTable"></table>
+<table id="dataTable" class="layui-table" lay-filter="user_table"></table>
 {include file="block/layui" /}
 <script type="text/html" id="statusTpl">
     <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=admin_user&id={{ d.id }}">
@@ -54,12 +54,33 @@
                             return '无'
                         }
                     }}
-                ,{field: 'mobile', title: '手机号码'}
+                ,{field: 'mobile', title: '手机号码',edit: 'text',}
                 ,{field: 'last_login_time', width: 150, title: '最后登陆时间'}
                 ,{field: 'last_login_ip', title: '最后登陆IP'}
                 ,{field: 'status', title: '状态', templet: '#statusTpl'}
                 ,{title: '操作', templet: '#buttonTpl'}
             ]]
         });
+        //监听单元格编辑
+        table.on('edit(user_table)', function(obj){
+            var value = obj.value //得到修改后的值
+                ,data = obj.data //得到所在行所有键值
+                ,field = obj.field; //得到字段
+            // layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+                var open_url = "{:url('setKV')}";
+                $.post(open_url, {
+                    id:data.id,
+                    k:field,
+                    v:value,
+                },function(res) {
+                    if (res.code == 1) {
+                        layer.msg(res.msg);
+                        location.reload();
+                    }else {
+                        layer.msg(res.msg);
+                        location.reload();
+                    }
+                });
+            });
     });
 </script>

@@ -37,6 +37,7 @@
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-card">
         <div class="layui-card-body">
+            申请时间：{$data_list['create_time']|date='Y-m-d H:i:s',###}<br>
             姓名：{$data_list['real_name']}<br>
             开始时间：{$data_list['start_time']}<br>
             结束时间：{$data_list['end_time']}<br>
@@ -54,7 +55,8 @@
             合计：{$data_list['total']}元<br>
             {/case}
             {case value="3"}
-            请假类型：{$leave_type[$data_list['type']]}<br>
+            费用类型：{$cost_type[$data_list['type']]}<br>
+            金额：{$data_list['money']}<br>
             {/case}
             {case value="4"}
             地点：{$data_list['address']}<br>
