@@ -648,7 +648,8 @@ class Project extends Admin
         $params = $this->request->param();
         $data = [
             'id'=>$params['id'],
-            'status'=>1
+            'status'=>1,
+            'realper'=>100
         ];
         if (!ProjectModel::update($data)) {
             return $this->error('修改失败！');

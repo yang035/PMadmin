@@ -422,12 +422,15 @@ class User extends Admin
     public function setKV(){
         if ($this->request->isAjax()){
             $data = $this->request->post();
+            $r = UserModel::where($data['k'],$data['v'])->find()->toArray();
+            $res = false;
             switch ($data['k']){
                 case 'mobile':
-                    $res = UserModel::where('id',$data['id'])->setField($data['k'],$data['v']);
+                    if (!$r){
+                        $res = UserModel::where('id',$data['id'])->setField($data['k'],$data['v']);
+                    }
                     break;
                 default:
-                    $res = false;
                     break;
             }
             if ($res){

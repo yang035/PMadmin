@@ -86,6 +86,14 @@
                     </div>
                     {/if}
                     {if condition="($vo['status'] eq 0) && ($Request.param.type eq 2) "}
+                    <div class="layui-btn-group" onclick="check_result({$vo['id']},'{$vo['name']}')">
+                        <a class="layui-btn layui-btn-normal layui-btn-xs">审核</a>
+                    </div>
+                    <div class="layui-btn-group" onclick="add_score({$vo['id']},'{$vo['code']}','{$vo['name']}')">
+                        <a class="layui-btn layui-btn-normal layui-btn-xs">评分</a>
+                    </div>
+                    {/if}
+                    {if condition="($vo['status'] eq 0) && ($Request.param.type eq 2) "}
                     <div class="layui-btn-group" onclick="finish_task({$vo['id']},{$Request.param.type})">
                         <a class="layui-btn layui-btn-normal layui-btn-xs">完结</a>
                     </div>
@@ -93,14 +101,6 @@
                         <span style="color: red;">已完结</span>
                     {else/}
                         <span>进行中</span>
-                    {/if}
-                    {if condition="($vo['status'] eq 1) && ($Request.param.type eq 2) "}
-                    <div class="layui-btn-group" onclick="check_result({$vo['id']},'{$vo['name']}')">
-                        <a class="layui-btn layui-btn-normal layui-btn-xs">审核</a>
-                    </div>
-                    <div class="layui-btn-group" onclick="add_score({$vo['id']},'{$vo['code']}','{$vo['name']}')">
-                        <a class="layui-btn layui-btn-normal layui-btn-xs">评分</a>
-                    </div>
                     {/if}
                 </td>
             </tr>
