@@ -386,7 +386,7 @@
     </div>
 </div>
 
-<div id="gtco-contact" data-section="contact" class="gtco-cover gtco-cover-xs" style="background-image:url(__PUBLIC_JS__/index/images/img_bg_2.jpg);">
+<div id="gtco-contact" data-section="contact" class="gtco-cover gtco-cover-xs" style="background-image:url(__PUBLIC_JS__/index/images/lower.jpg);">
     <div class="overlay"></div>
     <div class="gtco-container">
         <div class="row text-center">
