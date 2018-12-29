@@ -57,18 +57,18 @@
         <div class="gtco-container">
             <div class="row">
                 <div class="col-sm-2 col-xs-12">
-                    <div id="gtco-logo"><a href="index.html"><img src="__PUBLIC_JS__/index/images/logo.png" title="进入工作"></a></div>
+                    <div id="gtco-logo"><a href="/admin.php" target="_blank"><img src="__PUBLIC_JS__/index/images/logo.png" title="进入工作"></a></div>
                 </div>
                 <div class="col-sm-4 col-xs-12">
                     <div>良友圈层无限设计生活空间</div>
                 </div>
-                <div class="col-xs-6 text-right menu-1 main-nav">
+                <div class="col-xs-6 text-right menu-1">
                     <ul>
                         <li class="active"><a href="/" data-nav-section="home">首页</a></li>
-                        <li><a href="/" data-nav-section="services">生活区</a></li>
-                        <li><a href="/" data-nav-section="portfolio">学习区</a></li>
-                        <li><a href="/admin.php" data-nav-section="blog">工作区</a></li>
-                        <li><a href="http://bbs.imlgl.com" data-nav-section="contact">社区</a></li>
+                        <li><a href="/" data-nav-section="services" target="_blank">生活区</a></li>
+                        <li><a href="/" data-nav-section="portfolio" target="_blank">学习区</a></li>
+                        <li><a href="/admin.php" target="_blank">工作区</a></li>
+                        <li><a href="http://bbs.imlgl.com" target="_blank">社区</a></li>
                         <li><a href="/" class="external">联系我们</a></li>
                     </ul>
                 </div>
