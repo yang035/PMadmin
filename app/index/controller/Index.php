@@ -31,6 +31,7 @@ class Index extends Controller
         $this->assign('ispush',$this->isPush());
         $this->assign('data_project',$this->getProject());
         $this->assign('data_tpo',$this->getTpo());
+        $this->assign('data_live',$this->getLive());
         return $this->fetch();
     }
 
@@ -122,6 +123,16 @@ class Index extends Controller
         }
         $map['status'] = 1;
         $map['cat_id'] = 11;
+        $data_list = ItemModel::where($map)->order('id desc')->paginate(3, false, ['query' => input('get.')]);
+        return $data_list;
+    }
+    public function getLive(){
+        $map = [];
+        if (session('admin_user') && 1 != session('admin_user.role_id')) {
+            $map['cid'] = session('admin_user.cid');
+        }
+        $map['status'] = 1;
+        $map['cat_id'] = 7;
         $data_list = ItemModel::where($map)->order('id desc')->paginate(3, false, ['query' => input('get.')]);
         return $data_list;
     }

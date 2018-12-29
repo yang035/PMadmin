@@ -1,7 +1,10 @@
 <style>
+    .panel-body{
+        padding: 100px;
+    }
     .rate-counter-block{
         border: none;
-        padding-top: 20px;
+        padding-top: 100px;
         padding-bottom: 20px;
     }
 </style>

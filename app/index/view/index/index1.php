@@ -1,19 +1,39 @@
 <div id="gtco-hero" class="js-fullheight"  data-section="home">
     <div class="flexslider js-fullheight">
         <ul class="slides">
-            {volist name="ispush" id="vo"}
-            <li style="background-image: url({$vo.tuijian});">
+            <li style="background-image: url(__PUBLIC_JS__/index/images/img_bg_1.jpg);">
                 <div class="overlay"></div>
                 <div class="container">
                     <div class="col-md-10 col-md-offset-1 text-center js-fullheight slider-text">
                         <div class="slider-text-inner">
                             <h2>联合 协作 创新 发展</h2>
-                            <p><a href="{:url('detail',['id'=>$vo['id']])}" class="btn btn-primary btn-lg">{$vo.title}</a></p>
+                            <p><a href="#" target="_blank" class="btn btn-primary btn-lg">设计良友的空间律动</a></p>
                         </div>
                     </div>
                 </div>
             </li>
-            {/volist}
+            <li style="background-image: url(__PUBLIC_JS__/index/images/img_bg_2.jpg);">
+                <div class="overlay"></div>
+                <div class="container">
+                    <div class="col-md-10 col-md-offset-1 text-center js-fullheight slider-text">
+                        <div class="slider-text-inner">
+                            <h2>联合 协作 创新 发展</h2>
+                            <p><a href="#" class="btn btn-primary btn-lg">美好生活</a></p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li style="background-image: url(__PUBLIC_JS__/index/images/img_bg_3.jpg);">
+                <div class="overlay"></div>
+                <div class="container">
+                    <div class="col-md-10 col-md-offset-1 text-center js-fullheight slider-text">
+                        <div class="slider-text-inner">
+                            <h2>联合 协作 创新 发展</h2>
+                            <p><a href="#" class="btn btn-primary btn-lg">快乐工作</a></p>
+                        </div>
+                    </div>
+                </div>
+            </li>
         </ul>
     </div>
 </div>
@@ -141,16 +161,81 @@
                 </div>
             </div>
             <div class="row">
-                {volist name="data_project" id="vo"}
                 <div class="col-md-4">
-                    <a href="{$vo['thumb']}" class="gtco-card-item image-popup" title="{$vo['title']}">
+                    <a href="__PUBLIC_JS__/index/images/img_2.jpg" class="gtco-card-item image-popup" title="Project name here.">
                         <figure>
                             <div class="overlay"><i class="ti-plus"></i></div>
-                            <img src="{$vo['thumb']}" alt="Image" class="img-responsive">
+                            <img src="__PUBLIC_JS__/index/images/img_2.jpg" alt="Image" class="img-responsive">
                         </figure>
                     </a>
                 </div>
-                {/volist}
+                <div class="col-md-4">
+                    <a href="__PUBLIC_JS__/index/images/img_1.jpg" class="gtco-card-item image-popup" title="Project name here.">
+                        <figure>
+                            <div class="overlay"><i class="ti-plus"></i></div>
+                            <img src="__PUBLIC_JS__/index/images/img_1.jpg" alt="Image" class="img-responsive">
+                        </figure>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="__PUBLIC_JS__/index/images/img_3.jpg" class="gtco-card-item image-popup" title="Project name here.">
+                        <figure>
+                            <div class="overlay"><i class="ti-plus"></i></div>
+                            <img src="__PUBLIC_JS__/index/images/img_3.jpg" alt="Image" class="img-responsive">
+                        </figure>
+                    </a>
+                </div>
+
+                <div class="col-md-4">
+                    <a href="__PUBLIC_JS__/index/images/img_4.jpg" class="gtco-card-item image-popup" title="Project name here.">
+                        <figure>
+                            <div class="overlay"><i class="ti-plus"></i></div>
+                            <img src="__PUBLIC_JS__/index/images/img_4.jpg" alt="Image" class="img-responsive">
+                        </figure>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="__PUBLIC_JS__/index/images/img_5.jpg" class="gtco-card-item image-popup" title="Project name here.">
+                        <figure>
+                            <div class="overlay"><i class="ti-plus"></i></div>
+                            <img src="__PUBLIC_JS__/index/images/img_5.jpg" alt="Image" class="img-responsive">
+                        </figure>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="__PUBLIC_JS__/index/images/img_6.jpg" class="gtco-card-item image-popup" title="Project name here.">
+                        <figure>
+                            <div class="overlay"><i class="ti-plus"></i></div>
+                            <img src="__PUBLIC_JS__/index/images/img_6.jpg" alt="Image" class="img-responsive">
+                        </figure>
+                    </a>
+                </div>
+
+                <div class="col-md-4">
+                    <a href="__PUBLIC_JS__/index/images/img_2.jpg" class="gtco-card-item image-popup" title="Project name here.">
+                        <figure>
+                            <div class="overlay"><i class="ti-plus"></i></div>
+                            <img src="__PUBLIC_JS__/index/images/img_2.jpg" alt="Image" class="img-responsive">
+                        </figure>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="__PUBLIC_JS__/index/images/img_1.jpg" class="gtco-card-item image-popup" title="Project name here.">
+                        <figure>
+                            <div class="overlay"><i class="ti-plus"></i></div>
+                            <img src="__PUBLIC_JS__/index/images/img_1.jpg" alt="Image" class="img-responsive">
+                        </figure>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="__PUBLIC_JS__/index/images/img_3.jpg" class="gtco-card-item image-popup" title="Project name here.">
+                        <figure>
+                            <div class="overlay"><i class="ti-plus"></i></div>
+                            <img src="__PUBLIC_JS__/index/images/img_3.jpg" alt="Image" class="img-responsive">
+                        </figure>
+                    </a>
+                </div>
+
             </div>
         </div>
     </div>
@@ -253,21 +338,91 @@
             </div>
         </div>
         <div class="row">
-            {volist name="data_tpo" id="vo"}
             <div class="col-md-4">
-                <a href="{:url('detail',['id'=>$vo['id']])}" target="_blank" class="gtco-card-item has-text">
+                <a href="#" class="gtco-card-item has-text">
                     <figure>
                         <div class="overlay"><i class="ti-plus"></i></div>
-                        <img src="{$vo['thumb']}" alt="Image" class="img-responsive">
+                        <img src="__PUBLIC_JS__/index/images/img_1.jpg" alt="Image" class="img-responsive">
                     </figure>
                     <div class="gtco-text text-left">
-                        <h2>{$vo['title']}</h2>
-                        <p>{$vo['summarize']}</p>
-                        <p class="gtco-category">{$vo['create_time']}</p>
+                        <h2>产品名</h2>
+                        <p>产品介绍</p>
+                        <p class="gtco-category">日期</p>
                     </div>
                 </a>
             </div>
-            {/volist}
+
+            <div class="col-md-4">
+                <a href="#" class="gtco-card-item has-text">
+                    <figure>
+                        <div class="overlay"><i class="ti-plus"></i></div>
+                        <img src="__PUBLIC_JS__/index/images/img_2.jpg" alt="Image" class="img-responsive">
+                    </figure>
+                    <div class="gtco-text text-left">
+                        <h2>产品名</h2>
+                        <p>产品介绍</p>
+                        <p class="gtco-category">日期</p>
+                    </div>
+                </a>
+            </div>
+            <div class="clearfix visible-sm-block"></div>
+            <div class="col-md-4">
+                <a href="#" class="gtco-card-item has-text">
+                    <figure>
+                        <div class="overlay"><i class="ti-plus"></i></div>
+                        <img src="__PUBLIC_JS__/index/images/img_3.jpg" alt="Image" class="img-responsive">
+                    </figure>
+                    <div class="gtco-text text-left">
+                        <h2>产品名</h2>
+                        <p>产品介绍</p>
+                        <p class="gtco-category">日期</p>
+                    </div>
+                </a>
+            </div>
+            <div class="clearfix visible-lg-block visible-md-block"></div>
+
+            <div class="col-md-4">
+                <a href="#" class="gtco-card-item has-text">
+                    <figure>
+                        <div class="overlay"><i class="ti-plus"></i></div>
+                        <img src="__PUBLIC_JS__/index/images/img_4.jpg" alt="Image" class="img-responsive">
+                    </figure>
+                    <div class="gtco-text text-left">
+                        <h2>产品名</h2>
+                        <p>产品介绍</p>
+                        <p class="gtco-category">日期</p>
+                    </div>
+                </a>
+            </div>
+            <div class="clearfix visible-sm-block"></div>
+
+            <div class="col-md-4">
+                <a href="#" class="gtco-card-item has-text">
+                    <figure>
+                        <div class="overlay"><i class="ti-plus"></i></div>
+                        <img src="__PUBLIC_JS__/index/images/img_5.jpg" alt="Image" class="img-responsive">
+                    </figure>
+                    <div class="gtco-text text-left">
+                        <h2>产品名</h2>
+                        <p>产品介绍</p>
+                        <p class="gtco-category">日期</p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a href="#" class="gtco-card-item has-text">
+                    <figure>
+                        <div class="overlay"><i class="ti-plus"></i></div>
+                        <img src="__PUBLIC_JS__/index/images/img_6.jpg" alt="Image" class="img-responsive">
+                    </figure>
+                    <div class="gtco-text text-left">
+                        <h2>产品名</h2>
+                        <p>产品介绍</p>
+                        <p class="gtco-category">日期</p>
+                    </div>
+                </a>
+            </div>
             <div class="clearfix visible-lg-block visible-md-block"></div>
             <div class="clearfix visible-sm-block"></div>
 
@@ -341,11 +496,18 @@
             </div>
             <div class="row">
                 <div class="owl-carousel owl-carousel-carousel">
-                    {volist name="data_live" id="vo"}
                     <div class="item">
-                        <a href="{:url('detail',['id'=>$vo['id']])}"></a><img src="{$vo['thumb']}" alt="Free HTML5 Bootstrap Template by GetTemplates.co">
+                        <img src="__PUBLIC_JS__/index/images/img_1.jpg" alt="Free HTML5 Bootstrap Template by GetTemplates.co">
                     </div>
-                    {/volist}
+                    <div class="item">
+                        <img src="__PUBLIC_JS__/index/images/img_2.jpg" alt="Free HTML5 Bootstrap Template by GetTemplates.co">
+                    </div>
+                    <div class="item">
+                        <img src="__PUBLIC_JS__/index/images/img_3.jpg" alt="Free HTML5 Bootstrap Template by GetTemplates.co">
+                    </div>
+                    <div class="item">
+                        <img src="__PUBLIC_JS__/index/images/img_4.jpg" alt="Free HTML5 Bootstrap Template by GetTemplates.co">
+                    </div>
                 </div>
             </div>
         </div>
