@@ -4,16 +4,16 @@
         <div class="row copyright">
             <div class="col-md-12">
                 <p class="pull-left">
-                    <small class="block">联系方式：027-87747658           邮箱：27665567@qq.com</small>
-                    <small class="block">Copyright &copy; 2018.版权所有者   <a href="http://www.miitbeian.gov.cn" style="color: #778191">鲁ICP备18050320号</a> | 网警</small>
+                <ul class="gtco-social-icons pull-left">
+                    <li><a href="#"><img style="width: 110px;height: 45px;" src="__ADMIN_JS__/home/images/dc.png" alt="大成易景"></a></li>
+                    <li><a href="#"><img style="width: 110px;height: 45px;" src="__ADMIN_JS__/home/images/jz.png" alt="集智圈点"></a></li>
+                    <li><a href="#"><img style="width: 110px;height: 45px;" src="__ADMIN_JS__/home/images/sz.png" alt="深圳建筑设计院"></a></li>
+                    <li><a href="#"><img style="width: 110px;height: 45px;" src="__ADMIN_JS__/home/images/tc.png" alt="天成易创"></a></li>
+                </ul>
                 </p>
                 <p class="pull-right">
-                <ul class="gtco-social-icons pull-right">
-                    <li><a href="#"><i class="icon-twitter"></i></a></li>
-                    <li><a href="#"><i class="icon-facebook"></i></a></li>
-                    <li><a href="#"><i class="icon-linkedin"></i></a></li>
-                    <li><a href="#"><i class="icon-dribbble"></i></a></li>
-                </ul>
+                    <small class="block">联系方式：027-87747658           邮箱：27665567@qq.com</small>
+                    <small class="block">Copyright &copy; 2018.版权所有者   <a href="http://www.miitbeian.gov.cn" style="color: #778191">鲁ICP备18050320号</a> | 网警</small>
                 </p>
             </div>
         </div>
