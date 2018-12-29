@@ -9,7 +9,7 @@
         <form class="layui-form layui-form-pane" action="{:url()}" method="get" id="hisi-table-search">
             <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">检查分类</label>
+                <label class="layui-form-label">类型</label>
                 <div class="layui-input-inline">
                     <select name="cat_id" class="field-cat_id" type="select">
                         {$cat_option}
@@ -56,7 +56,7 @@
             }
             ,cols: [[ //表头
                 {type:'checkbox'},
-                {field: 'name', title: '检查项'},
+                {field: 'name', title: '名称'},
                 {field: 'cat_id', title: '类别', templet:function(d){
                         return d.cat.name;
                     }},

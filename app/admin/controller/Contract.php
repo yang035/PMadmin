@@ -20,11 +20,11 @@ class Contract extends Admin
 
         $tab_data['menu'] = [
             [
-                'title' => '合同类别',
+                'title' => '合同类型',
                 'url' => 'admin/Contract/cat',
             ],
             [
-                'title' => '合同内容',
+                'title' => '合同模板',
                 'url' => 'admin/Contract/index',
             ],
         ];

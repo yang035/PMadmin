@@ -1,7 +1,7 @@
 <form class="layui-form" action="{:url()}" method="post">
     <div class="layui-tab-item layui-show layui-form-pane">
         <div class="layui-form-item">
-            <label class="layui-form-label">检查分类</label>
+            <label class="layui-form-label">类型</label>
             <div class="layui-input-inline">
                 <select name="cat_id" class="field-cat_id" type="select">
                     {$cat_option}
@@ -9,17 +9,18 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">检查项<span style="color: red">*</span></label>
+            <label class="layui-form-label">名称<span style="color: red">*</span></label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-name" name="name" lay-verify="required" autocomplete="off" placeholder="请输入检查项">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">备注</label>
-            <div class="layui-input-inline">
-                <textarea  class="layui-textarea field-remark" name="remark" lay-verify="" autocomplete="off" placeholder="[选填]备注"></textarea>
+            <label class="layui-form-label">合同内容</label>
+            <div class="layui-input-block">
+                <textarea id="ckeditor" name="remark" class="field-remark"></textarea>
             </div>
         </div>
+        {:editor(['ckeditor', 'ckeditor2'],'kindeditor')}
         <div class="layui-form-item">
             <label class="layui-form-label">状态</label>
             <div class="layui-input-inline">
