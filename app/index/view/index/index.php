@@ -160,7 +160,7 @@
             <div class="row">
                 <div class="col-md-8 col-md-offset-2 text-center gtco-heading">
                     <h2>和良友一起学习更快乐</h2>
-                    <p>在生活的每一步都有你我的良师益友，信仰思维互长，信心耐心倍增，终有一天圈层的良友共同站在精彩的云端。</p>
+                    <p>在人生的每一步都有你——良师益友，信仰、思维互长，信心、耐心倍增，终有一天圈层的良友会一起共同站在精彩的云端。</p>
                 </div>
             </div>
             <div class="row">
