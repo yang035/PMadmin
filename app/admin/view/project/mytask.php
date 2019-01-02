@@ -75,9 +75,9 @@
                 </td>
                 <td>
 <!--                    暂时屏蔽此功能-->
-<!--                        <div class="layui-btn-group">-->
-<!--                        <a href="{:url('editTask',['id'=>$vo['id'],'pid'=>$vo['pid'],'type'=>$type])}" class="layui-btn layui-btn-normal layui-btn-xs">汇报</a>-->
-<!--                        </div>-->
+                        <div class="layui-btn-group">
+                        <a href="{:url('editTask',['id'=>$vo['id'],'pid'=>$vo['pid'],'type'=>$type])}" class="layui-btn layui-btn-normal layui-btn-xs">汇报</a>
+                        </div>
                     {if condition="$vo['u_res'] eq 'a'"}
                         <span style="color: red;">已确认</span>
                     {else/}
@@ -158,11 +158,10 @@
         var open_url = "{:url('setStatus')}?id="+id+"&type="+type;
         $.post(open_url, function(res) {
             if (res.code == 1) {
-                layer.msg(res.msg);
+                layer.alert(res.msg);
                 location.reload();
             }else {
-                layer.msg(res.msg);
-                location.reload();
+                layer.alert(res.msg);
             }
         });
     }

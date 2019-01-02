@@ -649,8 +649,11 @@ class Project extends Admin
         $data = [
             'id'=>$params['id'],
             'status'=>1,
-            'realper'=>100
         ];
+        $row = ProjectModel::getRowById($data['id']);
+        if ($row['realper'] < 100){
+            return $this->error('此任务进度为：'.$row['realper']);
+        }
         if (!ProjectModel::update($data)) {
             return $this->error('修改失败！');
         }

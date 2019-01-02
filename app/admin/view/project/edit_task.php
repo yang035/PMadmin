@@ -149,7 +149,7 @@
                     {else/}
                     <div class="layui-form-item">
                         <label class="layui-form-label">是否确认</label>
-                        <div class="layui-input-block">
+                        <div class="layui-input-inline">
                             <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
                             <button type="button" onclick="accept_task({$data_info['id']},{$Request.param.type})" class="layui-btn layui-btn-normal">确认</button>
                         </div>
@@ -158,16 +158,23 @@
                     {if condition="($data_info['status'] eq 0) && ($Request.param.type eq 2) "}
                     <div class="layui-form-item">
                         <label class="layui-form-label">是否完结</label>
-                        <div class="layui-input-block">
+                        <div class="layui-input-inline">
                             <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
                             <button type="button" onclick="finish_task({$data_info['id']},{$Request.param.type})" class="layui-btn layui-btn-normal">点击完成</button>
+                        </div>
+                    </div>
+                    {elseif condition="$data_info['status'] eq 1"}
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">是否完结</label>
+                        <div class="layui-input-inline">
+                            <span style="color: red;">已完结</span>
                         </div>
                     </div>
                     {else/}
                     <div class="layui-form-item">
                         <label class="layui-form-label">是否完结</label>
                         <div class="layui-input-inline">
-                            <span style="color: red;">已完结</span>
+                            <span style="color: red;">进行中</span>
                         </div>
                     </div>
                     {/if}
@@ -436,11 +443,10 @@
         var open_url = "{:url('setStatus')}?id="+id+"&type="+type;
         $.post(open_url, function(res) {
             if (res.code == 1) {
-                layer.msg(res.msg);
-                // location.reload();
+                layer.alert(res.msg);
+                location.reload();
             }else {
-                layer.msg(res.msg);
-                // location.reload();
+                layer.alert(res.msg);
             }
         });
     }
