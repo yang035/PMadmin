@@ -113,6 +113,11 @@
             <span>无</span>
             {/notempty}
             {/case}
+            {case value="12"}
+            项目名称：{$project_name['name']}<br>
+            打印类型：{$print_type[$data_list['type']]}<br>
+            纸张类型：{$size_type[$data_list['size_type']]}<br>
+            {/case}
             {/switch}
             事由：{$data_list['reason']}<br>
             附件说明：

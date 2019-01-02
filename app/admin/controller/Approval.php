@@ -19,6 +19,8 @@ use app\admin\model\ApprovalCost as CostModel;
 use app\admin\model\AdminUser;
 use app\admin\model\AssetItem as ItemModel;
 use app\admin\model\ApprovalGoods;
+use app\admin\model\ApprovalPrint;
+use app\admin\model\Project as ProjectModel;
 
 
 class Approval extends Admin
@@ -562,6 +564,51 @@ class Approval extends Admin
         return $this->fetch();
     }
 
+    public function printView()
+    {
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            // 验证
+            $result = $this->validate($data, 'ApprovalPrint');
+            if($result !== true) {
+                return $this->error($result);
+            }
+            unset($data['id']);
+            $approve = [
+                'class_type'=>$data['class_type'],
+                'cid'=>session('admin_user.cid'),
+                'start_time'=>$data['start_time'].' '.$data['start_time1'],
+                'end_time'=>$data['end_time'].' '.$data['end_time1'],
+                'time_long'=>$data['time_long'],
+                'user_id'=>session('admin_user.uid'),
+                'send_user'=>json_encode(user_array($data['send_user'])),
+                'copy_user'=>json_encode(user_array($data['copy_user'])),
+            ];
+            $res = ApprovalModel::create($approve);
+            if ($res) {
+                $leave = [
+                    'aid'=>$res['id'],
+                    'type'=>$data['type'],
+                    'project_id'=>$data['project_id'],
+                    'size_type'=>$data['size_type'],
+                    'reason'=>$data['reason'],
+                    'attachment'=>$data['attachment'],
+                    'money'=>$data['money'],
+                ];
+                if (!ApprovalPrint::create($leave)){
+                    return $this->error('添加失败！');
+                }
+            }else{
+                return $this->error('添加失败！');
+            }
+            return $this->success("操作成功{$this->score_value}",'index');
+        }
+        $this->assign('print_option',ApprovalPrint::getPrintOption());
+        $this->assign('size_option',ApprovalPrint::getSizeOption());
+        $this->assign('mytask', ProjectModel::getMyTask(0));
+        return $this->fetch();
+    }
+
     public function read(){
         $params = $this->request->param();
         if ($this->request->isPost()){
@@ -634,6 +681,10 @@ class Approval extends Admin
                 $table = 'tb_approval_goods';
                 $f = 'b.reason,b.goods,b.attachment';
                 break;
+            case 12:
+                $table = 'tb_approval_print';
+                $f = 'b.project_id,b.type,b.size_type,b.reason,b.money,b.attachment';
+                break;
             default:
                 $table = 'tb_approval_leave';
                 $f = 'b.type,b.reason,b.attachment';
@@ -680,6 +731,13 @@ class Approval extends Admin
                 break;
             case 11:
                 $list['goods'] = json_decode($list['goods'],true);
+                break;
+            case 12:
+                $print_type = config('other.print_type');
+                $this->assign('print_type',$print_type);
+                $size_type = config('other.size_type');
+                $this->assign('size_type',$size_type);
+                $this->assign('project_name', ProjectModel::getRowById($list['project_id']));
                 break;
             default:
                 break;

@@ -33,6 +33,22 @@ return [
         7=>'预支款',
         8=>'其他',
     ],
+    'print_type' =>[
+        1=>'文本',
+        2=>'图册',
+        3=>'白图',
+        4=>'蓝图',
+        5=>'投标文件',
+        6=>'电子文件',
+        7=>'其它',
+    ],
+    'size_type' =>[
+        1=>'A0',
+        2=>'A1',
+        3=>'A2',
+        4=>'A3',
+        5=>'A4',
+    ],
     'expense_type' =>[
         1=>'差旅费',
         2=>'交通费',
@@ -102,6 +118,10 @@ return [
         11=>[
             'title'=>'申领用品',
             'href'=>'admin/Approval/officeGood'
+        ],
+        12=>[
+            'title'=>'出图',
+            'href'=>'admin/Approval/printView'
         ],
     ],
     'car_type' => [
