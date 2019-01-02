@@ -122,7 +122,7 @@ layui.use(['jquery', 'laydate', 'upload','form'], function() {
         elem: '#oneImage',
         url: '{:url("admin/UploadFile/upload?group=front")}',
         method: 'post',
-        size:"{:config('upload.upload_image_size')}",
+        size:120,
         before: function(input) {
             layer.msg('文件上传中...', {time:3000000});
         },
@@ -157,7 +157,7 @@ layui.use(['jquery', 'laydate', 'upload','form'], function() {
         elem: '#tuijianImage',
         url: '{:url("admin/UploadFile/upload?group=front")}',
         method: 'post',
-        size:"{:config('upload.upload_image_size')}",
+        size:120,
         before: function(input) {
             layer.msg('文件上传中...', {time:3000000});
         },
