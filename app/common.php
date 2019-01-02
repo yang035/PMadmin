@@ -847,7 +847,10 @@ function time_per($start_time,$end_time,$time = ''){
     }
     $day1 = time_diff($start_time,$end_time,'day');
     $day2 = time_diff($start_time,$time,'day');
-    $per = round($day2/$day1*100,2);
+    $per = 100;
+    if ($day1 > 0){
+        $per = round($day2/$day1*100,2);
+    }
     return $per;
 
 }
