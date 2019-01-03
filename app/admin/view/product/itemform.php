@@ -67,7 +67,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">厂家名称<span style="color: red">*</span></label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input field-factory" name="factory" lay-verify="required" autocomplete="off" placeholder="产品规格">
+                <input type="text" class="layui-input field-factory" name="factory" lay-verify="required" autocomplete="off" placeholder="厂家名称">
             </div>
         </div>
         <div class="layui-form-item">
