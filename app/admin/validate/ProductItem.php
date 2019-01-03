@@ -11,18 +11,20 @@ namespace app\admin\validate;
 
 use think\Validate;
 
-class CarCat extends Validate
+class ProductItem extends Validate
 {
     //定义验证规则
     protected $rule = [
-        'name|分类名称' => 'require|unique:car_cat',
+        'name|名称' => 'require|unique:product_item',
+        'color|颜色' => 'require',
         'status|状态设置'  => 'require|in:0,1',
     ];
 
     //定义验证提示
     protected $message = [
-        'name.require' => '请输入分类名称',
-        'name.unique' => '分类名称已存在',
+        'name.require' => '请输入名称',
+        'name.unique' => '名称已存在',
+        'color.require' => '车辆颜色必填',
         'status.require'    => '请设置状态',
     ];
 

@@ -2,17 +2,17 @@
 /**
  * Created by PhpStorm.
  * User: Administrator
- * Date: 2018/11/6
- * Time: 15:29
+ * Date: 2018/10/8
+ * Time: 15:01
  */
 
 namespace app\admin\model;
 
 
 use think\Model;
-use app\admin\model\HomeCat as CatModel;
+use app\admin\model\ProductCat as CatModel;
 
-class HomeItem extends Model
+class ProductItem extends Model
 {
     public static function getOption($type = 0)
     {
@@ -33,10 +33,62 @@ class HomeItem extends Model
         }
         return $str;
     }
+    public static function getColorOption($type = 0)
+    {
+        $leaveType = config('other.car_color');
+        $str = '';
+        foreach ($leaveType as $k => $v) {
+            if ($type == $k) {
+                $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+            } else {
+                $str .= '<option value="'.$k.'">'.$v.'</option>';
+            }
+        }
+        return $str;
+    }
+    public static function getProductOption($type = 0)
+    {
+        $leaveType = config('other.product_type');
+        $str = '';
+        foreach ($leaveType as $k => $v) {
+            if ($type == $k) {
+                $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+            } else {
+                $str .= '<option value="'.$k.'">'.$v.'</option>';
+            }
+        }
+        return $str;
+    }
+    public static function getProductOption1($type = 0)
+    {
+        $leaveType = config('other.product_type');
+        $str = '';
+        foreach ($leaveType as $k => $v) {
+            if ($type == $k) {
+                $str .= '<input type="checkbox" name="like['.$k.']" title="'.$v.'" checked="">';
+            } else {
+                $str .= '<input type="checkbox" name="like['.$k.']" title="'.$v.'">';
+            }
+        }
+        return $str;
+    }
+    public static function getWaysOption($type = 0)
+    {
+        $leaveType = config('other.product_ways');
+        $str = '';
+        foreach ($leaveType as $k => $v) {
+            if ($type == $k) {
+                $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+            } else {
+                $str .= '<option value="'.$k.'">'.$v.'</option>';
+            }
+        }
+        return $str;
+    }
 
     public function cat()
     {
-        return $this->hasOne('HomeCat', 'id', 'cat_id');
+        return $this->hasOne('ProductCat', 'id', 'cat_id');
     }
 
     public static function getCat()
