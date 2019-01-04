@@ -168,8 +168,8 @@
                         ids+=id+',';
                     }
                 });
-                window.top.document.getElementById(m+'_select_id').innerText=name;
-                window.top.document.getElementById(m+'_user').value = ','+ids;
+                window.parent.document.getElementById(m+'_select_id').innerText=name;
+                window.parent.document.getElementById(m+'_user').value = ','+ids;
                 var index = parent.layer.getFrameIndex(window.name);
                 parent.layer.close(index);
             });

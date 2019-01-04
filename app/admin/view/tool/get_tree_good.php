@@ -167,8 +167,8 @@
                         ids+=id+',';
                     }
                 });
-                window.top.document.getElementById(m+'_select_id').innerText=name;
-                window.top.document.getElementById(m+'_cat').value = ','+ids;
+                window.parent.document.getElementById(m+'_select_id').innerText=name;
+                window.parent.document.getElementById(m+'_cat').value = ','+ids;
 
                 var d_h='',id_arr = ids.split(',').filter(d=>d),name_arr = name.split(',').filter(d=>d);;
                 // console.log(id_arr);
@@ -184,7 +184,7 @@
                             "            </div>";
                     });
                 }
-                window.top.document.getElementById('show_div').innerHTML = d_h;
+                window.parent.document.getElementById('show_div').innerHTML = d_h;
 
                 var index = parent.layer.getFrameIndex(window.name);
                 parent.layer.close(index);

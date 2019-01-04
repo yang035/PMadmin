@@ -26,7 +26,7 @@
             </div>
         </form>
         <div class="layui-btn-group fl">
-            <a href="{:url('addItem')}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加</a>
+            <a href="#" id="add_id" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加</a>
             <a data-href="{:url('status?table=asset_item&val=1')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-play" data-table="dataTable">&nbsp;启用</a>
             <a data-href="{:url('status?table=asset_item&val=0')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-pause" data-table="dataTable">&nbsp;禁用</a>
             <a data-href="{:url('delItem')}" class="layui-btn layui-btn-primary j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>
@@ -46,8 +46,8 @@
     {/eq}
 </script>
 <script type="text/javascript">
-    layui.use(['table'], function() {
-        var table = layui.table;
+    layui.use(['jquery','table'], function() {
+        var $ = layui.jquery,table = layui.table;
         table.render({
             elem: '#dataTable'
             ,url: '{:url()}' //数据接口
@@ -67,6 +67,26 @@
                 {field: 'status', title: '状态', templet: '#statusTpl'},
                 {title: '操作', templet: '#buttonTpl'}
             ]]
+        });
+
+        $('#add_id').on('click', function(){
+            var good_cat = $('#good_cat').val();
+            var open_url = "{:url('addItem')}";
+            if (open_url.indexOf('?') >= 0) {
+                open_url += '&hisi_iframe=yes';
+            } else {
+                open_url += '?hisi_iframe=yes';
+            }
+            layer.open({
+                type:2,
+                title :'物品列表',
+                maxmin: true,
+                area: ['900px', '600px'],
+                content: open_url,
+                success:function (layero, index) {
+                    var body = layer.getChildFrame('body', index);  //巧妙的地方在这里哦
+                }
+            });
         });
     });
 </script>

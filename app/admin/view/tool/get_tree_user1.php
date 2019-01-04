@@ -139,8 +139,8 @@
                         ids+=id+',';
                     }
 
-                    window.top.document.getElementById('copy_select_id').innerText=name;
-                    window.top.document.getElementById('copy_user').value = ids;
+                    window.parent.document.getElementById('copy_select_id').innerText=name;
+                    window.parent.document.getElementById('copy_user').value = ids;
                     var index = parent.layer.getFrameIndex(window.name);
                     parent.layer.close(index);
 
