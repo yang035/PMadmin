@@ -17,6 +17,7 @@ class ContactsItem extends Validate
     protected $rule = [
         'name|名称' => 'require|unique:contacts_item',
         'status|状态设置'  => 'require|in:0,1',
+        'subject_name' => 'unique:contacts_item,subject_id^mobile',
     ];
 
     //定义验证提示
@@ -24,6 +25,7 @@ class ContactsItem extends Validate
         'name.require' => '请输入名称',
         'name.unique' => '名称已存在',
         'status.require'    => '请设置状态',
+        'subject_name.unique' => '同公司下类型已经存在',
     ];
 
 }

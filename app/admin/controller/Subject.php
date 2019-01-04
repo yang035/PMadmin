@@ -202,4 +202,23 @@ class Subject extends Admin
         return $this->success('删除成功');
     }
 
+    public function addB($id = 0){
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+
+            $data['contract_b_user'] = json_encode(user_array($data['contract_b_user']));
+            $data['finance_b_user'] = json_encode(user_array($data['finance_b_user']));
+            $data['subject_b_user'] = json_encode(user_array($data['subject_b_user']));
+
+            if (!ItemModel::update($data)) {
+                return $this->error('操作失败');
+            }
+            return $this->success('操作成功');
+        }
+        $row = ItemModel::where('id', $id)->find()->toArray();
+        $this->assign('data_info', $row);
+        return $this->fetch();
+
+    }
+
 }
