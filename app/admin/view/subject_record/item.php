@@ -9,15 +9,7 @@
         <form class="layui-form layui-form-pane" action="{:url()}" method="get" id="hisi-table-search">
             <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">类型</label>
-                <div class="layui-input-inline">
-                    <select name="cat_id" class="field-cat_id" type="select">
-                        {$cat_option}
-                    </select>
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">名称</label>
+                <label class="layui-form-label">洽商记录</label>
                 <div class="layui-input-inline">
                     <input type="text" name="name" value="{:input('get.name')}" placeholder="关键字" autocomplete="off" class="layui-input">
                     <input type="hidden" name="subject_id" value="{$Request.param.subject_id}">
@@ -62,13 +54,13 @@
             }
             ,cols: [[ //表头
                 {type:'checkbox'},
-                {field: 'name', title: '名称'},
-                {field: 'cat_id', title: '类别', templet:function(d){
+                {field: 'subject_id', title: '项目名称', templet:function(d){
                         return d.cat.name;
                     }},
-                {field: 'level', title: '级别'},
-                {field: 'mobile', title: '手机号码'},
-                {field: 'status', title: '状态', templet: '#statusTpl'},
+                {field: 'content', title: '洽商记录'},
+                {field: 'report', title: '洽商报告'},
+                {field: 'update_time', title: '时间'},
+                // {field: 'status', title: '状态', templet: '#statusTpl'},
                 {title: '操作', templet: '#buttonTpl'}
             ]]
         });

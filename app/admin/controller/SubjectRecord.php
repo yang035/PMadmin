@@ -8,13 +8,12 @@
 
 namespace app\admin\controller;
 
-use app\admin\model\ContactsCat as CatModel;
-use app\admin\model\ContactsItem as ItemModel;
+use app\admin\model\SubjectRecord as RecordModel;
 use app\admin\model\SubjectItem;
 use think\Db;
 
 
-class Contacts extends Admin
+class SubjectRecord extends Admin
 {
     public $tab_data = [];
 
@@ -24,12 +23,8 @@ class Contacts extends Admin
 
         $tab_data['menu'] = [
             [
-                'title' => '类型',
-                'url' => 'admin/Contacts/cat',
-            ],
-            [
-                'title' => '人员',
-                'url' => 'admin/Contacts/index',
+                'title' => '洽商情况',
+                'url' => 'admin/SubjectRecord/index',
             ],
         ];
         $this->tab_data = $tab_data;
@@ -37,6 +32,7 @@ class Contacts extends Admin
 
     public function index($q = '')
     {
+
         if ($this->request->isAjax()) {
             $where = $data = [];
             $page = input('param.page/d', 1);
@@ -48,14 +44,20 @@ class Contacts extends Admin
             }
             $name = input('param.name');
             if ($name) {
-                $where['name'] = ['like', "%{$name}%"];
+                $where['content'] = ['like', "%{$name}%"];
             }
             if ($params['subject_id']) {
                 $where['subject_id'] = $params['subject_id'];
             }
             $where['cid'] = session('admin_user.cid');
-            $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->select();
-            $data['count'] = ItemModel::where($where)->count('id');
+            $data['data'] = RecordModel::with('cat')->where($where)->page($page)->limit($limit)->select();
+            if ($data['data']) {
+                foreach ($data['data'] as $k => $v) {
+                    $v['content'] = htmlspecialchars_decode($v['content']);
+                    $v['report'] = htmlspecialchars_decode($v['report']);
+                }
+            }
+            $data['count'] = RecordModel::where($where)->count('id');
             $data['code'] = 0;
             $data['msg'] = '';
             return json($data);
@@ -67,7 +69,6 @@ class Contacts extends Admin
 
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 1);
-        $this->assign('cat_option', ItemModel::getOption());
         return $this->fetch('item');
     }
 
@@ -76,53 +77,34 @@ class Contacts extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
             // 验证
-            $result = $this->validate($data, 'ContactsItem');
+            $result = $this->validate($data, 'SubjectRecord');
             if ($result !== true) {
                 return $this->error($result);
             }
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
             unset($data['id']);
-            $contacts_id = ItemModel::create($data);
-            if ($contacts_id) {
-                $tmp1['id'] = $data['subject_id'];
-                $where = [
-                    'cid' => session('admin_user.cid'),
-                    'subject_id' => $tmp1['id'],
-                    'status' => 1,
-                ];
 
-                switch ($data['cat_id']) {
-                    case 1:
-                        $where['cat_id'] = 1;
-                        $tmp = ItemModel::where($where)->column('id');
-                        $tmp1['contract_a_user'] = json_encode($tmp);
-                        break;
-                    case 2:
-                        $where['cat_id'] = 2;
-                        $tmp = ItemModel::where($where)->column('id');
-                        $tmp1['finance_a_user'] = json_encode($tmp);
-                        break;
-                    case 3:
-                        $where['cat_id'] = 3;
-                        $tmp = ItemModel::where($where)->column('id');
-                        $tmp1['subject_a_user'] = json_encode($tmp);
-                        break;
-                    default:
-                        break;
-                }
-
-                if (!SubjectItem::update($tmp1)) {
-                    return $this->error('添加失败');
-                }
-                return $this->success("操作成功{$this->score_value}");
-            } else {
+            if (!RecordModel::create($data)) {
                 return $this->error('添加失败');
             }
+            return $this->success("操作成功{$this->score_value}");
 
         }
-        $this->assign('cat_option', ItemModel::getOption());
-        $this->assign('sex_type', ItemModel::getSexOption());
+        //设置默认格式
+        $record_format = "&lt;p&gt;
+	甲方人员：
+&lt;/p&gt;
+&lt;p&gt;
+	乙方人员：
+&lt;/p&gt;
+&lt;p&gt;
+	时间：
+&lt;/p&gt;
+&lt;p&gt;
+	内容：
+&lt;/p&gt;";
+        $this->assign('record_format', $record_format);
         return $this->fetch('itemform');
     }
 
@@ -131,29 +113,31 @@ class Contacts extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
             // 验证
-            $result = $this->validate($data, 'ContactsItem');
+            $result = $this->validate($data, 'SubjectRecord');
             if ($result !== true) {
                 return $this->error($result);
             }
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
-            if (!ItemModel::update($data)) {
+            if (!RecordModel::update($data)) {
                 return $this->error('修改失败');
             }
             return $this->success('修改成功');
         }
 
-        $row = ItemModel::where('id', $id)->find()->toArray();
-        $this->assign('data_info', $row);
-        $this->assign('cat_option', ItemModel::getOption());
-        $this->assign('sex_type', ItemModel::getSexOption());
+        if ($id) {
+            $row = RecordModel::where('id', $id)->find()->toArray();
+            $row['content'] = htmlspecialchars_decode($row['content']);
+            $row['report'] = htmlspecialchars_decode($row['report']);
+            $this->assign('data_info', $row);
+        }
         return $this->fetch('itemform');
     }
 
     public function delItem()
     {
         $id = input('param.id/a');
-        $model = new ItemModel();
+        $model = new RecordModel();
         if (!$model->del($id)) {
             return $this->error($model->getError());
         }
