@@ -20,24 +20,24 @@
             <label class="layui-form-label">合同联系人</label>
             <div class="layui-input-inline">
                 <button type="button" class="layui-btn" id="contract_b_user_id">选择合同联系人</button>
-                <div id="contract_b_select_id">{$data_info['own_user_id']|default=''}</div>
-                <input type="hidden" name="contract_b_user" id="contract_b_user" value="{$data_info['own_user']|default=''}">
+                <div id="contract_b_select_id">{$data_info['contract_b_user_id']|default=''}</div>
+                <input type="hidden" name="contract_b_user" id="contract_b_user" value="{$data_info['contract_b_user']|default=''}">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">财务联系人</label>
             <div class="layui-input-inline">
                 <button type="button" class="layui-btn" id="finance_b_user_id">选择财务联系人</button>
-                <div id="finance_b_select_id">{$data_info['own_user_id']|default=''}</div>
-                <input type="hidden" name="finance_b_user" id="finance_b_user" value="{$data_info['own_user']|default=''}">
+                <div id="finance_b_select_id">{$data_info['finance_b_user_id']|default=''}</div>
+                <input type="hidden" name="finance_b_user" id="finance_b_user" value="{$data_info['finance_b_user']|default=''}">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">项目联系人</label>
             <div class="layui-input-inline">
                 <button type="button" class="layui-btn" id="subject_b_user_id">选择项目联系人</button>
-                <div id="subject_b_select_id">{$data_info['self_user_id']|default=''}</div>
-                <input type="hidden" name="subject_b_user" id="subject_b_user" value="{$data_info['self_user']|default=''}">
+                <div id="subject_b_select_id">{$data_info['subject_b_user_id']|default=''}</div>
+                <input type="hidden" name="subject_b_user" id="subject_b_user" value="{$data_info['subject_b_user']|default=''}">
             </div>
         </div>
     </div>

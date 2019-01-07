@@ -1,3 +1,19 @@
+<style>
+    .layui-upload-img {
+        width: 92px;
+        height: 92px;
+        margin: 0 10px 10px 0;
+        display: none;
+    }
+
+    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+</style>
 <form class="layui-form" action="{:url()}" method="post">
     <div class="layui-tab-item layui-show layui-form-pane">
         <div class="layui-form-item">
@@ -29,7 +45,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">项目面积</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input field-area" name="area" autocomplete="off" placeholder="请输入项目面积">
+                <input type="number" class="layui-input field-area" name="area" autocomplete="off" placeholder="请输入项目面积">
             </div>
         </div>
         <div class="layui-form-item">

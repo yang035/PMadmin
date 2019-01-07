@@ -9,6 +9,7 @@
 namespace app\admin\controller;
 use app\admin\model\SubjectCat as CatModel;
 use app\admin\model\SubjectItem as ItemModel;
+use app\admin\model\AdminUser;
 
 
 class Subject extends Admin
@@ -216,9 +217,41 @@ class Subject extends Admin
             return $this->success('操作成功');
         }
         $row = ItemModel::where('id', $id)->find()->toArray();
+        $row['contract_b_user_id'] = $this->deal_data($row['contract_b_user']);
+        $row['finance_b_user_id'] = $this->deal_data($row['finance_b_user']);
+        $row['subject_b_user_id'] = $this->deal_data($row['subject_b_user']);
+
+        $row['contract_b_user'] = $this->deal_data_id($row['contract_b_user']);
+        $row['finance_b_user'] = $this->deal_data_id($row['finance_b_user']);
+        $row['subject_b_user'] = $this->deal_data_id($row['subject_b_user']);
         $this->assign('data_info', $row);
         return $this->fetch();
 
+    }
+
+    public function deal_data($x_user)
+    {
+        $x_user_arr = json_decode($x_user,true);
+        $x_user = [];
+        if ($x_user_arr){
+            foreach ($x_user_arr as $key=>$val){
+                $real_name = AdminUser::getUserById($key)['realname'];
+                if ('a' == $val){
+                    $real_name = "<font style='color: blue'>".$real_name."</font>";
+                }
+                $x_user[] = $real_name;
+            }
+            return implode(',',$x_user);
+        }
+    }
+
+    public function deal_data_id($x_user){
+        $x_user_arr = json_decode($x_user,true);
+        if ($x_user_arr){
+            $tmp = array_keys($x_user_arr);
+            return implode(',',$tmp);
+        }
+        return '';
     }
 
 }

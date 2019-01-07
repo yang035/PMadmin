@@ -42,11 +42,11 @@
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
     <a href="{:url('editItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
 <!--    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
-    <a href="#" onclick="a_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">甲方人员</a>
+    <a href="#" onclick="a_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">甲方人员</a>
     <a href="#" onclick="b_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">乙方人员</a>
-    <a href="#" onclick="discuss_record({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">洽商记录</a>
+    <a href="#" onclick="discuss_record({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">洽商记录</a>
     <a href="#" onclick="contract({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">拟定合同</a>
-    <a href="#" onclick="contract_record({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">合同跟踪</a>
+    <a href="#" onclick="contract_record({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">合同跟踪</a>
     <a href="#" onclick="zujian_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">组建项目组</a>
 </script>
 <script type="text/javascript">
@@ -66,14 +66,14 @@
                 {field: 'cat_id', title: '类别', templet:function(d){
                         return d.cat.name;
                     }},
-                {field: 'status', title: '状态', templet: '#statusTpl'},
-                {title: '操作', templet: '#buttonTpl'}
+                // {field: 'status', title: '状态', templet: '#statusTpl'},
+                {title: '操作', templet: '#buttonTpl',width:600}
             ]]
         });
     });
 
     function a_user(id) {
-        var open_url = "{:url('Contacts/addItem')}?subject_id="+id;
+        var open_url = "{:url('Contacts/index')}?subject_id="+id;
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {
@@ -81,7 +81,7 @@
         }
         layer.open({
             type:2,
-            title :'物品列表',
+            title :'添加人员',
             maxmin: true,
             area: ['900px', '600px'],
             content: open_url,
@@ -100,7 +100,7 @@
         }
         layer.open({
             type:2,
-            title :'物品列表',
+            title :'添加人员',
             maxmin: true,
             area: ['900px', '600px'],
             content: open_url,

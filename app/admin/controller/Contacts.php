@@ -9,6 +9,8 @@
 namespace app\admin\controller;
 use app\admin\model\ContactsCat as CatModel;
 use app\admin\model\ContactsItem as ItemModel;
+use app\admin\model\SubjectItem;
+use think\Db;
 
 
 class Contacts extends Admin
@@ -33,11 +35,12 @@ class Contacts extends Admin
 
     public function index($q = '')
     {
+
         if ($this->request->isAjax()) {
             $where = $data = [];
             $page = input('param.page/d', 1);
             $limit = input('param.limit/d', 20);
-
+            $params = $this->request->param();
             $cat_id = input('param.cat_id/d');
             if ($cat_id){
                 $where['cat_id'] = $cat_id;
@@ -45,6 +48,9 @@ class Contacts extends Admin
             $name = input('param.name');
             if ($name) {
                 $where['name'] = ['like', "%{$name}%"];
+            }
+            if ($params['subject_id']){
+                $where['subject_id'] = $params['subject_id'];
             }
             $where['cid'] = session('admin_user.cid');
             $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->select();
@@ -75,10 +81,43 @@ class Contacts extends Admin
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
             unset($data['id']);
-            if (!ItemModel::create($data)) {
+            $contacts_id = ItemModel::create($data);
+            if ($contacts_id){
+                $tmp1['id'] = $data['subject_id'];
+                $where = [
+                    'cid'=>session('admin_user.cid'),
+                    'subject_id'=>$tmp1['id'],
+                    'status'=>1,
+                ];
+
+                switch ($data['cat_id']){
+                    case 1:
+                        $where['cat_id'] = 1;
+                        $tmp = ItemModel::where($where)->column('id');
+                        $tmp1['contract_a_user'] =json_encode($tmp);
+                        break;
+                    case 2:
+                        $where['cat_id'] = 2;
+                        $tmp = ItemModel::where($where)->column('id');
+                        $tmp1['finance_a_user'] =json_encode($tmp);
+                        break;
+                    case 3:
+                        $where['cat_id'] = 3;
+                        $tmp = ItemModel::where($where)->column('id');
+                        $tmp1['subject_a_user'] =json_encode($tmp);
+                        break;
+                    default:
+                        break;
+                }
+
+                if (!SubjectItem::update($tmp1)) {
+                    return $this->error('添加失败');
+                }
+                return $this->success("操作成功{$this->score_value}");
+            }else{
                 return $this->error('添加失败');
             }
-            return $this->success("操作成功{$this->score_value}");
+
         }
         $this->assign('cat_option',ItemModel::getOption());
         $this->assign('sex_type',ItemModel::getSexOption());
