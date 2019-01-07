@@ -21,7 +21,7 @@ class ContractItem extends Model
             'status'=>1,
         ];
         $data = CatModel::where($map)->select();
-        $str = '';
+        $str = '<option value="0" selected>选择类型</option>';
         if ($data){
             foreach ($data as $k => $v) {
                 if ($type == $k) {
@@ -56,6 +56,33 @@ class ContractItem extends Model
         ];
         $data = self::where($map)->column('name','id');
         return $data;
+    }
+
+    public static function getItemById($id=0)
+    {
+        $data = self::field('remark')->where('id',$id)->find()->toArray();
+        return $data;
+    }
+
+    public static function getItemByCat($cat)
+    {
+        $map = [
+            'cid'=>session('admin_user.cid'),
+            'status'=>1,
+            'cat_id'=>$cat
+        ];
+        $data = self::where($map)->select();
+        $str = '';
+        if ($data){
+            foreach ($data as $k => $v) {
+                if ($cat == $k) {
+                    $str .= '<option value="'.$v['id'].'" selected>'.$v['name'].'</option>';
+                } else {
+                    $str .= '<option value="'.$v['id'].'">'.$v['name'].'</option>';
+                }
+            }
+        }
+        return $str;
     }
 
     public function del($id){
