@@ -68,7 +68,7 @@
                     }},
                 {field: 'level', title: '级别'},
                 {field: 'mobile', title: '手机号码'},
-                {field: 'status', title: '状态', templet: '#statusTpl'},
+                // {field: 'status', title: '状态', templet: '#statusTpl'},
                 {title: '操作', templet: '#buttonTpl'}
             ]]
         });

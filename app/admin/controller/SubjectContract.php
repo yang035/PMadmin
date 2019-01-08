@@ -77,7 +77,7 @@ class SubjectContract extends Admin
             }
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
-            unset($data['id'],$data['contract_cat']);
+            unset($data['id'], $data['contract_cat']);
 
             if (!ContractModel::create($data)) {
                 return $this->error('添加失败');
@@ -89,12 +89,14 @@ class SubjectContract extends Admin
         return $this->fetch('itemform');
     }
 
-    public function getContractItem($cat_id = 0,$id=0){
-        $data = ContractItem::getItemByCat($cat_id,$id);
+    public function getContractItem($cat_id = 0, $id = 0)
+    {
+        $data = ContractItem::getItemByCat($cat_id, $id);
         echo $data;
     }
 
-    public function getItemById($id = 0){
+    public function getItemById($id = 0)
+    {
         $data = ContractItem::getItemById($id);
         echo $data['remark'];
     }
@@ -120,7 +122,7 @@ class SubjectContract extends Admin
         if ($id) {
             $row = ContractModel::where('id', $id)->find()->toArray();
             $row['content'] = htmlspecialchars_decode($row['content']);
-            if ($row){
+            if ($row) {
                 $row1 = ContractItem::getItemById($row['tpl_id']);
                 $row['cat_id'] = $row1['cat_id'];
                 $this->assign('contract_cat', ContractItem::getOption($row1['cat_id']));

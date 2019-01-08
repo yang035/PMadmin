@@ -46,7 +46,7 @@
     <a href="#" onclick="b_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">乙方人员</a>
     <a href="#" onclick="discuss_record({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">洽商记录</a>
     <a href="#" onclick="contract({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">拟定合同</a>
-    <a href="#" onclick="zujian_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">组建项目组</a>
+    <a href="#" onclick="zujian_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">组建项目组</a>
 </script>
 <script type="text/javascript">
     layui.use(['jquery','table'], function() {
@@ -66,7 +66,7 @@
                         return d.cat.name;
                     }},
                 // {field: 'status', title: '状态', templet: '#statusTpl'},
-                {title: '操作', templet: '#buttonTpl',width:600}
+                {title: '操作', templet: '#buttonTpl',width:500}
             ]]
         });
     });
