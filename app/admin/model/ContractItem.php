@@ -24,7 +24,7 @@ class ContractItem extends Model
         $str = '<option value="0" selected>选择类型</option>';
         if ($data){
             foreach ($data as $k => $v) {
-                if ($type == $k) {
+                if ($type == $v['id']) {
                     $str .= '<option value="'.$v['id'].'" selected>'.$v['name'].'</option>';
                 } else {
                     $str .= '<option value="'.$v['id'].'">'.$v['name'].'</option>';
@@ -60,11 +60,11 @@ class ContractItem extends Model
 
     public static function getItemById($id=0)
     {
-        $data = self::field('remark')->where('id',$id)->find()->toArray();
+        $data = self::where('id',$id)->find()->toArray();
         return $data;
     }
 
-    public static function getItemByCat($cat)
+    public static function getItemByCat($cat,$id=0)
     {
         $map = [
             'cid'=>session('admin_user.cid'),
@@ -72,10 +72,10 @@ class ContractItem extends Model
             'cat_id'=>$cat
         ];
         $data = self::where($map)->select();
-        $str = '';
+        $str = '<option value="0" selected>选择合同模板</option>';
         if ($data){
             foreach ($data as $k => $v) {
-                if ($cat == $k) {
+                if ($id == $v['id']) {
                     $str .= '<option value="'.$v['id'].'" selected>'.$v['name'].'</option>';
                 } else {
                     $str .= '<option value="'.$v['id'].'">'.$v['name'].'</option>';

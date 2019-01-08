@@ -55,10 +55,17 @@
                 form.render('select');
             });
         });
+        if (formData.cat_id){
+            var open_url = "{:url('getContractItem')}?cat_id="+formData.cat_id+"&id="+formData.tpl_id;
+            $.post(open_url, function(data){
+                $(".field-tpl_id").html(data);
+                form.render('select');
+            });
+        }
         form.on('select(tpl_id)', function(data){
             var open_url = "{:url('getItemById')}?id="+data.value;
             $.post(open_url, function(data){
-                KindEditor.html('#ckeditor',data);
+                editor.html(data);
             });
         });
     });

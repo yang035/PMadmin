@@ -51,12 +51,6 @@ class SubjectContract extends Admin
             }
             $where['cid'] = session('admin_user.cid');
             $data['data'] = ContractModel::with('cat')->where($where)->page($page)->limit($limit)->select();
-            if ($data['data']) {
-                foreach ($data['data'] as $k => $v) {
-                    $v['content'] = htmlspecialchars_decode($v['content']);
-                    $v['report'] = htmlspecialchars_decode($v['report']);
-                }
-            }
             $data['count'] = ContractModel::where($where)->count('id');
             $data['code'] = 0;
             $data['msg'] = '';
@@ -83,7 +77,7 @@ class SubjectContract extends Admin
             }
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
-            unset($data['id']);
+            unset($data['id'],$data['contract_cat']);
 
             if (!ContractModel::create($data)) {
                 return $this->error('添加失败');
@@ -95,8 +89,8 @@ class SubjectContract extends Admin
         return $this->fetch('itemform');
     }
 
-    public function getContractItem($cat_id = 0){
-        $data = ContractItem::getItemByCat($cat_id);
+    public function getContractItem($cat_id = 0,$id=0){
+        $data = ContractItem::getItemByCat($cat_id,$id);
         echo $data;
     }
 
@@ -116,6 +110,7 @@ class SubjectContract extends Admin
             }
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
+            unset($data['contract_cat']);
             if (!ContractModel::update($data)) {
                 return $this->error('修改失败');
             }
@@ -125,7 +120,12 @@ class SubjectContract extends Admin
         if ($id) {
             $row = ContractModel::where('id', $id)->find()->toArray();
             $row['content'] = htmlspecialchars_decode($row['content']);
-            $row['report'] = htmlspecialchars_decode($row['report']);
+            if ($row){
+                $row1 = ContractItem::getItemById($row['tpl_id']);
+                $row['cat_id'] = $row1['cat_id'];
+                $this->assign('contract_cat', ContractItem::getOption($row1['cat_id']));
+            }
+
             $this->assign('data_info', $row);
         }
         return $this->fetch('itemform');

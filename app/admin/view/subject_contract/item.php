@@ -9,7 +9,7 @@
         <form class="layui-form layui-form-pane" action="{:url()}" method="get" id="hisi-table-search">
             <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">洽商记录</label>
+                <label class="layui-form-label">合同名称</label>
                 <div class="layui-input-inline">
                     <input type="text" name="name" value="{:input('get.name')}" placeholder="关键字" autocomplete="off" class="layui-input">
                     <input type="hidden" name="subject_id" value="{$Request.param.subject_id}">
@@ -54,11 +54,10 @@
             }
             ,cols: [[ //表头
                 {type:'checkbox'},
+                {field: 'name', title: '合同名称'},
                 {field: 'subject_id', title: '项目名称', templet:function(d){
                         return d.cat.name;
                     }},
-                {field: 'content', title: '洽商记录'},
-                {field: 'report', title: '洽商报告'},
                 {field: 'update_time', title: '时间'},
                 // {field: 'status', title: '状态', templet: '#statusTpl'},
                 {title: '操作', templet: '#buttonTpl'}
