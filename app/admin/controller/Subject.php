@@ -7,6 +7,7 @@
  */
 
 namespace app\admin\controller;
+
 use app\admin\model\SubjectCat as CatModel;
 use app\admin\model\SubjectItem as ItemModel;
 use app\admin\model\AdminUser;
@@ -15,6 +16,7 @@ use app\admin\model\AdminUser;
 class Subject extends Admin
 {
     public $tab_data = [];
+
     protected function _initialize()
     {
         parent::_initialize();
@@ -40,7 +42,7 @@ class Subject extends Admin
             $limit = input('param.limit/d', 20);
 
             $cat_id = input('param.cat_id/d');
-            if ($cat_id){
+            if ($cat_id) {
                 $where['cat_id'] = $cat_id;
             }
             $name = input('param.name');
@@ -67,16 +69,17 @@ class Subject extends Admin
 
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 1);
-        $this->assign('cat_option',ItemModel::getOption());
+        $this->assign('cat_option', ItemModel::getOption());
         return $this->fetch('item');
     }
+
     public function addItem()
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
             // 验证
             $result = $this->validate($data, 'SubjectItem');
-            if($result !== true) {
+            if ($result !== true) {
                 return $this->error($result);
             }
             $data['cid'] = session('admin_user.cid');
@@ -87,8 +90,8 @@ class Subject extends Admin
             }
             return $this->success("操作成功{$this->score_value}");
         }
-        $this->assign('subject_option',ItemModel::getOption());
-        $this->assign('p_source',ItemModel::getPsource());
+        $this->assign('subject_option', ItemModel::getOption());
+        $this->assign('p_source', ItemModel::getPsource());
 
         return $this->fetch('itemform');
     }
@@ -99,7 +102,7 @@ class Subject extends Admin
             $data = $this->request->post();
             // 验证
             $result = $this->validate($data, 'SubjectItem');
-            if($result !== true) {
+            if ($result !== true) {
                 return $this->error($result);
             }
             $data['cid'] = session('admin_user.cid');
@@ -112,8 +115,8 @@ class Subject extends Admin
 
         $row = ItemModel::where('id', $id)->find()->toArray();
         $this->assign('data_info', $row);
-        $this->assign('subject_option',ItemModel::getOption());
-        $this->assign('p_source',ItemModel::getPsource());
+        $this->assign('subject_option', ItemModel::getOption());
+        $this->assign('p_source', ItemModel::getPsource());
         return $this->fetch('itemform');
     }
 
@@ -158,7 +161,7 @@ class Subject extends Admin
             $data = $this->request->post();
             // 验证
             $result = $this->validate($data, 'SubjectCat');
-            if($result !== true) {
+            if ($result !== true) {
                 return $this->error($result);
             }
             $data['cid'] = session('admin_user.cid');
@@ -178,7 +181,7 @@ class Subject extends Admin
             $data = $this->request->post();
             // 验证
             $result = $this->validate($data, 'SubjectCat');
-            if($result !== true) {
+            if ($result !== true) {
                 return $this->error($result);
             }
             $data['cid'] = session('admin_user.cid');
@@ -186,13 +189,14 @@ class Subject extends Admin
             if (!CatModel::update($data)) {
                 return $this->error('修改失败');
             }
-            return $this->success('修改成功',url('cat'));
+            return $this->success('修改成功', url('cat'));
         }
 
         $row = CatModel::where('id', $id)->find()->toArray();
         $this->assign('data_info', $row);
         return $this->fetch('catform');
     }
+
     public function delCat()
     {
         $id = input('param.id/a');
@@ -203,7 +207,8 @@ class Subject extends Admin
         return $this->success('删除成功');
     }
 
-    public function addB($id = 0){
+    public function addB($id = 0)
+    {
         if ($this->request->isPost()) {
             $data = $this->request->post();
 
@@ -229,27 +234,59 @@ class Subject extends Admin
 
     }
 
+    public function addBaseUser($id = 0)
+    {
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            foreach ($data as $k => $v) {
+                if ('id' == $k) {
+                    continue;
+                }
+                $data[$k] = json_encode(user_array($v));
+            }
+            if (!ItemModel::update($data)) {
+                return $this->error('操作失败');
+            }
+            return $this->success('操作成功');
+        }
+        $row = ItemModel::where('id', $id)->find()->toArray();
+        if ($row) {
+            //截取部分数组，只需要_user的字段
+            $new_row = array_slice($row, 20);
+            foreach ($new_row as $k => $v) {
+                if (strpos($k, '_user')) {
+                    $row[$k . '_id'] = $this->deal_data($v);
+                    $row[$k] = $this->deal_data_id($v);
+                }
+            }
+        }
+        $this->assign('data_info', $row);
+        return $this->fetch();
+
+    }
+
     public function deal_data($x_user)
     {
-        $x_user_arr = json_decode($x_user,true);
+        $x_user_arr = json_decode($x_user, true);
         $x_user = [];
-        if ($x_user_arr){
-            foreach ($x_user_arr as $key=>$val){
+        if ($x_user_arr) {
+            foreach ($x_user_arr as $key => $val) {
                 $real_name = AdminUser::getUserById($key)['realname'];
-                if ('a' == $val){
-                    $real_name = "<font style='color: blue'>".$real_name."</font>";
+                if ('a' == $val) {
+                    $real_name = "<font style='color: blue'>" . $real_name . "</font>";
                 }
                 $x_user[] = $real_name;
             }
-            return implode(',',$x_user);
+            return implode(',', $x_user);
         }
     }
 
-    public function deal_data_id($x_user){
-        $x_user_arr = json_decode($x_user,true);
-        if ($x_user_arr){
+    public function deal_data_id($x_user)
+    {
+        $x_user_arr = json_decode($x_user, true);
+        if ($x_user_arr) {
             $tmp = array_keys($x_user_arr);
-            return implode(',',$tmp);
+            return implode(',', $tmp);
         }
         return '';
     }

@@ -109,6 +109,25 @@
         });
     }
 
+    function zujian_user(id) {
+        var open_url = "{:url('addBaseUser')}?id="+id;
+        if (open_url.indexOf('?') >= 0) {
+            open_url += '&hisi_iframe=yes';
+        } else {
+            open_url += '?hisi_iframe=yes';
+        }
+        layer.open({
+            type:2,
+            title :'添加人员',
+            maxmin: true,
+            area: ['900px', '600px'],
+            content: open_url,
+            success:function (layero, index) {
+                var body = layer.getChildFrame('body', index);  //巧妙的地方在这里哦
+            }
+        });
+    }
+
     function discuss_record(id) {
         var open_url = "{:url('SubjectRecord/index')}?subject_id="+id;
         if (open_url.indexOf('?') >= 0) {
