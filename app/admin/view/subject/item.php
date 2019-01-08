@@ -46,7 +46,6 @@
     <a href="#" onclick="b_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">乙方人员</a>
     <a href="#" onclick="discuss_record({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">洽商记录</a>
     <a href="#" onclick="contract({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">拟定合同</a>
-    <a href="#" onclick="contract_record({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">合同跟踪</a>
     <a href="#" onclick="zujian_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">组建项目组</a>
 </script>
 <script type="text/javascript">

@@ -39,7 +39,6 @@
     <a href="#" onclick="add_user('editItem',{$Request.param.subject_id},{{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
 <!--    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
     {/notempty}
-    <a href="#" onclick="contract_record({{ d.id }},'{{ d.cat.name }}')" class="layui-btn layui-btn-xs layui-btn-normal">合同跟踪</a>
 </script>
 <script type="text/javascript">
     layui.use(['jquery','table'], function() {
@@ -78,25 +77,6 @@
             title :'添加/编辑用户',
             maxmin: true,
             area: ['800px', '500px'],
-            content: open_url,
-            success:function (layero, index) {
-                var body = layer.getChildFrame('body', index);  //巧妙的地方在这里哦
-            }
-        });
-    }
-
-    function contract_record(id,name) {
-        var open_url = "{:url('SubjectContractLog/addItem')}?id="+id+"&subject_name="+name;
-        if (open_url.indexOf('?') >= 0) {
-            open_url += '&hisi_iframe=yes';
-        } else {
-            open_url += '?hisi_iframe=yes';
-        }
-        layer.open({
-            type:2,
-            title :'添加人员',
-            maxmin: true,
-            area: ['900px', '600px'],
             content: open_url,
             success:function (layero, index) {
                 var body = layer.getChildFrame('body', index);  //巧妙的地方在这里哦
