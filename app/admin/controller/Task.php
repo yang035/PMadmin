@@ -283,6 +283,7 @@ class Task extends Admin
         $cid = session('admin_user.cid');
         $map['cid'] = $cid;
         $map['t_type'] = 2;
+        $map['user_id'] = session('admin_user.uid');
         if ($params){
             if (!empty($params['name'])){
                 $map['name'] = ['like', '%'.$params['name'].'%'];
