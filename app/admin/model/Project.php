@@ -15,7 +15,7 @@ class Project extends Model
 {
     public static function index($where){
         $field = '*';
-        $result = self::field($field)->where($where)->order('grade desc,id desc')->select();
+        $result = self::field($field)->where($where)->order('grade desc')->select();
         return $result;
     }
     public static function getOption($id = 0)

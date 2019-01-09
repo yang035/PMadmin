@@ -1,7 +1,7 @@
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="form1">
     <div class="layui-form-item">
         <label class="layui-form-label">模板文件</label>
-        <div class="layui-form-mid"><a href="/template/tpl1.xlsx"><font style="color: red">点击下载模板</font></a></div>
+        <div class="layui-form-mid"><a href="/template/tpl2.xlsx"><font style="color: red">点击下载模板</font></a></div>
     </div>
     <div class="layui-upload">
         <label class="layui-form-label">选择文件</label>
@@ -21,6 +21,7 @@
             ,url: "{:url('doimport')}"
             ,auto: false
             ,accept: 'file' //普通文件
+            ,data: {id: '{$Request.param.id}'}
             ,bindAction: '#test9'
             ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
                 layer.load(); //上传loading
@@ -33,7 +34,10 @@
                     window.parent.location.reload();//刷新父页面
                     layer.msg('导入成功', {icon: 6});
                 }else{
-                    layer.msg('导入失败', {icon: 5});
+                    layer.alert(res.msg, function () {
+                        var index = parent.layer.getFrameIndex(window.name);//获取窗口索引
+                        parent.layer.close(index);//关闭layer
+                    },{icon: 5});
                 }
 
                 $('#res').html(res.info);

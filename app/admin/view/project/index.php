@@ -51,6 +51,7 @@
             <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="read">查看</a>
             <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="add">添加计划</a>
             <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">修改</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="import">导入</a>
 <!--            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
         </script>
     </div>
@@ -175,6 +176,22 @@
             } else if (layEvent === 'dep_auth') {
                 var open_url = "{:url('depAuth')}?id=" + id;
                 window.location.href = open_url;
+            }else if (layEvent === 'import') {
+                var open_url = "{:url('doimport')}?id=" + id;
+                if (open_url.indexOf('?') >= 0) {
+                    open_url += '&hisi_iframe=yes';
+                } else {
+                    open_url += '?hisi_iframe=yes';
+                }
+                layer.open({
+                    type:2,
+                    title :'导入',
+                    maxmin: true,
+                    area: ['800px', '500px'],
+                    content: open_url,
+                    success:function (layero, index) {
+                    }
+                });
             }
         });
     });
