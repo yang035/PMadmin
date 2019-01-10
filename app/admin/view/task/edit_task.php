@@ -72,34 +72,10 @@
                             </select>
                         </div>
                     </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">附件说明</label>
-                    <div class="layui-input-inline">
-                        <div class="layui-upload">
-                            <button type="button" class="layui-btn layui-btn-normal" id="testList"
-                                    style="display: none;">选择多文件
-                            </button>
-                            <div class="other-div" style="display: none">
-                                <div class="layui-upload-list">
-                                    <table class="layui-table">
-                                        <thead>
-                                        <tr>
-                                            <th>文件名</th>
-                                            <th>大小</th>
-                                            <th>状态</th>
-                                            <th>操作</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="demoList"></tbody>
-                                    </table>
-                                </div>
-                                <button type="button" class="layui-btn layui-btn-danger" id="testListAction">开始上传
-                                </button>
-                                <input class="layui-input field-attachment" type="hidden" name="attachment" value="">
-                            </div>
-                        </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">附件说明</label>
+                        <div class="layui-input-inline">无</div>
                     </div>
-                </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">负责人</label>
                     <div class="layui-input-inline">
@@ -196,6 +172,31 @@
                         <div class="layui-input-inline">
                             <textarea type="text" class="layui-textarea field-mark" name="mark"
                                       lay-verify="required" autocomplete="off" placeholder="请输入备注"></textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">附件说明</label>
+                        <div class="layui-input-inline">
+                            <div class="layui-upload">
+                                <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
+                                <div class="other-div" style="display: none">
+                                    <div class="layui-upload-list">
+                                        <table class="layui-table">
+                                            <thead>
+                                            <tr>
+                                                <th>文件名</th>
+                                                <th>大小</th>
+                                                <th>状态</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="demoList"></tbody>
+                                        </table>
+                                    </div>
+                                    <button type="button" class="layui-btn layui-btn-danger" id="testListAction">开始上传</button>
+                                    <input class="layui-input field-attachment" type="hidden" name="attachment" value="">
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="layui-form-item">

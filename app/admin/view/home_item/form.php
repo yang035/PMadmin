@@ -17,6 +17,13 @@
         <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">内容</label>
+        <div class="layui-input-block">
+            <textarea id="ckeditor" name="content" class="field-content"></textarea>
+        </div>
+    </div>
+    {:editor(['ckeditor', 'ckeditor2'],'kindeditor')}
+    <div class="layui-form-item">
         <label class="layui-form-label">概述</label>
         <div class="layui-input-inline">
             <textarea type="text" class="layui-textarea field-summarize" name="summarize" autocomplete="off" placeholder="请输入概述"></textarea>
@@ -75,13 +82,6 @@
             </div>
         </div>
     </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">内容</label>
-        <div class="layui-input-block">
-            <textarea id="ckeditor" name="content" class="field-content"></textarea>
-        </div>
-    </div>
-    {:editor(['ckeditor', 'ckeditor2'],'kindeditor')}
     <div class="layui-form-item">
         <label class="layui-form-label">推&nbsp;&nbsp;&nbsp;&nbsp;荐</label>
         <div class="layui-input-inline">
