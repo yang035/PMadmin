@@ -24,6 +24,9 @@ class UploadFile extends Admin
                 $map['name'] = ['like', '%'.$q.'%'];
             }
         }
+        if (2 != session('admin_user.depid')){
+            $map['user_id'] = session('admin_user.uid');
+        }
 
         $data_list = UploadFileModel::where($map)->order('id desc')->paginate(30, false, ['query' => input('get.')]);
         if ($data_list){

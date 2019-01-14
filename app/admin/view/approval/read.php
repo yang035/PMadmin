@@ -157,6 +157,7 @@
             <br>
             结果：{$approval_status[$data_list['status']]}<br>
             意见：{$data_list['mark']}<br>
+            批示时间：{$data_list['update_time']|date='Y-m-d H:i:s',###}<br>
             {/if}
         </div>
     </div>
