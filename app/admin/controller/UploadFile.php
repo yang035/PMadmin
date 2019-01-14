@@ -3,6 +3,7 @@ namespace app\admin\controller;
 
 use app\admin\model\AdminUser;
 use app\common\model\UploadFile as UploadFileModel;
+use app\admin\model\AdminDepartment;
 use think\Request;
 
 
@@ -24,8 +25,25 @@ class UploadFile extends Admin
                 $map['name'] = ['like', '%'.$q.'%'];
             }
         }
-        if (2 != session('admin_user.depid')){
-            $map['user_id'] = session('admin_user.uid');
+        $sid = session('admin_user.depid');
+        if ($sid){
+            $dep_id = [];
+            $childs = AdminDepartment::getRowById($sid);
+            if ($childs){
+                $where = [
+                    'code' => ['like',$childs['code'].$sid.'d%'],
+                ];
+                $dep_id = AdminDepartment::where($where)->column('id');
+            }
+            array_push($dep_id,$sid);
+            $where =[
+                'department_id' => ['in',implode(',',$dep_id)],
+            ];
+
+            $user_id = AdminUser::where($where)->column('id');
+            $map =[
+                'user_id' => ['in',implode(',',$user_id)],
+            ];
         }
 
         $data_list = UploadFileModel::where($map)->order('id desc')->paginate(30, false, ['query' => input('get.')]);

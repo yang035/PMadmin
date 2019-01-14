@@ -722,8 +722,8 @@ class Approval extends Admin
             case 8:
                 $list['before_img'] = json_decode($list['before_img'],true);
                 $list['after_img'] = json_decode($list['after_img'],true);
-                $car_type = config('other.car_type');
-                $this->assign('car_type',$car_type);
+//                $car_type = config('other.car_type');
+                $this->assign('car_type',CarModel::getCarItem());
                 break;
             case 9:
                 break;
