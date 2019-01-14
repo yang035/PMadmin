@@ -252,10 +252,14 @@ class DailyReport extends Admin
     public function statistics(){
         $params = $this->request->param();
         $cid = session('admin_user.cid');
-        $d = date('Y-m-d',strtotime('-1 day'));
+        $d = date('Y-m-d',strtotime('-1 day')).' - '.date('Y-m-d');
         if (isset($params['search_date']) && !empty($params['search_date'])){
             $d = $params['search_date'];
         }
+        $d_arr = explode(' - ',$d);
+        $d0 = $d_arr[0].' 00:00:00';
+        $d1 = $d_arr[1].' 23:59:59';
+
         $fields = 'u.id,u.realname,tmp.num';
         $where =[
             'u.company_id'=>$cid,
@@ -268,12 +272,45 @@ class DailyReport extends Admin
                 $where['u.realname'] = ['like', '%'.$params['realname'].'%'];
             }
         }
+        if (isset($params['export']) && 1 == $params['export']){
+            set_time_limit(0);
+            $data_list = Db::table('tb_admin_user u')->field($fields)
+                ->join("(SELECT user_id,COUNT(DISTINCT create_time) AS num FROM tb_daily_report WHERE cid={$cid} and create_time between '{$d0}' and '{$d1}' GROUP BY user_id) tmp",'u.id=tmp.user_id','left')
+                ->where($where)->order('u.id asc')->select();
+//            $data_list = Db::table('tb_admin_user u')->field($fields)
+//                ->join("(SELECT user_id,COUNT(DISTINCT create_time) AS num FROM tb_daily_report WHERE cid={$cid} and create_time between '{$d0}' and '{$d1}' GROUP BY user_id) tmp",'u.id=tmp.user_id','left')
+//                ->where($where)->order('u.id asc')->buildSql();
+            vendor('PHPExcel.PHPExcel');
+            $objPHPExcel = new \PHPExcel();
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A1', '姓名')
+                ->setCellValue('B1', '数量');
+            foreach ($data_list as $k => $v) {
+                $num = $k + 2;
+                $objPHPExcel->setActiveSheetIndex(0)
+                    //Excel的第A列，uid是你查出数组的键值，下面以此类推
+                    ->setCellValue('A' . $num, $v['realname'])
+                    ->setCellValue('B' . $num, $v['num']);
+            }
+            $name = $d.'日报统计';
+            $objPHPExcel->getActiveSheet()->setTitle($d);
+            $objPHPExcel->setActiveSheetIndex(0);
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="' . $name . '.xls"');
+            header('Cache-Control: max-age=0');
+            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            $objWriter->save('php://output');
+            exit;
+        }
         $data_list = Db::table('tb_admin_user u')->field($fields)
-            ->join("(SELECT user_id,COUNT(DISTINCT create_time) AS num FROM tb_daily_report WHERE cid={$cid} and create_time like '{$d}%' GROUP BY user_id) tmp",'u.id=tmp.user_id','left')
+            ->join("(SELECT user_id,COUNT(DISTINCT create_time) AS num FROM tb_daily_report WHERE cid={$cid} and create_time between '{$d0}' and '{$d1}' GROUP BY user_id) tmp",'u.id=tmp.user_id','left')
             ->where($where)->order('u.id asc')->paginate(30, false, ['query' => input('get.')]);
 //        $data_list = Db::table('tb_admin_user u')->field($fields)
-//            ->join("(SELECT user_id,COUNT(id) AS num FROM tb_daily_report WHERE cid={$cid} and create_time like '{$d}%' GROUP BY user_id) tmp",'u.id=tmp.user_id','left')
+//            ->join("(SELECT user_id,COUNT(DISTINCT create_time) AS num FROM tb_daily_report WHERE cid={$cid} and create_time between '{$d0}' and '{$d1}' GROUP BY user_id) tmp",'u.id=tmp.user_id','left')
 //            ->where($where)->buildSql();
+//        print_r($data_list);
         // 分页
         $pages = $data_list->render();
         $this->assign('data_list', $data_list);
@@ -284,9 +321,10 @@ class DailyReport extends Admin
 
     public function detail(){
         $params = $this->request->param();
+        $search_date = explode('+-+',$params['search_date']);
         $where =[
             'r.user_id'=>$params['uid'],
-            'r.create_time'=>['like', '%'.$params['search_date'].'%'],
+            'r.create_time'=>['between', [$search_date[0],$search_date[1]]],
         ];
         $fields = 'r.*,u.realname';
         $data_list = Db::table('tb_daily_report r')->field($fields)
