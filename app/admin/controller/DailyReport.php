@@ -323,7 +323,6 @@ class DailyReport extends Admin
     public function detail(){
         $params = $this->request->param();
         $search_date = explode('+-+',$params['search_date']);
-        print_r($search_date);
         $where =[
             'r.user_id'=>$params['uid'],
             'r.create_time'=>['between', [$search_date[0].' 00:00:00',$search_date[1].' 23:59:59']],
