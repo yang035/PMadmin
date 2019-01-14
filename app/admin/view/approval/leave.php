@@ -126,7 +126,7 @@ layui.use(['jquery', 'laydate','upload','form'], function() {
         elem: '.field-start_time',
         type: 'date',
         calendar: true,
-        min: 0,
+        // min: 0,
         trigger: 'click',
         value: new Date(),
         showBottom: false,
@@ -148,7 +148,7 @@ layui.use(['jquery', 'laydate','upload','form'], function() {
         calendar: true,
         trigger: 'click',
         value: new Date(),
-        min: 0,
+        // min: 0,
     });
     laydate.render({
         elem: '.field-end_time1',
