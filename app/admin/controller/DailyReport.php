@@ -20,7 +20,7 @@ class DailyReport extends Admin
     protected function _initialize()
     {
         parent::_initialize();
-
+        $sta_count = $this->getApprovalCount();
         $tab_data['menu'] = [
             [
                 'title' => '汇报',
@@ -28,24 +28,41 @@ class DailyReport extends Admin
                 'params' =>['atype'=>1],
             ],
             [
-                'title' => '我的汇报',
+                'title' => "我的汇报<span class='layui-badge layui-bg-orange'>{$sta_count['user_num']}</span>",
                 'url' => 'admin/DailyReport/index',
                 'params' =>['atype'=>2],
             ],
             [
-                'title' => '汇报给我的',
+                'title' => "汇报给我的<span class='layui-badge'>{$sta_count['send_num']}</span>",
                 'url' => 'admin/DailyReport/index',
                 'params' =>['atype'=>3],
             ],
             [
-                'title' => '抄送我的',
+                'title' => "抄送我的<span class='layui-badge layui-bg-orange'>{$sta_count['copy_num']}</span>",
                 'url' => 'admin/DailyReport/index',
                 'params' =>['atype'=>4],
+            ],
+            [
+                'title' => "汇报人已读<span class='layui-badge layui-bg-orange'>{$sta_count['has_num']}</span>",
+                'url' => 'admin/DailyReport/index',
+                'params' =>['atype'=>5],
             ],
         ];
         $tab_data['current'] = url('index',['atype'=>1]);
         $this->tab_data = $tab_data;
     }
+
+    public function getApprovalCount(){
+        $map['cid'] = session('admin_user.cid');
+        $uid = session('admin_user.uid');
+        $fields = "SUM(IF(user_id='{$uid}',1,0)) user_num,
+        SUM(IF(JSON_EXTRACT(send_user,'$.\"$uid\"') = '',1,0)) send_num,
+        SUM(IF(JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"'),1,0)) copy_num,
+        SUM(IF(JSON_EXTRACT(send_user,'$.\"$uid\"') = 'a',1,0)) has_num";
+        $count = DailyReportModel::field($fields)->where($map)->find()->toArray();
+        return $count;
+    }
+
     public function index()
     {
         $params = $this->request->param();
@@ -78,10 +95,13 @@ class DailyReport extends Admin
                 $map['user_id'] = session('admin_user.uid');
                 break;
             case 3:
-                $con = "JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"')";
+                $con = "JSON_EXTRACT(send_user,'$.\"$uid\"') = ''";
                 break;
             case 4:
                 $con = "JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"')";
+                break;
+            case 5:
+                $con = "JSON_EXTRACT(send_user,'$.\"$uid\"') = 'a'";
                 break;
             default:
                 $con = "";

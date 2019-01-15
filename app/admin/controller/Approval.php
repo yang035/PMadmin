@@ -29,35 +29,35 @@ class Approval extends Admin
     protected function _initialize()
     {
         parent::_initialize();
-
+        $sta_count = $this->getApprovalCount();
         $tab_data['menu'] = [
             [
-                'title' => '发起申请',
+                'title' => "发起申请",
                 'url' => 'admin/approval/index',
                 'params' =>['atype'=>1],
             ],
             [
-                'title' => '我的申请',
+                'title' => "我的申请<span class='layui-badge layui-bg-orange'>{$sta_count['user_num']}</span>",
                 'url' => 'admin/approval/index',
                 'params' =>['atype'=>2],
             ],
             [
-                'title' => '待我审批',
+                'title' => "待我审批<span class='layui-badge'>{$sta_count['send_num']}</span>",
                 'url' => 'admin/approval/index',
                 'params' =>['atype'=>3],
             ],
             [
-                'title' => '抄送我的',
+                'title' => "抄送我的<span class='layui-badge layui-bg-orange'>{$sta_count['copy_num']}</span>",
                 'url' => 'admin/approval/index',
                 'params' =>['atype'=>4],
             ],
             [
-                'title' => '我参与的',
+                'title' => "我参与的<span class='layui-badge layui-bg-orange'>{$sta_count['deal_num']}</span>",
                 'url' => 'admin/approval/index',
                 'params' =>['atype'=>5],
             ],
             [
-                'title' => '已审批',
+                'title' => "已审批<span class='layui-badge layui-bg-orange'>{$sta_count['has_num']}</span>",
                 'url' => 'admin/approval/index',
                 'params' =>['atype'=>6],
             ],
@@ -97,6 +97,18 @@ class Approval extends Admin
             return implode(',',$tmp);
         }
         return '';
+    }
+
+    public function getApprovalCount(){
+        $map['cid'] = session('admin_user.cid');
+        $uid = session('admin_user.uid');
+        $fields = "SUM(IF(user_id='{$uid}',1,0)) user_num,
+        SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status=1,1,0)) send_num,
+        SUM(IF(JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"'),1,0)) copy_num,
+        SUM(IF(JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"'),1,0)) deal_num,
+        SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status>1,1,0)) has_num";
+        $count = ApprovalModel::field($fields)->where($map)->find()->toArray();
+        return $count;
     }
 
     public function index()

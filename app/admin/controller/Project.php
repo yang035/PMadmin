@@ -449,29 +449,6 @@ class Project extends Admin
     public function mytask($type = 1)
     {
         $params = $this->request->param();
-        $tab_data['menu'] = [
-            [
-                'title' => '我参与的',
-                'url' => 'admin/project/mytask',
-                'params' => ['type' => 1],
-            ],
-            [
-                'title' => '我负责的',
-                'url' => 'admin/project/mytask',
-                'params' => ['type' => 2],
-            ],
-            [
-                'title' => '我审批的',
-                'url' => 'admin/project/mytask',
-                'params' => ['type' => 3],
-            ],
-            [
-                'title' => '抄送我的',
-                'url' => 'admin/project/mytask',
-                'params' => ['type' => 4],
-            ],
-        ];
-        $tab_data['current'] = url('mytask', ['type' => 1]);
         $map = [];
         $cid = session('admin_user.cid');
         $map['cid'] = $cid;
@@ -485,6 +462,43 @@ class Project extends Admin
             }
         }
         $uid = session('admin_user.uid');
+
+        $fields = "SUM(IF(JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"') AND send_user LIKE '%a%',1,0)) deal_num,
+        SUM(IF(JSON_CONTAINS_PATH(manager_user,'one', '$.\"$uid\"'),1,0)) manager_num,
+        SUM(IF(JSON_EXTRACT(send_user,'$.\"$uid\"') = '',1,0)) send_num,
+        SUM(IF(JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"'),1,0)) copy_num,
+        SUM(IF(JSON_EXTRACT(send_user,'$.\"$uid\"') = 'a',1,0)) has_num";
+        $sta_count = ProjectModel::field($fields)->where($map)->find()->toArray();
+
+        $tab_data['menu'] = [
+            [
+                'title' => "我参与的<span class='layui-badge layui-bg-orange'>{$sta_count['deal_num']}</span>",
+                'url' => 'admin/project/mytask',
+                'params' => ['type' => 1],
+            ],
+            [
+                'title' => "我负责的<span class='layui-badge layui-bg-orange'>{$sta_count['manager_num']}</span>",
+                'url' => 'admin/project/mytask',
+                'params' => ['type' => 2],
+            ],
+            [
+                'title' => "待我审批<span class='layui-badge'>{$sta_count['send_num']}</span>",
+                'url' => 'admin/project/mytask',
+                'params' => ['type' => 3],
+            ],
+            [
+                'title' => "抄送我的<span class='layui-badge layui-bg-orange'>{$sta_count['copy_num']}</span>",
+                'url' => 'admin/project/mytask',
+                'params' => ['type' => 4],
+            ],
+            [
+                'title' => "已审批的<span class='layui-badge layui-bg-orange'>{$sta_count['has_num']}</span>",
+                'url' => 'admin/project/mytask',
+                'params' => ['type' => 5],
+            ],
+        ];
+        $tab_data['current'] = url('mytask', ['type' => 1]);
+
         switch ($params['type']) {
             case 1:
                 $con = "JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"') AND send_user LIKE '%a%'";
@@ -493,10 +507,13 @@ class Project extends Admin
                 $con = "JSON_CONTAINS_PATH(manager_user,'one', '$.\"$uid\"')";
                 break;
             case 3:
-                $con = "JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"')";
+                $con = "JSON_EXTRACT(send_user,'$.\"$uid\"') = ''";
                 break;
             case 4:
                 $con = "JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"')";
+                break;
+            case 5:
+                $con = "JSON_EXTRACT(send_user,'$.\"$uid\"') = 'a'";
                 break;
             default:
                 $con = "JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"')";
