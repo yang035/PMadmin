@@ -175,7 +175,7 @@ class DailyReport extends Admin
 
             $project_code = ProjectModel::getColumn('code');
             $gl_score = sumLineScore($data['content'])+sumLineScore($data['plan'])+sumLineScore($data['question'])+sumLineScore($data['tips']);
-            $ins_data['content'] = json_encode(array_values(array_filter($data['content'])));
+//            $ins_data['content'] = json_encode(array_values(array_filter($data['content'])));
             $ins_data['plan'] = json_encode(array_values(array_filter($data['plan'])));
             $ins_data['question'] = json_encode(array_values(array_filter($data['question'])));
             $ins_data['tips'] = json_encode(array_values(array_filter($data['tips'])));
@@ -194,6 +194,7 @@ class DailyReport extends Admin
                 $tmp[$k]['project_id'] = $data['project_id'][$k];
                 $tmp[$k]['project_code'] = $project_code[$data['project_id'][$k]];
                 $tmp[$k]['real_per'] = $v;
+                $tmp[$k]['content'] = json_encode([$data['content'][$k]]);
                 $ins_data_all[$k] = array_merge($tmp[$k],$ins_data);
             }
 

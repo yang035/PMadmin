@@ -75,6 +75,7 @@ class Project extends Model
     public static function getMyTask($id=0,$option=1){
         $cid = session('admin_user.cid');
         $map['cid'] = $cid;
+        $map['pid'] = 0;
         $uid = session('admin_user.uid');
         $con = "JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"')";
         $list = self::where($map)->where($con)->order('grade desc,create_time desc')->column('name','id');
