@@ -287,6 +287,7 @@ class DailyReport extends Admin
             'u.role_id'=>['not in',[1,2]],
             'u.status'=>1,
             'u.is_show'=>0,
+            'u.department_id'=>['>',2]
         ];
 
         if ($params){

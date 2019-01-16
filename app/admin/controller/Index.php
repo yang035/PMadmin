@@ -37,8 +37,10 @@ class Index extends Admin
         SUM(IF(JSON_EXTRACT(send_user,'$.\"$uid\"') = 'a',1,0)) has_num";
             $sta_count['task'] = ProjectModel::field($task_fields)->where($map)->find()->toArray();
 
+            //查询1个月之内的
             $map = [
                 'cid'=>session('admin_user.cid'),
+                'create_time'=>['>',date("Y-m-d H:i:s", strtotime("-1 month"))],
             ];
             $approval_fields = "SUM(IF(user_id='{$uid}',1,0)) user_num,
         SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status=1,1,0)) send_num,
@@ -47,8 +49,10 @@ class Index extends Admin
         SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status>1,1,0)) has_num";
             $sta_count['approval'] = ApprovalModel::field($approval_fields)->where($map)->find()->toArray();
 
+            //查询1个月之内的
             $map = [
                 'cid'=>session('admin_user.cid'),
+                'create_time'=>['>',date("Y-m-d H:i:s", strtotime("-1 month"))],
             ];
             $daily_fields = "SUM(IF(user_id='{$uid}',1,0)) user_num,
         SUM(IF(JSON_EXTRACT(send_user,'$.\"$uid\"') = '',1,0)) send_num,
