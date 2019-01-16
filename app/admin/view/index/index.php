@@ -43,5 +43,96 @@
     if (option && typeof option === "object") {
         myChart.setOption(option, true);
     }
+    myChart.on('click', function (params) {
+        var bar_id = params.seriesIndex;
+        // console.log(bar_id);
+        // 控制台打印数据的名称
+        if (0 == params.dataIndex){
+            switch (bar_id) {
+                case 0:
+                    bar_id = 3;
+                    break;
+                case 1:
+                    bar_id = 4;
+                    break;
+                case 2:
+                    bar_id = 5;
+                    break;
+                case 3:
+                    bar_id = 2;
+                    break;
+                case 4:
+                    bar_id = 1;
+                    break;
+                default:
+                    bar_id = 1;
+                    break;
+            }
+            window.open("{:url('Project/mytask')}?type="+ encodeURIComponent(bar_id));
+        } else if (1 == params.dataIndex) {
+            switch (bar_id) {
+                case 0:
+                    bar_id = 3;
+                    break;
+                case 1:
+                    bar_id = 4;
+                    break;
+                case 2:
+                    bar_id = 5;
+                    break;
+                case 3:
+                    bar_id = 2;
+                    break;
+                case 4:
+                    bar_id = 1;
+                    break;
+                default:
+                    bar_id = 1;
+                    break;
+            }
+            window.open("{:url('task/mytask')}?type="+ encodeURIComponent(bar_id));
+        } else if (2 == params.dataIndex) {
+            switch (bar_id) {
+                case 0:
+                    bar_id = 3;
+                    break;
+                case 1:
+                    bar_id = 4;
+                    break;
+                case 2:
+                    bar_id = 6;
+                    break;
+                case 4:
+                    bar_id = 5;
+                    break;
+                case 5:
+                    bar_id = 2;
+                    break;
+                default:
+                    bar_id = 1;
+                    break;
+            }
+            window.open("{:url('Approval/index')}?atype="+ encodeURIComponent(bar_id));
+        } else if (3 == params.dataIndex) {
+            switch (bar_id) {
+                case 0:
+                    bar_id = 3;
+                    break;
+                case 1:
+                    bar_id = 4;
+                    break;
+                case 2:
+                    bar_id = 5;
+                    break;
+                case 5:
+                    bar_id = 2;
+                    break;
+                default:
+                    bar_id = 1;
+                    break;
+            }
+            window.open("{:url('DailyReport/index')}?atype="+ encodeURIComponent(bar_id));
+        }
+    });
 </script>
 {include file="block/layui" /}
