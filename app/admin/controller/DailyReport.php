@@ -375,7 +375,11 @@ class DailyReport extends Admin
             foreach ($row as $k=>$v){
                 $data_list['arr'][$k]['project_name'] = ProjectModel::index(['id'=>$v['project_id']])[0]['name'];
                 $data_list['arr'][$k]['real_per'] = $v['real_per'];
-                $data_list['arr'][$k]['content'] = $content[$k];
+                if (count($content) == 1){
+                    $data_list['arr'][$k]['content'] = $content[0];
+                }else{
+                    $data_list['arr'][$k]['content'] = $content[$k];
+                }
             }
             $data_list['plan'] = json_decode($row[0]['plan'],true);
             $data_list['question'] = json_decode($row[0]['question'],true);

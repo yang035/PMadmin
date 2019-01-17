@@ -60,7 +60,7 @@
                     <div id="gtco-logo"><a href="/admin.php" target="_blank"><img src="__PUBLIC_JS__/index/images/logo.png" title="进入工作"></a></div>
                 </div>
                 <div class="col-sm-4 col-xs-12">
-                    <div>良友圈层无限设计生活空间</div>
+                    <div>{$signword}</div>
                 </div>
                 <div class="col-xs-6 text-right menu-1">
                     <ul>
