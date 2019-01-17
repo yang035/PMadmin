@@ -21,6 +21,7 @@ use app\admin\model\AssetItem as ItemModel;
 use app\admin\model\ApprovalGoods;
 use app\admin\model\ApprovalPrint;
 use app\admin\model\Project as ProjectModel;
+use think\Db;
 
 
 class Approval extends Admin
@@ -166,6 +167,7 @@ class Approval extends Admin
 
         $list = ApprovalModel::where($map)->where($con)->order('create_time desc')->paginate(10, false, ['query' => input('get.')]);
         foreach ($list as $k=>$v){
+            $list[$k]['send_user'] = $this->deal_data($v['send_user']);
             $list[$k]['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
         }
         $approval_status = config('other.approval_status');
@@ -645,7 +647,19 @@ class Approval extends Admin
             }elseif (3 == $data['atype']){
                 unset($data['atype'],$data['class_type']);
 //                $res= ApprovalModel::where('id',$data['id'])->setField('status',$data['status']);
-                $res = ApprovalModel::update($data);
+                //事务提交，保证数据一致性
+                Db::startTrans();
+                try{
+                    ApprovalModel::update($data);
+                    $uid = session('admin_user.uid');
+                    $sql = "UPDATE tb_approval SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$data['id']}";
+                    $res= ApprovalModel::execute($sql);
+                    // 提交事务
+                    Db::commit();
+                } catch (\Exception $e) {
+                    // 回滚事务
+                    Db::rollback();
+                }
             }
             if (!$res){
                 return $this->error('处理失败！');

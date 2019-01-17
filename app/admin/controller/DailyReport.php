@@ -110,6 +110,7 @@ class DailyReport extends Admin
 
         $list = DailyReportModel::where($map)->where($con)->order('create_time desc')->paginate(10, false, ['query' => input('get.')]);
         foreach ($list as $k=>$v){
+            $v['send_user'] = $this->deal_data($v['send_user']);
             $v['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
             $v['project_name'] = ProjectModel::index(['id'=>$v['project_id']])[0]['name'];
         }
