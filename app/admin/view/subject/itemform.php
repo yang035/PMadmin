@@ -156,7 +156,7 @@
             elem: '.field-end_time',
             type: 'datetime',
             trigger: 'click',
-            value: new Date(),
+            value: getNextDate(),
             min: $("input[name='start_time']").val(),
             change: function(value){
                 // $(".laydate-btns-time").click();
@@ -165,6 +165,14 @@
                 getTimeLong(value);
             },
         });
+
+        function getNextDate() {
+            var time = new Date().getTime();
+            return new Date(time).Format('yyyy-MM-dd HH:mm:ss') + ' 23:59:59';
+        }
+        //写入时长
+        getTimeLong(getNextDate());
+
         //计算两个时间差
         function getTimeLong(value) {
             var timeLong,time1 = $('.field-start_time').val();
@@ -183,7 +191,6 @@
             timeLong = days+"天"+hours+"小时"+minutes+"分钟"+seconds+"秒";
             $('.field-time_long').val(timeLong);
         }
-
 
         //多文件列表示例
         var demoListView = $('#demoList'),uploadListIns = upload.render({

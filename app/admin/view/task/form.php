@@ -169,7 +169,7 @@ layui.use(['jquery', 'laydate','upload'], function() {
         elem: '.field-end_time',
         type: 'datetime',
         trigger: 'click',
-        value: new Date(),
+        value: getNextDate(),
         min: $("input[name='start_time']").val(),
         change: function(value){
             // $(".laydate-btns-time").click();
@@ -178,6 +178,12 @@ layui.use(['jquery', 'laydate','upload'], function() {
             getTimeLong(value);
         },
     });
+    function getNextDate() {
+        var time = new Date().getTime();
+        return new Date(time).Format('yyyy-MM-dd') + ' 23:59:59';
+    }
+    //写入时长
+    getTimeLong(getNextDate());
     //计算两个时间差
     function getTimeLong(value) {
         var timeLong,time1 = $('.field-start_time').val();
