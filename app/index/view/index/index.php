@@ -343,7 +343,7 @@
                 <div class="owl-carousel owl-carousel-carousel">
                     {volist name="data_live" id="vo"}
                     <div class="item">
-                        <a href="{:url('detail',['id'=>$vo['id']])}"></a><img src="{$vo['thumb']}" alt="Free HTML5 Bootstrap Template by GetTemplates.co">
+                        <a href="{:url('detail',['id'=>$vo['id']])}"><img src="{$vo['thumb']}" alt="Free HTML5 Bootstrap Template by GetTemplates.co"></a>
                     </div>
                     {/volist}
                 </div>
