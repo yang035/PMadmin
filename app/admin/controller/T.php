@@ -23,7 +23,9 @@ class T extends Controller
             unset($v['pid'],$v['code'],$v['node'],$v['pic'],$v['contact'],$v['phone'],$v['result']);
 //            print_r(json_decode(json_encode($v),true));exit();
             $v = json_decode(json_encode($v),true);
-            $v['idcard'] = rand(100,1000);
+            $v['idcard'] = rand(100000,999999);
+            $v['create_time'] = strtotime($v['create_time']);
+            $v['update_time'] = strtotime($v['update_time']);
             SubjectItem::create($v);
         }
     }

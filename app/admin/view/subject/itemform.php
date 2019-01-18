@@ -87,6 +87,22 @@
             </div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label">紧急程度</label>
+            <div class="layui-input-inline">
+                <select name="grade" class="field-grade" type="select" lay-filter="grade">
+                    {$grade_type}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">项目属性</label>
+            <div class="layui-input-inline">
+                <select name="t_type" class="field-t_type" type="select" lay-filter="t_type">
+                    {$t_type}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">附件说明</label>
             <div class="layui-input-inline">
                 <!--            <div class="layui-upload">-->

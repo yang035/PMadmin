@@ -14,6 +14,7 @@ use app\admin\model\CheckCat as CatModel;
 use app\admin\model\CheckItem as ItemModel;
 use app\admin\model\ProjectScorelog as ScorelogModel;
 use app\admin\controller\ProjectReport;
+use app\admin\model\SubjectCat;
 use think\Db;
 
 class Project extends Admin
@@ -24,35 +25,27 @@ class Project extends Admin
     {
         parent::_initialize();
 
-        $tab_data['menu'] = [
-            [
-                'title' => '市政',
-                'url' => 'admin/Project/index',
-                'params' => ['atype' => 1],
-            ],
-            [
-                'title' => '住宅',
-                'url' => 'admin/Project/index',
-                'params' => ['atype' => 2],
-            ],
-            [
-                'title' => '旅游',
-                'url' => 'admin/Project/index',
-                'params' => ['atype' => 3],
-            ],
-            [
-                'title' => '其他',
-                'url' => 'admin/Project/index',
-                'params' => ['atype' => 5],
-            ],
-            [
-                'title' => '全部',
-                'url' => 'admin/Project/index',
-                'params' => ['atype' => 4],
-            ],
-        ];
+        $tab_data['menu'] = $this->getMenu();
         $tab_data['current'] = url('index', ['atype' => 1]);
         $this->tab_data = $tab_data;
+    }
+
+    public function getMenu(){
+        $where = [
+            'cid'=>session('admin_user.cid'),
+        ];
+        $list = [];
+        $list = SubjectCat::where($where)->column('name','id');
+        $tmp = [0=>'全部'];
+        $data = $list + $tmp;
+        foreach ($data as $k=>$v){
+            $res[] = [
+                'title' => $v,
+                'url' => 'admin/Project/index',
+                'params' => ['atype' => $k],
+            ];
+        }
+        return $res;
     }
 
     public function deal_data($x_user)
@@ -88,22 +81,10 @@ class Project extends Admin
 //        print_r($params['atype']);exit();
         $params['atype'] = isset($params['atype']) ? $params['atype'] : 1;
         switch ($params['atype']) {
-            case 1:
-                $map['cat_id'] = 1;
-                break;
-            case 2:
-                $map['cat_id'] = 2;
-                break;
-            case 3:
-                $map['cat_id'] = 3;
-                break;
-            case 4:
-                break;
-            case 5:
-                $map['cat_id'] = 5;
+            case 0:
                 break;
             default:
-                $map['cat_id'] = 1;
+                $map['cat_id'] = $params['atype'];
                 break;
         }
 

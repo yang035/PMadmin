@@ -11,6 +11,8 @@ namespace app\admin\controller;
 use app\admin\model\SubjectCat as CatModel;
 use app\admin\model\SubjectItem as ItemModel;
 use app\admin\model\AdminUser;
+use app\admin\model\Project as ProjectModel;
+use think\Db;
 
 
 class Subject extends Admin
@@ -85,14 +87,40 @@ class Subject extends Admin
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
             unset($data['id']);
-            if (!ItemModel::create($data)) {
+//            print_r($data);exit();
+//            $flag = ItemModel::create($data);
+//            print_r($flag);exit();
+            Db::startTrans();
+            try{
+                $flag = ItemModel::create($data);
+                unset($data['idcard']);
+
+                $code = (1 == $data['t_type']) ? session('admin_user.cid').'p' : session('admin_user.cid').'t';
+                $data['pid'] = 0;
+                $data['code'] = $code;
+                $data['subject_id'] = $flag['id'];
+                $flag1 = ProjectModel::create($data);
+                $res = ProjectModel::where('id',$flag1['id'])->setField('node',$flag1['id']);
+                // 提交事务
+                Db::commit();
+            } catch (\Exception $e) {
+                // 回滚事务
+                Db::rollback();
+            }
+//            if (!ItemModel::create($data)) {
+//                return $this->error('添加失败');
+//            }
+            if ($res){
+                return $this->success("操作成功{$this->score_value}");
+            }else{
                 return $this->error('添加失败');
             }
-            return $this->success("操作成功{$this->score_value}");
+
         }
         $this->assign('subject_option', ItemModel::getOption());
         $this->assign('p_source', ItemModel::getPsource());
-
+        $this->assign('grade_type', ProjectModel::getGrade());
+        $this->assign('t_type', ProjectModel::getTType());
         return $this->fetch('itemform');
     }
 
@@ -107,9 +135,29 @@ class Subject extends Admin
             }
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
-            if (!ItemModel::update($data)) {
-                return $this->error('修改失败');
+//            $res = [];
+            Db::startTrans();
+            try{
+                $flag = ItemModel::update($data);
+                unset($data['idcard'],$data['id']);
+                $code = (1 == $data['t_type']) ? session('admin_user.cid').'p' : session('admin_user.cid').'t';
+                $data['pid'] = 0;
+                $data['code'] = $code;
+                $res = ProjectModel::where('subject_id',$flag['id'])->update($data);
+//                // 提交事务
+                Db::commit();
+            } catch (\Exception $e) {
+                // 回滚事务
+                Db::rollback();
             }
+            if ($res){
+                return $this->success("操作成功{$this->score_value}");
+            }else{
+                return $this->error('添加失败');
+            }
+//            if (!ItemModel::update($data)) {
+//                return $this->error('修改失败');
+//            }
             return $this->success('修改成功');
         }
 
@@ -117,6 +165,8 @@ class Subject extends Admin
         $this->assign('data_info', $row);
         $this->assign('subject_option', ItemModel::getOption());
         $this->assign('p_source', ItemModel::getPsource());
+        $this->assign('grade_type', ProjectModel::getGrade());
+        $this->assign('t_type', ProjectModel::getTType());
         return $this->fetch('itemform');
     }
 

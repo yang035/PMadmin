@@ -49,6 +49,20 @@ class Project extends Model
             return $str;
     }
 
+    public static function getTType($type = 0)
+    {
+        $grade_type = config('other.t_type');
+        $str = '';
+        foreach ($grade_type as $k => $v) {
+            if ($type == $k) {
+                $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+            } else {
+                $str .= '<option value="'.$k.'">'.$v.'</option>';
+            }
+        }
+        return $str;
+    }
+
     public static function getRowById($id=1,$fields='*')
     {
         $map['cid'] = session('admin_user.cid');
