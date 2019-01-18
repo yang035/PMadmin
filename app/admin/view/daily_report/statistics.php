@@ -48,7 +48,7 @@
                     <td class="font12">
                         {empty name="vo['num']"}0
                         {else/}
-                        <a href="{:url('detail',['uid'=>$vo['id'],'search_date'=>$d])}"><strong class="mcolor">{$vo['num']}</strong></a>
+                        <a href="{:url('detail',['uid'=>$vo['id'],'realname'=>$vo['realname'],'search_date'=>$d])}"><strong class="mcolor">{$vo['num']}</strong></a>
                         {/empty}
                     </td>
                 </tr>

@@ -37,10 +37,10 @@
                 <tr>
                     <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
                     <th>名称</th>
-                    <th>计划完成(%)</th>
-                    <th>实际完成(%)</th>
                     <th>姓名</th>
                     <th>汇报人</th>
+                    <th>计划完成(%)</th>
+                    <th>实际完成(%)</th>
                     <th>添加时间</th>
                     <th>操作</th>
                 </tr>
@@ -50,12 +50,12 @@
                 <tr>
                     <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
                     <td class="font12">
-                        <strong class="mcolor">{$vo['project_name']}</strong>
+                        <a href="{:url('read',['id'=>$vo['id'],'atype'=>$atype])}"><strong class="mcolor">{$vo['project_name']}</strong></a>
                     </td>
-                    <td class="font12">{$vo['per']}</td>
-                    <td class="font12">{$vo['real_per']}</td>
                     <td class="font12">{$vo['user_id']}</td>
                     <td class="font12">{$vo['send_user']}</td>
+                    <td class="font12">{$vo['per']}</td>
+                    <td class="font12">{$vo['real_per']}</td>
                     <td class="font12">{$vo['create_time']}</td>
                     <td>
                         <div class="layui-btn-group">

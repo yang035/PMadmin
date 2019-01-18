@@ -8,12 +8,12 @@
     <div class="page-filter">
         <form class="layui-form layui-form-pane" action="{:url()}" method="get">
             <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">真实姓名</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="realname" value="{:input('get.realname')}" placeholder="真实姓名" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
+<!--                <div class="layui-inline">-->
+<!--                    <label class="layui-form-label">真实姓名</label>-->
+<!--                    <div class="layui-input-inline">-->
+<!--                        <input type="text" name="realname" value="{$Request.param.realname}" placeholder="真实姓名" autocomplete="off" class="layui-input">-->
+<!--                    </div>-->
+<!--                </div>-->
                 <div class="layui-inline">
                     <label class="layui-form-label">日期</label>
                     <div class="layui-input-inline">
@@ -21,6 +21,7 @@
                     </div>
                 </div>
                 <input type="hidden" name="type" value="{$Request.param.type}">
+                <input type="hidden" name="uid" value="{$Request.param.uid}">
                 <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
             </div>
         </form>
@@ -61,7 +62,8 @@
         var laydate = layui.laydate;
         //年选择器
         laydate.render({
-            elem: '#test2'
+            elem: '#test2',
+            range: true
         });
 
     });
