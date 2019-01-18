@@ -168,7 +168,7 @@
 
         function getNextDate() {
             var time = new Date().getTime();
-            return new Date(time).Format('yyyy-MM-dd HH:mm:ss') + ' 23:59:59';
+            return new Date(time).Format('yyyy-MM-dd') + ' 23:59:59';
         }
         //写入时长
         getTimeLong(getNextDate());

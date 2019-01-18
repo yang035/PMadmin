@@ -39,13 +39,13 @@
     <div class="layui-form-item">
         <label class="layui-form-label">项目类别</label>
         <div class="layui-input-inline">
-            <select name="p_type" class="field-p_type" type="select" lay-filter="p_type">
-                {$p_type}
+            <select name="cat_id" class="field-cat_id" type="select" lay-filter="cat_id">
+                {$cat_id}
             </select>
         </div>
     </div>
     {else/}
-    <input type="hidden" class="layui-input field-p_type" name="p_type" value="{$p_res.p_type}">
+    <input type="hidden" class="layui-input field-cat_id" name="cat_id" value="{$p_res.cat_id}">
     {/empty}
     <div id="div_show">
     {empty name="Request.param.id"}
@@ -210,7 +210,7 @@ var formData = {:json_encode($data_info)};
 layui.use(['jquery', 'laydate','upload','form'], function() {
     var $ = layui.jquery, laydate = layui.laydate,upload = layui.upload,form = layui.form;
 
-    form.on('select(p_type)', function(data){
+    form.on('select(cat_id)', function(data){
         if(5 == data.value){
             $('#div_show').hide();
         }else {

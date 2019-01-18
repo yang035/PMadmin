@@ -89,21 +89,21 @@ class Project extends Admin
         $params['atype'] = isset($params['atype']) ? $params['atype'] : 1;
         switch ($params['atype']) {
             case 1:
-                $map['p_type'] = 1;
+                $map['cat_id'] = 1;
                 break;
             case 2:
-                $map['p_type'] = 2;
+                $map['cat_id'] = 2;
                 break;
             case 3:
-                $map['p_type'] = 3;
+                $map['cat_id'] = 3;
                 break;
             case 4:
                 break;
             case 5:
-                $map['p_type'] = 5;
+                $map['cat_id'] = 5;
                 break;
             default:
-                $map['p_type'] = 1;
+                $map['cat_id'] = 1;
                 break;
         }
 
@@ -237,7 +237,7 @@ class Project extends Admin
         }
 
         $this->assign('grade_type', ProjectModel::getGrade());
-        $this->assign('p_type', ProjectModel::getPtype());
+        $this->assign('cat_id', ProjectModel::getPtype());
         $this->assign('p_source', ProjectModel::getPsource());
         return $this->fetch('form');
     }
@@ -284,7 +284,7 @@ class Project extends Admin
             $p_res = ProjectModel::where('name', $params['pname'])->limit(1)->select();
 //            print_r($p_res[0]['p_type']);
             $this->assign('pname', $params['pname']);
-            $this->assign('parent_type', $p_res[0]['p_type']);
+            $this->assign('parent_type', $p_res[0]['cat_id']);
             $this->assign('max_score', $max_score);
         }
 
@@ -297,7 +297,7 @@ class Project extends Admin
         }
 
         $this->assign('grade_type', ProjectModel::getGrade());
-        $this->assign('p_type', ProjectModel::getPtype());
+        $this->assign('cat_id', ProjectModel::getPtype());
         $this->assign('p_source', ProjectModel::getPsource());
         return $this->fetch('form');
     }
@@ -366,7 +366,7 @@ class Project extends Admin
 //        print_r($row);
         $this->assign('data_info', $row);
         $this->assign('grade_type', ProjectModel::getGrade($row['grade']));
-        $this->assign('p_type', ProjectModel::getPtype($row['p_type']));
+        $this->assign('cat_id', ProjectModel::getPtype($row['cat_id']));
         $this->assign('p_source', ProjectModel::getPsource($row['p_source']));
         return $this->fetch();
     }
@@ -791,7 +791,7 @@ class Project extends Admin
                             'name' => $v['C'],
                             'node' => $v['B'],
                             'remark' => $v['D'],
-                            'p_type' => $prow[0]['p_type'],
+                            'cat_id' => $prow[0]['cat_id'],
                             'score' => (int)$v['E'],
                             'start_time' => $v['F'] ? gmdate('Y-m-d H:i:s', ($v['F'] - $d) * $s) : '0000-00-00 00:00:00',
                             'end_time' => $v['F'] ? gmdate('Y-m-d H:i:s', ($v['G'] - $d) * $s) : '0000-00-00 00:00:00',
@@ -809,7 +809,7 @@ class Project extends Admin
                             'cid' => session('admin_user.cid'),
                             'code' => $prow[0]['code'] . $prow[0]['id'] . 'p',
                             'name' => $v['C'],
-                            'p_type' => $prow[0]['p_type'],
+                            'cat_id' => $prow[0]['cat_id'],
                             'node' => $v['B'],
                             'remark' => $v['D'],
                             'score' => (int)$v['E'],

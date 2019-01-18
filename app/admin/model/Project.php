@@ -103,7 +103,7 @@ class Project extends Model
 
     public static function getPtype($grade = 0)
     {
-        $grade_type = config('other.p_type');
+        $grade_type = config('other.cat_id');
         $str = '';
         foreach ($grade_type as $k => $v) {
             if ($grade == $k) {
