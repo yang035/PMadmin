@@ -39,7 +39,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">标签</label>
         <div class="layui-input-inline">
-            <input type="text" class="layui-input field-tags" name="tags" autocomplete="off" placeholder="标签用引文','隔开">
+            <input type="text" class="layui-input field-tags" name="tags" autocomplete="off" placeholder="标签用英文','隔开">
         </div>
     </div>
     <div class="layui-form-item">
