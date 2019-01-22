@@ -7,11 +7,11 @@
  */
 
 namespace app\admin\controller;
-use app\admin\model\CarCat as CatModel;
-use app\admin\model\CarItem as ItemModel;
+use app\admin\model\NoticeCat as CatModel;
+use app\admin\model\NoticeItem as ItemModel;
 
 
-class Car extends Admin
+class Notice extends Admin
 {
     public $tab_data = [];
     protected function _initialize()
@@ -20,12 +20,12 @@ class Car extends Admin
 
         $tab_data['menu'] = [
             [
-                'title' => '车辆类型',
-                'url' => 'admin/Car/cat',
+                'title' => '通知类型',
+                'url' => 'admin/Notice/cat',
             ],
             [
-                'title' => '车辆信息',
-                'url' => 'admin/Car/index',
+                'title' => '通知信息',
+                'url' => 'admin/Notice/index',
             ],
         ];
         $this->tab_data = $tab_data;
@@ -42,18 +42,12 @@ class Car extends Admin
             if ($cat_id){
                 $where['cat_id'] = $cat_id;
             }
-            $name = input('param.name');
+            $name = input('param.title');
             if ($name) {
-                $where['name'] = ['like', "%{$name}%"];
+                $where['title'] = ['like', "%{$name}%"];
             }
             $where['cid'] = session('admin_user.cid');
             $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->select();
-            $carType = config('other.car_color');
-            if ($data['data']){
-                foreach ($data['data'] as $k=>$v){
-                    $v['color'] = $carType[$v['color']];
-                }
-            }
             $data['count'] = ItemModel::where($where)->count('id');
             $data['code'] = 0;
             $data['msg'] = '';
@@ -74,7 +68,7 @@ class Car extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
             // 验证
-            $result = $this->validate($data, 'CarItem');
+            $result = $this->validate($data, 'NoticeItem');
             if($result !== true) {
                 return $this->error($result);
             }
@@ -87,7 +81,6 @@ class Car extends Admin
             return $this->success("操作成功{$this->score_value}");
         }
         $this->assign('cat_option',ItemModel::getOption());
-        $this->assign('car_color',ItemModel::getColorOption());
         return $this->fetch('itemform');
     }
 
@@ -96,7 +89,7 @@ class Car extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
             // 验证
-            $result = $this->validate($data, 'CarItem');
+            $result = $this->validate($data, 'NoticeItem');
             if($result !== true) {
                 return $this->error($result);
             }
@@ -109,11 +102,19 @@ class Car extends Admin
         }
 
         $row = ItemModel::where('id', $id)->find()->toArray();
-        $row['remark'] = htmlspecialchars_decode($row['remark']);
+        $row['content'] = htmlspecialchars_decode($row['content']);
         $this->assign('data_info', $row);
         $this->assign('cat_option',ItemModel::getOption());
-        $this->assign('car_color',ItemModel::getColorOption());
         return $this->fetch('itemform');
+    }
+
+    public function read($id = 0)
+    {
+        $row = ItemModel::where('id', $id)->find()->toArray();
+        $row['content'] = htmlspecialchars_decode($row['content']);
+        $this->assign('data_info', $row);
+        $this->assign('cat_option',ItemModel::getOption());
+        return $this->fetch('read');
     }
 
     public function delItem()
@@ -156,7 +157,7 @@ class Car extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
             // 验证
-            $result = $this->validate($data, 'CarCat');
+            $result = $this->validate($data, 'NoticeCat');
             if($result !== true) {
                 return $this->error($result);
             }
@@ -176,7 +177,7 @@ class Car extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
             // 验证
-            $result = $this->validate($data, 'CarCat');
+            $result = $this->validate($data, 'NoticeCat');
             if($result !== true) {
                 return $this->error($result);
             }

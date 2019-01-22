@@ -7,6 +7,7 @@ use app\admin\model\AdminRole as RoleModel;
 use app\admin\model\AdminUser as UserModel;
 use app\admin\model\AdminLog as LogModel;
 use app\admin\model\Score as ScoreModel;
+use app\admin\model\NoticeItem as NoticeModel;
 use think\Controller;
 use think\Db;
 /**
@@ -146,6 +147,9 @@ class Admin extends Controller
             $this->assign('form_data', '');
             $this->assign('admin_user', $login);
             $this->assign('languages', model('AdminLanguage')->lists());
+
+            $notice = NoticeModel::getItem1();
+            $this->assign('notice', $notice);
         }
     }
 
