@@ -15,7 +15,7 @@ class ApprovalOvertime extends Model
 {
     public static function getOption($type = 0)
     {
-        $leaveType = config('other.leave_type');
+        $leaveType = config('other.overtime_type');
         $str = '';
         foreach ($leaveType as $k => $v) {
             if ($type == $k) {

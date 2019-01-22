@@ -42,6 +42,14 @@
         <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">加班类型</label>
+        <div class="layui-input-inline">
+            <select name="overtime_type" class="field-overtime_type" type="select" lay-filter="overtime_type">
+                {$overtime_option}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">附件说明</label>
         <div class="layui-input-inline">
             <!--            <div class="layui-upload">-->

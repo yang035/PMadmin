@@ -111,7 +111,11 @@ class Project extends Model
     }
 
     public static function inputSearchProject(){
-        $data = self::field('code,name')->select();
+        $where = [
+            'pid'=>0,
+            'cid'=>session('admin_user.cid'),
+        ];
+        $data = self::field('id,name')->where($where)->select();
         return json_encode($data);
     }
 

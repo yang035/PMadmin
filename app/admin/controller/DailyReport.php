@@ -81,8 +81,17 @@ class DailyReport extends Admin
             return $this->fetch('panel');
         }
         if ($params){
-            if (!empty($params['project_code'])){
-                $map['project_code'] = ['like', '%'.$params['project_code'].'%'];
+            if (!empty($params['project_id'])){
+                $code = ProjectModel::where('id',$params['project_id'])->column('code');
+                $t = substr($code[0],-1);
+                $like = $code[0].$params['project_id'].$t;
+                $w = [
+                    'code' => ['like',"{$like}%"],
+                ];
+                $ids = ProjectModel::where($w)->column('id');
+                array_unshift($ids,$params['project_id']);
+//                print_r(implode(',',$ids));exit();
+                $map['project_id'] = ['in', implode(',',$ids)];
             }
             if (!empty($params['user_id'])){
                 $map['user_id'] = $params['user_id'];
@@ -114,7 +123,7 @@ class DailyReport extends Admin
             $v['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
             $v['project_name'] = ProjectModel::index(['id'=>$v['project_id']])[0]['name'];
         }
-//        print_r($list);
+//        print_r(ProjectModel::inputSearchProject());
         $this->assign('tab_data', $this->tab_data);
         $this->assign('tab_type', 1);
         $this->assign('isparams', 1);

@@ -67,6 +67,7 @@
             总价：{$data_list['amount']}元<br>
             {/case}
             {case value="6"}
+            加班类型：{$overtime_type[$data_list['overtime_type']]}<br>
             加班时长：{$data_list['time_long']}小时<br>
             {/case}
             {case value="7"}

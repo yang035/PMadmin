@@ -462,6 +462,7 @@ class Approval extends Admin
                     'time_long1' => $data['time_long1'],
                     'reason' => $data['reason'],
                     'attachment' => $data['attachment'],
+                    'overtime_type' => $data['overtime_type'],
                 ];
                 $flag = OvertimeModel::create($leave);
                 // 提交事务
@@ -476,6 +477,7 @@ class Approval extends Admin
                 return $this->error('添加失败！');
             }
         }
+        $this->assign('overtime_option', OvertimeModel::getOption());
         return $this->fetch();
     }
 
@@ -758,7 +760,7 @@ class Approval extends Admin
                 break;
             case 6:
                 $table = 'tb_approval_overtime';
-                $f = 'b.reason,b.time_long1,b.attachment';
+                $f = 'b.reason,b.time_long1,b.attachment,b.overtime_type';
                 break;
             case 7:
                 $table = 'tb_approval_goout';
@@ -811,6 +813,8 @@ class Approval extends Admin
             case 5:
                 break;
             case 6:
+                $overtime_type = config('other.overtime_type');
+                $this->assign('overtime_type', $overtime_type);
                 break;
             case 7:
                 break;

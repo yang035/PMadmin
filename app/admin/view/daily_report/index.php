@@ -14,7 +14,7 @@
                     <div class="layui-input-inline box box1">
                     </div>
                     <input id="project_name" type="hidden" name="project_name" value="{$Request.param.project_name}">
-                    <input id="project_code" type="hidden" name="project_code" value="{$Request.param.project_code}">
+                    <input id="project_id" type="hidden" name="project_id" value="{$Request.param.project_id}">
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">真实姓名</label>
@@ -106,11 +106,11 @@
     new SelectBox($('.box1'),{$project_select},function(result){
         if ('' != result.id){
             $('#project_name').val(result.name);
-            $('#project_code').val(result.id);
+            $('#project_id').val(result.id);
         }
     },{
         dataName:'name',//option的html
-        dataId:'code',//option的value
+        dataId:'id',//option的value
         fontSize:'14',//字体大小
         optionFontSize:'14',//下拉框字体大小
         textIndent:4,//字体缩进
@@ -124,7 +124,7 @@
         arrowBorderWidth:0,//箭头左侧分割线宽度。如果为0则不显示
         // borderRadius:5,//边线圆角
         placeholder:'输入关键字',//默认提示
-        // defalut:'firstData',//默认显示内容。如果是'firstData',则默认显示第一个
+        defalut:'{$Request.param.project_name}',//默认显示内容。如果是'firstData',则默认显示第一个
         // allowInput:true,//是否允许输入
         width:200,//宽
         height:37,//高
@@ -152,7 +152,7 @@
         arrowBorderWidth:0,//箭头左侧分割线宽度。如果为0则不显示
         // borderRadius:5,//边线圆角
         placeholder:'输入关键字',//默认提示
-        // defalut:'firstData',//默认显示内容。如果是'firstData',则默认显示第一个
+        defalut:'{$Request.param.real_name}',//默认显示内容。如果是'firstData',则默认显示第一个
         // allowInput:true,//是否允许输入
         width:200,//宽
         height:37,//高
