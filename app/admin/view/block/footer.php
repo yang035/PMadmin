@@ -9,9 +9,13 @@
         <div class="notice-title">公告：</div>
         <div class="notice-content">
             <div class="notice-text">
-                {volist name="notice" id="vo"}
-                <a href="{:url('Notice/read',['id'=>$key])}">{$vo}</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                {/volist}
+                {notempty name="notice"}
+                    {volist name="notice" id="vo"}
+                    <a href="{:url('Notice/read',['id'=>$key])}">{$vo}</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    {/volist}
+                {else/}
+                    暂无公告
+                {/notempty}
             </div>
         </div>
     </div>
