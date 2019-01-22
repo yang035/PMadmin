@@ -235,6 +235,7 @@ class DailyReport extends Admin
                 //计算得分
                 $sc = [
                     'project_id'=>0,
+                    'cid'=>session('admin_user.cid'),
                     'user'=>session('admin_user.uid'),
                     'ml_add_score'=>0,
                     'ml_sub_score'=>0,

@@ -104,6 +104,7 @@ class UploadFile extends Model
             'hash'  => $upfile->hash(),
             'data_id' => input('param.data_id', 0),
             'type'  => $type,
+            'cid'  => session('admin_user.cid'),
             'size'  => $file_size,
             'group' => $group,
             'user_id' => ADMIN_ID,

@@ -46,7 +46,10 @@ class UploadFile extends Admin
             ];
         }
 
+        $map['cid'] = session('admin_user.cid');
+
         $data_list = UploadFileModel::where($map)->order('id desc')->paginate(30, false, ['query' => input('get.')]);
+//        print_r($data_list);
         if ($data_list){
             foreach ($data_list as $k=>$v){
                 $tmp = explode('.',$v['file']);

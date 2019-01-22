@@ -52,6 +52,7 @@ class ScoreDeal extends Admin
             'self_user' => session('admin_user.uid'),
             'self_user_id' => session('admin_user.realname'),
         ];
+        $user = [];
         if ($default_user){
             $user = (array)json_decode($default_user);
         }

@@ -39,6 +39,7 @@ class Score extends Admin
                 $map['project_code'] = ['like', '%'.$params['project_code'].'%'];
             }
         }
+        $map['cid'] = session('admin_user.cid');
         $map1['id'] = ['neq', 1];
         $map1['is_show'] = ['eq', 0];
 
@@ -97,6 +98,7 @@ class Score extends Admin
             $sub_sub_score = 0;
             foreach ($data['u_id'] as $k=>$v){
                 $score[$k]['project_id'] = $data['id'];
+                $score[$k]['cid'] = session('admin_user.cid');
                 $score[$k]['project_code'] = $data['code'];
                 $score[$k]['user'] = $data['u_id'][$k];
                 $score[$k]['ml_add_score'] = !empty($data['add_score'][$k]) ? $data['add_score'][$k] : 0;

@@ -136,7 +136,7 @@ class Car extends Admin
             if ($keyword) {
                 $where['name'] = ['like', "%{$keyword}%"];
             }
-
+            $where['cid'] = session('admin_user.cid');
             $data['data'] = CatModel::where($where)->page($page)->limit($limit)->select();
             $data['count'] = CatModel::where($where)->count('id');
             $data['code'] = 0;
