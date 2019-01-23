@@ -102,6 +102,7 @@ class Contract extends Admin
         }
 
         $row = ItemModel::where('id', $id)->find()->toArray();
+        $row['remark'] = htmlspecialchars_decode($row['remark']);
         $this->assign('data_info', $row);
         $this->assign('cat_option',ItemModel::getOption());
         return $this->fetch('itemform');
