@@ -226,46 +226,50 @@ layui.define(['element', 'form', 'table'], function(exports) {
      * @attr action 请求地址
      * @attr data-form 表单DOM
      */
+    var lock=false;//加锁防止表单重复提交
     form.on('submit(formSubmit)', function(data) {
-        var _form = '';
-        if ($(this).attr('data-form')) {
-            _form = $($(this).attr('data-form'));
-        } else {
-            _form = $(this).parents('form');
-        }
-        // CKEditor专用
-        if (typeof(CKEDITOR) != 'undefined') {
-            for (instance in CKEDITOR.instances) {
-                CKEDITOR.instances[instance].updateElement();
+        if(!lock) {
+            lock=true;
+            var _form = '';
+            if ($(this).attr('data-form')) {
+                _form = $($(this).attr('data-form'));
+            } else {
+                _form = $(this).parents('form');
             }
-        }
-        layer.msg('数据提交中...',{time:500000});
-        $.ajax({
-            type: "POST",
-            url: _form.attr('action'),
-            data: _form.serialize(),
-            success: function(res) {
-                layer.msg(res.msg, {},function() {
-                    if (res.code == 1) {
-                        if (typeof(res.url) != 'undefined' && res.url != null && res.url != '') {
-                            var index = parent.layer.getFrameIndex(window.name);//获取窗口索引
-                            if (index > 1000) {
-                                parent.layer.close(index);//关闭layer
-                                if (res.url){
-                                    window.location.href = res.url;
+            // CKEditor专用
+            if (typeof(CKEDITOR) != 'undefined') {
+                for (instance in CKEDITOR.instances) {
+                    CKEDITOR.instances[instance].updateElement();
+                }
+            }
+            layer.msg('数据提交中...', {time: 500000});
+            $.ajax({
+                type: "POST",
+                url: _form.attr('action'),
+                data: _form.serialize(),
+                success: function (res) {
+                    layer.msg(res.msg, {}, function () {
+                        if (res.code == 1) {
+                            if (typeof(res.url) != 'undefined' && res.url != null && res.url != '') {
+                                var index = parent.layer.getFrameIndex(window.name);//获取窗口索引
+                                if (index > 1000) {
+                                    parent.layer.close(index);//关闭layer
+                                    if (res.url) {
+                                        window.location.href = res.url;
+                                    }
+                                    window.parent.location.reload();//刷新父页面
+                                } else {
+                                    window.history.back(-1);
                                 }
-                                window.parent.location.reload();//刷新父页面
-                            }else {
-                                window.history.back(-1);
+                            } else {
+                                location.href = res.url;
+                                location.reload();
                             }
-                        } else {
-                            location.href = res.url;
-                            location.reload();
                         }
-                    }
-                });
-            }
-        });
+                    });
+                }
+            });
+        }
         return false;
     });
 
