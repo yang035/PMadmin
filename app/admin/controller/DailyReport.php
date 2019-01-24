@@ -380,17 +380,19 @@ class DailyReport extends Admin
             'create_time'=>$params['create_time'],
         ];
         $row = DailyReportModel::where($where)->select();
+//        print_r($row);
         $data_list = [];
         if ($row){
-            $content = json_decode($row[0]['content'],true);
+//            $content = json_decode($row[0]['content'],true);
             foreach ($row as $k=>$v){
                 $data_list['arr'][$k]['project_name'] = ProjectModel::index(['id'=>$v['project_id']])[0]['name'];
                 $data_list['arr'][$k]['real_per'] = $v['real_per'];
-                if (count($content) == 1){
-                    $data_list['arr'][$k]['content'] = $content[0];
-                }else{
-                    $data_list['arr'][$k]['content'] = $content[$k];
-                }
+//                if (count($content) == 1){
+//                    $data_list['arr'][$k]['content'] = $content[0];
+//                }else{
+                $content = json_decode($v['content'],true);
+                $data_list['arr'][$k]['content'] = $content[0];
+//                }
             }
             $data_list['plan'] = json_decode($row[0]['plan'],true);
             $data_list['question'] = json_decode($row[0]['question'],true);
