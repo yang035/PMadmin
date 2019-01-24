@@ -80,6 +80,14 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">同行人</label>
+        <div class="layui-input-inline">
+            <button type="button" class="layui-btn" id="fellow_user_id">选择同行人</button>
+            <div id="fellow_select_id"></div>
+            <input type="hidden" name="fellow_user" id="fellow_user" value="">
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">审批人</label>
         <div class="layui-input-inline">
             <button type="button" class="layui-btn" id="send_user_id">选择汇报人</button>
@@ -196,6 +204,26 @@
 
         $('#reset_expire').on('click', function(){
             $('input[name="expire_time"]').val(0);
+        });
+
+        $('#fellow_user_id').on('click', function(){
+            var fellow_user = $('#fellow_user').val();
+            var open_url = "{:url('Tool/getTreeUser')}?m=fellow&u="+fellow_user;
+            if (open_url.indexOf('?') >= 0) {
+                open_url += '&hisi_iframe=yes';
+            } else {
+                open_url += '?hisi_iframe=yes';
+            }
+            layer.open({
+                type:2,
+                title :'员工列表',
+                maxmin: true,
+                area: ['800px', '500px'],
+                content: open_url,
+                success:function (layero, index) {
+                    var body = layer.getChildFrame('body', index);  //巧妙的地方在这里哦
+                }
+            });
         });
 
         $('#send_user_id').on('click', function(){

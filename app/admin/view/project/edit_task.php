@@ -247,7 +247,7 @@
 <script>
     var formData = {:json_encode($data_info)};
     layui.use(['jquery', 'laydate','flow', 'upload'], function () {
-        var $ = layui.jquery, laydate = layui.laydate, upload = layui.upload,flow = layui.flow;;
+        var $ = layui.jquery, laydate = layui.laydate, upload = layui.upload,flow = layui.flow;
 
         //计算两个时间差
         function getTimeLong(value) {

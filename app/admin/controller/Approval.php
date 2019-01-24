@@ -22,6 +22,7 @@ use app\admin\model\AssetItem as ItemModel;
 use app\admin\model\ApprovalGoods;
 use app\admin\model\ApprovalPrint;
 use app\admin\model\Project as ProjectModel;
+use app\admin\model\ApprovalReport as ApprovalReportModel;
 use think\Db;
 
 
@@ -63,6 +64,11 @@ class Approval extends Admin
                 'title' => "已审批<span class='layui-badge layui-bg-orange'>{$sta_count['has_num']}</span>",
                 'url' => 'admin/approval/index',
                 'params' => ['atype' => 6],
+            ],
+            [
+                'title' => "同行<span class='layui-badge layui-bg-orange'>{$sta_count['follow_num']}</span>",
+                'url' => 'admin/approval/index',
+                'params' => ['atype' => 7],
             ],
         ];
         $tab_data['current'] = url('index', ['atype' => 1]);
@@ -111,7 +117,8 @@ class Approval extends Admin
         SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status=1,1,0)) send_num,
         SUM(IF(JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"'),1,0)) copy_num,
         SUM(IF(JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"'),1,0)) deal_num,
-        SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status>1,1,0)) has_num";
+        SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status>1,1,0)) has_num,
+        SUM(IF(JSON_CONTAINS_PATH(fellow_user,'one', '$.\"$uid\"'),1,0)) follow_num";
         $count = ApprovalModel::field($fields)->where($map)->find()->toArray();
         return $count;
     }
@@ -163,6 +170,9 @@ class Approval extends Admin
             case 6:
                 $con = "JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"')";
                 $map['status'] = ['>', 1];
+                break;
+            case 7:
+                $con = "JSON_CONTAINS_PATH(fellow_user,'one', '$.\"$uid\"')";
                 break;
             default:
                 $con = "";
@@ -357,6 +367,7 @@ class Approval extends Admin
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
                     'user_id' => session('admin_user.uid'),
+                    'fellow_user' => json_encode(user_array($data['fellow_user'])),
                     'send_user' => json_encode(user_array($data['send_user'])),
                     'copy_user' => json_encode(user_array($data['copy_user'])),
                 ];
@@ -713,39 +724,46 @@ class Approval extends Admin
         $params = $this->request->param();
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            if (5 == $data['atype'] && 8 == $data['class_type']) {
-                if (isset($data['before_img'])) {
-                    $data['before_img'] = array_filter($data['before_img']);
-                    if (count($data['before_img']) < 4) {
-                        return $this->error('照片上传数量不够！');
+            if (!empty($data['atype'])) {
+                if (5 == $data['atype'] && 8 == $data['class_type']) {
+                    if (isset($data['before_img'])) {
+                        $data['before_img'] = array_filter($data['before_img']);
+                        if (count($data['before_img']) < 4) {
+                            return $this->error('照片上传数量不够！');
+                        }
+                        $tmp['before_img'] = json_encode($data['before_img']);
                     }
-                    $tmp['before_img'] = json_encode($data['before_img']);
-                }
-                if (isset($data['after_img'])) {
-                    $data['after_img'] = array_filter($data['after_img']);
-                    if (count($data['after_img']) < 4) {
-                        return $this->error('照片上传数量不够！');
+                    if (isset($data['after_img'])) {
+                        $data['after_img'] = array_filter($data['after_img']);
+                        if (count($data['after_img']) < 4) {
+                            return $this->error('照片上传数量不够！');
+                        }
+                        $tmp['after_img'] = json_encode($data['after_img']);
                     }
-                    $tmp['after_img'] = json_encode($data['after_img']);
-                }
 
-                $res = CarModel::where('aid', $data['id'])->update($tmp);
-            } elseif (3 == $data['atype']) {
-                unset($data['atype'], $data['class_type']);
+                    $res = CarModel::where('aid', $data['id'])->update($tmp);
+                } elseif (3 == $data['atype']) {
+                    unset($data['atype'], $data['class_type']);
 //                $res= ApprovalModel::where('id',$data['id'])->setField('status',$data['status']);
-                //事务提交，保证数据一致性
-                Db::startTrans();
-                try {
-                    ApprovalModel::update($data);
-                    $uid = session('admin_user.uid');
-                    $sql = "UPDATE tb_approval SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$data['id']}";
-                    $res = ApprovalModel::execute($sql);
-                    // 提交事务
-                    Db::commit();
-                } catch (\Exception $e) {
-                    // 回滚事务
-                    Db::rollback();
+                    //事务提交，保证数据一致性
+                    Db::startTrans();
+                    try {
+                        ApprovalModel::update($data);
+                        $uid = session('admin_user.uid');
+                        $sql = "UPDATE tb_approval SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$data['id']}";
+                        $res = ApprovalModel::execute($sql);
+                        // 提交事务
+                        Db::commit();
+                    } catch (\Exception $e) {
+                        // 回滚事务
+                        Db::rollback();
+                    }
                 }
+            }elseif (4 == $data['class_type']){
+                unset($data['class_type']);
+                $data['cid'] = session('admin_user.cid');
+                $data['user_id'] = session('admin_user.uid');
+                $res = ApprovalReportModel::create($data);
             }
             if (!$res) {
                 return $this->error('处理失败！');
@@ -824,6 +842,13 @@ class Approval extends Admin
                 $this->assign('cost_type', $cost_type);
                 break;
             case 4:
+                $report = ApprovalReport::getAll(5);
+                if ($report) {
+                    foreach ($report as $k => $v) {
+                        $report[$k]['reply'] = ApprovalReportReply::getAll($v['id'], 5);
+                    }
+                }
+                $this->assign('report_info', $report);
                 break;
             case 5:
                 break;
@@ -868,6 +893,9 @@ class Approval extends Admin
         $list['attachment'] = explode(',', substr($list['attachment'], 0, -1));
         $list['real_name'] = AdminUser::getUserById($list['user_id'])['realname'];
         $list['deal_user'] = $this->deal_data($list['deal_user']);
+        $list['fellow_user'] = $this->deal_data($list['fellow_user']);
+        $list['send_user'] = $this->deal_data($list['send_user']);
+        $list['copy_user'] = $this->deal_data($list['copy_user']);
 //        print_r($list);
         $approval_status = config('other.approval_status');
         $this->assign('data_list', $list);

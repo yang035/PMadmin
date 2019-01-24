@@ -76,8 +76,15 @@
                         <div class="layui-btn-group" onclick="approval_back({$vo['id']})">
                             <a class="layui-btn layui-btn-normal layui-btn-xs">撤销</a>
                         </div>
+                        {/if}
+                        {if condition="($vo['status'] eq 2) && ($Request.param.atype eq 2) "}
                         <div class="layui-btn-group" onclick="expense({$vo['id']},'{$panel_type[$vo['class_type']]['title']}')">
                             <a class="layui-btn layui-btn-danger layui-btn-xs">报销</a>
+                        </div>
+                        {/if}
+                        {if condition="$vo['class_type'] eq 4 "}
+                        <div class="layui-btn-group" onclick="approval_report({$vo['id']},{$atype},{$vo['class_type']},'{$panel_type[$vo['class_type']]['title']}')">
+                            <a class="layui-btn layui-btn-normal layui-btn-xs">出差报告</a>
                         </div>
                         {/if}
                     </td>
@@ -114,11 +121,16 @@
             type:2,
             title :cls_name,
             maxmin: true,
-            area: ['800px', '500px'],
+            area: ['800px', '600px'],
             content: open_url,
             success:function (layero, index) {
             }
         });
+    }
+
+    function approval_report(id,atype,class_type,cls_name){
+        var open_url = "{:url('Approval/read')}?id="+id+"&atype="+atype+"&class_type="+class_type;
+        window.location.href = open_url;
     }
 
     function approval_back(id) {
