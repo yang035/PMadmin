@@ -116,8 +116,10 @@
             {/case}
             {case value="12"}
             项目名称：{$project_name['name']}<br>
-            打印类型：{$print_type[$data_list['type']]}<br>
-            纸张类型：{$size_type[$data_list['size_type']]}<br>
+            用途：{$data_list['application']}<br>
+            打印类型：{$data_list['type']}<br>
+            规格：<br>{$data_list['s']}
+            打印单位：{$data_list['store_id']}<br>
             {/case}
             {/switch}
             事由：{$data_list['reason']}<br>

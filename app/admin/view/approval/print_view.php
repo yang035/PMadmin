@@ -56,6 +56,13 @@
         <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">用途</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-application" name="application" lay-verify="required" autocomplete="off" placeholder="请输入用途">
+        </div>
+        <div class="layui-form-mid" style="color: red">*</div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">打印类型</label>
         <div class="layui-input-inline">
             <select name="type" class="field-type" type="select">
@@ -64,20 +71,54 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">纸张类型</label>
-        <div class="layui-input-inline">
-            <select name="size_type" class="field-size_type" type="select">
+        <label class="layui-form-label">规格</label>
+        <div class="layui-input-inline" style="width: 100px">
+            <select name="size_type[]" class="field-size_type" type="select">
                 {$size_option}
             </select>
         </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">金额</label>
-        <div class="layui-input-inline">
-            <input type="number" class="layui-input field-money" name="money" autocomplete="off" placeholder="请输入金额">
+        <div class="layui-input-inline" style="width: 100px">
+            <select name="quality[]" class="field-quality" type="select">
+                {$quality_option}
+            </select>
         </div>
-        <div class="layui-form-mid">元</div>
+        <div class="layui-input-inline" style="width: 100px">
+            <input type="number" class="layui-input field-num" name="num[]" autocomplete="off" placeholder="请输入页数">
+        </div>
     </div>
+    <div class="new_task">
+        <a href="javascript:void(0);" class="aicon ai-tianjia field-guige-add" style="float: left;margin-left:450px;font-size: 30px;"></a>
+    </div>
+<!--    <div class="layui-form-item">-->
+<!--        <label class="layui-form-label">纸张质量</label>-->
+<!--        <div class="layui-input-inline">-->
+<!--            <select name="quality" class="field-quality" type="select">-->
+<!--                {$quality_option}-->
+<!--            </select>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="layui-form-item">-->
+<!--        <label class="layui-form-label">页数</label>-->
+<!--        <div class="layui-input-inline">-->
+<!--            <input type="number" class="layui-input field-num" lay-verify="required" name="num" autocomplete="off" placeholder="请输入页数">-->
+<!--        </div>-->
+<!--        <div class="layui-form-mid" style="color: red">*</div>-->
+<!--    </div>-->
+    <div class="layui-form-item">
+        <label class="layui-form-label">图文制作单位</label>
+        <div class="layui-input-inline">
+            <select name="store_id" class="field-store_id" type="select">
+                {$store_option}
+            </select>
+        </div>
+    </div>
+<!--    <div class="layui-form-item">-->
+<!--        <label class="layui-form-label">金额</label>-->
+<!--        <div class="layui-input-inline">-->
+<!--            <input type="number" class="layui-input field-money" name="money" autocomplete="off" placeholder="请输入金额">-->
+<!--        </div>-->
+<!--        <div class="layui-form-mid">元</div>-->
+<!--    </div>-->
 
     <div class="layui-form-item">
         <label class="layui-form-label">附件说明</label>
@@ -141,8 +182,8 @@
 <script>
     var formData = {:json_encode($data_info)};
 
-    layui.use(['jquery', 'laydate','upload'], function() {
-        var $ = layui.jquery, laydate = layui.laydate,upload = layui.upload;
+    layui.use(['jquery', 'laydate','upload','form'], function() {
+        var $ = layui.jquery, laydate = layui.laydate,upload = layui.upload,form = layui.form;
         laydate.render({
             elem: '.field-start_time',
             type: 'date',
@@ -269,6 +310,27 @@
                 }
             });
         });
+
+        $(".field-guige-add").click(function(){
+            $(".new_task").before("<div class=\"layui-form-item\">\n" +
+                "        <label class=\"layui-form-label\">规格</label>\n" +
+                "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
+                "            <select name=\"size_type[]\" class=\"field-size_type\" type=\"select\">\n" +
+                "                {$size_option}\n" +
+                "            </select>\n" +
+                "        </div>\n" +
+                "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
+                "            <select name=\"quality[]\" class=\"field-quality\" type=\"select\">\n" +
+                "                {$quality_option}\n" +
+                "            </select>\n" +
+                "        </div>\n" +
+                "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
+                "            <input type=\"number\" class=\"layui-input field-num\" name=\"num[]\" autocomplete=\"off\" placeholder=\"请输入页数\">\n" +
+                "        </div>\n" +
+                "    </div>");
+            form.render();
+        });
+
         //多文件列表示例
         var demoListView = $('#demoList'),uploadListIns = upload.render({
             elem: '#testList',

@@ -652,6 +652,15 @@ class Approval extends Admin
                 return $this->error($result);
             }
             unset($data['id']);
+
+            if (!empty($data['num'])){
+                foreach ($data['num'] as $k=>$v){
+                    if (empty($v)){
+                        unset($data['num'][$k],$data['quality'][$k],$data['size_type'][$k]);
+                    }
+                }
+            }
+
             Db::startTrans();
             try {
                 $approve = [
@@ -669,10 +678,14 @@ class Approval extends Admin
                     'aid' => $res['id'],
                     'type' => $data['type'],
                     'project_id' => $data['project_id'],
-                    'size_type' => $data['size_type'],
+                    'application' => $data['application'],
+                    'size_type' => json_encode($data['size_type']),
+                    'quality' => json_encode($data['quality']),
+                    'num' => json_encode($data['num']),
+                    'store_id' => $data['store_id'],
                     'reason' => $data['reason'],
                     'attachment' => $data['attachment'],
-                    'money' => $data['money'],
+//                    'money' => $data['money'],
                 ];
                 $flag = ApprovalPrint::create($leave);
                 // 提交事务
@@ -689,6 +702,8 @@ class Approval extends Admin
         }
         $this->assign('print_option', ApprovalPrint::getPrintOption());
         $this->assign('size_option', ApprovalPrint::getSizeOption());
+        $this->assign('quality_option', ApprovalPrint::getQualityOption());
+        $this->assign('store_option', ApprovalPrint::getStoreOption());
         $this->assign('mytask', ProjectModel::getMyTask(0));
         return $this->fetch();
     }
@@ -780,7 +795,7 @@ class Approval extends Admin
                 break;
             case 12:
                 $table = 'tb_approval_print';
-                $f = 'b.project_id,b.type,b.size_type,b.reason,b.money,b.attachment';
+                $f = 'b.project_id,b.reason,b.type,b.size_type,b.money,b.application,b.quality,b.num,b.store_id,b.attachment';
                 break;
             default:
                 $table = 'tb_approval_leave';
@@ -833,9 +848,18 @@ class Approval extends Admin
                 break;
             case 12:
                 $print_type = config('other.print_type');
-                $this->assign('print_type', $print_type);
                 $size_type = config('other.size_type');
-                $this->assign('size_type', $size_type);
+                $quality_type = config('other.quality_type');
+                $store_type = config('other.store_type');
+                $list['size_type'] = json_decode($list['size_type'],true);
+                $list['quality'] = json_decode($list['quality'],true);
+                $list['num'] = json_decode($list['num'],true);
+                $list['s'] = '';
+                foreach ($list['num'] as $k=>$v){
+                    $list['s'] .= $size_type[$list['size_type'][$k]].'--'.$quality_type[$list['quality'][$k]].'--'.$v."--页<br>";
+                }
+                $list['type'] = $print_type[$list['store_id']];
+                $list['store_id'] = $store_type[$list['store_id']];
                 $this->assign('project_name', ProjectModel::getRowById($list['project_id']));
                 break;
             default:
