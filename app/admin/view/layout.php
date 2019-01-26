@@ -115,7 +115,7 @@
 
     $(document).ready(function () {
         setInterval("startRequest()", 1000);
-        setRegular(12);//设置每天12点整提醒
+        setRegular(18);//设置每天12点整提醒
     });
 
     function setRegular(targetHour) {
@@ -134,11 +134,11 @@
         layer.open({
             type: 1,
             offset: 'auto', //具体配置参考：offset参数项
-            content: '<div style="padding: 20px 80px;">日报提醒</div>',
+            content: '<div style="padding: 20px 80px;">美好的一天快结束了，要写日报了...</div>',
             btn: '关闭',
             btnAlign: 'c', //按钮居中
             shade: 0, //不显示遮罩
-            time: 3000,
+            // time: 3000,
             area:['300','200'],
             yes: function () {
                 layer.closeAll();
