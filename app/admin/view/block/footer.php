@@ -11,7 +11,7 @@
             <div class="notice-text">
                 {notempty name="notice"}
                     {volist name="notice" id="vo"}
-                    <a href="{:url('Notice/read',['id'=>$key])}">{$vo}</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="{:url('Notice/read',['id'=>$key])}"><span style="color: red">{$vo}</span></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     {/volist}
                 {else/}
                     暂无公告
