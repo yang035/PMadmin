@@ -56,7 +56,6 @@
         </script>
     </div>
 </div>
-
 <script>
     var  name=$("input[name='name']").val();
     var  start_time=$("input[name='start_time']").val();
@@ -210,4 +209,4 @@
         });
     });
 </script>
-</div>
+
