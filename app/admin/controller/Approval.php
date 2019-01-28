@@ -913,4 +913,116 @@ class Approval extends Admin
         return $this->success('操作成功。');
     }
 
+    public function statistics(){
+        $params = $this->request->param();
+        $cid = session('admin_user.cid');
+        $d = date('Y-m-d',strtotime('-1 day')).' - '.date('Y-m-d');
+        if (isset($params['search_date']) && !empty($params['search_date'])){
+            $d = $params['search_date'];
+        }
+        $d_arr = explode(' - ',$d);
+        $d0 = strtotime($d_arr[0].' 00:00:00');
+        $d1 = strtotime($d_arr[1].' 23:59:59');
+
+        $fields = 'u.id,u.realname,tmp.*';
+        $panel_type = config('other.panel_type');
+        $t = '';
+        foreach ($panel_type as $k=>$v){
+            $t.=",sum(if(class_type={$k},1,0)) num_{$k} ";
+        }
+
+//echo $t;exit();
+        $where =[
+            'u.company_id'=>$cid,
+            'u.role_id'=>['not in',[1,2]],
+            'u.status'=>1,
+            'u.is_show'=>0,
+            'u.department_id'=>['>',2]
+        ];
+
+        if ($params){
+            if (!empty($params['realname'])){
+                $where['u.realname'] = ['like', '%'.$params['realname'].'%'];
+            }
+        }
+        $role_id = session('admin_user.role_id');
+        if ($role_id > 3){
+            $where['u.id'] = session('admin_user.uid');
+        }
+
+        if (isset($params['export']) && 1 == $params['export']){
+            set_time_limit(0);
+            $data_list = Db::table('tb_admin_user u')->field($fields)
+                ->join("(SELECT user_id{$t} FROM tb_approval WHERE cid={$cid} and status=2 and create_time between '{$d0}' and '{$d1}' GROUP BY user_id) tmp",'u.id=tmp.user_id','left')
+                ->where($where)->order('u.id asc')->select();
+            vendor('PHPExcel.PHPExcel');
+            $objPHPExcel = new \PHPExcel();
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(10);
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A1', '姓名')
+                ->setCellValue('B1', '请假调休')
+                ->setCellValue('C1', '报销')
+                ->setCellValue('D1', '费用')
+                ->setCellValue('E1', '出差')
+                ->setCellValue('F1', '采购')
+                ->setCellValue('G1', '加班')
+                ->setCellValue('H1', '外出')
+                ->setCellValue('I1', '用车')
+                ->setCellValue('J1', '申领物品')
+                ->setCellValue('K1', '出图');
+//            print_r($data_list);exit();
+            foreach ($data_list as $k => $v) {
+                $num = $k + 2;
+                $objPHPExcel->setActiveSheetIndex(0)
+                    //Excel的第A列，uid是你查出数组的键值，下面以此类推
+                    ->setCellValue('A' . $num, $v['realname'])
+                    ->setCellValue('B' . $num, $v['num_1'])
+                    ->setCellValue('C' . $num, $v['num_2'])
+                    ->setCellValue('D' . $num, $v['num_3'])
+                    ->setCellValue('E' . $num, $v['num_4'])
+                    ->setCellValue('F' . $num, $v['num_5'])
+                    ->setCellValue('G' . $num, $v['num_6'])
+                    ->setCellValue('H' . $num, $v['num_7'])
+                    ->setCellValue('I' . $num, $v['num_8'])
+                    ->setCellValue('J' . $num, $v['num_11'])
+                    ->setCellValue('K' . $num, $v['num_12']);
+            }
+            $d = !empty($d) ? $d : '全部';
+            $name = $d.'日常审批报表';
+            $objPHPExcel->getActiveSheet()->setTitle($d);
+            $objPHPExcel->setActiveSheetIndex(0);
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="' . $name . '.xls"');
+            header('Cache-Control: max-age=0');
+            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            $objWriter->save('php://output');
+            exit;
+        }
+
+        $data_list = Db::table('tb_admin_user u')->field($fields)
+            ->join("(SELECT user_id{$t} FROM tb_approval WHERE cid={$cid} and status=2 and create_time between {$d0} and {$d1} GROUP BY user_id) tmp",'u.id=tmp.user_id','left')
+            ->where($where)->order('u.id asc')->paginate(30, false, ['query' => input('get.')]);
+//        $data_list = Db::table('tb_admin_user u')->field($fields)
+//        ->join("(SELECT user_id,class_type{$t} FROM tb_approval WHERE cid={$cid} and status=2 and create_time between {$d0} and {$d1} GROUP BY user_id,class_type) tmp",'u.id=tmp.user_id','left')
+//            ->where($where)->buildSql();
+//        print_r($data_list);exit();
+        // 分页
+        $pages = $data_list->render();
+        $this->assign('data_list', $data_list);
+        $this->assign('pages', $pages);
+        $this->assign('d', $d);
+        $this->assign('panel_type', $panel_type);
+        return $this->fetch();
+    }
+
 }
