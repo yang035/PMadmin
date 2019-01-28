@@ -31,6 +31,7 @@ class Score extends Admin
         $map = [];
         $map1 = [];
         $params = $this->request->param();
+        $d = '';
         if ($params){
             if (!empty($params['realname'])){
                 $map1['realname'] = ['like', '%'.$params['realname'].'%'];
@@ -38,12 +39,65 @@ class Score extends Admin
             if (!empty($params['project_code'])){
                 $map['project_code'] = ['like', '%'.$params['project_code'].'%'];
             }
+            if (isset($params['search_date']) && !empty($params['search_date'])){
+                $d = urldecode($params['search_date']);
+                $d_arr = explode(' - ',$d);
+                $d0 = strtotime($d_arr[0].' 00:00:00');
+                $d1 = strtotime($d_arr[1].' 23:59:59');
+                $map['Score.create_time'] = ['between',["$d0","$d1"]];
+            }
         }
+
         $map['cid'] = session('admin_user.cid');
         $map1['id'] = ['neq', 1];
         $map1['is_show'] = ['eq', 0];
-
+//print_r($map);
         $fields = "`Score`.id,`Score`.user,sum(`Score`.ml_add_score) as ml_add_sum,sum(`Score`.ml_sub_score) as ml_sub_sum,sum(`Score`.gl_add_score) as gl_add_sum,sum(`Score`.gl_sub_score) as gl_sub_sum,`AdminUser`.realname";
+
+        if (isset($params['export']) && 1 == $params['export']){
+            set_time_limit(0);
+            $data_list = ScoreModel::hasWhere('adminUser',$map1)->field($fields)->where($map)->group('`Score`.user')->select();
+//        print_r($data_list);
+            $name_arr = ProjectModel::getColumn('name');
+            foreach ($data_list as $k=>$v){
+                $data_list[$k]['pname'] = $v['project_id'] ? $name_arr[$v['project_id']] : '系统';
+            }
+            vendor('PHPExcel.PHPExcel');
+            $objPHPExcel = new \PHPExcel();
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(10);
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A1', '姓名')
+                ->setCellValue('B1', 'ML+')
+                ->setCellValue('C1', 'ML-')
+                ->setCellValue('D1', 'GL+')
+                ->setCellValue('E1', 'GL-');
+//            print_r($data_list);exit();
+            foreach ($data_list as $k => $v) {
+                $num = $k + 2;
+                $objPHPExcel->setActiveSheetIndex(0)
+                    //Excel的第A列，uid是你查出数组的键值，下面以此类推
+                    ->setCellValue('A' . $num, $v['realname'])
+                    ->setCellValue('B' . $num, $v['ml_add_sum'])
+                    ->setCellValue('C' . $num, $v['ml_sub_sum'])
+                    ->setCellValue('D' . $num, $v['gl_add_sum'])
+                    ->setCellValue('E' . $num, $v['gl_sub_sum']);
+            }
+            $d = !empty($d) ? $d : '全部';
+            $name = $d.'ML/GL统计';
+            $objPHPExcel->getActiveSheet()->setTitle($d);
+            $objPHPExcel->setActiveSheetIndex(0);
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="' . $name . '.xls"');
+            header('Cache-Control: max-age=0');
+            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            $objWriter->save('php://output');
+            exit;
+        }
+
         $data_list = ScoreModel::hasWhere('adminUser',$map1)->field($fields)->where($map)->group('`Score`.user')->paginate(30, false, ['query' => input('get.')]);
 //        print_r($data_list);
         $name_arr = ProjectModel::getColumn('name');
@@ -56,6 +110,7 @@ class Score extends Admin
         $this->assign('pages', $pages);
         $this->assign('tab_data', $this->tab_data);
         $this->assign('tab_type', 2);
+        $this->assign('d', $d);
         return $this->fetch();
     }
 
