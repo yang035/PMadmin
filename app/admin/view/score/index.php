@@ -28,7 +28,7 @@
                 </div>
                 <input type="hidden" name="type" value="{$Request.param.type}">
                 <input type="hidden" name="export" value="">
-                <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
+                <button type="submit" class="layui-btn layui-btn-normal normal_btn">搜索</button>
                 <input type="button" class="layui-btn layui-btn-primary layui-icon export_btn" value="导出">
             </div>
         </form>
@@ -89,6 +89,13 @@
         $('.export_btn').click(function () {
             if ($(this).val() == '导出'){
                 $('input[name=export]').val(1);
+                $('#search_form').submit();
+            }
+        });
+
+        $('.normal_btn').click(function () {
+            if ($(this).val() != '导出'){
+                $('input[name=export]').val('');
                 $('#search_form').submit();
             }
         });
