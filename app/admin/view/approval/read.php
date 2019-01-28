@@ -233,13 +233,14 @@
     {/if}
     {/if}
     {if condition="$Request.param.class_type eq 4"}
+    {notin name="$Request.param.atype" value="3,4,5,6"}
     <div class="layui-col-md6">
         <div class="layui-card">
             <div class="layui-card-header">出差报告</div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">内容<span style="color: red"></span></label>
                     <div class="layui-input-inline">
-                        <textarea type="text" class="layui-textarea field-mark" name="mark" lay-verify="required" autocomplete="off" placeholder="请输入内容"></textarea>
+                        <textarea type="text" class="layui-textarea field-mark" name="mark" autocomplete="off" placeholder="请输入内容"></textarea>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -277,6 +278,7 @@
                 </div>
         </div>
     </div>
+    {/notin}
     <div class="layui-col-md6">
         <div class="layui-card">
             <div class="layui-card-header">报告记录</div>
