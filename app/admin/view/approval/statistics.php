@@ -45,13 +45,13 @@
                 <tr>
                     <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
                     <td class="font12">
-                        <a href="{:url('index',['atype'=>6,'uid'=>$vo['id'],'realname'=>$vo['realname'],'search_date'=>$d])}"><strong class="mcolor">{$vo['realname']}</strong></a>
+                        {$vo['realname']}
                     </td>
                     {volist name="panel_type" id="v"}
                     <td class="font12">
                         {empty name="vo['num_'.$key]"}0
                         {else/}
-                        <a href="{:url('index',['atype'=>6,'class_type'=>$key,'uid'=>$vo['id'],'realname'=>$vo['realname'],'search_date'=>$d])}"><strong style="color: red">{$vo['num_'.$key]}</strong></a>
+                        <strong style="color: red">{$vo['num_'.$key]}</strong>
                         {/empty}
                     </td>
                     {/volist}
