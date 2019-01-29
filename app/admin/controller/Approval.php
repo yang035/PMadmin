@@ -949,7 +949,7 @@ class Approval extends Admin
     public function statistics(){
         $params = $this->request->param();
         $cid = session('admin_user.cid');
-        $d = date('Y-m-d',strtotime('-1 day')).' - '.date('Y-m-d');
+        $d = date('Y-m-01').' - '.date('Y-m-d');
         if (isset($params['search_date']) && !empty($params['search_date'])){
             $d = $params['search_date'];
         }
