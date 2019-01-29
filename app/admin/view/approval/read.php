@@ -91,6 +91,7 @@
             {else/}
             <span>无</span>
             {/notempty}
+            <br>
             回来后照片：
             {notempty name="data_list['after_img']"}
             <div class="image-list">
@@ -101,6 +102,7 @@
             {else/}
             <span>无</span>
             {/notempty}
+            <br>
             {/case}
             {case value="9"}
             {/case}
