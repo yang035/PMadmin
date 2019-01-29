@@ -183,6 +183,14 @@ class Approval extends Admin
         foreach ($list as $k => $v) {
             $list[$k]['send_user'] = $this->deal_data($v['send_user']);
             $list[$k]['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
+            if ($v['project_id']){
+                $project_data = ProjectModel::getRowById($v['project_id']);
+            }else{
+                $project_data = [
+                    'name'=>'其他',
+                ];
+            }
+            $list[$k]['project_name'] = $project_data['name'];
         }
         $approval_status = config('other.approval_status');
         $this->assign('tab_data', $this->tab_data);
@@ -260,6 +268,7 @@ class Approval extends Admin
             Db::startTrans();
             try {
                 $approve = [
+                    'project_id' => $data['project_id'],
                     'class_type' => $data['class_type'],
                     'cid' => session('admin_user.cid'),
                     'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
@@ -298,6 +307,7 @@ class Approval extends Admin
             }
         }
         $this->assign('expense_type', ExpenseModel::getOption());
+        $this->assign('mytask', ProjectModel::getMyTask(0));
         return $this->fetch();
     }
 
@@ -314,6 +324,7 @@ class Approval extends Admin
             Db::startTrans();
             try {
                 $approve = [
+                    'project_id' => $data['project_id'],
                     'class_type' => $data['class_type'],
                     'cid' => session('admin_user.cid'),
                     'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
@@ -345,6 +356,7 @@ class Approval extends Admin
             }
         }
         $this->assign('cost_option', CostModel::getOption());
+        $this->assign('mytask', ProjectModel::getMyTask(0));
         return $this->fetch();
     }
 
@@ -361,6 +373,7 @@ class Approval extends Admin
             Db::startTrans();
             try {
                 $approve = [
+                    'project_id' => $data['project_id'],
                     'class_type' => $data['class_type'],
                     'cid' => session('admin_user.cid'),
                     'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
@@ -391,6 +404,7 @@ class Approval extends Admin
                 return $this->error('添加失败！');
             }
         }
+        $this->assign('mytask', ProjectModel::getMyTask(0));
         return $this->fetch();
 
     }
@@ -460,6 +474,7 @@ class Approval extends Admin
             Db::startTrans();
             try {
                 $approve = [
+                    'project_id' => $data['project_id'],
                     'class_type' => $data['class_type'],
                     'cid' => session('admin_user.cid'),
                     'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
@@ -491,6 +506,7 @@ class Approval extends Admin
             }
         }
         $this->assign('overtime_option', OvertimeModel::getOption());
+        $this->assign('mytask', ProjectModel::getMyTask(0));
         return $this->fetch();
     }
 
@@ -507,6 +523,7 @@ class Approval extends Admin
             Db::startTrans();
             try {
                 $approve = [
+                    'project_id' => $data['project_id'],
                     'class_type' => $data['class_type'],
                     'cid' => session('admin_user.cid'),
                     'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
@@ -538,6 +555,7 @@ class Approval extends Admin
                 return $this->error('添加失败！');
             }
         }
+        $this->assign('mytask', ProjectModel::getMyTask(0));
         return $this->fetch();
     }
 
@@ -554,6 +572,7 @@ class Approval extends Admin
             Db::startTrans();
             try {
                 $approve = [
+                    'project_id' => $data['project_id'],
                     'class_type' => $data['class_type'],
                     'cid' => session('admin_user.cid'),
                     'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
@@ -587,6 +606,7 @@ class Approval extends Admin
             }
         }
         $this->assign('car_type', CarModel::getOption());
+        $this->assign('mytask', ProjectModel::getMyTask(0));
         return $this->fetch();
     }
 
@@ -622,6 +642,7 @@ class Approval extends Admin
             Db::startTrans();
             try {
                 $approve = [
+                    'project_id' => $data['project_id'],
                     'class_type' => $data['class_type'],
                     'cid' => session('admin_user.cid'),
                     'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
@@ -652,6 +673,7 @@ class Approval extends Admin
             }
         }
 //        $this->assign('cat_option',ItemModel::getOption());
+        $this->assign('mytask', ProjectModel::getMyTask(0));
         return $this->fetch();
     }
 
@@ -677,6 +699,7 @@ class Approval extends Admin
             Db::startTrans();
             try {
                 $approve = [
+                    'project_id' => $data['project_id'],
                     'class_type' => $data['class_type'],
                     'cid' => session('admin_user.cid'),
                     'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
@@ -888,7 +911,6 @@ class Approval extends Admin
                 }
                 $list['type'] = $print_type[$list['store_id']];
                 $list['store_id'] = $store_type[$list['store_id']];
-                $this->assign('project_name', ProjectModel::getRowById($list['project_id']));
                 break;
             default:
                 break;
@@ -899,11 +921,19 @@ class Approval extends Admin
         $list['fellow_user'] = $this->deal_data($list['fellow_user']);
         $list['send_user'] = $this->deal_data($list['send_user']);
         $list['copy_user'] = $this->deal_data($list['copy_user']);
+        if ($list['project_id']){
+            $project_data = ProjectModel::getRowById($list['project_id']);
+        }else{
+            $project_data = [
+                'name'=>'其他',
+            ];
+        }
 //        print_r($list);
         $approval_status = config('other.approval_status');
         $this->assign('data_list', $list);
         $this->assign('approval_status', $approval_status);
         $this->assign('class_type', $params['class_type']);
+        $this->assign('project_name', $project_data);
         return $this->fetch();
     }
 

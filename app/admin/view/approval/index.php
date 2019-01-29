@@ -45,6 +45,7 @@
                     <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
                     <th>姓名</th>
                     <th>类型</th>
+                    <th>项目名称</th>
                     <th>审批人</th>
                     <th>添加时间</th>
                     <th>状态</th>
@@ -59,6 +60,7 @@
                         <strong class="mcolor">{$vo['user_id']}</strong>
                     </td>
                     <td class="font12">{$panel_type[$vo['class_type']]['title']}</td>
+                    <td class="font12">{$vo['project_name']}</td>
                     <td class="font12">{$vo['send_user']}</td>
                     <td class="font12">{$vo['create_time']}</td>
                     <td class="font12">{$approval_status[$vo['status']]}</td>

@@ -40,6 +40,7 @@
             姓名：{$data_list['real_name']}<br>
             开始时间：{$data_list['start_time']}<br>
             结束时间：{$data_list['end_time']}<br>
+            项目名称：{$project_name['name']}<br>
             {switch name="class_type"}
             {case value="1"}
             请假类型：{$leave_type[$data_list['type']]}<br>
@@ -118,7 +119,6 @@
             {/notempty}
             {/case}
             {case value="12"}
-            项目名称：{$project_name['name']}<br>
             用途：{$data_list['application']}<br>
             打印类型：{$data_list['type']}<br>
             规格：<br>{$data_list['s']}

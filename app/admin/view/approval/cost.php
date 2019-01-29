@@ -15,6 +15,14 @@
 </style>
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-form-item">
+        <label class="layui-form-label">选择项目</label>
+        <div class="layui-input-inline">
+            <select name="project_id" class="field-project_id" type="select">
+                {$mytask}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">费用类型</label>
         <div class="layui-input-inline">
             <select name="type" class="field-type" type="select">

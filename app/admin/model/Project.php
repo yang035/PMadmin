@@ -95,7 +95,7 @@ class Project extends Model
         $list = self::where($map)->where($con)->order('grade desc,create_time desc')->column('name','id');
         if ($list){
             if ($option){
-                $str = '';
+                $str = "<option value='0' selected>其他</option>";
                 foreach ($list as $k => $v) {
                     if ($id == $k) {
                         $str .= "<option value='".$k."' selected>".$v."</option>";

@@ -15,6 +15,14 @@
 </style>
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-form-item">
+        <label class="layui-form-label">选择项目</label>
+        <div class="layui-input-inline">
+            <select name="project_id" class="field-project_id" type="select">
+                {$mytask}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">开始时间</label>
         <div class="layui-input-inline" style="width: 250px">
             <input type="text" class="layui-input field-start_time" name="start_time" lay-verify="required" autocomplete="off" readonly placeholder="选择开始时间">
