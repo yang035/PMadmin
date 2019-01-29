@@ -425,6 +425,8 @@ class Approval extends Admin
                     'number' => $data['number'],
                     'amount' => $data['amount'],
                     'reason' => $data['reason'],
+                    'supplier' => $data['supplier'],
+                    'url' => urlencode($data['url']),
                     'attachment' => $data['attachment'],
                 ];
                 $flag = ProcurementModel::create($leave);
@@ -789,7 +791,7 @@ class Approval extends Admin
                 break;
             case 5:
                 $table = 'tb_approval_procurement';
-                $f = 'b.reason,b.name,b.number,b.amount,b.attachment';
+                $f = 'b.reason,b.name,b.number,b.amount,b.attachment,b.supplier,b.url';
                 break;
             case 6:
                 $table = 'tb_approval_overtime';
@@ -851,6 +853,7 @@ class Approval extends Admin
                 $this->assign('report_info', $report);
                 break;
             case 5:
+                $list['url'] = urldecode($list['url']);
                 break;
             case 6:
                 $overtime_type = config('other.overtime_type');

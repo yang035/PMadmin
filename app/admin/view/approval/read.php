@@ -65,6 +65,8 @@
             物品名称：{$data_list['name']}<br>
             数量：{$data_list['number']}<br>
             总价：{$data_list['amount']}元<br>
+            供应商：{$data_list['supplier']}<br>
+            产品链接：<a href="{$data_list['url']}" target="_blank" style="color: #5c90d2">{$data_list['url']}</a><br>
             {/case}
             {case value="6"}
             加班类型：{$overtime_type[$data_list['overtime_type']]}<br>

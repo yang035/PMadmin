@@ -77,7 +77,18 @@
         <div class="layui-form-mid">元</div>
         <div class="layui-form-mid" style="color: red">*</div>
     </div>
-
+    <div class="layui-form-item">
+        <label class="layui-form-label">供应商</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-supplier" name="supplier" autocomplete="off" placeholder="请输入供应商名称">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">产品链接</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-url" name="url" autocomplete="off" placeholder="请输入产品链接地址">
+        </div>
+    </div>
     <div class="layui-form-item">
         <label class="layui-form-label">附件说明</label>
         <div class="layui-input-inline">
