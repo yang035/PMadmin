@@ -758,6 +758,9 @@ class Project extends Admin
 
                 foreach ($res['data'] as $k => $v) {
                     $p_node = substr($v['B'], 0, strripos($v['B'], '.'));
+                    if ($p_node == session('admin_user.cid')){
+                        $p_node = $params['id'];
+                    }
                     $prow = ProjectModel::where('node', $p_node)->limit(1)->select();
                     $where = [
                         'cid' => session('admin_user.cid'),
@@ -768,6 +771,7 @@ class Project extends Admin
                         $tmp = [
                             'pid' => $prow[0]['id'],
                             'cid' => session('admin_user.cid'),
+                            'subject_id' => $params['id'],
                             'code' => $prow[0]['code'] . $prow[0]['id'] . 'p',
                             'name' => $v['C'],
                             'node' => $v['B'],
@@ -788,6 +792,7 @@ class Project extends Admin
                             'id' => $f['id'],
                             'pid' => $prow[0]['id'],
                             'cid' => session('admin_user.cid'),
+                            'subject_id' => $params['id'],
                             'code' => $prow[0]['code'] . $prow[0]['id'] . 'p',
                             'name' => $v['C'],
                             'cat_id' => $prow[0]['cat_id'],
