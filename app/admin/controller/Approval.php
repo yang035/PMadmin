@@ -179,7 +179,7 @@ class Approval extends Admin
                 break;
         }
 
-        $list = ApprovalModel::where($map)->where($con)->order('create_time desc')->paginate(10, false, ['query' => input('get.')]);
+        $list = ApprovalModel::where($map)->where($con)->order('create_time desc')->paginate(30, false, ['query' => input('get.')]);
         foreach ($list as $k => $v) {
             $list[$k]['send_user'] = $this->deal_data($v['send_user']);
             $list[$k]['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
