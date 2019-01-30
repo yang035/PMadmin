@@ -121,7 +121,11 @@ class DailyReport extends Admin
         foreach ($list as $k=>$v){
             $v['send_user'] = $this->deal_data($v['send_user']);
             $v['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
-            $v['project_name'] = ProjectModel::index(['id'=>$v['project_id']])[0]['name'];
+            if (!empty($v['project_id'])){
+                $v['project_name'] = ProjectModel::index(['id'=>$v['project_id']])[0]['name'];
+            }else{
+                $v['project_name'] = '其他';
+            }
         }
 //        print_r(ProjectModel::inputSearchProject());
         $this->assign('tab_data', $this->tab_data);
@@ -170,7 +174,12 @@ class DailyReport extends Admin
         }
 
         $coment = ReportReply::getAll($params['id'],5);
-        $row['project_name'] = ProjectModel::index(['id'=>$row['project_id']])[0]['name'];
+        if (!empty($row['project_id'])){
+            $row['project_name'] = ProjectModel::index(['id'=>$row['project_id']])[0]['name'];
+        }else{
+            $row['project_name'] = '其他';
+        }
+
         $this->assign('data_list', $row);
         $this->assign('coment', $coment);
         return $this->fetch();
@@ -222,7 +231,12 @@ class DailyReport extends Admin
                     continue;
                 }
                 $tmp[$k]['project_id'] = $data['project_id'][$k];
-                $tmp[$k]['project_code'] = $project_code[$data['project_id'][$k]];
+                if (empty($data['project_id'][$k])){
+                    $tmp[$k]['project_code'] = session('admin_user.cid').'p';
+                }else{
+                    $tmp[$k]['project_code'] = $project_code[$data['project_id'][$k]];
+                }
+
                 $tmp[$k]['real_per'] = $v;
                 $tmp[$k]['content'] = json_encode([$data['content'][$k]]);
                 $ins_data_all[$k] = array_merge($tmp[$k],$ins_data);
@@ -385,7 +399,12 @@ class DailyReport extends Admin
         if ($row){
 //            $content = json_decode($row[0]['content'],true);
             foreach ($row as $k=>$v){
-                $data_list['arr'][$k]['project_name'] = ProjectModel::index(['id'=>$v['project_id']])[0]['name'];
+                if (!empty($v['project_id'])){
+                    $data_list['arr'][$k]['project_name'] = ProjectModel::index(['id'=>$v['project_id']])[0]['name'];
+                }else{
+                    $data_list['arr'][$k]['project_name'] = '其他';
+                }
+
                 $data_list['arr'][$k]['real_per'] = $v['real_per'];
 //                if (count($content) == 1){
 //                    $data_list['arr'][$k]['content'] = $content[0];
