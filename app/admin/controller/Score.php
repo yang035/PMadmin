@@ -51,6 +51,10 @@ class Score extends Admin
         $map['cid'] = session('admin_user.cid');
         $map1['id'] = ['neq', 1];
         $map1['is_show'] = ['eq', 0];
+        $role_id = session('admin_user.role_id');
+        if ($role_id > 3){
+            $map1['id'] = session('admin_user.uid');
+        }
 //print_r($map);
         $fields = "`Score`.id,`Score`.user,sum(`Score`.ml_add_score) as ml_add_sum,sum(`Score`.ml_sub_score) as ml_sub_sum,sum(`Score`.gl_add_score) as gl_add_sum,sum(`Score`.gl_sub_score) as gl_sub_sum,`AdminUser`.realname";
 
