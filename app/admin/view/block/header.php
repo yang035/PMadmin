@@ -43,7 +43,13 @@ $ca = strtolower(request()->controller().'/'.request()->action());
                 {/if}
             {/volist}
             <li><a href="{:url('admin/menu/quick?id='.$_admin_menu_current['id'])}" title="添加到首页快捷菜单" class="j-ajax">[+]</a></li>
-            <li style="float: right">{$admin_user['signature']}</li>
+            <li style="float: right">
+                <span class="layui-badge layui-bg-orange yd"></span>
+                <span class="layui-badge td"></span>
+                <span class="layui-badge layui-bg-orange ym"></span>
+                <span class="layui-badge layui-bg-green tm"></span>
+                {$admin_user['signature']}
+            </li>
         </ul>
         <div style="padding:0 10px;" class="mcolor">{:runhook('system_admin_tips')}</div>
         <div class="page-body">

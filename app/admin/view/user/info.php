@@ -57,7 +57,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">个性签名</label>
         <div class="layui-input-inline">
-            <textarea type="text" class="layui-textarea field-signature" name="signature" lay-verify="" maxlength="50" autocomplete="off" placeholder="请输入个性签名"></textarea>
+            <textarea type="text" class="layui-textarea field-signature" name="signature" lay-verify="" maxlength="30" autocomplete="off" placeholder="请输入个性签名"></textarea>
         </div>
     </div>
     <div class="layui-form-item">

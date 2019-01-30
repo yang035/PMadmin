@@ -118,6 +118,35 @@ class Score extends Admin
         return $this->fetch();
     }
 
+    public function getStaData(){
+        $where = [
+            'user' =>session('admin_user.uid'),
+            'cid' =>session('admin_user.cid'),
+        ];
+        //统计昨日、今日、上月、本月数据
+        $sql = "SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl_sub_score)) AS gl_sum FROM tb_score WHERE TO_DAYS(NOW())-TO_DAYS(FROM_UNIXTIME(create_time)) = 1 AND user= {$where['user']} AND cid={$where['cid']} UNION ALL
+SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl_sub_score)) AS gl_sum FROM tb_score WHERE TO_DAYS(FROM_UNIXTIME(create_time)) = TO_DAYS(NOW()) AND user= {$where['user']} AND cid={$where['cid']} UNION ALL
+SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl_sub_score)) AS gl_sum FROM tb_score WHERE PERIOD_DIFF( DATE_FORMAT( NOW( ) , '%Y%m' ) , DATE_FORMAT( FROM_UNIXTIME(create_time), '%Y%m' ) ) =1 AND user= {$where['user']} AND cid={$where['cid']} UNION ALL
+SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl_sub_score)) AS gl_sum FROM tb_score WHERE DATE_FORMAT( FROM_UNIXTIME(create_time), '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) AND user= {$where['user']} AND cid={$where['cid']}";
+        $m = new ScoreModel();
+        $list = $m->query($sql);
+        $r = [
+            'code'=>0,
+            'data'=>[]
+        ];
+        if ($list){
+            foreach ($list as $k => $v){
+                $list[$k]['ml_sum'] = !empty($v['ml_sum']) ? $v['ml_sum'] : 0;
+                $list[$k]['gl_sum'] = !empty($v['gl_sum']) ? $v['gl_sum'] : 0;
+            }
+            $r = [
+                'code'=>1,
+                'data'=>$list
+            ];
+        }
+        return json($r);
+    }
+
     public function detail($q = '')
     {
         $map = [];
