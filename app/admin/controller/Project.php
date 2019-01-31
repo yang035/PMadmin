@@ -15,6 +15,7 @@ use app\admin\model\CheckItem as ItemModel;
 use app\admin\model\ProjectScorelog as ScorelogModel;
 use app\admin\controller\ProjectReport;
 use app\admin\model\SubjectCat;
+use app\admin\model\SubjectItem;
 use think\Db;
 
 class Project extends Admin
@@ -89,8 +90,10 @@ class Project extends Admin
         }
 
         if ($params) {
-            if (isset($params['name']) && !empty($params['name'])) {
-                $map['name'] = ['like', '%' . $params['name'] . '%'];
+            $subject_id = 0;
+            if (isset($params['project_id']) && !empty($params['project_id'])) {
+                $map['subject_id'] = $params['project_id'];
+                $subject_id = $params['project_id'];
             }
 
             if (isset($params['start_time']) && !empty($params['start_time'])) {
@@ -132,6 +135,7 @@ class Project extends Admin
         $this->assign('tab_url', url('index', ['atype' => $params['atype']]));
         $this->assign('isparams', 1);
         $this->assign('atype', $params['atype']);
+        $this->assign('subject_item', SubjectItem::getItemOption($subject_id,$params['atype']));
         return $this->fetch();
     }
 

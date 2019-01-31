@@ -12,7 +12,9 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">项目名称</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="name" value="{:input('get.name')}" placeholder="项目名称关键字" autocomplete="off" class="layui-input">
+                        <select name="project_id" class="field-project_id" type="select">
+                            {$subject_item}
+                        </select>
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -57,11 +59,11 @@
     </div>
 </div>
 <script>
-    var  name=$("input[name='name']").val();
+    var  project_id=$("select[name='project_id']").val();
     var  start_time=$("input[name='start_time']").val();
     var  end_time=$("input[name='end_time']").val();
     var  atype=$("input[name='atype']").val();
-    var _url = "{:url('admin/project/index')}?name="+name+"&start_time="+start_time+"&end_time="+end_time+"&atype="+atype;
+    var _url = "{:url('admin/project/index')}?project_id="+project_id+"&start_time="+start_time+"&end_time="+end_time+"&atype="+atype;
 
     layui.config({
         base: '/../../static/js/'

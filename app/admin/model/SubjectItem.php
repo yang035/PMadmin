@@ -33,6 +33,30 @@ class SubjectItem extends Model
         }
         return $str;
     }
+
+    public static function getItemOption($id = 0,$type=0)
+    {
+        $map = [
+            'cid'=>session('admin_user.cid'),
+//            'status'=>1,
+        ];
+        if (!empty($type)){
+            $map['cat_id'] = $type;
+        }
+        $data = self::where($map)->column('name','id');
+        $str = '<option value="0">全部</option>';
+        if ($data){
+            foreach ($data as $k => $v) {
+                if ($id == $k) {
+                    $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+                } else {
+                    $str .= '<option value="'.$k.'">'.$v.'</option>';
+                }
+            }
+        }
+        return $str;
+    }
+
     public static function getPsource($grade = 0)
     {
         $grade_type = config('other.p_source');
