@@ -25,7 +25,7 @@
         var open_url = "{:url('Score/getStaData')}";
         $.post(open_url, function(res) {
             var data = res.data;
-            console.log(data);
+            // console.log(data);
             if (res.code == 1) {
                 $('.yd').html('昨日：'+data[0]['ml_sum']+'/'+data[0]['gl_sum']);
                 $('.td').html('今日：'+data[1]['ml_sum']+'/'+data[1]['gl_sum']);

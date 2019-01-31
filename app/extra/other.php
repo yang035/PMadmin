@@ -162,6 +162,10 @@ return [
             'title'=>'出图',
             'href'=>'admin/Approval/printView'
         ],
+        13=>[
+            'title'=>'派遣',
+            'href'=>'admin/Approval/dispatch'
+        ],
     ],
     'car_type' => [
         1 =>'车辆1',

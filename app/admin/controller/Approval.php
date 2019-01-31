@@ -17,6 +17,7 @@ use app\admin\model\ApprovalOvertime as OvertimeModel;
 use app\admin\model\ApprovalGoout as GooutModel;
 use app\admin\model\ApprovalUsecar as CarModel;
 use app\admin\model\ApprovalCost as CostModel;
+use app\admin\model\ApprovalDispatch as DispatchModel;
 use app\admin\model\AdminUser;
 use app\admin\model\AssetItem as ItemModel;
 use app\admin\model\ApprovalGoods;
@@ -744,6 +745,57 @@ class Approval extends Admin
         return $this->fetch();
     }
 
+    public function dispatch()
+    {
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            // 验证
+            $result = $this->validate($data, 'ApprovalDispatch');
+            if ($result !== true) {
+                return $this->error($result);
+            }
+            unset($data['id']);
+            Db::startTrans();
+            try {
+                $approve = [
+                    'project_id' => $data['project_id'],
+                    'class_type' => $data['class_type'],
+                    'cid' => session('admin_user.cid'),
+                    'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
+                    'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
+                    'time_long' => $data['time_long'],
+                    'user_id' => session('admin_user.uid'),
+                    'deal_user' => json_encode(user_array($data['deal_user'])),
+                    'send_user' => json_encode(user_array($data['send_user'])),
+                    'copy_user' => json_encode(user_array($data['copy_user'])),
+                ];
+                $res = ApprovalModel::create($approve);
+                $leave = [
+                    'aid' => $res['id'],
+                    'address' => $data['address'],
+                    'reason' => $data['reason'],
+                    'contacts' => $data['contacts'],
+                    'belongs' => $data['belongs'],
+                    'time_long1' => $data['time_long1'],
+                    'attachment' => $data['attachment'],
+                ];
+                $flag = DispatchModel::create($leave);
+                // 提交事务
+                Db::commit();
+            } catch (\Exception $e) {
+                // 回滚事务
+                Db::rollback();
+            }
+            if ($flag) {
+                return $this->success("操作成功{$this->score_value}", 'index');
+            } else {
+                return $this->error('添加失败！');
+            }
+        }
+        $this->assign('mytask', ProjectModel::getMyTask(0));
+        return $this->fetch();
+    }
+
     public function read()
     {
         $params = $this->request->param();
@@ -840,6 +892,10 @@ class Approval extends Admin
                 $table = 'tb_approval_print';
                 $f = 'b.project_id,b.reason,b.type,b.size_type,b.money,b.application,b.quality,b.num,b.store_id,b.attachment';
                 break;
+            case 13:
+                $table = 'tb_approval_dispatch';
+                $f = 'b.reason,b.address,b.time_long1,b.attachment,b.contacts,b.belongs';
+                break;
             default:
                 $table = 'tb_approval_leave';
                 $f = 'b.type,b.reason,b.attachment';
@@ -911,6 +967,8 @@ class Approval extends Admin
                 }
                 $list['type'] = $print_type[$list['store_id']];
                 $list['store_id'] = $store_type[$list['store_id']];
+                break;
+            case 13:
                 break;
             default:
                 break;
@@ -1001,6 +1059,7 @@ class Approval extends Admin
             $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(10);
             $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(10);
             $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(10);
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A1', '姓名')
                 ->setCellValue('B1', '请假调休')
@@ -1012,7 +1071,8 @@ class Approval extends Admin
                 ->setCellValue('H1', '外出')
                 ->setCellValue('I1', '用车')
                 ->setCellValue('J1', '申领物品')
-                ->setCellValue('K1', '出图');
+                ->setCellValue('K1', '出图')
+                ->setCellValue('L1', '派遣');
 //            print_r($data_list);exit();
             foreach ($data_list as $k => $v) {
                 $num = $k + 2;
@@ -1028,7 +1088,8 @@ class Approval extends Admin
                     ->setCellValue('H' . $num, $v['num_7'])
                     ->setCellValue('I' . $num, $v['num_8'])
                     ->setCellValue('J' . $num, $v['num_11'])
-                    ->setCellValue('K' . $num, $v['num_12']);
+                    ->setCellValue('K' . $num, $v['num_12'])
+                    ->setCellValue('L' . $num, $v['num_13']);
             }
             $d = !empty($d) ? $d : '全部';
             $name = $d.'日常审批报表';

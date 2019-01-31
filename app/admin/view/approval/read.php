@@ -126,6 +126,12 @@
             规格：<br>{$data_list['s']}
             打印单位：{$data_list['store_id']}<br>
             {/case}
+            {case value="13"}
+            派遣地点：{$data_list['address']}<br>
+            执行人：{$data_list['deal_user']}<br>
+            联系人：{$data_list['contacts']}<br>
+            随身物品：{$data_list['belongs']}<br>
+            {/case}
             {/switch}
             事由：{$data_list['reason']}<br>
             附件说明：
