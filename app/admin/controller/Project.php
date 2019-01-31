@@ -88,9 +88,8 @@ class Project extends Admin
                 $map['cat_id'] = $params['atype'];
                 break;
         }
-
+        $subject_id = 0;
         if ($params) {
-            $subject_id = 0;
             if (isset($params['project_id']) && !empty($params['project_id'])) {
                 $map['subject_id'] = $params['project_id'];
                 $subject_id = $params['project_id'];
@@ -111,7 +110,13 @@ class Project extends Admin
         $cid = session('admin_user.cid');
         $map['cid'] = $cid;
         $map['t_type'] = 1;
-        $list = ProjectModel::index($map);
+        if (empty($subject_id)){
+            $list = ProjectModel::index($map);
+        }else{
+            $map['pid'] = 0;
+            $list = ProjectModel::getAll($map);
+        }
+
 //        $aa = new ProjectModel();
 //        echo $aa->getLastSql();exit();
         $grade_type = config('other.grade_type');

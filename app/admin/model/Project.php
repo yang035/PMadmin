@@ -18,6 +18,17 @@ class Project extends Model
         $result = self::field($field)->where($where)->order('grade desc')->select();
         return $result;
     }
+
+    public static function getAll($where){
+        $field = '*';
+        $result = self::field($field)->where($where)->order('grade desc')->limit(1)->select();
+//        print_r($result[0]['id']);exit();
+        unset($where['pid']);
+        $where['subject_id'] = $result[0]['id'];
+        $result1 = self::field($field)->where($where)->order('grade desc')->select();
+        return array_merge($result,$result1);
+    }
+
     public static function getOption($id = 0)
     {
         $where = [];
