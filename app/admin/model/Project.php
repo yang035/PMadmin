@@ -26,7 +26,7 @@ class Project extends Model
         unset($where['pid']);
         $where['subject_id'] = $result[0]['id'];
         $result1 = self::field($field)->where($where)->order('grade desc')->select();
-        return array_unique(array_merge($result,$result1));
+        return array_unique(array_merge($result1,$result));//顺序不能颠倒
     }
 
     public static function getOption($id = 0)
