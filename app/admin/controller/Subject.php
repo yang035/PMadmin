@@ -143,7 +143,11 @@ class Subject extends Admin
                 $code = (1 == $data['t_type']) ? session('admin_user.cid').'p' : session('admin_user.cid').'t';
                 $data['pid'] = 0;
                 $data['code'] = $code;
-                $res = ProjectModel::where('subject_id',$flag['id'])->update($data);
+                $where = [
+                    'subject_id' => $flag['id'],
+                    'pid' => 0,
+                ];
+                $res = ProjectModel::where($where)->update($data);
 //                // 提交事务
                 Db::commit();
             } catch (\Exception $e) {

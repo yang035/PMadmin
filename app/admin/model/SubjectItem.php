@@ -38,7 +38,7 @@ class SubjectItem extends Model
     {
         $map = [
             'cid'=>session('admin_user.cid'),
-//            'status'=>1,
+            'status'=>1,
         ];
         if (!empty($type)){
             $map['cat_id'] = $type;
