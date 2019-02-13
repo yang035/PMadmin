@@ -29,6 +29,12 @@
 
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-form-item">
+        <label class="layui-form-label">提交人</label>
+        <div class="layui-input-inline">
+            <span>{$data_list['real_name']}</span>
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">任务名</label>
         <div class="layui-input-inline">
             <span>{$data_list['project_name']}</span>

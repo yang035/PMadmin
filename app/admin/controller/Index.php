@@ -54,6 +54,7 @@ class Index extends Admin
                 'cid'=>session('admin_user.cid'),
                 'create_time'=>['>',date("Y-m-d H:i:s", strtotime("-1 month"))],
             ];
+            $map['create_time'] = ['>','2019-02-01 00:00:00'];
             $daily_fields = "SUM(IF(user_id='{$uid}',1,0)) user_num,
         SUM(IF(JSON_EXTRACT(send_user,'$.\"$uid\"') = '',1,0)) send_num,
         SUM(IF(JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"'),1,0)) copy_num,
