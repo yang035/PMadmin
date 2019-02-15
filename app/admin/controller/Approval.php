@@ -128,9 +128,11 @@ class Approval extends Admin
     {
         $params = $this->request->param();
         $map = [];
+        $d = '';
         $cid = session('admin_user.cid');
         $map['cid'] = $cid;
         $panel_type = config('other.panel_type');
+        $approval_status = config('other.approval_status');
         $params['atype'] = isset($params['atype']) ? $params['atype'] : 1;
         if (1 == $params['atype']) {
             $this->assign('tab_data', $this->tab_data);
@@ -145,11 +147,13 @@ class Approval extends Admin
             if (!empty($params['class_type'])) {
                 $map['class_type'] = $params['class_type'];
             }
-            if (!empty($params['start_time'])) {
-                $map['create_time'] = ['egt', $params['start_time']];
-            }
-            if (!empty($params['end_time'])) {
-                $map['create_time'] = ['elt', $params['end_time']];
+            if (isset($params['search_date']) && !empty($params['search_date'])){
+                $d = urldecode($params['search_date']);
+                $d_arr = explode(' - ',$d);
+                $d0 = $d_arr[0].' 00:00:00';
+                $d1 = $d_arr[1].' 23:59:59';
+                $map['start_time'] = ['egt',"$d0"];
+                $map['end_time'] = ['elt',"$d1"];
             }
         }
         $uid = session('admin_user.uid');
@@ -180,6 +184,67 @@ class Approval extends Admin
                 break;
         }
 
+        if (isset($params['export']) && 1 == $params['export']){
+            set_time_limit(0);
+            $list = ApprovalModel::where($map)->where($con)->order('create_time desc')->select();
+//        print_r($data_list);
+            foreach ($list as $k => $v) {
+                $list[$k]['send_user'] = strip_tags($this->deal_data($v['send_user']));
+                $list[$k]['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
+                if ($v['project_id']){
+                    $project_data = ProjectModel::getRowById($v['project_id']);
+                }else{
+                    $project_data = [
+                        'name'=>'其他',
+                    ];
+                }
+                $list[$k]['project_name'] = $project_data['name'];
+            }
+            vendor('PHPExcel.PHPExcel');
+            $objPHPExcel = new \PHPExcel();
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(10);
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A1', '姓名')
+                ->setCellValue('B1', '类型')
+                ->setCellValue('C1', '开始时间')
+                ->setCellValue('D1', '结束时间')
+                ->setCellValue('E1', '项目名称')
+                ->setCellValue('F1', '审批人')
+                ->setCellValue('G1', '添加时间')
+                ->setCellValue('H1', '状态');
+//            print_r($data_list);exit();
+            foreach ($list as $k => $v) {
+                $num = $k + 2;
+                $objPHPExcel->setActiveSheetIndex(0)
+                    //Excel的第A列，uid是你查出数组的键值，下面以此类推
+                    ->setCellValue('A' . $num, $v['user_id'])
+                    ->setCellValue('B' . $num, $panel_type[$v['class_type']]['title'])
+                    ->setCellValue('C' . $num, $v['start_time'])
+                    ->setCellValue('D' . $num, $v['end_time'])
+                    ->setCellValue('E' . $num, $v['project_name'])
+                    ->setCellValue('F' . $num, $v['send_user'])
+                    ->setCellValue('G' . $num, $v['create_time'])
+                    ->setCellValue('H' . $num, $approval_status[$v['status']]);
+            }
+            $d = !empty($d) ? $d : '全部';
+            $name = $d.'日常审批统计';
+            $objPHPExcel->getActiveSheet()->setTitle($d);
+            $objPHPExcel->setActiveSheetIndex(0);
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="' . $name . '.xls"');
+            header('Cache-Control: max-age=0');
+            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            $objWriter->save('php://output');
+            exit;
+        }
+
         $list = ApprovalModel::where($map)->where($con)->order('create_time desc')->paginate(30, false, ['query' => input('get.')]);
         foreach ($list as $k => $v) {
             $list[$k]['send_user'] = $this->deal_data($v['send_user']);
@@ -193,7 +258,7 @@ class Approval extends Admin
             }
             $list[$k]['project_name'] = $project_data['name'];
         }
-        $approval_status = config('other.approval_status');
+
         $this->assign('tab_data', $this->tab_data);
         $this->assign('tab_type', 1);
         $this->assign('isparams', 1);

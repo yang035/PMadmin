@@ -6,7 +6,7 @@
 </style>
 <div class="page-toolbar">
     <div class="page-filter">
-        <form class="layui-form layui-form-pane" action="{:url()}" method="get">
+        <form class="layui-form layui-form-pane" action="{:url()}" method="get" id="search_form">
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label">类型</label>
@@ -20,19 +20,15 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">开始时间</label>
+                    <label class="layui-form-label">日期范围</label>
                     <div class="layui-input-inline">
-                        <input type="text" class="layui-input field-start_time" name="start_time" value="{:input('get.start_time')}" autocomplete="off" placeholder="选择开始时间">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">结束时间</label>
-                    <div class="layui-input-inline">
-                        <input type="text" class="layui-input field-end_time" name="end_time" value="{:input('get.end_time')}" autocomplete="off" placeholder="选择结束时间">
+                        <input type="text" class="layui-input" id="test2" name="search_date" placeholder="选择日期" readonly value="{$d|default=''}">
                     </div>
                 </div>
                 <input type="hidden" name="atype" value="{$Request.param.atype}">
-                <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
+                <input type="hidden" name="export" value="">
+                <button type="submit" class="layui-btn layui-btn-normal normal_btn">搜索</button>
+                <input type="button" class="layui-btn layui-btn-primary layui-icon export_btn" value="导出">
             </div>
         </form>
         <div class="layui-form">
@@ -104,11 +100,26 @@
 {include file="block/layui" /}
 <script>
     var formData = {:json_encode($data_info)};
-    layui.use(['jquery', 'laydate'], function() {
-        var $ = layui.jquery, laydate = layui.laydate;
+    layui.use(['jquery', 'laydate','form'], function() {
+        var $ = layui.jquery,laydate = layui.laydate;
+        //年选择器
         laydate.render({
-            elem: '.field-expire_time',
-            min:'0'
+            elem: '#test2',
+            range: true
+        });
+
+        $('.export_btn').click(function () {
+            if ($(this).val() == '导出'){
+                $('input[name=export]').val(1);
+                $('#search_form').submit();
+            }
+        });
+
+        $('.normal_btn').click(function () {
+            if ($(this).val() != '导出'){
+                $('input[name=export]').val('');
+                $('#search_form').submit();
+            }
         });
 
 
