@@ -155,6 +155,10 @@ class Approval extends Admin
                 $map['start_time'] = ['egt',"$d0"];
                 $map['end_time'] = ['elt',"$d1"];
             }
+            if (!empty($params['person_user'])) {
+                $person_user = trim($params['person_user'],',');
+                $map['user_id'] = ['in',"{$person_user}"];
+            }
         }
         $uid = session('admin_user.uid');
         $con = '';

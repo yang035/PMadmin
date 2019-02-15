@@ -25,6 +25,13 @@
                         <input type="text" class="layui-input" id="test2" name="search_date" placeholder="选择日期" readonly value="{$d|default=''}">
                     </div>
                 </div>
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <button type="button" class="layui-btn layui-btn-primary" id="person_user_id">选择人员</button>
+                        <div id="person_select_id"></div>
+                        <input type="hidden" name="person_user" id="person_user" value="">
+                    </div>
+                </div>
                 <input type="hidden" name="atype" value="{$Request.param.atype}">
                 <input type="hidden" name="export" value="">
                 <button type="submit" class="layui-btn layui-btn-normal normal_btn">搜索</button>
@@ -122,7 +129,25 @@
             }
         });
 
-
+        $('#person_user_id').on('click', function(){
+            var person_user = $('#person_user').val();
+            var open_url = "{:url('Tool/getTreeUser')}?m=person&u="+person_user;
+            if (open_url.indexOf('?') >= 0) {
+                open_url += '&hisi_iframe=yes';
+            } else {
+                open_url += '?hisi_iframe=yes';
+            }
+            layer.open({
+                type:2,
+                title :'员工列表',
+                maxmin: true,
+                area: ['800px', '500px'],
+                content: open_url,
+                success:function (layero, index) {
+                    var body = layer.getChildFrame('body', index);  //巧妙的地方在这里哦
+                }
+            });
+        });
     });
 
     function approval_read(id,atype,class_type,cls_name){
