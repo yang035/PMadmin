@@ -54,7 +54,7 @@
             <tr>
                 <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
                 <td class="font12" title="{$vo['remark']}">
-                    <strong class="mcolor">{$vo['name']}</strong>
+                    <a href="{:url('read',['id'=>$vo['id'],'pid'=>$vo['pid']])}"><strong class="mcolor">{$vo['name']}</strong></a>
                 </td>
                 <td class="font12">{$vo['start_time']}</td>
                 <td class="font12">{$vo['end_time']}</td>
