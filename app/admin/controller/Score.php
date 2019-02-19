@@ -51,6 +51,7 @@ class Score extends Admin
         $map['cid'] = session('admin_user.cid');
         $map1['id'] = ['neq', 1];
         $map1['is_show'] = ['eq', 0];
+        $map1['status'] = 1;
         $role_id = session('admin_user.role_id');
         if ($role_id > 3){
             $map1['id'] = session('admin_user.uid');
