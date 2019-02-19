@@ -31,8 +31,8 @@
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">描述<span style="color: red">*</span></label>
-        <div class="layui-input-inline">
-            <textarea type="text" class="layui-textarea field-remark" name="remark" lay-verify="required" readonly autocomplete="off" placeholder="请输入描述"></textarea>
+        <div class="layui-input-block">
+            <textarea type="text" rows="15" class="layui-textarea field-remark" name="remark" lay-verify="required" readonly autocomplete="off" placeholder="请输入描述"></textarea>
         </div>
     </div>
     <div class="layui-form-item">
