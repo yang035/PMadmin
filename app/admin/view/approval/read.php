@@ -250,8 +250,9 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">内容<span style="color: red"></span></label>
                     <div class="layui-input-inline">
-                        <textarea type="text" class="layui-textarea field-mark" name="mark" autocomplete="off" placeholder="请输入内容"></textarea>
+                        <textarea type="text" class="layui-textarea field-mark" name="mark" autocomplete="off" lay-verify="required" placeholder="请输入内容"></textarea>
                     </div>
+                    <div class="layui-form-mid" style="color: red">*</div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">附件说明</label>

@@ -25,7 +25,7 @@
         <thead>
             <tr>
                 <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
-                <th style="width: 70px">目标值比例范围(%)</th>
+                <th style="width: 90px">目标值比例范围(%)</th>
                 <th>奖励百分比(%)</th>
                 <th>带薪年假(天)</th>
                 <th>旅游金(元)</th>
@@ -46,7 +46,13 @@
             {volist name="data_list" id="vo"}
             <tr>
                 <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
-                <td class="font12">{$vo['max_num']} > M ≥ {$vo['min_num']}</td>
+                <td class="font12">
+                    {notempty name="vo['max_num']"}
+                        {$vo['max_num']} > M ≥ {$vo['min_num']}
+                    {else/}
+                        M ≥ {$vo['min_num']}
+                    {/notempty}
+                </td>
                 <td class="font12">{$vo['prize_ratio']}</td>
                 <td class="font12">{$vo['annual_leave']}</td>
                 <td class="font12">{$vo['travel_money']}</td>
