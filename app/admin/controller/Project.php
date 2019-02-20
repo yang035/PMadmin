@@ -184,11 +184,7 @@ class Project extends Admin
         }
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            // 验证
-            $result = $this->validate($data, 'Project');
-            if ($result !== true) {
-                return $this->error($result);
-            }
+
             if (isset($data['max_score']) && $data['score'] > $data['max_score']) {
                 return $this->error('预设分超过最大分值！');
             }
@@ -202,6 +198,11 @@ class Project extends Admin
                 $data['code'] = $data['cid'] . 'p';
             } else {
                 $data['code'] = $this->getCode($data['code'], $data['pid']);
+            }
+            // 验证
+            $result = $this->validate($data, 'Project');
+            if ($result !== true) {
+                return $this->error($result);
             }
             $data['manager_user'] = json_encode(user_array($data['manager_user']));
             $data['deal_user'] = json_encode(user_array($data['deal_user']));
@@ -237,11 +238,7 @@ class Project extends Admin
         $params = $this->request->param();
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            // 验证
-            $result = $this->validate($data, 'Project');
-            if ($result !== true) {
-                return $this->error($result);
-            }
+
             if (isset($data['max_score']) && $data['score'] > $data['max_score']) {
                 return $this->error('预设分超过最大分值！');
             }
@@ -255,6 +252,11 @@ class Project extends Admin
                 $data['code'] = $data['cid'] . 'p';
             } else {
                 $data['code'] = $this->getCode($data['code'], $data['pid']);
+            }
+            // 验证
+            $result = $this->validate($data, 'Project');
+            if ($result !== true) {
+                return $this->error($result);
             }
             $data['manager_user'] = json_encode(user_array($data['manager_user']));
             $data['deal_user'] = json_encode(user_array($data['deal_user']));
@@ -301,11 +303,7 @@ class Project extends Admin
         $row = ProjectModel::where($map)->find()->toArray();
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            // 验证
-            $result = $this->validate($data, 'Project');
-            if ($result !== true) {
-                return $this->error($result);
-            }
+
             if (isset($data['max_score']) && $data['score'] > $data['max_score']) {
                 return $this->error('预设分超过最大分值！');
             }
@@ -317,6 +315,11 @@ class Project extends Admin
                 $data['code'] = $data['cid'] . 'p';
             } else {
                 $data['code'] = $this->getCode($data['code'], $data['pid']);
+            }
+            // 验证
+            $result = $this->validate($data, 'Project');
+            if ($result !== true) {
+                return $this->error($result);
             }
             unset($data['pname'], $data['max_score']);
             $data['user_id'] = session('admin_user.uid');

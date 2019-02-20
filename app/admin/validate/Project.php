@@ -14,13 +14,13 @@ class Project extends Validate
         'end_time|结束时间' => 'require|date',
         'send_user|审批人'   => 'require',
         'reason|事由'   =>'length:0,65',
-        'pid-name' => 'unique:project,pid^name',
+        'name' => 'unique:project,pid^name',
     ];
 
     //定义验证提示
     protected $message = [
         'name.require' => '请填写项目名称',
-        'pid-name.unique' => '同项目下节点名称不能重复',
+        'name.unique' => '同项目下节点名称不能重复',
         'remark.require' => '请填写项目描述',
         'score.require' => '请填写项目预设分值',
         'start_time.require' => '选择开始时间',

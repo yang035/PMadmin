@@ -20,7 +20,7 @@ class SubjectContract extends Validate
         'content|洽商记录' => 'require',
         'tpl_id|合同模板' => 'require',
         'name|合同名称' => 'require',
-        'cid-name' => 'unique:subject_contract,cid^name',
+        'name' => 'unique:subject_contract,cid^name',
     ];
 
     //定义验证提示
@@ -30,7 +30,7 @@ class SubjectContract extends Validate
         'status.require'    => '请设置状态',
         'tpl_id.require' => '合同模板必填',
         'name.require' => '合同名称必填',
-        'cid-name.unique' => '合同名称重复',
+        'name.unique' => '合同名称重复',
     ];
 
 }

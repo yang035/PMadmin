@@ -70,13 +70,14 @@ class SubjectContract extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
             // 验证
             $result = $this->validate($data, 'SubjectContract');
             if ($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
+
             unset($data['id'], $data['contract_cat']);
 
             if (!ContractModel::create($data)) {
@@ -105,13 +106,14 @@ class SubjectContract extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
             // 验证
             $result = $this->validate($data, 'SubjectContract');
             if ($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
+
             unset($data['contract_cat']);
             if (!ContractModel::update($data)) {
                 return $this->error('修改失败');

@@ -9,13 +9,13 @@ class Category extends Validate
     protected $rule = [
         'name|名称' => 'require|length:1,50',
         'remark|类型描述'   => 'length:0,200',
-        'pid-name' => 'unique:shopping_category,pid^name',
+        'name' => 'unique:shopping_category,pid^name',
     ];
 
     //定义验证提示
     protected $message = [
         'name.require' => '请输入名称',
         'remark.length'     => '类型描述超过制定长度',
-        'pid-name.unique' => '同公司下类型已经存在',
+        'name.unique' => '同公司下类型已经存在',
     ];
 }

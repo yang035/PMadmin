@@ -47,13 +47,14 @@ class Partner extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
             // 验证
             $result = $this->validate($data, 'Partner');
             if ($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
+
             unset($data['id']);
             $result = PartnerModel::create($data);
             $result_arr = $result->toArray();
@@ -71,13 +72,14 @@ class Partner extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
             // 验证
             $result = $this->validate($data, 'Partner');
             if ($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
+
             if (!PartnerModel::update($data)) {
                 return $this->error('修改失败！');
             }
