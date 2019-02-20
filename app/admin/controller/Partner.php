@@ -26,11 +26,12 @@ class Partner extends Admin
                 $map['name'] = ['like', '%'.$q.'%'];
             }
         }
-
+        $grade_type = config('other.partnership_grade');
         $data_list = PartnerModel::where($map)->paginate(20, false, ['query' => input('get.')]);
         // 分页
         $pages = $data_list->render();
         $this->assign('data_list', $data_list);
+        $this->assign('partnership_grade', $grade_type);
         $this->assign('pages', $pages);
         return $this->fetch();
     }
@@ -55,7 +56,7 @@ class Partner extends Admin
             }
             return $this->success('添加成功。',url('index'));
         }
-
+        $this->assign('partnership_grade', PartnerModel::getPartnershipGrade());
         return $this->fetch('form');
     }
 
@@ -63,9 +64,6 @@ class Partner extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            if ($data['cellphone'] == 0) {
-                unset($data['cellphone']);
-            }
             // 验证
             $result = $this->validate($data, 'Partner');
             if($result !== true) {
@@ -73,14 +71,15 @@ class Partner extends Admin
             }
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
-            if (!AdminCompany::update($data)) {
+            if (!PartnerModel::update($data)) {
                 return $this->error('修改失败！');
             }
             return $this->success('修改成功。',url('index'));
         }
 
-        $row = AdminCompany::where('id', $id)->find()->toArray();
+        $row = PartnerModel::where('id', $id)->find()->toArray();
         $this->assign('data_info', $row);
+        $this->assign('partnership_grade', PartnerModel::getPartnershipGrade());
         return $this->fetch('form');
     }
 }

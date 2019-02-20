@@ -23,15 +23,12 @@ class Partner extends Model
         $result = self::where($where)->find()->toArray();
         return $result;
     }
-    public static function getOption($id = 0)
+    public static function getPartnershipGrade($grade = 0)
     {
-        $rows = self::column('id,name');
+        $grade_type = config('other.partnership_grade');
         $str = '';
-        foreach ($rows as $k => $v) {
-            if ($k == 1) {// 过滤超级管理员角色
-                continue;
-            }
-            if ($id == $k) {
+        foreach ($grade_type as $k => $v) {
+            if ($grade == $k) {
                 $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
             } else {
                 $str .= '<option value="'.$k.'">'.$v.'</option>';

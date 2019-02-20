@@ -165,7 +165,9 @@ class Admin extends Controller
         $val   = input('param.val');
         $ids   = input('param.ids/a') ? input('param.ids/a') : input('param.id/a');
         $table = input('param.table');
-        $field = input('param.field', 'status');
+        $f = input('param.f');
+        $f = empty($f) ? 'status' : $f;
+        $field = input('param.field', $f);
 
         if (empty($ids)) {
             return $this->error('参数传递错误[1]！');

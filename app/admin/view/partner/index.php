@@ -25,10 +25,10 @@
         <thead>
             <tr>
                 <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
-                <th>名称</th>
-                <th>最低产值目标</th>
-                <th>年收益分配比例</th>
-                <th>月收益分配比例</th>
+                <th>合伙级别</th>
+                <th>最低产值目标(万)</th>
+                <th>年收益分配比例(%)</th>
+                <th>月收益分配比例(%)</th>
                 <th>工资发放形式</th>
                 <th>状态</th>
                 <th>添加时间</th>
@@ -39,13 +39,17 @@
             {volist name="data_list" id="vo"}
             <tr>
                 <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
-                <td class="font12">
-                    <strong class="mcolor">{$vo['name']}</strong>
-                </td>
+                <td class="font12">{$partnership_grade[$vo['partnership_grade']]}</td>
                 <td class="font12">{$vo['min_target']}</td>
                 <td class="font12">{$vo['year_per']}</td>
                 <td class="font12">{$vo['month_per']}</td>
-                <td class="font12">{$vo['type']}</td>
+                <td class="font12">
+                    {if condition="$vo['type'] eq 1"}
+                    按年薪
+                    {else/}
+                    按月薪
+                    {/if}
+                    </td>
                 <td><input type="checkbox" name="status" {if condition="$vo['status'] eq 1"}checked=""{/if} value="{$vo['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="{:url('status?table=admin_company&ids='.$vo['id'])}"></td>
                 <td class="font12">{$vo['create_time']}</td>
                 <td>

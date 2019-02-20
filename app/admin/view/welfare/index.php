@@ -25,20 +25,20 @@
         <thead>
             <tr>
                 <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
-                <th>比例范围</th>
+                <th style="width: 70px">目标值比例范围(%)</th>
                 <th>奖励百分比(%)</th>
-                <th>带薪年假</th>
-                <th>旅游金</th>
-                <th>设备折旧率</th>
-                <th>职业技能培训费</th>
-                <th>专家就业指导费</th>
-                <th>损差补偿</th>
+                <th>带薪年假(天)</th>
+                <th>旅游金(元)</th>
+                <th>设备折旧率(‰)</th>
+                <th>职业技能培训费(‰)</th>
+                <th>专家就业指导费(‰)</th>
+                <th>损差补偿(‰)</th>
                 <th>社保</th>
                 <th>公积金</th>
                 <th>个人意外险</th>
                 <th>家人幸福保险</th>
                 <th>状态</th>
-                <th>添加时间</th>
+                <th style="width: 120px">更新时间</th>
                 <th>操作</th>
             </tr> 
         </thead>
@@ -54,12 +54,12 @@
                 <td class="font12">{$vo['train_per']}</td>
                 <td class="font12">{$vo['job_train']}</td>
                 <td class="font12">{$vo['compensation']}</td>
-                <td><input type="checkbox" name="social" {if condition="$vo['social'] eq 1"}checked=""{/if} value="{$vo['social']}" lay-skin="switch" lay-filter="switchStatus" lay-text="有|无" data-href="{:url('social?table=welfare&ids='.$vo['id'])}"></td>
-                <td><input type="checkbox" name="accumulation" {if condition="$vo['accumulation'] eq 1"}checked=""{/if} value="{$vo['accumulation']}" lay-skin="switch" lay-filter="switchStatus" lay-text="有|无" data-href="{:url('accumulation?table=welfare&ids='.$vo['id'])}"></td>
-                <td><input type="checkbox" name="accident_insurance" {if condition="$vo['accident_insurance'] eq 1"}checked=""{/if} value="{$vo['accident_insurance']}" lay-skin="switch" lay-filter="switchStatus" lay-text="有|无" data-href="{:url('accident_insurance?table=welfare&ids='.$vo['id'])}"></td>
-                <td><input type="checkbox" name="happy_insurance" {if condition="$vo['happy_insurance'] eq 1"}checked=""{/if} value="{$vo['happy_insurance']}" lay-skin="switch" lay-filter="switchStatus" lay-text="有|无" data-href="{:url('happy_insurance?table=welfare&ids='.$vo['id'])}"></td>
+                <td><input type="checkbox" name="social" {if condition="$vo['social'] eq 1"}checked=""{/if} value="{$vo['social']}" lay-skin="switch" lay-filter="switchStatus" lay-text="有|无" data-href="{:url('status?table=welfare&f=social&ids='.$vo['id'])}"></td>
+                <td><input type="checkbox" name="accumulation" {if condition="$vo['accumulation'] eq 1"}checked=""{/if} value="{$vo['accumulation']}" lay-skin="switch" lay-filter="switchStatus" lay-text="有|无" data-href="{:url('status?table=welfare&f=accumulation&ids='.$vo['id'])}"></td>
+                <td><input type="checkbox" name="accident_insurance" {if condition="$vo['accident_insurance'] eq 1"}checked=""{/if} value="{$vo['accident_insurance']}" lay-skin="switch" lay-filter="switchStatus" lay-text="有|无" data-href="{:url('status?table=welfare&f=accident_insurance&ids='.$vo['id'])}"></td>
+                <td><input type="checkbox" name="happy_insurance" {if condition="$vo['happy_insurance'] eq 1"}checked=""{/if} value="{$vo['happy_insurance']}" lay-skin="switch" lay-filter="switchStatus" lay-text="有|无" data-href="{:url('status?table=welfare&f=happy_insurance&ids='.$vo['id'])}"></td>
                 <td><input type="checkbox" name="status" {if condition="$vo['status'] eq 1"}checked=""{/if} value="{$vo['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="{:url('status?table=welfare&ids='.$vo['id'])}"></td>
-                <td class="font12">{$vo['create_time']}</td>
+                <td class="font12">{$vo['update_time']}</td>
                 <td>
                     <div class="layui-btn-group">
                         <div class="layui-btn-group">
