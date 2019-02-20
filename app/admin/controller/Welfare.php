@@ -16,14 +16,14 @@ class Welfare extends Admin
     public function index($q = '')
     {
         $map = [];
-        if (1 != session('admin_user.role_id')){
+        if (1 != session('admin_user.role_id')) {
             $map['cid'] = session('admin_user.cid');
         }
         if ($q) {
             if (preg_match("/^1\d{10}$/", $q)) {// 手机号
                 $map['cellphone'] = $q;
             } else {// 用户名、昵称
-                $map['name'] = ['like', '%'.$q.'%'];
+                $map['name'] = ['like', '%' . $q . '%'];
             }
         }
 
@@ -41,7 +41,7 @@ class Welfare extends Admin
             $data = $this->request->post();
             // 验证
             $result = $this->validate($data, 'Welfare');
-            if($result !== true) {
+            if ($result !== true) {
                 return $this->error($result);
             }
             $data['cid'] = session('admin_user.cid');
@@ -51,7 +51,7 @@ class Welfare extends Admin
             if (!$result) {
                 return $this->error('添加失败！');
             }
-            return $this->success('添加成功。',url('index'));
+            return $this->success('添加成功。', url('index'));
         }
 
         return $this->fetch('form');
@@ -63,7 +63,7 @@ class Welfare extends Admin
             $data = $this->request->post();
             // 验证
             $result = $this->validate($data, 'Welfare');
-            if($result !== true) {
+            if ($result !== true) {
                 return $this->error($result);
             }
             $data['cid'] = session('admin_user.cid');
@@ -71,7 +71,7 @@ class Welfare extends Admin
             if (!WelfareModel::update($data)) {
                 return $this->error('修改失败！');
             }
-            return $this->success('修改成功。',url('index'));
+            return $this->success('修改成功。', url('index'));
         }
 
         $row = WelfareModel::where('id', $id)->find()->toArray();
