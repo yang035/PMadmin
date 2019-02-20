@@ -14,7 +14,7 @@ use app\admin\model\ContractCat as CatModel;
 
 class ContractItem extends Model
 {
-    public static function getOption($type = 0)
+    public static function getOption($f = 0,$type = 0)
     {
         $map = [
             'cid'=>session('admin_user.cid'),
@@ -22,6 +22,7 @@ class ContractItem extends Model
         ];
         $data = CatModel::where($map)->select();
         $str = '<option value="0" selected>选择类型</option>';
+        $str = empty($f) ? $str : '';
         if ($data){
             foreach ($data as $k => $v) {
                 if ($type == $v['id']) {

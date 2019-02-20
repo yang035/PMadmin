@@ -80,7 +80,7 @@ class Contract extends Admin
             }
             return $this->success("操作成功{$this->score_value}");
         }
-        $this->assign('cat_option',ItemModel::getOption());
+        $this->assign('cat_option',ItemModel::getOption(1));
         return $this->fetch('itemform');
     }
 
@@ -104,7 +104,7 @@ class Contract extends Admin
         $row = ItemModel::where('id', $id)->find()->toArray();
         $row['remark'] = htmlspecialchars_decode($row['remark']);
         $this->assign('data_info', $row);
-        $this->assign('cat_option',ItemModel::getOption());
+        $this->assign('cat_option',ItemModel::getOption(1));
         return $this->fetch('itemform');
     }
 
