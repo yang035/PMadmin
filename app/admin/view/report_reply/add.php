@@ -8,7 +8,7 @@
             <input type="hidden" class="field-report_id" name="report_id">
             <input type="hidden" class="field-project_id" name="project_id">
             <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
-            <a href="{:url('project/editTask')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
+<!--            <a href="{:url('project/editTask')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>-->
         </div>
     </div>
 </form>
