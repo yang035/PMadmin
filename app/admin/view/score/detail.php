@@ -38,8 +38,8 @@
                     <th>ML扣分</th>
                     <th>GL加分</th>
                     <th>GL扣分</th>
+                    <th>备注</th>
                     <th>添加时间</th>
-                    <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -54,15 +54,8 @@
                     <td class="font12">{$vo['ml_sub_score']}</td>
                     <td class="font12">{$vo['gl_add_score']}</td>
                     <td class="font12">{$vo['gl_sub_score']}</td>
+                    <td class="font12">{$vo['remark']}</td>
                     <td class="font12">{$vo['create_time']}</td>
-                    <td>
-                        <div class="layui-btn-group">
-                            <div class="layui-btn-group">
-<!--                                <a href="{:url('edit?id='.$vo['id'])}" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe642;</i></a>-->
-<!--                                <a data-href="{:url('del?table=admin_company&ids='.$vo['id'])}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>-->
-                            </div>
-                        </div>
-                    </td>
                 </tr>
                 {/volist}
                 </tbody>
