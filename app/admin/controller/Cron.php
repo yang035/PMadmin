@@ -112,7 +112,7 @@ class Cron extends Controller
                     'gl_add_score' => $num,
                     'remark' => $remark,
                 ];
-                if (ScoreModel::addScore($sc)) {
+                if (ScoreModel::create($sc)) {
                     echo '更新成功\r\n';
                 }
             }
