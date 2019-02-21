@@ -103,9 +103,20 @@ class Job extends Admin
 
         $row = ItemModel::where('id', $id)->find()->toArray();
         $row['remark'] = htmlspecialchars_decode($row['remark']);
+        $row['requirements'] = htmlspecialchars_decode($row['requirements']);
         $this->assign('data_info', $row);
         $this->assign('cat_option',ItemModel::getOption());
         return $this->fetch('itemform');
+    }
+
+    public function read($id = 0)
+    {
+        $row = ItemModel::where('id', $id)->find()->toArray();
+        $row['remark'] = htmlspecialchars_decode($row['remark']);
+        $row['requirements'] = htmlspecialchars_decode($row['requirements']);
+        $this->assign('data_list', $row);
+        $this->assign('cat_option',ItemModel::getOption());
+        return $this->fetch();
     }
 
     public function delItem()

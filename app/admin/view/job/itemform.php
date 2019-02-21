@@ -9,15 +9,27 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">名称<span style="color: red">*</span></label>
+            <label class="layui-form-label">职位名称<span style="color: red">*</span></label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input field-name" name="name" lay-verify="required" autocomplete="off" placeholder="请输入检查项">
+                <input type="text" class="layui-input field-name" name="name" lay-verify="required" autocomplete="off" placeholder="请输入职位名称">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">内容</label>
+            <label class="layui-form-label">职位代码<span style="color: red">*</span></label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input field-code" name="code" lay-verify="required" autocomplete="off" placeholder="请输入职位代码">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">职位职责</label>
             <div class="layui-input-block">
                 <textarea id="ckeditor" name="remark" class="field-remark"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">任职要求</label>
+            <div class="layui-input-block">
+                <textarea id="ckeditor2" name="requirements" class="field-requirements"></textarea>
             </div>
         </div>
         {:editor(['ckeditor', 'ckeditor2'],'kindeditor')}
