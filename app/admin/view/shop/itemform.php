@@ -64,7 +64,7 @@
         <div class="layui-form-item">
             <div class="layui-inline">
                 <label class="layui-form-label">其他设置</label>
-                <div class="layui-form-mid">每隔</div>
+                <div class="layui-form-mid">每</div>
                 <div class="layui-input-inline" style="width: 100px;">
                     <input type="number" name="time_interval" lay-verify="required" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" value="0" autocomplete="off" class="layui-input field-time_interval">
                 </div>
