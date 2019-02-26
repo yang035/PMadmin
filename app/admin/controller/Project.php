@@ -186,7 +186,7 @@ class Project extends Admin
             $data = $this->request->post();
 
             if (isset($data['max_score']) && $data['score'] > $data['max_score']) {
-                return $this->error('预设分超过最大分值！');
+                return $this->error('预设值超过最大值！');
             }
             $data['cid'] = session('admin_user.cid');
             if ($data['pid'] == '') {
@@ -240,7 +240,7 @@ class Project extends Admin
             $data = $this->request->post();
 
             if (isset($data['max_score']) && $data['score'] > $data['max_score']) {
-                return $this->error('预设分超过最大分值！');
+                return $this->error('预设值超过最大值！');
             }
             $data['cid'] = session('admin_user.cid');
             if ($data['pid'] == '') {
@@ -305,7 +305,7 @@ class Project extends Admin
             $data = $this->request->post();
 
             if (isset($data['max_score']) && $data['score'] > $data['max_score']) {
-                return $this->error('预设分超过最大分值！');
+                return $this->error('预设值超过最大值！');
             }
             $data['cid'] = session('admin_user.cid');
             if ($data['pid'] == '') {
@@ -745,7 +745,7 @@ class Project extends Admin
             set_time_limit(0);
             $excel = \service('Excel');
             $format = array('A' => 'line', 'B' => 'pid', 'C' => 'name', 'D' => 'remark', 'E' => 'score', 'F' => 'start_time', 'G' => 'end_time', 'H' => 'manager_user', 'I' => 'deal_user', 'J' => 'send_user', 'K' => 'copy_user');
-            $checkformat = array('A' => '序号', 'B' => '层级关系', 'C' => '名称', 'D' => '描述', 'E' => '预设分', 'F' => '开始时间', 'G' => '结束时间', 'H' => '负责人', 'I' => '参与人', 'J' => '审批人', 'K' => '抄送人');
+            $checkformat = array('A' => '序号', 'B' => '层级关系', 'C' => '名称', 'D' => '描述', 'E' => '预设值', 'F' => '开始时间', 'G' => '结束时间', 'H' => '负责人', 'I' => '参与人', 'J' => '审批人', 'K' => '抄送人');
             $res = $excel->readUploadFile($file_name, $format, 8050, $checkformat);
             if ($res['status'] == 0) {
                 $this->error($res['data']);

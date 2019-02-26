@@ -26,8 +26,8 @@
             <tr>
                 <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
                 <th>名称</th>
-                <th>预设分</th>
-                <th>实际分</th>
+                <th>计划产量(斗)</th>
+                <th>实际产量(斗)</th>
                 <th>开始时间</th>
                 <th>结束时间</th>
                 <th>审批人</th>

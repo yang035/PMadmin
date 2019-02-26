@@ -88,12 +88,12 @@
 <!--    {/empty}-->
 
     <div class="layui-form-item">
-        <label class="layui-form-label">预设分<span style="color: red">*</span></label>
+        <label class="layui-form-label">预设产量<span style="color: red">*</span></label>
         <div class="layui-input-inline">
-            <input type="number" class="layui-input field-score" name="score" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" lay-verify="required" autocomplete="off" placeholder="请输入预设分">
+            <input type="number" class="layui-input field-score" name="score" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" lay-verify="required" autocomplete="off" placeholder="请输入预设值">
         </div>
         {notempty name="Request.param.pid"}
-        <div class="layui-form-mid">不能超过<span id="max_score" style="color: red;">{$max_score}</span>分</div>
+        <div class="layui-form-mid">不能超过<span id="max_score" style="color: red;">{$max_score}</span>斗</div>
         {/notempty}
     </div>
     <div class="layui-form-item">

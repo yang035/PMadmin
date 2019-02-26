@@ -140,7 +140,7 @@ class Task extends Admin
                 return $this->error($result);
             }
             if (isset($data['max_score']) && $data['score'] > $data['max_score']){
-                return $this->error('预设分超过最大分值！');
+                return $this->error('预设值超过最大值！');
             }
             $data['cid'] = session('admin_user.cid');
             if ($data['pid'] == ''){
@@ -200,7 +200,7 @@ class Task extends Admin
                 return $this->error($result);
             }
             if (isset($data['max_score']) && $data['score'] > $data['max_score']){
-                return $this->error('预设分超过最大分值！');
+                return $this->error('预设值超过最大值！');
             }
             $data['cid'] = session('admin_user.cid');
             if ($data['pid'] == ''){

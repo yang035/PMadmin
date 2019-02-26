@@ -20,7 +20,7 @@ class Plan extends Validate
     protected $message = [
         'name.require' => '请填写项目名称',
         'remark.require' => '请填写项目描述',
-        'score.require' => '请填写项目预设分值',
+        'score.require' => '请填写项目预设值',
         'start_time.require' => '选择开始时间',
         'end_time.require' => '选择结束时间',
         'send_user.require' => '选择审批人',

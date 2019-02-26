@@ -15,10 +15,11 @@
         <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item" style="display: none;" id="tuijian_div">
-        <label class="layui-form-label">分值</label>
+        <label class="layui-form-label">产量</label>
         <div class="layui-input-inline">
-            <input type="number" class="layui-input field-score" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="score" autocomplete="off" placeholder="请输入预设分">
+            <input type="number" class="layui-input field-score" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="score" autocomplete="off" placeholder="请输入预设值">
         </div>
+        <div class="layui-form-mid">斗</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">状态设置</label>

@@ -36,10 +36,11 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">预设分<span style="color: red">*</span></label>
+        <label class="layui-form-label">预设产量<span style="color: red">*</span></label>
         <div class="layui-input-inline">
-            <input type="number" class="layui-input field-score" name="score" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" lay-verify="required" readonly autocomplete="off" placeholder="请输入预设分">
+            <input type="number" class="layui-input field-score" name="score" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" lay-verify="required" readonly autocomplete="off" placeholder="请输入预设值">
         </div>
+        <div class="layui-form-mid">斗</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">开始时间<span style="color: red">*</span></label>

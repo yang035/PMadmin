@@ -20,9 +20,9 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">预设分</label>
+        <label class="layui-form-label">预设产量</label>
         <div class="layui-input-inline">
-            <input type="text" class="layui-input field-score" name="score" lay-verify="required" autocomplete="off" placeholder="请输入名称">
+            <input type="text" class="layui-input field-score" name="score" lay-verify="required" autocomplete="off" placeholder="请输入产量">
         </div>
     </div>
     <div class="layui-form-item">
@@ -36,6 +36,7 @@
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-end_time" name="end_time" lay-verify="required" autocomplete="off" placeholder="选择结束时间">
         </div>
+        <div class="layui-form-mid">斗</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">历时</label>
