@@ -13,6 +13,12 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">工作岗位</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-job_item" name="job_item" lay-verify="" readonly autocomplete="off" placeholder="请输入工作岗位">
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">用户名</label>
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-username" name="username" lay-verify="required" autocomplete="off" placeholder="请输入用户名" readonly="">

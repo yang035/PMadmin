@@ -14,6 +14,25 @@ use app\admin\model\JobItem as ItemModel;
 
 class JobCat extends Model
 {
+    public static function getOption1($type = 0)
+    {
+        $map = [
+            'cid'=>session('admin_user.cid'),
+            'status'=>1,
+        ];
+        $data = self::where($map)->select();
+        $str = '';
+        if ($data){
+            foreach ($data as $k => $v) {
+                if ($type == $v['id']) {
+                    $str .= "<option value='".$v['id']."' selected>".$v['name']."</option>";
+                } else {
+                    $str .= "<option value='".$v['id']."'>".$v['name']."</option>";
+                }
+            }
+        }
+        return $str;
+    }
     public function del($id){
         if (is_array($id)) {
             $error = '';

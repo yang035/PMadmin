@@ -34,6 +34,27 @@ class JobItem extends Model
         return $str;
     }
 
+    public static function getChilds($id=1,$type = 0)
+    {
+        $map = [
+            'cid'=>session('admin_user.cid'),
+            'status'=>1,
+            'cat_id'=>$id,
+        ];
+        $data = self::where($map)->select();
+        $str = '';
+        if ($data){
+            foreach ($data as $k => $v) {
+                if ($type == $v['id']) {
+                    $str .= '<option value="'.$v['id'].'" selected>'.$v['name'].'</option>';
+                } else {
+                    $str .= '<option value="'.$v['id'].'">'.$v['name'].'</option>';
+                }
+            }
+        }
+        return $str;
+    }
+
     public function cat()
     {
         return $this->hasOne('JobCat', 'id', 'cat_id');

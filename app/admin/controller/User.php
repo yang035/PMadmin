@@ -9,6 +9,8 @@ use app\admin\model\AdminMenu as MenuModel;
 use app\admin\model\AdminUserDefault;
 use app\common\service\Service;
 use think\Validate;
+use app\admin\model\JobCat as JobCatModel;
+use app\admin\model\JobItem as JobItemModel;
 
 class User extends Admin
 {
@@ -59,6 +61,11 @@ class User extends Admin
             }
 
             $data['data'] = UserModel::with('role')->with('dep')->where($where)->page($page)->limit($limit)->select();
+            if ($data['data']){
+                foreach ($data['data'] as $k=>$v){
+                    $data['data'][$k]['job_item'] = !empty($v['job_item']) ? JobItemModel::getItem()[$v['job_item']] : '无';
+                }
+            }
             $data['count'] = UserModel::where($where)->count('id');
             $data['code'] = 0;
             $data['msg'] = '';
@@ -124,10 +131,16 @@ class User extends Admin
         ];
         $this->assign('menu_list', '');
         $this->assign('role_option', RoleModel::getOption());
+        $this->assign('rule_option',JobCatModel::getOption1());
         $this->assign('company_option', AdminCompany::getOption());
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 2);
         return $this->fetch('userform');
+    }
+
+    public function getJobItem($id=0){
+        $child_option = JobItemModel::getChilds($id);
+        echo json_encode($child_option);
     }
 
     public function editUser($id = 0)
@@ -191,6 +204,7 @@ class User extends Admin
         if ($row['department_id']){
             $row['dep_name'] = AdminDepartment::getRowById($row['department_id'])['name'];
         }
+        $row['job_item'] = !empty($row['job_item']) ? JobItemModel::getItem()[$row['job_item']] : '无';
 
         $this->assign('menu_list', MenuModel::getAllChild());
         $this->assign('role_option', RoleModel::getOption());
@@ -198,6 +212,7 @@ class User extends Admin
         $this->assign('tab_type', 2);
         $this->assign('role_option', RoleModel::getOption($row['role_id']));
         $this->assign('company_option', AdminCompany::getOption());
+        $this->assign('rule_option',JobCatModel::getOption1());
         $this->assign('data_info', $row);
         return $this->fetch('userform');
     }
@@ -230,6 +245,7 @@ class User extends Admin
         $row = UserModel::where('id', ADMIN_ID)->find()->toArray();
         $row['cname'] = AdminCompany::getCompanyById(session('admin_user.cid'))['name'];
         $row['dep_name'] = AdminDepartment::getRowById(session('admin_user.depid'))['name'];
+        $row['job_item'] = !empty($row['job_item']) ? JobItemModel::getItem()[$row['job_item']] : '无';
         $this->assign('data_info', $row);
         return $this->fetch();
     }

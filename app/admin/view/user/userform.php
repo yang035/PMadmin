@@ -128,6 +128,19 @@
             </div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label">工作岗位</label>
+            <div class="layui-input-inline">
+                <select name="job_cat" class="field-job_cat" type="select" lay-filter="job_cat">
+                    {$rule_option}
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="job_item" class="field-job_item" type="select" lay-filter="rid" id="c_id">
+                </select>
+            </div>
+            <div class="layui-form-mid field_job_item">{$data_info['job_item']|default=''}</div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">状&nbsp;&nbsp;&nbsp;&nbsp;态</label>
             <div class="layui-input-inline">
                 <input type="radio" class="field-status" name="status" value="1" title="启用" checked>
@@ -247,6 +260,29 @@
                 $('.role-list-form input[value="' + formData['auth'][i] + '"]').prop('checked', true);
             }
             form.render('checkbox');
+        }
+
+        // var i=0;
+        // console.log(formData.job_cat);
+        select_union();
+        function select_union(){
+            form.on('select(job_cat)', function(data){
+                $.ajax({
+                    type: 'POST',
+                    url: "{:url('getJobItem')}",
+                    data: {id:data.value},
+                    dataType:  'json',
+                    success: function(data){
+                        // $("#c_id").html("");
+                        // $.each(data, function(key, val) {
+                        //     var option1 = $("<option>").val(val.areaId).text(val.fullname);
+                        $('#c_id').html(data);
+                        form.render('select');
+                        // });
+                        // $("#c_id").get(0).selectedIndex=0;
+                    }
+                });
+            });
         }
     });
 
