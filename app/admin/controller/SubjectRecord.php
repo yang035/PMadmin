@@ -92,18 +92,10 @@ class SubjectRecord extends Admin
 
         }
         //设置默认格式
-        $record_format = "&lt;p&gt;
-	甲方人员：
-&lt;/p&gt;
-&lt;p&gt;
-	乙方人员：
-&lt;/p&gt;
-&lt;p&gt;
-	时间：
-&lt;/p&gt;
-&lt;p&gt;
-	内容：
-&lt;/p&gt;";
+        $record_format = "甲方人员：<br>
+乙方人员：<br>
+时间：<br>
+内容：<br>";
         $this->assign('record_format', $record_format);
         return $this->fetch('itemform');
     }
