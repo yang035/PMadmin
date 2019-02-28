@@ -34,10 +34,10 @@
                     <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
                     <th>员工</th>
                     <th>来源</th>
-                    <th>ML加分</th>
-                    <th>ML扣分</th>
-                    <th>GL加分</th>
-                    <th>GL扣分</th>
+                    <th>ML+</th>
+                    <th>ML-</th>
+                    <th>GL+</th>
+                    <th>GL-</th>
                     <th>备注</th>
                     <th>添加时间</th>
                 </tr>
