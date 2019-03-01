@@ -229,7 +229,10 @@ class DailyReport extends Admin
             $ins_data['copy_user'] = json_encode(user_array($data['copy_user']));
             $ins_data['cid'] = session('admin_user.cid');
             $ins_data['user_id'] = session('admin_user.uid');
-            $ins_data['work_option'] = implode(',',$data['work_option']);
+            if (isset($data['work_option'])){
+                $ins_data['work_option'] = implode(',',$data['work_option']);
+            }
+
             $ins_data_all = [];
             //以百分比为参考，当为空时中断循环
             foreach ($data['real_per'] as $k=>$v){
