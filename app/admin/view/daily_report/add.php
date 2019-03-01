@@ -72,6 +72,12 @@
         <a href="javascript:void(0);" class="aicon ai-tianjia field-task-add" style="float: left;font-size: 30px;"></a>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">基础工作项</label>
+        <div class="layui-input-block">
+            {$work_option}
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">明日计划</label>
         <div class="layui-input-block">
             <input type="text" class="layui-input field-plan" name="plan[]" autocomplete="off" placeholder="计划1">

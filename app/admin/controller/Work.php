@@ -47,6 +47,7 @@ class Work extends Admin
                 $where['name'] = ['like', "%{$name}%"];
             }
             $where['cid'] = session('admin_user.cid');
+            $where['user_id'] = session('admin_user.uid');
             $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->select();
             $data['count'] = ItemModel::where($where)->count('id');
             $data['code'] = 0;

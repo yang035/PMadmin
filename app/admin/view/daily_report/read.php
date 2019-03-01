@@ -59,6 +59,12 @@
         {/notempty}
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">基础工作</label>
+        <div class="layui-input-block">
+            {$data_list['work_option']}
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">明日计划</label>
         {notempty name="data_list['plan']"}
         {volist name="data_list['plan']" id="vo"}

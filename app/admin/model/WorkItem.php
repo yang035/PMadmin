@@ -58,6 +58,46 @@ class WorkItem extends Model
         return $str;
     }
 
+    public static function getOption3()
+    {
+        $w = date('w');
+        $map = [
+            'cid'=>session('admin_user.cid'),
+            'status'=>1,
+            'user_id'=>session('admin_user.uid'),
+            'week'=>['like',"%{$w}%"]
+        ];
+        $data = self::where($map)->column('name','id');
+        $str = '';
+        if ($data){
+            foreach ($data as $k => $v) {
+                $str .= '<input type="checkbox" name="work_option[]" lay-skin="primary" title="'.$v.'" value="'.$k.'"><br>';
+            }
+        }
+        return !empty($str) ? $str : '无';
+    }
+
+    public static function getOption4($option)
+    {
+        $map = [
+            'cid'=>session('admin_user.cid'),
+            'status'=>1,
+            'user_id'=>session('admin_user.uid'),
+        ];
+        $str = '';
+        if ($option){
+            $arr_option = explode(',',$option);
+            $data = self::where($map)->column('name','id');
+            if ($data){
+                foreach ($arr_option as $k => $v) {
+                    if (array_key_exists($v,$data))
+                    $str .= '<input type="checkbox" name="work_option[]" lay-skin="primary" checked="" disabled="" title="'.$data[$v].'" value="'.$v.'"><br>';
+                }
+            }
+        }
+        return !empty($str) ? $str : '无';
+    }
+
     public static function getChilds($id=1,$type = 0)
     {
         $map = [

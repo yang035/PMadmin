@@ -46,6 +46,12 @@
         </div>
     </div>
     {/volist}
+    <div class="layui-form-item">
+        <label class="layui-form-label">基础工作</label>
+        <div class="layui-input-block">
+            {$data_list['work_option']}
+        </div>
+    </div>
     <hr>
     <div class="layui-form-item">
         <label class="layui-form-label">明日计划</label>

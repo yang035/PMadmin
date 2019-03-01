@@ -11,6 +11,7 @@ use app\admin\model\AdminUser;
 use app\admin\model\DailyReport as DailyReportModel;
 use app\admin\model\Project as ProjectModel;
 use app\admin\model\Score as ScoreModel;
+use app\admin\model\WorkItem as WorkModel;
 use think\Db;
 
 
@@ -158,6 +159,7 @@ class DailyReport extends Admin
             $row['send_user'] = $this->deal_data($row['send_user']);
             $row['copy_user'] = $this->deal_data($row['copy_user']);
             $row['real_name'] = AdminUser::getUserById($row['user_id'])['realname'];
+            $row['work_option'] = WorkModel::getOption4($row['work_option']);
         }
         //标记已读
         $uid = session('admin_user.uid');
@@ -227,6 +229,7 @@ class DailyReport extends Admin
             $ins_data['copy_user'] = json_encode(user_array($data['copy_user']));
             $ins_data['cid'] = session('admin_user.cid');
             $ins_data['user_id'] = session('admin_user.uid');
+            $ins_data['work_option'] = implode(',',$data['work_option']);
             $ins_data_all = [];
             //以百分比为参考，当为空时中断循环
             foreach ($data['real_per'] as $k=>$v){
@@ -287,6 +290,8 @@ class DailyReport extends Admin
         }
 //        print_r($data_info);
         $this->assign('row', $row1);
+
+        $this->assign('work_option', WorkModel::getOption3());
         $this->assign('leave_type', DailyReportModel::getOption());
         $this->assign('mytask', ProjectModel::getMyTask(0));
         return $this->fetch();
@@ -422,6 +427,7 @@ class DailyReport extends Admin
             $data_list['attachment'] = json_decode($row[0]['attachment'],true);
             $data_list['send_user'] = $this->deal_data($row[0]['send_user']);
             $data_list['copy_user'] = $this->deal_data($row[0]['copy_user']);
+            $data_list['work_option'] = WorkModel::getOption4($row[0]['work_option']);
         }
 //        print_r($data_list);
         //标记已读
