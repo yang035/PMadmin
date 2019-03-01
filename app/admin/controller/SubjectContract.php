@@ -99,7 +99,7 @@ class SubjectContract extends Admin
     public function getItemById($id = 0)
     {
         $data = ContractItem::getItemById($id);
-        echo $data['remark'];
+        echo htmlspecialchars_decode($data['remark']);
     }
 
     public function editItem($id = 0)
