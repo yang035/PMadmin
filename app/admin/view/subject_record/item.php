@@ -18,14 +18,12 @@
             <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
             </div>
         </form>
-        {notempty name="$Request.param.subject_id"}
         <div class="layui-btn-group fl">
             <a href="#" onclick="add_user('addItem',{$Request.param.subject_id})" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加</a>
             <a data-href="{:url('status?table=contacts_item&val=1')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-play" data-table="dataTable">&nbsp;启用</a>
             <a data-href="{:url('status?table=contacts_item&val=0')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-pause" data-table="dataTable">&nbsp;禁用</a>
 <!--            <a data-href="{:url('delItem')}" class="layui-btn layui-btn-primary j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>-->
         </div>
-        {/notempty}
         <table id="dataTable" class="layui-table" lay-filter="table1"></table>
     </div>
 </div>
@@ -35,10 +33,8 @@
     <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=contacts_item&id={{ d.id }}">
 </script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
-    {notempty name="$Request.param.subject_id"}
-    <a href="#" onclick="add_user('editItem',{$Request.param.subject_id},{{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
+    <a href="#" onclick="add_user('editItem',{{ d.subject_id }},{{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
 <!--    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
-    {/notempty}
 </script>
 <script type="text/javascript">
     layui.use(['jquery','table'], function() {
@@ -67,7 +63,7 @@
     });
 
     function add_user(url,subject_id,id='') {
-        var open_url = "{:url('"+url+"')}?subject_id="+subject_id+"&id="+id;
+        var open_url = "{:url('"+url+"')}?subject_id="+subject_id+"&id="+id+"&subject_name={$Request.param.subject_name}";
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {
@@ -75,7 +71,7 @@
         }
         layer.open({
             type:2,
-            title :'添加/编辑用户',
+            title :'添加/编辑记录',
             maxmin: true,
             area: ['800px', '500px'],
             content: open_url,

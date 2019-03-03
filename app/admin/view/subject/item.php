@@ -44,8 +44,8 @@
 <!--    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
     <a href="#" onclick="a_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">甲方人员</a>
     <a href="#" onclick="b_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">乙方人员</a>
-    <a href="#" onclick="discuss_record({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">洽商记录</a>
-    <a href="#" onclick="contract({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">拟定合同</a>
+    <a href="#" onclick="discuss_record({{ d.id }},'{{ d.name }}')" class="layui-btn layui-btn-xs layui-btn-warm">洽商记录</a>
+    <a href="#" onclick="contract({{ d.id }},'{{ d.name }}')" class="layui-btn layui-btn-xs layui-btn-normal">拟定合同</a>
     <a href="#" onclick="zujian_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">组建项目组</a>
 </script>
 <script type="text/javascript">
@@ -128,8 +128,8 @@
         });
     }
 
-    function discuss_record(id) {
-        var open_url = "{:url('SubjectRecord/index')}?subject_id="+id;
+    function discuss_record(id,subject_name) {
+        var open_url = "{:url('SubjectRecord/index')}?subject_id="+id+"&subject_name="+subject_name;
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {
@@ -137,7 +137,7 @@
         }
         layer.open({
             type:2,
-            title :'添加人员',
+            title :'添加记录',
             maxmin: true,
             area: ['900px', '600px'],
             content: open_url,
@@ -147,8 +147,8 @@
         });
     }
 
-    function contract(id) {
-        var open_url = "{:url('SubjectContract/index')}?subject_id="+id;
+    function contract(id,subject_name) {
+        var open_url = "{:url('SubjectContract/index')}?subject_id="+id+"&subject_name="+subject_name;
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {
@@ -156,7 +156,7 @@
         }
         layer.open({
             type:2,
-            title :'添加人员',
+            title :'添加合同',
             maxmin: true,
             area: ['900px', '600px'],
             content: open_url,

@@ -9,6 +9,7 @@
 namespace app\admin\controller;
 
 use app\admin\model\SubjectRecord as RecordModel;
+use app\admin\model\Project as ProjectModel;
 use app\admin\model\SubjectItem;
 use think\Db;
 
@@ -28,6 +29,7 @@ class SubjectRecord extends Admin
             ],
         ];
         $this->tab_data = $tab_data;
+        $this->assign('project_select', ProjectModel::inputSearchProject());
     }
 
     public function index($q = '')
@@ -74,6 +76,7 @@ class SubjectRecord extends Admin
 
     public function addItem()
     {
+        $params= $this->request->param();
         if ($this->request->isPost()) {
             $data = $this->request->post();
             // 验证
@@ -83,7 +86,7 @@ class SubjectRecord extends Admin
             }
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
-            unset($data['id']);
+            unset($data['id'],$data['subject_name']);
 
             if (!RecordModel::create($data)) {
                 return $this->error('添加失败');
@@ -97,11 +100,13 @@ class SubjectRecord extends Admin
 时间：<br>
 内容：<br>";
         $this->assign('record_format', $record_format);
+        $this->assign('subject_name', $params['subject_name']);
         return $this->fetch('itemform');
     }
 
     public function editItem($id = 0)
     {
+        $params= $this->request->param();
         if ($this->request->isPost()) {
             $data = $this->request->post();
             // 验证
@@ -111,6 +116,7 @@ class SubjectRecord extends Admin
             }
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
+            unset($data['subject_name']);
             if (!RecordModel::update($data)) {
                 return $this->error('修改失败');
             }
@@ -122,7 +128,10 @@ class SubjectRecord extends Admin
             $row['content'] = htmlspecialchars_decode($row['content']);
             $row['report'] = htmlspecialchars_decode($row['report']);
             $this->assign('data_info', $row);
+            $subject_name = empty($params['subject_name']) ? SubjectItem::getItem()[$row['subject_id']] : $params['subject_name'];
+            $this->assign('subject_name', $subject_name);
         }
+
         return $this->fetch('itemform');
     }
 

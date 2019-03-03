@@ -9,7 +9,9 @@
 namespace app\admin\controller;
 
 use app\admin\model\SubjectContract as ContractModel;
+use app\admin\model\Project as ProjectModel;
 use app\admin\model\ContractItem;
+use app\admin\model\SubjectItem;
 use think\Db;
 
 
@@ -28,6 +30,7 @@ class SubjectContract extends Admin
             ],
         ];
         $this->tab_data = $tab_data;
+        $this->assign('project_select', ProjectModel::inputSearchProject());
     }
 
     public function index($q = '')
@@ -68,6 +71,7 @@ class SubjectContract extends Admin
 
     public function addItem()
     {
+        $params= $this->request->param();
         if ($this->request->isPost()) {
             $data = $this->request->post();
             $data['cid'] = session('admin_user.cid');
@@ -78,7 +82,7 @@ class SubjectContract extends Admin
                 return $this->error($result);
             }
 
-            unset($data['id'], $data['contract_cat']);
+            unset($data['id'], $data['contract_cat'],$data['subject_name']);
 
             if (!ContractModel::create($data)) {
                 return $this->error('添加失败');
@@ -86,6 +90,7 @@ class SubjectContract extends Admin
             return $this->success("操作成功{$this->score_value}");
 
         }
+        $this->assign('subject_name', $params['subject_name']);
         $this->assign('contract_cat', ContractItem::getOption());
         return $this->fetch('itemform');
     }
@@ -104,6 +109,7 @@ class SubjectContract extends Admin
 
     public function editItem($id = 0)
     {
+        $params= $this->request->param();
         if ($this->request->isPost()) {
             $data = $this->request->post();
             $data['cid'] = session('admin_user.cid');
@@ -114,7 +120,7 @@ class SubjectContract extends Admin
                 return $this->error($result);
             }
 
-            unset($data['contract_cat']);
+            unset($data['contract_cat'],$data['subject_name']);
             if (!ContractModel::update($data)) {
                 return $this->error('修改失败');
             }
@@ -128,9 +134,11 @@ class SubjectContract extends Admin
                 $row1 = ContractItem::getItemById($row['tpl_id']);
                 $row['cat_id'] = $row1['cat_id'];
                 $this->assign('contract_cat', ContractItem::getOption($row1['cat_id']));
+                $subject_name = empty($params['subject_name']) ? SubjectItem::getItem()[$row['subject_id']] : $params['subject_name'];
+                $this->assign('subject_name', $subject_name);
             }
-
             $this->assign('data_info', $row);
+
         }
         return $this->fetch('itemform');
     }
