@@ -82,6 +82,7 @@ class Approval extends Admin
             $user = json_decode($default_user);
             $this->assign('data_info', (array)$user);
         }
+        $this->assign('project_select', ProjectModel::inputSearchProject());
     }
 
     public function deal_data($x_user)

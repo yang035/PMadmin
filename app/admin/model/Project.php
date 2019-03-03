@@ -127,6 +127,11 @@ class Project extends Model
             'cid'=>session('admin_user.cid'),
         ];
         $data = self::field('id,name')->where($where)->select();
+        $tmp = [
+            'id'=>0,
+            'name'=>'其他'
+        ];
+        $data[] = $tmp;
         return json_encode($data);
     }
 
