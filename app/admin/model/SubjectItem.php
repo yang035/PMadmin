@@ -22,9 +22,13 @@ class SubjectItem extends Model
         ];
         $data = CatModel::where($map)->select();
         $str = '';
+        if (0 === $type){
+            $str = '<option value="0" selected>全部</option>';
+        }
+
         if ($data){
             foreach ($data as $k => $v) {
-                if ($type == $k) {
+                if ($type == $v['id']) {
                     $str .= '<option value="'.$v['id'].'" selected>'.$v['name'].'</option>';
                 } else {
                     $str .= '<option value="'.$v['id'].'">'.$v['name'].'</option>';
@@ -93,6 +97,20 @@ class SubjectItem extends Model
         ];
         $data = self::where($map)->column('name','id');
         return $data;
+    }
+
+    public static function inputSearchSubject(){
+        $where = [
+            'cid'=>session('admin_user.cid'),
+            'status'=>1,
+        ];
+        $data = self::field('id,name')->where($where)->select();
+        $tmp = [
+            'id'=>0,
+            'name'=>'其他'
+        ];
+        $data[] = $tmp;
+        return json_encode($data);
     }
 
     public function del($id){

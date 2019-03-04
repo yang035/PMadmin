@@ -1,3 +1,12 @@
+<style>
+    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+</style>
 <form class="layui-form" action="{:url()}" method="post">
     <div class="layui-tab-item layui-show layui-form-pane">
         <div class="layui-form-item">
@@ -40,7 +49,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">年龄</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input field-age" name="age" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" lay-verify="number" maxlength="3"
+                <input type="number" class="layui-input field-age" name="age" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" maxlength="3"
                        autocomplete="off" placeholder="请输入年龄">
             </div>
         </div>

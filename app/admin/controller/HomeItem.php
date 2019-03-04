@@ -52,14 +52,15 @@ class HomeItem extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
+            unset($data['id']);
             // 验证
             $result = $this->validate($data, 'HomeItem');
             if ($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
-            unset($data['id']);
             if (1 == $data['is_push']){
                 if (empty($data['tuijian'])){
                     return $this->error('推荐位图片必填！');
@@ -77,13 +78,14 @@ class HomeItem extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
             // 验证
             $result = $this->validate($data, 'HomeItem');
             if ($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
             if (1 == $data['is_push']){
                 if (empty($data['tuijian'])){
                     return $this->error('推荐位图片必填！');

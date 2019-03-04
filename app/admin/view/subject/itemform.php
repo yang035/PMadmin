@@ -25,20 +25,22 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">项目编号<span style="color: red">*</span></label>
+            <label class="layui-form-label">项目编号</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-idcard" name="idcard" lay-verify="required" autocomplete="off" placeholder="请输入项目编号">
             </div>
+            <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">项目名称<span style="color: red">*</span></label>
+            <label class="layui-form-label">项目名称</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-name" name="name" lay-verify="required" autocomplete="off" placeholder="请输入项目名称">
             </div>
+            <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">项目描述</label>
-            <div class="layui-input-inline">
+            <div class="layui-input-block">
                 <textarea  class="layui-textarea field-remark" name="remark" lay-verify="" autocomplete="off" placeholder="项目描述"></textarea>
             </div>
         </div>
@@ -47,6 +49,7 @@
             <div class="layui-input-inline">
                 <input type="number" class="layui-input field-area" name="area" autocomplete="off" placeholder="请输入项目面积">
             </div>
+            <div class="layui-form-mid">㎡</div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">建设单位</label>
@@ -69,16 +72,18 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">开始时间<span style="color: red">*</span></label>
+            <label class="layui-form-label">开始时间</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-start_time" name="start_time" lay-verify="required" readonly autocomplete="off" placeholder="选择开始时间">
             </div>
+            <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">结束时间<span style="color: red">*</span></label>
+            <label class="layui-form-label">结束时间</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-end_time" name="end_time" lay-verify="required" readonly autocomplete="off" placeholder="选择结束时间">
             </div>
+            <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">历时</label>

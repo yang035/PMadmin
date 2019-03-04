@@ -67,14 +67,15 @@ class Contract extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
+            unset($data['id']);
             // 验证
             $result = $this->validate($data, 'ContractItem');
             if($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
-            unset($data['id']);
             if (!ItemModel::create($data)) {
                 return $this->error('添加失败');
             }
@@ -88,13 +89,14 @@ class Contract extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
             // 验证
             $result = $this->validate($data, 'ContractItem');
             if($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
             if (!ItemModel::update($data)) {
                 return $this->error('修改失败');
             }
@@ -147,14 +149,15 @@ class Contract extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
+            unset($data['id']);
             // 验证
             $result = $this->validate($data, 'ContractCat');
             if($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
-            unset($data['id']);
             if (!CatModel::create($data)) {
                 return $this->error('添加失败');
             }
@@ -167,13 +170,14 @@ class Contract extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
             // 验证
             $result = $this->validate($data, 'ContractCat');
             if($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
             if (!CatModel::update($data)) {
                 return $this->error('修改失败');
             }

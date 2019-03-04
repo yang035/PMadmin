@@ -22,9 +22,12 @@ class ContactsItem extends Model
         ];
         $data = CatModel::where($map)->select();
         $str = '';
+        if (0 === $type){
+            $str = '<option value="0" selected>全部</option>';
+        }
         if ($data){
             foreach ($data as $k => $v) {
-                if ($type == $k) {
+                if ($type == $v['id']) {
                     $str .= '<option value="'.$v['id'].'" selected>'.$v['name'].'</option>';
                 } else {
                     $str .= '<option value="'.$v['id'].'">'.$v['name'].'</option>';

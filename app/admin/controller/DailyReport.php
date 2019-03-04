@@ -211,11 +211,6 @@ class DailyReport extends Admin
         $d_model = new DailyReportModel();
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            // 验证
-            $result = $this->validate($data, 'DailyReport');
-            if($result !== true) {
-                return $this->error($result);
-            }
 
             $project_code = ProjectModel::getColumn('code');
             $gl_score = sumLineScore($data['content'])+sumLineScore($data['plan'])+sumLineScore($data['question'])+sumLineScore($data['tips']);
@@ -227,8 +222,13 @@ class DailyReport extends Admin
             $ins_data['attachment'] = json_encode(array_values(array_filter($ins_data['attachment'])));
             $ins_data['send_user'] = json_encode(user_array($data['send_user']));
             $ins_data['copy_user'] = json_encode(user_array($data['copy_user']));
-            $ins_data['cid'] = session('admin_user.cid');
+            $ins_data['cid'] = $data['cid']= session('admin_user.cid');
             $ins_data['user_id'] = session('admin_user.uid');
+            // 验证
+            $result = $this->validate($data, 'DailyReport');
+            if($result !== true) {
+                return $this->error($result);
+            }
             if (isset($data['work_option'])){
                 $ins_data['work_option'] = implode(',',$data['work_option']);
             }

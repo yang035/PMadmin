@@ -9,7 +9,6 @@
 namespace app\admin\controller;
 
 use app\admin\model\SubjectRecord as RecordModel;
-use app\admin\model\Project as ProjectModel;
 use app\admin\model\SubjectItem;
 use think\Db;
 
@@ -29,12 +28,12 @@ class SubjectRecord extends Admin
             ],
         ];
         $this->tab_data = $tab_data;
-        $this->assign('project_select', ProjectModel::inputSearchProject());
+        $this->assign('project_select', SubjectItem::inputSearchSubject());
     }
 
     public function index($q = '')
     {
-
+        $subject_name = '';
         if ($this->request->isAjax()) {
             $where = $data = [];
             $page = input('param.page/d', 1);
@@ -44,14 +43,17 @@ class SubjectRecord extends Admin
             if ($cat_id) {
                 $where['cat_id'] = $cat_id;
             }
-            $name = input('param.name');
-            if ($name) {
-                $where['content'] = ['like', "%{$name}%"];
-            }
+//            $name = input('param.name');
+//            if ($name) {
+//                $where['content'] = ['like', "%{$name}%"];
+//            }
+
             if ($params['subject_id']) {
                 $where['subject_id'] = $params['subject_id'];
+                $subject_name = empty($params['subject_name']) ? SubjectItem::getItem()[$params['subject_id']] : $params['subject_name'];
             }
             $where['cid'] = session('admin_user.cid');
+//            print_r($where);exit();
             $data['data'] = RecordModel::with('cat')->where($where)->page($page)->order('id desc')->limit($limit)->select();
             if ($data['data']) {
                 foreach ($data['data'] as $k => $v) {
@@ -69,6 +71,8 @@ class SubjectRecord extends Admin
         $tab_data = $this->tab_data;
         $tab_data['current'] = url('');
 
+        $this->assign('subject_name', $subject_name);
+
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 1);
         return $this->fetch('item');
@@ -79,15 +83,19 @@ class SubjectRecord extends Admin
         $params= $this->request->param();
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
+            unset($data['id'],$data['subject_name']);
+
+            if (empty($data['subject_id'])){
+                return $this->error('请选择项目');
+            }
             // 验证
             $result = $this->validate($data, 'SubjectRecord');
             if ($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
-            unset($data['id'],$data['subject_name']);
-
             if (!RecordModel::create($data)) {
                 return $this->error('添加失败');
             }
@@ -99,8 +107,13 @@ class SubjectRecord extends Admin
 乙方人员：<br>
 时间：<br>
 内容：<br>";
+
+        $subject_name = isset($params['subject_name']) ? $params['subject_name'] : '';
+        $subject_id = is_int($params['subject_id']) ? $params['subject_id'] : 0;
+
         $this->assign('record_format', $record_format);
-        $this->assign('subject_name', $params['subject_name']);
+        $this->assign('subject_name', $subject_name);
+        $this->assign('subject_id', $subject_id);
         return $this->fetch('itemform');
     }
 
@@ -109,14 +122,18 @@ class SubjectRecord extends Admin
         $params= $this->request->param();
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
+            unset($data['subject_name']);
+            if (empty($data['subject_id'])){
+                return $this->error('请选择项目');
+            }
             // 验证
             $result = $this->validate($data, 'SubjectRecord');
             if ($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
-            unset($data['subject_name']);
             if (!RecordModel::update($data)) {
                 return $this->error('修改失败');
             }
@@ -174,14 +191,15 @@ class SubjectRecord extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
+            unset($data['id']);
             // 验证
             $result = $this->validate($data, 'ContactsCat');
             if ($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
-            unset($data['id']);
             if (!CatModel::create($data)) {
                 return $this->error('添加失败');
             }
@@ -194,13 +212,14 @@ class SubjectRecord extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
             // 验证
             $result = $this->validate($data, 'ContactsCat');
             if ($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
             if (!CatModel::update($data)) {
                 return $this->error('修改失败');
             }

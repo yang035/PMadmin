@@ -9,10 +9,12 @@
         <form class="layui-form layui-form-pane" action="{:url()}" method="get" id="hisi-table-search">
             <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">洽商记录</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="name" value="{:input('get.name')}" placeholder="关键字" autocomplete="off" class="layui-input">
-                    <input type="hidden" name="subject_id" value="{$Request.param.subject_id}">
+                <label class="layui-form-label">选择项目</label>
+                <div class="layui-inline">
+                    <div class="layui-input-inline box box1">
+                    </div>
+                    <input id="project_name" type="hidden" name="subject_name" value="{$Request.param.subject_name}">
+                    <input id="subject_id" type="hidden" name="subject_id" value="{$Request.param.subject_id}">
                 </div>
             </div>
             <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
@@ -29,6 +31,8 @@
 </div>
 
 {include file="block/layui" /}
+<script src="__PUBLIC_JS__/jquery.select.js?v="></script>
+<script src="__PUBLIC_JS__/SelectBox.min.js?v="></script>
 <script type="text/html" id="statusTpl">
     <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=contacts_item&id={{ d.id }}">
 </script>
@@ -53,6 +57,7 @@
                 {field: 'subject_id', title: '项目名称', templet:function(d){
                         return d.cat.name;
                     }},
+                {field: 'name', title: '记录主题'},
                 {field: 'content', title: '洽商记录'},
                 // {field: 'report', title: '洽商报告'},
                 {field: 'update_time', title: '时间'},
@@ -80,4 +85,32 @@
             }
         });
     }
+
+    new SelectBox($('.box1'),{$project_select},function(result){
+        if ('' != result.id){
+            $('#project_name').val(result.name);
+            $('#subject_id').val(result.id);
+        }
+    },{
+        dataName:'name',//option的html
+        dataId:'id',//option的value
+        fontSize:'14',//字体大小
+        optionFontSize:'14',//下拉框字体大小
+        textIndent:4,//字体缩进
+        color:'#000',//输入框字体颜色
+        optionColor:'#000',//下拉框字体颜色
+        arrowColor:'#D2D2D2',//箭头颜色
+        backgroundColor:'#fff',//背景色颜色
+        borderColor:'#D2D2D2',//边线颜色
+        hoverColor:'#009688',//下拉框HOVER颜色
+        borderWidth:1,//边线宽度
+        arrowBorderWidth:0,//箭头左侧分割线宽度。如果为0则不显示
+        // borderRadius:5,//边线圆角
+        placeholder:'输入关键字搜索',//默认提示
+        defalut:'{$subject_name}',//默认显示内容。如果是'firstData',则默认显示第一个
+        // allowInput:true,//是否允许输入
+        width:300,//宽
+        height:37,//高
+        optionMaxHeight:300//下拉框最大高度
+    });
 </script>

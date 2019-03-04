@@ -155,19 +155,19 @@ class ScoreDeal extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            // 验证
-            $result = $this->validate($data, 'ScoreDeal');
-            if($result !== true) {
-                return $this->error($result);
-            }
 
-            $p['cid'] = session('admin_user.cid');
+            $p['cid'] = $data['cid'] = session('admin_user.cid');
             $p['user_id'] = session('admin_user.uid');
             $p['score_user'] = json_encode(user_array($data['score_user']));
             $p['send_user'] = json_encode(user_array($data['send_user']));
             $p['copy_user'] = json_encode(user_array($data['copy_user']));
             $p['create_time'] = time();
             $p['update_time'] = time();
+            // 验证
+            $result = $this->validate($data, 'ScoreDeal');
+            if($result !== true) {
+                return $this->error($result);
+            }
             $tmp = [];
             if (is_array($data['rid'])){
                 $t = array_unique($data['rid']);

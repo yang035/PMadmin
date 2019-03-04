@@ -52,7 +52,7 @@ class Subject extends Admin
                 $where['name'] = ['like', "%{$name}%"];
             }
             $where['cid'] = session('admin_user.cid');
-            $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->select();
+            $data['data'] = ItemModel::with('cat')->where($where)->page($page)->order('id desc')->limit($limit)->select();
 //            $carType = config('other.car_color');
 //            if ($data['data']){
 //                foreach ($data['data'] as $k=>$v){
@@ -79,14 +79,15 @@ class Subject extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
+            unset($data['id']);
             // 验证
             $result = $this->validate($data, 'SubjectItem');
             if ($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
-            unset($data['id']);
+
 //            print_r($data);exit();
 //            $flag = ItemModel::create($data);
 //            print_r($flag);exit();
@@ -117,7 +118,7 @@ class Subject extends Admin
             }
 
         }
-        $this->assign('subject_option', ItemModel::getOption());
+        $this->assign('subject_option', ItemModel::getOption(null));
         $this->assign('p_source', ItemModel::getPsource());
         $this->assign('grade_type', ProjectModel::getGrade());
         $this->assign('t_type', ProjectModel::getTType());
@@ -128,13 +129,14 @@ class Subject extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
             // 验证
             $result = $this->validate($data, 'SubjectItem');
             if ($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
+
 //            $res = [];
             Db::startTrans();
             try{
@@ -167,7 +169,7 @@ class Subject extends Admin
 
         $row = ItemModel::where('id', $id)->find()->toArray();
         $this->assign('data_info', $row);
-        $this->assign('subject_option', ItemModel::getOption());
+        $this->assign('subject_option', ItemModel::getOption($row['cat_id']));
         $this->assign('p_source', ItemModel::getPsource());
         $this->assign('grade_type', ProjectModel::getGrade());
         $this->assign('t_type', ProjectModel::getTType());
@@ -214,14 +216,14 @@ class Subject extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
+            unset($data['id']);
             // 验证
             $result = $this->validate($data, 'SubjectCat');
             if ($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
-            unset($data['id']);
             if (!CatModel::create($data)) {
                 return $this->error('添加失败');
             }
@@ -234,13 +236,14 @@ class Subject extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
             // 验证
             $result = $this->validate($data, 'SubjectCat');
             if ($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
             if (!CatModel::update($data)) {
                 return $this->error('修改失败');
             }

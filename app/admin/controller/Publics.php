@@ -56,16 +56,17 @@ class Publics extends Common
     public function register(){
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            // 验证
-            $result = $this->validate($data, 'AdminUser.register');
-            if($result !== true) {
-                return $this->error($result);
-            }
+
             unset($data['password_confirm'],$data['__token__']);
 
             $data['last_login_ip'] = '';
             $data['auth'] = '';
             $data['status'] = 0;
+            // 验证
+            $result = $this->validate($data, 'AdminUser.register');
+            if($result !== true) {
+                return $this->error($result);
+            }
             if (!UserModel::create($data)) {
                 return $this->error('注册失败');
             }

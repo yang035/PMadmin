@@ -63,14 +63,15 @@ class Goods extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            unset($data['id'], $data['cat_name']);
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
             // 验证
             $result = $this->validate($data, 'Goods');
             if($result !== true) {
                 return $this->error($result);
             }
-            unset($data['id'], $data['cat_name']);
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
 //            print_r($data);exit();
             if (!GoodsModel::create($data)) {
                 return $this->error('添加失败');
@@ -89,14 +90,15 @@ class Goods extends Admin
         $params = $this->request->param();
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            unset($data['cat_name']);
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
             // 验证
             $result = $this->validate($data, 'Goods');
             if($result !== true) {
                 return $this->error($result);
             }
-            unset($data['cat_name']);
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
 //            print_r($data);exit();
             if (!GoodsModel::update($data)) {
                 return $this->error('修改失败');

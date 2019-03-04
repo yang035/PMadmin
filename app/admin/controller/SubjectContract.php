@@ -9,7 +9,6 @@
 namespace app\admin\controller;
 
 use app\admin\model\SubjectContract as ContractModel;
-use app\admin\model\Project as ProjectModel;
 use app\admin\model\ContractItem;
 use app\admin\model\SubjectItem;
 use think\Db;
@@ -30,12 +29,12 @@ class SubjectContract extends Admin
             ],
         ];
         $this->tab_data = $tab_data;
-        $this->assign('project_select', ProjectModel::inputSearchProject());
+        $this->assign('project_select', SubjectItem::inputSearchSubject());
     }
 
     public function index($q = '')
     {
-
+        $subject_name = '';
         if ($this->request->isAjax()) {
             $where = $data = [];
             $page = input('param.page/d', 1);
@@ -45,12 +44,13 @@ class SubjectContract extends Admin
             if ($cat_id) {
                 $where['cat_id'] = $cat_id;
             }
-            $name = input('param.name');
-            if ($name) {
-                $where['content'] = ['like', "%{$name}%"];
-            }
+//            $name = input('param.name');
+//            if ($name) {
+//                $where['content'] = ['like', "%{$name}%"];
+//            }
             if ($params['subject_id']) {
                 $where['subject_id'] = $params['subject_id'];
+                $subject_name = empty($params['subject_name']) ? SubjectItem::getItem()[$params['subject_id']] : $params['subject_name'];
             }
             $where['cid'] = session('admin_user.cid');
             $data['data'] = ContractModel::with('cat')->where($where)->page($page)->order('id desc')->limit($limit)->select();
@@ -63,7 +63,7 @@ class SubjectContract extends Admin
         // 分页
         $tab_data = $this->tab_data;
         $tab_data['current'] = url('');
-
+        $this->assign('subject_name', $subject_name);
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 1);
         return $this->fetch('item');
@@ -83,14 +83,19 @@ class SubjectContract extends Admin
             }
 
             unset($data['id'], $data['contract_cat'],$data['subject_name']);
-
+            if (empty($data['subject_id'])){
+                return $this->error('请选择项目');
+            }
             if (!ContractModel::create($data)) {
                 return $this->error('添加失败');
             }
             return $this->success("操作成功{$this->score_value}");
 
         }
-        $this->assign('subject_name', $params['subject_name']);
+        $subject_name = isset($params['subject_name']) ? $params['subject_name'] : '';
+        $subject_id = is_int($params['subject_id']) ? $params['subject_id'] : 0;
+        $this->assign('subject_name', $subject_name);
+        $this->assign('subject_id', $subject_id);
         $this->assign('contract_cat', ContractItem::getOption());
         return $this->fetch('itemform');
     }
@@ -119,7 +124,9 @@ class SubjectContract extends Admin
             if ($result !== true) {
                 return $this->error($result);
             }
-
+            if (empty($data['subject_id'])){
+                return $this->error('请选择项目');
+            }
             unset($data['contract_cat'],$data['subject_name']);
             if (!ContractModel::update($data)) {
                 return $this->error('修改失败');
@@ -182,14 +189,15 @@ class SubjectContract extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
+            unset($data['id']);
             // 验证
             $result = $this->validate($data, 'ContactsCat');
             if ($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
-            unset($data['id']);
             if (!CatModel::create($data)) {
                 return $this->error('添加失败');
             }
@@ -202,13 +210,14 @@ class SubjectContract extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
             // 验证
             $result = $this->validate($data, 'ContactsCat');
             if ($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
             if (!CatModel::update($data)) {
                 return $this->error('修改失败');
             }

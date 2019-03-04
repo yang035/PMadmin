@@ -199,11 +199,7 @@ class Project extends Admin
             } else {
                 $data['code'] = $this->getCode($data['code'], $data['pid']);
             }
-            // 验证
-            $result = $this->validate($data, 'Project');
-            if ($result !== true) {
-                return $this->error($result);
-            }
+
             $data['manager_user'] = json_encode(user_array($data['manager_user']));
             $data['deal_user'] = json_encode(user_array($data['deal_user']));
             $data['send_user'] = json_encode(user_array($data['send_user']));
@@ -211,6 +207,11 @@ class Project extends Admin
 
             unset($data['id'], $data['pname'], $data['max_score']);
             $data['user_id'] = session('admin_user.uid');
+            // 验证
+            $result = $this->validate($data, 'Project');
+            if ($result !== true) {
+                return $this->error($result);
+            }
 //            print_r($data);exit();
             if (!ProjectModel::create($data)) {
                 return $this->error('添加失败！');
@@ -253,11 +254,7 @@ class Project extends Admin
             } else {
                 $data['code'] = $this->getCode($data['code'], $data['pid']);
             }
-            // 验证
-            $result = $this->validate($data, 'Project');
-            if ($result !== true) {
-                return $this->error($result);
-            }
+
             $data['manager_user'] = json_encode(user_array($data['manager_user']));
             $data['deal_user'] = json_encode(user_array($data['deal_user']));
             $data['send_user'] = json_encode(user_array($data['send_user']));
@@ -265,6 +262,11 @@ class Project extends Admin
 
             unset($data['id'], $data['pname'], $data['max_score']);
             $data['user_id'] = session('admin_user.uid');
+            // 验证
+            $result = $this->validate($data, 'Project');
+            if ($result !== true) {
+                return $this->error($result);
+            }
             if (!ProjectModel::create($data)) {
                 return $this->error('添加失败！');
             }
@@ -316,17 +318,18 @@ class Project extends Admin
             } else {
                 $data['code'] = $this->getCode($data['code'], $data['pid']);
             }
-            // 验证
-            $result = $this->validate($data, 'Project');
-            if ($result !== true) {
-                return $this->error($result);
-            }
+
             unset($data['pname'], $data['max_score']);
             $data['user_id'] = session('admin_user.uid');
             $data['manager_user'] = json_encode(user_array($data['manager_user']));
             $data['deal_user'] = json_encode(user_array($data['deal_user']));
             $data['send_user'] = json_encode(user_array($data['send_user']));
             $data['copy_user'] = json_encode(user_array($data['copy_user']));
+            // 验证
+            $result = $this->validate($data, 'Project');
+            if ($result !== true) {
+                return $this->error($result);
+            }
             if (!ProjectModel::update($data)) {
                 return $this->error('修改失败！');
             }

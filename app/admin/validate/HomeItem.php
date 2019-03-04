@@ -8,7 +8,7 @@ class HomeItem extends Validate
     //定义验证规则
     protected $rule = [
         'cat_id' => 'require',
-        'title|标题' => 'require|unique:home_item',
+        'title|标题' => 'require|unique:home_item,cid^title',
         'author' => 'require',
         'content' => 'require',
     ];

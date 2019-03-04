@@ -24,15 +24,16 @@ class ApprovalReport extends Admin
     public function add(){
         if ($this->request->isPost()){
             $data = $this->request->post();
-            $result = $this->validate($data, 'ApprovalReport');
-            if($result !== true) {
-                return $this->error($result);
-            }
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
             unset($data['id']);
             $row = Project::getRowById($data['project_id']);
             $data['per'] = time_per($row['start_time'],$row['end_time']);
+            $result = $this->validate($data, 'ApprovalReport');
+            if($result !== true) {
+                return $this->error($result);
+            }
+
             if (!ReportModel::create($data)) {
                 return $this->error('添加失败！');
             }else{

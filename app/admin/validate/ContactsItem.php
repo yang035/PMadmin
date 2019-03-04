@@ -15,7 +15,7 @@ class ContactsItem extends Validate
 {
     //定义验证规则
     protected $rule = [
-        'name|名称' => 'require|unique:contacts_item',
+        'name|名称' => 'require|unique:contacts_item,cid^name',
         'status|状态设置'  => 'require|in:0,1',
         'subject_name' => 'unique:contacts_item,subject_id^mobile',
     ];

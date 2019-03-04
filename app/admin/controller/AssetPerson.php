@@ -72,16 +72,17 @@ class AssetPerson extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            // 验证
-            $result = $this->validate($data, 'AssetPerson');
-            if($result !== true) {
-                return $this->error($result);
-            }
+
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
             $data['manager_user'] = json_encode(user_array($data['manager_user']));
             $data['deal_user'] = json_encode(user_array($data['deal_user']));
             unset($data['id']);
+            // 验证
+            $result = $this->validate($data, 'AssetPerson');
+            if($result !== true) {
+                return $this->error($result);
+            }
             if (!ItemModel::create($data)) {
                 return $this->error('添加失败');
             }
@@ -95,15 +96,16 @@ class AssetPerson extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
+            $data['manager_user'] = json_encode(user_array($data['manager_user']));
+            $data['deal_user'] = json_encode(user_array($data['deal_user']));
             // 验证
             $result = $this->validate($data, 'AssetPerson');
             if($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
-            $data['manager_user'] = json_encode(user_array($data['manager_user']));
-            $data['deal_user'] = json_encode(user_array($data['deal_user']));
             if (!ItemModel::update($data)) {
                 return $this->error('修改失败');
             }
@@ -155,14 +157,15 @@ class AssetPerson extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
+            unset($data['id']);
             // 验证
             $result = $this->validate($data, 'AssetCat');
             if($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
-            unset($data['id']);
             if (!CatModel::create($data)) {
                 return $this->error('添加失败');
             }
@@ -175,13 +178,14 @@ class AssetPerson extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
             // 验证
             $result = $this->validate($data, 'AssetCat');
             if($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
             if (!CatModel::update($data)) {
                 return $this->error('修改失败');
             }

@@ -15,7 +15,7 @@ class CarItem extends Validate
 {
     //定义验证规则
     protected $rule = [
-        'name|名称' => 'require|unique:car_item',
+        'name|名称' => 'require|unique:car_item,cid^name',
         'color|颜色' => 'require',
         'idcard|车牌号' => 'require',
         'status|状态设置'  => 'require|in:0,1',

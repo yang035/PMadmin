@@ -134,11 +134,7 @@ class Task extends Admin
         $params = $this->request->param();
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            // 验证
-            $result = $this->validate($data, 'Project');
-            if($result !== true) {
-                return $this->error($result);
-            }
+
             if (isset($data['max_score']) && $data['score'] > $data['max_score']){
                 return $this->error('预设值超过最大值！');
             }
@@ -161,6 +157,11 @@ class Task extends Admin
 
             unset($data['id'],$data['pname'],$data['max_score']);
             $data['user_id'] = session('admin_user.uid');
+            // 验证
+            $result = $this->validate($data, 'Project');
+            if($result !== true) {
+                return $this->error($result);
+            }
             if (!ProjectModel::create($data)) {
                 return $this->error('添加失败！');
             }
@@ -194,11 +195,7 @@ class Task extends Admin
         $row = ProjectModel::where($map)->find()->toArray();
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            // 验证
-            $result = $this->validate($data, 'Project');
-            if($result !== true) {
-                return $this->error($result);
-            }
+
             if (isset($data['max_score']) && $data['score'] > $data['max_score']){
                 return $this->error('预设值超过最大值！');
             }
@@ -217,6 +214,11 @@ class Task extends Admin
             $data['deal_user'] = json_encode(user_array($data['deal_user']));
             $data['send_user'] = json_encode(user_array($data['send_user']));
             $data['copy_user'] = json_encode(user_array($data['copy_user']));
+            // 验证
+            $result = $this->validate($data, 'Project');
+            if($result !== true) {
+                return $this->error($result);
+            }
             if (!ProjectModel::update($data)) {
                 return $this->error('修改失败！');
             }

@@ -6,7 +6,7 @@
                 <div class="layui-input-inline box box1">
                 </div>
                 <input id="project_name" type="hidden" name="subject_name" value="{$Request.param.subject_name}">
-                <input id="subject_id" type="hidden" name="subject_id" value="{$Request.param.subject_id}">
+                <input id="subject_id" type="hidden" name="subject_id" value="{$subject_id}">
             </div>
         </div>
         <div class="layui-form-item">

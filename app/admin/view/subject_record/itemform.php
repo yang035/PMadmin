@@ -2,12 +2,20 @@
     <div class="layui-tab-item layui-show layui-form-pane">
         <div class="layui-form-item">
             <label class="layui-form-label">选择项目</label>
-            <div class="layui-inline">
+            <div class="layui-input-inline">
                 <div class="layui-input-inline box box1">
                 </div>
                 <input id="project_name" type="hidden" name="subject_name" value="{$Request.param.subject_name}">
-                <input id="subject_id" type="hidden" name="subject_id" value="{$Request.param.subject_id}">
+                <input id="subject_id" type="hidden" name="subject_id" lay-verify="required" value="{$subject_id}">
             </div>
+            <div class="layui-form-mid red">*</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">记录主题</label>
+            <div class="layui-input-inline">
+                <input class="layui-input field-name" name="name" lay-verify="required" autocomplete="off">
+            </div>
+            <div class="layui-form-mid" style="color: red">*</div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">洽商记录</label>

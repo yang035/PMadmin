@@ -37,11 +37,12 @@ class Contacts extends Admin
 
     public function index($q = '')
     {
+        $params = $this->request->param();
         if ($this->request->isAjax()) {
             $where = $data = [];
             $page = input('param.page/d', 1);
             $limit = input('param.limit/d', 20);
-            $params = $this->request->param();
+
             $cat_id = input('param.cat_id/d');
             if ($cat_id) {
                 $where['cat_id'] = $cat_id;
@@ -64,6 +65,9 @@ class Contacts extends Admin
         // 分页
         $tab_data = $this->tab_data;
         $tab_data['current'] = url('');
+        if (isset($params['subject_id'])){
+            unset($tab_data['menu'][0]);
+        }
 
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 1);
@@ -75,14 +79,15 @@ class Contacts extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
+            unset($data['id']);
             // 验证
             $result = $this->validate($data, 'ContactsItem');
             if ($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
-            unset($data['id']);
             $contacts_id = ItemModel::create($data);
             if ($contacts_id) {
                 $tmp1['id'] = $data['subject_id'];
@@ -121,7 +126,7 @@ class Contacts extends Admin
             }
 
         }
-        $this->assign('cat_option', ItemModel::getOption());
+        $this->assign('cat_option', ItemModel::getOption(null));
         $this->assign('sex_type', ItemModel::getSexOption());
         return $this->fetch('itemform');
     }
@@ -130,13 +135,14 @@ class Contacts extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
             // 验证
             $result = $this->validate($data, 'ContactsItem');
             if ($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
             if (!ItemModel::update($data)) {
                 return $this->error('修改失败');
             }
@@ -145,7 +151,7 @@ class Contacts extends Admin
 
         $row = ItemModel::where('id', $id)->find()->toArray();
         $this->assign('data_info', $row);
-        $this->assign('cat_option', ItemModel::getOption());
+        $this->assign('cat_option', ItemModel::getOption($row['cat_id']));
         $this->assign('sex_type', ItemModel::getSexOption());
         return $this->fetch('itemform');
     }
@@ -189,14 +195,15 @@ class Contacts extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
+            unset($data['id']);
             // 验证
             $result = $this->validate($data, 'ContactsCat');
             if ($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
-            unset($data['id']);
             if (!CatModel::create($data)) {
                 return $this->error('添加失败');
             }
@@ -209,13 +216,14 @@ class Contacts extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
             // 验证
             $result = $this->validate($data, 'ContactsCat');
             if ($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
             if (!CatModel::update($data)) {
                 return $this->error('修改失败');
             }

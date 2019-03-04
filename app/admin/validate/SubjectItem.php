@@ -15,8 +15,8 @@ class SubjectItem extends Validate
 {
     //定义验证规则
     protected $rule = [
-        'name|名称' => 'require|unique:subject_item',
-        'idcard|项目编号' => 'require|unique:subject_item',
+        'name|名称' => 'require|unique:subject_item,cid^name',
+        'idcard|项目编号' => 'require|unique:subject_item,cid^idcard',
         'status|状态设置'  => 'require|in:0,1',
     ];
 

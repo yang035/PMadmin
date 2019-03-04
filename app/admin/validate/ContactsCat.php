@@ -15,7 +15,7 @@ class ContactsCat extends Validate
 {
     //定义验证规则
     protected $rule = [
-        'name|分类名称' => 'require|unique:contacts_cat',
+        'name|分类名称' => 'require|unique:contacts_cat,cid^name',
         'status|状态设置'  => 'require|in:0,1',
     ];
 

@@ -15,7 +15,7 @@ class ContractItem extends Validate
 {
     //定义验证规则
     protected $rule = [
-        'name|名称' => 'require|unique:contract_item',
+        'name|名称' => 'require|unique:contract_item,cid^name',
         'status|状态设置'  => 'require|in:0,1',
     ];
 

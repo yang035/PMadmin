@@ -25,12 +25,13 @@ class ApprovalReportReply extends Admin
     public function add(){
         if ($this->request->isPost()){
             $data = $this->request->post();
+
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
             $result = $this->validate($data, 'ApprovalReportReply');
             if($result !== true) {
                 return $this->error($result);
             }
-            $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
             if (!ReplyModel::create($data)) {
                 return $this->error('添加失败！');
             }

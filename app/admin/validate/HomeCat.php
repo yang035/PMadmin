@@ -7,7 +7,7 @@ class HomeCat extends Validate
 {
     //定义验证规则
     protected $rule = [
-        'name|名称' => 'require|unique:home_cat',
+        'name|名称' => 'require|unique:home_cat,cid^name',
     ];
 
     //定义验证提示

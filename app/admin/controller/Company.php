@@ -41,13 +41,14 @@ class Company extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            $data['user_id'] = session('admin_user.uid');
+            unset($data['id']);
             // 验证
             $result = $this->validate($data, 'AdminCompany');
             if($result !== true) {
                 return $this->error($result);
             }
-            $data['user_id'] = session('admin_user.uid');
-            unset($data['id']);
             $result = AdminCompany::create($data);
             $result_arr =$result->toArray();
             $cid = $result_arr['id'];
@@ -90,12 +91,13 @@ class Company extends Admin
             if ($data['cellphone'] == 0) {
                 unset($data['cellphone']);
             }
+
+            $data['user_id'] = session('admin_user.uid');
             // 验证
             $result = $this->validate($data, 'AdminCompany');
             if($result !== true) {
                 return $this->error($result);
             }
-            $data['user_id'] = session('admin_user.uid');
             if (!AdminCompany::update($data)) {
                 return $this->error('修改失败！');
             }

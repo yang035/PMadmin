@@ -109,16 +109,17 @@ class User extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            // 验证
-            $result = $this->validate($data, 'AdminUser');
-            if($result !== true) {
-                return $this->error($result);
-            }
+
             unset($data['id'], $data['password_confirm'],$data['dep_name'],$data['is_auth']);
             $data['last_login_ip'] = '';
             $data['auth'] = '';
             $data['company_id'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
+            // 验证
+            $result = $this->validate($data, 'AdminUser');
+            if($result !== true) {
+                return $this->error($result);
+            }
             if (!UserModel::create($data)) {
                 return $this->error('添加失败');
             }
@@ -172,17 +173,17 @@ class User extends Admin
             if (isset($data['role_id']) && RoleModel::where('id', $data['role_id'])->value('auth') == json_encode($data['auth'])) {// 如果自定义权限与角色权限一致，则设置自定义权限为空
                 $data['auth'] = '';
             }
-            // 验证
-            $result = $this->validate($data, 'AdminUser.update');
-            if($result !== true) {
-                return $this->error($result);
-            }
 
             if ($data['password'] == '') {
                 unset($data['password']);
             }
             unset($data['password_confirm'],$data['dep_name'],$data['is_auth']);
             $data['company_id'] = session('admin_user.cid');
+            // 验证
+            $result = $this->validate($data, 'AdminUser.update');
+            if($result !== true) {
+                return $this->error($result);
+            }
             if (!UserModel::update($data)) {
                 return $this->error('修改失败');
             }
@@ -225,17 +226,15 @@ class User extends Admin
             // 防止伪造
             unset($data['role_id'], $data['status'],$data['cname'], $data['dep_name'], $data['last_login_time']);
 
+            if ($data['password'] == '') {
+                unset($data['password']);
+            }
+            unset($data['password_confirm']);
             // 验证
             $result = $this->validate($data, 'AdminUser.info');
             if($result !== true) {
                 return $this->error($result);
             }
-
-            if ($data['password'] == '') {
-                unset($data['password']);
-            }
-            unset($data['password_confirm']);
-
             if (!UserModel::update($data)) {
                 return $this->error('修改失败');
             }
@@ -288,13 +287,14 @@ class User extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            $data['user_id'] = session('admin_user.uid');
+            unset($data['id']);
             // 验证
             $result = $this->validate($data, 'AdminRole');
             if($result !== true) {
                 return $this->error($result);
             }
-            $data['user_id'] = session('admin_user.uid');
-            unset($data['id']);
             if (!RoleModel::create($data)) {
                 return $this->error('添加失败');
             }
@@ -324,12 +324,12 @@ class User extends Admin
                 return $this->error('禁止修改当前角色(原因：您不是超级管理员)');
             }
 
+            $data['user_id'] = session('admin_user.uid');
             // 验证
             $result = $this->validate($data, 'AdminRole');
             if($result !== true) {
                 return $this->error($result);
             }
-            $data['user_id'] = session('admin_user.uid');
             if (!RoleModel::update($data)) {
                 return $this->error('修改失败');
             }

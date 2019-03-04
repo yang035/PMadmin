@@ -61,13 +61,14 @@ class Plan extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            unset($data['id']);
+            $data['user_id'] = session('admin_user.uid');
             // 验证
             $result = $this->validate($data, 'Plan');
             if($result !== true) {
                 return $this->error($result);
             }
-            unset($data['id']);
-            $data['user_id'] = session('admin_user.uid');
             if (!PlanModel::create($data)) {
                 return $this->error('添加失败！');
             }
