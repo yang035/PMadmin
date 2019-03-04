@@ -53,7 +53,7 @@ class SubjectContract extends Admin
                 $where['subject_id'] = $params['subject_id'];
             }
             $where['cid'] = session('admin_user.cid');
-            $data['data'] = ContractModel::with('cat')->where($where)->page($page)->limit($limit)->select();
+            $data['data'] = ContractModel::with('cat')->where($where)->page($page)->order('id desc')->limit($limit)->select();
             $data['count'] = ContractModel::where($where)->count('id');
             $data['code'] = 0;
             $data['msg'] = '';

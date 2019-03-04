@@ -54,7 +54,7 @@
                         return d.cat.name;
                     }},
                 {field: 'content', title: '洽商记录'},
-                {field: 'report', title: '洽商报告'},
+                // {field: 'report', title: '洽商报告'},
                 {field: 'update_time', title: '时间'},
                 // {field: 'status', title: '状态', templet: '#statusTpl'},
                 {title: '操作', templet: '#buttonTpl'}

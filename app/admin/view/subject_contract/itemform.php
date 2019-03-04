@@ -75,7 +75,7 @@
         form.on('select(tpl_id)', function(data){
             var open_url = "{:url('getItemById')}?id="+data.value;
             $.post(open_url, function(data){
-                editor.html(data);
+                editor.insertHtml(data);//insertHtml和html有区别
             });
         });
     });

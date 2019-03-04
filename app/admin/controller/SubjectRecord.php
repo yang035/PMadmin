@@ -52,7 +52,7 @@ class SubjectRecord extends Admin
                 $where['subject_id'] = $params['subject_id'];
             }
             $where['cid'] = session('admin_user.cid');
-            $data['data'] = RecordModel::with('cat')->where($where)->page($page)->limit($limit)->select();
+            $data['data'] = RecordModel::with('cat')->where($where)->page($page)->order('id desc')->limit($limit)->select();
             if ($data['data']) {
                 foreach ($data['data'] as $k => $v) {
                     $v['content'] = htmlspecialchars_decode($v['content']);
