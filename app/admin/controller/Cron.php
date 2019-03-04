@@ -90,12 +90,15 @@ class Cron extends Controller
                 $num += 20;
             }
         }else{//休息日
-            if (in_array($b,$working_day)){
-//                echo '休息日第一天';
-            }elseif (in_array($t,$working_day)){
-//                echo '休息最后一天';
+            if (in_array($y,$legal_holiday)){
+                $remark = '法定节假日加班';
+                $num += 120;
+            }elseif (in_array($y,$weekend)){
+                $remark = '日常周末加班';
+                $num += 90;
             }else{
-//                echo '常规休息日';
+                $remark = '日常周末加班';
+                $num += 90;
             }
         }
         $where = [
