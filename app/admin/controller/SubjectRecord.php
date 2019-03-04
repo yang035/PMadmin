@@ -147,6 +147,7 @@ class SubjectRecord extends Admin
             $this->assign('data_info', $row);
             $subject_name = empty($params['subject_name']) ? SubjectItem::getItem()[$row['subject_id']] : $params['subject_name'];
             $this->assign('subject_name', $subject_name);
+            $this->assign('subject_id', $params['subject_id']);
         }
 
         return $this->fetch('itemform');

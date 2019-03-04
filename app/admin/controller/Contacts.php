@@ -28,15 +28,17 @@ class Contacts extends Admin
                 'url' => 'admin/Contacts/cat',
             ],
             [
-                'title' => '人员',
+                'title' => '甲方人员',
                 'url' => 'admin/Contacts/index',
             ],
         ];
         $this->tab_data = $tab_data;
+        $this->assign('project_select', SubjectItem::inputSearchSubject());
     }
 
     public function index($q = '')
     {
+        $subject_name = '';
         $params = $this->request->param();
         if ($this->request->isAjax()) {
             $where = $data = [];
@@ -53,9 +55,15 @@ class Contacts extends Admin
             }
             if ($params['subject_id']) {
                 $where['subject_id'] = $params['subject_id'];
+                $subject_name = empty($params['subject_name']) ? SubjectItem::getItem()[$params['subject_id']] : $params['subject_name'];
             }
             $where['cid'] = session('admin_user.cid');
             $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->select();
+            if ($data['data']){
+                foreach ($data['data'] as $k=>$v){
+                    $data['data'][$k]['subject_name'] = SubjectItem::getItem()[$v['subject_id']];
+                }
+            }
             $data['count'] = ItemModel::where($where)->count('id');
             $data['code'] = 0;
             $data['msg'] = '';
@@ -72,22 +80,28 @@ class Contacts extends Admin
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 1);
         $this->assign('cat_option', ItemModel::getOption());
+        $this->assign('subject_name', $subject_name);
         return $this->fetch('item');
     }
 
     public function addItem()
     {
+        $params= $this->request->param();
         if ($this->request->isPost()) {
             $data = $this->request->post();
 
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
-            unset($data['id']);
+            unset($data['id'],$data['subject_name']);
             // 验证
             $result = $this->validate($data, 'ContactsItem');
             if ($result !== true) {
                 return $this->error($result);
             }
+            if (empty($data['subject_id'])){
+                return $this->error('请选择项目');
+            }
+
             $contacts_id = ItemModel::create($data);
             if ($contacts_id) {
                 $tmp1['id'] = $data['subject_id'];
@@ -126,6 +140,10 @@ class Contacts extends Admin
             }
 
         }
+        $subject_name = isset($params['subject_name']) ? $params['subject_name'] : '';
+        $subject_id = is_int($params['subject_id']) ? $params['subject_id'] : 0;
+        $this->assign('subject_name', $subject_name);
+        $this->assign('subject_id', $subject_id);
         $this->assign('cat_option', ItemModel::getOption(null));
         $this->assign('sex_type', ItemModel::getSexOption());
         return $this->fetch('itemform');
@@ -133,15 +151,20 @@ class Contacts extends Admin
 
     public function editItem($id = 0)
     {
+        $params= $this->request->param();
         if ($this->request->isPost()) {
             $data = $this->request->post();
 
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
+            unset($data['subject_name']);
             // 验证
             $result = $this->validate($data, 'ContactsItem');
             if ($result !== true) {
                 return $this->error($result);
+            }
+            if (empty($data['subject_id'])){
+                return $this->error('请选择项目');
             }
             if (!ItemModel::update($data)) {
                 return $this->error('修改失败');
@@ -150,6 +173,11 @@ class Contacts extends Admin
         }
 
         $row = ItemModel::where('id', $id)->find()->toArray();
+        if ($row){
+            $subject_name = empty($params['subject_name']) ? SubjectItem::getItem()[$row['subject_id']] : $params['subject_name'];
+            $this->assign('subject_name', $subject_name);
+            $this->assign('subject_id', $params['subject_id']);
+        }
         $this->assign('data_info', $row);
         $this->assign('cat_option', ItemModel::getOption($row['cat_id']));
         $this->assign('sex_type', ItemModel::getSexOption());

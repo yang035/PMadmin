@@ -143,6 +143,7 @@ class SubjectContract extends Admin
                 $this->assign('contract_cat', ContractItem::getOption($row1['cat_id']));
                 $subject_name = empty($params['subject_name']) ? SubjectItem::getItem()[$row['subject_id']] : $params['subject_name'];
                 $this->assign('subject_name', $subject_name);
+                $this->assign('subject_id', $params['subject_id']);
             }
             $this->assign('data_info', $row);
 
