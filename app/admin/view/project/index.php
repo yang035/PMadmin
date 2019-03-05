@@ -172,8 +172,12 @@
                 var open_url = "{:url('add')}?id="+id+"&atype="+atype;
                 window.location.href = open_url;
             } else if (layEvent === 'edit') {
-                var open_url = "{:url('edit')}?id="+id+"&atype="+atype;
-                window.location.href = open_url;
+                if (0 == pid){
+                    layer.alert('项目信息不能在计划中修改');
+                } else {
+                    var open_url = "{:url('edit')}?id="+id+"&atype="+atype;
+                    window.location.href = open_url;
+                }
             } else if (layEvent === 'dep_auth') {
                 var open_url = "{:url('depAuth')}?id=" + id;
                 window.location.href = open_url;

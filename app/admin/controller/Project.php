@@ -818,7 +818,7 @@ class Project extends Admin
                             'end_time' => $v['F'] ? gmdate('Y-m-d H:i:s', ($v['G'] - $d) * $s) : '0000-00-00 00:00:00',
                             'manager_user' => $this->userFormat($v['H']),
                             'deal_user' => $this->userFormat($v['I']),
-                            'send_user' => $this->userFormat($v['J']),
+                            'send_user' => $this->userFormat($v['J'],'a'),
                             'copy_user' => $this->userFormat($v['K']),
                             'user_id' => session('admin_user.uid'),
                         ];
@@ -832,7 +832,7 @@ class Project extends Admin
         return $this->fetch();
     }
 
-    public function userFormat($val)
+    public function userFormat($val,$f='')
     {
         $name = preg_replace("/(\n)|(\s)|(\t)|(\')|(')|(，)|(\.)/", ',', $val);
         $where = [
@@ -843,7 +843,7 @@ class Project extends Admin
         $ids = AdminUser::where($where)->field('id')->select();
         if (!empty($ids)) {
             foreach ($ids as $k => $v) {
-                $data[$v['id']] = '';
+                $data[$v['id']] = $f;
             }
             return json_encode($data);
         }
