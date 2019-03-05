@@ -58,7 +58,7 @@ class Contacts extends Admin
                 $subject_name = empty($params['subject_name']) ? SubjectItem::getItem()[$params['subject_id']] : $params['subject_name'];
             }
             $where['cid'] = session('admin_user.cid');
-            $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->select();
+            $data['data'] = ItemModel::with('cat')->where($where)->order('id desc')->page($page)->limit($limit)->select();
             if ($data['data']){
                 foreach ($data['data'] as $k=>$v){
                     $data['data'][$k]['subject_name'] = SubjectItem::getItem()[$v['subject_id']];

@@ -121,6 +121,7 @@ class Subject extends Admin
         $this->assign('subject_option', ItemModel::getOption(null));
         $this->assign('p_source', ItemModel::getPsource());
         $this->assign('grade_type', ProjectModel::getGrade());
+        $this->assign('cur_time', date('YmdHis'));
         $this->assign('t_type', ProjectModel::getTType());
         return $this->fetch('itemform');
     }
@@ -168,12 +169,13 @@ class Subject extends Admin
         }
 
         $row = ItemModel::where('id', $id)->find()->toArray();
+        $this->assign('cur_time', empty($row['idcard']) ? date('YmdHis') : $row['idcard']);
         $this->assign('data_info', $row);
         $this->assign('subject_option', ItemModel::getOption($row['cat_id']));
         $this->assign('p_source', ItemModel::getPsource());
         $this->assign('grade_type', ProjectModel::getGrade());
         $this->assign('t_type', ProjectModel::getTType());
-        return $this->fetch('itemform');
+        return $this->fetch('itemedit');
     }
 
     public function delItem()
@@ -302,10 +304,32 @@ class Subject extends Admin
                 }
                 $data[$k] = json_encode(user_array($v));
             }
-            if (!ItemModel::update($data)) {
-                return $this->error('操作失败');
+//            print_r($data);exit();
+            Db::startTrans();
+            try{
+                ItemModel::update($data);
+                $where = [
+                    'pid'=>0,
+                    'subject_id'=>$data['id'],
+                ];
+                $tmp = [
+                    'manager_user'=>$data['manager_user'],
+                    'send_user'=>$data['send_user'],
+                    'deal_user'=>$data['deal_user'],
+                    'copy_user'=>$data['copy_user'],
+                ];
+                $res = ProjectModel::where($where)->update($tmp);
+//                // 提交事务
+                Db::commit();
+            } catch (\Exception $e) {
+                // 回滚事务
+                Db::rollback();
             }
-            return $this->success('操作成功');
+            if ($res){
+                return $this->success("操作成功{$this->score_value}");
+            }else{
+                return $this->error('添加失败');
+            }
         }
         $row = ItemModel::where('id', $id)->find()->toArray();
         if ($row) {

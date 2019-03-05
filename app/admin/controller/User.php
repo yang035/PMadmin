@@ -110,13 +110,13 @@ class User extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
 
-            unset($data['id'], $data['password_confirm'],$data['dep_name'],$data['is_auth']);
             $data['last_login_ip'] = '';
             $data['auth'] = '';
             $data['company_id'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
             // 验证
             $result = $this->validate($data, 'AdminUser');
+            unset($data['id'], $data['password_confirm'],$data['dep_name'],$data['is_auth']);
             if($result !== true) {
                 return $this->error($result);
             }

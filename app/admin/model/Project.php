@@ -15,17 +15,17 @@ class Project extends Model
 {
     public static function index($where){
         $field = '*';
-        $result = self::field($field)->where($where)->order('grade desc')->select();
+        $result = self::field($field)->where($where)->order('grade desc,id desc')->select();
         return $result;
     }
 
     public static function getAll($where){
         $field = '*';
-        $result = self::field($field)->where($where)->order('grade desc')->limit(1)->select();
+        $result = self::field($field)->where($where)->order('grade desc,id desc')->limit(1)->select();
 //        print_r($result[0]['id']);exit();
         unset($where['pid']);
         $where['subject_id'] = $result[0]['id'];
-        $result1 = self::field($field)->where($where)->order('grade desc')->select();
+        $result1 = self::field($field)->where($where)->order('grade desc,id desc')->select();
         return array_unique(array_merge($result1,$result));//顺序不能颠倒
     }
 

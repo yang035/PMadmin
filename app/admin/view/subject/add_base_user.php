@@ -169,9 +169,9 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">项目组成员</label>
+            <label class="layui-form-label">参与人</label>
             <div class="layui-input-inline">
-                <button type="button" class="layui-btn" id="deal_user_id" onclick="open_div('deal')">选择项目组成员</button>
+                <button type="button" class="layui-btn" id="deal_user_id" onclick="open_div('deal')">选择项目参与人</button>
                 <div id="deal_select_id">{$data_info['deal_user_id']|default=''}</div>
                 <input type="hidden" name="deal_user" id="deal_user" value="{$data_info['deal_user']|default=''}">
             </div>
