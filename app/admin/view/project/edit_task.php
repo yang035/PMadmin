@@ -6,6 +6,22 @@
         display: none;
     }
 
+    .layui-form-pane .layui-form-label {
+        width: 150px;
+        padding: 8px 15px;
+        height: 38px;
+        line-height: 20px;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 2px 0 0 2px;
+        text-align: center;
+        background-color: #FBFBFB;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        box-sizing: border-box;
+    }
+
     input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
         -webkit-appearance: none;
     }
@@ -20,8 +36,51 @@
             <div class="layui-card">
                 <div class="layui-card-header">工作内容</div>
                 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
+                    {if condition="$data_info['u_res'] eq 'a'"}
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">是否确认</label>
+                        <div class="layui-input-inline">
+                            <span style="color: red;">{$data_info['u_res_str']}</span>
+                        </div>
+                    </div>
+                    {else/}
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">是否确认</label>
+                        <div class="layui-input-inline">
+                            <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
+                            <button type="button" onclick="accept_task({$data_info['id']},{$Request.param.type})" class="layui-btn layui-btn-normal">确认</button>
+                        </div>
+                    </div>
+                    {/if}
+<!--                    {if condition="($data_info['status'] eq 0) && ($Request.param.type eq 2) "}-->
+<!--                    <div class="layui-form-item">-->
+<!--                        <label class="layui-form-label">是否完结</label>-->
+<!--                        <div class="layui-input-inline">-->
+<!--                            <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">-->
+<!--                            <button type="button" onclick="finish_task({$data_info['id']},{$Request.param.type})" class="layui-btn layui-btn-normal">点击完成</button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    {elseif condition="$data_info['status'] eq 1"}-->
+<!--                    <div class="layui-form-item">-->
+<!--                        <label class="layui-form-label">是否完结</label>-->
+<!--                        <div class="layui-input-inline">-->
+<!--                            <span style="color: red;">已完结</span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    {else/}-->
+<!--                    <div class="layui-form-item">-->
+<!--                        <label class="layui-form-label">是否完结</label>-->
+<!--                        <div class="layui-input-inline">-->
+<!--                            <span style="color: red;">进行中</span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    {/if}-->
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">项目名称<span style="color: red">*</span></label>
+                        <div class="layui-form-mid red">{$Request.param.project_name}</div>
+                    </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">名称<span style="color: red">*</span></label>
+                    <label class="layui-form-label">任务主题<span style="color: red">*</span></label>
                     <div class="layui-input-inline">
                         <input type="text" class="layui-input field-name" name="name" lay-verify="required" readonly
                                autocomplete="off" placeholder="请输入名称">
@@ -116,54 +175,21 @@
                         <input type="hidden" name="copy_user" id="copy_user" value="{$data_info['copy_user']}">
                     </div>
                 </div>
-                    {if condition="$data_info['u_res'] eq 'a'"}
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">是否确认</label>
-                        <div class="layui-input-inline">
-                            <span style="color: red;">{$data_info['u_res_str']}</span>
-                        </div>
-                    </div>
-                    {else/}
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">是否确认</label>
-                        <div class="layui-input-inline">
-                            <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
-                            <button type="button" onclick="accept_task({$data_info['id']},{$Request.param.type})" class="layui-btn layui-btn-normal">确认</button>
-                        </div>
-                    </div>
-                    {/if}
-                    {if condition="($data_info['status'] eq 0) && ($Request.param.type eq 2) "}
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">是否完结</label>
-                        <div class="layui-input-inline">
-                            <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
-                            <button type="button" onclick="finish_task({$data_info['id']},{$Request.param.type})" class="layui-btn layui-btn-normal">点击完成</button>
-                        </div>
-                    </div>
-                    {elseif condition="$data_info['status'] eq 1"}
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">是否完结</label>
-                        <div class="layui-input-inline">
-                            <span style="color: red;">已完结</span>
-                        </div>
-                    </div>
-                    {else/}
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">是否完结</label>
-                        <div class="layui-input-inline">
-                            <span style="color: red;">进行中</span>
-                        </div>
-                    </div>
-                    {/if}
+
                 </form>
             </div>
         </div>
         <div class="layui-col-md6">
+            {if condition="$Request.param.type eq 1"}
             <div class="layui-card">
                 <div class="layui-card-header">成果反馈</div>
                 <form class="layui-form layui-form-pane" action="{:url('ProjectReport/add')}" method="post" id="editForm">
                     <div class="layui-form-item">
-                        <label class="layui-form-label">完成百分比<span style="color: red">*</span></label>
+                        <label class="layui-form-label">计划完成百分比</label>
+                        <div class="layui-form-mid red">{$data_info['time_per']}%</div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">实际完成百分比<span style="color: red">*</span></label>
                         <div class="layui-input-inline">
                             <input type="number" class="layui-input field-realper" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="realper" lay-verify="required" autocomplete="off" placeholder="请输完成情况">
                         </div>%
@@ -204,11 +230,12 @@
                         <div class="layui-input-block">
                             <input type="hidden" class="field-project_id" name="project_id" value="{$Request.param.id}">
                             <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
-                            <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
+                            <a href="javascript:history.back()" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
                         </div>
                     </div>
                 </form>
             </div>
+            {/if}
             <div class="layui-card">
                 <div class="layui-card-header">汇报记录</div>
                 <ul class="layui-timeline">
@@ -221,15 +248,24 @@
                                 完成百分比：<span style="color: green">[{$vo['realper']}%]</span>
                                 {neq name="type" value='1'}
                                 计划百分比：<span style="color: green">[{$vo['per']}%]</span>
-                                <a onclick="open_reply({$vo['id']},{$vo['project_id']})" class="layui-btn layui-btn-normal layui-btn-xs">回复</a>
+                                <a onclick="open_reply({$vo['id']},{$vo['project_id']})" class="layui-btn layui-btn-normal layui-btn-xs">评价</a>
                                 {/neq}
                                 <br>
                                 {$vo['mark']}
                                 <br>
+                                附件：
+                                <ul>
+                                    {volist name="vo['attachment']" id="v"}
+                                    <li>
+                                        <a target="_blank" href="{$v}">{$v}</a>
+                                    </li>
+                                    {/volist}
+                                </ul>
+                                <br>
                                 <ul>
                                     {volist name="vo['reply']" id="v"}
                                     <li>
-                                        <span style="color: grey">[{$v['create_time']}回复]</span><br>
+                                        <span style="color: grey">[{$v['create_time']}评价]</span><br>
                                         {$v['content']}
                                     </li>
                                     {/volist}
@@ -433,7 +469,7 @@
         $.post(open_url, function(res) {
             if (res.code == 1) {
                 layer.msg(res.msg);
-                // location.reload();
+                location.reload();
             }else {
                 layer.msg(res.msg);
                 // location.reload();

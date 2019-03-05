@@ -1,7 +1,8 @@
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="form1">
     <div class="layui-form-item">
         <label class="layui-form-label">模板文件</label>
-        <a href="/template/tpl2.xlsx" class="layui-btn layui-btn-danger">点击下载模板</a>
+        <div><a href="/template/tpl2.xlsx" class="layui-btn layui-btn-danger">点击下载模板</a></div>
+        <div class="layui-form-mid red">注意：Excel中不是具体人员做的任务不填参与人</div>
     </div>
     <div class="layui-upload">
         <label class="layui-form-label">选择文件</label>

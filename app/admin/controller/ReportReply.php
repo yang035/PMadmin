@@ -8,6 +8,7 @@
 
 namespace app\admin\controller;
 use app\admin\model\ReportReply as ReplyModel;
+use app\admin\model\Project;
 
 class ReportReply extends Admin
 {
@@ -23,6 +24,8 @@ class ReportReply extends Admin
     }
 
     public function add(){
+        $params = $this->request->param();
+        $row = Project::getRowById($params['project_id']);
         if ($this->request->isPost()){
             $data = $this->request->post();
 
@@ -32,11 +35,13 @@ class ReportReply extends Admin
             if($result !== true) {
                 return $this->error($result);
             }
+
             if (!ReplyModel::create($data)) {
                 return $this->error('添加失败！');
             }
             return $this->success("操作成功{$this->score_value}",url('index'));
         }
+        $this->assign('row', $row);
         return $this->fetch();
     }
 

@@ -29,7 +29,14 @@ class ProjectReport extends Admin
             $data['user_id'] = session('admin_user.uid');
             unset($data['id']);
             $row = Project::getRowById($data['project_id']);
-            $data['per'] = time_per($row['start_time'],$row['end_time']);
+            if (!($row['start_time'] == '0000-00-00 00:00:00' || $row['end_time'] == '0000-00-00 00:00:00' || $row['start_time'] >= $row['end_time'])){
+                $fenzhi = (strtotime(date('Y-m-d').'23:59:59') - strtotime($row['start_time']))/3600;
+                $fenmu = (strtotime($row['end_time']) - strtotime($row['start_time'])) / 3600;
+                $row['time_per'] = ceil($fenzhi/$fenmu*100);
+                $data['per'] = $row['time_per'] > 100 ? 100 : $row['time_per'];
+            }else{
+                $data['per'] = 0;
+            }
             $result = $this->validate($data, 'ProjectReport');
             if($result !== true) {
                 return $this->error($result);

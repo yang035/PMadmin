@@ -522,34 +522,44 @@ class Project extends Admin
         $grade_type = config('other.grade_type');
         $u_res_conf = config('other.res_type');
 //        print_r($list);
-        foreach ($list as $k => $v) {
-            $list[$k]['manager_user'] = $this->deal_data($v['manager_user']);
-            $list[$k]['deal_user'] = $this->deal_data($v['deal_user']);
-            $list[$k]['copy_user'] = $this->deal_data($v['copy_user']);
-            $list[$k]['send_user'] = $this->deal_data($v['send_user']);
-            $list[$k]['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
-            $list[$k]['grade'] = $grade_type[$v['grade']];
-            switch ($params['type']) {
-                case 1:
-                    $u_res = $v['d_res'];
-                    break;
-                case 2:
-                    $u_res = $v['m_res'];
-                    break;
-                case 3:
-                    $u_res = $v['s_res'];
-                    break;
-                case 4:
-                    $u_res = $v['c_res'];
-                    break;
-                default:
-                    $u_res = $v['d_res'];
-                    break;
-            }
-            $list[$k]['u_res'] = trim($u_res, '"');
+        if ($list){
+            $myPro = ProjectModel::getMyTask(0,0);
+            foreach ($list as $k => $v) {
+                $list[$k]['manager_user'] = $this->deal_data($v['manager_user']);
+                $list[$k]['deal_user'] = $this->deal_data($v['deal_user']);
+                $list[$k]['copy_user'] = $this->deal_data($v['copy_user']);
+                $list[$k]['send_user'] = $this->deal_data($v['send_user']);
+                $list[$k]['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
+                $list[$k]['grade'] = $grade_type[$v['grade']];
+                if (0 != $v['pid']){
+                    $list[$k]['project_name'] = $myPro[$v['subject_id']];
+                }else{
+                    $list[$k]['project_name'] = $v['name'];
+                }
 
-            $list[$k]['u_res_str'] = $u_res_conf[$list[$k]['u_res']];
+                switch ($params['type']) {
+                    case 1:
+                        $u_res = $v['d_res'];
+                        break;
+                    case 2:
+                        $u_res = $v['m_res'];
+                        break;
+                    case 3:
+                        $u_res = $v['s_res'];
+                        break;
+                    case 4:
+                        $u_res = $v['c_res'];
+                        break;
+                    default:
+                        $u_res = $v['d_res'];
+                        break;
+                }
+                $list[$k]['u_res'] = trim($u_res, '"');
+
+                $list[$k]['u_res_str'] = $u_res_conf[$list[$k]['u_res']];
+            }
         }
+
 //        print_r($list);
 
         $this->assign('tab_data', $tab_data);
@@ -585,6 +595,15 @@ class Project extends Admin
         $row['deal_user_id'] = $this->deal_data($row['deal_user']);
         $row['copy_user_id'] = $this->deal_data($row['copy_user']);
         $row['send_user_id'] = $this->deal_data($row['send_user']);
+        if (!($row['start_time'] == '0000-00-00 00:00:00' || $row['end_time'] == '0000-00-00 00:00:00' || $row['start_time'] >= $row['end_time'])){
+            $fenzhi = (strtotime(date('Y-m-d').'23:59:59') - strtotime($row['start_time']))/3600;
+            $fenmu = (strtotime($row['end_time']) - strtotime($row['start_time'])) / 3600;
+            $row['time_per'] = ceil($fenzhi/$fenmu*100);
+            $row['time_per'] = $row['time_per'] > 100 ? 100 : $row['time_per'];
+        }else{
+            $row['time_per'] = 0;
+        }
+
 
         switch ($params['type']) {
             case 1:
@@ -608,11 +627,17 @@ class Project extends Admin
         $row['u_res_str'] = $u_res_conf[$row['u_res']];
 //print_r($row);
         $report = ProjectReport::getAll(5);
+
         if ($report) {
             foreach ($report as $k => $v) {
+                if (!empty($v['attachment'])){
+                    $attachment = explode(',',$v['attachment']);
+                    $report[$k]['attachment'] = array_filter($attachment);
+                }
                 $report[$k]['reply'] = ReportReply::getAll($v['id'], 5);
             }
         }
+//        print_r($report);
         if ($params['pid']) {
             $map = [];
             $map['cid'] = $cid;

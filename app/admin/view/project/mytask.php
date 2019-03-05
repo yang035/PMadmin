@@ -36,13 +36,14 @@
         <thead>
             <tr>
                 <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
-                <th>名称</th>
+                <th>项目名称</th>
+                <th>任务主题</th>
                 <th>开始时间</th>
                 <th>结束时间</th>
                 <th>计划产量(斗)</th>
                 <th>实际产量(斗)</th>
                 <th>紧急度</th>
-<!--                <th>参与人</th>-->
+                <th>参与人</th>
                 <th>负责人</th>
                 <th>审批人</th>
                 <th>完成情况</th>
@@ -53,15 +54,16 @@
             {volist name="data_list" id="vo"}
             <tr>
                 <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
+                <td class="font12">{$vo['project_name']}</td>
                 <td class="font12" title="{$vo['remark']}">
-                    <a href="{:url('read',['id'=>$vo['id'],'pid'=>$vo['pid']])}"><strong class="mcolor">{$vo['name']}</strong></a>
+                    <a href="{:url('editTask',['id'=>$vo['id'],'pid'=>$vo['pid'],'type'=>$type,'project_name'=>$vo['project_name']])}"><strong class="mcolor">{$vo['name']}</strong></a>
                 </td>
                 <td class="font12">{$vo['start_time']}</td>
                 <td class="font12">{$vo['end_time']}</td>
                 <td class="font12">{$vo['score']}</td>
                 <td class="font12">{$vo['real_score']}</td>
                 <td class="font12">{$vo['grade']}</td>
-<!--                <td class="font12">{$vo['deal_user']}</td>-->
+                <td class="font12">{$vo['deal_user']}</td>
                 <td class="font12">{$vo['manager_user']}</td>
                 <td class="font12">{$vo['send_user']}</td>
                 <td class="font12" title="昨日计划完成{$vo['per']}%">
@@ -76,7 +78,14 @@
                 <td>
 <!--                    暂时屏蔽此功能-->
                         <div class="layui-btn-group">
-                        <a href="{:url('editTask',['id'=>$vo['id'],'pid'=>$vo['pid'],'type'=>$type])}" class="layui-btn layui-btn-normal layui-btn-xs">汇报</a>
+                        <a href="{:url('editTask',['id'=>$vo['id'],'pid'=>$vo['pid'],'type'=>$type,'project_name'=>$vo['project_name']])}" class="layui-btn layui-btn-normal layui-btn-xs">
+                            {if condition="($vo['status'] eq 0) && ($Request.param.type eq 1) "}
+                            汇报
+                            {elseif condition="($vo['status'] eq 0) && ($Request.param.type eq 2) "}
+                            查看汇报
+                            {else/}
+                            {/if}
+                        </a>
                         </div>
                     {if condition="$vo['u_res'] eq 'a'"}
                         <span style="color: red;">已确认</span>
@@ -85,23 +94,23 @@
                         <a class="layui-btn layui-btn-normal layui-btn-xs">确认</a>
                     </div>
                     {/if}
-                    {if condition="($vo['status'] eq 0) && ($Request.param.type eq 2) "}
-                    <div class="layui-btn-group" onclick="check_result({$vo['id']},'{$vo['name']}')">
-                        <a class="layui-btn layui-btn-normal layui-btn-xs">审核</a>
-                    </div>
-                    <div class="layui-btn-group" onclick="add_score({$vo['id']},'{$vo['code']}','{$vo['name']}')">
-                        <a class="layui-btn layui-btn-normal layui-btn-xs">评分</a>
-                    </div>
-                    {/if}
-                    {if condition="($vo['status'] eq 0) && ($Request.param.type eq 2) "}
-                    <div class="layui-btn-group" onclick="finish_task({$vo['id']},{$Request.param.type})">
-                        <a class="layui-btn layui-btn-normal layui-btn-xs">完结</a>
-                    </div>
-                    {elseif condition="$vo['status'] eq 1"}
-                        <span style="color: red;">已完结</span>
-                    {else/}
-                        <span>进行中</span>
-                    {/if}
+<!--                    {if condition="($vo['status'] eq 0) && ($Request.param.type eq 2) "}-->
+<!--                    <div class="layui-btn-group" onclick="check_result({$vo['id']},'{$vo['name']}')">-->
+<!--                        <a class="layui-btn layui-btn-normal layui-btn-xs">审核</a>-->
+<!--                    </div>-->
+<!--                    <div class="layui-btn-group" onclick="add_score({$vo['id']},'{$vo['code']}','{$vo['name']}')">-->
+<!--                        <a class="layui-btn layui-btn-normal layui-btn-xs">评分</a>-->
+<!--                    </div>-->
+<!--                    {/if}-->
+<!--                    {if condition="($vo['status'] eq 0) && ($Request.param.type eq 2) "}-->
+<!--                    <div class="layui-btn-group" onclick="finish_task({$vo['id']},{$Request.param.type})">-->
+<!--                        <a class="layui-btn layui-btn-normal layui-btn-xs">完结</a>-->
+<!--                    </div>-->
+<!--                    {elseif condition="$vo['status'] eq 1"}-->
+<!--                        <span style="color: red;">已完结</span>-->
+<!--                    {else/}-->
+<!--                        <span>进行中</span>-->
+<!--                    {/if}-->
                 </td>
             </tr>
             {/volist}
