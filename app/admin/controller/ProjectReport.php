@@ -16,7 +16,7 @@ class ProjectReport extends Admin
         $project_id = input('id/d');
         $map['project_id'] = $project_id;
         $map['cid'] = session('admin_user.cid');
-        $map['user_id'] = session('admin_user.uid');
+//        $map['user_id'] = session('admin_user.uid');
         $list = ReportModel::getAll($map,$limit);
         return $list;
     }

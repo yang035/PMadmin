@@ -603,6 +603,11 @@ class Project extends Admin
         }else{
             $row['time_per'] = 0;
         }
+        if (time() > $row['end_time']){
+            $row['span'] = "(限定完成时间{$row['end_time']},已逾期)";
+        }else{
+            $row['span'] = '';
+        }
 
 
         switch ($params['type']) {
@@ -633,6 +638,11 @@ class Project extends Admin
                 if (!empty($v['attachment'])){
                     $attachment = explode(',',$v['attachment']);
                     $report[$k]['attachment'] = array_filter($attachment);
+                }
+                if ($v['create_time'] > $row['end_time']){
+                    $report[$k]['span'] = "(限定完成时间{$row['end_time']},已逾期)";
+                }else{
+                    $report[$k]['span'] = '';
                 }
                 $report[$k]['reply'] = ReportReply::getAll($v['id'], 5);
             }

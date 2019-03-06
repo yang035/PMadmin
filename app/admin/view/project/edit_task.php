@@ -7,7 +7,7 @@
     }
 
     .layui-form-pane .layui-form-label {
-        width: 150px;
+        width: 130px;
         padding: 8px 15px;
         height: 38px;
         line-height: 20px;
@@ -39,9 +39,7 @@
                     {if condition="$data_info['u_res'] eq 'a'"}
                     <div class="layui-form-item">
                         <label class="layui-form-label">是否确认</label>
-                        <div class="layui-input-inline">
-                            <span style="color: red;">{$data_info['u_res_str']}</span>
-                        </div>
+                        <div class="layui-form-mid red">{$data_info['u_res_str']}</div>
                     </div>
                     {else/}
                     <div class="layui-form-item">
@@ -76,25 +74,25 @@
 <!--                    </div>-->
 <!--                    {/if}-->
                     <div class="layui-form-item">
-                        <label class="layui-form-label">项目名称<span style="color: red">*</span></label>
+                        <label class="layui-form-label">项目名称</label>
                         <div class="layui-form-mid red">{$Request.param.project_name}</div>
                     </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">任务主题<span style="color: red">*</span></label>
+                    <label class="layui-form-label">任务主题</label>
                     <div class="layui-input-inline">
                         <input type="text" class="layui-input field-name" name="name" lay-verify="required" readonly
                                autocomplete="off" placeholder="请输入名称">
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">描述<span style="color: red">*</span></label>
+                    <label class="layui-form-label">描述</label>
                     <div class="layui-input-inline">
                         <textarea type="text" class="layui-textarea field-remark" name="remark" lay-verify="required"
                                   readonly autocomplete="off" placeholder="请输入描述"></textarea>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">预设产量<span style="color: red">*</span></label>
+                    <label class="layui-form-label">预设产量</label>
                     <div class="layui-input-inline">
                         <input type="number" class="layui-input field-score" name="score"
                                onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))"
@@ -103,14 +101,14 @@
                     <div class="layui-form-mid">斗</div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">开始时间<span style="color: red">*</span></label>
+                    <label class="layui-form-label">开始时间</label>
                     <div class="layui-input-inline">
                         <input type="text" class="layui-input field-start_time" name="start_time" lay-verify="required"
                                autocomplete="off" readonly placeholder="选择开始时间">
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">结束时间<span style="color: red">*</span></label>
+                    <label class="layui-form-label">结束时间</label>
                     <div class="layui-input-inline">
                         <input type="text" class="layui-input field-end_time" name="end_time" lay-verify="required"
                                autocomplete="off" readonly placeholder="选择结束时间">
@@ -186,13 +184,14 @@
                 <form class="layui-form layui-form-pane" action="{:url('ProjectReport/add')}" method="post" id="editForm">
                     <div class="layui-form-item">
                         <label class="layui-form-label">计划完成百分比</label>
-                        <div class="layui-form-mid red">{$data_info['time_per']}%</div>
+                        <div class="layui-form-mid red">{$data_info['time_per']}%{$data_info['span']}</div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label">实际完成百分比<span style="color: red">*</span></label>
+                        <label class="layui-form-label">实际完成百分比</label>
                         <div class="layui-input-inline">
                             <input type="number" class="layui-input field-realper" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="realper" lay-verify="required" autocomplete="off" placeholder="请输完成情况">
-                        </div>%
+                        </div>
+                        <div class="layui-form-mid red">%*</div>
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">备注<span style="color: red"></span></label>
@@ -200,6 +199,7 @@
                             <textarea type="text" class="layui-textarea field-mark" name="mark"
                                       lay-verify="required" autocomplete="off" placeholder="请输入备注"></textarea>
                         </div>
+                        <div class="layui-form-mid red">*</div>
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">附件说明</label>
@@ -253,6 +253,11 @@
                                 <br>
                                 {$vo['mark']}
                                 <br>
+                                {notempty name="vo['span']"}
+                                {$vo['span']}
+                                <br>
+                                {/notempty}
+                                {notempty name="vo['attachment']"}
                                 附件：
                                 <ul>
                                     {volist name="vo['attachment']" id="v"}
@@ -262,6 +267,7 @@
                                     {/volist}
                                 </ul>
                                 <br>
+                                {/notempty}
                                 <ul>
                                     {volist name="vo['reply']" id="v"}
                                     <li>
@@ -499,7 +505,7 @@
         layer.open({
             type:2,
             maxmin: true,
-            title :'回复',
+            title :'评价',
             area: ['600px', '400px'],
             content: open_url,
             success:function (layero, index) {
