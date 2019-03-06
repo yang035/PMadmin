@@ -644,6 +644,8 @@ class Project extends Admin
                 }else{
                     $report[$k]['span'] = '';
                 }
+                $report_user = AdminUser::getUserById($v['user_id'])['realname'];
+                $report[$k]['real_name'] = !empty($report_user) ? $report_user : '';
                 $report[$k]['reply'] = ReportReply::getAll($v['id'], 5);
             }
         }

@@ -244,6 +244,7 @@
                         <i class="layui-icon layui-timeline-axis"></i>
                         <div class="layui-timeline-content layui-text">
                             <div class="layui-timeline-title">
+                                <span style="color: red">[{$vo['real_name']}]</span>
                                 <span style="color: red">[{$vo['create_time']}]</span>
                                 完成百分比：<span style="color: green">[{$vo['realper']}%]</span>
                                 {neq name="type" value='1'}
@@ -271,6 +272,7 @@
                                 <ul>
                                     {volist name="vo['reply']" id="v"}
                                     <li>
+                                        <span style="color: green">[{$v['real_name']}]</span>
                                         <span style="color: grey">[{$v['create_time']}评价]</span><br>
                                         {$v['content']}
                                     </li>

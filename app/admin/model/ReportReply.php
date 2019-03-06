@@ -17,6 +17,7 @@ class ReportReply extends Model
         $list = self::where($where)->order('id desc')->limit($limit)->select();
         if ($list){
             foreach ($list as $k=>$v){
+                $list[$k]['real_name'] = AdminUser::getUserById($v['user_id'])['realname'];
                 $list[$k]['child'] = [];
                 $list[$k]['child'] = self::where('pid',$v['id'])->order('id desc')->limit($limit)->select();
             }
