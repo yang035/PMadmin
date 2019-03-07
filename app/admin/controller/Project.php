@@ -17,6 +17,7 @@ use app\admin\controller\ProjectReport;
 use app\admin\model\SubjectCat;
 use app\admin\model\SubjectItem;
 use think\Db;
+use think\Exception;
 
 class Project extends Admin
 {
@@ -450,6 +451,9 @@ class Project extends Admin
         $map['cid'] = $cid;
         $map['t_type'] = 1;
         if ($params) {
+            if (!empty($params['project_id'])){
+                $map['subject_id'] = $params['project_id'];
+            }
             if (!empty($params['name'])) {
                 $map['name'] = ['like', '%' . $params['name'] . '%'];
             }
@@ -568,6 +572,7 @@ class Project extends Admin
         $this->assign('type', $params['type']);
         $pages = $list->render();
         $this->assign('tab_url', url('mytask', ['type' => $params['type']]));
+        $this->assign('project_select', ProjectModel::inputSearchProject());
         $this->assign('data_list', $list);
         $this->assign('pages', $pages);
         return $this->fetch();
@@ -664,6 +669,170 @@ class Project extends Admin
         $this->assign('grade_type', ProjectModel::getGrade($row['grade']));
         $this->assign('type', $params['type']);
         $this->assign('report_info', $report);
+        return $this->fetch();
+    }
+
+    public function addScore(){
+        $params = $this->request->param();
+        $uid = session('admin_user.uid');
+        $map = [
+            'id'=>$params['id'],
+        ];
+        $row = ProjectModel::where($map)->find()->toArray();
+        $manager = json_decode($row['manager_user'],true);
+        $count = ScorelogModel::where('project_id',$params['id'])->count();
+        $p = [
+            count($manager),$count+1
+        ];
+
+//        print_r(ScorelogModel::where('project_id',$params['id'])->count());
+
+//        $s_d = ScorelogModel::where('project_id',$params['id'])->select();
+//        $s = [];
+//        if ($s_d){
+//            foreach ($s_d as $k=>$v){
+//                $summary = json_decode($v['summary'],true);
+//                foreach ($summary as $key=>$val){
+//                    if (key_exists($key,$s)){
+//                        $s[$key] += $val['score'];
+//                    }else{
+//                        $s[$key] = $val['score'];
+//                    }
+//                }
+//            }
+//        }
+//        print_r($s);
+//        exit();
+        if ($this->request->isPost()){
+            $data = $this->request->post();
+            $score = [];
+            $sum_add_score = 0;
+            $sub_sub_score = 0;
+            foreach ($data['u_id'] as $k=>$v){
+                $score[$k]['project_id'] = $data['id'];
+                $score[$k]['cid'] = session('admin_user.cid');
+                $score[$k]['project_code'] = $data['code'];
+                $score[$k]['user'] = $data['u_id'][$k];
+                $score[$k]['ml_add_score'] = !empty($data['add_score'][$k]) ? $data['add_score'][$k] : 0;
+//                $score[$k]['ml_sub_score'] = !empty($data['sub_score'][$k]) ? $data['sub_score'][$k] : 0;
+                $score[$k]['remark'] = !empty($data['mark'][$k]) ? $data['mark'][$k] : '';
+                $score[$k]['user_id'] = $uid;
+                $score[$k]['create_time'] = time();
+                $score[$k]['update_time'] = time();
+
+                $sum_add_score += $score[$k]['ml_add_score'];
+//                $sub_sub_score += $score[$k]['ml_sub_score'];
+            }
+            if ($sum_add_score > $data['pscore']){
+                return $this->error('得分合计不能超过任务总分！');
+            }
+//            if ($sub_sub_score > $data['pscore']){
+//                return $this->error('扣分合计不能超过任务总分！');
+//            }
+            $score_log = [
+                'project_id' => $params['id'],
+                'user' => json_encode($data['u_id']),
+                'score' => json_encode($data['add_score']),
+                'mark' => json_encode($data['mark']),
+                'total_score' => array_sum($data['add_score']),
+                'user_id' => session('admin_user.uid'),
+            ];
+            foreach ($data['u_id'] as $k=>$v){
+                $t[$v]['score'] = $data['add_score'][$k];
+                $t[$v]['mark'] = $data['mark'][$k];
+            }
+            $score_log['summary'] = json_encode($t);
+
+            if (count($manager) < 2){
+                //只有一个负责人情况
+                //事务开始
+                Db::startTrans();
+                try{
+                    db('score')->insertAll($score);
+                    ScorelogModel::create($score_log);
+                    $tmp = [
+                        'real_score'=>$sum_add_score,
+                    ];
+                    $res = ProjectModel::where('id',$data['id'])->update($tmp);
+                    //提交事务
+                    Db::commit();
+                }catch (\Exception $e){
+                    //回滚事务
+                    Db::rollback();
+                }
+            }else{
+                //有多个负责人情况
+                 if (($count+1) == count($manager)){
+                     $res = ScorelogModel::create($score_log);
+                     $s_d = ScorelogModel::where('project_id',$params['id'])->select();
+                     $s = [];
+                     if ($s_d){
+                         foreach ($s_d as $k=>$v){
+                             $summary = json_decode($v['summary'],true);
+                             foreach ($summary as $key=>$val){
+                                 if (key_exists($key,$s)){
+                                     $s[$key] = $val['score'];//暂时以最后一次的评定为主
+                                 }else{
+                                     $s[$key] = $val['score'];
+                                 }
+                             }
+                         }
+                     }
+                     $score = [];
+                     $sum_add_score = 0;
+                     foreach ($s as $k=>$v){
+                         $score[$k]['project_id'] = $data['id'];
+                         $score[$k]['cid'] = session('admin_user.cid');
+                         $score[$k]['project_code'] = $data['code'];
+                         $score[$k]['user'] = $k;
+                         $score[$k]['ml_add_score'] = $v;
+                         $score[$k]['remark'] = '最终核定计算产值';
+                         $score[$k]['user_id'] = $uid;
+                         $score[$k]['create_time'] = time();
+                         $score[$k]['update_time'] = time();
+
+                         $sum_add_score += $v;
+                     }
+
+                     //事务开始
+                     Db::startTrans();
+                     try{
+                         db('score')->insertAll($score);
+                         $tmp = [
+                             'real_score'=>$sum_add_score,
+                         ];
+                         $res = ProjectModel::where('id',$data['id'])->update($tmp);
+                         //提交事务
+                         Db::commit();
+                     }catch (\Exception $e){
+                         //回滚事务
+                         Db::rollback();
+                     }
+                 }else{
+                     return $this->error('已经操作成功，等待系统计算');
+                 }
+            }
+
+            if ($res){
+                return $this->success("之前已经操作成功{$this->score_value}");
+            }else{
+                return $this->error('添加失败');
+            }
+        }
+
+        if ($row){
+            $x_user_arr = json_decode($row['deal_user'],true);
+            $x_user = [];
+            if ($x_user_arr){
+                foreach ($x_user_arr as $key=>$val){
+                    $real_name = AdminUser::getUserById($key)['realname'];
+                    $x_user[$key] = $real_name;
+                }
+            }
+        }
+        $this->assign('p', $p);
+        $this->assign('x_user', $x_user);
+        $this->assign('data_list', $row);
         return $this->fetch();
     }
 

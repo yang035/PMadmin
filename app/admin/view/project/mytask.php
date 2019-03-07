@@ -9,20 +9,27 @@
         <form class="layui-form layui-form-pane" action="{:url()}" method="get">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">名称</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="name" value="{:input('get.name')}" placeholder="项目名称关键字" autocomplete="off" class="layui-input">
+                    <label class="layui-form-label">选择项目</label>
+                    <div class="layui-input-inline box box1">
                     </div>
+                    <input id="project_name" type="hidden" name="project_name" value="{$Request.param.project_name}">
+                    <input id="project_id" type="hidden" name="project_id" value="{$Request.param.project_id}">
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">是否完成</label>
+                    <label class="layui-form-label">任务名</label>
                     <div class="layui-input-inline">
-                        <select name="status">
-                            <option value="0" {if condition="$Request.param.status eq 0"}selected{/if} >进行中</option>
-                            <option value="1" {if condition="$Request.param.status eq '1' "}selected{/if} >已完成</option>
-                        </select>
+                        <input type="text" name="name" value="{:input('get.name')}" placeholder="关键字" autocomplete="off" class="layui-input">
                     </div>
                 </div>
+<!--                <div class="layui-inline">-->
+<!--                    <label class="layui-form-label">是否完成</label>-->
+<!--                    <div class="layui-input-inline">-->
+<!--                        <select name="status">-->
+<!--                            <option value="0" {if condition="$Request.param.status eq 0"}selected{/if} >进行中</option>-->
+<!--                            <option value="1" {if condition="$Request.param.status eq '1' "}selected{/if} >已完成</option>-->
+<!--                        </select>-->
+<!--                    </div>-->
+<!--                </div>-->
                 <input type="hidden" name="type" value="{$Request.param.type}">
                 <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
             </div>
@@ -61,7 +68,7 @@
                 <td class="font12">{$vo['start_time']}</td>
                 <td class="font12">{$vo['end_time']}</td>
                 <td class="font12">{$vo['score']}</td>
-                <td class="font12">{$vo['real_score']}</td>
+                <td class="font12 red">{$vo['real_score']}</td>
                 <td class="font12">{$vo['grade']}</td>
                 <td class="font12">{$vo['deal_user']}</td>
                 <td class="font12">{$vo['manager_user']}</td>
@@ -84,6 +91,7 @@
                             {elseif condition="($vo['status'] eq 0) && ($Request.param.type eq 2) "}
                             查看汇报
                             {else/}
+                            查看汇报
                             {/if}
                         </a>
                         </div>
@@ -94,14 +102,20 @@
                         <a class="layui-btn layui-btn-normal layui-btn-xs">确认</a>
                     </div>
                     {/if}
-<!--                    {if condition="($vo['status'] eq 0) && ($Request.param.type eq 2) "}-->
+                    {if condition="($vo['status'] eq 0) && ($Request.param.type eq 2) "}
 <!--                    <div class="layui-btn-group" onclick="check_result({$vo['id']},'{$vo['name']}')">-->
 <!--                        <a class="layui-btn layui-btn-normal layui-btn-xs">审核</a>-->
 <!--                    </div>-->
-<!--                    <div class="layui-btn-group" onclick="add_score({$vo['id']},'{$vo['code']}','{$vo['name']}')">-->
-<!--                        <a class="layui-btn layui-btn-normal layui-btn-xs">评分</a>-->
-<!--                    </div>-->
-<!--                    {/if}-->
+                    {if condition="($vo['realper'] egt 100) && ($vo['real_score'] eq 0) "}
+                    <div class="layui-btn-group" onclick="add_score({$vo['id']},'{$vo['code']}','{$vo['name']}')">
+                        <a class="layui-btn layui-btn-normal layui-btn-xs">评分</a>
+                    </div>
+                    {elseif condition="($vo['realper'] lt 100)"/}
+                        <span style="color: green;">待完成</span>
+                    {else/}
+                    <span style="color: red;">已评定</span>
+                    {/if}
+                    {/if}
 <!--                    {if condition="($vo['status'] eq 0) && ($Request.param.type eq 2) "}-->
 <!--                    <div class="layui-btn-group" onclick="finish_task({$vo['id']},{$Request.param.type})">-->
 <!--                        <a class="layui-btn layui-btn-normal layui-btn-xs">完结</a>-->
@@ -121,6 +135,8 @@
     </div>
 </div>
 {include file="block/layui" /}
+<script src="__PUBLIC_JS__/jquery.select.js?v="></script>
+<script src="__PUBLIC_JS__/SelectBox.min.js?v="></script>
 <script>
     var formData = {:json_encode($data_info)};
     layui.use(['jquery', 'laydate'], function() {
@@ -134,7 +150,7 @@
     });
 
     function add_score(id,code,pname){
-        var open_url = "{:url('Score/add')}?id="+id+"&code="+code+"&pname="+pname;
+        var open_url = "{:url('addScore')}?id="+id+"&code="+code+"&pname="+pname;
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {
@@ -192,4 +208,32 @@
             }
         });
     }
+
+    new SelectBox($('.box1'),{$project_select},function(result){
+        if ('' != result.id){
+            $('#project_name').val(result.name);
+            $('#project_id').val(result.id);
+        }
+    },{
+        dataName:'name',//option的html
+        dataId:'id',//option的value
+        fontSize:'14',//字体大小
+        optionFontSize:'14',//下拉框字体大小
+        textIndent:4,//字体缩进
+        color:'#000',//输入框字体颜色
+        optionColor:'#000',//下拉框字体颜色
+        arrowColor:'#D2D2D2',//箭头颜色
+        backgroundColor:'#fff',//背景色颜色
+        borderColor:'#D2D2D2',//边线颜色
+        hoverColor:'#009688',//下拉框HOVER颜色
+        borderWidth:1,//边线宽度
+        arrowBorderWidth:0,//箭头左侧分割线宽度。如果为0则不显示
+        // borderRadius:5,//边线圆角
+        placeholder:'输入关键字搜索',//默认提示
+        defalut:'{$Request.param.project_name}',//默认显示内容。如果是'firstData',则默认显示第一个
+        // allowInput:true,//是否允许输入
+        width:300,//宽
+        height:37,//高
+        optionMaxHeight:300//下拉框最大高度
+    });
 </script>
