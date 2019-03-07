@@ -34,13 +34,13 @@
                 <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
             </div>
         </form>
-
-<div class="layui-form">
-    <table class="layui-table mt10" lay-even="" lay-skin="row">
-        <colgroup>
-            <col width="50">
-        </colgroup>
-        <thead>
+    </div>
+    <div class="layui-form">
+        <table class="layui-table mt10" lay-even="" lay-skin="row">
+            <colgroup>
+                <col width="50">
+            </colgroup>
+            <thead>
             <tr>
                 <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
                 <th>项目名称</th>
@@ -55,9 +55,9 @@
                 <th>审批人</th>
                 <th>完成情况</th>
                 <th>操作</th>
-            </tr> 
-        </thead>
-        <tbody>
+            </tr>
+            </thead>
+            <tbody>
             {volist name="data_list" id="vo"}
             <tr>
                 <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
@@ -83,8 +83,8 @@
                     </div>
                 </td>
                 <td>
-<!--                    暂时屏蔽此功能-->
-                        <div class="layui-btn-group">
+                    <!--                    暂时屏蔽此功能-->
+                    <div class="layui-btn-group">
                         <a href="{:url('editTask',['id'=>$vo['id'],'pid'=>$vo['pid'],'type'=>$type,'project_name'=>$vo['project_name']])}" class="layui-btn layui-btn-normal layui-btn-xs">
                             {if condition="($vo['status'] eq 0) && ($Request.param.type eq 1) "}
                             汇报
@@ -94,44 +94,43 @@
                             查看汇报
                             {/if}
                         </a>
-                        </div>
+                    </div>
                     {if condition="$vo['u_res'] eq 'a'"}
-                        <span style="color: red;">已确认</span>
+                    <span style="color: red;">已确认</span>
                     {else/}
                     <div class="layui-btn-group" onclick="accept_task({$vo['id']},{$Request.param.type})">
                         <a class="layui-btn layui-btn-normal layui-btn-xs">确认</a>
                     </div>
                     {/if}
                     {if condition="($vo['status'] eq 0) && ($Request.param.type eq 2) "}
-<!--                    <div class="layui-btn-group" onclick="check_result({$vo['id']},'{$vo['name']}')">-->
-<!--                        <a class="layui-btn layui-btn-normal layui-btn-xs">审核</a>-->
-<!--                    </div>-->
+                    <!--                    <div class="layui-btn-group" onclick="check_result({$vo['id']},'{$vo['name']}')">-->
+                    <!--                        <a class="layui-btn layui-btn-normal layui-btn-xs">审核</a>-->
+                    <!--                    </div>-->
                     {if condition="($vo['realper'] egt 100) && ($vo['real_score'] eq 0) "}
                     <div class="layui-btn-group" onclick="add_score({$vo['id']},'{$vo['code']}','{$vo['name']}')">
                         <a class="layui-btn layui-btn-normal layui-btn-xs">评分</a>
                     </div>
                     {elseif condition="($vo['realper'] lt 100)"/}
-                        <span style="color: green;">待完成</span>
+                    <span style="color: green;">待完成</span>
                     {else/}
                     <span style="color: red;">已评定</span>
                     {/if}
                     {/if}
-<!--                    {if condition="($vo['status'] eq 0) && ($Request.param.type eq 2) "}-->
-<!--                    <div class="layui-btn-group" onclick="finish_task({$vo['id']},{$Request.param.type})">-->
-<!--                        <a class="layui-btn layui-btn-normal layui-btn-xs">完结</a>-->
-<!--                    </div>-->
-<!--                    {elseif condition="$vo['status'] eq 1"}-->
-<!--                        <span style="color: red;">已完结</span>-->
-<!--                    {else/}-->
-<!--                        <span>进行中</span>-->
-<!--                    {/if}-->
+                    <!--                    {if condition="($vo['status'] eq 0) && ($Request.param.type eq 2) "}-->
+                    <!--                    <div class="layui-btn-group" onclick="finish_task({$vo['id']},{$Request.param.type})">-->
+                    <!--                        <a class="layui-btn layui-btn-normal layui-btn-xs">完结</a>-->
+                    <!--                    </div>-->
+                    <!--                    {elseif condition="$vo['status'] eq 1"}-->
+                    <!--                        <span style="color: red;">已完结</span>-->
+                    <!--                    {else/}-->
+                    <!--                        <span>进行中</span>-->
+                    <!--                    {/if}-->
                 </td>
             </tr>
             {/volist}
-        </tbody>
-    </table>
-    {$pages}
-</div>
+            </tbody>
+        </table>
+        {$pages}
     </div>
 </div>
 {include file="block/layui" /}
