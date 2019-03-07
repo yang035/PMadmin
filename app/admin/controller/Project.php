@@ -709,6 +709,7 @@ class Project extends Admin
             $sum_add_score = 0;
             $sub_sub_score = 0;
             foreach ($data['u_id'] as $k=>$v){
+                $score[$k]['subject_id'] = $row['subject_id'];
                 $score[$k]['project_id'] = $data['id'];
                 $score[$k]['cid'] = session('admin_user.cid');
                 $score[$k]['project_code'] = $data['code'];
@@ -781,6 +782,7 @@ class Project extends Admin
                      $score = [];
                      $sum_add_score = 0;
                      foreach ($s as $k=>$v){
+                         $score[$k]['subject_id'] = $row['subject_id'];
                          $score[$k]['project_id'] = $data['id'];
                          $score[$k]['cid'] = session('admin_user.cid');
                          $score[$k]['project_code'] = $data['code'];
@@ -809,12 +811,12 @@ class Project extends Admin
                          Db::rollback();
                      }
                  }else{
-                     return $this->error('已经操作成功，等待系统计算');
+                     return $this->error('之前已经操作成功，等待系统计算');
                  }
             }
 
             if ($res){
-                return $this->success("之前已经操作成功{$this->score_value}");
+                return $this->success("操作成功{$this->score_value}");
             }else{
                 return $this->error('添加失败');
             }

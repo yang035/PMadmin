@@ -25,6 +25,7 @@ class Score extends Admin
             ],
         ];
         $this->tab_data = $tab_data;
+        $this->assign('project_select', ProjectModel::inputSearchProject());
     }
     public function index($q = '')
     {
@@ -35,6 +36,9 @@ class Score extends Admin
         if ($params){
             if (!empty($params['realname'])){
                 $map1['realname'] = ['like', '%'.$params['realname'].'%'];
+            }
+            if (!empty($params['project_id'])){
+                $map['subject_id'] = $params['project_id'];
             }
             if (!empty($params['project_code'])){
                 $map['project_code'] = ['like', '%'.$params['project_code'].'%'];
@@ -91,8 +95,9 @@ class Score extends Admin
                     ->setCellValue('D' . $num, $v['gl_add_sum'])
                     ->setCellValue('E' . $num, $v['gl_sub_sum']);
             }
-            $d = !empty($d) ? $d : '全部';
-            $name = $d.'ML/GL统计';
+            $d = !empty($d) ? $d : '全部日期';
+            $p = !empty($params['project_name']) ? $params['project_name'] : '';
+            $name = $p.$d.'ML/GL统计';
             $objPHPExcel->getActiveSheet()->setTitle($d);
             $objPHPExcel->setActiveSheetIndex(0);
             header('Content-Type: application/vnd.ms-excel');
@@ -157,6 +162,9 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
             if (!empty($params['realname'])){
                 $map1['realname'] = ['like', '%'.$params['realname'].'%'];
             }
+            if (!empty($params['project_id'])){
+                $map['subject_id'] = $params['project_id'];
+            }
             if (!empty($params['project_code'])){
                 $map['project_code'] = ['like', '%'.$params['project_code'].'%'];
             }
@@ -165,8 +173,10 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
 
         $data_list = ScoreModel::hasWhere('adminUser',$map1)->field("`Score`.*, `AdminUser`.realname")->where($map)->order('id desc')->paginate(30, false, ['query' => input('get.')]);
         $name_arr = ProjectModel::getColumn('name');
+        $myPro = ProjectModel::getMyTask(0,0);
         foreach ($data_list as $k=>$v){
             $data_list[$k]['pname'] = $v['project_id'] ? $name_arr[$v['project_id']] : '系统';
+            $data_list[$k]['subject_name'] = $v['subject_id'] ? $myPro[$v['subject_id']] : '其他';
         }
         // 分页
         $pages = $data_list->render();
