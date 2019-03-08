@@ -115,8 +115,7 @@ class Index extends Admin
         if (empty($data['lat']) || empty($data['lon'])) {
             return $this->error('当前位置获取失败');
         }
-        $now = [$data['lon'], $data['lat']];
-        $location = [30.44784,114.4049];
+        $location = [30.47879,114.40481];
         $tmp['longitude'] = $data['lon'];
         $tmp['latitude'] = $data['lat'];
         $tmp['distance'] = get_distance($location[0], $location[1], $data['lat'],$data['lon']) / 1000;
