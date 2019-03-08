@@ -119,6 +119,9 @@ class Index extends Admin
         $tmp['longitude'] = $data['lon'];
         $tmp['latitude'] = $data['lat'];
         $tmp['distance'] = get_distance($location[0], $location[1], $data['lat'],$data['lon']) / 1000;
+        if ($tmp['distance'] > 30){
+            return $this->error('当前位置离公司太远，打卡失败！');
+        }
         $tmp['cid'] = session('admin_user.cid');
         $tmp['user_id'] = session('admin_user.uid');
 

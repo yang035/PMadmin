@@ -1,4 +1,4 @@
-<div id="daka" class="layui-btn">打卡</div><div id="demo"></div>
+<div id="daka" class="layui-btn" style="display:none;">打卡</div>
 <div id="container" style="height: 500px"></div>
 <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
 <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
@@ -142,6 +142,12 @@
 
     layui.use(['jquery', 'laydate'], function() {
         var $ = layui.jquery, laydate = layui.laydate;
+
+        $(function(){
+            if(navigator.userAgent.match(/mobile/i)) {
+                $('#daka').show();
+            }
+        });
 
         $('#daka').click(function () {
             getLocation();
