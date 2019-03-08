@@ -116,10 +116,10 @@ class Index extends Admin
             return $this->error('当前位置获取失败');
         }
         $now = [$data['lon'], $data['lat']];
-        $location = [114.4049, 30.44784];
+        $location = [30.44784,114.4049];
         $tmp['longitude'] = $data['lon'];
         $tmp['latitude'] = $data['lat'];
-        $tmp['distance'] = get_distance($now, $location, false);
+        $tmp['distance'] = get_distance($location[0], $location[1], $data['lat'],$data['lon']) / 1000;
         $tmp['cid'] = session('admin_user.cid');
         $tmp['user_id'] = session('admin_user.uid');
 

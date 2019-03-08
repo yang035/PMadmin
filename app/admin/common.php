@@ -15,21 +15,22 @@ if (!function_exists('app_status')) {
 }
 
 /**
- * 根据起点坐标和终点坐标测距离
- * @param  [array]   $from 	[起点坐标(经纬度),例如:array(118.012951,36.810024)]
- * @param  [array]   $to 	[终点坐标(经纬度)]
- * @param  [bool]    $km        是否以公里为单位 false:米 true:公里(千米)
- * @param  [int]     $decimal   精度 保留小数位数
- * @return [string]  距离数值
+ * @param $lat 纬度
+ * @param $lng 经度
+ * @return float
  */
-function get_distance($from,$to,$km=true,$decimal=2){
-    sort($from);
-    sort($to);
-    $EARTH_RADIUS = 6370.996; // 地球半径系数
-    $distance = $EARTH_RADIUS*2*asin(sqrt(pow(sin( ($from[0]*pi()/180-$to[0]*pi()/180)/2),2)+cos($from[0]*pi()/180)*cos($to[0]*pi()/180)* pow(sin( ($from[1]*pi()/180-$to[1]*pi()/180)/2),2)))*1000;
-    if($km){
-        $distance = $distance / 1000;
-    }
-    return round($distance, $decimal);
+function get_distance($lat1, $lng1, $lat2, $lng2)
+{
+    $earthRadius = 6367000;
+    $lat1 = ($lat1 * pi()) / 180;
+    $lng1 = ($lng1 * pi()) / 180;
+    $lat2 = ($lat2 * pi()) / 180;
+    $lng2 = ($lng2 * pi()) / 180;
+    $calcLongitude = $lng2 - $lng1;
+    $calcLatitude = $lat2 - $lat1;
+    $stepOne = pow(sin($calcLatitude / 2), 2) + cos($lat1) * cos($lat2) * pow(sin($calcLongitude / 2), 2);
+    $stepTwo = 2 * asin(min(1, sqrt($stepOne)));
+    $calculatedDistance = $earthRadius * $stepTwo;
+    return round($calculatedDistance);
 }
 
