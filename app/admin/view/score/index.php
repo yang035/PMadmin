@@ -52,8 +52,10 @@
             <th>员工</th>
             <th>ML+</th>
             <th>ML-</th>
+            <th>剩余ML</th>
             <th>GL+</th>
             <th>GL-</th>
+            <th>剩余GL</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -66,8 +68,10 @@
             </td>
             <td class="font12">{$vo['ml_add_sum']}</td>
             <td class="font12">{$vo['ml_sub_sum']}</td>
+            <td class="font12">{$vo['unused_ml']}</td>
             <td class="font12">{$vo['gl_add_sum']}</td>
             <td class="font12">{$vo['gl_sub_sum']}</td>
+            <td class="font12">{$vo['unused_gl']}</td>
             <td>
                 <div class="layui-btn-group">
                     <div class="layui-btn-group">

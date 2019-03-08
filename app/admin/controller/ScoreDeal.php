@@ -11,6 +11,8 @@ use app\admin\model\Rule;
 use app\admin\model\ScoreRule as RuleModel;
 use app\admin\model\ScoreDeal as DealModel;
 use app\admin\model\AdminUser;
+use app\admin\model\Score as ScoreModel;
+use think\Db;
 
 
 class ScoreDeal extends Admin
@@ -19,25 +21,25 @@ class ScoreDeal extends Admin
     protected function _initialize()
     {
         parent::_initialize();
-
+        $sta_count = $this->getDealCount();
         $tab_data['menu'] = [
             [
-                'title' => '积分奖扣',
+                'title' => "积分奖扣<span class='layui-badge layui-bg-orange'>{$sta_count['user_num']}</span>",
                 'url' => 'admin/ScoreDeal/index',
                 'params' =>['atype'=>1],
             ],
             [
-                'title' => '待我审批',
+                'title' => "待我审批<span class='layui-badge'>{$sta_count['send_num']}</span>",
                 'url' => 'admin/ScoreDeal/index',
                 'params' =>['atype'=>2],
             ],
             [
-                'title' => '已审批的',
+                'title' => "已审批的<span class='layui-badge layui-bg-orange'>{$sta_count['has_num']}</span>",
                 'url' => 'admin/ScoreDeal/index',
                 'params' =>['atype'=>3],
             ],
             [
-                'title' => '抄送我的',
+                'title' => "抄送我的<span class='layui-badge layui-bg-orange'>{$sta_count['copy_num']}</span>",
                 'url' => 'admin/ScoreDeal/index',
                 'params' =>['atype'=>4],
             ],
@@ -58,6 +60,17 @@ class ScoreDeal extends Admin
         }
 
         $this->assign('data_info', array_merge($user,$o));
+    }
+
+    public function getDealCount(){
+        $map['cid'] = session('admin_user.cid');
+        $uid = session('admin_user.uid');
+        $fields = "SUM(IF(user_id='{$uid}',1,0)) user_num,
+        SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status = 1,1,0)) send_num,
+        SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status = 2,1,0)) has_num,
+        SUM(IF(JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"'),1,0)) copy_num";
+        $count = DealModel::field($fields)->where($map)->find()->toArray();
+        return $count;
     }
 
     public function deal_data($x_user)
@@ -194,29 +207,41 @@ class ScoreDeal extends Admin
         if ($this->request->isPost()){
             $data = $this->request->post();
             unset($data['atype']);
-//            Db::transaction(function(){
-//                DealModel::update($data)
-//            });
 
-            if (!DealModel::update($data)){
-                return $this->error('处理失败！');
-            }
             $score_user = json_decode($list['score_user'],true);
             $score = [];
             $realname = session('admin_user.realname');
             $rule_row = RuleModel::getRowById($list['rid']);
             foreach ($score_user as $k=>$v) {
+                $score[$k]['cid'] = session('admin_user.cid');
                 $score[$k]['user'] = $k;
-                $score[$k]['url'] = $list['id'];
-                $score[$k]['remark'] = "事件积分({$realname})审批";
+                $score[$k]['url'] = $this->request->url();
+                $score[$k]['remark'] = "事件积分({$realname})审批,{$rule_row['name']}";
                 $score[$k]['user_id'] = session('admin_user.uid');
                 if ($rule_row['score'] > 0){
                     $score[$k]['gl_add_score'] = $rule_row['score'];
                 }else{
                     $score[$k]['gl_sub_score'] = abs($rule_row['score']);
                 }
+                $score[$k]['create_time'] = $score[$k]['update_time'] = time();
             }
-            return $this->success('处理成功。');
+            //开启事务
+            Db::startTrans();
+            try{
+                DealModel::update($data);
+                $score_model = new ScoreModel();
+                $res = $score_model->insertAll($score);
+                //事务提交
+                Db::commit();
+            }catch (\Exception $e){
+                //事务回滚
+                Db::rollback();
+            }
+            if ($res){
+                return $this->success("操作成功{$this->score_value}");
+            }else{
+                return $this->error('操作失败');
+            }
         }
 
 //        print_r($score);exit();

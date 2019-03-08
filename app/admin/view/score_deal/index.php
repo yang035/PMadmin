@@ -35,57 +35,57 @@
                 <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
             </div>
         </form>
-        <div class="layui-btn-group fl">
-            <a href="{:url('add',['atype'=>$Request.param.atype])}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加奖扣</a>
-        </div>
-        <div class="layui-form">
-            <table class="layui-table mt10" lay-even="" lay-skin="row">
-                <colgroup>
-                    <col width="50">
-                </colgroup>
-                <thead>
-                <tr>
-                    <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
-                    <th>姓名</th>
-                    <th>事件</th>
-                    <th>审批状态</th>
-                    <th>添加时间</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                {volist name="data_list" id="vo"}
-                <tr>
-                    <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
-                    <td class="font12">
-                        <strong class="mcolor">{$vo['user_id']}</strong>
-                    </td>
-                    <td class="font12">{$vo['rid']}</td>
-                    <td class="font12">{$approval_status[$vo['status']]}</td>
-                    <td class="font12">{$vo['create_time']}</td>
-                    <td>
-                        <div class="layui-btn-group" onclick="deal_read({$vo['id']},{$atype})">
-                            <a class="layui-btn layui-btn-normal layui-btn-xs">
-                                {if condition="($vo['status'] eq 1) && ($Request.param.atype eq 2) "}
-                                批示
-                                {else/}
-                                查看
-                                {/if}
-                            </a>
-                        </div>
-                        {if condition="($vo['status'] eq 1) && ($Request.param.atype eq 1) "}
-                        <div class="layui-btn-group" onclick="deal_back({$vo['id']})">
-                            <a class="layui-btn layui-btn-normal layui-btn-xs">撤销</a>
-                        </div>
-                        {/if}
-                    </td>
-                </tr>
-                {/volist}
-                </tbody>
-            </table>
-            {$pages}
-        </div>
     </div>
+    <div class="layui-btn-group fl">
+        <a href="{:url('add',['atype'=>$Request.param.atype])}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加奖扣</a>
+    </div>
+</div>
+<div class="layui-form">
+    <table class="layui-table mt10" lay-even="" lay-skin="row">
+        <colgroup>
+            <col width="50">
+        </colgroup>
+        <thead>
+        <tr>
+            <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
+            <th>姓名</th>
+            <th>事件</th>
+            <th>审批状态</th>
+            <th>添加时间</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {volist name="data_list" id="vo"}
+        <tr>
+            <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
+            <td class="font12">
+                <strong class="mcolor">{$vo['user_id']}</strong>
+            </td>
+            <td class="font12">{$vo['rid']}</td>
+            <td class="font12">{$approval_status[$vo['status']]}</td>
+            <td class="font12">{$vo['create_time']}</td>
+            <td>
+                <div class="layui-btn-group" onclick="deal_read({$vo['id']},{$atype})">
+                    <a class="layui-btn layui-btn-normal layui-btn-xs">
+                        {if condition="($vo['status'] eq 1) && ($Request.param.atype eq 2) "}
+                        批示
+                        {else/}
+                        查看
+                        {/if}
+                    </a>
+                </div>
+                {if condition="($vo['status'] eq 1) && ($Request.param.atype eq 1) "}
+                <div class="layui-btn-group" onclick="deal_back({$vo['id']})">
+                    <a class="layui-btn layui-btn-normal layui-btn-xs">撤销</a>
+                </div>
+                {/if}
+            </td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+    {$pages}
 </div>
 
 {include file="block/layui" /}

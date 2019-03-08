@@ -60,7 +60,9 @@ class User extends Admin
                 $where['company_id'] = session('admin_user.cid');
             }
 
-            $data['data'] = UserModel::with('role')->with('dep')->where($where)->page($page)->limit($limit)->select();
+            $order = 'status desc,id asc';
+
+            $data['data'] = UserModel::with('role')->with('dep')->where($where)->order($order)->page($page)->limit($limit)->select();
             if ($data['data']){
                 foreach ($data['data'] as $k=>$v){
                     $data['data'][$k]['job_item'] = !empty($v['job_item']) ? JobItemModel::getItem()[$v['job_item']] : '无';

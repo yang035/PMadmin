@@ -70,6 +70,8 @@ class Score extends Admin
             $name_arr = ProjectModel::getColumn('name');
             foreach ($data_list as $k=>$v){
                 $data_list[$k]['pname'] = $v['project_id'] ? $name_arr[$v['project_id']] : '系统';
+                $data_list[$k]['unused_ml'] = $v['ml_add_sum'] - $v['ml_sub_sum'];
+                $data_list[$k]['unused_gl'] = $v['gl_add_sum'] - $v['gl_sub_sum'];
             }
             vendor('PHPExcel.PHPExcel');
             $objPHPExcel = new \PHPExcel();
@@ -78,12 +80,16 @@ class Score extends Admin
             $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(10);
             $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(10);
             $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A1', '姓名')
                 ->setCellValue('B1', 'ML+')
                 ->setCellValue('C1', 'ML-')
-                ->setCellValue('D1', 'GL+')
-                ->setCellValue('E1', 'GL-');
+                ->setCellValue('D1', '剩余ML')
+                ->setCellValue('E1', 'GL+')
+                ->setCellValue('F1', 'GL-')
+                ->setCellValue('G1', '剩余GL');
 //            print_r($data_list);exit();
             foreach ($data_list as $k => $v) {
                 $num = $k + 2;
@@ -92,8 +98,10 @@ class Score extends Admin
                     ->setCellValue('A' . $num, $v['realname'])
                     ->setCellValue('B' . $num, $v['ml_add_sum'])
                     ->setCellValue('C' . $num, $v['ml_sub_sum'])
-                    ->setCellValue('D' . $num, $v['gl_add_sum'])
-                    ->setCellValue('E' . $num, $v['gl_sub_sum']);
+                    ->setCellValue('D' . $num, $v['unused_ml'])
+                    ->setCellValue('E' . $num, $v['gl_add_sum'])
+                    ->setCellValue('F' . $num, $v['gl_sub_sum'])
+                    ->setCellValue('G' . $num, $v['unused_gl']);
             }
             $d = !empty($d) ? $d : '全部日期';
             $p = !empty($params['project_name']) ? $params['project_name'] : '';
@@ -113,6 +121,8 @@ class Score extends Admin
         $name_arr = ProjectModel::getColumn('name');
         foreach ($data_list as $k=>$v){
             $data_list[$k]['pname'] = $v['project_id'] ? $name_arr[$v['project_id']] : '系统';
+            $data_list[$k]['unused_ml'] = $v['ml_add_sum'] - $v['ml_sub_sum'];
+            $data_list[$k]['unused_gl'] = $v['gl_add_sum'] - $v['gl_sub_sum'];
         }
         // 分页
         $pages = $data_list->render();
