@@ -5,6 +5,7 @@ use app\common\util\Dir;
 use app\admin\model\Project as ProjectModel;
 use app\admin\model\Approval as ApprovalModel;
 use app\admin\model\DailyReport as DailyReportModel;
+use app\admin\model\Kaoqin as KaoqinModel;
 
 class Index extends Admin
 {
@@ -106,5 +107,27 @@ class Index extends Admin
             return $this->error('缓存清理失败！');
         }
         return $this->success('缓存清理成功！');
+    }
+
+    public function daKa(){
+        if ($this->request->isPost()){
+            $data = $this->request->post();
+            if (empty($data['lat']) || empty($data['lon'])){
+                return $this->error('当前位置获取失败');
+            }
+            $now = [$data['lon'],$data['lat']];
+            $location = [115.4049,30.4088];
+            $tmp['longitude'] = $data['lon'];
+            $tmp['latitude'] = $data['lat'];
+            $tmp['distance'] = get_distance($now,$location,false);
+            $tmp['cid'] = session('admin_user.cid');
+            $tmp['user_id'] = session('admin_user.uid');
+
+            if (!KaoqinModel::create($tmp)){
+                return $this->error('打卡失败！');
+            }
+            return $this->success('打卡成功！');
+        }
+
     }
 }

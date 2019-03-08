@@ -1,3 +1,4 @@
+<div id="daka" class="layui-btn">打卡</div><div id="demo"></div>
 <div id="container" style="height: 500px"></div>
 <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
 <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
@@ -136,3 +137,37 @@
     });
 </script>
 {include file="block/layui" /}
+<script>
+    var formData = {:json_encode($data_info)};
+
+    layui.use(['jquery', 'laydate'], function() {
+        var $ = layui.jquery, laydate = layui.laydate;
+
+        $('#daka').click(function () {
+            getLocation();
+        });
+
+        function getLocation()
+        {
+            if (navigator.geolocation)
+            {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            }else{
+                layer.alert('用户拒绝了获取定位请求！');
+            }
+        }
+        function showPosition(position)
+        {
+            var lat = position.coords.latitude,lon = position.coords.longitude;
+            var open_url = "{:url('daKa')}?&lat="+lat+"&lon="+lon;
+            $.post(open_url, function(res) {
+                if (res.code == 1) {
+                    layer.alert(res.msg);
+                }else {
+                    layer.alert(res.msg);
+                }
+            });
+        }
+
+    });
+</script>
