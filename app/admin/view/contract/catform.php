@@ -1,10 +1,11 @@
 <form class="layui-form" action="{:url()}" method="post">
     <div class="layui-tab-item layui-show layui-form-pane">
         <div class="layui-form-item">
-            <label class="layui-form-label">分类名称<span style="color: red">*</span></label>
+            <label class="layui-form-label">分类名称</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-name" name="name" lay-verify="required" autocomplete="off" placeholder="请输入分类名称">
             </div>
+            <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">分类简介</label>

@@ -9,10 +9,11 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">名称<span style="color: red">*</span></label>
+            <label class="layui-form-label">名称</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-name" name="name" lay-verify="required" autocomplete="off" placeholder="请输入检查项">
             </div>
+            <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">颜色</label>
@@ -23,10 +24,11 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">车牌号<span style="color: red">*</span></label>
+            <label class="layui-form-label">车牌号</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-idcard" name="idcard" lay-verify="required" autocomplete="off" placeholder="请输入车牌号">
             </div>
+            <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">车辆配置</label>

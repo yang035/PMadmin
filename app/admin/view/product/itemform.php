@@ -25,22 +25,25 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">名称<span style="color: red">*</span></label>
+            <label class="layui-form-label">名称</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-name" name="name" lay-verify="required" autocomplete="off" placeholder="产品名称">
             </div>
+            <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">特性<span style="color: red">*</span></label>
+            <label class="layui-form-label">特性</label>
             <div class="layui-input-inline">
                 <textarea type="text" class="layui-textarea field-special" name="special" lay-verify="required" autocomplete="off" placeholder="产品特性或技术指标"></textarea>
             </div>
+            <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">规格<span style="color: red">*</span></label>
+            <label class="layui-form-label">规格</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-size" name="size" lay-verify="required" autocomplete="off" placeholder="产品规格">
             </div>
+            <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">颜色</label>
@@ -51,24 +54,27 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">适用范围<span style="color: red">*</span></label>
+            <label class="layui-form-label">适用范围</label>
             <div class="layui-input-inline">
                 <select name="match" class="field-match" type="select">
                     {$product_type}
                 </select>
             </div>
+            <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">注意事项<span style="color: red">*</span></label>
+            <label class="layui-form-label">注意事项</label>
             <div class="layui-input-inline">
                 <textarea type="text" class="layui-textarea field-notice" name="notice" lay-verify="required" autocomplete="off" placeholder="产品特性或技术指标"></textarea>
             </div>
+            <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">厂家名称<span style="color: red">*</span></label>
+            <label class="layui-form-label">厂家名称</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-factory" name="factory" lay-verify="required" autocomplete="off" placeholder="厂家名称">
             </div>
+            <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">合作方式</label>
@@ -79,40 +85,46 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">厂家负责人<span style="color: red">*</span></label>
+            <label class="layui-form-label">厂家负责人</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-p_user" name="p_user" lay-verify="required" autocomplete="off" placeholder="请输入厂家负责人">
             </div>
+            <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">厂家手机号<span style="color: red">*</span></label>
+            <label class="layui-form-label">厂家手机号</label>
             <div class="layui-input-inline">
                 <input type="number" class="layui-input field-p_mobile" name="p_mobile" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" maxlength="11" lay-verify="required" autocomplete="off" placeholder="请输入厂家手机号码">
             </div>
+            <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">厂家地址<span style="color: red">*</span></label>
+            <label class="layui-form-label">厂家地址</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-p_address" name="p_address" lay-verify="required" autocomplete="off" placeholder="请输厂家地址">
             </div>
+            <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">代理负责人<span style="color: red">*</span></label>
+            <label class="layui-form-label">代理负责人</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-a_user" name="a_user" lay-verify="required" autocomplete="off" placeholder="请输入代理商负责人">
             </div>
+            <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">代理手机号<span style="color: red">*</span></label>
+            <label class="layui-form-label">代理手机号</label>
             <div class="layui-input-inline">
                 <input type="number" class="layui-input field-a_mobile" name="a_mobile" lay-verify="required" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" maxlength="11" autocomplete="off" placeholder="请输入代理商手机号码">
             </div>
+            <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">代理商地址<span style="color: red">*</span></label>
+            <label class="layui-form-label">代理商地址</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-a_address" name="a_address" lay-verify="required" autocomplete="off" placeholder="请输入代理商地址">
             </div>
+            <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">缩略图</label>

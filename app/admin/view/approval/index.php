@@ -38,70 +38,76 @@
                 <input type="button" class="layui-btn layui-btn-primary layui-icon export_btn" value="导出">
             </div>
         </form>
-        <div class="layui-form">
-            <table class="layui-table mt10" lay-even="" lay-skin="row">
-                <colgroup>
-                    <col width="50">
-                </colgroup>
-                <thead>
-                <tr>
-                    <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
-                    <th>姓名</th>
-                    <th>类型</th>
-                    <th>时间段</th>
-                    <th>项目名称</th>
-                    <th>审批人</th>
-                    <th>添加时间</th>
-                    <th>状态</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                {volist name="data_list" id="vo"}
-                <tr>
-                    <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
-                    <td class="font12">
-                        <strong class="mcolor">{$vo['user_id']}</strong>
-                    </td>
-                    <td class="font12">{$panel_type[$vo['class_type']]['title']}</td>
-                    <td class="font12">{$vo['start_time']} ~ {$vo['end_time']}</td>
-                    <td class="font12">{$vo['project_name']}</td>
-                    <td class="font12">{$vo['send_user']}</td>
-                    <td class="font12">{$vo['create_time']}</td>
-                    <td class="font12">{$approval_status[$vo['status']]}</td>
-                    <td>
-                        <div class="layui-btn-group" onclick="approval_read({$vo['id']},{$atype},{$vo['class_type']},'{$panel_type[$vo['class_type']]['title']}')">
-                            <a class="layui-btn layui-btn-normal layui-btn-xs">
-                                {if condition="($vo['status'] eq 1) && ($Request.param.atype eq 3) "}
-                                批示
-                                {else/}
-                                查看
-                                {/if}
-                            </a>
-                        </div>
-                        {if condition="($vo['status'] eq 1) && ($Request.param.atype eq 2) "}
-                        <div class="layui-btn-group" onclick="approval_back({$vo['id']})">
-                            <a class="layui-btn layui-btn-normal layui-btn-xs">撤销</a>
-                        </div>
-                        {/if}
-                        {if condition="($vo['status'] eq 2) && ($Request.param.atype eq 2) "}
-                        <div class="layui-btn-group" onclick="expense({$vo['id']},'{$panel_type[$vo['class_type']]['title']}')">
-                            <a class="layui-btn layui-btn-danger layui-btn-xs">报销</a>
-                        </div>
-                        {/if}
-                        {if condition="$vo['class_type'] eq 4 "}
-                        <div class="layui-btn-group" onclick="approval_report({$vo['id']},{$atype},{$vo['class_type']},'{$panel_type[$vo['class_type']]['title']}')">
-                            <a class="layui-btn layui-btn-normal layui-btn-xs">出差报告</a>
-                        </div>
-                        {/if}
-                    </td>
-                </tr>
-                {/volist}
-                </tbody>
-            </table>
-            {$pages}
-        </div>
     </div>
+</div>
+<div class="layui-form">
+    <table class="layui-table mt10" lay-even="" lay-skin="row">
+        <colgroup>
+            <col width="50">
+        </colgroup>
+        <thead>
+        <tr>
+            <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
+            <th>姓名</th>
+            <th>类型</th>
+            <th>时间段</th>
+            <th>项目名称</th>
+            <th>审批人</th>
+            <th>添加时间</th>
+            <th>状态</th>
+            <th>审批时间</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {volist name="data_list" id="vo"}
+        <tr>
+            <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
+            <td class="font12">
+                <strong class="mcolor">{$vo['user_id']}</strong>
+            </td>
+            <td class="font12">{$panel_type[$vo['class_type']]['title']}</td>
+            <td class="font12">{$vo['start_time']} ~ {$vo['end_time']}</td>
+            <td class="font12">{$vo['project_name']}</td>
+            <td class="font12">{$vo['send_user']}</td>
+            <td class="font12">{$vo['create_time']}</td>
+            <td class="font12">{$approval_status[$vo['status']]}</td>
+            {if condition="$vo['create_time'] neq $vo['update_time']"}
+            <td class="font12">{$vo['update_time']}</td>
+            {else/}
+            <td class="font12">-</td>
+            {/if}
+            <td>
+                <div class="layui-btn-group" onclick="approval_read({$vo['id']},{$atype},{$vo['class_type']},'{$panel_type[$vo['class_type']]['title']}')">
+                    <a class="layui-btn layui-btn-normal layui-btn-xs">
+                        {if condition="($vo['status'] eq 1) && ($Request.param.atype eq 3) "}
+                        批示
+                        {else/}
+                        查看
+                        {/if}
+                    </a>
+                </div>
+                {if condition="($vo['status'] eq 1) && ($Request.param.atype eq 2) "}
+                <div class="layui-btn-group" onclick="approval_back({$vo['id']})">
+                    <a class="layui-btn layui-btn-normal layui-btn-xs">撤销</a>
+                </div>
+                {/if}
+                {if condition="($vo['status'] eq 2) && ($Request.param.atype eq 2) "}
+                <div class="layui-btn-group" onclick="expense({$vo['id']},'{$panel_type[$vo['class_type']]['title']}')">
+                    <a class="layui-btn layui-btn-danger layui-btn-xs">报销</a>
+                </div>
+                {/if}
+                {if condition="$vo['class_type'] eq 4 "}
+                <div class="layui-btn-group" onclick="approval_report({$vo['id']},{$atype},{$vo['class_type']},'{$panel_type[$vo['class_type']]['title']}')">
+                    <a class="layui-btn layui-btn-normal layui-btn-xs">出差报告</a>
+                </div>
+                {/if}
+            </td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+    {$pages}
 </div>
 
 {include file="block/layui" /}

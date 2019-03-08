@@ -5,6 +5,7 @@
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-name" name="name" lay-verify="required" autocomplete="off" placeholder="请输入角色名称">
         </div>
+        <div class="layui-form-mid red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">角色简介</label>

@@ -12,12 +12,14 @@
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-name" name="name" lay-verify="required" autocomplete="off" placeholder="请输入名称">
         </div>
+        <div class="layui-form-mid red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">部门描述</label>
         <div class="layui-input-inline">
             <textarea class="layui-textarea field-remark" name="remark" lay-verify="required" autocomplete="off"></textarea>
         </div>
+        <div class="layui-form-mid red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">状态设置</label>

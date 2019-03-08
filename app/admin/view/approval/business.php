@@ -17,12 +17,13 @@
 <!--    </div>-->
     <div class="layui-form-item">
         <label class="layui-form-label">选择项目</label>
-        <div class="layui-inline">
+        <div class="layui-input-inline">
             <div class="layui-input-inline box box1">
             </div>
             <input id="project_name" type="hidden" name="project_name" value="{$Request.param.project_name}">
             <input id="project_id" type="hidden" name="project_id" value="{$Request.param.project_id}">
         </div>
+        <div class="layui-form-mid red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">开始时间</label>

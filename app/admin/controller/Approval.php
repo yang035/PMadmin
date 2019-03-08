@@ -329,6 +329,9 @@ class Approval extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            if ('' == $data['project_id']){
+                return $this->error('请选择项目');
+            }
             // 验证
             $result = $this->validate($data, 'ApprovalExpense');
             if ($result !== true) {
@@ -386,6 +389,9 @@ class Approval extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            if ('' == $data['project_id']){
+                return $this->error('请选择项目');
+            }
             // 验证
             $result = $this->validate($data, 'ApprovalCost');
             if ($result !== true) {
@@ -435,6 +441,9 @@ class Approval extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            if ('' == $data['project_id']){
+                return $this->error('请选择项目');
+            }
             // 验证
             $result = $this->validate($data, 'ApprovalBusiness');
             if ($result !== true) {
@@ -536,6 +545,9 @@ class Approval extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            if ('' == $data['project_id']){
+                return $this->error('请选择项目');
+            }
             // 验证
             $result = $this->validate($data, 'ApprovalOvertime');
             if ($result !== true) {
@@ -585,6 +597,9 @@ class Approval extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            if ('' == $data['project_id']){
+                return $this->error('请选择项目');
+            }
             // 验证
             $result = $this->validate($data, 'ApprovalGoout');
             if ($result !== true) {
@@ -634,6 +649,9 @@ class Approval extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            if ('' == $data['project_id']){
+                return $this->error('请选择项目');
+            }
             // 验证
             $result = $this->validate($data, 'ApprovalUsecar');
             if ($result !== true) {
@@ -695,6 +713,9 @@ class Approval extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            if ('' == $data['project_id']){
+                return $this->error('请选择项目');
+            }
             // 验证
             $result = $this->validate($data, 'ApprovalGoods');
             if ($result !== true) {
@@ -752,6 +773,9 @@ class Approval extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            if ('' == $data['project_id']){
+                return $this->error('请选择项目');
+            }
             // 验证
             $result = $this->validate($data, 'ApprovalPrint');
             if ($result !== true) {
@@ -819,6 +843,9 @@ class Approval extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            if ('' == $data['project_id']){
+                return $this->error('请选择项目');
+            }
             // 验证
             $result = $this->validate($data, 'ApprovalDispatch');
             if ($result !== true) {

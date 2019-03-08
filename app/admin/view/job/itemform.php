@@ -9,16 +9,18 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">职位名称<span style="color: red">*</span></label>
+            <label class="layui-form-label">职位名称</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-name" name="name" lay-verify="required" autocomplete="off" placeholder="请输入职位名称">
             </div>
+            <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">职位代码<span style="color: red">*</span></label>
+            <label class="layui-form-label">职位代码</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-code" name="code" lay-verify="required" autocomplete="off" placeholder="请输入职位代码">
             </div>
+            <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">职位职责</label>

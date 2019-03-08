@@ -19,37 +19,37 @@
             <button type="submit" class="layui-btn layui-btn-normal normal_btn">搜索</button>
             <input type="button" class="layui-btn layui-btn-primary layui-icon export_btn" value="导出">
         </form>
-        <div class="layui-form">
-            <table class="layui-table mt10" lay-even="" lay-skin="row">
-                <colgroup>
-                    <col width="50">
-                </colgroup>
-                <thead>
-                <tr>
-                    <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
-                    <th>姓名</th>
-                    <th>商品名称</th>
-                    <th>数量(份)</th>
-                    <th>总消耗(斗)</th>
-                    <th>添加时间</th>
-                </tr>
-                </thead>
-                <tbody>
-                {volist name="data_list" id="vo"}
-                <tr>
-                    <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
-                    <td class="font12">{$vo['realname']}</td>
-                    <td class="font12">{$vo['name']}</td>
-                    <td class="font12">{$vo['num']}</td>
-                    <td class="font12">{$vo['total_score']}</td>
-                    <td class="font12">{$vo['create_time']}</td>
-                </tr>
-                {/volist}
-                </tbody>
-            </table>
-            {$pages}
-        </div>
     </div>
+</div>
+<div class="layui-form">
+    <table class="layui-table mt10" lay-even="" lay-skin="row">
+        <colgroup>
+            <col width="50">
+        </colgroup>
+        <thead>
+        <tr>
+            <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
+            <th>姓名</th>
+            <th>商品名称</th>
+            <th>数量(份)</th>
+            <th>总消耗(斗)</th>
+            <th>添加时间</th>
+        </tr>
+        </thead>
+        <tbody>
+        {volist name="data_list" id="vo"}
+        <tr>
+            <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
+            <td class="font12">{$vo['realname']}</td>
+            <td class="font12">{$vo['name']}</td>
+            <td class="font12">{$vo['num']}</td>
+            <td class="font12">{$vo['total_score']}</td>
+            <td class="font12">{$vo['create_time']}</td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+    {$pages}
 </div>
 
 {include file="block/layui" /}

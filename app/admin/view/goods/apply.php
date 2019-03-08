@@ -53,10 +53,9 @@
                 <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
             </div>
         </form>
-        <table id="dataTable" class="layui-table" lay-filter="table1"></table>
     </div>
 </div>
-
+<table id="dataTable" class="layui-table" lay-filter="table1"></table>
 <script type="text/html" id="statusTpl">
     <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=shopping_goods&id={{ d.id }}">
 </script>

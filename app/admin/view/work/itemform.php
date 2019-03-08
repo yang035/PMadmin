@@ -9,10 +9,11 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">内容<span style="color: red">*</span></label>
+            <label class="layui-form-label">内容</label>
             <div class="layui-input-inline">
                 <textarea  class="layui-textarea field-name" name="name" lay-verify="required" autocomplete="off" placeholder=""></textarea>
             </div>
+            <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">显示设置</label>

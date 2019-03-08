@@ -16,7 +16,7 @@
         <a data-href="{:url('delCat')}" class="layui-btn layui-btn-primary j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>
     </div>
 </div>
-<table id="dataTable"></table>
+<table id="dataTable" class="layui-table" lay-filter="table1"></table>
 {include file="block/layui" /}
 <script type="text/html" id="statusTpl">
     <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=contract_cat&id={{ d.id }}">

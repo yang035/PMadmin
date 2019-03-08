@@ -155,6 +155,7 @@
             <div id="send_select_id"></div>
             <input type="hidden" name="send_user" id="send_user" value="">
         </div>
+        <div class="layui-form-mid red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">抄送给</label>

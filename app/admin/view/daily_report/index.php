@@ -28,47 +28,47 @@
                 <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
             </div>
         </form>
-        <div class="layui-form">
-            <table class="layui-table mt10" lay-even="" lay-skin="row">
-                <colgroup>
-                    <col width="50">
-                </colgroup>
-                <thead>
-                <tr>
-                    <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
-                    <th>名称</th>
-                    <th>姓名</th>
-                    <th>汇报人</th>
-                    <th>计划完成(%)</th>
-                    <th>实际完成(%)</th>
-                    <th>添加时间</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                {volist name="data_list" id="vo"}
-                <tr>
-                    <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
-                    <td class="font12">
-                        <a href="{:url('read',['id'=>$vo['id'],'atype'=>$atype])}"><strong class="mcolor">{$vo['project_name']}</strong></a>
-                    </td>
-                    <td class="font12">{$vo['user_id']}</td>
-                    <td class="font12">{$vo['send_user']}</td>
-                    <td class="font12">{$vo['per']}</td>
-                    <td class="font12">{$vo['real_per']}</td>
-                    <td class="font12">{$vo['create_time']}</td>
-                    <td>
-                        <div class="layui-btn-group">
-                            <a href="{:url('read',['id'=>$vo['id'],'atype'=>$atype])}" class="layui-btn layui-btn-normal layui-btn-xs">查看</a>
-                        </div>
-                    </td>
-                </tr>
-                {/volist}
-                </tbody>
-            </table>
-            {$pages}
-        </div>
     </div>
+</div>
+<div class="layui-form">
+    <table class="layui-table mt10" lay-even="" lay-skin="row">
+        <colgroup>
+            <col width="50">
+        </colgroup>
+        <thead>
+        <tr>
+            <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
+            <th>名称</th>
+            <th>姓名</th>
+            <th>汇报人</th>
+            <th>计划完成(%)</th>
+            <th>实际完成(%)</th>
+            <th>添加时间</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {volist name="data_list" id="vo"}
+        <tr>
+            <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
+            <td class="font12">
+                <a href="{:url('read',['id'=>$vo['id'],'atype'=>$atype])}"><strong class="mcolor">{$vo['project_name']}</strong></a>
+            </td>
+            <td class="font12">{$vo['user_id']}</td>
+            <td class="font12">{$vo['send_user']}</td>
+            <td class="font12">{$vo['per']}</td>
+            <td class="font12">{$vo['real_per']}</td>
+            <td class="font12">{$vo['create_time']}</td>
+            <td>
+                <div class="layui-btn-group">
+                    <a href="{:url('read',['id'=>$vo['id'],'atype'=>$atype])}" class="layui-btn layui-btn-normal layui-btn-xs">查看</a>
+                </div>
+            </td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+    {$pages}
 </div>
 {include file="block/layui" /}
 <script src="__PUBLIC_JS__/jquery.select.js?v="></script>
