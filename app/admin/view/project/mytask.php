@@ -1,7 +1,15 @@
+{include file="block/layui" /}
 <style>
     .layui-form-item .layui-input-inline {
         float: left;
         width: auto;
+    }
+    .layui-progress-text {
+        position: relative;
+        top: 0px;
+         line-height: 18px;
+        font-size: 12px;
+        color: #666;
     }
 </style>
 <div class="page-toolbar">
@@ -9,143 +17,220 @@
         <form class="layui-form layui-form-pane" action="{:url()}" method="get">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">选择项目</label>
-                    <div class="layui-input-inline box box1">
+                    <label class="layui-form-label">项目名称</label>
+                    <div class="layui-input-inline">
+                        <select name="project_id" class="field-project_id" type="select">
+                            {$subject_item}
+                        </select>
                     </div>
-                    <input id="project_name" type="hidden" name="project_name" value="{$Request.param.project_name}">
-                    <input id="project_id" type="hidden" name="project_id" value="{$Request.param.project_id}">
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">任务名</label>
+                    <label class="layui-form-label">开始时段</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="name" value="{:input('get.name')}" placeholder="关键字" autocomplete="off" class="layui-input">
+                        <input type="text" class="layui-input field-start_time" name="start_time" value="{:input('get.start_time')}" readonly autocomplete="off" placeholder="选择开始日期段">
                     </div>
                 </div>
-<!--                <div class="layui-inline">-->
-<!--                    <label class="layui-form-label">是否完成</label>-->
-<!--                    <div class="layui-input-inline">-->
-<!--                        <select name="status">-->
-<!--                            <option value="0" {if condition="$Request.param.status eq 0"}selected{/if} >进行中</option>-->
-<!--                            <option value="1" {if condition="$Request.param.status eq '1' "}selected{/if} >已完成</option>-->
-<!--                        </select>-->
-<!--                    </div>-->
-<!--                </div>-->
-                <input type="hidden" name="type" value="{$Request.param.type}">
-                <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
+                <div class="layui-inline">
+                    <label class="layui-form-label">结束时段</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input field-end_time" name="end_time" value="{:input('get.end_time')}" readonly autocomplete="off" placeholder="选择结束日期段">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <input type="hidden" name="type" value="{$Request.param.type}">
+                    <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
+                </div>
             </div>
         </form>
     </div>
-    <div class="layui-form">
-        <table class="layui-table mt10" lay-even="" lay-skin="row">
-            <colgroup>
-                <col width="50">
-            </colgroup>
-            <thead>
-            <tr>
-                <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
-                <th>项目名称</th>
-                <th>任务主题</th>
-                <th>开始时间</th>
-                <th>结束时间</th>
-                <th>计划产量(斗)</th>
-                <th>实际产量(斗)</th>
-                <th>紧急度</th>
-                <th>参与人</th>
-                <th>负责人</th>
-                <th>审批人</th>
-                <th>完成情况</th>
-                <th>操作</th>
-            </tr>
-            </thead>
-            <tbody>
-            {volist name="data_list" id="vo"}
-            <tr>
-                <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
-                <td class="font12">{$vo['project_name']}</td>
-                <td class="font12" title="{$vo['remark']}">
-                    <a href="{:url('editTask',['id'=>$vo['id'],'pid'=>$vo['pid'],'type'=>$type,'project_name'=>$vo['project_name']])}"><strong class="mcolor">{$vo['name']}</strong></a>
-                </td>
-                <td class="font12">{$vo['start_time']}</td>
-                <td class="font12">{$vo['end_time']}</td>
-                <td class="font12">{$vo['score']}</td>
-                <td class="font12 red">{$vo['real_score']}</td>
-                <td class="font12">{$vo['grade']}</td>
-                <td class="font12">{$vo['deal_user']}</td>
-                <td class="font12">{$vo['manager_user']}</td>
-                <td class="font12">{$vo['send_user']}</td>
-                <td class="font12" title="昨日计划完成{$vo['per']}%">
-                    <div class="layui-progress" lay-showpercent="true">
-                        {if condition="$vo['realper'] > $vo['per']"}
-                        <div class="layui-progress-bar" lay-percent="{$vo['realper']}%"></div>
-                        {else/}
-                        <div class="layui-progress-bar layui-bg-red" lay-percent="{$vo['realper']}%"></div>
-                        {/if}
-                    </div>
-                </td>
-                <td>
-                    <!--                    暂时屏蔽此功能-->
-                    <div class="layui-btn-group">
-                        <a href="{:url('editTask',['id'=>$vo['id'],'pid'=>$vo['pid'],'type'=>$type,'project_name'=>$vo['project_name']])}" class="layui-btn layui-btn-normal layui-btn-xs">
-                            {if condition="($vo['status'] eq 0) && ($Request.param.type eq 1) "}
-                            汇报
-                            {elseif condition="($vo['status'] eq 0) && ($Request.param.type eq 2) "}
-                            查看汇报
-                            {else/}
-                            查看汇报
-                            {/if}
-                        </a>
-                    </div>
-                    {if condition="$vo['u_res'] eq 'a'"}
-                    <span style="color: red;">已确认</span>
-                    {else/}
-                    <div class="layui-btn-group" onclick="accept_task({$vo['id']},{$Request.param.type})">
-                        <a class="layui-btn layui-btn-normal layui-btn-xs">确认</a>
-                    </div>
-                    {/if}
-                    {if condition="($vo['status'] eq 0) && ($Request.param.type eq 2) "}
-                    <!--                    <div class="layui-btn-group" onclick="check_result({$vo['id']},'{$vo['name']}')">-->
-                    <!--                        <a class="layui-btn layui-btn-normal layui-btn-xs">审核</a>-->
-                    <!--                    </div>-->
-                    {if condition="($vo['realper'] egt 100) && ($vo['real_score'] eq 0) "}
-                    <div class="layui-btn-group" onclick="add_score({$vo['id']},'{$vo['code']}','{$vo['name']}')">
-                        <a class="layui-btn layui-btn-normal layui-btn-xs">评分</a>
-                    </div>
-                    {elseif condition="($vo['realper'] lt 100)"/}
-                    <span style="color: green;">待完成</span>
-                    {else/}
-                    <span style="color: red;">已评定</span>
-                    {/if}
-                    {/if}
-                    <!--                    {if condition="($vo['status'] eq 0) && ($Request.param.type eq 2) "}-->
-                    <!--                    <div class="layui-btn-group" onclick="finish_task({$vo['id']},{$Request.param.type})">-->
-                    <!--                        <a class="layui-btn layui-btn-normal layui-btn-xs">完结</a>-->
-                    <!--                    </div>-->
-                    <!--                    {elseif condition="$vo['status'] eq 1"}-->
-                    <!--                        <span style="color: red;">已完结</span>-->
-                    <!--                    {else/}-->
-                    <!--                        <span>进行中</span>-->
-                    <!--                    {/if}-->
-                </td>
-            </tr>
-            {/volist}
-            </tbody>
-        </table>
-        {$pages}
+    <div class="layui-btn-group fl">
+        <!--            <a href="{:url('add',['atype'=>$Request.param.atype])}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加项目</a>-->
+        <button class="layui-btn" id="btn-expand">全部展开</button>
+        <button class="layui-btn" id="btn-fold">全部折叠</button>
+        <button class="layui-btn" id="btn-refresh">刷新表格</button>
     </div>
 </div>
-{include file="block/layui" /}
-<script src="__PUBLIC_JS__/jquery.select.js?v="></script>
-<script src="__PUBLIC_JS__/SelectBox.min.js?v="></script>
+<script type="text/html" id="oper-col-1">
+    <div class="layui-progress" lay-showpercent="true">
+        {{#  if(d.realper > d.per){ }}
+        <div class="layui-progress-bar" lay-percent="{{ d.realper }}%"></div>
+        {{#  }else{ }}
+        <div class="layui-progress-bar layui-bg-red" lay-percent="{{ d.realper }}%"></div>
+        {{#  } }}
+    </div>
+</script>
+<script type="text/html" id="oper-col-2">
+        <a lay-event="read" class="layui-btn layui-btn-normal layui-btn-xs">
+            {{#  if(d.child == 1){ }}
+                {{#  if(d.status == 0 && type == 1){ }}
+                阶段成果
+                {{#  }else if(d.status == 0 && type == 2){ }}
+                查看成果
+                {{#  }else{ }}
+                查看成果
+                {{#  } }}
+            {{#  }else{ }}
+                {{#  if(d.status == 0 && type == 1){ }}
+                汇报
+                {{#  }else if(d.status == 0 && type == 2){ }}
+                查看汇报
+                {{#  }else{ }}
+                查看汇报
+                {{#  } }}
+            {{#  } }}
+        </a>
+    {{#  if(d.u_res == 'a'){ }}
+    <span style="color: red;">已确认</span>
+    {{#  }else{ }}
+    <div class="layui-btn-group" onclick="accept_task({{ d.id }},type)">
+        <a class="layui-btn layui-btn-normal layui-btn-xs">确认</a>
+    </div>
+    {{#  } }}
+    {{#  if(d.status == 0 && type == 2){ }}
+    {{#  if(d.realper >= 100 && d.real_score == 0){ }}
+    <div class="layui-btn-group" onclick="add_score({{ d.id }},'{{ d.code }}','{{ d.name }}')">
+        <a class="layui-btn layui-btn-normal layui-btn-xs">评分</a>
+    </div>
+    {{#  }else if(d.realper < 100){ }}
+    <span style="color: green;">待完成</span>
+    {{#  }else{ }}
+    <span style="color: red;">已评定</span>
+    {{#  } }}
+    {{#  } }}
+</script>
+<table id="table1" class="layui-table" lay-filter="table1"></table>
 <script>
-    var formData = {:json_encode($data_info)};
-    layui.use(['jquery', 'laydate'], function() {
-        var $ = layui.jquery, laydate = layui.laydate;
-        laydate.render({
-            elem: '.field-expire_time',
-            min:'0'
+    var  project_id=$("select[name='project_id']").val();
+    var  start_time=$("input[name='start_time']").val();
+    var  end_time=$("input[name='end_time']").val();
+    var  atype=$("input[name='type']").val();
+    var _url = "{:url('admin/project/mytask')}?project_id="+project_id+"&start_time="+start_time+"&end_time="+end_time+"&type="+atype;
+    var type = "{$Request.param.type}";
+    layui.config({
+        base: '/../../static/js/'
+    }).extend({
+        treetable: 'treetable-lay/treetable'
+    }).use(['layer', 'table','element', 'treetable'], function () {
+        var $ = layui.jquery;
+        var element = layui.element;
+        var table = layui.table;
+        var layer = layui.layer;
+        var treetable = layui.treetable;
+
+        // 渲染表格
+        var renderTable = function () {
+            layer.load(2);
+            element.render();
+            treetable.render({
+                treeColIndex: 1,
+                treeSpid: 0,
+                treeIdName: 'id',
+                treePidName: 'pid',
+                treeDefaultClose: false,
+                treeLinkage: true,
+                elem: '#table1',
+                url: _url,
+                page: false,
+                cols: [[
+                    {type: 'numbers'},
+                    {field: 'name', title: '项目名称',width: 300},
+                    {field: 'start_time', title: '开始时间'},
+                    {field: 'end_time', title: '结束时间'},
+                    {field: 'score', title: '计划产量(斗)',width: 80},
+                    {field: 'real_score', title: '实际产量(斗)',width: 80,templet:function (d) {
+                            return "<span class='red'>"+d.real_score+"</span>";
+                        }},
+                    {field: 'grade', title: '紧急度',width: 80},
+                    {field: 'deal_user', title: '参与人'},
+                    {field: 'manager_user', title: '负责人'},
+                    {field: 'send_user', title: '审批人',width: 80},
+                    {field: 'realper', title: '完成情况',width: 80, templet:'#oper-col-1'},
+                    {templet: '#oper-col-2', title: '操作',width: 200,}
+                ]],
+                done: function () {
+                    element.render();
+                    layer.closeAll('loading');
+                }
+            });
+        };
+
+        renderTable();
+
+        $('#btn-expand').click(function () {
+            treetable.expandAll('#table1');
         });
 
+        $('#btn-fold').click(function () {
+            treetable.foldAll('#table1');
+        });
 
+        $('#btn-refresh').click(function () {
+            renderTable();
+        });
+
+        $('#edt-search').keyup(function () {
+            var keyword = $('#edt-search').val();
+            var searchCount = 0;
+            $('#table1').next('.treeTable').find('.layui-table-body tbody tr td').each(function () {
+                $(this).css('background-color', 'transparent');
+                var text = $(this).text();
+                if (keyword != '' && text.indexOf(keyword) >= 0) {
+                    $(this).css('background-color', 'rgba(250,230,160,0.5)');
+                    if (searchCount == 0) {
+                        treetable.expandAll('#table1');
+                        $('html,body').stop(true);
+                        $('html,body').animate({scrollTop: $(this).offset().top - 150}, 500);
+                    }
+                    searchCount++;
+                }
+            });
+            if (keyword == '') {
+                layer.msg("请输入搜索内容", {icon: 5});
+            } else if (searchCount == 0) {
+                layer.msg("没有匹配结果", {icon: 5});
+            }
+        });
+
+        //监听工具条
+        table.on('tool(table1)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            var id=data.id,pid=data.pid,code=data.code,pname=data.name,pscore=data.score,project_name=data.project_name;
+
+            if (layEvent === 'read') {
+                var open_url = "{:url('editTask')}?id="+id+"&pid="+pid+"&type="+type+"&project_name="+project_name;
+                window.location.href = open_url;
+            } else if (layEvent === 'add') {
+                var reg = /<[^>]+>/g;
+                if (reg.test(data.send_user)){
+                    var open_url = "{:url('add')}?id="+id+"&atype="+atype;
+                    window.location.href = open_url;
+                } else {
+                    layer.alert('此项目或计划未审批，暂不能添加');
+                }
+            } else if (layEvent === 'edit') {
+                if (0 == pid){
+                    layer.alert('项目信息不能在计划中修改');
+                } else {
+                    var open_url = "{:url('edit')}?id="+id+"&atype="+atype;
+                    window.location.href = open_url;
+                }
+            }
+        });
+    });
+
+    layui.use(['jquery', 'laydate','upload'], function() {
+        var $ = layui.jquery, laydate = layui.laydate, upload = layui.upload;
+        laydate.render({
+            elem: '.field-start_time',
+            range: true,
+            trigger: 'click',
+        });
+        laydate.render({
+            elem: '.field-end_time',
+            range: true,
+            trigger: 'click',
+        });
     });
 
     function add_score(id,code,pname){
@@ -207,32 +292,5 @@
             }
         });
     }
-
-    new SelectBox($('.box1'),{$project_select},function(result){
-        if ('' != result.id){
-            $('#project_name').val(result.name);
-            $('#project_id').val(result.id);
-        }
-    },{
-        dataName:'name',//option的html
-        dataId:'id',//option的value
-        fontSize:'14',//字体大小
-        optionFontSize:'14',//下拉框字体大小
-        textIndent:4,//字体缩进
-        color:'#000',//输入框字体颜色
-        optionColor:'#000',//下拉框字体颜色
-        arrowColor:'#D2D2D2',//箭头颜色
-        backgroundColor:'#fff',//背景色颜色
-        borderColor:'#D2D2D2',//边线颜色
-        hoverColor:'#009688',//下拉框HOVER颜色
-        borderWidth:1,//边线宽度
-        arrowBorderWidth:0,//箭头左侧分割线宽度。如果为0则不显示
-        // borderRadius:5,//边线圆角
-        placeholder:'输入关键字搜索',//默认提示
-        defalut:'{$Request.param.project_name}',//默认显示内容。如果是'firstData',则默认显示第一个
-        // allowInput:true,//是否允许输入
-        width:300,//宽
-        height:37,//高
-        optionMaxHeight:300//下拉框最大高度
-    });
 </script>
+

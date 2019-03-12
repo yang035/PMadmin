@@ -236,6 +236,7 @@
                 </form>
             </div>
             {/if}
+            {empty name="data_info['child']"}
             <div class="layui-card">
                 <div class="layui-card-header">汇报记录</div>
                 <ul class="layui-timeline">
@@ -284,6 +285,56 @@
                     {/volist}
                 </ul>
             </div>
+            {else/}
+            <div class="layui-card">
+                <div class="layui-card-header">成果记录</div>
+                <ul class="layui-timeline">
+                    {volist name="report_info" id="vo"}
+                    <li class="layui-timeline-item">
+                        <i class="layui-icon layui-timeline-axis"></i>
+                        <div class="layui-timeline-content layui-text">
+                            <div class="layui-timeline-title">
+                                <span style="color: red">[{$vo['real_name']}]</span>
+                                <span style="color: red">[{$vo['create_time']}]</span>
+                                完成百分比：<span style="color: green">[{$vo['realper']}%]</span>
+                                {neq name="type" value='1'}
+                                计划百分比：<span style="color: green">[{$vo['per']}%]</span>
+                                <a onclick="open_reply({$vo['id']},{$vo['project_id']})" class="layui-btn layui-btn-normal layui-btn-xs">审核校对</a>
+                                {/neq}
+                                <br>
+                                {$vo['mark']}
+                                <br>
+                                {notempty name="vo['span']"}
+                                {$vo['span']}
+                                <br>
+                                {/notempty}
+                                {notempty name="vo['attachment']"}
+                                附件：
+                                <ul>
+                                    {volist name="vo['attachment']" id="v"}
+                                    <li>
+                                        <a target="_blank" href="{$v}">{$v}</a>
+                                    </li>
+                                    {/volist}
+                                </ul>
+                                <br>
+                                {/notempty}
+                                <ul>
+                                    {volist name="vo['reply']" id="v"}
+                                    <li>
+                                        <span style="color: green">[{$v['real_name']}]</span>
+                                        <span style="color: grey">[{$v['create_time']}审核]</span><br>
+                                        {$v['content']}
+                                    </li>
+                                    {/volist}
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    {/volist}
+                </ul>
+            </div>
+            {/empty}
         </div>
     </div>
 </div>

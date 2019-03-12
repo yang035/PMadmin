@@ -450,6 +450,183 @@ class Project extends Admin
         $cid = session('admin_user.cid');
         $map['cid'] = $cid;
         $map['t_type'] = 1;
+        $subject_id = 0;
+        if ($params) {
+            if (!empty($params['project_id'])){
+                $map['subject_id'] = $params['project_id'];
+                $subject_id = $params['project_id'];
+            }
+
+            if (isset($params['start_time']) && !empty($params['start_time'])) {
+                $start_time = $params['start_time'];
+                $start_time_arr = explode(' - ', $start_time);//这里分隔符两边加空格
+                $map['start_time'] = ['between', [$start_time_arr['0'].' 00:00:00', $start_time_arr['1'].' 23:59:59']];
+            }
+
+            if (isset($params['end_time']) && !empty($params['end_time'])) {
+                $end_time = $params['end_time'];
+                $end_time_arr = explode(' - ', $end_time);//这里分隔符两边加空格
+                $map['end_time'] = ['between', [$end_time_arr['0'].' 00:00:00', $end_time_arr['1'].' 23:59:59']];
+            }
+            if (!empty($params['name'])) {
+                $map['name'] = ['like', '%' . $params['name'] . '%'];
+            }
+            if (isset($params['status'])) {
+                $map['status'] = $params['status'];
+            }
+        }
+        $uid = session('admin_user.uid');
+
+        $fields = "SUM(IF(JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"') AND send_user LIKE '%a%',1,0)) deal_num,
+        SUM(IF(JSON_CONTAINS_PATH(manager_user,'one', '$.\"$uid\"'),1,0)) manager_num,
+        SUM(IF(JSON_EXTRACT(send_user,'$.\"$uid\"') = '',1,0)) send_num,
+        SUM(IF(JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"'),1,0)) copy_num,
+        SUM(IF(JSON_EXTRACT(send_user,'$.\"$uid\"') = 'a',1,0)) has_num";
+        $sta_count = ProjectModel::field($fields)->where($map)->find()->toArray();
+
+        $tab_data['menu'] = [
+            [
+                'title' => "我参与的<span class='layui-badge layui-bg-orange'>{$sta_count['deal_num']}</span>",
+                'url' => 'admin/project/mytask',
+                'params' => ['type' => 1],
+            ],
+            [
+                'title' => "我负责的<span class='layui-badge layui-bg-orange'>{$sta_count['manager_num']}</span>",
+                'url' => 'admin/project/mytask',
+                'params' => ['type' => 2],
+            ],
+            [
+                'title' => "待我审批<span class='layui-badge'>{$sta_count['send_num']}</span>",
+                'url' => 'admin/project/mytask',
+                'params' => ['type' => 3],
+            ],
+            [
+                'title' => "抄送我的<span class='layui-badge layui-bg-orange'>{$sta_count['copy_num']}</span>",
+                'url' => 'admin/project/mytask',
+                'params' => ['type' => 4],
+            ],
+            [
+                'title' => "已审批的<span class='layui-badge layui-bg-orange'>{$sta_count['has_num']}</span>",
+                'url' => 'admin/project/mytask',
+                'params' => ['type' => 5],
+            ],
+        ];
+        $tab_data['current'] = url('mytask', ['type' => 1]);
+
+        switch ($params['type']) {
+            case 1:
+                $con = "JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"') AND send_user LIKE '%a%'";
+                break;
+            case 2:
+                $con = "JSON_CONTAINS_PATH(manager_user,'one', '$.\"$uid\"')";
+                break;
+            case 3:
+                $con = "JSON_EXTRACT(send_user,'$.\"$uid\"') = ''";
+                break;
+            case 4:
+                $con = "JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"')";
+                break;
+            case 5:
+                $con = "JSON_EXTRACT(send_user,'$.\"$uid\"') = 'a'";
+                break;
+            default:
+                $con = "JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"')";
+                break;
+        }
+        $field = "*,JSON_EXTRACT(manager_user,'$.\"{$uid}\"') m_res,JSON_EXTRACT(send_user,'$.\"{$uid}\"') s_res,JSON_EXTRACT(deal_user,'$.\"{$uid}\"') d_res,JSON_EXTRACT(copy_user,'$.\"{$uid}\"') c_res";
+
+        if (empty($subject_id)) {
+            $list = ProjectModel::field($field)->where($map)->where($con)->order('grade desc,create_time desc')->select();
+        }else{
+            $result = ProjectModel::field($field)->where($map)->where($con)->order('grade desc,create_time desc')->limit(1)->select();
+            $map['subject_id'] = $result[0]['id'];
+            $result1 = ProjectModel::field($field)->where($map)->where($con)->order('grade desc,create_time desc')->select();
+            $list = array_unique(array_merge($result1,$result));//顺序不能颠倒
+        }
+
+//        $aaa = new  ProjectModel();
+//        print_r($aaa->getLastSql());
+        $grade_type = config('other.grade_type');
+        $u_res_conf = config('other.res_type');
+//        print_r($list);
+        if ($list){
+            $myPro = ProjectModel::getMyTask(0,0);
+            foreach ($list as $k => $v) {
+                $list[$k]['manager_user'] = $this->deal_data($v['manager_user']);
+                $list[$k]['deal_user'] = $this->deal_data($v['deal_user']);
+                $list[$k]['copy_user'] = $this->deal_data($v['copy_user']);
+                $list[$k]['send_user'] = $this->deal_data($v['send_user']);
+                $list[$k]['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
+                $list[$k]['grade'] = $grade_type[$v['grade']];
+                if (0 != $v['pid']){
+                    $list[$k]['project_name'] = $myPro[$v['subject_id']];
+                }else{
+                    $list[$k]['project_name'] = $v['name'];
+                }
+                $child = ProjectModel::getChildCount($v['id']);
+                if ($child){
+                    $list[$k]['child'] = 1;
+                }else{
+                    $list[$k]['child'] = 0;
+                }
+
+                switch ($params['type']) {
+                    case 1:
+                        $u_res = $v['d_res'];
+                        break;
+                    case 2:
+                        $u_res = $v['m_res'];
+                        break;
+                    case 3:
+                        $u_res = $v['s_res'];
+                        break;
+                    case 4:
+                        $u_res = $v['c_res'];
+                        break;
+                    default:
+                        $u_res = $v['d_res'];
+                        break;
+                }
+                $list[$k]['u_res'] = trim($u_res, '"');
+
+                $list[$k]['u_res_str'] = $u_res_conf[$list[$k]['u_res']];
+            }
+        }
+        if ($this->request->isAjax()) {
+            $data = [];
+            $data['code'] = 0;
+            $data['msg'] = 'ok';
+            $data['data'] = $list;
+            return json($data);
+        }
+
+        $this->assign('tab_data', $tab_data);
+        $this->assign('tab_type', 1);
+        $this->assign('isparams', 1);
+        $this->assign('type', $params['type']);
+//        $pages = $list->render();
+        $this->assign('tab_url', url('mytask', ['type' => $params['type']]));
+        $this->assign('project_select', ProjectModel::inputSearchProject());
+//        $this->assign('data_list', $list);
+//        $this->assign('pages', $pages);
+//        return $this->fetch();
+
+//        $this->assign('tab_data', $this->tab_data);
+//        $this->assign('tab_type', 1);
+//        $this->assign('tab_url', url('index', ['atype' => $params['atype']]));
+//        $this->assign('isparams', 1);
+//        $this->assign('atype', $params['atype']);
+        $this->assign('subject_item', SubjectItem::getItemOption($subject_id));
+        return $this->fetch();
+    }
+
+    public function mytask1($type = 1)
+    {
+        $params = $this->request->param();
+        $map = [];
+        $cid = session('admin_user.cid');
+        $map['cid'] = $cid;
+        $map['t_type'] = 1;
         if ($params) {
             if (!empty($params['project_id'])){
                 $map['subject_id'] = $params['project_id'];
@@ -600,6 +777,13 @@ class Project extends Admin
         $row['deal_user_id'] = $this->deal_data($row['deal_user']);
         $row['copy_user_id'] = $this->deal_data($row['copy_user']);
         $row['send_user_id'] = $this->deal_data($row['send_user']);
+        $child = ProjectModel::getChildCount($row['id']);
+//        print_r($child);
+        if ($child){
+            $row['child'] = 1;
+        }else{
+            $row['child'] = 0;
+        }
         if (!($row['start_time'] == '0000-00-00 00:00:00' || $row['end_time'] == '0000-00-00 00:00:00' || $row['start_time'] >= $row['end_time'])){
             $fenzhi = (strtotime(date('Y-m-d').'23:59:59') - strtotime($row['start_time']))/3600;
             $fenmu = (strtotime($row['end_time']) - strtotime($row['start_time'])) / 3600;
@@ -680,9 +864,17 @@ class Project extends Admin
         ];
         $row = ProjectModel::where($map)->find()->toArray();
         $manager = json_decode($row['manager_user'],true);
-        $count = ScorelogModel::where('project_id',$params['id'])->count();
+        $where = [
+            'project_id' => $params['id'],
+            'user_id' =>$uid,
+        ];
+        $count = ScorelogModel::where($where)->count('DISTINCT user_id');
+//        print_r($params);
+//        print_r($manager);
+//        print_r($count);exit();
+        $cc = ScorelogModel::where('project_id',$params['id'])->count('DISTINCT user_id');
         $p = [
-            count($manager),$count+1
+            count($manager),$cc+1
         ];
 
 //        print_r(ScorelogModel::where('project_id',$params['id'])->count());
@@ -763,56 +955,59 @@ class Project extends Admin
                 }
             }else{
                 //有多个负责人情况
-                 if (($count+1) == count($manager)){
-                     $res = ScorelogModel::create($score_log);
-                     $s_d = ScorelogModel::where('project_id',$params['id'])->select();
-                     $s = [];
-                     if ($s_d){
-                         foreach ($s_d as $k=>$v){
-                             $summary = json_decode($v['summary'],true);
-                             foreach ($summary as $key=>$val){
-                                 if (key_exists($key,$s)){
-                                     $s[$key] = $val['score'];//暂时以最后一次的评定为主
-                                 }else{
-                                     $s[$key] = $val['score'];
-                                 }
-                             }
-                         }
-                     }
-                     $score = [];
-                     $sum_add_score = 0;
-                     foreach ($s as $k=>$v){
-                         $score[$k]['subject_id'] = $row['subject_id'];
-                         $score[$k]['project_id'] = $data['id'];
-                         $score[$k]['cid'] = session('admin_user.cid');
-                         $score[$k]['project_code'] = $data['code'];
-                         $score[$k]['user'] = $k;
-                         $score[$k]['ml_add_score'] = $v;
-                         $score[$k]['remark'] = '最终核定计算产值';
-                         $score[$k]['user_id'] = $uid;
-                         $score[$k]['create_time'] = time();
-                         $score[$k]['update_time'] = time();
+                if(empty($count)){
+                    $res = ScorelogModel::create($score_log);
+                } else {
+                    return $this->error('之前已经操作成功，等待系统计算');
+                }
+                $c = ScorelogModel::where('project_id',$params['id'])->count('DISTINCT user_id');
+                if ($c == count($manager)){
+                    $s_d = ScorelogModel::where('project_id',$params['id'])->select();
+                    $s = [];
+                    if ($s_d){
+                        foreach ($s_d as $k=>$v){
+                            $summary = json_decode($v['summary'],true);
+                            foreach ($summary as $key=>$val){
+                                if (key_exists($key,$s)){
+                                    $s[$key] = $val['score'];//暂时以最后一次的评定为主
+                                }else{
+                                    $s[$key] = $val['score'];
+                                }
+                            }
+                        }
+                    }
+                    $score = [];
+                    $sum_add_score = 0;
+                    foreach ($s as $k=>$v){
+                        $score[$k]['subject_id'] = $row['subject_id'];
+                        $score[$k]['project_id'] = $data['id'];
+                        $score[$k]['cid'] = session('admin_user.cid');
+                        $score[$k]['project_code'] = $data['code'];
+                        $score[$k]['user'] = $k;
+                        $score[$k]['ml_add_score'] = $v;
+                        $score[$k]['remark'] = '最终核定计算产值';
+                        $score[$k]['user_id'] = $uid;
+                        $score[$k]['create_time'] = time();
+                        $score[$k]['update_time'] = time();
 
-                         $sum_add_score += $v;
-                     }
+                        $sum_add_score += $v;
+                    }
 
-                     //事务开始
-                     Db::startTrans();
-                     try{
-                         db('score')->insertAll($score);
-                         $tmp = [
-                             'real_score'=>$sum_add_score,
-                         ];
-                         $res = ProjectModel::where('id',$data['id'])->update($tmp);
-                         //提交事务
-                         Db::commit();
-                     }catch (\Exception $e){
-                         //回滚事务
-                         Db::rollback();
-                     }
-                 }else{
-                     return $this->error('之前已经操作成功，等待系统计算');
-                 }
+                    //事务开始
+                    Db::startTrans();
+                    try{
+                        db('score')->insertAll($score);
+                        $tmp = [
+                            'real_score'=>$sum_add_score,
+                        ];
+                        $res = ProjectModel::where('id',$data['id'])->update($tmp);
+                        //提交事务
+                        Db::commit();
+                    }catch (\Exception $e){
+                        //回滚事务
+                        Db::rollback();
+                    }
+                }
             }
 
             if ($res){

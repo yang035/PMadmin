@@ -81,6 +81,12 @@ class Project extends Model
         $data = self::where($map)->field($fields)->find()->toArray();
         return $data;
     }
+    public static function getChildCount($id){
+        $map['cid'] = session('admin_user.cid');
+        $map['pid'] = $id;
+        $data = self::where($map)->count();
+        return $data;
+    }
 
     public static function getRowByCode($code='2p',$fields='*')
     {
