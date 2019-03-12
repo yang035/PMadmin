@@ -60,25 +60,27 @@
     </div>
 </script>
 <script type="text/html" id="oper-col-2">
-        <a lay-event="read" class="layui-btn layui-btn-normal layui-btn-xs">
-            {{#  if(d.child == 1){ }}
-                {{#  if(d.status == 0 && type == 1){ }}
-                阶段成果
-                {{#  }else if(d.status == 0 && type == 2){ }}
-                查看成果
-                {{#  }else{ }}
-                查看成果
-                {{#  } }}
+        {{#  if(d.child == 1){ }}
+        <a lay-event="read" class="layui-btn layui-btn-warm layui-btn-xs">
+            {{#  if(d.status == 0 && type == 1){ }}
+            阶段成果
+            {{#  }else if(d.status == 0 && type == 2){ }}
+            查看成果
             {{#  }else{ }}
-                {{#  if(d.status == 0 && type == 1){ }}
-                汇报
-                {{#  }else if(d.status == 0 && type == 2){ }}
-                查看汇报
-                {{#  }else{ }}
-                查看汇报
-                {{#  } }}
+            查看成果
             {{#  } }}
         </a>
+        {{#  }else{ }}
+        <a lay-event="read" class="layui-btn layui-btn-normal layui-btn-xs">
+            {{#  if(d.status == 0 && type == 1){ }}
+            汇报
+            {{#  }else if(d.status == 0 && type == 2){ }}
+            查看汇报
+            {{#  }else{ }}
+            查看汇报
+            {{#  } }}
+        </a>
+        {{#  } }}
     {{#  if(d.u_res == 'a'){ }}
     <span style="color: red;">已确认</span>
     {{#  }else{ }}
