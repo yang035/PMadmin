@@ -304,6 +304,17 @@
                             <br>
                             {$vo['mark']}
                             <br>
+                            {notempty name="vo['attachment']"}
+                            附件：
+                            <ul>
+                                {volist name="vo['attachment']" id="v"}
+                                <li>
+                                    <a target="_blank" href="{$v}">{$v}</a>
+                                </li>
+                                {/volist}
+                            </ul>
+                            <br>
+                            {/notempty}
                             <ul>
                                 {volist name="vo['reply']" id="v"}
                                 <li>

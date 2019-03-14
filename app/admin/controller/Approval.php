@@ -1023,6 +1023,10 @@ class Approval extends Admin
                 $report = ApprovalReport::getAll(5);
                 if ($report) {
                     foreach ($report as $k => $v) {
+                        if (!empty($v['attachment'])){
+                            $attachment = explode(',',$v['attachment']);
+                            $report[$k]['attachment'] = array_filter($attachment);
+                        }
                         $report[$k]['reply'] = ApprovalReportReply::getAll($v['id'], 5);
                     }
                 }
