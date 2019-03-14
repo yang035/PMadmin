@@ -25,7 +25,12 @@ class ReportReply extends Admin
 
     public function add(){
         $params = $this->request->param();
-        $row = Project::getRowById($params['project_id']);
+        if ($params['project_id']){
+            $row = Project::getRowById($params['project_id']);
+        }else{
+            $row = [];
+        }
+
         if ($this->request->isPost()){
             $data = $this->request->post();
 
