@@ -156,7 +156,7 @@
             }
 
             $('.user_confirm').click(function () {
-                var ids='',name='',url_array = [],m="{$Request.param.m}";
+                var ids='',name='',url_array = [],m="{$Request.param.m}",i="{$Request.param.i}";
                 $('li').each(function(){
                     uname = $(this).attr('name');
                     if ('undefined' != typeof(uname)){
@@ -168,8 +168,13 @@
                         ids+=id+',';
                     }
                 });
-                window.parent.document.getElementById(m+'_select_id').innerText=name;
-                window.parent.document.getElementById(m+'_user').value = ','+ids;
+                if (i){
+                    window.parent.document.getElementById(m+'_select_id['+i+']').innerText=name;
+                    window.parent.document.getElementById(m+'_user['+i+']').value = ','+ids;
+                } else {
+                    window.parent.document.getElementById(m+'_select_id').innerText=name;
+                    window.parent.document.getElementById(m+'_user').value = ','+ids;
+                }
                 var index = parent.layer.getFrameIndex(window.name);
                 parent.layer.close(index);
             });

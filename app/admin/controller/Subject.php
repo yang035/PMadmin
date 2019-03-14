@@ -101,7 +101,7 @@ class Subject extends Admin
                 $data['code'] = $code;
                 $data['subject_id'] = $flag['id'];
                 $flag1 = ProjectModel::create($data);
-                $res = ProjectModel::where('id',$flag1['id'])->setField('node',$flag1['id']);
+                $res = ProjectModel::where('id',$flag1['id'])->setField('node',$data['cid'].'.'.$flag1['id']);
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {

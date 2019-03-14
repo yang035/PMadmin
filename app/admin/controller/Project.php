@@ -1090,13 +1090,18 @@ class Project extends Admin
     {
         if ($this->request->isPost()) {
             $params = $this->request->post();
+            print_r($params);exit();
             $ins_data = [
                 'project_id' => $params['id'],
-                'score' => json_encode($params['score']),
+                'check_id' => json_encode($params['check_id']),
+                'flag' => json_encode($params['flag']),
+                'person_user' => json_encode($params['person_user']),
+                'ml' => json_encode($params['ml']),
+                'gl' => json_encode($params['gl']),
                 'mark' => json_encode($params['mark']),
-                'total_score' => array_sum($params['score']),
                 'user_id' => session('admin_user.uid'),
             ];
+
             if (!ProjectCheck::create($ins_data)) {
                 return $this->error('添加失败！');
             }
@@ -1162,6 +1167,9 @@ class Project extends Admin
             if ($res['status'] == 0) {
                 $this->error($res['data']);
             } else {
+                if ('1.1' != $res['data'][0]['B']){
+                    $this->error('层级关系列从1.1编号开始');
+                }
                 foreach ($res['data'] as $k => $v) {
                     $res['data'][$k]['B'] = session('admin_user.cid') . '.' . $params['id'] . substr($v['B'], 1);
                 }
@@ -1191,6 +1199,11 @@ class Project extends Admin
                         'node' => $v['B'],
                     ];
                     $f = ProjectModel::where($where)->find();
+
+                    $ff = trim($v['F']);
+                    $ff = empty($ff) ? 0 : (int)$ff;
+                    $gg = trim($v['G']);
+                    $gg = empty($gg) ? 0 : (int)$gg;
                     if (!$f) {
                         $tmp = [
                             'pid' => $prow[0]['id'],
@@ -1202,8 +1215,8 @@ class Project extends Admin
                             'remark' => $v['D'],
                             'cat_id' => $prow[0]['cat_id'],
                             'score' => (int)$v['E'],
-                            'start_time' => $v['F'] ? gmdate('Y-m-d H:i:s', ($v['F'] - $d) * $s) : '0000-00-00 00:00:00',
-                            'end_time' => $v['F'] ? gmdate('Y-m-d H:i:s', ($v['G'] - $d) * $s) : '0000-00-00 00:00:00',
+                            'start_time' => $ff > $d ? gmdate('Y-m-d H:i:s', ($ff - $d) * $s) : '0000-00-00 00:00:00',
+                            'end_time' => $gg > $d ? gmdate('Y-m-d H:i:s', ($gg - $d) * $s) : '0000-00-00 00:00:00',
                             'manager_user' => $this->userFormat($v['H']),
                             'deal_user' => $this->userFormat($v['I']),
                             'send_user' => $this->userFormat($v['J']),
@@ -1223,8 +1236,8 @@ class Project extends Admin
                             'node' => $v['B'],
                             'remark' => $v['D'],
                             'score' => (int)$v['E'],
-                            'start_time' => $v['F'] ? gmdate('Y-m-d H:i:s', ($v['F'] - $d) * $s) : '0000-00-00 00:00:00',
-                            'end_time' => $v['F'] ? gmdate('Y-m-d H:i:s', ($v['G'] - $d) * $s) : '0000-00-00 00:00:00',
+                            'start_time' => $ff > $d ? gmdate('Y-m-d H:i:s', ($ff - $d) * $s) : '0000-00-00 00:00:00',
+                            'end_time' => $gg > $d ? gmdate('Y-m-d H:i:s', ($gg - $d) * $s) : '0000-00-00 00:00:00',
                             'manager_user' => $this->userFormat($v['H']),
                             'deal_user' => $this->userFormat($v['I']),
                             'send_user' => $this->userFormat($v['J'],'a'),

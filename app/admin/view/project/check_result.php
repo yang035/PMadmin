@@ -1,12 +1,3 @@
-<style>
-    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-    }
-
-    input[type="number"] {
-        -moz-appearance: textfield;
-    }
-</style>
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-form">
         <table class="layui-table mt10" lay-even="" lay-skin="row" lay-size="sm">
@@ -15,8 +6,11 @@
             </colgroup>
             <thead>
             <tr>
-                <th width="100px">问题</th>
-                <th>扣减</th>
+                <th width="100px">审核项</th>
+                <th width="160px">是否有问题</th>
+                <th>责任人</th>
+                <th>ML</th>
+                <th>GL</th>
                 <th>意见</th>
             </tr>
             </thead>
@@ -28,16 +22,40 @@
                 </td>
                 <td></td>
                 <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             {volist name="vo['data']" id="v"}
             <tr>
                 <td>{$v['name']}</td>
                 <td>
-                    <input type="radio" name="score[{$v['id']}]" class="layui-checkbox checkbox-ids" checked value="10" lay-skin="primary">10分
-                    <input type="radio" name="score[{$v['id']}]" class="layui-checkbox checkbox-ids" value="5" lay-skin="primary">5分
-                    <input type="radio" name="score[{$v['id']}]" class="layui-checkbox checkbox-ids" value="0" lay-skin="primary">0分
+                    <input type="radio" name="flag[{$v['id']}]" class="layui-checkbox checkbox-ids" value="1" title="有">
+                    <input type="radio" name="flag[{$v['id']}]" class="layui-checkbox checkbox-ids" checked value="0" title="无">
                 </td>
-                <td><input class="layui-input" name="mark[{$v['id']}]"></td>
+                <td>
+                    <div class="layui-inline">
+                        <div class="layui-input-inline">
+                            <button type="button" class="layui-btn layui-btn-xs" id="person_user_id[{$v['id']}]" onclick="check_user({$v['id']})">选择人员</button>
+                            <div id="person_select_id[{$v['id']}]"></div>
+                            <input type="hidden" name="person_user[{$v['id']}]" id="person_user[{$v['id']}]" value="">
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="layui-input-inline" style="width: 80px;">
+                        <input type="number" class="layui-input field-ml" name="ml[{$v['id']}]" autocomplete="off" lay-verify="" placeholder="ML">
+                    </div>
+                </td>
+                <td>
+                    <div class="layui-input-inline" style="width: 80px;">
+                        <input type="number" class="layui-input field-gl" name="gl[{$v['id']}]" autocomplete="off" lay-verify="" placeholder="GL">
+                    </div>
+                </td>
+                <td>
+                    <input class="layui-input" name="mark[{$v['id']}]">
+                    <input type="hidden" class="field-check_id" name="check_id[{$v['id']}]" value="{$v['id']}">
+                </td>
             </tr>
             {/volist}
             {/volist}
@@ -68,12 +86,33 @@
 <script>
     var formData = {:json_encode($data_info)};
 
-    layui.use(['jquery', 'laydate'], function() {
-        var $ = layui.jquery, laydate = layui.laydate;
+    layui.use(['jquery', 'laydate','form'], function() {
+        var $ = layui.jquery, laydate = layui.laydate, form = layui.form;
         laydate.render({
             elem: '.field-expire_time',
             min:'0'
         });
+
     });
+
+    function check_user(i) {
+        var person_user = document.getElementById('person_user['+i+']').value;
+        var open_url = "{:url('Tool/getTreeUser')}?m=person&u="+person_user+"&i="+i;
+        if (open_url.indexOf('?') >= 0) {
+            open_url += '&hisi_iframe=yes';
+        } else {
+            open_url += '?hisi_iframe=yes';
+        }
+        layer.open({
+            type:2,
+            title :'员工列表',
+            maxmin: true,
+            area: ['800px', '500px'],
+            content: open_url,
+            success:function (layero, index) {
+                var body = layer.getChildFrame('body', index);  //巧妙的地方在这里哦
+            }
+        });
+    }
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>
