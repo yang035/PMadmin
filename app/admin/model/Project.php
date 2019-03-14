@@ -127,6 +127,28 @@ class Project extends Model
         }
     }
 
+    public static function getProTask($id=0,$option=1){
+        $cid = session('admin_user.cid');
+        $map['cid'] = $cid;
+        $map['pid'] = 0;
+        $list = self::where($map)->order('grade desc,create_time desc')->column('name','id');
+        if ($list){
+            if ($option){
+                $str = "<option value='0' selected>其他</option>";
+                foreach ($list as $k => $v) {
+                    if ($id == $k) {
+                        $str .= "<option value='".$k."' selected>".$v."</option>";
+                    } else {
+                        $str .= "<option value='".$k."'>".$v."</option>";
+                    }
+                }
+                return $str;
+            }else{
+                return $list;
+            }
+        }
+    }
+
     public static function inputSearchProject(){
         $where = [
             'pid'=>0,

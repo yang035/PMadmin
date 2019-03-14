@@ -299,7 +299,7 @@
                                 完成百分比：<span style="color: green">[{$vo['realper']}%]</span>
                                 {neq name="type" value='1'}
                                 计划百分比：<span style="color: green">[{$vo['per']}%]</span>
-                                <a onclick="open_reply({$vo['id']},{$vo['project_id']})" class="layui-btn layui-btn-normal layui-btn-xs">审核校对</a>
+                                <a onclick="check_result({$data_info['id']},'{$data_info['name']}')" class="layui-btn layui-btn-normal layui-btn-xs">审核校对</a>
                                 {/neq}
                                 <br>
                                 {$vo['mark']}
@@ -565,6 +565,24 @@
                 var body = layer.getChildFrame('body', index);  //巧妙的地方在这里哦
                 body.contents().find(".field-report_id").val(id);
                 body.contents().find(".field-project_id").val(project_id);
+            }
+        });
+    }
+
+    function check_result(id,pname){
+        var open_url = "{:url('Project/checkResult')}?id="+id+"&pname="+pname;
+        if (open_url.indexOf('?') >= 0) {
+            open_url += '&hisi_iframe=yes';
+        } else {
+            open_url += '?hisi_iframe=yes';
+        }
+        layer.open({
+            type:2,
+            title :pname,
+            maxmin: true,
+            area: ['900px', '700px'],
+            content: open_url,
+            success:function (layero, index) {
             }
         });
     }

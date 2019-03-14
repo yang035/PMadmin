@@ -89,6 +89,9 @@
     </div>
     {{#  } }}
     {{#  if(d.status == 0 && type == 2){ }}
+<!--            <div class="layui-btn-group" onclick="check_result({{ d.id }},'{{ d.name }}')">-->
+<!--                <a class="layui-btn layui-btn-normal layui-btn-xs">审核</a>-->
+<!--            </div>-->
     {{#  if(d.realper >= 100 && d.real_score == 0){ }}
     <div class="layui-btn-group" onclick="add_score({{ d.id }},'{{ d.code }}','{{ d.name }}')">
         <a class="layui-btn layui-btn-normal layui-btn-xs">评分</a>

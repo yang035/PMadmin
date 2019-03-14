@@ -15,9 +15,9 @@
             </colgroup>
             <thead>
             <tr>
-                <th width="100px">名称</th>
-                <th>得分</th>
-                <th>建议</th>
+                <th width="100px">问题</th>
+                <th>扣减</th>
+                <th>意见</th>
             </tr>
             </thead>
             <tbody>

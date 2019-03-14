@@ -13,6 +13,7 @@ use app\admin\model\Project as ProjectModel;
 use app\admin\model\CheckCat as CatModel;
 use app\admin\model\CheckItem as ItemModel;
 use app\admin\model\ProjectScorelog as ScorelogModel;
+use app\admin\model\ProjectCheck;
 use app\admin\controller\ProjectReport;
 use app\admin\model\SubjectCat;
 use app\admin\model\SubjectItem;
@@ -550,7 +551,7 @@ class Project extends Admin
         $u_res_conf = config('other.res_type');
 //        print_r($list);
         if ($list){
-            $myPro = ProjectModel::getMyTask(0,0);
+            $myPro = ProjectModel::getProTask(0,0);
             foreach ($list as $k => $v) {
                 $list[$k]['manager_user'] = $this->deal_data($v['manager_user']);
                 $list[$k]['deal_user'] = $this->deal_data($v['deal_user']);
@@ -1096,7 +1097,7 @@ class Project extends Admin
                 'total_score' => array_sum($params['score']),
                 'user_id' => session('admin_user.uid'),
             ];
-            if (!ScorelogModel::create($ins_data)) {
+            if (!ProjectCheck::create($ins_data)) {
                 return $this->error('添加失败！');
             }
             return $this->success('添加成功。', url('index'));
@@ -1114,7 +1115,7 @@ class Project extends Admin
         $map = [
             'project_id' => $params['id']
         ];
-        $score_log = ScorelogModel::where($map)->order('id desc')->select();
+        $score_log = ProjectCheck::where($map)->order('id desc')->select();
         if ($score_log) {
             foreach ($score_log as $k => $v) {
                 $score_log[$k]['score'] = json_decode($v['score'], true);
