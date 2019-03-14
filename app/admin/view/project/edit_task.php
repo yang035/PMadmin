@@ -35,149 +35,42 @@
         <div class="layui-col-md6">
             <div class="layui-card">
                 <div class="layui-card-header">工作内容</div>
-                <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
-                    {if condition="$data_info['u_res'] eq 'a'"}
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">是否确认</label>
-                        <div class="layui-form-mid red">{$data_info['u_res_str']}</div>
+                    <div class="layui-card-body">
+                        <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
+                            项目名称：{$Request.param.project_name}
+                            <br>
+                            任务主题：{$data_info['name']}
+                            <br>
+                            描述：{$data_info['remark']}
+                            <br>
+                            预设产量：{$data_info['score']}
+                            <br>
+                            开始时间：{$data_info['start_time']}
+                            <br>
+                            结束时间：{$data_info['end_time']}
+                            <br>
+                            历时：{$data_info['time_long']}
+                            <br>
+                            附件说明：{$data_info['attachment']}
+                            <br>
+                            负责人：{$data_info['manager_user_id']|default=''}
+                            <br>
+                            参与人：{$data_info['deal_user_id']|default=''}
+                            <br>
+                            审批人：{$data_info['send_user_id']|default=''}
+                            <br>
+                            抄送人：{$data_info['copy_user_id']|default=''}
+                            <br>
+                            是否确认：
+                            {if condition="$data_info['u_res'] eq 'a'"}
+                                <span class="red">{$data_info['u_res_str']}</span>
+                            {else/}
+                                <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
+                                <button type="button" onclick="accept_task({$data_info['id']},{$Request.param.type})" class="layui-btn layui-btn-normal">确认</button>
+                            {/if}
+                        </form>
                     </div>
-                    {else/}
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">是否确认</label>
-                        <div class="layui-input-inline">
-                            <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
-                            <button type="button" onclick="accept_task({$data_info['id']},{$Request.param.type})" class="layui-btn layui-btn-normal">确认</button>
-                        </div>
-                    </div>
-                    {/if}
-<!--                    {if condition="($data_info['status'] eq 0) && ($Request.param.type eq 2) "}-->
-<!--                    <div class="layui-form-item">-->
-<!--                        <label class="layui-form-label">是否完结</label>-->
-<!--                        <div class="layui-input-inline">-->
-<!--                            <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">-->
-<!--                            <button type="button" onclick="finish_task({$data_info['id']},{$Request.param.type})" class="layui-btn layui-btn-normal">点击完成</button>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    {elseif condition="$data_info['status'] eq 1"}-->
-<!--                    <div class="layui-form-item">-->
-<!--                        <label class="layui-form-label">是否完结</label>-->
-<!--                        <div class="layui-input-inline">-->
-<!--                            <span style="color: red;">已完结</span>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    {else/}-->
-<!--                    <div class="layui-form-item">-->
-<!--                        <label class="layui-form-label">是否完结</label>-->
-<!--                        <div class="layui-input-inline">-->
-<!--                            <span style="color: red;">进行中</span>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    {/if}-->
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">项目名称</label>
-                        <div class="layui-form-mid red">{$Request.param.project_name}</div>
-                    </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">任务主题</label>
-                    <div class="layui-input-inline">
-                        <input type="text" class="layui-input field-name" name="name" lay-verify="required" readonly
-                               autocomplete="off" placeholder="请输入名称">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">描述</label>
-                    <div class="layui-input-inline">
-                        <textarea type="text" class="layui-textarea field-remark" name="remark" lay-verify="required"
-                                  readonly autocomplete="off" placeholder="请输入描述"></textarea>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">预设产量</label>
-                    <div class="layui-input-inline">
-                        <input type="number" class="layui-input field-score" name="score"
-                               onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))"
-                               lay-verify="required" readonly autocomplete="off" placeholder="请输入预设值">
-                    </div>
-                    <div class="layui-form-mid">斗</div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">开始时间</label>
-                    <div class="layui-input-inline">
-                        <input type="text" class="layui-input field-start_time" name="start_time" lay-verify="required"
-                               autocomplete="off" readonly placeholder="选择开始时间">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">结束时间</label>
-                    <div class="layui-input-inline">
-                        <input type="text" class="layui-input field-end_time" name="end_time" lay-verify="required"
-                               autocomplete="off" readonly placeholder="选择结束时间">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">历时</label>
-                    <div class="layui-input-inline">
-                        <input type="text" class="layui-input field-time_long" name="time_long" readonly
-                               autocomplete="off" readonly>
-                    </div>
-                    天
-                </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">紧急程度</label>
-                        <div class="layui-input-inline">
-                            <select name="grade" class="field-grade" readonly type="select" lay-filter="grade">
-                                {$grade_type}
-                            </select>
-                        </div>
-                    </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">附件说明</label>
-                    <div class="layui-input-inline">无</div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">负责人</label>
-                    <div class="layui-input-inline">
-                        <button type="button" class="layui-btn" id="manager_user_id" style="display: none;">选择负责人
-                        </button>
-                        (此任务由谁负责)
-                        <div id="manager_select_id">{$data_info['manager_user_id']|default=''}</div>
-                        <input type="hidden" name="manager_user" id="manager_user"
-                               value="{$data_info['manager_user']|default=''}">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">参与人</label>
-                    <div class="layui-input-inline">
-                        <button type="button" class="layui-btn" id="deal_user_id" style="display: none;">选择参与人</button>
-                        (此任务具体哪些人做)
-                        <div id="deal_select_id">{$data_info['deal_user_id']|default=''}</div>
-                        <input type="hidden" name="deal_user" id="deal_user"
-                               value="{$data_info['deal_user']|default=''}">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">审批人</label>
-                    <div class="layui-input-inline">
-                        <button type="button" class="layui-btn" id="send_user_id" style="display: none;">选择审批人</button>
-                        (此任务需要谁来审批)
-                        <div id="send_select_id">{$data_info['send_user_id']|default=''}</div>
-                        <input type="hidden" name="send_user" id="send_user" value="{$data_info['send_user']}">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">抄送人</label>
-                    <div class="layui-input-inline">
-                        <button type="button" class="layui-btn" id="copy_user_id" style="display: none;">选择抄送人</button>
-                        (此任务需要抄送给谁)
-                        <div id="copy_select_id">{$data_info['copy_user_id']|default=''}</div>
-                        <input type="hidden" name="copy_user" id="copy_user" value="{$data_info['copy_user']}">
-                    </div>
-                </div>
-
-                </form>
             </div>
-        </div>
-        <div class="layui-col-md6">
             {if condition="$Request.param.type eq 1"}
             <div class="layui-card">
                 <div class="layui-card-header">成果反馈</div>
@@ -236,6 +129,8 @@
                 </form>
             </div>
             {/if}
+        </div>
+        <div class="layui-col-md6">
             {empty name="data_info['child']"}
             <div class="layui-card">
                 <div class="layui-card-header">汇报记录</div>
