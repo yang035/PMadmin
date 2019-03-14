@@ -200,10 +200,10 @@
         table.on('tool(table1)', function (obj) {
             var data = obj.data;
             var layEvent = obj.event;
-            var id=data.id,pid=data.pid,code=data.code,pname=data.name,pscore=data.score,project_name=data.project_name;
+            var id=data.id,pid=data.pid,code=data.code,pname=data.name,pscore=data.score,project_name=data.project_name,child=data.child;
 
             if (layEvent === 'read') {
-                var open_url = "{:url('editTask')}?id="+id+"&pid="+pid+"&type="+type+"&project_name="+project_name;
+                var open_url = "{:url('editTask')}?id="+id+"&pid="+pid+"&type="+type+"&child="+child+"&project_name="+project_name;
                 window.location.href = open_url;
             } else if (layEvent === 'add') {
                 var reg = /<[^>]+>/g;

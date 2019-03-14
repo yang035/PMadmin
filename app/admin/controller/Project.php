@@ -836,6 +836,7 @@ class Project extends Admin
                 }
                 $report_user = AdminUser::getUserById($v['user_id'])['realname'];
                 $report[$k]['real_name'] = !empty($report_user) ? $report_user : '';
+                $report[$k]['check_catname'] = ItemModel::getCat()[$v['check_cat']];
                 $report[$k]['reply'] = ReportReply::getAll($v['id'], 5);
             }
         }
@@ -853,6 +854,7 @@ class Project extends Admin
         $this->assign('data_info', $row);
         $this->assign('grade_type', ProjectModel::getGrade($row['grade']));
         $this->assign('type', $params['type']);
+        $this->assign('cat_option',ItemModel::getOption());
         $this->assign('report_info', $report);
         return $this->fetch();
     }
@@ -1086,8 +1088,6 @@ class Project extends Admin
 
     public function checkResult()
     {
-        $where['cid'] = session('admin_user.cid');
-        $where['status'] = 1;
         if ($this->request->isPost()) {
             $params = $this->request->post();
             $ins_data = [
@@ -1103,6 +1103,11 @@ class Project extends Admin
             return $this->success('添加成功。', url('index'));
         }
 
+        $params = $this->request->param();
+        $where['cid'] = session('admin_user.cid');
+        $where['status'] = 1;
+        $where['cat_id'] = $params['check_cat'];
+
         $res = ItemModel::with('cat')->where($where)->select();
         $data = [];
         if ($res) {
@@ -1111,7 +1116,7 @@ class Project extends Admin
             }
         }
 
-        $params = $this->request->param();
+
         $map = [
             'project_id' => $params['id']
         ];

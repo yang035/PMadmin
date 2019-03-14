@@ -68,6 +68,8 @@
                                 <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
                                 <button type="button" onclick="accept_task({$data_info['id']},{$Request.param.type})" class="layui-btn layui-btn-normal">确认</button>
                             {/if}
+                            <br>
+                            <a href="javascript:history.back()" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
                         </form>
                     </div>
             </div>
@@ -94,6 +96,16 @@
                         </div>
                         <div class="layui-form-mid red">*</div>
                     </div>
+                    {notempty name="data_info['child']"}
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">待审核类型</label>
+                        <div class="layui-input-inline">
+                            <select name="check_cat" class="field-check_cat" type="select">
+                                {$cat_option}
+                            </select>
+                        </div>
+                    </div>
+                    {/notempty}
                     <div class="layui-form-item">
                         <label class="layui-form-label">附件说明</label>
                         <div class="layui-input-inline">
@@ -194,8 +206,10 @@
                                 完成百分比：<span style="color: green">[{$vo['realper']}%]</span>
                                 {neq name="type" value='1'}
                                 计划百分比：<span style="color: green">[{$vo['per']}%]</span>
-                                <a onclick="check_result({$data_info['id']},'{$data_info['name']}')" class="layui-btn layui-btn-normal layui-btn-xs">审核校对</a>
+                                <a onclick="check_result({$data_info['id']},{$vo['check_cat']},'{$data_info['name']}')" class="layui-btn layui-btn-normal layui-btn-xs">审核校对</a>
                                 {/neq}
+                                <br>
+                                审核类型：{$vo['check_catname']}
                                 <br>
                                 {$vo['mark']}
                                 <br>
@@ -463,8 +477,8 @@
         });
     }
 
-    function check_result(id,pname){
-        var open_url = "{:url('Project/checkResult')}?id="+id+"&pname="+pname;
+    function check_result(id,check_cat,pname){
+        var open_url = "{:url('Project/checkResult')}?id="+id+"&check_cat="+check_cat+"&pname="+pname;
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {
