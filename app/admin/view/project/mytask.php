@@ -88,7 +88,7 @@
         <a class="layui-btn layui-btn-normal layui-btn-xs">确认</a>
     </div>
     {{#  } }}
-    {{#  if(d.status == 0 && type == 2){ }}
+    {{#  if(d.status == 0 && type == 2 && d.child == 0){ }}
 <!--            <div class="layui-btn-group" onclick="check_result({{ d.id }},'{{ d.name }}')">-->
 <!--                <a class="layui-btn layui-btn-normal layui-btn-xs">审核</a>-->
 <!--            </div>-->
