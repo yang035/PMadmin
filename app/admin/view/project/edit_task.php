@@ -309,11 +309,10 @@
                                 <br>
                                 {/notempty}
                                 {notempty name="vo['attachment']"}
-                                附件：
                                 <ul>
                                     {volist name="vo['attachment']" id="v"}
                                     <li>
-                                        <a target="_blank" href="{$v}">{$v}</a>
+                                        <a target="_blank" href="{$v}">附件{$i}</a>
                                     </li>
                                     {/volist}
                                 </ul>
