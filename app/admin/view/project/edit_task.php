@@ -32,7 +32,7 @@
 </style>
 <div style="padding: 20px; background-color: #F2F2F2;">
     <div class="layui-row layui-col-space15">
-        <div class="layui-col-md6">
+        <div class="layui-col-md5">
             <div class="layui-card">
                 <div class="layui-card-header">工作内容</div>
                     <div class="layui-card-body">
@@ -142,7 +142,7 @@
             </div>
             {/if}
         </div>
-        <div class="layui-col-md6">
+        <div class="layui-col-md7">
             {empty name="data_info['child']"}
             <div class="layui-card">
                 <div class="layui-card-header">汇报记录</div>
@@ -206,7 +206,7 @@
                                 完成百分比：<span style="color: green">[{$vo['realper']}%]</span>
                                 {neq name="type" value='1'}
                                 计划百分比：<span style="color: green">[{$vo['per']}%]</span>
-                                <a onclick="check_result({$data_info['id']},{$vo['check_cat']},'{$data_info['name']}')" class="layui-btn layui-btn-normal layui-btn-xs">审核校对</a>
+                                <a onclick="check_result({$vo['id']},{$vo['project_id']},{$vo['check_cat']},'{$data_info['name']}')" class="layui-btn layui-btn-normal layui-btn-xs">审核校对</a>
                                 {/neq}
                                 <br>
                                 审核类型：{$vo['check_catname']}
@@ -227,15 +227,64 @@
                                 </ul>
                                 <br>
                                 {/notempty}
-                                <ul>
-                                    {volist name="vo['reply']" id="v"}
-                                    <li>
-                                        <span style="color: green">[{$v['real_name']}]</span>
-                                        <span style="color: grey">[{$v['create_time']}审核]</span><br>
-                                        {$v['content']}
-                                    </li>
-                                    {/volist}
-                                </ul>
+                                {notempty name="vo['reply']"}
+                                <div class="layui-card">
+                                    <div class="layui-card-body">
+                                        <table class="layui-table mt10" lay-even="" lay-skin="row" lay-size="sm">
+                                            <thead>
+                                            <tr>
+                                                <th width="150px">审核项</th>
+                                                <th width="160px">是否有问题</th>
+                                                <th>责任人</th>
+                                                <th>ML(斗)</th>
+                                                <th>GL(斗)</th>
+                                                <th>意见</th>
+                                                <th>说明</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {volist name="vo['reply']" id="kkk"}
+                                            <tr>
+                                                <td class="font12">
+                                                    <strong class="mcolor">审核人：{$kkk['user_name']}</strong>
+                                                </td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            {volist name="kkk['content']" id="v"}
+                                            <tr>
+                                                <td>{$v['check_name']}({$v['check_ml']})</td>
+                                                <td>{$v['flag']}</td>
+                                                <td>{$v['person_user']}</td>
+                                                <td>{$v['ml']}</td>
+                                                <td>{$v['gl']}</td>
+                                                <td>{$v['mark']}</td>
+                                                <td>
+                                                    {eq name="v['isfinish']" value="1"}
+                                                    <span class="green">已完成</span>
+                                                    {else/}
+                                                    <span class="red">待完成</span>
+                                                    {/eq}
+                                                    {$v['remark']}</td>
+                                                <td>
+                                                    {if condition="($Request.param.type eq 1) && ($v['isfinish'] eq 0)"}
+                                                    <a onclick="receipt({$kkk['id']},{$key})" class="layui-btn layui-btn-normal layui-btn-xs">回执</a>
+                                                    {/if}
+                                                </td>
+                                            </tr>
+                                            {/volist}
+                                            {/volist}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                {/notempty}
                             </div>
                         </div>
                     </li>
@@ -477,8 +526,8 @@
         });
     }
 
-    function check_result(id,check_cat,pname){
-        var open_url = "{:url('Project/checkResult')}?id="+id+"&check_cat="+check_cat+"&pname="+pname;
+    function check_result(report_id,project_id,check_cat,pname){
+        var open_url = "{:url('Project/checkResult')}?report_id="+report_id+"&project_id="+project_id+"&check_cat="+check_cat+"&pname="+pname;
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {
@@ -488,9 +537,40 @@
             type:2,
             title :pname,
             maxmin: true,
-            area: ['900px', '700px'],
+            area: ['1000px', '800px'],
             content: open_url,
             success:function (layero, index) {
+            }
+        });
+    }
+
+    function receipt(r_id,q_id){
+        var open_url = "{:url('Project/receipt')}?id="+r_id+"&q_id="+q_id;
+        if (open_url.indexOf('?') >= 0) {
+            open_url += '&hisi_iframe=yes';
+        } else {
+            open_url += '?hisi_iframe=yes';
+        }
+        layer.open({
+            type:2,
+            title :'回执单',
+            maxmin: true,
+            area: ['700px', '500px'],
+            content: open_url,
+            success:function (layero, index) {
+            }
+        });
+    }
+
+    function get_confirm(r_id,q_id){
+        var open_url = "{:url('Project/getConfirm')}?id="+r_id+"&q_id="+q_id;
+        $.post(open_url, function(res) {
+            if (res.code == 1) {
+                layer.msg(res.msg);
+                location.reload();
+            }else {
+                layer.msg(res.msg);
+                location.reload();
             }
         });
     }

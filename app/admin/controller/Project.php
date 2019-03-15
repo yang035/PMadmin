@@ -13,10 +13,11 @@ use app\admin\model\Project as ProjectModel;
 use app\admin\model\CheckCat as CatModel;
 use app\admin\model\CheckItem as ItemModel;
 use app\admin\model\ProjectScorelog as ScorelogModel;
-use app\admin\model\ProjectCheck;
+use app\admin\model\ReportCheck as ReportCheckModel;
 use app\admin\controller\ProjectReport;
 use app\admin\model\SubjectCat;
 use app\admin\model\SubjectItem;
+use app\admin\controller\ReportCheck;
 use think\Db;
 use think\Exception;
 
@@ -837,7 +838,26 @@ class Project extends Admin
                 $report_user = AdminUser::getUserById($v['user_id'])['realname'];
                 $report[$k]['real_name'] = !empty($report_user) ? $report_user : '';
                 $report[$k]['check_catname'] = ItemModel::getCat()[$v['check_cat']];
-                $report[$k]['reply'] = ReportReply::getAll($v['id'], 5);
+                if (empty($row['child'])){
+                    $report[$k]['reply'] = ReportReply::getAll($v['id'], 5);
+                }else{
+                    $reply = ReportCheck::getAll($v['id'], 1);
+                    if ($reply){
+                        foreach ($reply as $key=>$val){
+                            $content = json_decode($val['content'], true);
+                            if ($content){
+                                foreach ($content as $kk=>$vv){
+                                    $content[$kk]['flag'] = $vv['flag'] ? '有' : '无';
+                                    $content[$kk]['person_user'] = $this->deal_data(json_encode(user_array($vv['person_user'])));
+                                }
+                            }
+                            $reply[$key]['content'] = $content;
+                            $reply[$key]['user_name'] = AdminUser::getUserById($val['user_id'])['realname'];
+                        }
+                    }
+                    $report[$k]['reply'] = $reply;
+                }
+
             }
         }
 //        print_r($report);
@@ -856,6 +876,127 @@ class Project extends Admin
         $this->assign('type', $params['type']);
         $this->assign('cat_option',ItemModel::getOption());
         $this->assign('report_info', $report);
+        return $this->fetch();
+    }
+
+    public function receipt(){
+        $params = $this->request->param();
+        $row = ReportCheckModel::getRowById($params['id']);
+        $q = [];
+        if ($row){
+            $content = json_decode($row['content'], true);
+            $q = $content[$params['q_id']];
+        }
+        $tmp = [
+            'isfinish' => 0,
+            'remark' => '',
+        ];
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            if ($content){
+                foreach ($content as $k=>$v){
+                    if ($k == $params['q_id']){
+                        $tmp = [
+                            'isfinish' => $data['isfinish'],
+                            'remark' => $data['remark'],
+                        ];
+                        $content[$k] = array_merge($v,$tmp);
+
+                    }else{
+                        $content[$k] = array_merge($v,$tmp);
+                    }
+                }
+            }
+            $d = [
+                'id'=>$data['id'],
+                'content'=>json_encode($content),
+            ];
+
+            $person_user = explode(',',trim($q['person_user'],','));
+            $score = [];
+            $p = ProjectModel::where('id',$row['project_id'])->find();
+            foreach ($person_user as $k=>$v){
+                $score[$k]['subject_id'] = $p['subject_id'];
+                $score[$k]['project_id'] = $row['project_id'];
+                $score[$k]['cid'] = session('admin_user.cid');
+                $score[$k]['project_code'] = $p['code'];
+                $score[$k]['user'] = $v;
+                if ($q['ml'] > 0){
+                    $score[$k]['ml_add_score'] = $q['ml'];
+                }else{
+                    $score[$k]['ml_sub_score'] = abs($q['ml']);
+                }
+                if ($q['gl'] > 0){
+                    $score[$k]['gl_add_score'] = $q['gl'];
+                }else{
+                    $score[$k]['gl_sub_score'] = abs($q['gl']);
+                }
+                $score[$k]['remark'] = "任务主题编号[{$row['project_id']}],阶段审核编号[{$row['report_id']}],问题编号[{$q['check_id']}],出现问题[{$q['check_name']}]";
+                $score[$k]['user_id'] = session('admin_user.uid');
+                $score[$k]['create_time'] = time();
+                $score[$k]['update_time'] = time();
+
+            }
+            //事务开始
+            Db::startTrans();
+            try{
+                ReportCheckModel::update($d);
+                $res = db('score')->insertAll($score);
+                //提交事务
+                Db::commit();
+            }catch (\Exception $e){
+                //回滚事务
+                Db::rollback();
+            }
+            if ($res){
+                return $this->success("操作成功{$this->score_value}");
+            }else{
+                return $this->error('添加失败');
+            }
+        }
+//        print_r($q);
+        $this->assign('q', $q);
+        return $this->fetch();
+    }
+
+    public function getConfirm(){
+        $params = $this->request->param();
+        $row = ReportCheckModel::getRowById($params['id']);
+        $q = [];
+        if ($row){
+            $content = json_decode($row['content'], true);
+        }
+        $tmp = [
+            'confirm' => 0,
+        ];
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            if ($content){
+                foreach ($content as $k=>$v){
+                    if ($k == $params['q_id']){
+                        $tmp = [
+                            'isfinish' => $data['isfinish'],
+                            'remark' => $data['remark'],
+                        ];
+                        $content[$k] = array_merge($v,$tmp);
+
+                    }else{
+                        $content[$k] = array_merge($v,$tmp);
+                    }
+                }
+            }
+            $d = [
+                'id'=>$data['id'],
+                'content'=>json_encode($content),
+            ];
+
+            if (!ReportCheckModel::update($d)) {
+                return $this->error('修改失败！');
+            }
+            return $this->success('修改成功。', url('index'));
+        }
+
+        $this->assign('q', $q);
         return $this->fetch();
     }
 
@@ -1088,56 +1229,88 @@ class Project extends Admin
 
     public function checkResult()
     {
-        if ($this->request->isPost()) {
-            $params = $this->request->post();
-            print_r($params);exit();
-            $ins_data = [
-                'project_id' => $params['id'],
-                'check_id' => json_encode($params['check_id']),
-                'flag' => json_encode($params['flag']),
-                'person_user' => json_encode($params['person_user']),
-                'ml' => json_encode($params['ml']),
-                'gl' => json_encode($params['gl']),
-                'mark' => json_encode($params['mark']),
-                'user_id' => session('admin_user.uid'),
-            ];
+        $params = $this->request->param();
+        $where['cid'] = session('admin_user.cid');
 
-            if (!ProjectCheck::create($ins_data)) {
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            $tmp = [];
+            if ($data){
+                foreach ($data['flag'] as $k=>$v){
+                    if ($v == 1){
+                        if (empty($data['ml'][$k])){
+                            $data['ml'][$k] = $data['check_ml'][$k];
+                        }elseif ($data['ml'][$k] > 0){
+                            $data['ml'][$k] = '-'.$data['ml'][$k];
+                        }
+                    }else{
+                        if (empty($data['ml'][$k]) || $data['ml'][$k] < 0){
+                            $data['ml'][$k] = 0;
+                        }else{
+                            $data['ml'][$k] = (int)$data['ml'][$k];
+                        }
+                    }
+                    $tmp[$k] = [
+                        'check_id' => $data['check_id'][$k],
+                        'check_name' => $data['check_name'][$k],
+                        'check_ml' => $data['check_ml'][$k],
+                        'flag' => $data['flag'][$k],
+                        'person_user' => $data['person_user'][$k],
+                        'ml' => $data['ml'][$k],
+                        'gl' => $data['gl'][$k],
+                        'mark' => $data['mark'][$k],
+                    ];
+
+                }
+                $ins_data = [
+                    'cid' => $where['cid'],
+                    'report_id' => $data['report_id'],
+                    'project_id' => $data['project_id'],
+                    'content' => json_encode($tmp),
+                    'user_id' => session('admin_user.uid'),
+                ];
+
+            if (!ReportCheckModel::create($ins_data)) {
                 return $this->error('添加失败！');
             }
             return $this->success('添加成功。', url('index'));
+            }
         }
-
-        $params = $this->request->param();
-        $where['cid'] = session('admin_user.cid');
         $where['status'] = 1;
         $where['cat_id'] = $params['check_cat'];
-
         $res = ItemModel::with('cat')->where($where)->select();
-        $data = [];
+        $list = [];
         if ($res) {
             foreach ($res as $k => $v) {
-                $data[$v['cat_id']]['data'][] = $v;
+                $list[$v['cat_id']]['data'][] = $v;
             }
         }
-
 
         $map = [
-            'project_id' => $params['id']
+            'report_id' => $params['report_id']
         ];
-        $score_log = ProjectCheck::where($map)->order('id desc')->select();
-        if ($score_log) {
-            foreach ($score_log as $k => $v) {
-                $score_log[$k]['score'] = json_decode($v['score'], true);
-                $score_log[$k]['mark'] = json_decode($v['mark'], true);
+        $check_log = ReportCheckModel::where($map)->order('id desc')->select();
+        if ($check_log) {
+            foreach ($check_log as $k => $v) {
+                $content = json_decode($v['content'], true);
+                if ($content){
+                    foreach ($content as $key=>$val){
+                        $content[$key]['flag_name'] = $val['flag'] ? '有' : '无';
+                        $content[$key]['person_select_id'] = $this->deal_data(json_encode(user_array($val['person_user'])));
+                    }
+                }
+                $check_log[$k]['content'] = $content;
+                $check_log[$k]['user_name'] = AdminUser::getUserById($v['user_id'])['realname'];
             }
         }
-//        print_r($score_log);
-        if (!$score_log) {
-            $score_log = [];
+//        print_r($check_log);
+        if (!$check_log) {
+            $check_log = [];
         }
-        $this->assign('data_list', $data);
-        $this->assign('score_log', $score_log);
+//        print_r($list);
+//        print_r($check_log);
+        $this->assign('data_list', $list);
+        $this->assign('check_log', $check_log);
         $this->assign('cat_option', ItemModel::getCat());
         $this->assign('item_option', ItemModel::getItem());
         return $this->fetch();
