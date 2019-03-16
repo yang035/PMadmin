@@ -302,7 +302,12 @@ class Subject extends Admin
                 if ('id' == $k) {
                     continue;
                 }
-                $data[$k] = json_encode(user_array($v));
+                if ($k == 'send_user'){
+                    $data[$k] = json_encode(user_array1($v));
+                }else{
+                    $data[$k] = json_encode(user_array($v));
+                }
+
             }
 //            print_r($data);exit();
             Db::startTrans();

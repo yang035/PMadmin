@@ -882,6 +882,25 @@ function user_array($val, $old_val = '', $s1 = ',', $s2 = ',')
     return '';
 }
 
+function user_array1($val, $old_val = '', $s1 = ',', $s2 = ',')
+{
+    $data = explode($s1, trim($val, $s2));
+    if (!empty($data[0])) {
+        $data = array_flip($data);
+        foreach ($data as $k => $v) {
+            $data[$k] = 'a';
+        }
+        //新值与数据库中值合并
+        if (!empty($old_val)) {
+            $old_val = json_decode($old_val, true);
+            $new = $old_val + $data;//数字索引相加合并数组，注意顺序，保证老值不被替换
+            return $new;
+        }
+        return $data;
+    }
+    return '';
+}
+
 /**
  * @param $data
  * @return float|int
