@@ -33,7 +33,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">描述</label>
         <div class="layui-input-inline">
-            <textarea type="text" class="layui-textarea field-remark" name="remark" lay-verify="required" autocomplete="off" readonly placeholder="请输入描述"></textarea>
+            <textarea type="text" class="layui-textarea field-remark" name="remark" lay-verify="required" autocomplete="off" placeholder="请输入描述"></textarea>
         </div>
         <div class="layui-form-mid red">*</div>
     </div>

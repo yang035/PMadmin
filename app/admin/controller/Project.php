@@ -849,6 +849,12 @@ class Project extends Admin
                                 foreach ($content as $kk=>$vv){
                                     $content[$kk]['flag'] = $vv['flag'] ? '有' : '无';
                                     $content[$kk]['person_user'] = $this->deal_data(json_encode(user_array($vv['person_user'])));
+                                    if (!isset($vv['isfinish'])){
+                                        $content[$kk]['isfinish'] = 0;
+                                    }
+                                    if (!isset($vv['remark'])){
+                                        $content[$kk]['remark'] = '';
+                                    }
                                 }
                             }
                             $reply[$key]['content'] = $content;
