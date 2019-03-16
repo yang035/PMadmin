@@ -265,6 +265,8 @@ layui.define(['element', 'form', 'table'], function(exports) {
                                 location.href = res.url;
                                 location.reload();
                             }
+                        }else {
+                            lock=false;
                         }
                     });
                 }

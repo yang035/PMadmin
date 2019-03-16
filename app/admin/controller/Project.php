@@ -1244,6 +1244,9 @@ class Project extends Admin
             if ($data){
                 foreach ($data['flag'] as $k=>$v){
                     if ($v == 1){
+                        if (empty($data['person_user'][$k])){
+                            return $this->error('有问题项，责任人必选！');
+                        }
                         if (empty($data['ml'][$k])){
                             $data['ml'][$k] = $data['check_ml'][$k];
                         }elseif ($data['ml'][$k] > 0){
