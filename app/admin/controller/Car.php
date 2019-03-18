@@ -118,6 +118,17 @@ class Car extends Admin
         return $this->fetch('itemform');
     }
 
+    public function read($id = 0)
+    {
+        $row = ItemModel::where('id', $id)->find()->toArray();
+        $row['remark'] = htmlspecialchars_decode($row['remark']);
+        $car_color = config('other.car_color');
+        $this->assign('data_list', $row);
+        $this->assign('cat_option',ItemModel::getCat());
+        $this->assign('car_color',$car_color);
+        return $this->fetch();
+    }
+
     public function delItem()
     {
         $id = input('param.id/a');

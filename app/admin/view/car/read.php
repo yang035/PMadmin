@@ -2,10 +2,10 @@
     <div class="layui-card">
         <div class="layui-card-body">
             <b>类型：</b>{$cat_option[$data_list['cat_id']]}<br>
-            <b>职位名称：</b>{$data_list['name']}<br>
-            <b>职位代码：</b>{$data_list['code']}<br>
-            <b>职位职责：</b>{$data_list['remark']}<br>
-            <b>任职要求：</b>{$data_list['requirements']}<br>
+            <b>名称：</b>{$data_list['name']}<br>
+            <b>颜色：</b>{$car_color[$data_list['color']]}<br>
+            <b>车牌号：</b>{$data_list['idcard']}<br>
+            <b>具体配置：</b>{$data_list['remark']}<br>
             <b>更新时间：</b>{$data_list['update_time']}<br>
         </div>
     </div>

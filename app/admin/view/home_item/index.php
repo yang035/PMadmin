@@ -42,7 +42,7 @@
     <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=home_item&id={{ d.id }}">
 </script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
-    <a href="{:url('home/detail')}?id={{ d.id }}&yulan=1" class="layui-btn layui-btn-xs layui-btn-normal">预览</a>
+    <a href="{:url('home/detail')}?id={{ d.id }}&yulan=1" target="_blank" class="layui-btn layui-btn-xs layui-btn-normal">预览</a>
     <a href="{:url('edit')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
 <!--    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
 </script>
@@ -59,7 +59,9 @@
             }
             ,cols: [[ //表头
                 {type:'checkbox'},
-                {field: 'title', title: '文章标题'},
+                {field: 'title', title: '文章标题', templet:function(d){
+                        return "<a class='mcolor' target='_blank' href=\"{:url('home/detail')}?id="+d.id+"&yulan=1\" >"+d.title+"</a>";
+                    }},
                 {field: 'cat_id', title: '文章分类'},
                 {field: 'author', title: '作者'},
                 {field: 'summarize', title: '摘要'},

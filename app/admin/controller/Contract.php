@@ -110,6 +110,15 @@ class Contract extends Admin
         return $this->fetch('itemform');
     }
 
+    public function read($id = 0)
+    {
+        $row = ItemModel::where('id', $id)->find()->toArray();
+        $row['remark'] = htmlspecialchars_decode($row['remark']);
+        $this->assign('data_list', $row);
+        $this->assign('cat_option',ItemModel::getCat());
+        return $this->fetch();
+    }
+
     public function delItem()
     {
         $id = input('param.id/a');

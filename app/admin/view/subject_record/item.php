@@ -3,6 +3,9 @@
         float: left;
         width: auto;
     }
+    a:hover{
+        cursor:pointer
+    }
 </style>
 <div class="page-toolbar">
     <div class="page-filter">
@@ -36,6 +39,7 @@
     <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=contacts_item&id={{ d.id }}">
 </script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
+    <a onclick="read({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">查看</a>
     <a href="#" onclick="add_user('editItem',{{ d.subject_id }},{{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
 <!--    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
 </script>
@@ -56,7 +60,9 @@
                 {field: 'subject_id', title: '项目名称', templet:function(d){
                         return d.cat.name;
                     }},
-                {field: 'name', title: '记录主题'},
+                {field: 'name', title: '记录主题', templet:function(d){
+                        return "<a class='mcolor' onclick='read("+d.id+")'>"+d.name+"</a>";
+                    }},
                 {field: 'content', title: '洽商记录'},
                 // {field: 'report', title: '洽商报告'},
                 {field: 'update_time', title: '时间'},
@@ -81,6 +87,24 @@
             content: open_url,
             success:function (layero, index) {
                 var body = layer.getChildFrame('body', index);  //巧妙的地方在这里哦
+            }
+        });
+    }
+
+    function read(id){
+        var open_url = "{:url('read')}?id="+id;
+        if (open_url.indexOf('?') >= 0) {
+            open_url += '&hisi_iframe=yes';
+        } else {
+            open_url += '?hisi_iframe=yes';
+        }
+        layer.open({
+            type:2,
+            title :'详情',
+            maxmin: true,
+            area: ['800px', '600px'],
+            content: open_url,
+            success:function (layero, index) {
             }
         });
     }

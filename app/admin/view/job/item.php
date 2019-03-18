@@ -3,6 +3,9 @@
         float: left;
         width: auto;
     }
+    a:hover{
+        cursor:pointer
+    }
 </style>
 <div class="page-toolbar">
     <div class="page-filter">
@@ -56,7 +59,9 @@
             }
             ,cols: [[ //表头
                 {type:'checkbox'},
-                {field: 'name', title: '名称'},
+                {field: 'name', title: '名称', templet:function(d){
+                        return "<a class='mcolor' onclick='read("+d.id+")'>"+d.name+"</a>";
+                    }},
                 {field: 'cat_id', title: '类别', templet:function(d){
                         return d.cat.name;
                     }},

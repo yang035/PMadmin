@@ -153,6 +153,15 @@ class SubjectRecord extends Admin
         return $this->fetch('itemform');
     }
 
+    public function read($id = 0)
+    {
+        $row = RecordModel::where('id', $id)->find()->toArray();
+        $row['content'] = htmlspecialchars_decode($row['content']);
+        $this->assign('data_list', $row);
+        $this->assign('cat_option',SubjectItem::getItem());
+        return $this->fetch();
+    }
+
     public function delItem()
     {
         $id = input('param.id/a');

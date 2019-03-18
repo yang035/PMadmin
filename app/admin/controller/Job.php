@@ -117,7 +117,7 @@ class Job extends Admin
         $row['remark'] = htmlspecialchars_decode($row['remark']);
         $row['requirements'] = htmlspecialchars_decode($row['requirements']);
         $this->assign('data_list', $row);
-        $this->assign('cat_option',ItemModel::getOption());
+        $this->assign('cat_option',ItemModel::getCat());
         return $this->fetch();
     }
 

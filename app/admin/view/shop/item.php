@@ -3,6 +3,9 @@
         float: left;
         width: auto;
     }
+    a:hover{
+        cursor:pointer
+    }
 </style>
 <div class="page-toolbar">
     <div class="page-filter">
@@ -56,7 +59,9 @@
             }
             ,cols: [[ //表头
                 {type:'checkbox'},
-                {field: 'name', title: '名称'},
+                {field: 'name', title: '名称', templet:function(d){
+                        return "<a class='mcolor' onclick='read("+d.id+")'>"+d.name+"</a>";
+                    }},
                 {field: 'cat_id', title: '类别', templet:function(d){
                         return d.cat.name;
                     }},
@@ -76,7 +81,7 @@
             type:2,
             title :'详情',
             maxmin: true,
-            area: ['800px', '600px'],
+            area: ['1000px', '800px'],
             content: open_url,
             success:function (layero, index) {
             }
