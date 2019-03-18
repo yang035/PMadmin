@@ -26,6 +26,14 @@
         <div class="layui-form-mid red">*</div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">加班类型</label>
+        <div class="layui-input-inline">
+            <select name="overtime_type" class="field-overtime_type" type="select" lay-filter="overtime_type">
+                {$overtime_option}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">开始时间</label>
         <div class="layui-input-inline" style="width: 250px">
             <input type="text" class="layui-input field-start_time" name="start_time" lay-verify="required" autocomplete="off" readonly placeholder="选择开始时间">
@@ -58,14 +66,6 @@
             <textarea type="text" class="layui-textarea field-reason" name="reason" autocomplete="off" placeholder="请输入加班事由" lay-verify="required"></textarea>
         </div>
         <div class="layui-form-mid" style="color: red">*</div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">加班类型</label>
-        <div class="layui-input-inline">
-            <select name="overtime_type" class="field-overtime_type" type="select" lay-filter="overtime_type">
-                {$overtime_option}
-            </select>
-        </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">附件说明</label>
@@ -131,8 +131,8 @@
 <script>
     var formData = {:json_encode($data_info)};
 
-    layui.use(['jquery', 'laydate','upload'], function() {
-        var $ = layui.jquery, laydate = layui.laydate,upload = layui.upload;
+    layui.use(['jquery', 'laydate','upload','form'], function() {
+        var $ = layui.jquery, laydate = layui.laydate,upload = layui.upload,form = layui.form;
         laydate.render({
             elem: '.field-start_time',
             type: 'date',
@@ -190,6 +190,7 @@
             timeLong1 = days*24+hours;
             $('.field-time_long1').val(timeLong1);
         }
+
         var uploadInst = upload.render({
             elem: '#attachment-upload'
             ,url: '/upload/'

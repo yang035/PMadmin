@@ -183,9 +183,9 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
 
         $data_list = ScoreModel::hasWhere('adminUser',$map1)->field("`Score`.*, `AdminUser`.realname")->where($map)->order('id desc')->paginate(30, false, ['query' => input('get.')]);
         $name_arr = ProjectModel::getColumn('name');
-        $myPro = ProjectModel::getMyTask(0,0);
+        $myPro = ProjectModel::getProTask(0,0);
         foreach ($data_list as $k=>$v){
-            $data_list[$k]['pname'] = $v['project_id'] ? $name_arr[$v['project_id']] : '系统';
+            $data_list[$k]['pname'] = $v['project_id'] ? $name_arr[$v['project_id']] : '无';
             $data_list[$k]['subject_name'] = $v['subject_id'] ? $myPro[$v['subject_id']] : '其他';
         }
         // 分页

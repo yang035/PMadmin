@@ -554,14 +554,20 @@ class Approval extends Admin
                 return $this->error($result);
             }
             unset($data['id']);
+            $a = $data['start_time'] . ' ' . $data['start_time1'];
+            $b = $data['end_time'] . ' ' . $data['end_time1'];
+            $c = (int)((strtotime($b) - strtotime($a))/3600);
+            if ($c < 2){
+                return $this->error('加班时长不到2个小时');
+            }
             Db::startTrans();
             try {
                 $approve = [
                     'project_id' => $data['project_id'],
                     'class_type' => $data['class_type'],
                     'cid' => session('admin_user.cid'),
-                    'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
-                    'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
+                    'start_time' => $a,
+                    'end_time' => $b,
                     'time_long' => $data['time_long'],
                     'user_id' => session('admin_user.uid'),
                     'send_user' => json_encode(user_array($data['send_user'])),
@@ -896,54 +902,7 @@ class Approval extends Admin
     public function read()
     {
         $params = $this->request->param();
-        if ($this->request->isPost()) {
-            $data = $this->request->post();
-            if (!empty($data['atype'])) {
-                if (5 == $data['atype'] && 8 == $data['class_type']) {
-                    if (isset($data['before_img'])) {
-                        $data['before_img'] = array_filter($data['before_img']);
-                        if (count($data['before_img']) < 4) {
-                            return $this->error('照片上传数量不够！');
-                        }
-                        $tmp['before_img'] = json_encode($data['before_img']);
-                    }
-                    if (isset($data['after_img'])) {
-                        $data['after_img'] = array_filter($data['after_img']);
-                        if (count($data['after_img']) < 4) {
-                            return $this->error('照片上传数量不够！');
-                        }
-                        $tmp['after_img'] = json_encode($data['after_img']);
-                    }
 
-                    $res = CarModel::where('aid', $data['id'])->update($tmp);
-                } elseif (3 == $data['atype']) {
-                    unset($data['atype'], $data['class_type']);
-//                $res= ApprovalModel::where('id',$data['id'])->setField('status',$data['status']);
-                    //事务提交，保证数据一致性
-                    Db::startTrans();
-                    try {
-                        ApprovalModel::update($data);
-                        $uid = session('admin_user.uid');
-                        $sql = "UPDATE tb_approval SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$data['id']}";
-                        $res = ApprovalModel::execute($sql);
-                        // 提交事务
-                        Db::commit();
-                    } catch (\Exception $e) {
-                        // 回滚事务
-                        Db::rollback();
-                    }
-                }
-            }elseif (4 == $data['class_type']){
-                unset($data['class_type']);
-                $data['cid'] = session('admin_user.cid');
-                $data['user_id'] = session('admin_user.uid');
-                $res = ApprovalReportModel::create($data);
-            }
-            if (!$res) {
-                return $this->error('处理失败！');
-            }
-            return $this->success("操作成功{$this->score_value}");
-        }
         switch ($params['class_type']) {
             case 1:
                 $table = 'tb_approval_leave';
@@ -1005,6 +964,77 @@ class Approval extends Admin
         $list = db('approval')->alias('a')->field($fields)
             ->join("{$table} b", 'a.id = b.aid', 'left')
             ->where($map)->find();
+//print_r($list);
+        $res = false;
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            if (!empty($data['atype'])) {
+                if (5 == $data['atype'] && 8 == $data['class_type']) {
+                    if (isset($data['before_img'])) {
+                        $data['before_img'] = array_filter($data['before_img']);
+                        if (count($data['before_img']) < 4) {
+                            return $this->error('照片上传数量不够！');
+                        }
+                        $tmp['before_img'] = json_encode($data['before_img']);
+                    }
+                    if (isset($data['after_img'])) {
+                        $data['after_img'] = array_filter($data['after_img']);
+                        if (count($data['after_img']) < 4) {
+                            return $this->error('照片上传数量不够！');
+                        }
+                        $tmp['after_img'] = json_encode($data['after_img']);
+                    }
+
+                    $res = CarModel::where('aid', $data['id'])->update($tmp);
+                } elseif (3 == $data['atype']) {
+//                $res= ApprovalModel::where('id',$data['id'])->setField('status',$data['status']);
+
+                    //事务提交，保证数据一致性
+                    Db::startTrans();
+                    try {
+                        if (6 == $data['class_type'] && 2 == $data['status']){
+                            $c = (int)((strtotime($list['end_time']) - strtotime($list['start_time']))/3600);
+                            $per_score = config('score.hour_score') ? config('score.hour_score') : 0;
+                            $gl_add_score = $per_score*$c;
+                            $score = [
+                                'subject_id' => $list['project_id'],
+                                'project_id' => 0,
+                                'cid' => session('admin_user.cid'),
+                                'project_code' => '',
+                                'user' => $list['user_id'],
+                                'gl_add_score' => $gl_add_score,
+                                'remark' => "加班时间段{$list['start_time']}~{$list['end_time']},计算{$c}小时，鼓励{$gl_add_score}斗",
+                                'user_id' => session('admin_user.uid'),
+                                'create_time' => time(),
+                                'update_time' => time(),
+                            ];
+                            db('score')->insert($score);
+                        }
+
+                        unset($data['atype'], $data['class_type']);
+                        ApprovalModel::update($data);
+                        $uid = session('admin_user.uid');
+                        $sql = "UPDATE tb_approval SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$data['id']}";
+                        $res = ApprovalModel::execute($sql);
+                        // 提交事务
+                        Db::commit();
+                    } catch (\Exception $e) {
+                        // 回滚事务
+                        Db::rollback();
+                    }
+                }
+            }elseif (4 == $data['class_type']){
+                unset($data['class_type']);
+                $data['cid'] = session('admin_user.cid');
+                $data['user_id'] = session('admin_user.uid');
+                $res = ApprovalReportModel::create($data);
+            }
+            if (!$res) {
+                return $this->error('处理失败！');
+            }
+            return $this->success("操作成功{$this->score_value}");
+        }
+
         switch ($params['class_type']) {
             case 1:
                 $leave_type = config('other.leave_type');
