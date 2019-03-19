@@ -1,6 +1,5 @@
-<div id="daka" style="display:none;">
-    <span class="layui-btn layui-btn-lg layui-btn-radius">签到</span>
-    <span class="layui-btn layui-btn-lg layui-btn-danger layui-btn-radius">签退</span>
+<div style="display: none">
+    <a href="javascript:void(0)" class="layui-btn layui-btn-lg layui-btn-danger layui-btn-radius clockin">打卡</a>
 </div>
 <hr>
 <div id="container" style="height: 500px"></div>
@@ -153,7 +152,10 @@
             }
         });
 
-        $('#daka').click(function () {
+        $('.clockin').click(function () {
+            getLocation();
+        });
+        $('.clockout').click(function () {
             getLocation();
         });
 
