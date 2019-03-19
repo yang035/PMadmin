@@ -1,4 +1,8 @@
-<div id="daka" class="layui-btn" style="display:none;">打卡</div>
+<div id="daka" style="display:none;">
+    <span class="layui-btn layui-btn-lg layui-btn-radius">签到</span>
+    <span class="layui-btn layui-btn-lg layui-btn-danger layui-btn-radius">签退</span>
+</div>
+<hr>
 <div id="container" style="height: 500px"></div>
 <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
 <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>

@@ -282,6 +282,7 @@
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <input type="hidden" class="field-id" name="aid" value="{$Request.param.id}">
+                        <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
                         <input type="hidden" class="field-class_type" name="class_type" value="{$Request.param.class_type}">
                         <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
                         <a href="javascript:history.back()" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
