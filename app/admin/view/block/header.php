@@ -3,6 +3,7 @@
 <html>
 <head>
     <title>{$_admin_menu_current['title']}</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
     <link rel="stylesheet" href="__ADMIN_JS__/layui/css/layui.css?v={:config('pmadmin.version')}">
     <link rel="stylesheet" href="__ADMIN_CSS__/theme.css?v={:config('pmadmin.version')}">
