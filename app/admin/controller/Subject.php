@@ -169,6 +169,12 @@ class Subject extends Admin
         }
 
         $row = ItemModel::where('id', $id)->find()->toArray();
+        if ($row){
+            if (!empty($row['attachment'])){
+                $attachment = explode(',',$row['attachment']);
+                $row['attachment_show'] = array_filter($attachment);
+            }
+        }
         $this->assign('cur_time', empty($row['idcard']) ? date('YmdHis') : $row['idcard']);
         $this->assign('data_info', $row);
         $this->assign('subject_option', ItemModel::getOption($row['cat_id']));

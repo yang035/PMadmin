@@ -159,6 +159,12 @@ class Project extends Admin
         $row['deal_user_id'] = $this->deal_data($row['deal_user']);
         $row['copy_user_id'] = $this->deal_data($row['copy_user']);
         $row['send_user_id'] = $this->deal_data($row['send_user']);
+        if ($row){
+            if (!empty($row['attachment'])){
+                $attachment = explode(',',$row['attachment']);
+                $row['attachment_show'] = array_filter($attachment);
+            }
+        }
         if ($row['pid']) {
             $map = [];
             $map['cid'] = $cid;
@@ -340,6 +346,12 @@ class Project extends Admin
         }
 
 //        $row['time_long'] = floor((strtotime($row['end_time'])-strtotime($row['start_time']))/86400);
+        if ($row){
+            if (!empty($row['attachment'])){
+                $attachment = explode(',',$row['attachment']);
+                $row['attachment_show'] = array_filter($attachment);
+            }
+        }
         $row['manager_user_id'] = $this->deal_data($row['manager_user']);
         $row['deal_user_id'] = $this->deal_data($row['deal_user']);
         $row['copy_user_id'] = $this->deal_data($row['copy_user']);
@@ -349,6 +361,7 @@ class Project extends Admin
         $row['deal_user'] = $this->deal_data_id($row['deal_user']);
         $row['copy_user'] = $this->deal_data_id($row['copy_user']);
         $row['send_user'] = $this->deal_data_id($row['send_user']);
+
 
         if ($row['pid']) {
             $map = [];
@@ -779,6 +792,13 @@ class Project extends Admin
         $row['deal_user_id'] = $this->deal_data($row['deal_user']);
         $row['copy_user_id'] = $this->deal_data($row['copy_user']);
         $row['send_user_id'] = $this->deal_data($row['send_user']);
+        if ($row){
+            if (!empty($row['attachment'])){
+                $attachment = explode(',',$row['attachment']);
+                $row['attachment_show'] = array_filter($attachment);
+            }
+        }
+//        print_r($row);
         $child = ProjectModel::getChildCount($row['id']);
 //        print_r($child);
         if ($child){

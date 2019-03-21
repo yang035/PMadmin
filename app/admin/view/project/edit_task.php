@@ -51,8 +51,19 @@
                             <br>
                             历时：{$data_info['time_long']}
                             <br>
-                            附件说明：{$data_info['attachment']}
-                            <br>
+                            附件说明：
+                            <div class="layui-timeline-content layui-text">
+                                {notempty name="data_info['attachment_show']"}
+                                <ul>
+                                    {volist name="data_info['attachment_show']" id="v"}
+                                    <li>
+                                        <a target="_blank" href="{$v}">附件{$i}</a>
+                                    </li>
+                                    {/volist}
+                                </ul>
+                                <br>
+                                {/notempty}
+                            </div>
                             负责人：{$data_info['manager_user_id']|default=''}
                             <br>
                             参与人：{$data_info['deal_user_id']|default=''}
@@ -171,7 +182,7 @@
                                 <ul>
                                     {volist name="vo['attachment']" id="v"}
                                     <li>
-                                        <a target="_blank" href="{$v}">{$v}</a>
+                                        <a target="_blank" href="{$v}">附件{$i}</a>
                                     </li>
                                     {/volist}
                                 </ul>

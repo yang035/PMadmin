@@ -103,6 +103,18 @@
                     <input class="layui-input field-attachment" type="hidden" name="attachment" value="">
                 </div>
             </div>
+            <div class="layui-timeline-content layui-text">
+                {notempty name="data_info['attachment_show']"}
+                <ul>
+                    {volist name="data_info['attachment_show']" id="v"}
+                    <li>
+                        <a target="_blank" href="{$v}">附件{$i}</a>
+                    </li>
+                    {/volist}
+                </ul>
+                <br>
+                {/notempty}
+            </div>
         </div>
     </div>
     <div class="layui-form-item">
