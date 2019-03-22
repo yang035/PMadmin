@@ -40,6 +40,13 @@
                 {type:'checkbox'}
                 ,{field: 'username', title: '用户名'}
                 ,{field: 'realname', title: '真实姓名'}
+                ,{field: 'sex', title: '性别', templet:function(d){
+                        if (d.sex == 2){
+                            return '女';
+                        }else {
+                            return '男'
+                        }
+                    }}
                 ,{field: 'role_id', title: '角色', templet:function(d){
                     if (d.role){
                         return d.role.name;

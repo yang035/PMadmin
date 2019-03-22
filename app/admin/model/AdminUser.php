@@ -339,4 +339,18 @@ class AdminUser extends Model
         $data = self::field('id,realname')->select();
         return json_encode($data);
     }
+
+    public static function getSexOption($type = 0)
+    {
+        $leaveType = config('other.sex_type');
+        $str = '';
+        foreach ($leaveType as $k => $v) {
+            if ($type == $k) {
+                $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+            } else {
+                $str .= '<option value="'.$k.'">'.$v.'</option>';
+            }
+        }
+        return $str;
+    }
 }

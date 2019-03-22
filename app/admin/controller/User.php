@@ -138,6 +138,7 @@ class User extends Admin
         $this->assign('company_option', AdminCompany::getOption());
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 2);
+        $this->assign('sex_type', UserModel::getSexOption());
         return $this->fetch('userform');
     }
 
@@ -217,6 +218,7 @@ class User extends Admin
         $this->assign('company_option', AdminCompany::getOption());
         $this->assign('rule_option',JobCatModel::getOption1());
         $this->assign('data_info', $row);
+        $this->assign('sex_type', UserModel::getSexOption());
         return $this->fetch('userform');
     }
 
@@ -247,6 +249,7 @@ class User extends Admin
         $row['cname'] = AdminCompany::getCompanyById(session('admin_user.cid'))['name'];
         $row['dep_name'] = AdminDepartment::getRowById(session('admin_user.depid'))['name'];
         $row['job_item'] = !empty($row['job_item']) ? JobItemModel::getItem()[$row['job_item']] : '无';
+        $this->assign('sex_type', UserModel::getSexOption());
         $this->assign('data_info', $row);
         return $this->fetch();
     }

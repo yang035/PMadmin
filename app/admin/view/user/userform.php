@@ -97,6 +97,14 @@
             <div class="layui-form-mid" style="color: red">*</div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-inline">
+                <select name="sex" class="field-sex" type="select">
+                    {$sex_type}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">联系手机</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-mobile" name="mobile" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" lay-verify="phone" maxlength="11"
