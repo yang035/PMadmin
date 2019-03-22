@@ -23,7 +23,7 @@
 </script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
     <a href="{:url('editUser')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a>
-<!--    <a href="{:url('delUser')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
+    <a href="{:url('UserInfo/addItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">入职备案</a>
 </script>
 <script type="text/javascript">
     layui.use(['table'], function() {
