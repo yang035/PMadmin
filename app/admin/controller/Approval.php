@@ -1024,9 +1024,10 @@ class Approval extends Admin
                     }
                 }
             }elseif (4 == $data['class_type']){
-                unset($data['class_type']);
+                unset($data['class_type'],$data['id']);
                 $data['cid'] = session('admin_user.cid');
                 $data['user_id'] = session('admin_user.uid');
+//                print_r($data);exit();
                 $res = ApprovalReportModel::create($data);
             }
             if (!$res) {

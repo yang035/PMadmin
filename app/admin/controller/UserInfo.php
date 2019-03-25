@@ -89,8 +89,63 @@ class UserInfo extends Admin
             if ($result !== true) {
                 return $this->error($result);
             }
+
+            $main_user = array_filter($data['main_user']);
+            $jiating = [];
+            if (!empty($main_user)){
+                foreach ($main_user as $k=>$v){
+                    $jiating[$k]['main_user'] = $v;
+                    $jiating[$k]['relation_type'] = $data['relation_type'][$k];
+                    $jiating[$k]['user_age'] = $data['user_age'][$k];
+                    $jiating[$k]['company_address'] = $data['company_address'][$k];
+                    $jiating[$k]['user_phone'] = $data['user_phone'][$k];
+                }
+            }
+
+            $education_school = array_filter($data['education_school']);
+            $jiaoyu = [];
+            if (!empty($education_school)){
+                foreach ($education_school as $k=>$v){
+                    $jiaoyu[$k]['education_school'] = $v;
+                    $jiaoyu[$k]['education_date'] = $data['education_date'][$k];
+                    $jiaoyu[$k]['education_certificate'] = $data['education_certificate'][$k];
+                }
+            }
+
+            $train_school = array_filter($data['train_school']);
+            $peixun = [];
+            if (!empty($train_school)){
+                foreach ($train_school as $k=>$v){
+                    $peixun[$k]['train_school'] = $v;
+                    $peixun[$k]['train_name'] = $data['train_name'][$k];
+                    $peixun[$k]['train_date'] = $data['train_date'][$k];
+                    $peixun[$k]['train_certificate'] = $data['train_certificate'][$k];
+                }
+            }
+
+            $work_date= array_filter($data['work_date']);
+            $gongzuo = [];
+            if (!empty($work_date)){
+                foreach ($work_date as $k=>$v){
+                    $gongzuo[$k]['work_date'] = $v;
+                    $gongzuo[$k]['work_place'] = $data['work_place'][$k];
+                    $gongzuo[$k]['work_station'] = $data['work_station'][$k];
+                    $gongzuo[$k]['work_reason'] = $data['work_reason'][$k];
+                    $gongzuo[$k]['work_man'] = $data['work_man'][$k];
+                }
+            }
+
+            foreach ($data as $k=>$v){
+                if (is_array($v)){
+                    unset($data[$k]);
+                }
+            }
+            $data['jiating'] = json_encode($jiating);
+            $data['jiaoyu'] = json_encode($jiaoyu);
+            $data['peixun'] = json_encode($peixun);
+            $data['gongzuo'] = json_encode($gongzuo);
+
             unset($data['real_name'],$data['id']);
-//            print_r($data);exit();
 
             if (!UserInfoModel::create($data)) {
                 return $this->error('添加失败');
@@ -103,6 +158,7 @@ class UserInfo extends Admin
         $this->assign('education_type', UserInfoModel::getEducationOption());
         $this->assign('marital_type', UserInfoModel::getMaritalOption());
         $this->assign('nation_type', NationModel::getOption());
+        $this->assign('relation_type', UserInfoModel::getRelationOption());
         $this->assign('real_name', $params['real_name']);
         return $this->fetch('itemform');
     }
@@ -140,6 +196,7 @@ class UserInfo extends Admin
         $this->assign('education_type', UserInfoModel::getEducationOption());
         $this->assign('marital_type', UserInfoModel::getMaritalOption());
         $this->assign('nation_type', NationModel::getOption());
+        $this->assign('relation_type', UserInfoModel::getRelationOption());
         $this->assign('real_name', $row['real_name']);
         return $this->fetch('itemform');
     }
