@@ -24,7 +24,7 @@ class UserInfo extends Admin
 
         $tab_data['menu'] = [
             [
-                'title' => '洽商情况',
+                'title' => '备案列表',
                 'url' => 'admin/UserInfo/index',
             ],
         ];
