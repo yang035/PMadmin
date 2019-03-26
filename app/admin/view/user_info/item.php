@@ -37,8 +37,8 @@
     <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=user_info&id={{ d.id }}">
 </script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
-    <a onclick="read({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">查看</a>
-    <a href="#" onclick="add_user('editItem',{{ d.user_id }},{{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
+    <a onclick="read1({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">查看</a>
+    <a href="#" onclick="add_user1('editItem',{{ d.user_id }},{{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
 <!--    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
 </script>
 <script type="text/javascript">
@@ -105,6 +105,11 @@
             success:function (layero, index) {
             }
         });
+    }
+
+    function read1(id){
+        var open_url = "{:url('read')}?id="+id;
+        window.location.href = open_url;
     }
 
     new SelectBox($('.box2'),{$user_select},function(result){
