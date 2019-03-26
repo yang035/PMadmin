@@ -336,7 +336,12 @@ class AdminUser extends Model
     }
 
     public static function inputSearchUser(){
-        $data = self::field('id,realname')->select();
+        $where = [
+            'status' => 1,
+            'is_show' => 0,
+            'company_id' => session('admin_user.cid'),
+        ];
+        $data = self::where($where)->field('id,realname')->select();
         return json_encode($data);
     }
 
