@@ -23,7 +23,7 @@
         </form>
     </div>
     <div class="layui-btn-group fl">
-        <a href="#" onclick="add_user1('addItem',{$Request.param.user_id})" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加</a>
+        <a href="#" onclick="add_user1('addItem',{$Request.param.user_id|default=0})" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加</a>
         <a data-href="{:url('status?table=user_info&val=1')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-play" data-table="dataTable">&nbsp;启用</a>
         <a data-href="{:url('status?table=user_info&val=0')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-pause" data-table="dataTable">&nbsp;禁用</a>
         <!--            <a data-href="{:url('delItem')}" class="layui-btn layui-btn-primary j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>-->
@@ -65,7 +65,7 @@
         });
     });
 
-    function add_user(url,user_id,id='') {
+    function add_user(url,user_id,id) {
         var open_url = "{:url('"+url+"')}?user_id="+user_id+"&id="+id+"&real_name={$Request.param.real_name}";
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
@@ -84,7 +84,7 @@
         });
     }
 
-    function add_user1(url,user_id,id='') {
+    function add_user1(url,user_id,id) {
         var open_url = "{:url('"+url+"')}?user_id="+user_id+"&id="+id+"&real_name={$Request.param.real_name}";
         window.location.href = open_url;
     }
