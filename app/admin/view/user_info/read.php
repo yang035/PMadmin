@@ -1,5 +1,20 @@
 <link rel="stylesheet" href="__ADMIN_JS__/pictureViewer/css/pictureViewer.css">
 <style>
+    .layui-form-pane .layui-form-label {
+        width: 130px;
+        padding: 8px 15px;
+        height: 38px;
+        line-height: 20px;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 2px 0 0 2px;
+        text-align: center;
+        background-color: #FBFBFB;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        box-sizing: border-box;
+    }
     input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
         -webkit-appearance: none;
     }
@@ -149,6 +164,100 @@
                             <div class="layui-input-inline">
                                 <input type="radio" class="field-status" name="status" value="1" title="启用" checked>
                                 <input type="radio" class="field-status" name="status" value="0" title="禁用">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title">补充资料</h2>
+                <div class="layui-colla-content">
+                    <div class="layui-col-md6">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">员工性质</label>
+                            <div class="layui-input-inline">
+                                <select name="man_type" class="field-man_type" type="select">
+                                    {$man_type}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">工资卡开户行</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input field-open_bank" name="open_bank"
+                                       autocomplete="off" placeholder="工资卡开户行">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">工资卡号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input field-bank_num" name="bank_num"
+                                       autocomplete="off" placeholder="工资卡号">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">入职时间</label>
+                            <div class="layui-input-inline" style="width: 250px">
+                                <input type="text" class="layui-input field-start_date" name="start_date" autocomplete="off" readonly placeholder="入职时间">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">离职时间</label>
+                            <div class="layui-input-inline" style="width: 250px">
+                                <input type="text" class="layui-input field-end_date" name="end_date" autocomplete="off" readonly placeholder="离职时间">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">合同开始时间</label>
+                            <div class="layui-input-inline" style="width: 250px">
+                                <input type="text" class="layui-input field-contract_start_date" name="contract_start_date" autocomplete="off" readonly placeholder="合同开始时间">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">合同结束时间</label>
+                            <div class="layui-input-inline" style="width: 250px">
+                                <input type="text" class="layui-input field-contract_end_date" name="contract_end_date" autocomplete="off" readonly placeholder="合同结束时间">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md6">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">社保</label>
+                            <div class="layui-input-inline">
+                                <input type="radio" class="field-social" name="social" value="1" title="有" checked>
+                                <input type="radio" class="field-social" name="social" value="0" title="无">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">社保开始时间</label>
+                            <div class="layui-input-inline" style="width: 250px">
+                                <input type="text" class="layui-input field-social_start_date" name="social_start_date" autocomplete="off" readonly placeholder="社保开始时间">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">社保结束时间</label>
+                            <div class="layui-input-inline" style="width: 250px">
+                                <input type="text" class="layui-input field-social_end_date" name="social_end_date" autocomplete="off" readonly placeholder="社保结束时间">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">公积金</label>
+                            <div class="layui-input-inline">
+                                <input type="radio" class="field-accumulation" name="accumulation" value="1" title="有" checked>
+                                <input type="radio" class="field-accumulation" name="accumulation" value="0" title="无">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">公积金开始时间</label>
+                            <div class="layui-input-inline" style="width: 250px">
+                                <input type="text" class="layui-input field-accumulation_start_date" name="accumulation_start_date" autocomplete="off" readonly placeholder="公积金开始时间">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">公积金结束时间</label>
+                            <div class="layui-input-inline" style="width: 250px">
+                                <input type="text" class="layui-input field-accumulation_end_date" name="accumulation_end_date" autocomplete="off" readonly placeholder="公积金结束时间">
                             </div>
                         </div>
                     </div>

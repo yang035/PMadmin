@@ -41,6 +41,20 @@ class UserInfo extends Model
         return $str;
     }
 
+    public static function getManOption($type = 0)
+    {
+        $leaveType = config('other.man_type');
+        $str = '';
+        foreach ($leaveType as $k => $v) {
+            if ($type == $k) {
+                $str .= "<option value='".$k."' selected>".$v."</option>";
+            } else {
+                $str .= "<option value='".$k."'>".$v."</option>";
+            }
+        }
+        return $str;
+    }
+
     public static function getEducationOption($type = 0)
     {
         $leaveType = config('develop.education');

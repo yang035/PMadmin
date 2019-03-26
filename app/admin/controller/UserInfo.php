@@ -159,6 +159,7 @@ class UserInfo extends Admin
         $this->assign('marital_type', UserInfoModel::getMaritalOption());
         $this->assign('nation_type', NationModel::getOption());
         $this->assign('relation_type', UserInfoModel::getRelationOption());
+        $this->assign('man_type', UserInfoModel::getManOption());
         $this->assign('real_name', $params['real_name']);
         return $this->fetch('itemform');
     }
@@ -262,6 +263,7 @@ class UserInfo extends Admin
         $this->assign('marital_type', UserInfoModel::getMaritalOption());
         $this->assign('nation_type', NationModel::getOption());
         $this->assign('relation_type', UserInfoModel::getRelationOption());
+        $this->assign('man_type', UserInfoModel::getManOption());
         $this->assign('real_name', $row['real_name']);
         return $this->fetch('itemform');
     }
@@ -289,6 +291,7 @@ class UserInfo extends Admin
         $this->assign('marital_type', UserInfoModel::getMaritalOption());
         $this->assign('nation_type', NationModel::getOption());
         $this->assign('relation_type', UserInfoModel::getRelationOption());
+        $this->assign('man_type', UserInfoModel::getManOption());
         $this->assign('real_name', $row['real_name']);
         return $this->fetch();
     }
