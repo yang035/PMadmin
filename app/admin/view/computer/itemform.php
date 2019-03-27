@@ -232,7 +232,7 @@
             var e = new Enumerator (properties);
             for (;!e.atEnd();e.moveNext ()) {
                 var p = e.item ();
-                $('.field-xianshiqi').val(p.Name);
+                $('.field-xianshiqi').val(p.PNPDeviceID);
             }
 
             //声卡信息
