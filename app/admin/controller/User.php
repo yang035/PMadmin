@@ -233,12 +233,14 @@ class User extends Admin
             if ($data['password'] == '') {
                 unset($data['password']);
             }
-            unset($data['password_confirm']);
+            
             // 验证
             $result = $this->validate($data, 'AdminUser.info');
             if($result !== true) {
                 return $this->error($result);
             }
+            unset($data['password_confirm']);
+
             if (!UserModel::update($data)) {
                 return $this->error('修改失败');
             }
