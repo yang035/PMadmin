@@ -55,7 +55,9 @@
             }
             ,cols: [[ //表头
                 {type:'checkbox'},
-                {field: 'real_name', title: '姓名'},
+                {field: 'real_name', title: '姓名', templet:function(d){
+                        return "<a class='mcolor' onclick='read("+d.id+")'>"+d.real_name+"</a>";
+                    }},
                 {field: 'total_mem', title: '总内存(M)'},
                 {field: 'zhuban', title: '主板'},
                 {field: 'xianka', title: '显卡'},
