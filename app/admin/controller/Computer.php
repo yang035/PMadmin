@@ -83,14 +83,24 @@ class Computer extends Admin
             if ($result !== true) {
                 return $this->error($result);
             }
-//            print_r($data);exit();
             unset($data['id']);
-
-            if (!ComputerModel::create($data)) {
-                return $this->error('添加失败');
+            if ($data['serial_number']){
+                $where = [
+                    'serial_number'=>$data['serial_number'],
+                    'cid'=>$data['cid'],
+                    'user_id'=>$data['user_id']
+                ];
+                $flag = ComputerModel::where($where)->find();
+                if (!$flag){
+                    $res = ComputerModel::create($data);
+                }else{
+                    $res = ComputerModel::where($where)->update($data);
+                }
             }
-            return $this->success("操作成功{$this->score_value}");
-
+            if ($res) {
+                return $this->success("操作成功{$this->score_value}");
+            }
+            return $this->error('提交失败,只能提交一次');
         }
 
         $this->assign('real_name', $params['real_name']);

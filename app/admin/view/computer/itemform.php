@@ -1,3 +1,11 @@
+<style>
+    .layui-form-item .layui-input-inline {
+        float: left;
+        width: 400px;
+        margin-right: 10px;
+    }
+
+</style>
 <form class="layui-form" action="{:url()}" method="post" name="loginForm">
     <div class="layui-tab-item layui-show layui-form-pane">
         <div class="show_div">
@@ -46,10 +54,17 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">硬盘</label>
+                <label class="layui-form-label">主硬盘</label>
                 <div class="layui-input-inline">
                     <input type="text" class="layui-input field-yingpan" name="yingpan" readonly
                            autocomplete="off" placeholder="硬盘">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">主硬盘序列号</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input field-serial_number" name="serial_number" readonly
+                           autocomplete="off" placeholder="主硬盘序列号">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -57,6 +72,13 @@
                 <div class="layui-input-inline">
                     <input type="text" class="layui-input field-xianka" name="xianka" readonly
                            autocomplete="off" placeholder="显卡">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">网卡</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input field-wangka" name="wangka" readonly
+                           autocomplete="off" placeholder="网卡">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -71,6 +93,20 @@
                 <div class="layui-input-inline">
                     <input type="text" class="layui-input field-ip" name="ip" readonly
                            autocomplete="off" placeholder="IP">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">显示器</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input field-xianshiqi" name="xianshiqi" readonly
+                           autocomplete="off" placeholder="显示器">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">声卡</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input field-shengka" name="shengka" readonly
+                           autocomplete="off" placeholder="声卡">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -115,6 +151,7 @@
             var e = new Enumerator (properties);
             for (;!e.atEnd();e.moveNext ()) {
                 var p = e.item ();
+                // console.log(p);
                 $('.field-name').val(p.SystemName);
                 $('.field-cpu').val(p.Name +","+p.NumberOfCores+"核,"+p.MaxClockSpeed+"Hz");
             }
@@ -124,7 +161,7 @@
             var e = new Enumerator (properties);
             for (;!e.atEnd();e.moveNext ()) {
                 var p = e.item ();
-                $('.field-zhuban').val(p.Manufacturer);
+                $('.field-zhuban').val(p.Product);
             }
 
             //BIOS信息
@@ -156,7 +193,9 @@
             var i=1;
             for (;!e.atEnd();e.moveNext ()){
                 var p = e.item ();
+
                 i++;
+                $('.field-wangka').val(p.Caption);
                 $('.field-mac').val(p.MACAddress);
                 $('.field-ip').val(p.IPAddress(0));
             }
@@ -168,7 +207,7 @@
             for (;!e.atEnd();e.moveNext ()){
                 var p = e.item ();
                 i++;
-                $('.field-os_info').val(p.Caption);
+                $('.field-os_info').val(p.Caption+'('+p.OSArchitecture+'/'+p.CSDVersion+')');
             }
 
             //硬盘信息
@@ -177,6 +216,7 @@
             for (;!e.atEnd();e.moveNext ()) {
                 var p = e.item ();
                 $('.field-yingpan').val(p.Size.substr(0,p.Size.length-9)  +"G,型号:" + p.Model);
+                $('.field-serial_number').val($.trim(p.SerialNumber));
             }
 
             //显卡信息
@@ -185,6 +225,22 @@
             for (;!e.atEnd();e.moveNext ()) {
                 var p = e.item ();
                 $('.field-xianka').val(p.Name + " 厂商: " + p.AdapterCompatibility);
+            }
+
+            //显示器信息
+            var properties = service.ExecQuery("SELECT * FROM Win32_DesktopMonitor");  //Win32_DiskDrive
+            var e = new Enumerator (properties);
+            for (;!e.atEnd();e.moveNext ()) {
+                var p = e.item ();
+                $('.field-xianshiqi').val(p.Name);
+            }
+
+            //声卡信息
+            var properties = service.ExecQuery("SELECT * FROM Win32_SoundDevice");  //Win32_DiskDrive
+            var e = new Enumerator (properties);
+            for (;!e.atEnd();e.moveNext ()) {
+                var p = e.item ();
+                $('.field-shengka').val(p.Name);
             }
         }catch(e){
             $('.show_div').hide();
