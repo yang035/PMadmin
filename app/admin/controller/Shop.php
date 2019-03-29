@@ -12,6 +12,7 @@ use app\admin\model\ShopItem as ItemModel;
 use app\admin\model\Score as ScoreModel;
 use app\admin\model\ShopOrder as OrderModel;
 use think\Db;
+use think\Url;
 
 
 class Shop extends Admin
@@ -282,7 +283,7 @@ class Shop extends Admin
                 Db::rollback();
             }
             if ($flag) {
-                return $this->success("操作成功{$this->score_value}", 'ShopOrder/index');
+                return $this->success("操作成功{$this->score_value}", url('ShopOrder/index'));
             } else {
                 return $this->error('添加失败！');
             }

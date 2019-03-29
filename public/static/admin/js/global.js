@@ -255,9 +255,10 @@ layui.define(['element', 'form', 'table'], function(exports) {
                                 if (index > 1000) {
                                     parent.layer.close(index);//关闭layer
                                     if (res.url) {
-                                        window.location.href = res.url;
+                                        window.parent.location.href = res.url;
+                                    }else {
+                                        window.parent.location.reload();//刷新父页面
                                     }
-                                    window.parent.location.reload();//刷新父页面
                                 } else {
                                     window.history.back(-1);
                                 }

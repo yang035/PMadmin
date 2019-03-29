@@ -53,7 +53,7 @@ class ShopOrder extends Admin
         $map['ShopOrder.cid'] = session('admin_user.cid');
         $role_id = session('admin_user.role_id');
         if ($role_id > 3){
-            $map1['user_id'] = session('admin_user.uid');
+            $map['ShopOrder.user_id'] = session('admin_user.uid');
         }
 //print_r($map);
         $fields = "`ShopOrder`.item_id,sum(`ShopOrder`.num) as num,sum(`ShopOrder`.total_score) as total_score,`ShopItem`.name";
@@ -93,7 +93,8 @@ class ShopOrder extends Admin
         }
 
         $data_list = OrderModel::hasWhere('cat',$map1)->field($fields)->where($map)->group('`ShopOrder`.item_id')->paginate(30, false, ['query' => input('get.')]);
-//        print_r($data_list);
+//        $aa = new OrderModel();
+//        print_r($aa->getLastSql());
         // 分页
         $pages = $data_list->render();
         $this->assign('data_list', $data_list);
@@ -113,6 +114,10 @@ class ShopOrder extends Admin
                 $person_user = trim($params['person_user'],',');
                 $map['ShopOrder.user_id'] = ['in',"{$person_user}"];
             }
+        }
+        $role_id = session('admin_user.role_id');
+        if ($role_id > 3){
+            $map['ShopOrder.user_id'] = session('admin_user.uid');
         }
         if (isset($params['export']) && 1 == $params['export']){
             set_time_limit(0);
