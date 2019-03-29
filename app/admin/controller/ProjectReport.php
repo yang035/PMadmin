@@ -53,7 +53,7 @@ class ProjectReport extends Admin
                     return $this->error('添加失败！');
                 }
             }
-            return $this->success("操作成功{$this->score_value}",url('index'));
+            return $this->success("操作成功{$this->score_value}",'');
         }
     }
 

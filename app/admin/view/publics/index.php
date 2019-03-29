@@ -5,10 +5,10 @@
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
     <link rel="stylesheet" href="__ADMIN_JS__/layui/css/layui.css">
     <style type="text/css">
-        body{background-color: #009688}
+        body{background-color: #20B2AA;}
         .login-head{position:fixed;left:0;top:0;width:80%;height:60px;line-height:60px;background:#000;padding:0 10%;}
         .login-head h1{color:#fff;font-size:20px;font-weight:600}
-        .login-box{margin:240px auto 0;width:400px;background-color:#fff;padding:15px 30px;border-radius:10px;box-shadow: 5px 5px 15px #999;}
+        .login-box{margin:240px auto 0;width:400px;background-color:rgba(250, 250, 250, 0.7);padding:15px 30px;border-radius:10px;box-shadow: 5px 5px 15px #999;}
         .login-box .layui-input{font-size:15px;font-weight:400}
         .login-box input[name="password"]{letter-spacing:5px;font-weight:800}
         .login-box .layui-btn{width:100%;}

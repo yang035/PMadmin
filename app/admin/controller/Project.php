@@ -468,7 +468,7 @@ class Project extends Admin
         $subject_id = 0;
         if ($params) {
             if (!empty($params['project_id'])){
-                $map['subject_id'] = $params['project_id'];
+                $map['id'] = $params['project_id'];
                 $subject_id = $params['project_id'];
             }
 
@@ -555,6 +555,7 @@ class Project extends Admin
         }else{
             $result = ProjectModel::field($field)->where($map)->where($con)->order('grade desc,create_time desc')->limit(1)->select();
             $map['subject_id'] = $result[0]['id'];
+            unset($map['id']);
             $result1 = ProjectModel::field($field)->where($map)->where($con)->order('grade desc,create_time desc')->select();
             $list = array_unique(array_merge($result1,$result));//顺序不能颠倒
         }

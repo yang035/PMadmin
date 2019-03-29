@@ -44,7 +44,7 @@ class ReportReply extends Admin
             if (!ReplyModel::create($data)) {
                 return $this->error('添加失败！');
             }
-            return $this->success("操作成功{$this->score_value}",url('index'));
+            return $this->success("操作成功{$this->score_value}",'');
         }
         $this->assign('row', $row);
         return $this->fetch();

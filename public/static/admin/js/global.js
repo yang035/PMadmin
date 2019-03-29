@@ -250,7 +250,7 @@ layui.define(['element', 'form', 'table'], function(exports) {
                 success: function (res) {
                     layer.msg(res.msg, {}, function () {
                         if (res.code == 1) {
-                            if (typeof(res.url) != 'undefined' && res.url != null && res.url != '') {
+                            if (typeof(res.url) != 'undefined' && res.url != null) {
                                 var index = parent.layer.getFrameIndex(window.name);//获取窗口索引
                                 if (index > 1000) {
                                     parent.layer.close(index);//关闭layer

@@ -55,9 +55,9 @@
             }
             ,cols: [[ //表头
                 {type:'checkbox'},
-                {field: 'real_name', title: '姓名'},
-                {field: 'linkman', title: '紧急联系人'},
-                {field: 'linkman_phone', title: '联系人电话'},
+                {field: 'real_name', title: '姓名',sort: true},
+                {field: 'birthday', title: '生日',sort: true},
+                {field: 'start_date', title: '入职时间',sort: true},
                 {field: 'update_time', title: '时间'},
                 {field: 'status', title: '状态', templet: '#statusTpl'},
                 {title: '操作', templet: '#buttonTpl'}
