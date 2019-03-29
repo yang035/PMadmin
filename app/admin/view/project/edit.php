@@ -209,6 +209,7 @@
             <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
             <input type="hidden" class="field-pid" name="pid" value="{$Request.param.pid}">
             <input type="hidden" class="field-code" name="code" value="{$Request.param.code}">
+            <input type="hidden" class="field-cat_id" name="cat_id" value="{$Request.param.cat_id}">
             {notempty name="Request.param.pid"}
             <input type="hidden" class="field-max_score" name="max_score" value="{$max_score}">
             {/notempty}
