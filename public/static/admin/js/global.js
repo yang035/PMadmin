@@ -250,15 +250,14 @@ layui.define(['element', 'form', 'table'], function(exports) {
                 success: function (res) {
                     layer.msg(res.msg, {}, function () {
                         if (res.code == 1) {
-                            if (typeof(res.url) != 'undefined' && res.url != null) {
+                            if (typeof(res.url) != 'undefined' && res.url != null && res.url != '') {
                                 var index = parent.layer.getFrameIndex(window.name);//获取窗口索引
                                 if (index > 1000) {
                                     parent.layer.close(index);//关闭layer
                                     if (res.url) {
                                         window.parent.location.href = res.url;
-                                    }else {
-                                        window.parent.location.reload();//刷新父页面
                                     }
+                                    window.parent.location.reload();//刷新父页面
                                 } else {
                                     window.history.back(-1);
                                 }
