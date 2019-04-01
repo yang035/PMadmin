@@ -109,6 +109,12 @@ class Goods extends Admin
             'id'=>$params['id'],
         ];
         $data_info = GoodsModel::with('category')->where($where)->find();
+        if ($data_info){
+            if (!empty($data_info['attachment'])){
+                $attachment = explode(',',$data_info['attachment']);
+                $data_info['attachment_show'] = array_filter($attachment);
+            }
+        }
         $this->assign('unit_option', GoodsModel::getOption());
         $this->assign('data_info', $data_info);
         return $this->fetch('add');
