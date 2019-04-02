@@ -90,6 +90,7 @@
         <a data-href="{:url('status?table=shopping_goods&val=1')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-play" data-table="dataTable">&nbsp;启用</a>
         <a data-href="{:url('status?table=shopping_goods&val=0')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-pause" data-table="dataTable">&nbsp;禁用</a>
         <a data-href="{:url('del')}" class="layui-btn layui-btn-primary j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>
+        <a href="javascript:import_excel();" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;导入</a>
     </div>
 </div>
 <table id="dataTable" class="layui-table" lay-filter="table1"></table>
@@ -155,7 +156,7 @@
             elem: '#dataTable'
             ,url: '{:url()}' //数据接口
             ,page: true //开启分页
-            ,limit: 20
+            ,limit: 30
             ,text: {
                 none : '暂无相关数据'
             }
@@ -197,6 +198,24 @@
             title :'查看',
             maxmin: true,
             area: ['700px', '500px'],
+            content: open_url,
+            success:function (layero, index) {
+            }
+        });
+    }
+
+    function import_excel() {
+        var open_url = "{:url('doimport')}";
+        if (open_url.indexOf('?') >= 0) {
+            open_url += '&hisi_iframe=yes';
+        } else {
+            open_url += '?hisi_iframe=yes';
+        }
+        layer.open({
+            type:2,
+            title :'导入',
+            maxmin: true,
+            area: ['800px', '500px'],
             content: open_url,
             success:function (layero, index) {
             }

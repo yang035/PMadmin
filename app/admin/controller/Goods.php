@@ -2,6 +2,7 @@
 namespace app\admin\controller;
 
 use app\admin\model\Goods as GoodsModel;
+use app\admin\model\Category as CategoryModel;
 use think\Db;
 use think\Validate;
 use app\admin\model\AdminUser;
@@ -30,7 +31,7 @@ class Goods extends Admin
         if ($this->request->isAjax()) {
             $where = $data = [];
             $page = input('param.page/d', 1);
-            $limit = input('param.limit/d', 15);
+            $limit = input('param.limit/d', 30);
 
             if (1 != session('admin_user.role_id')){
                 $where['cid'] = session('admin_user.cid');
@@ -42,7 +43,7 @@ class Goods extends Admin
                 $where['title'] = ['like',"%{$params['name']}%"];
             }
 
-            $data['data'] = GoodsModel::with('category')->where($where)->page($page)->limit($limit)->select();
+            $data['data'] = GoodsModel::with('category')->where($where)->order('id desc')->page($page)->limit($limit)->select();
             $data['count'] = GoodsModel::where($where)->count('id');
             $data['code'] = 0;
             $data['msg'] = '';
@@ -286,6 +287,99 @@ class Goods extends Admin
             $user = (array)json_decode($default_user);
         }
         $this->assign('data_info', array_merge($row,$user));
+        return $this->fetch();
+    }
+
+    public function doimport(){
+        if ($this->request->isAjax()) {
+            $file = request()->file('file');
+            // 上传附件路径
+            $_upload_path = ROOT_PATH . 'public/upload' . DS . 'excel' . DS . date('Ymd') . DS;
+            // 附件访问路径
+            $_file_path = ROOT_DIR . 'upload/excel/' . date('Ymd') . '/';
+
+            // 移动到upload 目录下
+            $upfile = $file->rule('md5')->move($_upload_path);//以md5方式命名
+            if (!is_file($_upload_path . $upfile->getSaveName())) {
+                return self::result('文件上传失败！');
+            }
+            $file_name = $_upload_path . $upfile->getSaveName();
+//            print_r($file_name);exit();
+            set_time_limit(0);
+            $excel = \service('Excel');
+            $format = array('A' => 'line', 'B' => 'cat_id', 'C' => 'title', 'D' => 'description', 'E' => 'marketprice', 'F' => 'total', 'G' => 'unit', 'H' => 'content');
+            $checkformat = array('A' => '序号', 'B' => '物品类型', 'C' => '名称', 'D' => '概述', 'E' => '采购单价', 'F' => '库存数', 'G' => '单位', 'H' => '描述');
+            $res = $excel->readUploadFile($file_name, $format, 8050, $checkformat);
+            $cid = session('admin_user.cid');
+            if ($res['status'] == 0) {
+                $this->error($res['data']);
+            } else {
+                $good_type = array_unique(array_column($res['data'], 'B'));
+                $w = [
+                    'cid'=>$cid,
+                    'status'=>1,
+                ];
+                $m_t = CategoryModel::where($w)->column('name','id');
+                $t = [];
+                if (!$m_t){
+                    $this->error('请先添加类型');
+                }else{
+                    foreach ($m_t as $k => $v) {
+                        $t[$v] = $k;
+                    }
+                }
+                if ($good_type){
+                    foreach ($good_type as $k=>$v){
+                        if (!in_array($v,$m_t)){
+                            $this->error("类型[$v]不存在，请先添加类型");
+                        }
+                    }
+                }
+                $unit = config('other.unit');
+                $u = [];
+                if ($unit){
+                    foreach ($unit as $k => $v) {
+                        $u[$v] = $k;
+                    }
+                }
+                foreach ($res['data'] as $k => $v) {
+                    $where = [
+                        'cid' => session('admin_user.cid'),
+                        'title' => $v['C'],
+                    ];
+                    $f = GoodsModel::where($where)->find();
+                    if (!$f) {
+                        $tmp = [
+                            'cat_id' => $t[$v['B']],
+                            'title' => $v['C'],
+                            'description' => $v['D'],
+                            'marketprice' => $v['E'],
+                            'total' => $v['F'],
+                            'unit' => $u[$v['G']],
+                            'content' => $v['H'],
+                            'cid' => session('admin_user.cid'),
+                            'user_id' => session('admin_user.uid'),
+                        ];
+                        GoodsModel::create($tmp);
+                    }else{
+                        $tmp = [
+                            'id'=>$f['id'],
+                            'cat_id' => $t[$v['B']],
+                            'title' => $v['C'],
+                            'description' => $v['D'],
+                            'marketprice' => $v['E'],
+                            'total' => $v['F']+$f['total'],
+                            'unit' => $u[$v['G']],
+                            'content' => $v['H'],
+                            'cid' => session('admin_user.cid'),
+                            'user_id' => session('admin_user.uid'),
+                        ];
+                        GoodsModel::update($tmp);
+                    }
+                }
+                return $this->success('导入成功。',url('index'));
+            }
+        }
         return $this->fetch();
     }
 }
