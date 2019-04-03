@@ -58,13 +58,16 @@
                 {field: 'real_name', title: '姓名', templet:function(d){
                         return "<a class='mcolor' onclick='read("+d.id+")'>"+d.real_name+"</a>";
                     }},
+                {field: 'name', title: '机器名称'},
+                {field: 'cpu', title: 'CPU'},
                 {field: 'total_mem', title: '总内存(M)'},
                 {field: 'zhuban', title: '主板'},
+                {field: 'yingpan', title: '主硬盘'},
                 {field: 'xianka', title: '显卡'},
-                {field: 'mac', title: '网卡'},
-                {field: 'ip', title: 'IP地址'},
-                {field: 'update_time', title: '时间'},
-                {field: 'status', title: '状态', templet: '#statusTpl'},
+                {field: 'wangka', title: '网卡'},
+                {field: 'xianshiqi', title: '显示器'},
+                {field: 'update_time', title: '登记时间'},
+                // {field: 'status', title: '状态', templet: '#statusTpl'},
                 {title: '操作', templet: '#buttonTpl'}
             ]]
         });
