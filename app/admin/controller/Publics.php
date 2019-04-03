@@ -3,6 +3,10 @@ namespace app\admin\controller;
 use app\common\controller\Common;
 use app\admin\model\AdminUser as UserModel;
 use app\admin\model\AdminCompany;
+use app\admin\model\Category;
+use app\admin\model\AdminDepartment;
+use think\Db;
+use think\Exception;
 
 class Publics extends Common
 {
@@ -57,8 +61,6 @@ class Publics extends Common
         if ($this->request->isPost()) {
             $data = $this->request->post();
 
-            unset($data['password_confirm'],$data['__token__']);
-
             $data['last_login_ip'] = '';
             $data['auth'] = '';
             $data['status'] = 0;
@@ -67,8 +69,62 @@ class Publics extends Common
             if($result !== true) {
                 return $this->error($result);
             }
-            if (!UserModel::create($data)) {
-                return $this->error('注册失败');
+            unset($data['password_confirm'],$data['__token__']);
+
+            if (0 == $data['type']) {
+                //事务开始
+                Db::startTrans();
+                try {
+                    $tmp = [
+                        'name' => $data['name'],
+                    ];
+                    $f1 = AdminCompany::where($tmp)->find();
+                    if (!$f1) {
+                        $result = AdminCompany::create($tmp);
+                        $dep_data = [
+                            'code' => $result['id'] . 'd',
+                            'cid' => $result['id'],
+                            'user_id' => 1,
+                            'name' => $result['name'],
+                            'remark' => $result['name']
+                        ];
+                        $d = AdminDepartment::create($dep_data);
+
+                        $categoty_data = [
+                            'code' => $result['id'] . 'g',
+                            'cid' => $result['id'],
+                            'user_id' => 1,
+                            'name' => $result['name'],
+                            'remark' => $result['name']
+                        ];
+                        Category::create($categoty_data);
+                    } else {
+                        $result = $f1;
+                        $d = AdminDepartment::where($tmp)->find();
+                    }
+                    unset($data['type'], $data['name']);
+                    $data['company_id'] = $result['id'];
+                    $data['role_id'] = 3;
+                    $data['department_id'] = $d['id'];
+                    $data['status'] = 1;
+                    UserModel::create($data);
+
+                    //事务提交
+                    Db::commit();
+                } catch (\Exception $e) {
+                    //事务回滚
+                    Db::rollback();
+                    return $this->error('注册失败');
+                }
+            } else {
+                unset($data['type'], $data['name']);
+                $data['company_id'] = 3;
+                $data['role_id'] = 3;
+                $data['department_id'] = 25;
+                $data['status'] = 1;
+                if (!UserModel::create($data)) {
+                    return $this->error('注册失败');
+                }
             }
             return $this->success('注册成功',url('index'));
         }

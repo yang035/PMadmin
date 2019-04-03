@@ -80,13 +80,28 @@
             <fieldset class="layui-elem-field layui-field-title">
                 <legend>账号注册</legend>
             </fieldset>
+<!--            <div class="layui-form-item">-->
+<!--                <label class="layui-form-label">选择公司</label>-->
+<!--                <div class="layui-input-inline">-->
+<!--                    <select name="company_id" class="field-company_id" type="select">-->
+<!--                        {$company_option}-->
+<!--                    </select>-->
+<!--                </div>-->
+<!--            </div>-->
             <div class="layui-form-item">
-                <label class="layui-form-label">选择公司</label>
+                <label class="layui-form-label">类型</label>
                 <div class="layui-input-inline">
-                    <select name="company_id" class="field-company_id" type="select">
-                        {$company_option}
-                    </select>
+                    <input type="radio" class="field-type" name="type" value="0" title="公司" checked lay-filter="type">
+                    <input type="radio" class="field-type" name="type" value="1" title="个人" lay-filter="type">
                 </div>
+            </div>
+            <div class="layui-form-item show">
+                <label class="layui-form-label">公司名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input field-name" name="name" lay-verify="required"
+                           autocomplete="off" placeholder="请输入公司名称">
+                </div>
+                <div class="layui-form-mid" style="color: red">*</div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">用户名</label>
@@ -152,6 +167,15 @@
 <script type="text/javascript">
     layui.define('form', function (exports) {
         var $ = layui.jquery, layer = layui.layer, form = layui.form;
+        form.on('radio(type)',function (data) {
+            if (1 == data.value){
+                $('.field-name').attr('lay-verify','');
+                $('.show').hide();
+            }else {
+                $('.field-name').attr('lay-verify','required');
+                $('.show').show();
+            }
+        });
         form.on('submit(formSubmit)', function (data) {
             var _form = $(this).parents('form');
             layer.msg('数据提交中...', {time: 3000});
