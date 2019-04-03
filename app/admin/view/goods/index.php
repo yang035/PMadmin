@@ -199,7 +199,7 @@
             type:2,
             title :'查看',
             maxmin: true,
-            area: ['700px', '500px'],
+            area: ['800px', '600px'],
             content: open_url,
             success:function (layero, index) {
             }
