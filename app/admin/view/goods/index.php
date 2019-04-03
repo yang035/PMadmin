@@ -162,14 +162,16 @@
             }
             ,cols: [[ //表头
                 {type:'checkbox'}
+                ,{field: 'title', title: '名称',width: 300, templet:function(d){
+                        return "<a class='mcolor' onclick='open_div("+d.id+")'>"+d.title+"</a>";
+                    }}
                 ,{field: 'cat_id', title: '类型', templet:function(d){
                         if (d.category){
-                            return "<a onclick='open_div("+d.id+")'><strong class='mcolor'>"+d.category.name+"</strong></a>";
+                            return d.category.name;
                         }else {
                             return '无'
                         }
                     }}
-                ,{field: 'title', title: '名称',width: 300}
                 ,{field: 'thumb', title: '缩略图', templet:function(d){
                         return "<img src='"+ d.thumb +"'>";
                     }}
