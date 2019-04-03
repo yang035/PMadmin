@@ -54,7 +54,7 @@
                 cols: [[
                     {type: 'numbers'},
                     {field: 'name', title: '名称'},
-                    {field: 'code', title: '编码'},
+                    // {field: 'code', title: '编码'},
                     {field: 'remark', title: '说明'},
                     {templet: '#oper-col', title: '操作'}
                 ]],

@@ -47,7 +47,7 @@ class Notice extends Admin
                 $where['title'] = ['like', "%{$name}%"];
             }
             $where['cid'] = session('admin_user.cid');
-            $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->select();
+            $data['data'] = ItemModel::with('cat')->where($where)->order('id desc')->page($page)->limit($limit)->select();
             $data['count'] = ItemModel::where($where)->count('id');
             $data['code'] = 0;
             $data['msg'] = '';

@@ -169,7 +169,7 @@
                             return '无'
                         }
                     }}
-                ,{field: 'title', title: '名称'}
+                ,{field: 'title', title: '名称',width: 300}
                 ,{field: 'thumb', title: '缩略图', templet:function(d){
                         return "<img src='"+ d.thumb +"'>";
                     }}
@@ -182,7 +182,7 @@
                 ,{field: 'sales',  title: '分发数'}
                 ,{field: 'viewcount', title: '浏览次数'}
                 ,{field: 'status', title: '状态', templet: '#statusTpl'}
-                ,{title: '操作', templet: '#buttonTpl',width:200}
+                ,{title: '操作', templet: '#buttonTpl'}
             ]]
         });
     });
