@@ -7,6 +7,7 @@ use think\Db;
 use think\Validate;
 use app\admin\model\AdminUser;
 use app\admin\model\Approval as ApprovalModel;
+use app\admin\model\Score as ScoreModel;
 use app\admin\model\AssetItem;
 
 class Goods extends Admin
@@ -315,6 +316,7 @@ class Goods extends Admin
                 $this->error($res['data']);
             } else {
                 $good_type = array_unique(array_column($res['data'], 'B'));
+
                 $w = [
                     'cid'=>$cid,
                     'status'=>1,
@@ -322,7 +324,7 @@ class Goods extends Admin
                 $m_t = CategoryModel::where($w)->column('name','id');
                 $t = [];
                 if (!$m_t){
-                    $this->error('请先添加类型');
+                    return $this->error('请先添加类型');
                 }else{
                     foreach ($m_t as $k => $v) {
                         $t[$v] = $k;
@@ -331,10 +333,16 @@ class Goods extends Admin
                 if ($good_type){
                     foreach ($good_type as $k=>$v){
                         if (!in_array($v,$m_t)){
-                            $this->error("类型[$v]不存在，请先添加类型");
+                            return $this->error("类型[$v]不存在，请先添加类型");
                         }
                     }
                 }
+                $c0 = array_column($res['data'], 'C');
+                $c1 = array_unique(array_filter($c0));
+                if (count($c0) > count($c1)){
+                    return $this->error("名称不能有重复的或空值");
+                }
+
                 $unit = config('other.unit');
                 $u = [];
                 if ($unit){
@@ -342,6 +350,7 @@ class Goods extends Admin
                         $u[$v] = $k;
                     }
                 }
+                $i = 0;
                 foreach ($res['data'] as $k => $v) {
                     $where = [
                         'cid' => session('admin_user.cid'),
@@ -360,7 +369,7 @@ class Goods extends Admin
                             'cid' => session('admin_user.cid'),
                             'user_id' => session('admin_user.uid'),
                         ];
-                        GoodsModel::create($tmp);
+                        $f1 = GoodsModel::create($tmp);
                     }else{
                         $tmp = [
                             'id'=>$f['id'],
@@ -374,10 +383,30 @@ class Goods extends Admin
                             'cid' => session('admin_user.cid'),
                             'user_id' => session('admin_user.uid'),
                         ];
-                        GoodsModel::update($tmp);
+                        $f1 = GoodsModel::update($tmp);
+                    }
+                    if ($f1){
+                        $i++;
                     }
                 }
-                return $this->success('导入成功。',url('index'));
+                if ($i){
+                    //计算得分
+                    $sc = [
+                        'project_id'=>0,
+                        'cid'=>session('admin_user.cid'),
+                        'user'=>session('admin_user.uid'),
+                        'ml_add_score'=>0,
+                        'ml_sub_score'=>0,
+                        'gl_add_score'=>$this->scoreConfig()['gl']['common'],
+                        'gl_sub_score'=>0,
+                        'remark' => '资产管理，物品入库导入Excel得分'
+                    ];
+                    if (ScoreModel::addScore($sc)){
+                        return $this->success("添加成功，奖励{$sc['gl_add_score']}GL分。",'index');
+                    }
+                }else{
+                    return $this->error("导入失败");
+                }
             }
         }
         return $this->fetch();

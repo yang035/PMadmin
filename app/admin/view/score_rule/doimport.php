@@ -31,9 +31,11 @@
                     var index = parent.layer.getFrameIndex(window.name);//获取窗口索引
                     parent.layer.close(index);//关闭layer
                     window.parent.location.reload();//刷新父页面
-                    layer.msg('导入成功', {icon: 6});
+                    layer.msg(res.msg, {icon: 6});
                 }else{
-                    layer.msg('导入失败', {icon: 5});
+                    layer.alert(res.msg, {icon: 5},function () {
+                        window.location.reload();
+                    });
                 }
 
                 $('#res').html(res.info);
