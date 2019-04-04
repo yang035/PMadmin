@@ -302,7 +302,7 @@ class Goods extends Admin
             if ($data['title']){
                 $title = explode("\r\n",trim($data['title']));
                 $title = array_map('trim',array_filter(array_unique($title)));
-                if (count($borrow) > count($title)){
+                if ($borrow && count($borrow) > count($title)){
                     return $this->error("原来的数据不能删除");
                 }
                 $res = $redis->set("pm:zichan:borrow:".$cid,json_encode($title));
