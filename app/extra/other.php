@@ -275,6 +275,11 @@ return [
         5=>'套',
         6=>'盒',
         7=>'箱',
+        8=>'张',
+        9=>'瓶',
+        10=>'卷',
+        11=>'把',
+        12=>'块',
     ],
     'bbs_url' => 'http://bbs.imlgl.com/?user-login.htm',
     'partnership_grade' => [
