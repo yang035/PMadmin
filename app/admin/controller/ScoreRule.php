@@ -8,6 +8,7 @@
 
 namespace app\admin\controller;
 use app\admin\model\ScoreRule as RuleModel;
+use app\admin\model\Score as ScoreModel;
 
 
 class ScoreRule extends Admin
@@ -191,6 +192,7 @@ class ScoreRule extends Admin
                         $t[$v['name']] = $v['id'];
                     }
                 }
+                $i = 0;
                 foreach ($res['data'] as $k => $v) {
                     $where = [
                         'cid' => session('admin_user.cid'),
@@ -206,7 +208,7 @@ class ScoreRule extends Admin
                             'score' => $v['D'],
                             'user_id' => session('admin_user.uid'),
                         ];
-                        RuleModel::create($tmp);
+                        $f1 = RuleModel::create($tmp);
                     }else{
                         $tmp = [
                             'id'=>$f['id'],
@@ -217,66 +219,33 @@ class ScoreRule extends Admin
                             'score' => $v['D'],
                             'user_id' => session('admin_user.uid'),
                         ];
-                        RuleModel::update($tmp);
+                        $f1 = RuleModel::update($tmp);
+                    }
+                    if ($f1){
+                        $i++;
                     }
                 }
+                if ($i){
+                    //计算得分
+                    $sc = [
+                        'project_id'=>0,
+                        'cid'=>session('admin_user.cid'),
+                        'user'=>session('admin_user.uid'),
+                        'ml_add_score'=>0,
+                        'ml_sub_score'=>0,
+                        'gl_add_score'=>$i,
+                        'gl_sub_score'=>0,
+                        'remark' => 'MLGL，积分规则导入Excel得分'
+                    ];
+                    if (ScoreModel::addScore($sc)){
+                        return $this->success("添加成功，奖励{$sc['gl_add_score']}GL分。",'index');
+                    }
+                }else{
+                    return $this->error("导入失败");
+                }
             }
-            return $this->success('导入成功。',url('index'));
         }
 
-//            $types = D('Ptype')->getCacheAll();
-//            $types = array_flip($types);
-//            $data = $res['data'];
-//            $addData = array();
-//            $errLog = '';
-//            // $branch = array_flip($branch);
-//$model ='';
-//$count=0;
-//            // die;
-//            $bid =array() ;
-//            foreach($data as $v){
-//                $tmp = array();
-//                $res = '';
-//                foreach($v as $k=>$vo){
-//                    $tmp[$format[$k]] = $vo;
-//                }
-//                $tmp['pid'] = empty($types[$tmp['pid']]) ? 0 : $types[$tmp['pid']];
-//                $line = $tmp['line'];
-//                unset($tmp['line']);
-//
-//                $res = $model->create($tmp);
-//                if(!$model->create($tmp)){
-//
-//                    $errLog .= "第{$line}行数据检查异常:".$model->getError()."<br/>";
-//                }else{
-//
-//
-//                    $res = $model->add($tmp);
-//
-//                    if($res){
-//                        $count++;
-//                    }
-//                    //echo $this->model->_sql();
-//                }
-//            }
-//
-//            $str = "导入结果：<br/>";
-//            $str .= "<span style='color:green'>成功导入:".$count.'条数据></span><br/>';
-//
-//
-//
-//
-//            if($errLog){
-//
-//                $str .= "<span style='color:red'>导入失败记录：<br/>".$errLog.'</span>';
-//            }
-//
-//            if($res){
-//                $this->success($str);
-//            }else{
-//                $this->error($str);
-//            }
-//        }
         return $this->fetch();
     }
 

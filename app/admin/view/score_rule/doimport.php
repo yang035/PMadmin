@@ -27,11 +27,11 @@
             }
             ,done: function(res){
                 if(res.code==1){
-                    layer.msg('导入成功', {icon: 6});
-                    var index = parent.layer.getFrameIndex(window.name);//获取窗口索引
-                    parent.layer.close(index);//关闭layer
-                    window.parent.location.reload();//刷新父页面
-                    layer.msg(res.msg, {icon: 6});
+                    layer.alert(res.msg, {icon: 6},function () {
+                        var index = parent.layer.getFrameIndex(window.name);//获取窗口索引
+                        parent.layer.close(index);//关闭layer
+                        window.parent.location.reload();//刷新父页面
+                    });
                 }else{
                     layer.alert(res.msg, {icon: 5},function () {
                         window.location.reload();

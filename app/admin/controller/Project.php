@@ -18,6 +18,7 @@ use app\admin\controller\ProjectReport;
 use app\admin\model\SubjectCat;
 use app\admin\model\SubjectItem;
 use app\admin\controller\ReportCheck;
+use app\admin\model\Score as ScoreModel;
 use think\Db;
 use think\Exception;
 
@@ -1391,6 +1392,7 @@ class Project extends Admin
                 $d = 25569;
                 $s = 24 * 60 * 60;
 
+                $i = 0;
                 foreach ($res['data'] as $k => $v) {
                     $p_node = substr($v['B'], 0, strripos($v['B'], '.'));
                     if ($p_node == session('admin_user.cid')){
@@ -1426,7 +1428,7 @@ class Project extends Admin
                             'copy_user' => $this->userFormat($v['K']),
                             'user_id' => session('admin_user.uid'),
                         ];
-                        ProjectModel::create($tmp);
+                        $f1 = ProjectModel::create($tmp);
                     } else {
                         $tmp = [
                             'id' => $f['id'],
@@ -1447,11 +1449,31 @@ class Project extends Admin
                             'copy_user' => $this->userFormat($v['K']),
                             'user_id' => session('admin_user.uid'),
                         ];
-                        ProjectModel::update($tmp);
+                        $f1 = ProjectModel::update($tmp);
+                    }
+                    if ($f1){
+                        $i++;
                     }
                 }
+                if ($i){
+                    //计算得分
+                    $sc = [
+                        'project_id'=>0,
+                        'cid'=>session('admin_user.cid'),
+                        'user'=>session('admin_user.uid'),
+                        'ml_add_score'=>0,
+                        'ml_sub_score'=>0,
+                        'gl_add_score'=>$i,
+                        'gl_sub_score'=>0,
+                        'remark' => 'ML工作，项目计划导入Excel得分'
+                    ];
+                    if (ScoreModel::addScore($sc)){
+                        return $this->success("添加成功，奖励{$sc['gl_add_score']}GL分。",'index');
+                    }
+                }else{
+                    return $this->error("导入失败");
+                }
             }
-            return $this->success('导入成功。', url('index'));
         }
 
         return $this->fetch();
