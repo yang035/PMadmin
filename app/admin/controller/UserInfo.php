@@ -29,7 +29,7 @@ class UserInfo extends Admin
             ],
         ];
         $this->tab_data = $tab_data;
-        $this->assign('user_select', AdminUser::inputSearchUser());
+        $this->assign('user_select', AdminUser::inputSearchUser1());
     }
 
     public function index($q = '')

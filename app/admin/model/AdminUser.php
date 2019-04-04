@@ -345,6 +345,15 @@ class AdminUser extends Model
         return json_encode($data);
     }
 
+    public static function inputSearchUser1(){
+        $where = [
+            'is_show' => 0,
+            'company_id' => session('admin_user.cid'),
+        ];
+        $data = self::where($where)->field('id,realname')->select();
+        return json_encode($data);
+    }
+
     public static function getSexOption($type = 0)
     {
         $leaveType = config('other.sex_type');
