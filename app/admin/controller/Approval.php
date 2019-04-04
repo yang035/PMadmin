@@ -18,6 +18,7 @@ use app\admin\model\ApprovalGoout as GooutModel;
 use app\admin\model\ApprovalUsecar as CarModel;
 use app\admin\model\ApprovalCost as CostModel;
 use app\admin\model\ApprovalDispatch as DispatchModel;
+use app\admin\model\ApprovalBorrow;
 use app\admin\model\AdminUser;
 use app\admin\model\AssetItem as ItemModel;
 use app\admin\model\ApprovalGoods;
@@ -775,6 +776,61 @@ class Approval extends Admin
         return $this->fetch();
     }
 
+    public function borrow()
+    {
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            if ('' == $data['project_id']){
+                return $this->error('请选择项目');
+            }
+            if (!isset($data['borrow_option'])){
+                return $this->error('请选择借用物品');
+            }
+            // 验证
+            $result = $this->validate($data, 'ApprovalBorrow');
+            if ($result !== true) {
+                return $this->error($result);
+            }
+
+            unset($data['id']);
+            Db::startTrans();
+            try {
+                $approve = [
+                    'project_id' => $data['project_id'],
+                    'class_type' => $data['class_type'],
+                    'cid' => session('admin_user.cid'),
+                    'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
+                    'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
+                    'time_long' => $data['time_long'],
+                    'user_id' => session('admin_user.uid'),
+                    'send_user' => json_encode(user_array($data['send_user'])),
+                    'copy_user' => json_encode(user_array($data['copy_user'])),
+                ];
+                $res = ApprovalModel::create($approve);
+                $leave = [
+                    'aid' => $res['id'],
+                    'borrow' => json_encode($data['borrow_option']),
+                    'reason' => $data['reason'],
+                    'attachment' => $data['attachment'],
+                ];
+                $flag = ApprovalBorrow::create($leave);
+                // 提交事务
+                Db::commit();
+            } catch (\Exception $e) {
+                // 回滚事务
+                Db::rollback();
+            }
+            if ($flag) {
+                return $this->success("操作成功{$this->score_value}", 'index');
+            } else {
+                return $this->error('添加失败！');
+            }
+        }
+        $this->assign('borrow_option',ApprovalBorrow::getOption());
+        $this->assign('mytask', ProjectModel::getMyTask(0));
+        return $this->fetch();
+    }
+
     public function printView()
     {
         if ($this->request->isPost()) {
@@ -952,6 +1008,10 @@ class Approval extends Admin
                 $table = 'tb_approval_dispatch';
                 $f = 'b.reason,b.address,b.time_long1,b.attachment,b.contacts,b.belongs';
                 break;
+            case 14:
+                $table = 'tb_approval_borrow';
+                $f = 'b.reason,b.borrow,b.attachment';
+                break;
             default:
                 $table = 'tb_approval_leave';
                 $f = 'b.type,b.reason,b.attachment';
@@ -1101,6 +1161,9 @@ class Approval extends Admin
                 $list['store_id'] = $store_type[$list['store_id']];
                 break;
             case 13:
+                break;
+            case 14:
+                $list['borrow'] = json_decode($list['borrow'], true);
                 break;
             default:
                 break;

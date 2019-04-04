@@ -3,7 +3,7 @@ namespace app\admin\validate;
 
 use think\Validate;
 
-class ApprovalGoods extends Validate
+class ApprovalBorrow extends Validate
 {
     //定义验证规则
     protected $rule = [

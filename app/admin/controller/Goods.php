@@ -291,6 +291,38 @@ class Goods extends Admin
         return $this->fetch();
     }
 
+    public function borrow(){
+        $redis = service('Redis');
+        $cid = session('admin_user.cid');
+        $borrow = $redis->get("pm:zichan:borrow:".$cid);
+        $borrow = json_decode($borrow,true);
+
+        if ($this->request->isPost()){
+            $data = $this->request->post();
+            if ($data['title']){
+                $title = explode("\r\n",trim($data['title']));
+                $title = array_map('trim',array_filter(array_unique($title)));
+                if (count($borrow) > count($title)){
+                    return $this->error("原来的数据不能删除");
+                }
+                $res = $redis->set("pm:zichan:borrow:".$cid,json_encode($title));
+                if (!$res) {
+                    return $this->error('添加失败！');
+                }
+                return $this->success('修改成功。',url('goods/borrow'));
+            }
+        }
+
+        if ($borrow){
+            $borrow = implode("\r\n",$borrow);
+        }else{
+            $borrow = '';
+        }
+
+        $this->assign('data_info', $borrow);
+        return $this->fetch('borrow');
+    }
+
     public function doimport(){
         if ($this->request->isAjax()) {
             $file = request()->file('file');

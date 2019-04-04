@@ -132,6 +132,18 @@
             联系人：{$data_list['contacts']}<br>
             随身物品：{$data_list['belongs']}<br>
             {/case}
+            {case value="14"}
+            {notempty name="data_list['borrow']"}
+            物品清单：
+            <div>
+                {volist name="data_list['borrow']" id="vo"}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$vo}<br>
+                {/volist}
+            </div>
+            {else/}
+            <span>无</span>
+            {/notempty}
+            {/case}
             {/switch}
             事由：{$data_list['reason']}<br>
             附件说明：

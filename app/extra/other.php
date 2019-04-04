@@ -175,6 +175,10 @@ return [
             'title'=>'派遣',
             'href'=>'admin/Approval/dispatch'
         ],
+        14=>[
+            'title'=>'物品借用',
+            'href'=>'admin/Approval/borrow'
+        ],
     ],
     'car_type' => [
         1 =>'车辆1',

@@ -180,7 +180,7 @@
                             "            </div>\n" +
                             "            <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
                             "                <input type=\"hidden\" name=\"good_id[]\" value=\""+id_arr[i]+"\" lay-verify=\"required\">\n" +
-                            "                <input type=\"number\" class=\"layui-input field-number fl\" onkeypress=\"return (/[\\d]/.test(String.fromCharCode(event.keyCode)))\" lay-verify=\"required\" name=\"number[]\" autocomplete=\"off\" placeholder=\"请输入数量\">\n" +
+                            "                <input type=\"number\" class=\"layui-input field-number fl\" onkeypress=\"return (/[\\d]/.test(String.fromCharCode(event.keyCode)))\" lay-verify=\"required\" name=\"number[]\" autocomplete=\"off\" value='1' placeholder=\"请输入数量\">\n" +
                             "            </div>";
                     });
                 }
