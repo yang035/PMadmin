@@ -9,13 +9,13 @@ class ApprovalCost extends Validate
     protected $rule = [
         'type|费用类型' => 'require',
         'money|金额' => 'require',
-        'reason|事由'   =>'length:0,65',
+        'reason|事由'   =>'length:0,255',
     ];
 
     //定义验证提示
     protected $message = [
         'type.require' => '费用类型必填',
         'money.require' => '金额必填',
-        'reason.length' => '事由超过限制65个字符数',
+        'reason.length' => '事由超过限制255个字符数',
     ];
 }
