@@ -82,7 +82,7 @@ class WorkItem extends Model
         $map = [
             'cid'=>session('admin_user.cid'),
             'status'=>1,
-            'user_id'=>session('admin_user.uid'),
+//            'user_id'=>session('admin_user.uid'),
         ];
         $str = '';
         if ($option){
