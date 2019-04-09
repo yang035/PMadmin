@@ -78,19 +78,19 @@
             }
             ,cols: [[ //表头
                 {type:'checkbox'}
-                ,{field: 'realname', title: '姓名'}
+                ,{field: 'realname', title: '姓名',width:100}
                 ,{field: 'reason', title: '事由'}
-                ,{field: 'goods', title: '物品', templet:function(d){
-                    var g = d.goods,t='';
+                ,{field: 'goods', title: '物品',width:400, templet:function(d){
+                    var g = d.goods,t="";
                     $.each(g,function (i) {
-                        t += g[i]['name']+g[i]['number']+','
+                        t += g[i]['name']+"<span class='red'>[ "+g[i]['number']+" ]</span>"+',';
                     });
                     return t;
                     }}
                 ,{field: 'send_user',  title: '审批人'}
                 ,{field: 'status',  title: '状态'}
-                ,{field: 'create_time', title: '申请时间',width:170}
-                ,{title: '操作', templet: '#buttonTpl',width:200}
+                ,{field: 'create_time', title: '申请时间'}
+                ,{title: '操作', templet: '#buttonTpl'}
             ]]
         });
     });
