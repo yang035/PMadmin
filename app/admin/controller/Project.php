@@ -212,7 +212,7 @@ class Project extends Admin
 
             $data['manager_user'] = json_encode(user_array($data['manager_user']));
             $data['deal_user'] = json_encode(user_array($data['deal_user']));
-            $data['send_user'] = json_encode(user_array($data['send_user']));
+            $data['send_user'] = json_encode(user_array1($data['send_user']));
             $data['copy_user'] = json_encode(user_array($data['copy_user']));
             $data['subject_id'] = empty($p_res['pid']) ? $data['id'] : $p_res['subject_id'];
 
