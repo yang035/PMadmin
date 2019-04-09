@@ -214,7 +214,7 @@ class Project extends Admin
             $data['deal_user'] = json_encode(user_array($data['deal_user']));
             $data['send_user'] = json_encode(user_array($data['send_user']));
             $data['copy_user'] = json_encode(user_array($data['copy_user']));
-            $data['subject_id'] = $p_res['subject_id'];
+            $data['subject_id'] = empty($p_res['pid']) ? $data['id'] : $p_res['subject_id'];
 
             unset($data['id'], $data['pname'], $data['max_score']);
             $data['user_id'] = session('admin_user.uid');
