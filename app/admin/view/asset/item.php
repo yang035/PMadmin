@@ -40,7 +40,7 @@
 </script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
     {eq name="$Think.session.admin_user.role_id" value='3'}
-    <a href="{:url('editItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a>
+<!--    <a href="{:url('editItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a>-->
 <!--    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
     {/eq}
 </script>

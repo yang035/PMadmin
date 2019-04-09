@@ -146,19 +146,68 @@ class Goods extends Admin
         return $this->fetch();
     }
 
+    public function getApprovalCount()
+    {
+        $map['cid'] = session('admin_user.cid');
+        $map['class_type'] = 11;
+        $uid = session('admin_user.uid');
+        $fields = "SUM(IF(user_id='{$uid}',1,0)) user_num,
+        SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status=1,1,0)) send_num,
+        SUM(IF(JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"'),1,0)) copy_num,
+        SUM(IF(JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"'),1,0)) deal_num,
+        SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status>1,1,0)) has_num,
+        SUM(IF(JSON_CONTAINS_PATH(fellow_user,'one', '$.\"$uid\"'),1,0)) follow_num";
+        $count = ApprovalModel::field($fields)->where($map)->find()->toArray();
+        return $count;
+    }
+
     public function apply(){
         $params = $this->request->param();
-        if ($this->request->isAjax()) {
-            $where = $data = [];
+        $sta_count = $this->getApprovalCount();
+        $tab_data['menu'] = [
+            [
+                'title' => "待我审批<span class='layui-badge'>{$sta_count['send_num']}</span>",
+                'url' => 'admin/Goods/apply',
+                'params' => ['atype' => 3],
+            ],
+            [
+                'title' => "已审批<span class='layui-badge layui-bg-orange'>{$sta_count['has_num']}</span>",
+                'url' => 'admin/Goods/apply',
+                'params' => ['atype' => 6],
+            ],
+        ];
 
+        $tab_data['current'] = url('apply', ['atype' => 3]);
+
+        $this->tab_data = $tab_data;
+        $params['atype'] = isset($params['atype']) ? $params['atype'] : 3;
+
+        if ($this->request->isAjax()) {
             $page = input('param.page/d', 1);
             $limit = input('param.limit/d', 15);
+            $atype = input('param.0/d', 3);
 
             if (1 != session('admin_user.role_id')){
                 $where['a.cid'] = session('admin_user.cid');
             }
+            $uid = session('admin_user.uid');
+            $con = '';
+            $where = $data = [];
+            switch ($atype) {
+                case 3:
+                    $con = "JSON_CONTAINS_PATH(a.send_user,'one', '$.\"$uid\"')";
+                    $where['a.status'] = 1;
+                    break;
+                case 6:
+                    $con = "JSON_CONTAINS_PATH(a.send_user,'one', '$.\"$uid\"')";
+                    $where['a.status'] = ['>', 1];
+                    break;
+                default:
+                    $con = "";
+                    break;
+            }
             $where['a.class_type'] = 11;
-            $where['a.status'] = ['<',3];
+//            $where['a.status'] = ['<',3];
 
             if (isset($params['name']) && !empty($params['name'])){
                 $where['u.realname'] = ['like',"%{$params['name']}%"];
@@ -169,16 +218,18 @@ class Goods extends Admin
                 ->join('tb_approval_goods g','a.id=g.aid','right')
                 ->join('tb_admin_user u','a.user_id=u.id','left')
                 ->where($where)
+                ->where($con)
                 ->order('a.status desc')
                 ->page($page)
                 ->limit($limit)
                 ->select();
+//            echo Db::table('tb_approval a')->getLastSql();
             $approval_status = config('other.approval_status');
             if ($data['data']){
                 foreach ($data['data'] as $k=>$v) {
                     $data['data'][$k]['send_user'] = $this->deal_data($v['send_user']);
                     $data['data'][$k]['goods'] = json_decode($v['goods'],true);
-                    $data['data'][$k]['status'] = $approval_status[$v['status']];
+                    $data['data'][$k]['status_name'] = $approval_status[$v['status']];
                     $data['data'][$k]['create_time'] = date('Y-m-d H:i:s',$v['create_time']);
                 }
             }
@@ -188,23 +239,25 @@ class Goods extends Admin
                 ->join('tb_approval_goods g','a.id=g.aid','right')
                 ->join('tb_admin_user u','a.user_id=u.id','left')
                 ->where($where)
+                ->where($con)
                 ->order('a.status desc')
                 ->page($page)
                 ->limit($limit)
                 ->count();
             $data['code'] = 0;
             $data['msg'] = '';
-//            print_r($data);
             return json($data);
         }
 
         // 分页
-        $tab_data = $this->tab_data;
         $tab_data['current'] = url('');
 
         $this->assign('unit_option', config('other.unit'));
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 1);
+        $this->assign('isparams', 1);
+        $this->assign('atype', $params['atype']);
+        $this->assign('tab_url', url('apply', ['atype' => $params['atype']]));
         return $this->fetch();
     }
     public function deal_data($x_user)

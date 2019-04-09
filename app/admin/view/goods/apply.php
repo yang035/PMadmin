@@ -60,7 +60,9 @@
     <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=shopping_goods&id={{ d.id }}">
 </script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
+    {{# if(d.status == 1){ }}
     <a href="{:url('hand')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">分发</a>
+    {{# } }}
 <!--    <a href="{:url('del')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
 </script>
 <script type="text/javascript">
@@ -70,7 +72,7 @@
         var table = layui.table;
         table.render({
             elem: '#dataTable'
-            ,url: '{:url()}' //数据接口
+            ,url: "{:url('apply',[$atype])}" //数据接口
             ,page: true //开启分页
             ,limit: 20
             ,text: {
@@ -88,7 +90,7 @@
                     return t;
                     }}
                 ,{field: 'send_user',  title: '审批人'}
-                ,{field: 'status',  title: '状态'}
+                ,{field: 'status_name',  title: '状态'}
                 ,{field: 'create_time', title: '申请时间'}
                 ,{title: '操作', templet: '#buttonTpl'}
             ]]
