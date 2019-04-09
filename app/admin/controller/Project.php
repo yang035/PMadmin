@@ -115,7 +115,7 @@ class Project extends Admin
         $map['cid'] = $cid;
         $map['t_type'] = 1;
         if (empty($subject_id)){
-            $list = ProjectModel::index($map);
+            $list = ProjectModel::index1($map);
         }else{
             $map['pid'] = 0;
             $list = ProjectModel::getAll($map);
@@ -552,7 +552,18 @@ class Project extends Admin
         $field = "*,JSON_EXTRACT(manager_user,'$.\"{$uid}\"') m_res,JSON_EXTRACT(send_user,'$.\"{$uid}\"') s_res,JSON_EXTRACT(deal_user,'$.\"{$uid}\"') d_res,JSON_EXTRACT(copy_user,'$.\"{$uid}\"') c_res";
 
         if (empty($subject_id)) {
-            $list = ProjectModel::field($field)->where($map)->where($con)->order('grade desc,create_time desc')->select();
+//            $list = ProjectModel::field($field)->where($map)->where($con)->order('grade desc,create_time desc')->select();
+            $result = ProjectModel::field($field)->where($map)->where($con)->order('grade desc,create_time desc')->limit(5)->select();
+            if ($result){
+                $ids = array_column($result,'id');
+                $map['subject_id'] = ['in',implode(',',$ids)];
+                unset($map['id']);
+                $result1 = ProjectModel::field($field)->where($map)->where($con)->order('grade desc,create_time desc')->select();
+                $list = array_unique(array_merge($result1,$result));//顺序不能颠倒
+            }else{
+                $list = [];
+            }
+
         }else{
             $result = ProjectModel::field($field)->where($map)->where($con)->order('grade desc,create_time desc')->limit(1)->select();
             $map['subject_id'] = $result[0]['id'];

@@ -19,6 +19,21 @@ class Project extends Model
         return $result;
     }
 
+    public static function index1($where){
+        $field = '*';
+        $result = self::field($field)->where($where)->order('grade desc')->limit(5)->select();
+//        print_r($result[0]['id']);exit();
+        if ($result) {
+            $ids = array_column($result, 'id');
+            $where['subject_id'] = ['in', implode(',', $ids)];
+            unset($where['pid']);
+            $result1 = self::field($field)->where($where)->order('grade desc')->select();
+            return array_unique(array_merge($result1, $result));//顺序不能颠倒
+        }else{
+            return [];
+        }
+    }
+
     public static function getAll($where){
         $field = '*';
         $result = self::field($field)->where($where)->order('grade desc')->limit(1)->select();
