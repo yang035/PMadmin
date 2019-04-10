@@ -495,6 +495,8 @@ class Project extends Admin
             if (!empty($params['project_id'])){
                 $map['id'] = $params['project_id'];
                 $subject_id = $params['project_id'];
+            }else{
+                $map['pid'] = 0;
             }
 
             if (isset($params['start_time']) && !empty($params['start_time'])) {
@@ -579,12 +581,12 @@ class Project extends Admin
 //            $list = ProjectModel::field($field)->where($map)->where($con)->order('grade desc,create_time desc')->select();
             $st = strtotime('-3 days');
             $et = strtotime('+3 days');
-            $map1['update_time'] = ['between',[$st,$et]];
-            $result = ProjectModel::field($field)->where($map)->where($con)->where($map1)->order('grade desc,create_time desc')->limit(5)->select();
+            $map['update_time'] = ['between',[$st,$et]];
+            $result = ProjectModel::field($field)->where($map)->where($con)->order('grade desc,create_time desc')->limit(5)->select();
             if ($result){
                 $ids = array_column($result,'id');
                 $map['subject_id'] = ['in',implode(',',$ids)];
-                unset($map['id']);
+                $map['pid'] =['<>',0];
                 $result1 = ProjectModel::field($field)->where($map)->where($con)->order('grade desc,create_time desc')->select();
                 $list = array_unique(array_merge($result1,$result));//顺序不能颠倒
             }else{
@@ -648,6 +650,7 @@ class Project extends Admin
             }
         }
         if ($this->request->isAjax()) {
+//            print_r($list);
             $data = [];
             $data['code'] = 0;
             $data['msg'] = 'ok';
