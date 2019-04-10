@@ -181,6 +181,21 @@ class Project extends Model
         return json_encode($data);
     }
 
+    public static function inputSearchProject1(){
+        $where = [
+            'pid'=>0,
+            'cid'=>session('admin_user.cid'),
+            't_type'=>1,
+        ];
+        $data = self::field('id,name')->where($where)->select();
+        $tmp = [
+            'id'=>0,
+            'name'=>'其他'
+        ];
+        $data[] = $tmp;
+        return json_encode($data);
+    }
+
     public static function getPtype($grade = 0)
     {
         $grade_type = config('other.cat_id');
