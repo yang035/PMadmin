@@ -224,8 +224,30 @@ class Project extends Admin
             if ($result !== true) {
                 return $this->error($result);
             }
-//            print_r($data);exit();
-            if (!ProjectModel::create($data)) {
+
+            Db::startTrans();
+            try{
+                $res = ProjectModel::create($data);
+                $ids = str_replace('p',',',substr(stristr($data['code'],'p'),1,-1));
+                $w = [
+                    'id' => ['in',$ids]
+                ];
+                $r = ProjectModel::where($w)->select();
+                if ($r){
+                    foreach ($r as $k=>$v){
+                        $u = [
+                            'end_time' =>$data['end_time'],
+                            'update_time'=>time(),
+                        ];
+                        ProjectModel::where('id',$v['id'])->update($u);
+                    }
+                }
+                Db::commit();
+            }catch (\Exception $e){
+                Db::rollback();
+            }
+
+            if (!$res) {
                 return $this->error('添加失败！');
             }
             return $this->success("操作成功{$this->score_value}", url('index'));
@@ -555,7 +577,10 @@ class Project extends Admin
 
         if (empty($subject_id)) {
 //            $list = ProjectModel::field($field)->where($map)->where($con)->order('grade desc,create_time desc')->select();
-            $result = ProjectModel::field($field)->where($map)->where($con)->order('grade desc,create_time desc')->limit(5)->select();
+            $st = strtotime('-3 days');
+            $et = strtotime('+3 days');
+            $map1['update_time'] = ['between',[$st,$et]];
+            $result = ProjectModel::field($field)->where($map)->where($con)->where($map1)->order('grade desc,create_time desc')->limit(5)->select();
             if ($result){
                 $ids = array_column($result,'id');
                 $map['subject_id'] = ['in',implode(',',$ids)];
