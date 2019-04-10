@@ -43,7 +43,7 @@
             <th>计划产量(斗)</th>
             <th>实际产量(斗)</th>
             <th>紧急度</th>
-            <!--                <th>参与人</th>-->
+            <th>参与人</th>
             <th>负责人</th>
             <th>审批人</th>
             <th>完成情况</th>
@@ -62,7 +62,7 @@
             <td class="font12">{$vo['score']}</td>
             <td class="font12">{$vo['real_score']}</td>
             <td class="font12">{$vo['grade']}</td>
-            <!--                <td class="font12">{$vo['deal_user']}</td>-->
+            <td class="font12">{$vo['deal_user']}</td>
             <td class="font12">{$vo['manager_user']}</td>
             <td class="font12">{$vo['send_user']}</td>
             <td class="font12" title="昨日计划完成{$vo['per']}%">

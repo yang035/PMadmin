@@ -75,7 +75,16 @@
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">附件说明</label>
-                        <div class="layui-input-inline">无</div>
+                        {notempty name="data_info['attachment_show']"}
+                        <ul>
+                            {volist name="data_info['attachment_show']" id="v"}
+                            <li>
+                                <a target="_blank" href="{$v}">附件{$i}</a>
+                            </li>
+                            {/volist}
+                        </ul>
+                        <br>
+                        {/notempty}
                     </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">负责人</label>
@@ -226,6 +235,17 @@
                                 <br>
                                 {$vo['mark']}
                                 <br>
+                                {notempty name="vo['attachment']"}
+                                附件：
+                                <ul>
+                                    {volist name="vo['attachment']" id="v"}
+                                    <li>
+                                        <a target="_blank" href="{$v}">附件{$i}</a>
+                                    </li>
+                                    {/volist}
+                                </ul>
+                                <br>
+                                {/notempty}
                                 <ul>
                                     {volist name="vo['reply']" id="v"}
                                     <li>

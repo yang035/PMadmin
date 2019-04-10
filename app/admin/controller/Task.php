@@ -463,6 +463,12 @@ class Task extends Admin
         $row['deal_user_id'] = $this->deal_data($row['deal_user']);
         $row['copy_user_id'] = $this->deal_data($row['copy_user']);
         $row['send_user_id'] = $this->deal_data($row['send_user']);
+        if ($row){
+            if (!empty($row['attachment'])){
+                $attachment = explode(',',$row['attachment']);
+                $row['attachment_show'] = array_filter($attachment);
+            }
+        }
 
         switch ($params['type']){
             case 1:
@@ -488,6 +494,10 @@ class Task extends Admin
         $report = ProjectReport::getAll(5);
         if ($report){
             foreach ($report as $k=>$v){
+                if (!empty($v['attachment'])){
+                    $attachment = explode(',',$v['attachment']);
+                    $report[$k]['attachment'] = array_filter($attachment);
+                }
                 $report[$k]['reply'] = ReportReply::getAll($v['id'],5);
             }
         }
