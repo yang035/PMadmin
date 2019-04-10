@@ -106,12 +106,24 @@ class Cron extends Controller
             'create_time'=>['between',[$yesday.' 17:00:00',$today.' 10:00:00']]
         ];
         $daily_report = Db::table('tb_daily_report')->field('user_id')->where($where)->group('user_id')->select();
-//        print_r($daily_report);exit();
         if ($daily_report){
-            foreach ($daily_report as $v){
+            $daily_report = array_column($daily_report,'user_id');
+        }
+        $where = [
+            'cid'=>2,
+            'create_time'=>['between',[strtotime($yesday.' 17:00:00'),strtotime($today.' 10:00:00')]]
+        ];
+        $project_report = Db::table('tb_project_report')->field('user_id')->where($where)->group('user_id')->select();
+        if ($project_report){
+            $project_report = array_column($project_report,'user_id');
+        }
+        $merge_arr = array_unique(array_merge($daily_report,$project_report));
+
+        if ($merge_arr){
+            foreach ($merge_arr as $v){
                 $sc = [
                     'cid' => 2,
-                    'user' => $v['user_id'],
+                    'user' => $v,
                     'gl_add_score' => $num,
                     'remark' => $remark,
                 ];
