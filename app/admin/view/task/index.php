@@ -5,6 +5,13 @@
         float: left;
         width: auto;
     }
+    .layui-progress-text {
+        position: relative;
+        top: 0px;
+        line-height: 18px;
+        font-size: 12px;
+        color: #666;
+    }
 </style>
 <div class="page-toolbar">
     <div class="page-filter">
