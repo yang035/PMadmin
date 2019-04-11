@@ -865,7 +865,7 @@ class Project extends Admin
             $row['time_per'] = 0;
         }
         if (time() > $row['end_time']){
-            $row['span'] = "(限定完成时间{$row['end_time']},已逾期)";
+            $row['span'] = "(限定完成时间{$row['end_time']})";
         }else{
             $row['span'] = '';
         }
@@ -901,7 +901,7 @@ class Project extends Admin
                     $report[$k]['attachment'] = array_filter($attachment);
                 }
                 if ($v['create_time'] > $row['end_time']){
-                    $report[$k]['span'] = "(限定完成时间{$row['end_time']},已逾期)";
+                    $report[$k]['span'] = "(限定完成时间{$row['end_time']})";
                 }else{
                     $report[$k]['span'] = '';
                 }
