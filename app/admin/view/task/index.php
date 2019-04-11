@@ -55,6 +55,15 @@
     <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">编辑</a>
     <!--            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
 </script>
+<script type="text/html" id="oper-col-1">
+    <div class="layui-progress" lay-showpercent="true">
+        {{#  if(d.realper > d.per){ }}
+        <div class="layui-progress-bar" lay-percent="{{ d.realper }}%"></div>
+        {{#  }else{ }}
+        <div class="layui-progress-bar layui-bg-red" lay-percent="{{ d.realper }}%"></div>
+        {{#  } }}
+    </div>
+</script>
 <script>
     var  name=$("input[name='name']").val();
     var  start_time=$("input[name='start_time']").val();
@@ -65,8 +74,9 @@
         base: '/../../static/js/'
     }).extend({
         treetable: 'treetable-lay/treetable'
-    }).use(['layer', 'table', 'treetable'], function () {
+    }).use(['layer', 'table','element', 'treetable'], function () {
         var $ = layui.jquery;
+        var element = layui.element;
         var table = layui.table;
         var layer = layui.layer;
         var treetable = layui.treetable;
@@ -95,10 +105,12 @@
                     {field: 'deal_user', title: '参与人'},
                     {field: 'manager_user', title: '负责人'},
                     {field: 'send_user', title: '审批人'},
+                    {field: 'realper', title: '完成情况',width: 80, templet:'#oper-col-1'},
                     // {field: 'user_id', title: '添加人',width: 80},
                     {templet: '#oper-col', title: '操作',width: 250,}
                 ]],
                 done: function () {
+                    element.render();
                     layer.closeAll('loading');
                 }
             });

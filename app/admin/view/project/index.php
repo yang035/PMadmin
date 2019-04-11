@@ -1,8 +1,17 @@
 {include file="block/layui" /}
+<script src="__PUBLIC_JS__/jquery.select.js?v="></script>
+<script src="__PUBLIC_JS__/SelectBox.min.js?v="></script>
 <style>
     .layui-form-item .layui-input-inline {
         float: left;
         width: auto;
+    }
+    .layui-progress-text {
+        position: relative;
+        top: 0px;
+        line-height: 18px;
+        font-size: 12px;
+        color: #666;
     }
 </style>
 <div class="page-toolbar">
@@ -60,6 +69,15 @@
     {{#  } }}
     <!--            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
 </script>
+<script type="text/html" id="oper-col-1">
+    <div class="layui-progress" lay-showpercent="true">
+        {{#  if(d.realper > d.per){ }}
+        <div class="layui-progress-bar" lay-percent="{{ d.realper }}%"></div>
+        {{#  }else{ }}
+        <div class="layui-progress-bar layui-bg-red" lay-percent="{{ d.realper }}%"></div>
+        {{#  } }}
+    </div>
+</script>
 <table id="table1" class="layui-table" lay-filter="table1"></table>
 <script>
     var  project_id=$("select[name='project_id']").val();
@@ -72,8 +90,9 @@
         base: '/../../static/js/'
     }).extend({
         treetable: 'treetable-lay/treetable'
-    }).use(['layer', 'table', 'treetable'], function () {
+    }).use(['layer', 'table','element', 'treetable'], function () {
         var $ = layui.jquery;
+        var element = layui.element;
         var table = layui.table;
         var layer = layui.layer;
         var treetable = layui.treetable;
@@ -86,7 +105,7 @@
                 treeSpid: 0,
                 treeIdName: 'id',
                 treePidName: 'pid',
-                treeDefaultClose: true,
+                treeDefaultClose: false,
                 treeLinkage: true,
                 elem: '#table1',
                 url: _url,
@@ -103,9 +122,11 @@
                     {field: 'manager_user', title: '负责人'},
                     {field: 'send_user', title: '审批人'},
                     {field: 'user_id', title: '添加人',width: 80},
+                    {field: 'realper', title: '完成情况',width: 80, templet:'#oper-col-1'},
                     {templet: '#oper-col', title: '操作',width: 250,}
                 ]],
                 done: function () {
+                    element.render();
                     layer.closeAll('loading');
                 }
             });
