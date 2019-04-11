@@ -585,7 +585,7 @@ class Project extends Admin
             $st = strtotime('-3 days');
             $et = strtotime('+3 days');
             $map['update_time'] = ['between',[$st,$et]];
-            $result = ProjectModel::field($field)->where($map)->where($con)->order('grade desc,create_time desc')->limit(5)->select();
+            $result = ProjectModel::field($field)->where($map)->where($con)->order('grade desc,create_time desc')->select();
             if ($result){
                 $ids = array_column($result,'id');
                 $map['subject_id'] = ['in',implode(',',$ids)];

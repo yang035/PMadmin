@@ -24,7 +24,7 @@ class Project extends Model
         $et = strtotime('+3 days');
         $where['update_time'] = ['between',[$st,$et]];
         $field = '*';
-        $result = self::field($field)->where($where)->order('grade desc')->limit(5)->select();
+        $result = self::field($field)->where($where)->order('grade desc')->select();
 //        print_r($result[0]['id']);exit();
         if ($result) {
             $ids = array_column($result, 'id');
