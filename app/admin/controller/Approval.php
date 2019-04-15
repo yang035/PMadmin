@@ -133,6 +133,7 @@ class Approval extends Admin
         $d = '';
         $cid = session('admin_user.cid');
         $map['cid'] = $cid;
+        $map['class_type'] = ['<>',11];
         $panel_type = config('other.panel_type');
         $approval_status = config('other.approval_status');
         $params['atype'] = isset($params['atype']) ? $params['atype'] : 1;
