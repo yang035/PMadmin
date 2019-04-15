@@ -117,7 +117,7 @@ class Approval extends Admin
         $map['cid'] = session('admin_user.cid');
         $uid = session('admin_user.uid');
         $fields = "SUM(IF(user_id='{$uid}',1,0)) user_num,
-        SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status=1,1,0)) send_num,
+        SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status=1 and class_type <> 11,1,0)) send_num,
         SUM(IF(JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"'),1,0)) copy_num,
         SUM(IF(JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"'),1,0)) deal_num,
         SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status>1,1,0)) has_num,
@@ -133,7 +133,6 @@ class Approval extends Admin
         $d = '';
         $cid = session('admin_user.cid');
         $map['cid'] = $cid;
-        $map['class_type'] = ['<>',11];
         $panel_type = config('other.panel_type');
         $approval_status = config('other.approval_status');
         $params['atype'] = isset($params['atype']) ? $params['atype'] : 1;
@@ -172,6 +171,7 @@ class Approval extends Admin
             case 3:
                 $con = "JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"')";
                 $map['status'] = 1;
+                $map['class_type'] = ['<>',11];
                 break;
             case 4:
                 $con = "JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"')";
