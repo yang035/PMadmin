@@ -20,7 +20,7 @@ class Project extends Model
     }
 
     public static function index1($where){
-        $st = strtotime('-3 days');
+        $st = strtotime('-7 days');
         $et = strtotime('+3 days');
         $where['update_time'] = ['between',[$st,$et]];
         $field = '*';

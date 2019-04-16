@@ -588,7 +588,7 @@ class Project extends Admin
 
         if (empty($subject_id)) {
 //            $list = ProjectModel::field($field)->where($map)->where($con)->order('grade desc,create_time desc')->select();
-            $st = strtotime('-3 days');
+            $st = strtotime('-7 days');
             $et = strtotime('+3 days');
             $map['update_time'] = ['between',[$st,$et]];
             $result = ProjectModel::field($field)->where($map)->where($con)->order('grade desc,create_time desc')->select();
