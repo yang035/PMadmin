@@ -180,7 +180,7 @@ layui.use(['jquery', 'laydate','upload'], function() {
     });
     function getNowDate() {
         var time = new Date().getTime();
-        return new Date(time).Format('yyyy-MM-dd') + ' 09:00:00';
+        return new Date(time).Format('yyyy-MM-dd') + ' 08:30:00';
     }
     function getNextDate() {
         var time = new Date().getTime();
