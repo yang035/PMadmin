@@ -138,6 +138,9 @@ class Task extends Admin
             if (isset($data['max_score']) && $data['score'] > $data['max_score']){
                 return $this->error('预设值超过最大值！');
             }
+            if($data['start_time'] >= $data['end_time']){
+                return $this->error('结束时间不能小于开始时间');
+            }
             $data['cid'] = session('admin_user.cid');
             if ($data['pid'] == ''){
                 $data['pid'] = 0;
@@ -198,6 +201,9 @@ class Task extends Admin
 
             if (isset($data['max_score']) && $data['score'] > $data['max_score']){
                 return $this->error('预设值超过最大值！');
+            }
+            if($data['start_time'] >= $data['end_time']){
+                return $this->error('结束时间不能小于开始时间');
             }
             $data['cid'] = session('admin_user.cid');
             if ($data['pid'] == ''){

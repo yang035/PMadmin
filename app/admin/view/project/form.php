@@ -229,12 +229,12 @@ layui.use(['jquery', 'laydate','upload','form'], function() {
         elem: '.field-start_time',
         type: 'datetime',
         trigger: 'click',
-        value: new Date(),
+        value: getNowDate(),
         change: function(value){
             // $(".laydate-btns-time").click();
         },
         done: function (value, date, endDate) {
-            $("input[name='end_time']").val(value);
+            // $("input[name='end_time']").val(value);
         }
     });
 
@@ -243,7 +243,7 @@ layui.use(['jquery', 'laydate','upload','form'], function() {
         type: 'datetime',
         trigger: 'click',
         value: getNextDate(),
-        min: $("input[name='start_time']").val(),
+        // min: $("input[name='end_time']").val(),
         change: function(value){
             // $(".laydate-btns-time").click();
         },
@@ -251,9 +251,13 @@ layui.use(['jquery', 'laydate','upload','form'], function() {
             getTimeLong(value);
         },
     });
+    function getNowDate() {
+        var time = new Date().getTime();
+        return new Date(time).Format('yyyy-MM-dd') + ' 09:00:00';
+    }
     function getNextDate() {
         var time = new Date().getTime();
-        return new Date(time).Format('yyyy-MM-dd') + ' 23:59:59';
+        return new Date(time).Format('yyyy-MM-dd') + ' 18:00:00';
     }
     //写入时长
     getTimeLong(getNextDate());
@@ -261,6 +265,9 @@ layui.use(['jquery', 'laydate','upload','form'], function() {
     function getTimeLong(value) {
         var timeLong,time1 = $('.field-start_time').val();
         var date3 = new Date(value).getTime() - new Date(time1).getTime();   //时间差的毫秒数
+        if (date3 <= 0 ){
+            layer.alert('结束时间不能小于开始时间');
+        }
         //计算出相差天数
         var days=Math.floor(date3/(24*3600*1000));
         //计算出小时数
