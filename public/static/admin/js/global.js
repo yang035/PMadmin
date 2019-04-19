@@ -490,3 +490,17 @@ layui.define(['element', 'form', 'table'], function(exports) {
     });
     exports('global', {});
 });
+function getSatrtDate() {
+    var time = new Date().getTime();
+    return new Date(time).Format('yyyy-MM-dd') + ' 08:30:00';
+}
+function getEndDate() {
+    var time = new Date().getTime();
+    return new Date(time).Format('yyyy-MM-dd') + ' 18:00:00';
+}
+function getStartTime() {
+    return '08:30:00';
+}
+function getEndTime() {
+    return '18:00:00';
+}

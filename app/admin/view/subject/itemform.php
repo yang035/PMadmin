@@ -172,7 +172,7 @@
             elem: '.field-start_time',
             type: 'datetime',
             trigger: 'click',
-            value: new Date(),
+            value: getSatrtDate(),
             change: function(value){
                 // $(".laydate-btns-time").click();
             },
@@ -184,7 +184,7 @@
             elem: '.field-end_time',
             type: 'datetime',
             trigger: 'click',
-            value: getNextDate(),
+            value: getEndDate(),
             min: $("input[name='start_time']").val(),
             change: function(value){
                 // $(".laydate-btns-time").click();
@@ -199,7 +199,7 @@
             return new Date(time).Format('yyyy-MM-dd') + ' 23:59:59';
         }
         //写入时长
-        getTimeLong(getNextDate());
+        getTimeLong(getEndDate());
 
         //计算两个时间差
         function getTimeLong(value) {

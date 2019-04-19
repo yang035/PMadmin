@@ -158,7 +158,7 @@
             trigger: 'click',
             min: '08:00:00',
             max: '18:00:00',
-            value: '00:00:00',
+            value: getStartTime(),
         });
         laydate.render({
             elem: '.field-end_time',

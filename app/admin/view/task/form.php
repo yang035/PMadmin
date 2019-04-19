@@ -157,7 +157,7 @@ layui.use(['jquery', 'laydate','upload'], function() {
         elem: '.field-start_time',
         type: 'datetime',
         trigger: 'click',
-        value: getNowDate(),
+        value: getSatrtDate(),
         change: function(value){
             // $(".laydate-btns-time").click();
         },
@@ -169,7 +169,7 @@ layui.use(['jquery', 'laydate','upload'], function() {
         elem: '.field-end_time',
         type: 'datetime',
         trigger: 'click',
-        value: getNextDate(),
+        value: getEndDate(),
         // min: $("input[name='start_time']").val(),
         change: function(value){
             // $(".laydate-btns-time").click();
@@ -187,7 +187,7 @@ layui.use(['jquery', 'laydate','upload'], function() {
         return new Date(time).Format('yyyy-MM-dd') + ' 18:00:00';
     }
     //写入时长
-    getTimeLong(getNextDate());
+    getTimeLong(getEndDate());
     //计算两个时间差
     function getTimeLong(value) {
         var timeLong,time1 = $('.field-start_time').val();

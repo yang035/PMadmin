@@ -150,7 +150,7 @@
             type: 'time',
             // format: 'HH',
             trigger: 'click',
-            value: '00:00:00',
+            value: '18:00:00',
         });
         laydate.render({
             elem: '.field-end_time',
@@ -165,7 +165,7 @@
             type: 'time',
             // format: 'HH',
             trigger: 'click',
-            value: '00:00:00',
+            value: '20:00:00',
         });
         $('.field-reason').focus(function () {
             var time1 = $('.field-start_time').val()+' '+$('.field-start_time1').val();
