@@ -48,7 +48,7 @@
 
                     }
                     document.write(d);
-                    d.openAll();
+                    // d.openAll();
                 }
             });
         </script>
