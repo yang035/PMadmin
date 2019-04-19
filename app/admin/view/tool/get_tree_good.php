@@ -23,7 +23,7 @@
 <div>
     <div class="dtree" id="dtree_div" style="width: 500px;float: left">
         <p><button class="layui-btn layui-btn-normal" onclick="javascript:  d.openAll();">打开</button><button  class="layui-btn layui-btn-normal" onclick="javascript: d.closeAll();">关闭</button></p>
-        <input class="layui-input" id="dosearch_text" type="text" onkeyup="nodeSearching()"/><input id="dosearch" type="button" class="layui-btn layui-btn-normal" value="查询" onclick="nodeSearching() " />
+        <input class="layui-input" id="dosearch_text" type="text" onkeyup="nodeSearching()" placeholder="关键字搜索"/><input id="dosearch" type="button" class="layui-btn layui-btn-normal" value="查询" onclick="nodeSearching() " />
         <div style="color: red">备注：点击部门名称“批量操作”</div>
         <script type="text/javascript">
             d = new dTree('d', true);
