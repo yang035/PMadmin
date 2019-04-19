@@ -6,7 +6,7 @@
                 <p class="pull-left">
                 <ul class="gtco-social-icons pull-left">
                     <li><a href="#"><img style="width: 110px;height: 45px;" src="__ADMIN_JS__/home/images/dc.png" alt="大成易景"></a></li>
-                    <li><a href="#"><img style="width: 110px;height: 45px;" src="__ADMIN_JS__/home/images/jz.png" alt="集智圈点"></a></li>
+<!--                    <li><a href="#"><img style="width: 110px;height: 45px;" src="__ADMIN_JS__/home/images/jz.png" alt="集智圈点"></a></li>-->
                     <li><a href="#"><img style="width: 110px;height: 45px;" src="__ADMIN_JS__/home/images/sz.png" alt="深圳建筑设计院"></a></li>
                     <li><a href="#"><img style="width: 110px;height: 45px;" src="__ADMIN_JS__/home/images/tc.png" alt="天成易创"></a></li>
                 </ul>
