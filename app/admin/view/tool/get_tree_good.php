@@ -136,10 +136,18 @@
             function nodeSearching() {
                 var dosearch = $.trim($("#dosearch_text").val());//获取要查询的文字
                 var dtree_div = $("#dtree_div").find(".dtree_node").show().filter(":contains('" + dosearch + "')");//获取所有包含文本的节点
-                $.each(dtree_div, function (index, element) {
-                    var s = $(element).attr("node_id");
-                    d.openTo(s);//根据id打开节点
-                });
+                if (dtree_div.length > 0){
+                    var p = $(dtree_div).parent().parent().parent();
+                    $(p.children()).css({display: 'none'});
+                    $(p.siblings()).css({display: 'none'});
+                    $.each(dtree_div, function (index, element) {
+                        var s = $(element).attr("node_id");
+                        $($(element).parent().parent()).css({display: 'block'});
+                        d.openTo(s);//根据id打开节点
+                    });
+                } else {
+                    layer.msg('关键字搜索不到');
+                }
             }
 
             //判断默认选中复选框
