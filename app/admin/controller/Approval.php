@@ -256,6 +256,21 @@ class Approval extends Admin
         foreach ($list as $k => $v) {
             $list[$k]['send_user'] = $this->deal_data($v['send_user']);
             $list[$k]['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
+            $list[$k]['money'] = '#';
+            switch ($v['class_type']){
+                case 2://报销
+                    $child = ExpenseModel::where('aid',$v['id'])->find();
+                    if ($child){
+                        $list[$k]['money'] = $child['total'];
+                    }
+                    break;
+                case 3://费用
+                    $child = CostModel::where('aid',$v['id'])->find();
+                    if ($child){
+                        $list[$k]['money'] = $child['money'];
+                    }
+                    break;
+            }
             if ($v['project_id']){
                 $project_data = ProjectModel::getRowById($v['project_id']);
             }else{
