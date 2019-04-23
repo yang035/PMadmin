@@ -53,7 +53,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">任务名</label>
         <div class="layui-input-inline">
-            <select name="project_id[]" class="layui-input field-project_id" type="select">
+            <select name="project_id[]" class="layui-input field-project_id" type="select" lay-search>
                 {$mytask}
             </select>
         </div>
@@ -314,7 +314,7 @@
             $(".new_task").before("<div class=\"layui-form-item\">\n" +
                 "        <label class=\"layui-form-label\">任务名</label>\n" +
                 "        <div class=\"layui-input-inline\">\n" +
-                "            <select name=\"project_id[]\" class=\"layui-input field-project_id\" type=\"select\">\n" +
+                "            <select name=\"project_id[]\" class=\"layui-input field-project_id\" type=\"select\" lay-search>\n" +
                 "                {$mytask}\n" +
                 "            </select>\n" +
                 "        </div>\n" +
