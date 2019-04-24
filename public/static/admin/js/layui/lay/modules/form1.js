@@ -299,7 +299,7 @@ layui.define('layer', function(exports){
                             if (escape(value).indexOf("%u") != -1) { //汉字
                                 result = text.indexOf(value) > -1;
                             } else {
-                                var len = value.length
+                                var len = value.length,value=value.toLowerCase();
                                 result = ConvertPinyin(text).substring(0, len) === value || makePy(text)[0].toLowerCase().substring(0, len) === value || text.toLowerCase().indexOf(value) > -1 || (id === undefined ? false : id.indexOf(value) > -1);
                             }
                             if (result == true) {
