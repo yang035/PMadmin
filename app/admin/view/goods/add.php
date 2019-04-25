@@ -81,6 +81,13 @@
             <div class="layui-form-mid" style="color: red">*</div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label">物品编号</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input field-goodssn" name="goodssn" lay-verify="required"
+                       autocomplete="off" placeholder="请输入物品编号">
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">描述</label>
             <div class="layui-input-inline">
                 <textarea type="text" class="layui-textarea field-description" name="description" lay-verify="required"

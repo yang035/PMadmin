@@ -393,8 +393,8 @@ class Goods extends Admin
 //            print_r($file_name);exit();
             set_time_limit(0);
             $excel = \service('Excel');
-            $format = array('A' => 'line', 'B' => 'cat_id', 'C' => 'title', 'D' => 'description', 'E' => 'marketprice', 'F' => 'total', 'G' => 'unit', 'H' => 'content');
-            $checkformat = array('A' => '序号', 'B' => '物品类型', 'C' => '名称', 'D' => '概述', 'E' => '采购单价', 'F' => '库存数', 'G' => '单位', 'H' => '描述');
+            $format = array('A' => 'line', 'B' => 'cat_id', 'C' => 'title', 'D' => 'description', 'E' => 'marketprice', 'F' => 'total', 'G' => 'unit', 'H' => 'content', 'I' => 'goodssn');
+            $checkformat = array('A' => '序号', 'B' => '物品类型', 'C' => '名称', 'D' => '概述', 'E' => '采购单价', 'F' => '库存数', 'G' => '单位', 'H' => '描述', 'I' => '物品编号');
             $res = $excel->readUploadFile($file_name, $format, 8050, $checkformat);
             $cid = session('admin_user.cid');
             if ($res['status'] == 0) {
@@ -451,6 +451,7 @@ class Goods extends Admin
                             'total' => $v['F'],
                             'unit' => $u[$v['G']],
                             'content' => $v['H'],
+                            'goodssn' => $v['I'],
                             'cid' => session('admin_user.cid'),
                             'user_id' => session('admin_user.uid'),
                         ];
@@ -465,6 +466,7 @@ class Goods extends Admin
                             'total' => $v['F']+$f['total'],
                             'unit' => $u[$v['G']],
                             'content' => $v['H'],
+                            'goodssn' => $v['I'],
                             'cid' => session('admin_user.cid'),
                             'user_id' => session('admin_user.uid'),
                         ];

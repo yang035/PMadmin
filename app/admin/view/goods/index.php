@@ -165,6 +165,7 @@
                 ,{field: 'title', title: '名称',width: 300, templet:function(d){
                         return "<a class='mcolor' onclick='open_div("+d.id+")'>"+d.title+"</a>";
                     }}
+                ,{field: 'goodssn', title: '物品编号'}
                 ,{field: 'cat_id', title: '类型', templet:function(d){
                         if (d.category){
                             return d.category.name;
