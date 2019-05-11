@@ -108,7 +108,8 @@ class ScoreRule extends Model
             }
             $str .= $data['name'];
         }
-        return $str;
+        $data['fullname'] = $str;
+        return $data;
     }
 
     public function del($ids = '')

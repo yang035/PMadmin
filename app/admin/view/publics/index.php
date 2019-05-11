@@ -35,13 +35,6 @@
                 <input type="password" name="password" class="layui-input" lay-verify="required" placeholder="******" value="">
             </div>
         </div>
-<!--         <div class="layui-form-item">-->
-<!--            <label class="layui-form-label">安全验证</label>-->
-<!--            <div class="layui-input-block">-->
-<!--                <input type="text" name="code" class="layui-input">-->
-<!--                <div><img src="{123456|substr=1,3}" onclick="this.src='{:captcha_src()}?x='+Math.random();" /></div>-->
-<!--            </div>-->
-<!--        </div>-->
         {:token('__token__', 'sha1')}
         <input type="submit" value="登陆" lay-submit="" lay-filter="formLogin" class="layui-btn">
         <div class="layui-form-item">

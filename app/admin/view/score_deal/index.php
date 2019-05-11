@@ -48,6 +48,7 @@
                     <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
                     <th>姓名</th>
                     <th>事件</th>
+                    <th>ML(斗)</th>
                     <th>审批状态</th>
                     <th>添加时间</th>
                     <th>操作</th>
@@ -60,7 +61,8 @@
                     <td class="font12">
                         <strong class="mcolor">{$vo['user_id']}</strong>
                     </td>
-                    <td class="font12">{$vo['rid']}</td>
+                    <td class="font12">{$vo['rid']['fullname']}</td>
+                    <td class="font12">{$vo['rid']['score']}</td>
                     <td class="font12">{$approval_status[$vo['status']]}</td>
                     <td class="font12">{$vo['create_time']}</td>
                     <td>

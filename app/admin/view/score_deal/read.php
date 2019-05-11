@@ -37,9 +37,10 @@
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-card">
         <div class="layui-card-body">
-            事件名称：{$data_list['rid']}<br>
+            事件名称：{$data_list['rid']['fullname']}<br>
             说明：{$data_list['remark']}<br>
             得分人：{$data_list['score_user']}<br>
+            ML值：{$data_list['rid']['score']}（斗）<br>
             审批人：{$data_list['send_user']}<br>
             抄送人：{$data_list['copy_user']}<br>
             添加人：{$data_list['user_id']}<br>
