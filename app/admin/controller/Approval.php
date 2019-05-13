@@ -169,9 +169,8 @@ class Approval extends Admin
                 $map['user_id'] = session('admin_user.uid');
                 break;
             case 3:
-                $con = "JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"')";
+                $con = "JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and class_type <> 11";
                 $map['status'] = 1;
-                $map['class_type'] = ['<>',11];
                 break;
             case 4:
                 $con = "JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"')";
@@ -969,6 +968,67 @@ class Approval extends Admin
         }
         $this->assign('mytask', ProjectModel::getMyTask(0));
         return $this->fetch();
+    }
+
+    public function batch(){
+        $data = $this->request->param();
+
+        if (!isset($data['class_type']) || empty($data['class_type'])) {
+            return $this->error('请选择类型');
+        }
+        if (!isset($data['id']) || empty($data['id'])) {
+            return $this->error('参数传递错误[1]！');
+        }
+        if (!isset($data['table']) || empty($data['table'])) {
+            return $this->error('参数传递错误[2]！');
+        }
+        // 获取主键
+        $pk = Db::name($data['table'])->getPk();
+        $map = [];
+        $map[$pk] = ['in', $data['id']];
+
+        $list1 = ApprovalModel::where($map)->select();
+        //事务提交，保证数据一致性
+        if ($list1){
+            foreach ($list1 as $list){
+                Db::startTrans();
+                try {
+                    if (6 == $data['class_type'] && 2 == $data['val']){
+                        $c = (int)((strtotime($list['end_time']) - strtotime($list['start_time']))/3600);
+                        $per_score = config('score.hour_score') ? config('score.hour_score') : 0;
+                        $gl_add_score = $per_score*$c;
+                        $score = [
+                            'subject_id' => $list['project_id'],
+                            'project_id' => 0,
+                            'cid' => session('admin_user.cid'),
+                            'project_code' => '',
+                            'user' => $list['user_id'],
+                            'gl_add_score' => $gl_add_score,
+                            'remark' => "加班时间段{$list['start_time']}~{$list['end_time']},计算{$c}小时，鼓励{$gl_add_score}斗",
+                            'user_id' => session('admin_user.uid'),
+                            'create_time' => time(),
+                            'update_time' => time(),
+                        ];
+                        db('score')->insert($score);
+                    }
+
+                    $time = time();
+                    $uid = session('admin_user.uid');
+                    $sql = "UPDATE tb_approval SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a'),status={$data['val']},update_time={$time} WHERE id ={$list['id']}";
+                    $res = ApprovalModel::execute($sql);
+                    // 提交事务
+                    Db::commit();
+                } catch (\Exception $e) {
+                    // 回滚事务
+                    Db::rollback();
+                }
+            }
+        }
+
+        if ($res === false) {
+            return $this->error('状态设置失败');
+        }
+        return $this->success('状态设置成功');
     }
 
     public function read()

@@ -32,16 +32,28 @@
                         <input type="hidden" name="person_user" id="person_user" value="">
                     </div>
                 </div>
-                <input type="hidden" name="atype" value="{$Request.param.atype}">
-                <input type="hidden" name="export" value="">
-                <button type="submit" class="layui-btn layui-btn-normal normal_btn">搜索</button>
-                <input type="button" class="layui-btn layui-btn-primary layui-icon export_btn" value="导出">
+                <div class="layui-inline">
+                    <input type="hidden" name="atype" value="{$Request.param.atype}">
+                    <input type="hidden" name="export" value="">
+                    <button type="submit" class="layui-btn layui-btn-normal normal_btn">搜索</button>
+                    <input type="button" class="layui-btn layui-btn-primary layui-icon export_btn" value="导出">
+                </div>
             </div>
         </form>
+        {if condition="($Request.param.atype eq 3) && ($Request.param.class_type > 0) "}
+        <div class="layui-btn-group fl">
+<!--            <a href="{:url('addItem')}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加</a>-->
+            <a data-href="{:url('batch',['table'=>'approval','val'=>2,'class_type'=>$Request.param.class_type])}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-play" data-table="dataTable">同意</a>
+            <a data-href="{:url('batch',['table'=>'approval','val'=>4,'class_type'=>$Request.param.class_type])}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-pause" data-table="dataTable">驳回</a>
+<!--            <a data-href="{:url('delItem')}" class="layui-btn layui-btn-primary j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>-->
+        </div>
+        {/if}
     </div>
+
 </div>
+
 <div class="layui-form">
-    <table class="layui-table mt10" lay-even="" lay-skin="row">
+    <table id="dataTable" class="layui-table mt10" lay-even="" lay-skin="row">
         <colgroup>
             <col width="50">
         </colgroup>

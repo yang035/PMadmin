@@ -425,6 +425,13 @@ layui.define(['element', 'form', 'table'], function(exports) {
                         }
                         query += 'id[]='+checkStatus.data[i].id;
                     }
+                }else if($('.checkbox-ids:checked').length > 0){
+                    $.each($('.checkbox-ids:checked'), function (index, element) {
+                        if (index > 0) {
+                                    query += '&';
+                                }
+                        query += 'id[]='+element.value;
+                    });
                 } else {
                     if (that.parents('form')[0]) {
                         query = that.parents('form').serialize();
@@ -438,7 +445,7 @@ layui.define(['element', 'form', 'table'], function(exports) {
                     layer.msg(res.msg, {}, function(){
                         if (res.code != 0) {
                             location.reload();
-                        } 
+                        }
                     });
                 });
             };
