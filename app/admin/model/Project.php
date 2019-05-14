@@ -40,11 +40,17 @@ class Project extends Model
     public static function getAll($where){
         $field = '*';
         $result = self::field($field)->where($where)->order('grade desc')->limit(1)->select();
+//        $a = self::field($field)->where($where)->order('grade desc')->limit(1)->buildSql();
+//        echo $a;
 //        print_r($result[0]['id']);exit();
-        unset($where['pid']);
-        $where['subject_id'] = $result[0]['id'];
-        $result1 = self::field($field)->where($where)->order('grade desc')->select();
-        return array_unique(array_merge($result1,$result));//顺序不能颠倒
+        if ($result) {
+            unset($where['pid']);
+            $where['subject_id'] = $result[0]['id'];
+            $result1 = self::field($field)->where($where)->order('grade desc')->select();
+            return array_unique(array_merge($result1,$result));//顺序不能颠倒
+        }else{
+            return [];
+        }
     }
 
     public static function getOption($id = 0)
