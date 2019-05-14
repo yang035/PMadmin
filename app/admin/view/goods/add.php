@@ -104,7 +104,7 @@
             <div class="layui-form-mid" style="color: red">*</div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">库存数</label>
+            <label class="layui-form-label">采购总数</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-total" name="total" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" lay-verify="required" maxlength="11"
                        autocomplete="off" placeholder="请输入库存数">
