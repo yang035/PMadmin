@@ -116,7 +116,7 @@ class Score extends Admin
             exit;
         }
 
-        $data_list = ScoreModel::hasWhere('adminUser',$map1)->field($fields)->where($map)->group('`Score`.user')->paginate(30, false, ['query' => input('get.')]);
+        $data_list = ScoreModel::hasWhere('adminUser',$map1)->field($fields)->where($map)->group('`Score`.user')->order('gl_add_sum desc')->paginate(30, false, ['query' => input('get.')]);
 //        print_r($data_list);
         $name_arr = ProjectModel::getColumn('name');
         foreach ($data_list as $k=>$v){
