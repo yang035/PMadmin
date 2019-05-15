@@ -68,6 +68,7 @@
             <th>审批人</th>
             <th>添加时间</th>
             <th>状态</th>
+            <th>审批意见</th>
             <th>审批时间</th>
             <th>操作</th>
         </tr>
@@ -86,6 +87,7 @@
             <td class="font12">{$vo['send_user']}</td>
             <td class="font12">{$vo['create_time']}</td>
             <td class="font12">{$approval_status[$vo['status']]}</td>
+            <td class="font12">{$vo['mark']}</td>
             {if condition="$vo['create_time'] neq $vo['update_time']"}
             <td class="font12">{$vo['update_time']}</td>
             {else/}
