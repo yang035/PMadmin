@@ -36,7 +36,7 @@
             <label class="layui-form-label">选择部门</label>
             {neq name="ADMIN_ROLE" value="1"}
             <div class="layui-input-inline">
-                <input type="text" class="layui-input field-dep_name" id="menu_parent_name" lay-verify="required"
+                <input type="text" class="layui-input field-dep_name" id="menu_parent_name" lay-verify="required" readonly
                        name="dep_name" autocomplete="off">
                 <div id="treediv" style="overflow:scroll;position: relative;z-index:9999;display:none;">
                     <div align="right"><a href="##" id="closed"><font color="#000">关闭&nbsp;</font></a></div>
