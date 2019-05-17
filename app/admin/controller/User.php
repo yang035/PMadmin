@@ -60,7 +60,7 @@ class User extends Admin
                 $where['company_id'] = session('admin_user.cid');
             }
 
-            $order = 'status desc,id asc';
+            $order = 'status desc,id desc';
 
             $data['data'] = UserModel::with('role')->with('dep')->where($where)->order($order)->page($page)->limit($limit)->select();
             if ($data['data']){

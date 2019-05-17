@@ -46,8 +46,9 @@ class UserInfo extends Admin
                 $real_name = $params['real_name'];
             }
             $where['cid'] = session('admin_user.cid');
+            $order = 'status desc,id desc';
 //            print_r($where);exit();
-            $data['data'] = UserInfoModel::where($where)->page($page)->order('id desc')->limit($limit)->select();
+            $data['data'] = UserInfoModel::where($where)->page($page)->order($order)->limit($limit)->select();
             if ($data['data']) {
                 foreach ($data['data'] as $k => $v) {
                     $v['real_name'] = AdminUser::getUserById($v['user_id'])['realname'];
