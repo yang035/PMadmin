@@ -29,6 +29,7 @@ class Score extends Admin
     }
     public function index($q = '')
     {
+//        echo strtotime('2019-04-31 23:59:59');
         $map = [];
         $map1 = [];
         $params = $this->request->param();
@@ -60,12 +61,13 @@ class Score extends Admin
         if ($role_id > 3){
             $map1['id'] = session('admin_user.uid');
         }
+//        $map['Score.create_time'] = ['<',1556726399];
 //print_r($map);
         $fields = "`Score`.id,`Score`.user,sum(`Score`.ml_add_score) as ml_add_sum,sum(`Score`.ml_sub_score) as ml_sub_sum,sum(`Score`.gl_add_score) as gl_add_sum,sum(`Score`.gl_sub_score) as gl_sub_sum,`AdminUser`.realname";
 
         if (isset($params['export']) && 1 == $params['export']){
             set_time_limit(0);
-            $data_list = ScoreModel::hasWhere('adminUser',$map1)->field($fields)->where($map)->group('`Score`.user')->select();
+            $data_list = ScoreModel::hasWhere('adminUser',$map1)->field($fields)->where($map)->group('`Score`.user')->order('gl_add_sum desc')->select();
 //        print_r($data_list);
             $name_arr = ProjectModel::getColumn('name');
             foreach ($data_list as $k=>$v){

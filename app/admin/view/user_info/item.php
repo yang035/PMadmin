@@ -55,6 +55,7 @@
             }
             ,cols: [[ //表头
                 {type:'checkbox'},
+                {field: 'xuhao', title: '序号',type: 'numbers'},
                 {field: 'real_name', title: '姓名',sort: true},
                 {field: 'birthday', title: '生日',sort: true},
                 {field: 'start_date', title: '入职时间',sort: true},

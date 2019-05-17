@@ -38,6 +38,7 @@
             }
             ,cols: [[ //表头
                 {type:'checkbox'}
+                ,{field: 'xuhao', title: '序号',type: 'numbers'}
                 ,{field: 'username', title: '用户名'}
                 ,{field: 'realname', title: '真实姓名'}
                 ,{field: 'sex', title: '性别', templet:function(d){
