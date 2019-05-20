@@ -67,7 +67,7 @@
                 {field: 'wangka', title: '网卡'},
                 {field: 'xianshiqi', title: '显示器'},
                 {field: 'update_time', title: '登记时间'},
-                // {field: 'status', title: '状态', templet: '#statusTpl'},
+                {field: 'status', title: '状态', templet: '#statusTpl'},
                 {title: '操作', templet: '#buttonTpl',width: 100}
             ]]
         });
