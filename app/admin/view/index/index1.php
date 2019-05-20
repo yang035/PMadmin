@@ -1,10 +1,7 @@
 <style type="text/css">
-    #allmap {width: 100%;height: 500px;margin:0;overflow: hidden;font-family:"微软雅黑";}
+    #allmap {width: 500px;height: 500px;margin:0;overflow: hidden;font-family:"微软雅黑";}
 </style>
-<div id="daka" style="display: none">
 <div style=" display:block" id="allmap"></div>
-    <a href="javascript:void(0)" class="layui-btn layui-btn-danger layui-btn-radius clockin" style="width: 150px;height: 80px;font-size: xx-large;padding-top: 20px">打卡</a>
-</div>
 <hr>
 <div id="container" style="height: 500px"></div>
 <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
@@ -16,6 +13,7 @@
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=toiMZBRlpONvNLxNqv8xYrq95ly6x1Z1"></script>
 <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
 <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
@@ -147,94 +145,40 @@
 <script>
     var formData = {:json_encode($data_info)};
 
-    layui.use(['jquery', 'laydate'], function() {
+    layui.use(['jquery', 'laydate'], function () {
         var $ = layui.jquery, laydate = layui.laydate;
 
-        $(function(){
-            if(navigator.userAgent.match(/mobile/i)) {
-                $('#daka').show();
-                setTimeout(function(){
-                    navigator.geolocation.getCurrentPosition(showPosition1,showError);
-                }, 1000);
+        var map = new BMap.Map("allmap");
+        var pointA = new BMap.Point(114.411705,30.484671);
+        map.centerAndZoom(pointA, 12);
+        var geolocation = new BMap.Geolocation();
+        geolocation.getCurrentPosition(function (r) {
+            if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+                var mk = new BMap.Marker(r.point);
+                map.addOverlay(mk);
+                map.panTo(r.point);//r.point.lng    获取x坐标      r.point.lat获取y坐标
+                alert('您的位置：'+r.point.lng+','+r.point.lat);
+                var pointB = new BMap.Point(r.point.lng,r.point.lat);
+                var polyline = new BMap.Polyline([pointA,pointB], {strokeColor:"blue", strokeWeight:6, strokeOpacity:0.5});  //定义折线
+                map.addOverlay(polyline);     //添加折线到地图上
+                // showPosition(r.point.lng, r.point.lat);//调用ajax方法获取地理位置
+            } else {
+                // showPosition('120.57991', '27.997864');
             }
-        });
+        }, {enableHighAccuracy: true});
 
-        $('.clockin').click(function () {
-            getLocation();
-        });
-        $('.clockout').click(function () {
-            getLocation();
-        });
-
-        function showPosition1(position)
-        {
-            //公司坐标
-            var map = new BMap.Map("allmap");
-            var point = new BMap.Point(114.411705,30.484671);
-            var marker = new BMap.Marker(point);  // 创建标注
-            map.addOverlay(marker);// 将标注添加到地图中
-            var label = new BMap.Label("公司",{offset:new BMap.Size(20,-10)});
-            marker.setLabel(label);
-            // var pointB = new BMap.Point(114.411505,30.484671);
-            //我的坐标
-            var pointB = new BMap.Point(position.coords.longitude,position.coords.latitude);
-            var convertor = new BMap.Convertor();//GPS转百度坐标
-            var pointArr = [];
-            pointArr.push(pointB);
-            convertor.translate(pointArr, 3, 5, function (data){
-                if(data.status === 0) {
-                    var person = new BMap.Marker(data.points[0]);
-                    map.addOverlay(person);
-                    var label = new BMap.Label("我",{offset:new BMap.Size(20,-10)});
-                    person.setLabel(label); //添加百度label
-                    // map.setCenter(data.points[0]);
-                    var polyline = new BMap.Polyline([point,data.points[0]], {strokeColor:"blue", strokeWeight:6, strokeOpacity:0.5});  //定义折线
-                    map.addOverlay(polyline);     //添加折线到地图上
-                }
-            });
-            map.centerAndZoom(point, 20);
-        }
-
-        function getLocation()
-        {
-            if (navigator.geolocation)
-            {
-                navigator.geolocation.getCurrentPosition(showPosition,showError);
-            }else{
-                layer.alert('浏览器不支持地理定位');
-            }
-        }
-        function showPosition(position)
-        {
-            var lat = position.coords.latitude,lon = position.coords.longitude;
-            var open_url = "{:url('daKa')}?&lat="+lat+"&lon="+lon;
-            $.post(open_url, function(res) {
-                if (res.code == 1) {
-                    layer.alert(res.msg);
-                }else {
-                    layer.alert(res.msg);
+        function showPosition(x, y) {
+            var postData = {"subtype": "dingwei", "x": x, "y": y};// 提交表单数据到后台处理
+            var url = "{:url('daKa')}";
+            $.ajax({
+                type: "post",
+                dataType: "text",
+                data: postData,
+                url: url,
+                success: function (json) { //执行成功
+                    // alert(json);} });}
                 }
             });
         }
-
-
-
-        function showError(error) {
-            switch (error.code) {
-                case error.PERMISSION_DENIED:
-                    layer.alert("定位失败,用户拒绝请求地理定位");
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    layer.alert("定位失败,位置信息是不可用");
-                    break;
-                case error.TIMEOUT:
-                    layer.alert("定位失败,请求获取用户位置超时");
-                    break;
-                case error.UNKNOWN_ERR:
-                    layer.alert("定位失败,定位系统失效");
-                    break;
-            }
-        }
-
     });
 </script>
