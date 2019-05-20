@@ -55,6 +55,7 @@
             }
             ,cols: [[ //表头
                 {type:'checkbox'},
+                {field: 'xuhao', title: '序号',type: 'numbers'},
                 {field: 'real_name', title: '姓名',width: 100, templet:function(d){
                         return "<a class='mcolor' onclick='read("+d.id+")'>"+d.real_name+"</a>";
                     }},
