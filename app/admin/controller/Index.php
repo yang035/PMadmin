@@ -15,6 +15,147 @@ class Index extends Admin
             $this->view->engine->layout(false);
             return $this->fetch('iframe');
         } else {
+            if (session('admin_user.role_id') > 3) {
+                $this->redirect(url('Project/mytask', ['type' => 1]));
+            }
+            return $this->fetch();
+        }
+    }
+
+    public function getApprovalCount()
+    {
+        $map['cid'] = session('admin_user.cid');
+        $uid = session('admin_user.uid');
+        $fields = "SUM(IF(user_id='{$uid}',1,0)) user_num,
+        SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status=1 and class_type <> 11,1,0)) send_num,
+        SUM(IF(JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"'),1,0)) copy_num,
+        SUM(IF(JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"'),1,0)) deal_num,
+        SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status>1,1,0)) has_num,
+        SUM(IF(JSON_CONTAINS_PATH(fellow_user,'one', '$.\"$uid\"'),1,0)) follow_num";
+        $count = ApprovalModel::field($fields)->where($map)->find()->toArray();
+        $names = [
+            'send_num'=>'待我审批',
+            'user_num'=>'我的申请',
+            'copy_num'=>'抄送我的',
+            'deal_num'=>'我参与的',
+            'has_num'=>'已审批',
+            'follow_num'=>'同行',
+        ];
+        $rule = [];
+        if ($count){
+            $i = 0;
+            foreach ($names as $k=>$v) {
+                $rule[$i]['name'] = $v;
+                $rule[$i]['value'] = $count[$k];
+                $i++;
+            }
+        }
+        return [
+            'leg'=>array_values($names),
+            'ser'=>$rule
+        ];
+    }
+
+    public function getReportCount(){
+        $map['cid'] = session('admin_user.cid');
+        $map['create_time'] = ['>','2019-02-01 00:00:00'];
+        $uid = session('admin_user.uid');
+        $fields = "SUM(IF(user_id='{$uid}',1,0)) user_num,
+        SUM(IF(JSON_EXTRACT(send_user,'$.\"$uid\"') = '',1,0)) send_num,
+        SUM(IF(JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"'),1,0)) copy_num,
+        SUM(IF(JSON_EXTRACT(send_user,'$.\"$uid\"') = 'a',1,0)) has_num";
+        $count = DailyReportModel::field($fields)->where($map)->find()->toArray();
+        $names = [
+            'send_num'=>'汇报给我的',
+            'user_num'=>'我的汇报',
+            'copy_num'=>'抄送我的',
+            'has_num'=>'汇报人已读',
+        ];
+        $rule = [];
+        if ($count){
+            $i = 0;
+            foreach ($names as $k=>$v) {
+                $rule[$i]['name'] = $v;
+                $rule[$i]['value'] = $count[$k];
+                $i++;
+            }
+        }
+        return [
+            'leg'=>array_values($names),
+            'ser'=>$rule
+        ];
+    }
+
+    public function getProjectCount(){
+        $map['cid'] = session('admin_user.cid');
+        $map['t_type'] = 1;
+        $uid = session('admin_user.uid');
+        $fields = "SUM(IF(JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"') AND send_user LIKE '%a%',1,0)) deal_num,
+        SUM(IF(JSON_CONTAINS_PATH(manager_user,'one', '$.\"$uid\"'),1,0)) manager_num,
+        SUM(IF(JSON_EXTRACT(send_user,'$.\"$uid\"') = '',1,0)) send_num,
+        SUM(IF(JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"'),1,0)) copy_num,
+        SUM(IF(JSON_EXTRACT(send_user,'$.\"$uid\"') = 'a',1,0)) has_num";
+        $count = ProjectModel::field($fields)->where($map)->find()->toArray();
+        $names = [
+            'deal_num'=>'我参与的',
+            'manager_num'=>'我负责的',
+            'send_num'=>'待我审批的',
+            'copy_num'=>'抄送我的',
+            'has_num'=>'已审批的',
+        ];
+        $rule = [];
+        if ($count){
+            $i = 0;
+            foreach ($names as $k=>$v) {
+                $rule[$i]['name'] = $v;
+                $rule[$i]['value'] = $count[$k];
+                $i++;
+            }
+        }
+        return [
+            'leg'=>array_values($names),
+            'ser'=>$rule
+        ];
+    }
+
+    public function getTaskCount(){
+        $map['cid'] = session('admin_user.cid');
+        $map['t_type'] = 2;
+        $uid = session('admin_user.uid');
+        $fields = "SUM(IF(JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"') AND send_user LIKE '%a%',1,0)) deal_num,
+        SUM(IF(JSON_CONTAINS_PATH(manager_user,'one', '$.\"$uid\"'),1,0)) manager_num,
+        SUM(IF(JSON_EXTRACT(send_user,'$.\"$uid\"') = '',1,0)) send_num,
+        SUM(IF(JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"'),1,0)) copy_num,
+        SUM(IF(JSON_EXTRACT(send_user,'$.\"$uid\"') = 'a',1,0)) has_num";
+        $count = ProjectModel::field($fields)->where($map)->find()->toArray();
+        $names = [
+            'deal_num'=>'我参与的',
+            'manager_num'=>'我负责的',
+            'send_num'=>'待我审批的',
+            'copy_num'=>'抄送我的',
+            'has_num'=>'已审批的',
+        ];
+        $rule = [];
+        if ($count){
+            $i = 0;
+            foreach ($names as $k=>$v) {
+                $rule[$i]['name'] = $v;
+                $rule[$i]['value'] = $count[$k];
+                $i++;
+            }
+        }
+        return [
+            'leg'=>array_values($names),
+            'ser'=>$rule
+        ];
+    }
+
+    public function index1()
+    {
+        if (cookie('hisi_iframe')) {
+            $this->view->engine->layout(false);
+            return $this->fetch('iframe');
+        } else {
             if (session('admin_user.role_id') > 3){
                 $this->redirect(url('Project/mytask',['type'=>1]));
             }

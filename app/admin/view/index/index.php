@@ -6,7 +6,12 @@
     <a href="javascript:void(0)" class="layui-btn layui-btn-danger layui-btn-radius clockin" style="width: 150px;height: 80px;font-size: xx-large;padding-top: 20px">打卡</a>
 </div>
 <hr>
-<div id="container" style="height: 500px"></div>
+<div id="jihua" style="height: 300px;width: 50%;float: left"></div>
+<div id="linshi" style="height: 300px;width: 50%;float: left"></div>
+<hr>
+<div id="shenpi" style="height: 300px;width: 50%;float: left"></div>
+<div id="ribao" style="height: 300px;width: 50%;float: left"></div>
+
 <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
 <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
 <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
@@ -16,133 +21,6 @@
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=toiMZBRlpONvNLxNqv8xYrq95ly6x1Z1"></script>
 <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
 <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
-<script type="text/javascript">
-    var dom = document.getElementById("container");
-    var myChart = echarts.init(dom);
-    var app = {};
-    option = null;
-    app.title = '数据汇总';
-
-    option = {
-        tooltip : {
-            trigger: 'axis',
-            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-                type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-            }
-        },
-        legend: {
-            data: {$x}
-        },
-        grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-        },
-        xAxis:  {
-            type: 'value'
-        },
-        yAxis: {
-            type: 'category',
-            data: {$y}
-        },
-        series: {$data}
-    };
-    if (option && typeof option === "object") {
-        myChart.setOption(option, true);
-    }
-    myChart.on('click', function (params) {
-        var bar_id = params.seriesIndex;
-        // console.log(bar_id);
-        // 控制台打印数据的名称
-        if (0 == params.dataIndex){
-            switch (bar_id) {
-                case 0:
-                    bar_id = 3;
-                    break;
-                case 1:
-                    bar_id = 4;
-                    break;
-                case 2:
-                    bar_id = 5;
-                    break;
-                case 3:
-                    bar_id = 2;
-                    break;
-                case 4:
-                    bar_id = 1;
-                    break;
-                default:
-                    bar_id = 1;
-                    break;
-            }
-            window.open("{:url('Project/mytask')}?type="+ encodeURIComponent(bar_id));
-        } else if (1 == params.dataIndex) {
-            switch (bar_id) {
-                case 0:
-                    bar_id = 3;
-                    break;
-                case 1:
-                    bar_id = 4;
-                    break;
-                case 2:
-                    bar_id = 5;
-                    break;
-                case 3:
-                    bar_id = 2;
-                    break;
-                case 4:
-                    bar_id = 1;
-                    break;
-                default:
-                    bar_id = 1;
-                    break;
-            }
-            window.open("{:url('task/mytask')}?type="+ encodeURIComponent(bar_id));
-        } else if (2 == params.dataIndex) {
-            switch (bar_id) {
-                case 0:
-                    bar_id = 3;
-                    break;
-                case 1:
-                    bar_id = 4;
-                    break;
-                case 2:
-                    bar_id = 6;
-                    break;
-                case 4:
-                    bar_id = 5;
-                    break;
-                case 5:
-                    bar_id = 2;
-                    break;
-                default:
-                    bar_id = 1;
-                    break;
-            }
-            window.open("{:url('Approval/index')}?atype="+ encodeURIComponent(bar_id));
-        } else if (3 == params.dataIndex) {
-            switch (bar_id) {
-                case 0:
-                    bar_id = 3;
-                    break;
-                case 1:
-                    bar_id = 4;
-                    break;
-                case 2:
-                    bar_id = 5;
-                    break;
-                case 5:
-                    bar_id = 2;
-                    break;
-                default:
-                    bar_id = 1;
-                    break;
-            }
-            window.open("{:url('DailyReport/index')}?atype="+ encodeURIComponent(bar_id));
-        }
-    });
-</script>
 {include file="block/layui" /}
 <script>
     var formData = {:json_encode($data_info)};
@@ -237,4 +115,174 @@
         }
 
     });
+    // var _url = "{:url('admin/Index/getApprovalCount')}";
+    pie_chart('jihua','计划统计',"{:url('admin/Index/getProjectCount')}");
+    pie_chart('linshi','临时任务统计',"{:url('admin/Index/getTaskCount')}");
+    pie_chart('shenpi','审批统计',"{:url('admin/Index/getApprovalCount')}");
+    pie_chart('ribao','日报统计',"{:url('admin/Index/getReportCount')}");
+
+    function pie_chart(id,title,_url) {
+        var dom = document.getElementById(id);
+        var myChart = echarts.init(dom);
+        var app = {};
+        option = null;
+        myChart.setOption({
+            title: {
+                text: title,
+                left: 'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                // orient: 'vertical',
+                // top: 'middle',
+                bottom: 10,
+                left: 'center',
+                data: []
+            },
+            series : [
+                {
+                    type: 'pie',
+                    radius : '65%',
+                    center: ['50%', '50%'],
+                    selectedMode: 'single',
+                    data:[],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        });
+        myChart.showLoading();    //数据加载完之前先显示一段简单的loading动画
+
+        $.ajax({
+            type: "post",
+            async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+            url: _url,    //请求发送到TestServlet处
+            data: {},
+            dataType: "json",        //返回数据形式为json
+            success: function (result) {
+                //请求成功时执行该函数内容，result即为服务器返回的json对象
+                if (result) {
+                    myChart.hideLoading();    //隐藏加载动画
+                    myChart.setOption({        //加载数据图表
+                        legend: {
+                            data: result.leg
+                        },
+                        series: [{
+                            data: result.ser
+                        }]
+                    });
+
+                }
+            },
+            error: function (errorMsg) {
+                //请求失败时执行该函数
+                alert("图表请求数据失败!");
+                myChart.hideLoading();
+            }
+        });
+
+        myChart.on('click', function (params) {
+            var bar_id = params.dataIndex;
+            // console.log(bar_id);
+            // 控制台打印数据的名称
+            if ('jihua' == id){
+                // switch (bar_id) {
+                //     case 0:
+                //         bar_id = 1;
+                //         break;
+                //     case 1:
+                //         bar_id = 4;
+                //         break;
+                //     case 2:
+                //         bar_id = 5;
+                //         break;
+                //     case 3:
+                //         bar_id = 2;
+                //         break;
+                //     case 4:
+                //         bar_id = 1;
+                //         break;
+                //     default:
+                //         bar_id = 1;
+                //         break;
+                // }
+                window.open("{:url('Project/mytask')}?type="+ encodeURIComponent(bar_id+1));
+            } else if ('linshi' == id) {
+                // switch (bar_id) {
+                //     case 0:
+                //         bar_id = 3;
+                //         break;
+                //     case 1:
+                //         bar_id = 4;
+                //         break;
+                //     case 2:
+                //         bar_id = 5;
+                //         break;
+                //     case 3:
+                //         bar_id = 2;
+                //         break;
+                //     case 4:
+                //         bar_id = 1;
+                //         break;
+                //     default:
+                //         bar_id = 1;
+                //         break;
+                // }
+                window.open("{:url('task/mytask')}?type="+ encodeURIComponent(bar_id+1));
+            } else if ('shenpi' == id) {
+                switch (bar_id) {
+                    case 0:
+                        bar_id = 3;
+                        break;
+                    case 1:
+                        bar_id = 2;
+                        break;
+                    case 2:
+                        bar_id = 4;
+                        break;
+                    case 4:
+                        bar_id = 5;
+                        break;
+                    case 5:
+                        bar_id = 6;
+                        break;
+                    case 6:
+                        bar_id = 7;
+                        break;
+                    default:
+                        bar_id = 1;
+                        break;
+                }
+                window.open("{:url('Approval/index')}?atype="+ encodeURIComponent(bar_id));
+            } else if ('ribao' == id) {
+                switch (bar_id) {
+                    case 0:
+                        bar_id = 3;
+                        break;
+                    case 1:
+                        bar_id = 2;
+                        break;
+                    case 2:
+                        bar_id = 4;
+                        break;
+                    case 5:
+                        bar_id = 5;
+                        break;
+                    default:
+                        bar_id = 1;
+                        break;
+                }
+                window.open("{:url('DailyReport/index')}?atype="+ encodeURIComponent(bar_id));
+            }
+        });
+    }
+
 </script>
