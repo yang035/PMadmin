@@ -15,6 +15,9 @@ class Index extends Admin
             $this->view->engine->layout(false);
             return $this->fetch('iframe');
         } else {
+            if (session('admin_user.role_id') > 3){
+                $this->redirect(url('Project/mytask',['type'=>1]));
+            }
             $map = [
                 'cid'=>session('admin_user.cid'),
                 't_type'=>1,
