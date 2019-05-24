@@ -165,6 +165,28 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
         return json($r);
     }
 
+    public function getScoreList(){
+        $where = [
+            'cid' =>session('admin_user.cid'),
+        ];
+        $list = ScoreModel::hasWhere('adminUser')->field("`Score`.*, `AdminUser`.realname")->where($where)->order('id desc')->limit(30)->select();
+        $r = [
+            'code'=>0,
+            'data'=>[]
+        ];
+        $tmp = [];
+        if ($list){
+            foreach ($list as $k=>$v){
+                $tmp[$k] = '<span style="color: red">'.$v['realname'].'('.$v['ml_add_score'].'/'.$v['gl_add_score'].')</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+            }
+            $r = [
+                'code'=>1,
+                'data'=>$tmp
+            ];
+        }
+        return json($r);
+    }
+
     public function detail($q = '')
     {
         $map = [];

@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="__ADMIN_CSS__/style.css?v={:config('pmadmin.version')}">
     <link rel="stylesheet" href="__STATIC__/fonts/typicons/min.css?v={:config('pmadmin.version')}">
     <link rel="stylesheet" href="__STATIC__/fonts/font-awesome/min.css?v={:config('pmadmin.version')}">
+    <link rel="stylesheet" href="__ADMIN_JS__/roll/roll.css">
 </head>
 <body class="hisi-theme-{:cookie('hisi_admin_theme')}">
 <div style="padding:0 10px;" class="mcolor">{:runhook('system_admin_tips')}</div>
@@ -23,6 +24,7 @@
     <link rel="stylesheet" href="__ADMIN_CSS__/style.css?v={:config('pmadmin.version')}">
     <link rel="stylesheet" href="__STATIC__/fonts/typicons/min.css?v={:config('pmadmin.version')}">
     <link rel="stylesheet" href="__STATIC__/fonts/font-awesome/min.css?v={:config('pmadmin.version')}">
+    <link rel="stylesheet" href="__ADMIN_JS__/roll/roll.css">
 </head>
 <body class="hisi-theme-{:cookie('hisi_admin_theme')}">
 {php}
@@ -51,6 +53,11 @@ $ca = strtolower(request()->controller().'/'.request()->action());
                 <span class="layui-badge layui-bg-green tm"></span>
                 {$admin_user['signature']}
             </li>
+        </ul>
+        <ul>
+            <div class="mlgl-content">
+                <div class="mlgl-text"></div>
+            </div>
         </ul>
         <div style="padding:0 10px;" class="mcolor">{:runhook('system_admin_tips')}</div>
         <div class="page-body">

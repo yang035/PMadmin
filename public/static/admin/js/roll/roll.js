@@ -1,6 +1,7 @@
 $(function() {
     // 公告滚动
     $(".notice-content").textScroll();
+    $(".mlgl-content").textScroll();
 });
 
 /**

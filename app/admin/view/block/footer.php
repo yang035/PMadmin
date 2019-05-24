@@ -2,7 +2,6 @@
 {else /}
         </div>
     </div>
-<link rel="stylesheet" href="__ADMIN_JS__/roll/roll.css">
     <div class="layui-footer footer">
         <div class="notice-title">公告：</div>
         <div class="notice-content">
@@ -31,6 +30,15 @@
                 $('.td').html('今日：'+data[1]['ml_sum']+'/'+data[1]['gl_sum']);
                 $('.ym').html('上月：'+data[2]['ml_sum']+'/'+data[2]['gl_sum']);
                 $('.tm').html('本月：'+data[3]['ml_sum']+'/'+data[3]['gl_sum']);
+            }
+        });
+
+        var open_url = "{:url('Score/getScoreList')}";
+        $.post(open_url, function(res) {
+            var data = res.data;
+            // console.log(data);
+            if (res.code == 1) {
+                $('.mlgl-text').html(data);
             }
         });
     });

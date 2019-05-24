@@ -20,7 +20,22 @@
     opacity: 0.5;
     */
 }
-.notice-text {
+.mlgl-content {
+    position: relative;
+    width: 100%;
+    height: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+
+    /*背景透明度
+    background-color: #fff;
+    filter:alpha(opacity=10);
+    -moz-opacity:0.5;
+    -khtml-opacity: 0.5;
+    opacity: 0.5;
+    */
+}
+.notice-text,.mlgl-text {
     color: red;
     font-size: 14px;
     position: absolute;
