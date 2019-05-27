@@ -75,31 +75,31 @@ class Cron extends Controller
 //            }
             if (in_array($b,$legal_holiday)){
                 $remark = '法定节假日后工作日第一天';
-                $num += 60;
+                $num += 40;
             }elseif (in_array($t,$legal_holiday)){
                 $remark = '法定节假日后工作日最后一天';
-                $num += 60;
+                $num += 40;
             }elseif (in_array($b,$weekend)){
                 $remark = '周末后工作日第一天';
-                $num += 40;
+                $num += 20;
             }elseif (in_array($t,$weekend)){
                 $remark = '周末后工作日最后一天';
-                $num += 40;
+                $num += 20;
             }else{
                 $remark = '常规工作日';
-                $num += 20;
+                $num += 0;
             }
         }else{//休息日
-            if (in_array($y,$legal_holiday)){
-                $remark = '法定节假日加班';
-                $num += 120;
-            }elseif (in_array($y,$weekend)){
-                $remark = '日常周末加班';
-                $num += 90;
-            }else{
-                $remark = '日常周末加班';
-                $num += 90;
-            }
+//            if (in_array($y,$legal_holiday)){
+//                $remark = '法定节假日加班';
+//                $num += 120;
+//            }elseif (in_array($y,$weekend)){
+//                $remark = '日常周末加班';
+//                $num += 90;
+//            }else{
+//                $remark = '日常周末加班';
+//                $num += 90;
+//            }
         }
         $where = [
             'cid'=>2,
