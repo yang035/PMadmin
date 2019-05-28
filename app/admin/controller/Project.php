@@ -584,7 +584,7 @@ class Project extends Admin
                 $con = "JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"')";
                 break;
         }
-        $field = "*,JSON_EXTRACT(manager_user,'$.\"{$uid}\"') m_res,JSON_EXTRACT(send_user,'$.\"{$uid}\"') s_res,JSON_EXTRACT(deal_user,'$.\"{$uid}\"') d_res,JSON_EXTRACT(copy_user,'$.\"{$uid}\"') c_res";
+        $field = "*,DATEDIFF(end_time,NOW()) hit,JSON_EXTRACT(manager_user,'$.\"{$uid}\"') m_res,JSON_EXTRACT(send_user,'$.\"{$uid}\"') s_res,JSON_EXTRACT(deal_user,'$.\"{$uid}\"') d_res,JSON_EXTRACT(copy_user,'$.\"{$uid}\"') c_res";
 
         if (empty($subject_id)) {
 //            $list = ProjectModel::field($field)->where($map)->where($con)->order('grade desc,create_time desc')->select();
@@ -597,6 +597,23 @@ class Project extends Admin
                 $map['subject_id'] = ['in',implode(',',$ids)];
                 $map['pid'] =['<>',0];
                 $result1 = ProjectModel::field($field)->where($map)->where($con)->order('grade desc,create_time desc')->select();
+                if ($result1){
+                    foreach ($result1 as $k=>$v){
+                        if ($v['realper'] < 100){
+                            if ($v['hit'] < 0){
+                                $v['name'] = "<font style='color: red;font-weight:bold'>[逾期]</font>".$v['name'];
+                            }elseif ($v['hit'] == 0){
+                                $v['name'] = "<font style='color: blue;font-weight:bold'>[当日]</font>".$v['name'];
+                            }else{
+                                $v['name'] = "<font style='color: green'>[待完成]</font>".$v['name'];
+                            }
+                        }else{
+                            if ($v['real_score'] == 0 && $params['type'] == 2){
+                                $v['name'] = "<font style='color: darkturquoise;font-weight:bold'>[待评定]</font>".$v['name'];
+                            }
+                        }
+                    }
+                }
                 $list = array_unique(array_merge($result1,$result));//顺序不能颠倒
             }else{
                 $list = [];
@@ -608,6 +625,23 @@ class Project extends Admin
                 $map['subject_id'] = $result[0]['id'];
                 unset($map['id']);
                 $result1 = ProjectModel::field($field)->where($map)->where($con)->order('grade desc,create_time desc')->select();
+                if ($result1){
+                    foreach ($result1 as $k=>$v){
+                        if ($v['realper'] < 100){
+                            if ($v['hit'] < 0){
+                                $v['name'] = "<font style='color: red;font-weight:bold'>[逾期]</font>".$v['name'];
+                            }elseif ($v['hit'] == 0){
+                                $v['name'] = "<font style='color: blue;font-weight:bold'>[当日]</font>".$v['name'];
+                            }else{
+                                $v['name'] = "<font style='color: green'>[待完成]</font>".$v['name'];
+                            }
+                        }else{
+                            if ($v['real_score'] == 0 && $params['type'] == 2){
+                                $v['name'] = "<font style='color: darkturquoise;font-weight:bold'>[待评定]</font>".$v['name'];
+                            }
+                        }
+                    }
+                }
                 $list = array_unique(array_merge($result1,$result));//顺序不能颠倒
             }else{
                 $list = [];

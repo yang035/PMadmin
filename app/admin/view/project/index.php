@@ -112,8 +112,8 @@
                 page: false,
                 cols: [[
                     {type: 'numbers'},
-                    {field: 'name', title: '项目名称',width: 200},
-                    {field: 'start_time', title: '开始时间'},
+                    {field: 'name', title: '项目名称',width: 300},
+                    // {field: 'start_time', title: '开始时间'},
                     {field: 'end_time', title: '结束时间'},
                     {field: 'score', title: '计划产量(斗)',width: 80},
                     {field: 'real_score', title: '实际产量(斗)',width: 80},

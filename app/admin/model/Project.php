@@ -23,7 +23,7 @@ class Project extends Model
         $st = strtotime('-7 days');
         $et = strtotime('+3 days');
         $where['update_time'] = ['between',[$st,$et]];
-        $field = '*';
+        $field = '*,DATEDIFF(end_time,NOW()) hit';
         $result = self::field($field)->where($where)->order('update_time desc')->select();
 //        print_r($result[0]['id']);exit();
         if ($result) {
@@ -31,6 +31,23 @@ class Project extends Model
             $where['subject_id'] = ['in', implode(',', $ids)];
             $where['pid'] =['<>',0];
             $result1 = self::field($field)->where($where)->order('update_time desc')->select();
+            if ($result1){
+                foreach ($result1 as $k=>$v){
+                    if ($v['realper'] < 100){
+                        if ($v['hit'] < 0){
+                            $v['name'] = "<font style='color: red;font-weight:bold'>[逾期]</font>".$v['name'];
+                        }elseif ($v['hit'] == 0){
+                            $v['name'] = "<font style='color: blue;font-weight:bold'>[当日]</font>".$v['name'];
+                        }else{
+                            $v['name'] = "<font style='color: green;font-weight:bold'>[待完成]</font>".$v['name'];
+                        }
+                    }else{
+                        if ($v['real_score'] == 0){
+                            $v['name'] = "<font style='color: darkturquoise;font-weight:bold'>[待评定]</font>".$v['name'];
+                        }
+                    }
+                }
+            }
             return array_unique(array_merge($result1, $result));//顺序不能颠倒
         }else{
             return [];
@@ -38,7 +55,7 @@ class Project extends Model
     }
 
     public static function getAll($where){
-        $field = '*';
+        $field = '*,DATEDIFF(end_time,NOW()) hit';
         $result = self::field($field)->where($where)->order('update_time desc')->limit(1)->select();
 //        $a = self::field($field)->where($where)->order('grade desc')->limit(1)->buildSql();
 //        echo $a;
@@ -47,6 +64,23 @@ class Project extends Model
             unset($where['pid']);
             $where['subject_id'] = $result[0]['id'];
             $result1 = self::field($field)->where($where)->order('update_time desc')->select();
+            if ($result1){
+                foreach ($result1 as $k=>$v){
+                    if ($v['realper'] < 100){
+                        if ($v['hit'] < 0){
+                            $v['name'] = "<font style='color: red;font-weight:bold'>[逾期]</font>".$v['name'];
+                        }elseif ($v['hit'] == 0){
+                            $v['name'] = "<font style='color: blue;font-weight:bold'>[当日]</font>".$v['name'];
+                        }else{
+                            $v['name'] = "<font style='color: green;font-weight:bold'>[待完成]</font>".$v['name'];
+                        }
+                    }else{
+                        if ($v['real_score'] == 0){
+                            $v['name'] = "<font style='color: darkturquoise;font-weight:bold'>[待评定]</font>".$v['name'];
+                        }
+                    }
+                }
+            }
             return array_unique(array_merge($result1,$result));//顺序不能颠倒
         }else{
             return [];
