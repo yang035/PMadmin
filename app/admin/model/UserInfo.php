@@ -41,7 +41,7 @@ class UserInfo extends Model
         return $str;
     }
 
-    public static function getManOption($type = 0)
+    public static function getManOption($type = 2)
     {
         $leaveType = config('other.man_type');
         $str = '';

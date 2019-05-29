@@ -9,7 +9,7 @@
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-card">
         <div class="layui-form-item">
-            <label class="layui-form-label">可用麦粒</label>
+            <label class="layui-form-label">可用谷粒</label>
             <div class="layui-form-mid" style="color: red;"><b>{$score}</b> 斗</div>
         </div>
         <div class="layui-form-item">
@@ -34,7 +34,7 @@
         <div class="layui-card-body">
             <b>名称：</b>{$data_list['name']}<br>
             <b>价格：</b>{$data_list['marketprice']}(元)<br>
-            <b>麦粒兑换：</b>{$data_list['score']}(斗)<br>
+            <b>谷粒兑换：</b>{$data_list['score']}(斗)<br>
             <b>描述：</b>{$data_list['remark']}<br>
         </div>
     </div>
@@ -45,9 +45,9 @@
     layui.use(['jquery', 'laydate','upload','form'], function() {
         var $ = layui.jquery, laydate = layui.laydate, upload = layui.upload, form = layui.form;
         var score = "{$score}",unit_score = "{$data_list['score']}";
-        $('#cost').text('总计麦粒：'+unit_score*1+'斗');
+        $('#cost').text('总计谷粒：'+unit_score*1+'斗');
         if (unit_score*1 > score){
-            layer.alert('麦粒不够兑换');
+            layer.alert('谷粒不够兑换');
             $('.btn_sub').hide();
         }else {
             $('.btn_sub').show();
@@ -57,12 +57,12 @@
             var num = $('.field-num').val();
             var total_score = unit_score*num;
             if (total_score > score){
-                layer.alert('麦粒不够兑换');
+                layer.alert('谷粒不够兑换');
                 $('.btn_sub').hide();
             }else {
                 $('.btn_sub').show();
             }
-            $('#cost').text('总计麦粒：'+total_score+'斗');
+            $('#cost').text('总计谷粒：'+total_score+'斗');
         })
     });
 </script>
