@@ -386,4 +386,24 @@ class UserInfo extends Admin
         return $this->success('删除成功');
     }
 
+    public function getWarningList(){
+        $where = [
+            'cid' => session('admin_user.cid'),
+            'status' => 1,
+            'start_date' => ['between',[date('Y-m-d',strtotime('-90 days')),date('Y-m-d',strtotime('-80 days'))]],
+            'end_date' => ['in',['0100-01-01','0000-00-00']]
+        ];
+        $fields = 'user_id,start_date';
+        $res = UserInfoModel::field($fields)->where($where)->select();
+        if ($res){
+            foreach ($res as $v){
+                $v['real_name'] = AdminUser::getUserById($v['user_id'])['realname'];
+            }
+        }else{
+            $res = [];
+        }
+        return json($res);
+
+    }
+
 }

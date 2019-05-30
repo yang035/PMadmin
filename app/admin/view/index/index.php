@@ -114,6 +114,36 @@
             }
         }
 
+        var role_id = "{$Think.session.admin_user.role_id}";
+        if (role_id >= 3 ){
+            msg_open();
+        }
+
+        function msg_open() {
+            var tmp='',open_url = "{:url('UserInfo/getWarningList')}";
+            $.post(open_url, function(res) {
+                if (res) {
+                    $.each(res,function (i,v) {
+                        tmp += v['real_name'] +',入职时间:'+ v['start_date']+'<br>'
+                    });
+                    layer.open({
+                        title:'员工转正提醒',
+                        type: 0,
+                        offset: 'rb', //具体配置参考：offset参数项
+                        content: '<div>'+tmp+'</div>',
+                        btn: '关闭',
+                        btnAlign: 'c', //按钮居中
+                        shade: 0, //不显示遮罩
+                        time: 3000,
+                        area:['300','200'],
+                        yes: function () {
+                            layer.closeAll();
+                        }
+                    });
+                }
+            });
+        }
+
     });
     // var _url = "{:url('admin/Index/getApprovalCount')}";
     pie_chart('jihua','计划统计',"{:url('admin/Index/getProjectCount')}");
