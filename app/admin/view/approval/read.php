@@ -148,11 +148,14 @@
             事由：{$data_list['reason']}<br>
             附件说明：
             {notempty name="data_list['attachment'][0]"}
-            <div class="image-list">
+<!--            <div class="image-list">-->
+            <ul>
                 {volist name="data_list['attachment']" id="vo"}
-                <div class="cover"><img src="{$vo}" style="height: 30px;width: 30px;"></div>
+<!--                <div class="cover"><img src="{$vo}" style="height: 30px;width: 30px;"></div>-->
+                <li>&nbsp;&nbsp;&nbsp;&nbsp;<a target="_blank" href="{$vo}" style="color: #5c90d2">附件{$i}</a></li>
                 {/volist}
-            </div>
+            </ul>
+<!--            </div>-->
             {else/}
             <span>无</span>
             {/notempty}
