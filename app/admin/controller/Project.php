@@ -142,11 +142,6 @@ class Project extends Admin
                         $attachment = explode(',',$v['attachment']);
                         $report[$k]['attachment'] = array_filter($attachment);
                     }
-//                    if ($v['create_time'] > $row['end_time']){
-//                        $report[$k]['span'] = "(限定完成时间{$row['end_time']})";
-//                    }else{
-//                        $report[$k]['span'] = '';
-//                    }
                     $report_user = AdminUser::getUserById($v['user_id'])['realname'];
                     $report[$k]['real_name'] = !empty($report_user) ? $report_user : '';
                     $report[$k]['check_catname'] = ItemModel::getCat()[$v['check_cat']];
@@ -774,45 +769,87 @@ class Project extends Admin
 //        print_r($list);
         if ($list){
             $myPro = ProjectModel::getProTask(0,0);
-            foreach ($list as $k => $v) {
-                $list[$k]['manager_user'] = $this->deal_data($v['manager_user']);
-                $list[$k]['deal_user'] = $this->deal_data($v['deal_user']);
-                $list[$k]['copy_user'] = $this->deal_data($v['copy_user']);
-                $list[$k]['send_user'] = $this->deal_data($v['send_user']);
-                $list[$k]['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
-                $list[$k]['grade'] = $grade_type[$v['grade']];
-                if (0 != $v['pid']){
-                    $list[$k]['project_name'] = $myPro[$v['subject_id']];
+            foreach ($list as $kk => $vv) {
+                $list[$kk]['manager_user'] = $this->deal_data($vv['manager_user']);
+                $list[$kk]['deal_user'] = $this->deal_data($vv['deal_user']);
+                $list[$kk]['copy_user'] = $this->deal_data($vv['copy_user']);
+                $list[$kk]['send_user'] = $this->deal_data($vv['send_user']);
+                $list[$kk]['user_id'] = AdminUser::getUserById($vv['user_id'])['realname'];
+                $list[$kk]['grade'] = $grade_type[$vv['grade']];
+                if (0 != $vv['pid']){
+                    $list[$kk]['project_name'] = $myPro[$vv['subject_id']];
                 }else{
-                    $list[$k]['project_name'] = $v['name'];
+                    $list[$kk]['project_name'] = $vv['name'];
                 }
-                $child = ProjectModel::getChildCount($v['id']);
+                $child = ProjectModel::getChildCount($vv['id']);
                 if ($child){
-                    $list[$k]['child'] = 1;
+                    $list[$kk]['child'] = 1;
                 }else{
-                    $list[$k]['child'] = 0;
+                    $list[$kk]['child'] = 0;
                 }
 
                 switch ($params['type']) {
                     case 1:
-                        $u_res = $v['d_res'];
+                        $u_res = $vv['d_res'];
                         break;
                     case 2:
-                        $u_res = $v['m_res'];
+                        $u_res = $vv['m_res'];
                         break;
                     case 3:
-                        $u_res = $v['s_res'];
+                        $u_res = $vv['s_res'];
                         break;
                     case 4:
-                        $u_res = $v['c_res'];
+                        $u_res = $vv['c_res'];
                         break;
                     default:
-                        $u_res = $v['d_res'];
+                        $u_res = $vv['d_res'];
                         break;
                 }
-                $list[$k]['u_res'] = trim($u_res, '"');
+                $list[$kk]['u_res'] = trim($u_res, '"');
 
-                $list[$k]['u_res_str'] = $u_res_conf[$list[$k]['u_res']];
+                $list[$kk]['u_res_str'] = $u_res_conf[$list[$kk]['u_res']];
+
+                $report = ProjectReport::getAll(5,$vv['id']);
+
+                if ($report) {
+                    foreach ($report as $k => $v) {
+                        if (!empty($v['attachment'])){
+                            $attachment = explode(',',$v['attachment']);
+                            $report[$k]['attachment'] = array_filter($attachment);
+                        }
+                        $report_user = AdminUser::getUserById($v['user_id'])['realname'];
+                        $report[$k]['real_name'] = !empty($report_user) ? $report_user : '';
+                        $report[$k]['check_catname'] = ItemModel::getCat()[$v['check_cat']];
+                        if (empty($row['child'])){
+                            $report[$k]['reply'] = ReportReply::getAll($v['id'], 5);
+                        }else{
+                            $reply = ReportCheck::getAll($v['id'], 1);
+                            if ($reply){
+                                foreach ($reply as $key=>$val){
+                                    $content = json_decode($val['content'], true);
+                                    if ($content){
+                                        foreach ($content as $kk=>$vv){
+                                            $content[$kk]['flag'] = $vv['flag'] ? '有' : '无';
+                                            $content[$kk]['person_user'] = $this->deal_data(json_encode(user_array($vv['person_user'])));
+                                            if (!isset($vv['isfinish'])){
+                                                $content[$kk]['isfinish'] = 0;
+                                            }
+                                            if (!isset($vv['remark'])){
+                                                $content[$kk]['remark'] = '';
+                                            }
+                                        }
+                                    }
+                                    $reply[$key]['content'] = $content;
+                                    $reply[$key]['user_name'] = AdminUser::getUserById($val['user_id'])['realname'];
+                                }
+                            }
+                            $report[$k]['reply'] = $reply;
+                        }
+
+                    }
+                    $list[$kk]['report'] = $report;
+                }
+
             }
         }
         if ($this->request->isAjax()) {

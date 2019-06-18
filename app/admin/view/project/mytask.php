@@ -150,9 +150,32 @@
                             return "<span class='red'>"+d.real_score+"</span>";
                         }},
                     // {field: 'grade', title: '紧急度',width: 70},
-                    {field: 'deal_user', title: '参与人'},
+                    // {field: 'deal_user', title: '参与人'},
                     {field: 'manager_user', title: '负责人'},
-                    {field: 'send_user', title: '审批人',width: 80},
+                    // {field: 'send_user', title: '审批人',width: 80},
+                    {title: '成果展示',templet:function (d) {
+                            var t = '';
+                            if (d.report){
+                                $.each(d.report,function(index,value){
+                                    var n = parseInt(index)+1;
+                                    t += '('+ n +')'+value.mark+'<br>';
+                                    if (value.attachment){
+                                        $.each(value.attachment,function(i,v){
+                                            var m = parseInt(i)+1;
+                                            t += '<a target="_blank" href="'+v+'" style="color: red">附件'+m+'</a>,';
+                                        });
+                                    }
+                                    t += '<br>';
+                                    if (value.reply){
+                                        $.each(value.reply,function(k,val){
+                                            t += '意见：<font style="color: blue">'+val.content+'</font>';
+                                        });
+                                    }
+                                    t += '<br>';
+                                });
+                            }
+                            return t;
+                        }},
                     {field: 'realper', title: '完成情况',width: 80, templet:'#oper-col-1'},
                     {templet: '#oper-col-2', title: '操作',width: 200,}
                 ]],

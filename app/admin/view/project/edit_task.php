@@ -169,7 +169,7 @@
                                 完成百分比：<span style="color: green">[{$vo['realper']}%]</span>
                                 {neq name="type" value='1'}
                                 计划百分比：<span style="color: green">[{$vo['per']}%]</span>
-                                <a onclick="open_reply({$vo['id']},{$vo['project_id']})" class="layui-btn layui-btn-normal layui-btn-xs">评价</a>
+                                <a onclick="open_reply({$vo['id']},{$vo['project_id']})" class="layui-btn layui-btn-normal layui-btn-xs">意见</a>
                                 {/neq}
                                 <br>
                                 {$vo['mark']}

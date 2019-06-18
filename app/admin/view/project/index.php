@@ -117,7 +117,7 @@
                     {field: 'score', title: '计划产量(斗)',width: 80},
                     {field: 'real_score', title: '实际产量(斗)',width: 80},
                     {field: 'deal_user', title: '参与人',width: 80},
-                    {title: '成果',templet:function (d) {
+                    {title: '成果展示',templet:function (d) {
                         var t = '';
                         if (d.report){
                             $.each(d.report,function(index,value){
