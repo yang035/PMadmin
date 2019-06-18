@@ -126,6 +126,125 @@ class Project extends Admin
 //        $aa = new ProjectModel();
 //        echo $aa->getLastSql();exit();
         $grade_type = config('other.grade_type');
+        foreach ($list as $kk => $vv) {
+            $list[$kk]['manager_user'] = $this->deal_data($vv['manager_user']);
+            $list[$kk]['deal_user'] = $this->deal_data($vv['deal_user']);
+            $list[$kk]['copy_user'] = $this->deal_data($vv['copy_user']);
+            $list[$kk]['send_user'] = $this->deal_data($vv['send_user']);
+            $list[$kk]['user_id'] = AdminUser::getUserById($vv['user_id'])['realname'];
+            $list[$kk]['grade'] = $grade_type[$vv['grade']];
+
+            $report = ProjectReport::getAll(5,$vv['id']);
+
+            if ($report) {
+                foreach ($report as $k => $v) {
+                    if (!empty($v['attachment'])){
+                        $attachment = explode(',',$v['attachment']);
+                        $report[$k]['attachment'] = array_filter($attachment);
+                    }
+//                    if ($v['create_time'] > $row['end_time']){
+//                        $report[$k]['span'] = "(限定完成时间{$row['end_time']})";
+//                    }else{
+//                        $report[$k]['span'] = '';
+//                    }
+                    $report_user = AdminUser::getUserById($v['user_id'])['realname'];
+                    $report[$k]['real_name'] = !empty($report_user) ? $report_user : '';
+                    $report[$k]['check_catname'] = ItemModel::getCat()[$v['check_cat']];
+                    if (empty($row['child'])){
+                        $report[$k]['reply'] = ReportReply::getAll($v['id'], 5);
+                    }else{
+                        $reply = ReportCheck::getAll($v['id'], 1);
+                        if ($reply){
+                            foreach ($reply as $key=>$val){
+                                $content = json_decode($val['content'], true);
+                                if ($content){
+                                    foreach ($content as $kk=>$vv){
+                                        $content[$kk]['flag'] = $vv['flag'] ? '有' : '无';
+                                        $content[$kk]['person_user'] = $this->deal_data(json_encode(user_array($vv['person_user'])));
+                                        if (!isset($vv['isfinish'])){
+                                            $content[$kk]['isfinish'] = 0;
+                                        }
+                                        if (!isset($vv['remark'])){
+                                            $content[$kk]['remark'] = '';
+                                        }
+                                    }
+                                }
+                                $reply[$key]['content'] = $content;
+                                $reply[$key]['user_name'] = AdminUser::getUserById($val['user_id'])['realname'];
+                            }
+                        }
+                        $report[$k]['reply'] = $reply;
+                    }
+
+                }
+                $list[$kk]['report'] = $report;
+            }
+
+        }
+//        print_r($list);
+        if ($this->request->isAjax()) {
+            $data = [];
+            $data['code'] = 0;
+            $data['msg'] = 'ok';
+            $data['data'] = $list;
+            return json($data);
+        }
+        $this->assign('tab_data', $this->tab_data);
+        $this->assign('tab_type', 1);
+        $this->assign('tab_url', url('index', ['atype' => $params['atype']]));
+        $this->assign('isparams', 1);
+        $this->assign('atype', $params['atype']);
+        $this->assign('subject_item', SubjectItem::getItemOption($subject_id,$params['atype']));
+        return $this->fetch();
+    }
+
+    public function index1()
+    {
+        $map = [];
+        $params = $this->request->param();
+//        print_r($params['atype']);exit();
+        $params['atype'] = isset($params['atype']) ? $params['atype'] : 1;
+        switch ($params['atype']) {
+            case 0:
+                break;
+            default:
+                $map['cat_id'] = $params['atype'];
+                break;
+        }
+        $subject_id = 0;
+        if ($params) {
+            if (isset($params['project_id']) && !empty($params['project_id'])) {
+                $map['subject_id'] = $params['project_id'];
+                $subject_id = $params['project_id'];
+            }
+
+            if (isset($params['start_time']) && !empty($params['start_time'])) {
+                $start_time = $params['start_time'];
+                $start_time_arr = explode(' - ', $start_time);//这里分隔符两边加空格
+                $map['start_time'] = ['between', [$start_time_arr['0'], $start_time_arr['1']]];
+            }
+
+            if (isset($params['end_time']) && !empty($params['end_time'])) {
+                $end_time = $params['end_time'];
+                $end_time_arr = explode(' - ', $end_time);//这里分隔符两边加空格
+                $map['end_time'] = ['between', [$end_time_arr['0'], $end_time_arr['1']]];
+            }
+        }
+        $cid = session('admin_user.cid');
+        $map['cid'] = $cid;
+        $map['t_type'] = 1;
+
+        if (empty($subject_id)){
+            $map['pid'] = 0;
+            $list = ProjectModel::index1($map);
+        }else{
+            $map['pid'] = 0;
+            $list = ProjectModel::getAll($map);
+        }
+
+//        $aa = new ProjectModel();
+//        echo $aa->getLastSql();exit();
+        $grade_type = config('other.grade_type');
         foreach ($list as $k => $v) {
             $list[$k]['manager_user'] = $this->deal_data($v['manager_user']);
             $list[$k]['deal_user'] = $this->deal_data($v['deal_user']);

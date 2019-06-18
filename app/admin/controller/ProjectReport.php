@@ -12,8 +12,8 @@ use app\admin\model\Project;
 
 class ProjectReport extends Admin
 {
-    public static function getAll($limit=0){
-        $project_id = input('id/d');
+    public static function getAll($limit=0,$project_id=null){
+        $project_id = empty($project_id) ? input('id/d') : $project_id;
         $map['project_id'] = $project_id;
         $map['cid'] = session('admin_user.cid');
 //        $map['user_id'] = session('admin_user.uid');

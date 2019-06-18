@@ -113,26 +113,15 @@
                 cols: [[
                     {type: 'numbers'},
                     {field: 'name', title: '项目名称',width: 300},
+                    // {field: 'start_time', title: '开始时间'},
                     {field: 'end_time', title: '结束时间'},
                     {field: 'score', title: '计划产量(斗)',width: 80},
                     {field: 'real_score', title: '实际产量(斗)',width: 80},
+                    {field: 'grade', title: '紧急度',width: 80},
                     {field: 'deal_user', title: '参与人'},
-                    {title: '成果',templet:function (d) {
-                        var t = '';
-                        if (d.report){
-                            $.each(d.report,function(index,value){
-                                var n = parseInt(index)+1;
-                                t += '('+ n +')'+value.mark+'<br>';
-                                if (value.attachment){
-                                    $.each(value.attachment,function(i,v){
-                                        var m = parseInt(i)+1;
-                                        t += '<a target="_blank" href="'+v+'" style="color: red">附件'+m+'</a>,';
-                                    });
-                                }
-                            });
-                        }
-                        return t;
-                        }},
+                    {field: 'manager_user', title: '负责人'},
+                    {field: 'send_user', title: '审批人'},
+                    {field: 'user_id', title: '添加人',width: 80},
                     {field: 'realper', title: '完成情况',width: 80, templet:'#oper-col-1'},
                     {templet: '#oper-col', title: '操作',width: 250,}
                 ]],
@@ -184,8 +173,7 @@
         table.on('tool(table1)', function (obj) {
             var data = obj.data;
             var layEvent = obj.event;
-            // var id=data.id,pid=data.pid,code=data.code,pname=data.name,pscore=data.score;
-            var id=data.id,pid=data.pid,code=data.code,pname=data.name,pscore=data.score,project_name=data.project_name,child=data.child;
+            var id=data.id,pid=data.pid,code=data.code,pname=data.name,pscore=data.score;
 
             if (layEvent === 'del') {
                 var open_url = "{:url('del')}?ids="+id;
@@ -202,8 +190,7 @@
                     layer.close(index);
                 });
             }else if (layEvent === 'read') {
-                // var open_url = "{:url('read')}?id="+id+"&atype="+atype;
-                var open_url = "{:url('editTask')}?id="+id+"&pid="+pid+"&type=2"+"&child="+child+"&project_name="+project_name;
+                var open_url = "{:url('read')}?id="+id+"&atype="+atype;
                 window.location.href = open_url;
             } else if (layEvent === 'add') {
                 var reg = /<[^>]+>/g;
