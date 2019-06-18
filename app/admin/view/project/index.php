@@ -60,7 +60,7 @@
 </div>
 <!-- 操作列 -->
 <script type="text/html" id="oper-col">
-    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="read">查看</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="read">详情</a>
     <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="add">添加计划</a>
     {{#  if(d.pid > 0){ }}
     <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">修改</a>
@@ -113,10 +113,10 @@
                 cols: [[
                     {type: 'numbers'},
                     {field: 'name', title: '项目名称',width: 300},
-                    {field: 'end_time', title: '结束时间'},
+                    {field: 'end_time', title: '结束时间',width: 160},
                     {field: 'score', title: '计划产量(斗)',width: 80},
                     {field: 'real_score', title: '实际产量(斗)',width: 80},
-                    {field: 'deal_user', title: '参与人'},
+                    {field: 'deal_user', title: '参与人',width: 80},
                     {title: '成果',templet:function (d) {
                         var t = '';
                         if (d.report){
@@ -129,6 +129,13 @@
                                         t += '<a target="_blank" href="'+v+'" style="color: red">附件'+m+'</a>,';
                                     });
                                 }
+                                t += '<br>';
+                                if (value.reply){
+                                    $.each(value.reply,function(k,val){
+                                        t += '意见：<font style="color: blue">'+val.content+'</font>';
+                                    });
+                                }
+                                t += '<br>';
                             });
                         }
                         return t;
