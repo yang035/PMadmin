@@ -31,7 +31,7 @@ class Project extends Admin
         parent::_initialize();
 
         $tab_data['menu'] = $this->getMenu();
-        $tab_data['current'] = url('index', ['atype' => 1]);
+        $tab_data['current'] = url('index', ['atype' => 0]);
         $this->tab_data = $tab_data;
     }
 
@@ -42,7 +42,7 @@ class Project extends Admin
         $list = [];
         $list = SubjectCat::where($where)->column('name','id');
         $tmp = [0=>'全部'];
-        $data = $list + $tmp;
+        $data = $tmp + $list;
         foreach ($data as $k=>$v){
             $res[] = [
                 'title' => $v,
