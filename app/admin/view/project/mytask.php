@@ -174,20 +174,25 @@
                             if (d.report){
                                 $.each(d.report,function(index,value){
                                     var n = parseInt(index)+1;
-                                    t += '('+ n +')'+value.mark+'<br>';
-                                    if (value.attachment){
+                                    if (n > 1){
+                                        t += '<br>';
+                                    }
+                                    t += '('+ n +')'+value.mark;
+                                    if (value.attachment.length > 0){
+                                        t += '<br>';
                                         $.each(value.attachment,function(i,v){
                                             var m = parseInt(i)+1;
                                             t += '<a target="_blank" href="'+v+'" style="color: red">附件'+m+'</a>,';
                                         });
                                     }
-                                    t += '<br>';
-                                    if (value.reply){
+
+                                    if (value.reply.length > 0){
+                                        t += '<br>';
                                         $.each(value.reply,function(k,val){
                                             t += '意见：<font style="color: blue">'+val.content+'</font>';
                                         });
                                     }
-                                    t += '<br>';
+
                                 });
                             }
                             return t;
