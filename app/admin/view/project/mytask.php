@@ -163,7 +163,7 @@
                     // {field: 'deal_user', title: '参与人'},
                     {field: 'manager_user', title: '负责人',width: 80},
                     // {field: 'send_user', title: '审批人',width: 80},
-                    {title: '成果展示',width: 400,templet:function (d) {
+                    {title: '成果展示',width: 300,templet:function (d) {
                             var t = '';
                             if (d.report){
                                 $.each(d.report,function(index,value){
