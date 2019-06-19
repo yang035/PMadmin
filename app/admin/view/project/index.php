@@ -121,7 +121,13 @@
                 url: _url,
                 page: false,
                 cols: [[
-                    {type: 'numbers'},
+                    {title: '编号',templet:function (d) {
+                        if (d.pid == 0){
+                            return d.id;
+                        }else {
+                            return '';
+                        }
+                    }},
                     {field: 'name', title: '项目名称',width: 250},
                     {field: 'end_time', title: '结束时间',width: 110},
                     {field: 'score', title: '计划产量(斗)',width: 70},

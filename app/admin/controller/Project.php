@@ -126,6 +126,8 @@ class Project extends Admin
 //        $aa = new ProjectModel();
 //        echo $aa->getLastSql();exit();
         $grade_type = config('other.grade_type');
+        $myPro = ProjectModel::getProTask(0,0);
+
         foreach ($list as $kk => $vv) {
             $list[$kk]['manager_user'] = $this->deal_data($vv['manager_user']);
             $list[$kk]['deal_user'] = $this->deal_data($vv['deal_user']);
@@ -133,6 +135,12 @@ class Project extends Admin
             $list[$kk]['send_user'] = $this->deal_data($vv['send_user']);
             $list[$kk]['user_id'] = AdminUser::getUserById($vv['user_id'])['realname'];
             $list[$kk]['grade'] = $grade_type[$vv['grade']];
+
+            if (0 != $vv['pid']){
+                $list[$kk]['project_name'] = $myPro[$vv['subject_id']];
+            }else{
+                $list[$kk]['project_name'] = $vv['name'];
+            }
 
             $report = ProjectReport::getAll(5,$vv['id']);
 
