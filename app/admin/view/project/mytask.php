@@ -151,7 +151,7 @@
                 url: _url,
                 page: false,
                 cols: [[
-                    {title: '编号',templet:function (d) {
+                    {title: '编号',width: 70,templet:function (d) {
                             if (d.pid == 0){
                                 return d.id;
                             }else {
