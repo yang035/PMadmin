@@ -13,6 +13,16 @@
         font-size: 12px;
         color: #666;
     }
+    .laytable-cell-1-0-2,.laytable-cell-1-0-3 {
+        height: auto;
+        line-height: 28px;
+        padding: 0 15px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+        box-sizing: border-box;
+    }
 </style>
 <div class="page-toolbar">
     <div class="page-filter">
@@ -142,18 +152,18 @@
                 page: false,
                 cols: [[
                     {type: 'numbers'},
-                    {field: 'name', title: '项目名称',width: 300},
-                    {field: 'start_time', title: '开始时间'},
-                    {field: 'end_time', title: '结束时间'},
-                    {field: 'score', title: '计划产量(斗)',width: 80},
-                    {field: 'real_score', title: '实际产量(斗)',width: 80,templet:function (d) {
+                    {field: 'name', title: '项目名称',width: 250},
+                    {field: 'start_time', title: '开始时间',width: 110},
+                    {field: 'end_time', title: '结束时间',width: 110},
+                    {field: 'score', title: '计划产量(斗)',width: 70},
+                    {field: 'real_score', title: '实际产量(斗)',width: 70,templet:function (d) {
                             return "<span class='red'>"+d.real_score+"</span>";
                         }},
                     // {field: 'grade', title: '紧急度',width: 70},
                     // {field: 'deal_user', title: '参与人'},
-                    {field: 'manager_user', title: '负责人'},
+                    {field: 'manager_user', title: '负责人',width: 80},
                     // {field: 'send_user', title: '审批人',width: 80},
-                    {title: '成果展示',templet:function (d) {
+                    {title: '成果展示',width: 400,templet:function (d) {
                             var t = '';
                             if (d.report){
                                 $.each(d.report,function(index,value){
@@ -176,7 +186,7 @@
                             }
                             return t;
                         }},
-                    {field: 'realper', title: '完成情况',width: 80, templet:'#oper-col-1'},
+                    {field: 'realper', title: '完成情况',width: 70, templet:'#oper-col-1'},
                     {templet: '#oper-col-2', title: '操作',width: 200,}
                 ]],
                 done: function () {
