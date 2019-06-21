@@ -14,6 +14,13 @@
             </div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label">系数</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input field-ratio" name="ratio" value="1.0" lay-verify="required" autocomplete="off" placeholder="请输入系数">
+            </div>
+            <div class="layui-form-mid" style="color: red">*</div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">分类状态</label>
             <div class="layui-input-inline">
                 <input type="radio" class="field-status" name="status" value="1" title="启用" checked>

@@ -193,10 +193,32 @@ class Approval extends Admin
         if (isset($params['export']) && 1 == $params['export']){
             set_time_limit(0);
             $list = ApprovalModel::where($map)->where($con)->order('create_time desc')->select();
-//        print_r($data_list);
+//        print_r($list);exit();
             foreach ($list as $k => $v) {
                 $list[$k]['send_user'] = strip_tags($this->deal_data($v['send_user']));
                 $list[$k]['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
+
+                $list[$k]['money'] = '#';
+                switch ($v['class_type']){
+                    case 2://报销
+                        $child = ExpenseModel::where('aid',$v['id'])->find();
+                        if ($child){
+                            $list[$k]['money'] = $child['total'];
+                        }
+                        break;
+                    case 3://费用
+                        $child = CostModel::where('aid',$v['id'])->find();
+                        if ($child){
+                            $list[$k]['money'] = $child['money'];
+                        }
+                        break;
+                }
+//                if ($v['create_time'] == $v['update_time']){
+//                    $list[$k]['update_time'] = 0;
+//                }else{
+//                    $v['update_time'] = $v['update_time'];
+//                }
+
                 if ($v['project_id']){
                     $project_data = ProjectModel::getRowById($v['project_id']);
                 }else{
@@ -216,15 +238,21 @@ class Approval extends Admin
             $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
             $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
             $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(10);
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A1', '姓名')
                 ->setCellValue('B1', '类型')
                 ->setCellValue('C1', '开始时间')
                 ->setCellValue('D1', '结束时间')
                 ->setCellValue('E1', '项目名称')
-                ->setCellValue('F1', '审批人')
-                ->setCellValue('G1', '添加时间')
-                ->setCellValue('H1', '状态');
+                ->setCellValue('F1', '金额(元)')
+                ->setCellValue('G1', '审批人')
+                ->setCellValue('H1', '添加时间')
+                ->setCellValue('I1', '状态')
+                ->setCellValue('J1', '审批意见')
+                ->setCellValue('K1', '审批时间');
 //            print_r($data_list);exit();
             foreach ($list as $k => $v) {
                 $num = $k + 2;
@@ -235,9 +263,12 @@ class Approval extends Admin
                     ->setCellValue('C' . $num, $v['start_time'])
                     ->setCellValue('D' . $num, $v['end_time'])
                     ->setCellValue('E' . $num, $v['project_name'])
-                    ->setCellValue('F' . $num, $v['send_user'])
-                    ->setCellValue('G' . $num, $v['create_time'])
-                    ->setCellValue('H' . $num, $approval_status[$v['status']]);
+                    ->setCellValue('F' . $num, $v['money'])
+                    ->setCellValue('G' . $num, $v['send_user'])
+                    ->setCellValue('H' . $num, $v['create_time'])
+                    ->setCellValue('I' . $num, $approval_status[$v['status']])
+                    ->setCellValue('J' . $num, $v['mark'])
+                    ->setCellValue('K' . $num, $v['update_time']);
             }
             $d = !empty($d) ? $d : '全部';
             $name = $d.'日常审批统计';
