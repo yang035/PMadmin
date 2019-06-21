@@ -39,6 +39,8 @@
             ,cols: [[ //表头
                 {type:'checkbox'}
                 ,{field: 'name', title: '名称'}
+                ,{field: 'group', title: '组名配置'}
+                ,{field: 'remark', title: '备注'}
                 ,{title: '操作', templet: '#buttonTpl'}
             ]]
         });

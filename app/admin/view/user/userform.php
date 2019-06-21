@@ -146,7 +146,14 @@
                 <select name="job_item" class="field-job_item" type="select" lay-filter="rid" id="c_id">
                 </select>
             </div>
-            <div class="layui-form-mid field_job_item">{$data_info['job_item']|default=''}</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">日常工作</label>
+            <div class="layui-input-inline">
+                <select name="work_cat" class="field-work_cat" type="select">
+                    {$work_option}
+                </select>
+            </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">状&nbsp;&nbsp;&nbsp;&nbsp;态</label>
@@ -270,26 +277,30 @@
             form.render('checkbox');
         }
 
-        // var i=0;
-        // console.log(formData.job_cat);
-        select_union();
-        function select_union(){
-            form.on('select(job_cat)', function(data){
-                $.ajax({
-                    type: 'POST',
-                    url: "{:url('getJobItem')}",
-                    data: {id:data.value},
-                    dataType:  'json',
-                    success: function(data){
-                        // $("#c_id").html("");
-                        // $.each(data, function(key, val) {
-                        //     var option1 = $("<option>").val(val.areaId).text(val.fullname);
-                        $('#c_id').html(data);
-                        form.render('select');
-                        // });
-                        // $("#c_id").get(0).selectedIndex=0;
-                    }
-                });
+        form.on('select(job_cat)', function(data){
+            select_union(data.value);
+        });
+        if (formData.job_cat){
+            select_union(formData.job_cat,formData.job_item);
+        }else {
+            select_union(1);
+        }
+
+        function select_union(id,gid=0){
+            $.ajax({
+                type: 'POST',
+                url: "{:url('getJobItem')}",
+                data: {id:id,gid:gid},
+                dataType:  'json',
+                success: function(data){
+                    // $("#c_id").html("");
+                    // $.each(data, function(key, val) {
+                    //     var option1 = $("<option>").val(val.areaId).text(val.fullname);
+                    $('#c_id').html(data);
+                    form.render('select');
+                    // });
+                    // $("#c_id").get(0).selectedIndex=0;
+                }
             });
         }
     });

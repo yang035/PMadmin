@@ -60,6 +60,10 @@
                 {field: 'cat_id', title: '类别', templet:function(d){
                         return d.cat.name;
                     }},
+                {field: 'group_id', title: '组名', templet:function(d){
+                        var group = JSON.parse(d.cat.group);
+                        return group[d.group_id];
+                    }},
                 {field: 'status', title: '状态', templet: '#statusTpl'},
                 {title: '操作', templet: '#buttonTpl'}
             ]]

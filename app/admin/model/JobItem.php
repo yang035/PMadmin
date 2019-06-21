@@ -42,7 +42,7 @@ class JobItem extends Model
             'cat_id'=>$id,
         ];
         $data = self::where($map)->select();
-        $str = '';
+        $str = '<option value="0" selected>无</option>';
         if ($data){
             foreach ($data as $k => $v) {
                 if ($type == $v['id']) {

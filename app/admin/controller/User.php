@@ -7,6 +7,8 @@ use app\admin\model\AdminUser as UserModel;
 use app\admin\model\AdminRole as RoleModel;
 use app\admin\model\AdminMenu as MenuModel;
 use app\admin\model\AdminUserDefault;
+use app\admin\model\WorkCat;
+use app\admin\model\WorkItem;
 use app\common\service\Service;
 use think\Validate;
 use app\admin\model\JobCat as JobCatModel;
@@ -66,6 +68,7 @@ class User extends Admin
             if ($data['data']){
                 foreach ($data['data'] as $k=>$v){
                     $data['data'][$k]['job_item'] = !empty($v['job_item']) ? JobItemModel::getItem()[$v['job_item']] : '无';
+                    $data['data'][$k]['work_cat'] = !empty($v['work_cat']) ? WorkCat::getItem()[$v['work_cat']] : '无';
                 }
             }
             $data['count'] = UserModel::where($where)->count('id');
@@ -135,6 +138,7 @@ class User extends Admin
         $this->assign('menu_list', '');
         $this->assign('role_option', RoleModel::getOption());
         $this->assign('rule_option',JobCatModel::getOption1());
+        $this->assign('work_option',WorkItem::getOption());
         $this->assign('company_option', AdminCompany::getOption());
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 2);
@@ -142,8 +146,8 @@ class User extends Admin
         return $this->fetch('userform');
     }
 
-    public function getJobItem($id=0){
-        $child_option = JobItemModel::getChilds($id);
+    public function getJobItem($id=0,$gid=0){
+        $child_option = JobItemModel::getChilds($id,$gid);
         echo json_encode($child_option);
     }
 
@@ -208,10 +212,11 @@ class User extends Admin
         if ($row['department_id']){
             $row['dep_name'] = AdminDepartment::getRowById($row['department_id'])['name'];
         }
-        $row['job_item'] = !empty($row['job_item']) ? JobItemModel::getItem()[$row['job_item']] : '无';
+//        $row['job_item'] = !empty($row['job_item']) ? JobItemModel::getItem()[$row['job_item']] : '无';
 
         $this->assign('menu_list', MenuModel::getAllChild());
         $this->assign('role_option', RoleModel::getOption());
+        $this->assign('work_option',WorkItem::getOption($row['work_cat']));
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 2);
         $this->assign('role_option', RoleModel::getOption($row['role_id']));

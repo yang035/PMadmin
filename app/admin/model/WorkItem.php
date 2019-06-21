@@ -21,10 +21,10 @@ class WorkItem extends Model
             'status'=>1,
         ];
         $data = CatModel::where($map)->select();
-        $str = '';
+        $str = '<option value="0" selected>无</option>';
         if ($data){
             foreach ($data as $k => $v) {
-                if ($type == $k) {
+                if ($type == $v['id']) {
                     $str .= '<option value="'.$v['id'].'" selected>'.$v['name'].'</option>';
                 } else {
                     $str .= '<option value="'.$v['id'].'">'.$v['name'].'</option>';
@@ -60,19 +60,44 @@ class WorkItem extends Model
 
     public static function getOption3()
     {
+        $str = '';
+        $map1 = [
+            'cid'=>session('admin_user.cid'),
+            'status'=>1,
+            'id'=>session('admin_user.work_cat'),
+        ];
+        $cat = WorkCat::where($map1)->find();
+
+        if ($cat){
+            $group = json_decode($cat['group'],true);
+        }else{
+            return '无';
+        }
+
         $w = date('w');
         $map = [
             'cid'=>session('admin_user.cid'),
             'status'=>1,
-            'user_id'=>session('admin_user.uid'),
+            'cat_id'=>session('admin_user.work_cat'),
             'week'=>['like',"%{$w}%"]
         ];
-        $data = self::where($map)->column('name','id');
-        $str = '';
+//        $data = self::where($map)->column('name','id');
+        $data = self::where($map)->field('id,group_id,name')->select();
+
+        $tmp = [];
         if ($data){
             foreach ($data as $k => $v) {
-                $str .= '<input type="checkbox" name="work_option[]" lay-skin="primary" title="'.$v.'" value="'.$k.'"><br>';
+                $tmp[$v['group_id']][$v['id']] = $v['name'];
+//                $str .= '<input type="checkbox" name="work_option[]" lay-skin="primary" title="'.$v.'" value="'.$k.'"><br>';
             }
+            foreach ($tmp as $key => $val) {
+                $str .= '<fieldset class="layui-elem-field"><legend style="font-size:14px">'.$group[$key].'</legend><div class="layui-field-box">';
+                foreach ($val as $k=>$v){
+                    $str .= '<input type="checkbox" name="work_option[]" lay-skin="primary" title="'.$v.'" value="'.$k.'"><br>';
+                }
+                $str .= '</div></fieldset>';
+            }
+
         }
         return !empty($str) ? $str : '无';
     }
@@ -83,15 +108,23 @@ class WorkItem extends Model
             'cid'=>session('admin_user.cid'),
             'status'=>1,
 //            'user_id'=>session('admin_user.uid'),
+            'cat_id'=>session('admin_user.work_cat'),
         ];
         $str = '';
         if ($option){
             $arr_option = explode(',',$option);
             $data = self::where($map)->column('name','id');
             if ($data){
-                foreach ($arr_option as $k => $v) {
-                    if (array_key_exists($v,$data))
-                    $str .= '<input type="checkbox" name="work_option[]" lay-skin="primary" checked="" disabled="" title="'.$data[$v].'" value="'.$v.'"><br>';
+//                foreach ($arr_option as $k => $v) {
+//                    if (array_key_exists($v,$data))
+//                    $str .= '<input type="checkbox" name="work_option[]" lay-skin="primary" checked="" disabled="" title="'.$data[$v].'" value="'.$v.'"><br>';
+//                }
+                foreach ($data as $k => $v) {
+                    if (in_array($k, $arr_option)) {
+                        $str .= '<input type="checkbox" name="work_option[]" lay-skin="primary" checked="" disabled="" title="' . $v . '" value="' . $k . '"><br>';
+                    } else {
+                        $str .= '<input type="checkbox" name="work_option[]" lay-skin="primary" disabled="" title="' . $v . '" value="' . $k . '"><br>';
+                    }
                 }
             }
         }

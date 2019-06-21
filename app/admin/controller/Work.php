@@ -47,7 +47,7 @@ class Work extends Admin
                 $where['name'] = ['like', "%{$name}%"];
             }
             $where['cid'] = session('admin_user.cid');
-            $where['user_id'] = session('admin_user.uid');
+            $where['cat_id'] = session('admin_user.work_cat');
             $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->select();
             $data['count'] = ItemModel::where($where)->count('id');
             $data['code'] = 0;
@@ -128,8 +128,13 @@ class Work extends Admin
         }else{
             $row['week'] = [];
         }
+        $cat_option = CatModel::where('id',$row['cat_id'])->find();
+        $row['cat_name'] = $cat_option['name'];
+        if ($cat_option['group']){
+            $group = json_decode($cat_option['group'],true);
+            $row['group_id'] = $group[$row['group_id']];
+        }
         $this->assign('data_list', $row);
-        $this->assign('cat_option',ItemModel::getOption());
         $this->assign('week_option',ItemModel::getOption2($row['week']));
         return $this->fetch();
     }
@@ -182,6 +187,11 @@ class Work extends Admin
             if($result !== true) {
                 return $this->error($result);
             }
+            if ($data['group']){
+                $title = explode("\r\n",trim($data['group']));
+                $title = array_map('trim',array_filter(array_unique($title)));
+                $data['group'] = json_encode($title);
+            }
             if (!CatModel::create($data)) {
                 return $this->error('添加失败');
             }
@@ -202,6 +212,11 @@ class Work extends Admin
             if($result !== true) {
                 return $this->error($result);
             }
+            if ($data['group']){
+                $title = explode("\r\n",trim($data['group']));
+                $title = array_map('trim',array_filter(array_unique($title)));
+                $data['group'] = json_encode($title);
+            }
             if (!CatModel::update($data)) {
                 return $this->error('修改失败');
             }
@@ -209,6 +224,11 @@ class Work extends Admin
         }
 
         $row = CatModel::where('id', $id)->find()->toArray();
+        if ($row['group']){
+            $group = json_decode($row['group'],true);
+            $row['group'] = implode("\r\n",$group);
+        }
+
         $this->assign('data_info', $row);
         return $this->fetch('catform');
     }
@@ -220,6 +240,11 @@ class Work extends Admin
             return $this->error('此类别下有检查项，不能删除');
         }
         return $this->success('删除成功');
+    }
+
+    public function getGroupItem($id=0,$gid=0){
+        $group_option = CatModel::getGroup($id,$gid);
+        echo json_encode($group_option);
     }
 
 }

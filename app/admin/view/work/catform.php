@@ -8,6 +8,13 @@
             <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label">组名配置</label>
+            <div class="layui-input-inline">
+                <textarea type="text" class="layui-textarea field-group" rows="10" lay-verify="required" name="group" autocomplete="off" placeholder="请输入组名配置">默认</textarea>
+            </div>
+            <div class="layui-form-mid" style="color: red">*(一行一个，原来的数据不能删除)</div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">分类简介</label>
             <div class="layui-input-inline">
                 <textarea  class="layui-textarea field-remark" name="remark" lay-verify="" autocomplete="off" placeholder="[选填]分类简介"></textarea>

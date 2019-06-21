@@ -186,6 +186,7 @@ class AdminUser extends Model
             $login['depid'] = $user->department_id;
             $login['path'] = $dep_role['path'];
             $login['role_id'] = $user->role_id;
+            $login['work_cat'] = $user->work_cat;
             $login['role_name'] = $role['name'];
             $login['nick'] = $user->nick;
             $login['username'] = $user->username;

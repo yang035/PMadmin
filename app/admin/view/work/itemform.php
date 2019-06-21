@@ -3,8 +3,16 @@
         <div class="layui-form-item">
             <label class="layui-form-label">类型</label>
             <div class="layui-input-inline">
-                <select name="cat_id" class="field-cat_id" type="select">
+                <select name="cat_id" class="field-cat_id" type="select" lay-filter="job_cat">
                     {$cat_option}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">分组</label>
+            <div class="layui-input-inline">
+                <select name="group_id" class="field-group_id" type="select" lay-filter="rid" id="c_id">
+                    <option value="0">默认</option>
                 </select>
             </div>
         </div>
@@ -102,6 +110,31 @@
                 tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
             }
         });
+
+        form.on('select(job_cat)', function(data){
+            select_union(data.value);
+        });
+        if (formData.cat_id){
+            select_union(formData.cat_id,formData.group_id);
+        }
+
+        function select_union(id,gid=0){
+            $.ajax({
+                type: 'POST',
+                url: "{:url('getGroupItem')}",
+                data: {id:id,gid:gid},
+                dataType:  'json',
+                success: function(data){
+                    // $("#c_id").html("");
+                    // $.each(data, function(key, val) {
+                    //     var option1 = $("<option>").val(val.areaId).text(val.fullname);
+                    $('#c_id').html(data);
+                    form.render('select');
+                    // });
+                    // $("#c_id").get(0).selectedIndex=0;
+                }
+            });
+        }
     });
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>

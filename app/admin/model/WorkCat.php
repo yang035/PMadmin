@@ -14,6 +14,16 @@ use app\admin\model\WorkItem as ItemModel;
 
 class WorkCat extends Model
 {
+    public static function getItem()
+    {
+        $map = [
+            'cid'=>session('admin_user.cid'),
+            'status'=>1,
+        ];
+        $data = self::where($map)->column('name','id');
+        return $data;
+    }
+
     public static function getOption1($type = 0)
     {
         $map = [
@@ -33,6 +43,29 @@ class WorkCat extends Model
         }
         return $str;
     }
+
+    public static function getGroup($id=1,$type = 0)
+    {
+        $map = [
+            'cid'=>session('admin_user.cid'),
+            'status'=>1,
+            'id'=>$id,
+        ];
+        $data = self::where($map)->find();
+        $str = '';
+        if ($data){
+            $group = json_decode($data['group'],true);
+            foreach ($group as $k => $v) {
+                if ($type == $k) {
+                    $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+                } else {
+                    $str .= '<option value="'.$k.'">'.$v.'</option>';
+                }
+            }
+        }
+        return $str;
+    }
+
     public function del($id){
         if (is_array($id)) {
             $error = '';
