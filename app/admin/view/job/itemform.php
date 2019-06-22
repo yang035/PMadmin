@@ -16,6 +16,13 @@
             <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label">职位系数</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input field-ratio" name="ratio" value="1.0" lay-verify="required" autocomplete="off" placeholder="请输入系数">
+            </div>
+            <div class="layui-form-mid" style="color: red">*</div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">职位代码</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-code" name="code" lay-verify="required" autocomplete="off" placeholder="请输入职位代码">
