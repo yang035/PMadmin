@@ -13,6 +13,7 @@ use app\admin\model\SubjectItem as ItemModel;
 use app\admin\model\AdminUser;
 use app\admin\model\Project as ProjectModel;
 use think\Db;
+use traits\think\Instance;
 
 
 class Subject extends Admin
@@ -75,6 +76,70 @@ class Subject extends Admin
         return $this->fetch('item');
     }
 
+    /**
+     * @param $big_major_str
+     * @param $small_major_str
+     * @return mixed
+     * 例如：
+     * $big_major_str="方案设计：50"
+     * $small_major_str="方案创意：25，文本：16，效果表现：35，估算：2，植物：3，审核校对：4，项目负责：10，设计服务：5"
+     */
+    public function deal_major($big_major_str,$small_major_str){
+        //计算比例
+        $big_major = array_unique(array_filter($big_major_str));
+        if (count($big_major_str) != count($big_major)){
+            return $this->error('大类专业不能重复或者为空');
+        }
+        foreach ($big_major as $k=>$v) {
+            if (empty($small_major_str[$k])){
+                return $this->error('专业小类配比不能为空');
+            };
+        }
+        $small_major = $small_major_str;
+        $big_major_arr = [];
+        $small_major_arr = [];
+        if ($big_major){
+            foreach ($big_major as $k=>$v) {
+                $tmp1 = explode('：',trim($v));
+                $big_major_arr[$k] = $small_major_arr[$k] = [
+                    'name'=>$tmp1[0],
+                    'value'=>(int)$tmp1[1]
+                ];
+                $tmp2 = array_unique(array_filter(explode('，',trim($small_major[$k]))));
+                foreach ($tmp2 as $k1=>$v1) {
+                    $tmp3 = explode('：',trim($v1));
+                    $small_major_arr[$k]['child'][$k1] = [
+                        'name'=>$tmp3[0],
+                        'value'=>(int)$tmp3[1]
+                    ];
+                }
+            }
+        }
+        $big_sum = array_sum(array_column($big_major_arr,'value'));
+        if ($big_sum > 100){
+            return $this->error('大类专业配比之和不能超过100');
+        }
+        $small_child = array_column($small_major_arr,'child');
+        if ($small_child){
+            foreach ($small_child as $k=>$v){
+                $small_sum = array_sum(array_column($big_major_arr,'value'));
+                if ($small_sum > 100){
+                    return $this->error('每项小类专业配比之和不能超过100');
+                }
+            }
+        }
+//        print_r($small_sum);
+//        print_r($big_major_arr);
+//        print_r($small_major_arr);
+        $res = [
+            'big_major'=>json_encode($big_major),
+            'small_major'=>json_encode($small_major_str),
+            'big_major_deal'=>json_encode($big_major_arr),
+            'small_major_deal'=>json_encode($small_major_arr),
+        ];
+        return $res;
+    }
+
     public function addItem()
     {
         if ($this->request->isPost()) {
@@ -88,6 +153,11 @@ class Subject extends Admin
                 return $this->error($result);
             }
 
+            $major = $this->deal_major($data['big_major'],$data['small_major']);
+            $data['big_major'] = $major['big_major'];
+            $data['small_major'] = $major['small_major'];
+            $data['big_major_deal'] = $major['big_major_deal'];
+            $data['small_major_deal'] = $major['small_major_deal'];
 //            print_r($data);exit();
 //            $flag = ItemModel::create($data);
 //            print_r($flag);exit();
