@@ -101,7 +101,7 @@
                         {if condition="($vo['status'] eq 1) && ($Request.param.atype eq 3) "}
                         批示
                         {else/}
-                        查看
+                        查看处理
                         {/if}
                     </a>
                 </div>
