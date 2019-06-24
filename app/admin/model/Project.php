@@ -227,7 +227,7 @@ class Project extends Model
             'cid'=>session('admin_user.cid'),
             't_type'=>1,
         ];
-        $data = self::field('id,name')->where($where)->select();
+        $data = self::field('id,CONCAT( idcard, NAME) as name')->where($where)->select();
         $tmp = [
             'id'=>0,
             'name'=>'其他'

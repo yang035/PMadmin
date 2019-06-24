@@ -61,6 +61,7 @@
             ,cols: [[ //表头
                 {type:'checkbox'},
                 {field: 'name', title: '名称'},
+                {field: 'idcard', title: '项目编号'},
                 {field: 'cat_id', title: '类别', templet:function(d){
                         return d.cat.name;
                     }},

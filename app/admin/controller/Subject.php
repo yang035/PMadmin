@@ -94,7 +94,7 @@ class Subject extends Admin
             Db::startTrans();
             try{
                 $flag = ItemModel::create($data);
-                unset($data['idcard']);
+//                unset($data['idcard']);
 
                 $code = (1 == $data['t_type']) ? session('admin_user.cid').'p' : session('admin_user.cid').'t';
                 $data['pid'] = 0;
@@ -142,7 +142,7 @@ class Subject extends Admin
             Db::startTrans();
             try{
                 $flag = ItemModel::update($data);
-                unset($data['idcard'],$data['id']);
+                unset($data['id']);
                 $code = (1 == $data['t_type']) ? session('admin_user.cid').'p' : session('admin_user.cid').'t';
                 $data['pid'] = 0;
                 $data['code'] = $code;

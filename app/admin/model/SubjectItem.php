@@ -47,7 +47,7 @@ class SubjectItem extends Model
         if (!empty($type)){
             $map['cat_id'] = $type;
         }
-        $data = self::where($map)->column('name','id');
+        $data = self::where($map)->column('CONCAT( idcard, NAME)','id');
         $str = '<option value="0">全部</option>';
         if ($data){
             foreach ($data as $k => $v) {
