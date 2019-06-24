@@ -163,6 +163,7 @@
             审批人：{$data_list['send_user']}<br>
             抄送人：{$data_list['copy_user']}<br>
             {if condition="($data_list['status'] eq 1) && ($Request.param.atype eq 3) "}
+            <hr>
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <input type="radio" name="status" value="2" title="同意" checked>
@@ -190,6 +191,37 @@
             结果：{$approval_status[$data_list['status']]}<br>
             意见：{$data_list['mark']}<br>
             批示时间：{$data_list['update_time']|date='Y-m-d H:i:s',###}<br>
+            {/if}
+            {if condition="($data_list['status'] eq 2) && ($Request.param.atype eq 4) && ($data_list['is_deal'] neq 2)"}
+            <hr>
+            <div class="layui-form-item">
+                <label class="layui-form-label">支付结果</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="is_deal" value="1" title="未支付">
+                    <input type="radio" name="is_deal" value="2" title="支付">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">支付备注</label>
+                <div class="layui-input-inline">
+                    <textarea type="text" class="layui-textarea field-deal_mark" name="deal_mark" autocomplete="off" placeholder="请输入备注"></textarea>
+                </div>
+            </div>
+            <br>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
+                    <input type="hidden" class="field-atype" name="atype" value="{$Request.param.atype}">
+                    <input type="hidden" class="field-class_type" name="class_type" value="{$Request.param.class_type}">
+                    <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
+                    <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
+                </div>
+            </div>
+            {else/}
+            <br>
+            支付结果：{eq name="data_list['is_deal']" value="2"}支付{else/}已支付{/eq}<br>
+            支付备注：{$data_list['deal_mark']}<br>
+            支付时间：{$data_list['deal_time']}<br>
             {/if}
         </div>
     </div>

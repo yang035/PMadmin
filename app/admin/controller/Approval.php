@@ -227,6 +227,11 @@ class Approval extends Admin
                     ];
                 }
                 $list[$k]['project_name'] = $project_data['name'];
+                if (1 == $v['is_deal']){
+                    $list[$k]['deal_mark'] = '未支付';
+                }elseif (2 == $v['is_deal']){
+                    $list[$k]['deal_mark'] = '支付-'.$v['deal_mark'].'-'.$v['deal_time'];
+                }
             }
             vendor('PHPExcel.PHPExcel');
             $objPHPExcel = new \PHPExcel();
@@ -241,6 +246,7 @@ class Approval extends Admin
             $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
             $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
             $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(30);
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A1', '姓名')
                 ->setCellValue('B1', '类型')
@@ -252,7 +258,8 @@ class Approval extends Admin
                 ->setCellValue('H1', '添加时间')
                 ->setCellValue('I1', '状态')
                 ->setCellValue('J1', '审批意见')
-                ->setCellValue('K1', '审批时间');
+                ->setCellValue('K1', '审批时间')
+                ->setCellValue('L1', '支付结果');
 //            print_r($data_list);exit();
             foreach ($list as $k => $v) {
                 $num = $k + 2;
@@ -268,7 +275,8 @@ class Approval extends Admin
                     ->setCellValue('H' . $num, $v['create_time'])
                     ->setCellValue('I' . $num, $approval_status[$v['status']])
                     ->setCellValue('J' . $num, $v['mark'])
-                    ->setCellValue('K' . $num, $v['update_time']);
+                    ->setCellValue('K' . $num, $v['update_time'])
+                    ->setCellValue('L' . $num, $v['deal_mark']);
             }
             $d = !empty($d) ? $d : '全部';
             $name = $d.'日常审批统计';
@@ -309,6 +317,11 @@ class Approval extends Admin
                 ];
             }
             $list[$k]['project_name'] = $project_data['name'];
+            if (1 == $v['is_deal']){
+                $list[$k]['deal_mark'] = '未支付';
+            }elseif (2 == $v['is_deal']){
+                $list[$k]['deal_mark'] = '支付-'.$v['deal_mark'].'-'.$v['deal_time'];
+            }
         }
 
         $this->assign('tab_data', $this->tab_data);
@@ -1183,6 +1196,25 @@ class Approval extends Admin
                         $uid = session('admin_user.uid');
                         $sql = "UPDATE tb_approval SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$data['id']}";
                         $res = ApprovalModel::execute($sql);
+                        // 提交事务
+                        Db::commit();
+                    } catch (\Exception $e) {
+                        // 回滚事务
+                        Db::rollback();
+                    }
+                }elseif (4 == $data['atype']) {
+                    if (empty($data['is_deal'])){
+                        return $this->error('请选择支付结果');
+                    }
+                    //事务提交，保证数据一致性
+                    Db::startTrans();
+                    try {
+                        unset($data['atype'], $data['class_type']);
+                        $data['deal_time'] = date('Y-m-d H:i:s');
+                        $uid = session('admin_user.uid');
+                        $sql = "UPDATE tb_approval SET copy_user = JSON_SET(copy_user, '$.\"{$uid}\"', 'a') WHERE id ={$data['id']}";
+                        ApprovalModel::execute($sql);
+                        $res = ApprovalModel::update($data);
                         // 提交事务
                         Db::commit();
                     } catch (\Exception $e) {

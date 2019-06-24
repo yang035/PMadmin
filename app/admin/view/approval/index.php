@@ -70,6 +70,7 @@
             <th>状态</th>
             <th>审批意见</th>
             <th>审批时间</th>
+            <th>支付结果</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -93,6 +94,7 @@
             {else/}
             <td class="font12">-</td>
             {/if}
+            <td class="font12">{$vo['deal_mark']}</td>
             <td>
                 <div class="layui-btn-group" onclick="approval_read({$vo['id']},{$atype},{$vo['class_type']},'{$panel_type[$vo['class_type']]['title']}')">
                     <a class="layui-btn layui-btn-normal layui-btn-xs">
