@@ -13,6 +13,12 @@
     input[type="number"] {
         -moz-appearance: textfield;
     }
+    .layui-input-block{
+        width: 519px;
+    }
+    .new_task{
+        margin-left: 630px;
+    }
 </style>
 <form class="layui-form" action="{:url()}" method="post">
     <div class="layui-tab-item layui-show layui-form-pane">
@@ -23,6 +29,13 @@
                     {$subject_option}
                 </select>
             </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">类型系数</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input field-ratio" name="ratio" value="1.0" lay-verify="required" autocomplete="off" placeholder="请输入系数">
+            </div>
+            <div class="layui-form-mid" style="color: red">*</div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">项目编号</label>
@@ -43,6 +56,36 @@
             <div class="layui-input-block">
                 <textarea  class="layui-textarea field-remark" name="remark" lay-verify="" autocomplete="off" placeholder="项目描述"></textarea>
             </div>
+        </div>
+        {notempty name="data_info['big_major']"}
+        {volist name="data_info['big_major']" id="vo"}
+        <div class="layui-form-item">
+            <label class="layui-form-label">专业配比</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input field-big_major1" name="big_major[]" autocomplete="off" placeholder="大类型名称" value="{$vo}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <textarea type="text" class="layui-textarea field-small_major1" name="small_major[]" autocomplete="off" placeholder="专业小类配比">{$data_info['small_major'][$key]}</textarea>
+            </div>
+        </div>
+        {/volist}
+        {else/}
+        <div class="layui-form-item">
+            <label class="layui-form-label">专业配比</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input field-big_major" name="big_major[]" autocomplete="off" placeholder="大类型名称">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <textarea type="text" class="layui-textarea field-small_major" name="small_major[]" autocomplete="off" placeholder="专业小类配比"></textarea>
+            </div>
+        </div>
+        {/notempty}
+        <div class="new_task">
+            <a href="javascript:void(0);" class="aicon ai-tianjia field-task-add" style="float: left;font-size: 30px;"></a>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">项目面积</label>
@@ -282,6 +325,28 @@
                 tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
             }
         });
+
+        $(".field-task-add").click(function(){
+            $(".new_task").before("<div class=\"layui-form-item\">\n" +
+                "            <label class=\"layui-form-label\">专业配比</label>\n" +
+                "            <div class=\"layui-input-inline\">\n" +
+                "                <input type=\"text\" class=\"layui-input field-big_major\" name=\"big_major[]\" autocomplete=\"off\" placeholder=\"大类型名称\">\n" +
+                "            </div>\n" +
+                "        </div>\n" +
+                "        <div class=\"layui-form-item\">\n" +
+                "            <div class=\"layui-input-block\">\n" +
+                "                <textarea type=\"text\" class=\"layui-textarea field-small_major\" name=\"small_major[]\" autocomplete=\"off\" placeholder=\"专业小类配比\"></textarea>\n" +
+                "            </div>\n" +
+                "        </div>");
+            form.render();
+        });
+        $('.field-real_per').keyup(function () {
+            var num = $('.field-real_per').val();
+            if (num > 100){
+                layer.msg('百分比不能超过100');
+            }
+        });
+
     });
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>

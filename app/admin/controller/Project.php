@@ -312,6 +312,11 @@ class Project extends Admin
             if (!$p_res) {
                 return $this->error('计划编号不存在');
             }
+            if (empty($p_res['pid'])){
+                $m_id = $p_res['id'];
+            }else{
+                $m_id = $p_res['subject_id'];
+            }
             $sub_total_score = ProjectModel::where('pid', $params['id'])->column('sum(score)');
             $p_res['max_score'] = $p_res['score'] - $sub_total_score[0];
             $this->assign('p_res', $p_res);
@@ -392,7 +397,22 @@ class Project extends Admin
         $this->assign('grade_type', ProjectModel::getGrade());
         $this->assign('cat_id', ProjectModel::getPtype());
         $this->assign('p_source', ProjectModel::getPsource());
+        $this->assign('major_option', ProjectModel::getOption1($m_id));
         return $this->fetch('form');
+    }
+
+    public function getMajorItem($id,$major_cat=0,$major_item=0){
+        $p_res = ProjectModel::where('id', $id)->find();
+        if (!$p_res) {
+            return $this->error('计划编号不存在');
+        }
+        if (empty($p_res['pid'])){
+            $m_id = $p_res['id'];
+        }else{
+            $m_id = $p_res['subject_id'];
+        }
+        $child_option = ProjectModel::getChilds($m_id,$major_cat,$major_item);
+        echo json_encode($child_option);
     }
 
     public function add1()
@@ -506,6 +526,11 @@ class Project extends Admin
                 $attachment = explode(',',$row['attachment']);
                 $row['attachment_show'] = array_filter($attachment);
             }
+            if (empty($row['pid'])){
+                $m_id = $row['id'];
+            }else{
+                $m_id = $row['subject_id'];
+            }
         }
         $row['manager_user_id'] = $this->deal_data($row['manager_user']);
         $row['deal_user_id'] = $this->deal_data($row['deal_user']);
@@ -535,6 +560,7 @@ class Project extends Admin
         $this->assign('grade_type', ProjectModel::getGrade($row['grade']));
         $this->assign('cat_id', ProjectModel::getPtype($row['cat_id']));
         $this->assign('p_source', ProjectModel::getPsource($row['p_source']));
+        $this->assign('major_option', ProjectModel::getOption1($m_id,$row['major_cat']));
         return $this->fetch();
     }
 

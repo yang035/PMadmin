@@ -24,6 +24,18 @@
     </div>
         {/notempty}
     <div class="layui-form-item">
+        <label class="layui-form-label">专业类型</label>
+        <div class="layui-input-inline">
+            <select name="major_cat" class="field-major_cat" type="select" lay-filter="major_cat">
+                {$major_option}
+            </select>
+        </div>
+        <div class="layui-input-inline">
+            <select name="major_item" class="field-major_item" type="select" lay-filter="rid" id="c_id">
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">名称</label>
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-name" name="name" lay-verify="required" autocomplete="off" readonly placeholder="请输入名称">
@@ -232,6 +244,33 @@ layui.use(['jquery', 'laydate','upload','form'], function() {
             $('#div_show').show();
         };
     });
+
+    form.on('select(major_cat)', function(data){
+        select_union('{$Request.param.id}',data.value);
+    });
+    if (formData.major_cat){
+        select_union('{$Request.param.id}',formData.major_cat,formData.major_item);
+    }else {
+        select_union('{$Request.param.id}',1,1);
+    }
+
+    function select_union(id,major_cat=0,major_item=0){
+        $.ajax({
+            type: 'POST',
+            url: "{:url('getMajorItem')}",
+            data: {id:id,major_cat:major_cat,major_item:major_item},
+            dataType:  'json',
+            success: function(data){
+                // $("#c_id").html("");
+                // $.each(data, function(key, val) {
+                //     var option1 = $("<option>").val(val.areaId).text(val.fullname);
+                $('#c_id').html(data);
+                form.render('select');
+                // });
+                // $("#c_id").get(0).selectedIndex=0;
+            }
+        });
+    }
 
     laydate.render({
         elem: '.field-start_time',

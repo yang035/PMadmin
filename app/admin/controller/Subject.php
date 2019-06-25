@@ -102,6 +102,7 @@ class Subject extends Admin
             foreach ($big_major as $k=>$v) {
                 $tmp1 = explode('：',trim($v));
                 $big_major_arr[$k] = $small_major_arr[$k] = [
+                    'id'=>$k+1,
                     'name'=>$tmp1[0],
                     'value'=>(int)$tmp1[1]
                 ];
@@ -109,6 +110,7 @@ class Subject extends Admin
                 foreach ($tmp2 as $k1=>$v1) {
                     $tmp3 = explode('：',trim($v1));
                     $small_major_arr[$k]['child'][$k1] = [
+                        'id'=>$k1+1,
                         'name'=>$tmp3[0],
                         'value'=>(int)$tmp3[1]
                     ];
@@ -207,6 +209,11 @@ class Subject extends Admin
             if ($result !== true) {
                 return $this->error($result);
             }
+            $major = $this->deal_major($data['big_major'],$data['small_major']);
+            $data['big_major'] = $major['big_major'];
+            $data['small_major'] = $major['small_major'];
+            $data['big_major_deal'] = $major['big_major_deal'];
+            $data['small_major_deal'] = $major['small_major_deal'];
 
 //            $res = [];
             Db::startTrans();
@@ -240,11 +247,14 @@ class Subject extends Admin
 
         $row = ItemModel::where('id', $id)->find()->toArray();
         if ($row){
+            $row['big_major'] = json_decode($row['big_major'],true);
+            $row['small_major'] = json_decode($row['small_major'],true);
             if (!empty($row['attachment'])){
                 $attachment = explode(',',$row['attachment']);
                 $row['attachment_show'] = array_filter($attachment);
             }
         }
+//        print_r($row);
         $this->assign('cur_time', empty($row['idcard']) ? date('YmdHis') : $row['idcard']);
         $this->assign('data_info', $row);
         $this->assign('subject_option', ItemModel::getOption($row['cat_id']));

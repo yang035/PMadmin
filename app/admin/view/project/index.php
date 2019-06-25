@@ -129,6 +129,7 @@
                         }
                     }},
                     {field: 'name', title: '项目名称',width: 250},
+                    {field: 'major_item', title: '专业分类',width: 80},
                     {field: 'end_time', title: '结束时间',width: 110},
                     {field: 'score', title: '计划产量(斗)',width: 70},
                     {field: 'real_score', title: '实际产量(斗)',width: 70},
