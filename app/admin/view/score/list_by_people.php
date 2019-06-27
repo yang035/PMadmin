@@ -70,7 +70,7 @@
             <td class="font12">{$vo['subject_name']}</td>
             {/notempty}
             {volist name="major_item" id="v"}
-            <th>{$vo[$v]}</th>
+            <th>{$vo[$v]['old']}&nbsp;|&nbsp;{$vo[$v]['new']}&nbsp;|&nbsp;{$vo[$v]['ratio']}</th>
             {/volist}
             <td>
                 <div class="layui-btn-group">

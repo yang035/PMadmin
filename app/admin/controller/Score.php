@@ -357,8 +357,11 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
 
         $data_list = model('Score')::hasWhere('scoreProject')->field($fields)->group('major_item')->where($map)->paginate(10000, false, ['query' => input('get.')])->toArray();
         $data_list = $data_list['data'];
+//        print_r($data_list);exit();
         $tmp = [];
+        $major_score_new = [];
         if ($data_list) {
+            $orderRatio = $this->getOrderRatio();
             $small_major_deal = ProjectModel::smallMajorDeal($params['project_id']);
             $major_item = array_column($data_list, 'major_item');
             $major_user = array_unique(array_column($data_list, 'user'));
@@ -375,14 +378,18 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                 }
                 foreach ($major_user as $key => $val) {
                     foreach ($major_item as $k => $v) {
-                        $tmp[$val][$v] = 0;
+                        $tmp[$val][$v] = [
+                            'old'=>0,
+                            'new'=>0
+                        ];
                     }
                 }
                 foreach ($tmp as $key => $val) {
                     foreach ($data_list as $k => $v) {
                         if ($key = $v['user']) {
                             foreach ($val as $k1 => $v1) {
-                                $tmp[$key][$k1] += $v[$k1];
+                                $tmp[$key][$k1]['old'] += $v[$k1];
+                                $tmp[$key][$k1]['new'] += $v[$k1]*($orderRatio[$key] ? $orderRatio[$key] : 0);
                             }
                         }
                         $tmp[$key]['id'] = $v['id'];
@@ -392,6 +399,17 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                     }
                     break;
                 }
+                foreach ($major_item as $key => $val) {
+                    $major_score_new[$val] = 0;
+                    foreach ($tmp as $k => $v) {
+                        $major_score_new[$val] += $v[$val]['new'];
+                    }
+                }
+                foreach ($major_score_new as $key => $val) {
+                    foreach ($tmp as $k => $v) {
+                        $tmp[$k][$key]['ratio'] = round($v[$key]['new']/$val,3);
+                    }
+                }
                 foreach ($tmp as $k=>$v){
                     $tmp[$k]['realname'] = AdminUser::getUserById($k)['realname'];
                     $tmp[$k]['subject_name'] = $v['subject_id'] ? $myPro[$v['subject_id']] : '其他';
@@ -399,6 +417,8 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
             }
 
         }
+//        print_r($major_score_new);
+//        print_r($tmp);exit();
 
         // 分页
 //        $pages = $data_list->render();
@@ -410,6 +430,29 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
         $this->assign('tab_type', 2);
         $this->assign('d', $d);
         return $this->fetch();
+    }
+
+    public function getOrderRatio(){
+        $map['cid'] = session('admin_user.cid');
+        $map1['id'] = ['neq', 1];
+        $map1['is_show'] = ['eq', 0];
+        $map1['status'] = 1;
+        $fields = "`Score`.id,`Score`.subject_id,`Score`.user,sum(`Score`.ml_add_score) as ml_add_sum,sum(`Score`.ml_sub_score) as ml_sub_sum,sum(`Score`.gl_add_score) as gl_add_sum,sum(`Score`.gl_sub_score) as gl_sub_sum,`AdminUser`.realname";
+        $data_list = ScoreModel::hasWhere('adminUser',$map1)->field($fields)->where($map)->group('`Score`.user')->order('gl_add_sum desc')->paginate(30, false, ['query' => input('get.')]);
+        $tmp = [];
+        if ($data_list) {
+            foreach ($data_list as $k => $v) {
+                $tmp[$v['user']] = $k + 1;
+            }
+
+            $a = 0.5;
+            $b = 1.2;
+            $n = count($tmp);
+            foreach ($tmp as $k => $v) {
+                $tmp[$k] = round($b - ($b - $a) / ($n -1) * ($v-1),4);
+            }
+        }
+        return $tmp;
     }
 
     public function detailByMajor($q = '')

@@ -41,8 +41,8 @@
             <div><span><a href="{:url('register')}" class="login-qq-a">注册</a></span><span style="float: right"><a href="{:url()}">忘记密码?</a></span></div>
         </div>
         <div>
-            <a href="{:url('Qqlogin/index')}" title="QQ"><img src="__ADMIN_IMG__/qq.png"/></a>
-            <a href="{:url('Wxlogin/index')}" title="微信"><img src="__ADMIN_IMG__/wx.png"/></a>
+<!--            <a href="{:url('Qqlogin/index')}" title="QQ"><img src="__ADMIN_IMG__/qq.png"/></a>-->
+<!--            <a href="{:url('Wxlogin/index')}" title="微信"><img src="__ADMIN_IMG__/wx.png"/></a>-->
         </div>
     </form>
     <div class="copyright">
