@@ -13,7 +13,7 @@
         font-size: 12px;
         color: #666;
     }
-    .laytable-cell-1-0-2 {
+    .laytable-cell-1-0-5 {
         height: auto;
         line-height: 28px;
         padding: 0 15px;
@@ -129,10 +129,6 @@
                         }
                     }},
                     {field: 'name', title: '项目名称',width: 250},
-                    {field: 'major_item', title: '专业分类',width: 80},
-                    {field: 'end_time', title: '结束时间',width: 110},
-                    {field: 'score', title: '计划产量(斗)',width: 70},
-                    {field: 'real_score', title: '实际产量(斗)',width: 70},
                     {field: 'deal_user', title: '参与人',width: 80},
                     {title: '成果展示',width: 300,templet:function (d) {
                         var t = '';
@@ -162,7 +158,10 @@
                         }
                         return t;
                         }},
-                    {field: 'realper', title: '完成情况',width: 70, templet:'#oper-col-1'},
+                    {field: 'realper', title: '进度',width: 70, templet:'#oper-col-1'},
+                    {field: 'end_time', title: '结束时间',width: 110},
+                    {field: 'score', title: '计划斗',width: 80},
+                    {field: 'real_score', title: '实际斗',width: 80},
                     {templet: '#oper-col', title: '操作',width: 200,}
                 ]],
                 done: function () {

@@ -1075,6 +1075,39 @@ class Approval extends Admin
         return $this->success('状态设置成功');
     }
 
+    public function dealDay($day){
+        $legal_holiday = config('config_score.legal_holiday');
+        $weekend_work = config('config_score.weekend_work');
+        $year = substr($day,0,4);
+        $year_legal_holiday = $legal_holiday[$year];
+        $year_weekend_work = $weekend_work[$year];
+        /**
+         * 星期一 1
+         * 星期二 2
+         * 星期三 3
+         * 星期四 4
+         * 星期五 5
+         * 星期六 6
+         * 星期日 0
+         * 法定节假日 7
+         * 周末调整工作日 8
+         */
+        if (in_array($day,$year_legal_holiday)){
+            $n = 7;
+        }elseif (in_array($day,$year_weekend_work)){
+            $n = 8;
+        }else{
+            $n = date('w',strtotime($day));
+        }
+        //工作日
+        $working_day = [1,2,3,4,5,8];
+        $f = false;
+        if (in_array($n,$working_day)){
+            $f = true;
+        }
+        return $f;
+    }
+
     public function read()
     {
         $params = $this->request->param();
@@ -1172,6 +1205,40 @@ class Approval extends Admin
                     //事务提交，保证数据一致性
                     Db::startTrans();
                     try {
+                        if (1 == $data['class_type'] && 2 == $data['status']){
+                            $start_time = explode(' ',$list['start_time']);
+                            $end_time = explode(' ',$list['end_time']);
+                            if ($start_time[0] == $end_time[0]){
+                                $c = (int)((strtotime($list['end_time']) - strtotime($list['start_time']))/3600);
+                            }else{
+                                $d = round((strtotime($end_time[0])-strtotime($start_time[0]))/3600/24);
+                                $c = 0;
+                                for ($i=0; $i<=$d; $i++) {
+                                    $dd = date('Y-m-d',strtotime("{$start_time[0]} +{$i} day"));
+                                    if ($this->dealDay($dd)){
+                                        $c++;
+                                    }
+                                }
+                                $c *= 8;
+                            }
+
+                            $per_score = config('score.hour_score') ? config('score.hour_score') : 0;
+                            $gl_sub_score = $per_score*$c;
+                            $score = [
+                                'subject_id' => $list['project_id'],
+                                'project_id' => 0,
+                                'cid' => session('admin_user.cid'),
+                                'project_code' => '',
+                                'user' => $list['user_id'],
+                                'gl_sub_score' => $gl_sub_score,
+                                'remark' => "请假调休时间段{$list['start_time']}~{$list['end_time']},计算{$c}小时，扣除{$gl_sub_score}斗(编号{$list['id']})",
+                                'user_id' => session('admin_user.uid'),
+                                'create_time' => time(),
+                                'update_time' => time(),
+                            ];
+                            db('score')->insert($score);
+                        }
+
                         if (6 == $data['class_type'] && 2 == $data['status']){
                             $c = (int)((strtotime($list['end_time']) - strtotime($list['start_time']))/3600);
                             $per_score = config('score.hour_score') ? config('score.hour_score') : 0;
