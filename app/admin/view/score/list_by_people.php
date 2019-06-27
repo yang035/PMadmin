@@ -54,7 +54,9 @@
             <th>项目名称</th>
             {/notempty}
             {volist name="major_item" id="vo"}
+            {notempty name="vo"}
             <th>{$small_major_deal[$vo]}</th>
+            {/notempty}
             {/volist}
             <th>操作</th>
         </tr>
@@ -70,7 +72,9 @@
             <td class="font12">{$vo['subject_name']}</td>
             {/notempty}
             {volist name="major_item" id="v"}
+            {notempty name="v"}
             <th>{$vo[$v]['old']}&nbsp;|&nbsp;{$vo[$v]['new']}&nbsp;|&nbsp;{$vo[$v]['ratio']}</th>
+            {/notempty}
             {/volist}
             <td>
                 <div class="layui-btn-group">

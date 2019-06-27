@@ -276,11 +276,13 @@ class Project extends Model
         $str = '';
         if ($data){
             $big_major_deal = json_decode($data['big_major_deal'],true);
-            foreach ($big_major_deal as $k => $v) {
-                if ($type == $v['id']) {
-                    $str .= '<option value="'.$v['id'].'" selected>'.$v['name'].'</option>';
-                } else {
-                    $str .= '<option value="'.$v['id'].'">'.$v['name'].'</option>';
+            if ($big_major_deal){
+                foreach ($big_major_deal as $k => $v) {
+                    if ($type == $v['id']) {
+                        $str .= '<option value="'.$v['id'].'" selected>'.$v['name'].'</option>';
+                    } else {
+                        $str .= '<option value="'.$v['id'].'">'.$v['name'].'</option>';
+                    }
                 }
             }
         }
@@ -298,16 +300,18 @@ class Project extends Model
         $str = '<option value="0" selected>无</option>';
         if ($data){
             $small_major_deal = json_decode($data['small_major_deal'],true);
-            foreach ($small_major_deal as $key => $val) {
-                if ($major_cat == $val['id']){
-                    foreach ($val['child'] as $k => $v) {
-                        if ($major_item == $v['id']) {
-                            $str .= '<option value="'.$v['id'].'" selected>'.$v['name'].'</option>';
-                        } else {
-                            $str .= '<option value="'.$v['id'].'">'.$v['name'].'</option>';
+            if ($small_major_deal){
+                foreach ($small_major_deal as $key => $val) {
+                    if ($major_cat == $val['id']){
+                        foreach ($val['child'] as $k => $v) {
+                            if ($major_item == $v['id']) {
+                                $str .= '<option value="'.$v['id'].'" selected>'.$v['name'].'</option>';
+                            } else {
+                                $str .= '<option value="'.$v['id'].'">'.$v['name'].'</option>';
+                            }
                         }
+                        break;
                     }
-                    break;
                 }
             }
         }
@@ -324,9 +328,11 @@ class Project extends Model
         if ($data){
             $small_major_deal = json_decode($data['small_major_deal'],true);
             $tmp = [];
-            foreach ($small_major_deal as $key => $val) {
-                foreach ($val['child'] as $k => $v) {
-                    $tmp[$v['id']] = $v['name'];
+            if ($small_major_deal){
+                foreach ($small_major_deal as $key => $val) {
+                    foreach ($val['child'] as $k => $v) {
+                        $tmp[$v['id']] = $v['name'];
+                    }
                 }
             }
         }
