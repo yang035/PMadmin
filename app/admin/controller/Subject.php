@@ -85,6 +85,14 @@ class Subject extends Admin
      * $small_major_str="方案创意：25，文本：16，效果表现：35，估算：2，植物：3，审核校对：4，项目负责：10，设计服务：5"
      */
     public function deal_major($big_major_str,$small_major_str){
+        if (empty($big_major_str[0])){
+            return [
+                'big_major'=>json_encode([]),
+                'small_major'=>json_encode([]),
+                'big_major_deal'=>json_encode([]),
+                'small_major_deal'=>json_encode([]),
+            ];
+        }
         //计算比例
         $big_major = array_unique(array_filter($big_major_str));
         if (count($big_major_str) != count($big_major)){
