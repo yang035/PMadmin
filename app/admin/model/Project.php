@@ -313,4 +313,23 @@ class Project extends Model
         }
         return $str;
     }
+
+    public static function smallMajorDeal($id=1)
+    {
+        $map = [
+            'cid'=>session('admin_user.cid'),
+            'id'=>$id,
+        ];
+        $data = self::field('small_major_deal')->where($map)->find();
+        if ($data){
+            $small_major_deal = json_decode($data['small_major_deal'],true);
+            $tmp = [];
+            foreach ($small_major_deal as $key => $val) {
+                foreach ($val['child'] as $k => $v) {
+                    $tmp[$v['id']] = $v['name'];
+                }
+            }
+        }
+        return $tmp;
+    }
 }

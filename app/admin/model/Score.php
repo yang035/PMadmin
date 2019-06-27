@@ -42,4 +42,10 @@ class Score extends Model
         return $this->hasOne('AdminUser', 'id', 'user')->field('username,realname');
     }
 
+    //关联项目
+    public function scoreProject()
+    {
+        return $this->hasOne('Project', 'id', 'project_id')->field('*');
+    }
+
 }

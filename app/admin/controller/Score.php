@@ -10,6 +10,7 @@ namespace app\admin\controller;
 use app\admin\model\Project as ProjectModel;
 use app\admin\model\AdminUser;
 use app\admin\model\Score as ScoreModel;
+use think\Db;
 
 class Score extends Admin
 {
@@ -28,97 +29,46 @@ class Score extends Admin
         $this->assign('project_select', ProjectModel::inputSearchProject());
     }
     public function index($q = '')
-    {
+{
 //        echo strtotime('2019-04-31 23:59:59');
-        $map = [];
-        $map1 = [];
-        $params = $this->request->param();
-        $d = '';
-        if ($params){
-            if (!empty($params['realname'])){
-                $map1['realname'] = ['like', '%'.$params['realname'].'%'];
-            }
-            if (!empty($params['project_id'])){
-                $map['subject_id'] = $params['project_id'];
-            }
-            if (!empty($params['project_code'])){
-                $map['project_code'] = ['like', '%'.$params['project_code'].'%'];
-            }
-            if (isset($params['search_date']) && !empty($params['search_date'])){
-                $d = urldecode($params['search_date']);
-                $d_arr = explode(' - ',$d);
-                $d0 = strtotime($d_arr[0].' 00:00:00');
-                $d1 = strtotime($d_arr[1].' 23:59:59');
-                $map['Score.create_time'] = ['between',["$d0","$d1"]];
-            }
+    $map = [];
+    $map1 = [];
+    $params = $this->request->param();
+    $d = '';
+    if ($params){
+        if (!empty($params['realname'])){
+            $map1['realname'] = ['like', '%'.$params['realname'].'%'];
         }
+        if (!empty($params['project_id'])){
+            $map['subject_id'] = $params['project_id'];
+        }
+        if (!empty($params['project_code'])){
+            $map['project_code'] = ['like', '%'.$params['project_code'].'%'];
+        }
+        if (isset($params['search_date']) && !empty($params['search_date'])){
+            $d = urldecode($params['search_date']);
+            $d_arr = explode(' - ',$d);
+            $d0 = strtotime($d_arr[0].' 00:00:00');
+            $d1 = strtotime($d_arr[1].' 23:59:59');
+            $map['Score.create_time'] = ['between',["$d0","$d1"]];
+        }
+    }
 
-        $map['cid'] = session('admin_user.cid');
-        $map1['id'] = ['neq', 1];
-        $map1['is_show'] = ['eq', 0];
-        $map1['status'] = 1;
-        $role_id = session('admin_user.role_id');
-        if ($role_id > 3){
-            $map1['id'] = session('admin_user.uid');
-        }
+    $map['cid'] = session('admin_user.cid');
+    $map1['id'] = ['neq', 1];
+    $map1['is_show'] = ['eq', 0];
+    $map1['status'] = 1;
+    $role_id = session('admin_user.role_id');
+    if ($role_id > 3){
+        $map1['id'] = session('admin_user.uid');
+    }
 //        $map['Score.create_time'] = ['<',1556726399];
 //print_r($map);
-        $fields = "`Score`.id,`Score`.user,sum(`Score`.ml_add_score) as ml_add_sum,sum(`Score`.ml_sub_score) as ml_sub_sum,sum(`Score`.gl_add_score) as gl_add_sum,sum(`Score`.gl_sub_score) as gl_sub_sum,`AdminUser`.realname";
+    $fields = "`Score`.id,`Score`.subject_id,`Score`.user,sum(`Score`.ml_add_score) as ml_add_sum,sum(`Score`.ml_sub_score) as ml_sub_sum,sum(`Score`.gl_add_score) as gl_add_sum,sum(`Score`.gl_sub_score) as gl_sub_sum,`AdminUser`.realname";
 
-        if (isset($params['export']) && 1 == $params['export']){
-            set_time_limit(0);
-            $data_list = ScoreModel::hasWhere('adminUser',$map1)->field($fields)->where($map)->group('`Score`.user')->order('gl_add_sum desc')->select();
-//        print_r($data_list);
-            $name_arr = ProjectModel::getColumn('name');
-            foreach ($data_list as $k=>$v){
-                $data_list[$k]['pname'] = $v['project_id'] ? $name_arr[$v['project_id']] : '系统';
-                $data_list[$k]['unused_ml'] = $v['ml_add_sum'] - $v['ml_sub_sum'];
-                $data_list[$k]['unused_gl'] = $v['gl_add_sum'] - $v['gl_sub_sum'];
-            }
-            vendor('PHPExcel.PHPExcel');
-            $objPHPExcel = new \PHPExcel();
-            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(10);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(10);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(10);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(10);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
-            $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A1', '姓名')
-                ->setCellValue('B1', 'ML+')
-                ->setCellValue('C1', 'ML-')
-                ->setCellValue('D1', '剩余ML')
-                ->setCellValue('E1', 'GL+')
-                ->setCellValue('F1', 'GL-')
-                ->setCellValue('G1', '剩余GL');
-//            print_r($data_list);exit();
-            foreach ($data_list as $k => $v) {
-                $num = $k + 2;
-                $objPHPExcel->setActiveSheetIndex(0)
-                    //Excel的第A列，uid是你查出数组的键值，下面以此类推
-                    ->setCellValue('A' . $num, $v['realname'])
-                    ->setCellValue('B' . $num, $v['ml_add_sum'])
-                    ->setCellValue('C' . $num, $v['ml_sub_sum'])
-                    ->setCellValue('D' . $num, $v['unused_ml'])
-                    ->setCellValue('E' . $num, $v['gl_add_sum'])
-                    ->setCellValue('F' . $num, $v['gl_sub_sum'])
-                    ->setCellValue('G' . $num, $v['unused_gl']);
-            }
-            $d = !empty($d) ? $d : '全部日期';
-            $p = !empty($params['project_name']) ? $params['project_name'] : '';
-            $name = $p.$d.'ML/GL统计';
-            $objPHPExcel->getActiveSheet()->setTitle($d);
-            $objPHPExcel->setActiveSheetIndex(0);
-            header('Content-Type: application/vnd.ms-excel');
-            header('Content-Disposition: attachment;filename="' . $name . '.xls"');
-            header('Cache-Control: max-age=0');
-            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-            $objWriter->save('php://output');
-            exit;
-        }
-
-        $data_list = ScoreModel::hasWhere('adminUser',$map1)->field($fields)->where($map)->group('`Score`.user')->order('gl_add_sum desc')->paginate(30, false, ['query' => input('get.')]);
+    if (isset($params['export']) && 1 == $params['export']){
+        set_time_limit(0);
+        $data_list = ScoreModel::hasWhere('adminUser',$map1)->field($fields)->where($map)->group('`Score`.user')->order('gl_add_sum desc')->select();
 //        print_r($data_list);
         $name_arr = ProjectModel::getColumn('name');
         foreach ($data_list as $k=>$v){
@@ -126,15 +76,68 @@ class Score extends Admin
             $data_list[$k]['unused_ml'] = $v['ml_add_sum'] - $v['ml_sub_sum'];
             $data_list[$k]['unused_gl'] = $v['gl_add_sum'] - $v['gl_sub_sum'];
         }
-        // 分页
-        $pages = $data_list->render();
-        $this->assign('data_list', $data_list);
-        $this->assign('pages', $pages);
-        $this->assign('tab_data', $this->tab_data);
-        $this->assign('tab_type', 2);
-        $this->assign('d', $d);
-        return $this->fetch();
+        vendor('PHPExcel.PHPExcel');
+        $objPHPExcel = new \PHPExcel();
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A1', '姓名')
+            ->setCellValue('B1', 'ML+')
+            ->setCellValue('C1', 'ML-')
+            ->setCellValue('D1', '剩余ML')
+            ->setCellValue('E1', 'GL+')
+            ->setCellValue('F1', 'GL-')
+            ->setCellValue('G1', '剩余GL');
+//            print_r($data_list);exit();
+        foreach ($data_list as $k => $v) {
+            $num = $k + 2;
+            $objPHPExcel->setActiveSheetIndex(0)
+                //Excel的第A列，uid是你查出数组的键值，下面以此类推
+                ->setCellValue('A' . $num, $v['realname'])
+                ->setCellValue('B' . $num, $v['ml_add_sum'])
+                ->setCellValue('C' . $num, $v['ml_sub_sum'])
+                ->setCellValue('D' . $num, $v['unused_ml'])
+                ->setCellValue('E' . $num, $v['gl_add_sum'])
+                ->setCellValue('F' . $num, $v['gl_sub_sum'])
+                ->setCellValue('G' . $num, $v['unused_gl']);
+        }
+        $d = !empty($d) ? $d : '全部日期';
+        $p = !empty($params['project_name']) ? $params['project_name'] : '';
+        $name = $p.$d.'ML/GL统计';
+        $objPHPExcel->getActiveSheet()->setTitle($d);
+        $objPHPExcel->setActiveSheetIndex(0);
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $name . '.xls"');
+        header('Cache-Control: max-age=0');
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+        exit;
     }
+
+    $data_list = ScoreModel::hasWhere('adminUser',$map1)->field($fields)->where($map)->group('`Score`.user')->order('gl_add_sum desc')->paginate(30, false, ['query' => input('get.')]);
+//        print_r($data_list);
+    $name_arr = ProjectModel::getColumn('name');
+    $myPro = ProjectModel::getProTask(0,0);
+    foreach ($data_list as $k=>$v){
+        $data_list[$k]['pname'] = $v['project_id'] ? $name_arr[$v['project_id']] : '系统';
+        $data_list[$k]['unused_ml'] = $v['ml_add_sum'] - $v['ml_sub_sum'];
+        $data_list[$k]['unused_gl'] = $v['gl_add_sum'] - $v['gl_sub_sum'];
+        $data_list[$k]['subject_name'] = $v['subject_id'] ? $myPro[$v['subject_id']] : '其他';
+    }
+    // 分页
+    $pages = $data_list->render();
+    $this->assign('data_list', $data_list);
+    $this->assign('pages', $pages);
+    $this->assign('tab_data', $this->tab_data);
+    $this->assign('tab_type', 2);
+    $this->assign('d', $d);
+    return $this->fetch();
+}
 
     public function getStaData(){
         $where = [
@@ -274,27 +277,172 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
         return $this->fetch();
     }
 
-    public function edit(){
+    public function listByProject($q = '')
+    {
+//        echo strtotime('2019-04-31 23:59:59');
+        $map = [];
+        $map1 = [];
+        $params = $this->request->param();
+        $d = '';
+        if ($params){
+            if (!empty($params['realname'])){
+                $map1['realname'] = ['like', '%'.$params['realname'].'%'];
+            }
+            if (!empty($params['project_id'])){
+                $map['subject_id'] = $params['project_id'];
+            }
+            if (!empty($params['project_code'])){
+                $map['project_code'] = ['like', '%'.$params['project_code'].'%'];
+            }
+            if (isset($params['search_date']) && !empty($params['search_date'])){
+                $d = urldecode($params['search_date']);
+                $d_arr = explode(' - ',$d);
+                $d0 = strtotime($d_arr[0].' 00:00:00');
+                $d1 = strtotime($d_arr[1].' 23:59:59');
+                $map['Score.create_time'] = ['between',["$d0","$d1"]];
+            }
+        }
+
+        $map['cid'] = session('admin_user.cid');
+        $fields = "subject_id,sum(ml_add_score) as ml_add_sum,sum(ml_sub_score) as ml_sub_sum,sum(gl_add_score) as gl_add_sum,sum(gl_sub_score) as gl_sub_sum";
+
+        $data_list = ScoreModel::field($fields)->where($map)->group('subject_id')->order('subject_id desc')->paginate(30, false, ['query' => input('get.')]);
+//        print_r($data_list);
+        $myPro = ProjectModel::getProTask(0,0);
+        foreach ($data_list as $k=>$v){
+            $data_list[$k]['subject_name'] = $v['subject_id'] ? $myPro[$v['subject_id']] : '其他';
+        }
+
+        // 分页
+        $pages = $data_list->render();
+        $this->assign('data_list', $data_list);
+        $this->assign('pages', $pages);
+        $this->assign('tab_data', $this->tab_data);
+        $this->assign('tab_type', 2);
+        $this->assign('d', $d);
         return $this->fetch();
     }
 
-    public function del(){
+    public function listByPeople($q = '')
+    {
+//        echo strtotime('2019-04-31 23:59:59');
+        $map = [];
+        $map1 = [];
+        $params = $this->request->param();
+        if (!isset($params['project_id'])){
+            return $this->error('此菜单已禁用');
+        }
+        $d = '';
+        if ($params){
+            if (!empty($params['realname'])){
+                $map1['realname'] = ['like', '%'.$params['realname'].'%'];
+            }
+            if (!empty($params['project_id'])){
+                $map['Score.subject_id'] = $params['project_id'];
+            }
+            if (!empty($params['project_code'])){
+                $map['project_code'] = ['like', '%'.$params['project_code'].'%'];
+            }
+            if (isset($params['search_date']) && !empty($params['search_date'])){
+                $d = urldecode($params['search_date']);
+                $d_arr = explode(' - ',$d);
+                $d0 = strtotime($d_arr[0].' 00:00:00');
+                $d1 = strtotime($d_arr[1].' 23:59:59');
+                $map['Score.create_time'] = ['between',["$d0","$d1"]];
+            }
+        }
+
+        $map['Score.cid'] = session('admin_user.cid');
+        $fields = "`Score`.id,`Score`.subject_id,`Score`.user,sum(`Score`.ml_add_score) as ml_add_sum,sum(`Score`.ml_sub_score) as ml_sub_sum,sum(`Score`.gl_add_score) as gl_add_sum,sum(`Score`.gl_sub_score) as gl_sub_sum,Project.name,Project.major_cat,Project.major_cat_name,Project.major_item,Project.major_item_name";
+
+        $data_list = model('Score')::hasWhere('scoreProject')->field($fields)->group('major_item')->where($map)->paginate(10000, false, ['query' => input('get.')])->toArray();
+        $data_list = $data_list['data'];
+        $tmp = [];
+        if ($data_list) {
+            $small_major_deal = ProjectModel::smallMajorDeal($params['project_id']);
+            $major_item = array_column($data_list, 'major_item');
+            $major_user = array_unique(array_column($data_list, 'user'));
+            $myPro = ProjectModel::getProTask(0,0);
+            if (is_array($major_item)) {
+                foreach ($major_item as $key => $val) {
+                    foreach ($data_list as $k => $v) {
+                        if ($val == $v['major_item']) {
+                            $data_list[$k][$val] = $v['ml_add_sum'];
+                        } else {
+                            $data_list[$k][$val] = 0;
+                        }
+                    }
+                }
+                foreach ($major_user as $key => $val) {
+                    foreach ($major_item as $k => $v) {
+                        $tmp[$val][$v] = 0;
+                    }
+                }
+                foreach ($tmp as $key => $val) {
+                    foreach ($data_list as $k => $v) {
+                        if ($key = $v['user']) {
+                            foreach ($val as $k1 => $v1) {
+                                $tmp[$key][$k1] += $v[$k1];
+                            }
+                        }
+                        $tmp[$key]['id'] = $v['id'];
+                        $tmp[$key]['subject_id'] = $v['subject_id'];
+                        $tmp[$key]['user'] = $v['user'];
+                        $tmp[$key]['name'] = $v['name'];
+                    }
+                    break;
+                }
+                foreach ($tmp as $k=>$v){
+                    $tmp[$k]['realname'] = AdminUser::getUserById($k)['realname'];
+                    $tmp[$k]['subject_name'] = $v['subject_id'] ? $myPro[$v['subject_id']] : '其他';
+                }
+            }
+
+        }
+
+        // 分页
+//        $pages = $data_list->render();
+        $this->assign('data_list', $tmp);
+        $this->assign('small_major_deal', $small_major_deal);
+        $this->assign('major_item', $major_item);
+//        $this->assign('pages', $pages);
+        $this->assign('tab_data', $this->tab_data);
+        $this->assign('tab_type', 2);
+        $this->assign('d', $d);
         return $this->fetch();
     }
 
-    public function daily(){
-        return $this->fetch();
-    }
+    public function detailByMajor($q = '')
+    {
+        $map = [];
+        $map1 = [];
+        $params = $this->request->param();
+        if ($params){
+            if (!empty($params['realname'])){
+                $map1['realname'] = ['like', '%'.$params['realname'].'%'];
+            }
+            if (!empty($params['project_id'])){
+                $map['subject_id'] = $params['project_id'];
+            }
+            if (!empty($params['project_code'])){
+                $map['project_code'] = ['like', '%'.$params['project_code'].'%'];
+            }
+            $map['user'] = $params['user'];
+        }
 
-    public function addDaily(){
-        return $this->fetch();
-    }
-
-    public function editDaily(){
-        return $this->fetch();
-    }
-
-    public function delDaily(){
+        $data_list = ScoreModel::hasWhere('adminUser',$map1)->field("`Score`.*, `AdminUser`.realname")->where($map)->order('id desc')->paginate(30, false, ['query' => input('get.')]);
+        $name_arr = ProjectModel::getColumn('name');
+        $myPro = ProjectModel::getProTask(0,0);
+        foreach ($data_list as $k=>$v){
+            $data_list[$k]['pname'] = $v['project_id'] ? $name_arr[$v['project_id']] : '无';
+            $data_list[$k]['subject_name'] = $v['subject_id'] ? $myPro[$v['subject_id']] : '其他';
+        }
+        // 分页
+        $pages = $data_list->render();
+        $this->assign('data_list', $data_list);
+        $this->assign('pages', $pages);
+        $this->assign('tab_data', $this->tab_data);
+        $this->assign('tab_type', 2);
         return $this->fetch();
     }
 

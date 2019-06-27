@@ -110,7 +110,7 @@ class Subject extends Admin
                 foreach ($tmp2 as $k1=>$v1) {
                     $tmp3 = explode('：',trim($v1));
                     $small_major_arr[$k]['child'][$k1] = [
-                        'id'=>$k1+1,
+                        'id'=>($k+1)*10000+($k1+1),
                         'name'=>$tmp3[0],
                         'value'=>(int)$tmp3[1]
                     ];
