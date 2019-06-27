@@ -47,6 +47,28 @@ class SubjectItem extends Model
         if (!empty($type)){
             $map['cat_id'] = $type;
         }
+        $data = self::where($map)->column('name','id');
+        $str = '<option value="0">全部</option>';
+        if ($data){
+            foreach ($data as $k => $v) {
+                if ($id == $k) {
+                    $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+                } else {
+                    $str .= '<option value="'.$k.'">'.$v.'</option>';
+                }
+            }
+        }
+        return $str;
+    }
+    public static function getItemOption1($id = 0,$type=0)
+    {
+        $map = [
+            'cid'=>session('admin_user.cid'),
+            'status'=>1,
+        ];
+        if (!empty($type)){
+            $map['cat_id'] = $type;
+        }
         $data = self::where($map)->column('CONCAT( idcard, NAME)','id');
         $str = '<option value="0">全部</option>';
         if ($data){

@@ -901,7 +901,7 @@ class Project extends Admin
         $this->assign('type', $params['type']);
 //        $pages = $list->render();
         $this->assign('tab_url', url('mytask', ['type' => $params['type']]));
-        $this->assign('project_select', ProjectModel::inputSearchProject1());
+        $this->assign('project_select', ProjectModel::inputSearchProject());
 //        $this->assign('data_list', $list);
 //        $this->assign('pages', $pages);
 //        return $this->fetch();
