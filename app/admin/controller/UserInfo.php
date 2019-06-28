@@ -390,7 +390,7 @@ class UserInfo extends Admin
         $where = [
             'cid' => session('admin_user.cid'),
             'status' => 1,
-            'start_date' => ['between',[date('Y-m-d',strtotime('-90 days')),date('Y-m-d',strtotime('-80 days'))]],
+            'start_date' => ['between',[date('Y-m-d',strtotime('-90 days')),date('Y-m-d',strtotime('-60 days'))]],
             'end_date' => ['in',['0100-01-01','0000-00-00']]
         ];
         $fields = 'user_id,start_date';
