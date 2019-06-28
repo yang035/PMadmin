@@ -62,26 +62,30 @@
         <div class="layui-form-item">
             <label class="layui-form-label">专业配比</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input field-big_major1" name="big_major[]" autocomplete="off" placeholder="大类型名称" value="{$vo}">
+                <input type="text" class="layui-input field-big_major1" name="big_major[]" autocomplete="off" onblur='big_major_match()' placeholder="方案设计：50" value="{$vo}">
             </div>
+            <div class="layui-form-mid red"></div>
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <textarea type="text" class="layui-textarea field-small_major1" name="small_major[]" autocomplete="off" placeholder="专业小类配比">{$data_info['small_major'][$key]}</textarea>
+                <textarea type="text" class="layui-textarea field-small_major1" name="small_major[]" onblur='small_major_match()' autocomplete="off" placeholder="方案创意：25，文本：16，效果表现：35，估算：2，植物：3，审核校对：4，项目负责：10，设计服务：5">{$data_info['small_major'][$key]}</textarea>
             </div>
+            <div class="layui-form-mid red"></div>
         </div>
         {/volist}
         {else/}
         <div class="layui-form-item">
             <label class="layui-form-label">专业配比</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input field-big_major" name="big_major[]" autocomplete="off" placeholder="大类型名称">
+                <input type="text" class="layui-input field-big_major1" name="big_major[]" onblur='big_major_match()' autocomplete="off" placeholder="方案设计：50">
             </div>
+            <div class="layui-form-mid red"></div>
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <textarea type="text" class="layui-textarea field-small_major" name="small_major[]" autocomplete="off" placeholder="专业小类配比"></textarea>
+                <textarea type="text" class="layui-textarea field-small_major1" name="small_major[]" onblur='small_major_match()' autocomplete="off" placeholder="方案创意：25，文本：16，效果表现：35，估算：2，植物：3，审核校对：4，项目负责：10，设计服务：5"></textarea>
             </div>
+            <div class="layui-form-mid red"></div>
         </div>
         {/notempty}
         <div class="new_task">
@@ -330,13 +334,15 @@
             $(".new_task").before("<div class=\"layui-form-item\">\n" +
                 "            <label class=\"layui-form-label\">专业配比</label>\n" +
                 "            <div class=\"layui-input-inline\">\n" +
-                "                <input type=\"text\" class=\"layui-input field-big_major\" name=\"big_major[]\" autocomplete=\"off\" placeholder=\"大类型名称\">\n" +
+                "                <input type=\"text\" class=\"layui-input field-big_major1\" name=\"big_major[]\" onblur='big_major_match()' autocomplete=\"off\" placeholder=\"方案设计：50\">\n" +
                 "            </div>\n" +
+                "            <div class=\"layui-form-mid red\"></div>\n"+
                 "        </div>\n" +
                 "        <div class=\"layui-form-item\">\n" +
                 "            <div class=\"layui-input-block\">\n" +
-                "                <textarea type=\"text\" class=\"layui-textarea field-small_major\" name=\"small_major[]\" autocomplete=\"off\" placeholder=\"专业小类配比\"></textarea>\n" +
+                "                <textarea type=\"text\" class=\"layui-textarea field-small_major1\" name=\"small_major[]\" onblur='small_major_match()' autocomplete=\"off\" placeholder=\"方案创意：25，文本：16，效果表现：35，估算：2，植物：3，审核校对：4，项目负责：10，设计服务：5\"></textarea>\n" +
                 "            </div>\n" +
+                "            <div class=\"layui-form-mid red\"></div>\n"+
                 "        </div>");
             form.render();
         });
@@ -348,5 +354,88 @@
         });
 
     });
+
+    $(".field-big_major1").blur(function () {
+        var a = $(this).val(),
+            re = /^[\u4E00-\u9FA5A-Za-z]+[：]{1}[\d]+$/,
+            b = a.match(re),
+            c = $(this).parent("div").next("div");
+        if (null != b) {
+            c.html("正确");
+        } else {
+            c.html("格式不正确");
+        }
+    });
+
+    $(".field-small_major1").blur(function () {
+        var a = $(this).val(),
+            re = /^[\u4E00-\u9FA5A-Za-z]+[：]{1}[\d]+$/,
+            re1 = /^[\u4E00-\u9FA5A-Za-z][\u4E00-\u9FA5A-Za-z：\d，]+[\d]+$/,
+            b = a.match(re1),
+            c = $(this).parent("div").next("div"),
+            d = a.split('，'),
+            e,
+            f=0;
+        if (null == b) {
+            f = f+1;
+        }
+        $.each(d, function (i, v) {
+            e = v.match(re);
+            if (null == e) {
+                f = f+1;
+            }
+        });
+
+        if (f > 0) {
+            c.html("格式不正确");
+        } else {
+            c.html("正确");
+        }
+
+    });
+
+    function big_major_match(){
+        $(".field-big_major1").blur(function () {
+            var a = $(this).val(),
+                re = /^[\u4E00-\u9FA5A-Za-z]+[：]{1}[\d]+$/,
+                b = a.match(re),
+                c = $(this).parent("div").next("div");
+            if (null != b) {
+                c.html("正确");
+            } else {
+                c.html("格式不正确");
+            }
+        });
+    }
+    function small_major_match(){
+        $(".field-small_major1").blur(function () {
+            var a = $(this).val(),
+                re = /^[\u4E00-\u9FA5A-Za-z]+[：]{1}[\d]+$/,
+                re1 = /^[\u4E00-\u9FA5A-Za-z][\u4E00-\u9FA5A-Za-z：\d，]+[\d]+$/,
+                b = a.match(re1),
+                c = $(this).parent("div").next("div"),
+                d = a.split('，'),
+                e,
+                f=0;
+            if (null == b) {
+                f = f+1;
+            }
+            $.each(d, function (i, v) {
+                e = v.match(re);
+                if (null == e) {
+                    f = f+1;
+                }
+            });
+
+            if (f > 0) {
+                c.html("格式不正确");
+            } else {
+                c.html("正确");
+            }
+
+        });
+
+    }
+
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>
