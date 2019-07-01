@@ -1627,7 +1627,77 @@ class Project extends Admin
 
     public function doimport()
     {
+        $p = $this->request->param();
+        if (isset($p['a']) && $p['a'] = 'major'){
+            set_time_limit(0);
+            $map = [
+                'cid'=>session('admin_user.cid'),
+                'id'=>(int)$p['id'],
+            ];
+            $row = ProjectModel::where($map)->find();
+            if ($row && !empty($row['small_major_deal'])){
+                $major = json_decode($row['small_major_deal'],true);
+                if ($major){
+                    $major_arr = [];
+                    foreach ($major as $k=>$v){
+                        foreach ($v['child'] as $key=>$val){
+                            $val['type'] = $v['name'];
+                            $major_arr[] = $val;
+                        }
+                    }
+                    if ($major_arr){
+                        vendor('PHPExcel.PHPExcel');
+                        $objPHPExcel = new \PHPExcel();
+                        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+                        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+                        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+                        $objPHPExcel->setActiveSheetIndex(0)
+                            ->setCellValue('A1', '类型')
+                            ->setCellValue('B1', '专业名称')
+                            ->setCellValue('C1', '专业编号');
+                        foreach ($major_arr as $k => $v) {
+                            $num = $k + 2;
+                            $objPHPExcel->setActiveSheetIndex(0)
+                                //Excel的第A列，uid是你查出数组的键值，下面以此类推
+                                ->setCellValue('A' . $num, $v['type'])
+                                ->setCellValue('B' . $num, $v['name'])
+                                ->setCellValue('C' . $num, $v['id']);
+                        }
+                        $name = $row['name'].'-专业配比';
+                        $objPHPExcel->getActiveSheet()->setTitle($name);
+                        $objPHPExcel->setActiveSheetIndex(0);
+                        header('Content-Type: application/vnd.ms-excel');
+                        header('Content-Disposition: attachment;filename="' . $name . '.xls"');
+                        header('Cache-Control: max-age=0');
+                        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+                        $objWriter->save('php://output');
+                        exit;
+
+                    }
+
+                }
+            }
+        }
+
         if ($this->request->isAjax()) {
+            $map = [
+                'cid'=>session('admin_user.cid'),
+                'id'=>(int)$p['id'],
+            ];
+            $row = ProjectModel::where($map)->find();
+            if ($row && !empty($row['small_major_deal'])) {
+                $major = json_decode($row['small_major_deal'], true);
+                if ($major) {
+                    $big_major = [];
+                    $small_major = [];
+                    foreach ($major as $k => $v) {
+                        $big_major[$v['id']] = $v['name'];
+                        foreach ($v['child'] as $key => $val) {
+                            $small_major[$val['id']] = $val['name'];
+                        }
+                    }
+                }
+            }
             $file = request()->file('file');
             $params = $this->request->post();
             // 上传附件路径
@@ -1643,8 +1713,8 @@ class Project extends Admin
             $file_name = $_upload_path . $upfile->getSaveName();
             set_time_limit(0);
             $excel = \service('Excel');
-            $format = array('A' => 'line', 'B' => 'pid', 'C' => 'name', 'D' => 'remark', 'E' => 'score', 'F' => 'start_time', 'G' => 'end_time', 'H' => 'manager_user', 'I' => 'deal_user', 'J' => 'send_user', 'K' => 'copy_user');
-            $checkformat = array('A' => '序号', 'B' => '层级关系', 'C' => '名称', 'D' => '描述', 'E' => '预设值', 'F' => '开始时间', 'G' => '结束时间', 'H' => '负责人', 'I' => '参与人', 'J' => '审批人', 'K' => '抄送人');
+            $format = array('A' => 'line', 'B' => 'pid', 'C' => 'name', 'D' => 'remark', 'E' => 'score', 'F' => 'start_time', 'G' => 'end_time', 'H' => 'manager_user', 'I' => 'deal_user', 'J' => 'send_user', 'K' => 'copy_user', 'L' => 'major_item');
+            $checkformat = array('A' => '序号', 'B' => '层级关系', 'C' => '名称', 'D' => '描述', 'E' => '预设值', 'F' => '开始时间', 'G' => '结束时间', 'H' => '负责人', 'I' => '参与人', 'J' => '审批人', 'K' => '抄送人', 'L' => '专业编号');
             $res = $excel->readUploadFile($file_name, $format, 8050, $checkformat);
             if ($res['status'] == 0) {
                 $this->error($res['data']);
@@ -1672,6 +1742,11 @@ class Project extends Admin
 
                 $i = 0;
                 foreach ($res['data'] as $k => $v) {
+                    if (!key_exists($v['L'],$small_major)){
+                        return $this->error("专业编号不存在");
+                    }else{
+                        $b_m = substr($v['L'],0,1);
+                    }
                     $p_node = substr($v['B'], 0, strripos($v['B'], '.'));
                     if ($p_node == session('admin_user.cid')){
                         $p_node = $params['id'];
@@ -1704,6 +1779,10 @@ class Project extends Admin
                             'deal_user' => $this->userFormat($v['I']),
                             'send_user' => $this->userFormat($v['J']),
                             'copy_user' => $this->userFormat($v['K']),
+                            'major_cat'=>$b_m,
+                            'major_cat_name'=>$big_major[$b_m],
+                            'major_item' => $v['L'],
+                            'major_item_name'=>$small_major[$v['L']],
                             'user_id' => session('admin_user.uid'),
                         ];
                         $f1 = ProjectModel::create($tmp);
@@ -1725,6 +1804,10 @@ class Project extends Admin
                             'deal_user' => $this->userFormat($v['I']),
                             'send_user' => $this->userFormat($v['J'],'a'),
                             'copy_user' => $this->userFormat($v['K']),
+                            'major_cat'=>$b_m,
+                            'major_cat_name'=>$big_major[$b_m],
+                            'major_item' => $v['L'],
+                            'major_item_name'=>$small_major[$v['L']],
                             'user_id' => session('admin_user.uid'),
                         ];
                         $f1 = ProjectModel::update($tmp);
