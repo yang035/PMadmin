@@ -19,10 +19,27 @@ class Project extends Model
         return $result;
     }
 
-    public static function index1($where){
-        $st = strtotime('-7 days');
-        $et = strtotime('+3 days');
-        $where['update_time'] = ['between',[$st,$et]];
+    public static function getPStatus($type = 0)
+    {
+        $p_status = config('other.p_status');
+        $str = '';
+        foreach ($p_status as $k => $v) {
+            if ($type == $k) {
+                $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+            } else {
+                $str .= '<option value="'.$k.'">'.$v.'</option>';
+            }
+        }
+        return $str;
+    }
+
+    public static function index1($where,$p_status){
+        if ('' == $p_status){
+            $st = strtotime('-7 days');
+            $et = strtotime('+3 days');
+            $where['update_time'] = ['between',[$st,$et]];
+        }
+
         $field = '*,DATEDIFF(end_time,NOW()) hit';
         $result = self::field($field)->where($where)->order('update_time desc')->select();
 //        print_r($result[0]['id']);exit();
@@ -30,7 +47,30 @@ class Project extends Model
             $ids = array_column($result, 'id');
             $where['subject_id'] = ['in', implode(',', $ids)];
             $where['pid'] =['<>',0];
-            $result1 = self::field($field)->where($where)->order('update_time desc')->select();
+            $w = '';
+            if ($p_status){
+                switch ($p_status){
+                    case 1:
+                        $w = " realper < 100 and DATEDIFF(end_time,NOW()) = 0";
+                        break;
+                    case 2:
+                        $w = " realper < 100 and DATEDIFF(end_time,NOW()) < 0";
+                        break;
+                    case 3:
+                        $w = " realper < 100 and DATEDIFF(end_time,NOW()) > 0";
+                        break;
+                    case 4:
+                        $w = " realper >= 100 and real_score = 0";
+                        break;
+                    default :
+                        break;
+                }
+            }
+//            print_r($ids);
+//            echo  $w;
+            $result1 = self::field($field)->where($where)->where($w)->order('update_time desc')->select();
+//            echo self::getLastSql();exit();
+//            print_r($result1);exit();
             if ($result1){
                 foreach ($result1 as $k=>$v){
                     if ($v['realper'] < 100){
@@ -48,13 +88,14 @@ class Project extends Model
                     }
                 }
             }
+//            print_r($result1);exit();
             return array_unique(array_merge($result1, $result));//顺序不能颠倒
         }else{
             return [];
         }
     }
 
-    public static function getAll($where){
+    public static function getAll($where,$p_status){
         $field = '*,DATEDIFF(end_time,NOW()) hit';
         $result = self::field($field)->where($where)->order('update_time desc')->limit(1)->select();
 //        $a = self::field($field)->where($where)->order('grade desc')->limit(1)->buildSql();
@@ -63,7 +104,26 @@ class Project extends Model
         if ($result) {
             unset($where['pid']);
             $where['subject_id'] = $result[0]['id'];
-            $result1 = self::field($field)->where($where)->order('update_time desc')->select();
+            $w = '';
+            if ($p_status){
+                switch ($p_status){
+                    case 1:
+                        $w = " realper < 100 and DATEDIFF(end_time,NOW()) = 0";
+                        break;
+                    case 2:
+                        $w = " realper < 100 and DATEDIFF(end_time,NOW()) < 0";
+                        break;
+                    case 3:
+                        $w = " realper < 100 and DATEDIFF(end_time,NOW()) > 0";
+                        break;
+                    case 4:
+                        $w = " realper >= 100 and real_score = 0";
+                        break;
+                    default :
+                        break;
+                }
+            }
+            $result1 = self::field($field)->where($where)->where($w)->order('update_time desc')->select();
             if ($result1){
                 foreach ($result1 as $k=>$v){
                     if ($v['realper'] < 100){

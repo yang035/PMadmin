@@ -36,6 +36,14 @@
                     <input id="project_id" type="hidden" name="project_id" value="{$Request.param.project_id}">
                 </div>
                 <div class="layui-inline">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-inline">
+                        <select name="p_status" class="field-p_status" type="select" lay-search>
+                            {$p_status}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
                     <label class="layui-form-label">开始时段</label>
                     <div class="layui-input-inline">
                         <input type="text" class="layui-input field-start_time" name="start_time" value="{:input('get.start_time')}" readonly autocomplete="off" placeholder="选择开始日期段">
@@ -120,10 +128,11 @@
     var  start_time=$("input[name='start_time']").val();
     var  end_time=$("input[name='end_time']").val();
     var  atype=$("input[name='type']").val();
+    var  p_status=$("select[name='p_status']").val();
     if (typeof(project_id) == 'undefined'){
         project_id = 0;
     }
-    var _url = "{:url('admin/project/mytask')}?project_id="+project_id+"&start_time="+start_time+"&end_time="+end_time+"&type="+atype;
+    var _url = "{:url('admin/project/mytask')}?project_id="+project_id+"&start_time="+start_time+"&end_time="+end_time+"&type="+atype+"&p_status="+p_status;
     var type = "{$Request.param.type}";
     layui.config({
         base: '/../../static/js/'

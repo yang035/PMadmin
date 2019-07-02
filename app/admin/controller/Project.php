@@ -93,6 +93,7 @@ class Project extends Admin
                 break;
         }
         $subject_id = 0;
+        $p_status = '';
         if ($params) {
             if (isset($params['project_id']) && !empty($params['project_id'])) {
                 $map['subject_id'] = $params['project_id'];
@@ -110,6 +111,10 @@ class Project extends Admin
                 $end_time_arr = explode(' - ', $end_time);//这里分隔符两边加空格
                 $map['end_time'] = ['between', [$end_time_arr['0'], $end_time_arr['1']]];
             }
+            if (isset($params['p_status'])) {
+                $p_status = (int)$params['p_status'];
+            }
+
         }
         $cid = session('admin_user.cid');
         $map['cid'] = $cid;
@@ -117,10 +122,10 @@ class Project extends Admin
 
         if (empty($subject_id)){
             $map['pid'] = 0;
-            $list = ProjectModel::index1($map);
+            $list = ProjectModel::index1($map,$p_status);
         }else{
             $map['pid'] = 0;
-            $list = ProjectModel::getAll($map);
+            $list = ProjectModel::getAll($map,$p_status);
         }
 
 //        $aa = new ProjectModel();
@@ -197,6 +202,7 @@ class Project extends Admin
         $this->assign('tab_url', url('index', ['atype' => $params['atype']]));
         $this->assign('isparams', 1);
         $this->assign('atype', $params['atype']);
+        $this->assign('p_status', ProjectModel::getPStatus($p_status));
         $this->assign('subject_item', SubjectItem::getItemOption($subject_id,$params['atype']));
         return $this->fetch();
     }
@@ -647,6 +653,7 @@ class Project extends Admin
         $map['cid'] = $cid;
         $map['t_type'] = 1;
         $subject_id = 0;
+        $p_status = '';
 
         if ($params) {
             if (!empty($params['project_id']) && is_numeric($params['project_id'])){
@@ -672,6 +679,9 @@ class Project extends Admin
             }
             if (isset($params['status'])) {
                 $map['status'] = $params['status'];
+            }
+            if (isset($params['p_status'])) {
+                $p_status = (int)$params['p_status'];
             }
         }
         $uid = session('admin_user.uid');
@@ -732,19 +742,42 @@ class Project extends Admin
                 $con = "JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"')";
                 break;
         }
+
+        $w = '';
+        if ($p_status){
+            switch ($p_status){
+                case 1:
+                    $w = " realper < 100 and DATEDIFF(end_time,NOW()) = 0";
+                    break;
+                case 2:
+                    $w = " realper < 100 and DATEDIFF(end_time,NOW()) < 0";
+                    break;
+                case 3:
+                    $w = " realper < 100 and DATEDIFF(end_time,NOW()) > 0";
+                    break;
+                case 4:
+                    $w = " realper >= 100 and real_score = 0";
+                    break;
+                default :
+                    break;
+            }
+        }
+
         $field = "*,DATEDIFF(end_time,NOW()) hit,JSON_EXTRACT(manager_user,'$.\"{$uid}\"') m_res,JSON_EXTRACT(send_user,'$.\"{$uid}\"') s_res,JSON_EXTRACT(deal_user,'$.\"{$uid}\"') d_res,JSON_EXTRACT(copy_user,'$.\"{$uid}\"') c_res";
 
         if (empty($subject_id)) {
 //            $list = ProjectModel::field($field)->where($map)->where($con)->order('grade desc,create_time desc')->select();
-            $st = strtotime('-7 days');
-            $et = strtotime('+3 days');
-            $map['update_time'] = ['between',[$st,$et]];
+            if ('' == $p_status) {
+                $st = strtotime('-7 days');
+                $et = strtotime('+3 days');
+                $map['update_time'] = ['between', [$st, $et]];
+            }
             $result = ProjectModel::field($field)->where($map)->order('grade desc,create_time desc')->select();
             if ($result){
                 $ids = array_column($result,'id');
                 $map['subject_id'] = ['in',implode(',',$ids)];
                 $map['pid'] =['<>',0];
-                $result1 = ProjectModel::field($field)->where($map)->where($con)->order('grade desc,create_time desc')->select();
+                $result1 = ProjectModel::field($field)->where($map)->where($con)->where($w)->order('grade desc,create_time desc')->select();
                 if ($result1){
                     foreach ($result1 as $k=>$v){
                         if ($v['realper'] < 100){
@@ -772,7 +805,7 @@ class Project extends Admin
             if ($result){
                 $map['subject_id'] = $result[0]['id'];
                 unset($map['id']);
-                $result1 = ProjectModel::field($field)->where($map)->where($con)->order('grade desc,create_time desc')->select();
+                $result1 = ProjectModel::field($field)->where($map)->where($con)->where($w)->order('grade desc,create_time desc')->select();
                 if ($result1){
                     foreach ($result1 as $k=>$v){
                         if ($v['realper'] < 100){
@@ -912,6 +945,7 @@ class Project extends Admin
 //        $this->assign('isparams', 1);
 //        $this->assign('atype', $params['atype']);
         $this->assign('subject_item', SubjectItem::getItemOption($subject_id));
+        $this->assign('p_status', ProjectModel::getPStatus($p_status));
         return $this->fetch();
     }
 
