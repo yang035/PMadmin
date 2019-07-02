@@ -192,8 +192,9 @@
             意见：{$data_list['mark']}<br>
             批示时间：{$data_list['update_time']|date='Y-m-d H:i:s',###}<br>
             {/if}
-            {if condition="($data_list['status'] eq 2) && ($Request.param.atype eq 4) && ($data_list['is_deal'] neq 2)"}
             <hr>
+            {eq name="data_list['status']" value="2"}
+            {if condition="($Request.param.atype eq 4) && ($data_list['is_deal'] neq 2)"}
             <div class="layui-form-item">
                 <label class="layui-form-label">支付结果</label>
                 <div class="layui-input-block">
@@ -219,10 +220,11 @@
             </div>
             {else/}
             <br>
-            支付结果：{eq name="data_list['is_deal']" value="2"}支付{else/}已支付{/eq}<br>
+            支付结果：{eq name="data_list['is_deal']" value="2"}已支付{else/}未支付{/eq}<br>
             支付备注：{$data_list['deal_mark']}<br>
             支付时间：{$data_list['deal_time']}<br>
             {/if}
+            {/eq}
         </div>
     </div>
     {if condition="($Request.param.class_type eq 8) && ($Request.param.atype eq 5) "}
