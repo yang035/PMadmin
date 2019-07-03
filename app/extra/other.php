@@ -132,7 +132,7 @@ return [
             'href'=>'admin/Approval/expense'
         ],
         3=>[
-            'title'=>'费用',
+            'title'=>'费用申请',
             'href'=>'admin/Approval/cost'
         ],
         4=>[

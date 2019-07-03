@@ -145,6 +145,7 @@
             calendar: true,
             trigger: 'click',
             value: new Date(),
+            min: -30,
             showBottom: false,
             done: function (value, date, endDate) {
                 $("input[name='end_time']").val(value);
@@ -162,6 +163,7 @@
             type: 'date',
             calendar: true,
             trigger: 'click',
+            min: -30,
             value: new Date(),
         });
         laydate.render({
