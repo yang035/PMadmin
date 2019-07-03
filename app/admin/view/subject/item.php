@@ -22,6 +22,14 @@
                     <input type="text" name="name" value="{:input('get.name')}" placeholder="关键字" autocomplete="off" class="layui-input">
                 </div>
             </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">项目状态</label>
+                    <div class="layui-input-inline">
+                        <select name="s_status" class="field-s_status" type="select">
+                            {$s_status}
+                        </select>
+                    </div>
+                </div>
             <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
             </div>
         </form>
@@ -60,10 +68,14 @@
             }
             ,cols: [[ //表头
                 {type:'checkbox'},
+                {field: 'xuhao', title: '序号',type: 'numbers'},
                 {field: 'name', title: '名称'},
                 {field: 'idcard', title: '项目编号'},
                 {field: 'cat_id', title: '类别', templet:function(d){
                         return d.cat.name;
+                    }},
+                {field: 's_status', title: '项目状态', templet:function(d){
+                        return d.s_status;
                     }},
                 // {field: 'status', title: '状态', templet: '#statusTpl'},
                 {title: '操作', templet: '#buttonTpl',width:500}

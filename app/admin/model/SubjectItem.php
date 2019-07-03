@@ -38,6 +38,20 @@ class SubjectItem extends Model
         return $str;
     }
 
+    public static function getSStatus($type = 0)
+    {
+        $p_status = config('other.s_status');
+        $str = '';
+        foreach ($p_status as $k => $v) {
+            if ($type == $k) {
+                $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+            } else {
+                $str .= '<option value="'.$k.'">'.$v.'</option>';
+            }
+        }
+        return $str;
+    }
+
     public static function getItemOption($id = 0,$type=0)
     {
         $map = [

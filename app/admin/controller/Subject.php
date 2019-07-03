@@ -52,14 +52,19 @@ class Subject extends Admin
             if ($name) {
                 $where['name'] = ['like', "%{$name}%"];
             }
+            $s_status = input('param.s_status/d');
+            if ($s_status) {
+                $where['s_status'] = $s_status;
+            }
+            $p_status = config('other.s_status');
             $where['cid'] = session('admin_user.cid');
             $data['data'] = ItemModel::with('cat')->where($where)->page($page)->order('id desc')->limit($limit)->select();
 //            $carType = config('other.car_color');
-//            if ($data['data']){
-//                foreach ($data['data'] as $k=>$v){
-//                    $v['color'] = $carType[$v['color']];
-//                }
-//            }
+            if ($data['data']){
+                foreach ($data['data'] as $k=>$v){
+                    $v['s_status'] = $p_status[$v['s_status']];
+                }
+            }
             $data['count'] = ItemModel::where($where)->count('id');
             $data['code'] = 0;
             $data['msg'] = '';
@@ -73,6 +78,7 @@ class Subject extends Admin
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 1);
         $this->assign('cat_option', ItemModel::getOption());
+        $this->assign('s_status', ItemModel::getSStatus());
         return $this->fetch('item');
     }
 
@@ -203,6 +209,7 @@ class Subject extends Admin
         $this->assign('grade_type', ProjectModel::getGrade());
         $this->assign('cur_time', date('YmdHis'));
         $this->assign('t_type', ProjectModel::getTType());
+        $this->assign('s_status', ItemModel::getSStatus(1));
         return $this->fetch('itemform');
     }
 
@@ -269,6 +276,7 @@ class Subject extends Admin
         $this->assign('p_source', ItemModel::getPsource());
         $this->assign('grade_type', ProjectModel::getGrade());
         $this->assign('t_type', ProjectModel::getTType());
+        $this->assign('s_status', ItemModel::getSStatus($row['s_status']));
         return $this->fetch('itemedit');
     }
 

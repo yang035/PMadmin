@@ -205,6 +205,14 @@
                 </div>
             </div>
         </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">项目状态</label>
+            <div class="layui-input-inline">
+                <select name="s_status" class="field-s_status" type="select">
+                    {$s_status}
+                </select>
+            </div>
+        </div>
         <div class="layui-form-item">
             <label class="layui-form-label">状态</label>
             <div class="layui-input-inline">
