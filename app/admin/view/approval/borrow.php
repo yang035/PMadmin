@@ -142,6 +142,7 @@
             type: 'date',
             calendar: true,
             trigger: 'click',
+            min: 0,
             value: new Date(),
             showBottom: false,
             done: function (value, date, endDate) {
@@ -159,6 +160,7 @@
             elem: '.field-end_time',
             type: 'date',
             calendar: true,
+            min: 0,
             trigger: 'click',
             value: new Date(),
         });

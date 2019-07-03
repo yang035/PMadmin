@@ -48,7 +48,7 @@
                     <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
                     <th>姓名</th>
                     <th>事件</th>
-                    <th>ML(斗)</th>
+                    <th>GL(斗)</th>
                     <th>审批状态</th>
                     <th>添加时间</th>
                     <th>操作</th>
