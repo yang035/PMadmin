@@ -28,7 +28,11 @@ class ProjectReport extends Admin
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
             unset($data['id']);
-            $row = Project::getRowById($data['project_id']);
+            $row = Project::getRowById($data['project_id'],'*,DATEDIFF(end_time,NOW()) hit');
+//            print_r($row);exit();
+            if ($row['realper'] < 100 && $row['hit'] < -7){
+                return $this->error('逾期超过7天，禁止提交！');
+            }
             if (!($row['start_time'] == '0000-00-00 00:00:00' || $row['end_time'] == '0000-00-00 00:00:00' || $row['start_time'] >= $row['end_time'])){
                 $fenzhi = (strtotime(date('Y-m-d').'23:59:59') - strtotime($row['start_time']))/3600;
                 $fenmu = (strtotime($row['end_time']) - strtotime($row['start_time'])) / 3600;
