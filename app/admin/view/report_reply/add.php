@@ -18,6 +18,7 @@
     <div class="layui-form-item">
         <div class="layui-input-block">
             <input type="hidden" class="field-pid" name="pid">
+            <input type="hidden" class="field-type" name="type" value="{$Request.param.type|default='1'}">
             <input type="hidden" class="field-report_id" name="report_id">
             <input type="hidden" class="field-project_id" name="project_id">
             <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>

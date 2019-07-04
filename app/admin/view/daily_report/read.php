@@ -390,7 +390,7 @@
     });
 
     function open_reply(pid,report_id,project_id) {
-        var open_url = "{:url('ReportReply/add')}?id="+report_id+"&project_id="+project_id;
+        var open_url = "{:url('ReportReply/add')}?id="+report_id+"&project_id="+project_id+"&type=1";
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {

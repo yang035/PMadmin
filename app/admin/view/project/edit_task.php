@@ -552,7 +552,7 @@
     }
 
     function open_reply(id,project_id) {
-        var open_url = "{:url('ReportReply/add')}?id="+id+"&project_id="+project_id;
+        var open_url = "{:url('ReportReply/add')}?id="+id+"&project_id="+project_id+"&type=2";
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {

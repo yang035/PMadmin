@@ -12,13 +12,15 @@ use app\admin\model\Project;
 
 class ReportReply extends Admin
 {
-    public static function getAll($id=0,$limit){
+    public static function getAll($id=0,$limit,$type=1){
         $report_id = input('id/d');
         if (!empty($id)){
             $report_id = $id;
         }
         $map['report_id'] = $report_id;
         $map['cid'] = session('admin_user.cid');
+        $map['pid'] = 0;
+        $map['type'] = $type;
         $list = ReplyModel::getAll($map,$limit);
         return $list;
     }

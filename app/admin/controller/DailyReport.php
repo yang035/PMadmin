@@ -178,7 +178,7 @@ class DailyReport extends Admin
             ProjectModel::execute($sql);
         }
 
-        $coment = ReportReply::getAll($params['id'],5);
+        $coment = ReportReply::getAll($params['id'],5,1);
         if (!empty($row['project_id'])){
             $row['project_name'] = ProjectModel::index(['id'=>$row['project_id']])[0]['name'];
         }else{

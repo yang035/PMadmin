@@ -159,7 +159,7 @@ class Project extends Admin
                     $report[$k]['real_name'] = !empty($report_user) ? $report_user : '';
                     $report[$k]['check_catname'] = ItemModel::getCat()[$v['check_cat']];
                     if (empty($row['child'])){
-                        $report[$k]['reply'] = ReportReply::getAll($v['id'], 5);
+                        $report[$k]['reply'] = ReportReply::getAll($v['id'], 5,2);
                     }else{
                         $reply = ReportCheck::getAll($v['id'], 1);
                         if ($reply){
@@ -1173,7 +1173,7 @@ class Project extends Admin
                 $report[$k]['real_name'] = !empty($report_user) ? $report_user : '';
                 $report[$k]['check_catname'] = ItemModel::getCat()[$v['check_cat']];
                 if (empty($row['child'])){
-                    $report[$k]['reply'] = ReportReply::getAll($v['id'], 5);
+                    $report[$k]['reply'] = ReportReply::getAll($v['id'], 5,2);
                 }else{
                     $reply = ReportCheck::getAll($v['id'], 1);
                     if ($reply){
