@@ -105,6 +105,9 @@ class Subject extends Admin
             return $this->error('大类专业不能重复或者为空');
         }
         foreach ($big_major as $k=>$v) {
+            if (!big_major_match($v)){
+                return $this->error('大类专业配置不符合规则');
+            }
             if (empty($small_major_str[$k])){
                 return $this->error('专业小类配比不能为空');
             };
@@ -120,6 +123,9 @@ class Subject extends Admin
                     'name'=>$tmp1[0],
                     'value'=>(int)$tmp1[1]
                 ];
+                if (!small_major_match($small_major[$k])){
+                    return $this->error('小类专业配置不符合规则');
+                }
                 $tmp2 = array_unique(array_filter(explode('，',trim($small_major[$k]))));
                 foreach ($tmp2 as $k1=>$v1) {
                     $tmp3 = explode('：',trim($v1));

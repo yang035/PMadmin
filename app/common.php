@@ -957,3 +957,36 @@ function  curlInfo($toUrl,$urlParams){
 
     return $content;
 }
+
+/**
+ * @param $a
+ * @return bool验证大类专业填写规则是否符合要求
+ */
+function big_major_match($a){
+    $r = "/^[\x{4e00}-\x{9fa5}A-Za-z]+[：]{1}[\d]+$/u";
+    if (preg_match($r,$a)){
+        return true;
+    }
+    return false;
+}
+
+/**
+ * @param $a
+ * @return bool验证小类专业填写规则是否符合要求
+ */
+function small_major_match($a){
+    $re = "/[\x{4e00}-\x{9fa5}A-Za-z]+[：]{1}[\d]+$/u";
+    $re1 = "/^[\x{4e00}-\x{9fa5}A-Za-z][\x{4e00}-\x{9fa5}A-Za-z：\d，]+[\d]+$/u";
+    if (!preg_match($re,$a)){
+        return false;
+    }
+    $d = explode('，',$a);
+    if ($d){
+        foreach ($d as $k=>$v){
+            if (!preg_match($re1,$v)){
+                return false;
+            }
+        }
+    }
+    return true;
+}

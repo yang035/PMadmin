@@ -60,15 +60,21 @@
         <div class="layui-form-item">
             <label class="layui-form-label">专业配比</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input field-big_major1" name="big_major[]" onblur='big_major_match()' autocomplete="off" placeholder="方案设计：50">
+                <input type="text" class="layui-input field-big_major1" name="big_major[]" onblur='big_major_match()' autocomplete="off" placeholder="大专业配比">
             </div>
             <div class="layui-form-mid red"></div>
         </div>
+        <div class="layui-field-box" style="margin-left: 100px;width: 519px; color: #666;">
+            <font style="color: red">规则 </font>方案设计：100
+        </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <textarea type="text" class="layui-textarea field-small_major1" name="small_major[]" onblur='small_major_match()' autocomplete="off" placeholder="方案创意：25，文本：16，效果表现：35，估算：2，植物：3，审核校对：4，项目负责：10，设计服务：5"></textarea>
+                <textarea type="text" class="layui-textarea field-small_major1" name="small_major[]" onblur='small_major_match()' autocomplete="off" placeholder="小专业配比"></textarea>
             </div>
             <div class="layui-form-mid red"></div>
+        </div>
+        <div class="layui-field-box" style="margin-left: 100px;width: 519px; color: #666;">
+            <font style="color: red">规则 </font>方案创意：25，文本：16，效果表现：35，估算：2，植物：3，审核校对：4，项目负责：10，设计服务：5
         </div>
         <div class="new_task">
             <a href="javascript:void(0);" class="aicon ai-tianjia field-task-add" style="float: left;font-size: 30px;"></a>
@@ -321,13 +327,13 @@
             $(".new_task").before("<div class=\"layui-form-item\">\n" +
                 "            <label class=\"layui-form-label\">专业配比</label>\n" +
                 "            <div class=\"layui-input-inline\">\n" +
-                "                <input type=\"text\" class=\"layui-input field-big_major1\" name=\"big_major[]\" onblur='big_major_match()' autocomplete=\"off\" placeholder=\"方案设计：50\">\n" +
+                "                <input type=\"text\" class=\"layui-input field-big_major1\" name=\"big_major[]\" onblur='big_major_match()' autocomplete=\"off\" placeholder=\"大专业配比\">\n" +
                 "            </div>\n" +
                 "            <div class=\"layui-form-mid red\"></div>\n"+
                 "        </div>\n" +
                 "        <div class=\"layui-form-item\">\n" +
                 "            <div class=\"layui-input-block\">\n" +
-                "                <textarea type=\"text\" class=\"layui-textarea field-small_major1\" name=\"small_major[]\" onblur='small_major_match()' autocomplete=\"off\" placeholder=\"方案创意：25，文本：16，效果表现：35，估算：2，植物：3，审核校对：4，项目负责：10，设计服务：5\"></textarea>\n" +
+                "                <textarea type=\"text\" class=\"layui-textarea field-small_major1\" name=\"small_major[]\" onblur='small_major_match()' autocomplete=\"off\" placeholder=\"小专业配比\"></textarea>\n" +
                 "            </div>\n" +
                 "            <div class=\"layui-form-mid red\"></div>\n"+
                 "        </div>");
