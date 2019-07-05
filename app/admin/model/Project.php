@@ -35,7 +35,7 @@ class Project extends Model
 
     public static function index1($where,$p_status){
         if ('' == $p_status){
-            $st = strtotime('-7 days');
+            $st = strtotime('-3 days');
             $et = strtotime('+3 days');
             $where['update_time'] = ['between',[$st,$et]];
         }
