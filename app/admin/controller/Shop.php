@@ -215,7 +215,7 @@ class Shop extends Admin
         if ($this->request->isAjax()) {
             $today = date('Y-m-d');
             $where = [
-                'cid' => session('admin_user.cid'),
+//                'cid' => session('admin_user.cid'),
                 'status' => 1,
                 'start_time' => ['elt',"{$today}"],
                 'end_time' => ['egt',"{$today}"],
@@ -291,7 +291,7 @@ class Shop extends Admin
         $today = date('Y-m-d');
         $where = [
             'id' => $id,
-            'cid' => session('admin_user.cid'),
+//            'cid' => session('admin_user.cid'),
             'status' => 1,
             'start_time' => ['elt',"{$today}"],
             'end_time' => ['egt',"{$today}"],

@@ -173,7 +173,9 @@ class Approval extends Admin
                 $map['status'] = 1;
                 break;
             case 4:
-                $con = "JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"')";
+                if (31 != $uid){
+                    $con = "JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"')";
+                }
                 break;
             case 5:
                 $con = "JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"')";

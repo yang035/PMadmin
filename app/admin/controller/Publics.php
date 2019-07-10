@@ -107,7 +107,21 @@ class Publics extends Common
                     $data['role_id'] = 3;
                     $data['department_id'] = $d['id'];
                     $data['status'] = 1;
-                    UserModel::create($data);
+                    $u = UserModel::create($data);
+
+                    $score = [
+                        'subject_id' => 0,
+                        'project_id' => 0,
+                        'cid' => $data['company_id'],
+                        'project_code' => '',
+                        'user' => $u['id'],
+                        'gl_add_score' => 1000,
+                        'remark' => "新用户注册所得GL",
+                        'user_id' => 0,
+                        'create_time' => time(),
+                        'update_time' => time(),
+                    ];
+                    db('score')->insert($score);
 
                     //事务提交
                     Db::commit();
@@ -122,9 +136,23 @@ class Publics extends Common
                 $data['role_id'] = 3;
                 $data['department_id'] = 25;
                 $data['status'] = 1;
-                if (!UserModel::create($data)) {
+                $u = UserModel::create($data);
+                if (!$u) {
                     return $this->error('注册失败');
                 }
+                $score = [
+                    'subject_id' => 0,
+                    'project_id' => 0,
+                    'cid' => $data['company_id'],
+                    'project_code' => '',
+                    'user' => $u['id'],
+                    'gl_add_score' => 1000,
+                    'remark' => "新用户注册所得GL",
+                    'user_id' => 0,
+                    'create_time' => time(),
+                    'update_time' => time(),
+                ];
+                db('score')->insert($score);
             }
             return $this->success('注册成功',url('index'));
         }

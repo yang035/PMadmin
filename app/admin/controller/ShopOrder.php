@@ -119,6 +119,12 @@ class ShopOrder extends Admin
         if ($role_id > 3){
             $map['ShopOrder.user_id'] = session('admin_user.uid');
         }
+
+        $cid = session('admin_user.cid');
+        if ($cid != 2){
+            $map['ShopOrder.cid'] = session('admin_user.cid');
+        }
+
         if (isset($params['export']) && 1 == $params['export']){
             set_time_limit(0);
             $data_list = OrderModel::hasWhere('cat',$map1)->field("`ShopOrder`.*, `ShopItem`.name")->where($map)->order('id desc')->select();
