@@ -68,13 +68,16 @@
                 </div>
             </div>
         </form>
+        <div class="layui-btn-group fl">
+            <!--            <a href="{:url('add',['atype'=>$Request.param.atype])}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加项目</a>-->
+            <button class="layui-btn" id="btn-expand">全部展开</button>
+            <button class="layui-btn" id="btn-fold">全部折叠</button>
+            <button class="layui-btn" id="btn-refresh">刷新表格</button>
+        </div>
+        <table id="table1" class="layui-table" lay-filter="table1"></table>
     </div>
-    <div class="layui-btn-group fl">
-        <!--            <a href="{:url('add',['atype'=>$Request.param.atype])}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加项目</a>-->
-        <button class="layui-btn" id="btn-expand">全部展开</button>
-        <button class="layui-btn" id="btn-fold">全部折叠</button>
-        <button class="layui-btn" id="btn-refresh">刷新表格</button>
-    </div>
+
+
 </div>
 <!-- 操作列 -->
 <script type="text/html" id="oper-col">
@@ -96,7 +99,7 @@
         {{#  } }}
     </div>
 </script>
-<table id="table1" class="layui-table" lay-filter="table1"></table>
+
 <script>
     var  project_id=$("select[name='project_id']").val();
     var  start_time=$("input[name='start_time']").val();
