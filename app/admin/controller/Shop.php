@@ -319,6 +319,7 @@ class Shop extends Admin
             'cid' => session('admin_user.cid'),
             'user' => session('admin_user.uid'),
             'status' => 1,
+            'is_lock' => 0,
         ];
         $fields = "(SUM(gl_add_score)-SUM(gl_sub_score)) AS unuse_score";
         $score = ScoreModel::field($fields)->where($map)->find()->toArray();

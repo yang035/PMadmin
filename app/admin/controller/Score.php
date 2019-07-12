@@ -123,11 +123,24 @@ class Score extends Admin
 //        print_r($data_list);
     $name_arr = ProjectModel::getColumn('name');
     $myPro = ProjectModel::getProTask(0,0);
+    $w = [
+        'cid'=>session('admin_user.cid'),
+        'user'=>session('admin_user.uid'),
+        'is_lock'=>1
+    ];
+    $u = ScoreModel::where($w)->field('id,user')->find();
+//    print_r($data_list);
     foreach ($data_list as $k=>$v){
         $data_list[$k]['pname'] = $v['project_id'] ? $name_arr[$v['project_id']] : '系统';
         $data_list[$k]['unused_ml'] = $v['ml_add_sum'] - $v['ml_sub_sum'];
         $data_list[$k]['unused_gl'] = $v['gl_add_sum'] - $v['gl_sub_sum'];
         $data_list[$k]['subject_name'] = $v['subject_id'] ? $myPro[$v['subject_id']] : '其他';
+        if ($u){
+            //当GL超过10000时，送的GL才可用
+            if ($u['user'] == $v['user'] && $v['gl_add_sum'] > 10000 + config('other.gl_give')){
+                ScoreModel::where($w)->setField('is_lock',0);
+            }
+        }
     }
     // 分页
     $pages = $data_list->render();
