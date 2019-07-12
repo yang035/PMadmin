@@ -23,6 +23,12 @@
         white-space: normal;
         box-sizing: border-box;
     }
+    .layui-table-box{
+        float: left;
+    }
+    .layui-table, .layui-table-view {
+        margin: 45px 0;
+    }
 </style>
 <div class="page-toolbar">
     <div class="page-filter">
@@ -68,17 +74,16 @@
                 </div>
             </div>
         </form>
-        <div class="layui-btn-group fl">
-            <!--            <a href="{:url('add',['atype'=>$Request.param.atype])}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加项目</a>-->
-            <button class="layui-btn" id="btn-expand">全部展开</button>
-            <button class="layui-btn" id="btn-fold">全部折叠</button>
-            <button class="layui-btn" id="btn-refresh">刷新表格</button>
-        </div>
-        <table id="table1" class="layui-table" lay-filter="table1"></table>
+
     </div>
-
-
+    <div class="layui-btn-group fl">
+        <!--            <a href="{:url('add',['atype'=>$Request.param.atype])}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加项目</a>-->
+        <button class="layui-btn" id="btn-expand">全部展开</button>
+        <button class="layui-btn" id="btn-fold">全部折叠</button>
+        <button class="layui-btn" id="btn-refresh">刷新表格</button>
+    </div>
 </div>
+<table id="table1" class="layui-table" lay-filter="table1"></table>
 <!-- 操作列 -->
 <script type="text/html" id="oper-col">
     <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="read">详情</a>

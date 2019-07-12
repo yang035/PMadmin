@@ -23,6 +23,12 @@
         white-space: normal;
         box-sizing: border-box;
     }
+    .layui-table-box{
+        float: left;
+    }
+    .layui-table, .layui-table-view {
+        margin: 50px 0;
+    }
 </style>
 <div class="page-toolbar">
     <div class="page-filter">
@@ -67,10 +73,10 @@
             <button class="layui-btn" id="btn-fold">全部折叠</button>
             <button class="layui-btn" id="btn-refresh">刷新表格</button>
         </div>
-        <table id="table1" class="layui-table" lay-filter="table1"></table>
     </div>
 
 </div>
+<table id="table1" class="layui-table" lay-filter="table1"></table>
 <script type="text/html" id="oper-col-1">
     <div class="layui-progress" lay-showpercent="true">
         {{#  if(d.realper > d.per){ }}
