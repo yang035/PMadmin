@@ -184,7 +184,7 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
     public function getScoreList(){
         $where = [
             'cid' =>session('admin_user.cid'),
-            'ml_add_score|gl_add_score' =>['>',5],
+            'ml_add_score|gl_add_score|ml_sub_score|gl_sub_score' =>['>',5],
         ];
         $list = ScoreModel::hasWhere('adminUser')->field("`Score`.*, `AdminUser`.realname")->where($where)->order('id desc')->limit(30)->select();
         $r = [
@@ -194,7 +194,9 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
         $tmp = [];
         if ($list){
             foreach ($list as $k=>$v){
-                $tmp[$k] = '<span style="color: red">'.$v['realname'].'('.$v['ml_add_score'].'/'.$v['gl_add_score'].')</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                $ml = $v['ml_add_score'] >= abs($v['ml_sub_score']) ? $v['ml_add_score'] : $v['ml_sub_score'];
+                $gl = $v['gl_add_score'] >= abs($v['gl_sub_score']) ? $v['gl_add_score'] : $v['gl_sub_score'];
+                $tmp[$k] = '<span style="color: red">'.$v['realname'].'('.$ml.'/'.$gl.')</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
             }
             $r = [
                 'code'=>1,
