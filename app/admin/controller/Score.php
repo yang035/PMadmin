@@ -194,8 +194,8 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
         $tmp = [];
         if ($list){
             foreach ($list as $k=>$v){
-                $ml = $v['ml_add_score'] >= abs($v['ml_sub_score']) ? $v['ml_add_score'] : -$v['ml_sub_score'];
-                $gl = $v['gl_add_score'] >= abs($v['gl_sub_score']) ? $v['gl_add_score'] : -$v['gl_sub_score'];
+                $ml = $v['ml_add_score'] >= $v['ml_sub_score'] ? $v['ml_add_score'] : -$v['ml_sub_score'];
+                $gl = $v['gl_add_score'] >= $v['gl_sub_score'] ? $v['gl_add_score'] : -$v['gl_sub_score'];
                 $tmp[$k] = '<span style="color: red">'.$v['realname'].'('.$ml.'/'.$gl.')</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
             }
             $r = [
