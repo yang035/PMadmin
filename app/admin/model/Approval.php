@@ -40,7 +40,7 @@ class Approval extends Model
         $str = '';
         if ($list){
             foreach ($list as $k => $v) {
-                $str .= '<input type="radio" name="leave_id" lay-skin="primary" title="'.$v['start_time'].'-'.$v['end_time'].'" value="'.$v['id'].'"><br>';
+                $str .= '<input type="radio" name="leave_id" lay-skin="primary" title="'.$v['start_time'].' - '.$v['end_time'].'" value="'.$v['id'].'"><br>';
             }
         }
         return !empty($str) ? $str : '无';
