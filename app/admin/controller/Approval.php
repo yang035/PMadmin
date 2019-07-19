@@ -10,6 +10,7 @@ namespace app\admin\controller;
 
 use app\admin\model\Approval as ApprovalModel;
 use app\admin\model\ApprovalLeave as LeaveModel;
+use app\admin\model\ApprovalBackleave as BackleaveModel;
 use app\admin\model\ApprovalExpense as ExpenseModel;
 use app\admin\model\ApprovalBusiness as BusinessModel;
 use app\admin\model\ApprovalProcurement as ProcurementModel;
@@ -1110,6 +1111,54 @@ class Approval extends Admin
         return $f;
     }
 
+    public function backLeave()
+    {
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            // 验证
+            $result = $this->validate($data, 'ApprovalBackleave');
+            if ($result !== true) {
+                return $this->error($result);
+            }
+            unset($data['id']);
+            // 启动事务
+            Db::startTrans();
+            try {
+                $approve = [
+                    'class_type' => $data['class_type'],
+                    'cid' => session('admin_user.cid'),
+                    'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
+                    'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
+                    'time_long' => $data['time_long'],
+                    'user_id' => session('admin_user.uid'),
+                    'send_user' => json_encode(user_array($data['send_user'])),
+                    'copy_user' => json_encode(user_array($data['copy_user'])),
+                ];
+
+                $res = ApprovalModel::create($approve);
+                $leave = [
+                    'aid' => $res['id'],
+                    'leave_id' => $data['leave_id'],
+                    'reason' => $data['reason'],
+                    'attachment' => $data['attachment'],
+                ];
+                $flag = BackleaveModel::create($leave);
+                // 提交事务
+                Db::commit();
+            } catch (\Exception $e) {
+                // 回滚事务
+                Db::rollback();
+            }
+            if ($flag) {
+                return $this->success("操作成功{$this->score_value}", 'index');
+            } else {
+                return $this->error('添加失败！');
+            }
+        }
+        $this->assign('leave_option', ApprovalModel::getOption());
+        return $this->fetch();
+    }
+
     public function read()
     {
         $params = $this->request->param();
@@ -1166,6 +1215,10 @@ class Approval extends Admin
             case 14:
                 $table = 'tb_approval_borrow';
                 $f = 'b.reason,b.borrow,b.attachment';
+                break;
+            case 15:
+                $table = 'tb_approval_backleave';
+                $f = 'b.leave_id,b.reason,b.attachment';
                 break;
             default:
                 $table = 'tb_approval_leave';
@@ -1372,6 +1425,34 @@ class Approval extends Admin
                 break;
             case 14:
                 $list['borrow'] = json_decode($list['borrow'], true);
+                break;
+            case 15:
+                $table = 'tb_approval_leave';
+                $f = 'b.type,b.reason,b.attachment';
+                $map = [
+                    'a.id' => $list['leave_id']
+                ];
+                $fields = 'a.*,' . $f;
+                $list1 = db('approval')->alias('a')->field($fields)
+                    ->join("{$table} b", 'a.id = b.aid', 'left')
+                    ->where($map)->find();
+                $leave_type = config('other.leave_type');
+                $list1['attachment'] = explode(',', substr($list1['attachment'], 0, -1));
+                $list1['real_name'] = AdminUser::getUserById($list1['user_id'])['realname'];
+                $list1['deal_user'] = $this->deal_data($list1['deal_user']);
+                $list1['fellow_user'] = $this->deal_data($list1['fellow_user']);
+                $list1['send_user'] = $this->deal_data($list1['send_user']);
+                $list1['copy_user'] = $this->deal_data($list1['copy_user']);
+                if ($list1['project_id']){
+                    $project_data = ProjectModel::getRowById($list1['project_id']);
+                }else{
+                    $project_data = [
+                        'name'=>'其他',
+                    ];
+                }
+                $list1['type'] = $leave_type[$list1['type']];
+                $list1['project_name'] = $project_data['name'];
+                $this->assign('list1', $list1);
                 break;
             default:
                 break;

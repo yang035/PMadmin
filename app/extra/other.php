@@ -179,6 +179,10 @@ return [
             'title'=>'物品借用',
             'href'=>'admin/Approval/borrow'
         ],
+        15=>[
+            'title'=>'销假',
+            'href'=>'admin/Approval/backLeave'
+        ],
     ],
     'car_type' => [
         1 =>'车辆1',
