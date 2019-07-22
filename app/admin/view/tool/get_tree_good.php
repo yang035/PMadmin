@@ -43,7 +43,7 @@
                         if (typeof (data[i].cat_id) == 'undefined'){
                             d.add(data[i].id,data[i].pid,'authority',data[i].id,data[i].name,true,false);
                         } else {
-                            d.add(data[i].gid,data[i].cat_id,'authority',data[i].id,data[i].title,false,false);
+                            d.add(data[i].gid,data[i].cat_id,'authority',data[i].id,data[i].title+'['+data[i].kucun+']',false,false);
                         }
 
                     }

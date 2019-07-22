@@ -332,6 +332,7 @@ class Category extends Model
         $goods = Goods::where($map)->select();
         foreach ($goods as $k => $v) {
             $goods[$k]['gid'] = '10000' . $v->id;
+            $goods[$k]['kucun'] = $v['total'] - $v['sales'];
         }
         $data = array_merge($goods, $result);
         return $data;

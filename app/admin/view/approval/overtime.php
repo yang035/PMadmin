@@ -136,7 +136,7 @@
         laydate.render({
             elem: '.field-start_time',
             type: 'date',
-            min: -3,
+            min: -1,
             calendar: true,
             trigger: 'click',
             value: new Date(),
@@ -155,7 +155,7 @@
         laydate.render({
             elem: '.field-end_time',
             type: 'date',
-            min: -3,
+            min: -1,
             calendar: true,
             trigger: 'click',
             value: new Date(),
