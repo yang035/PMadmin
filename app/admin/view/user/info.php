@@ -31,17 +31,17 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">英文名</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-nick" name="nick" lay-verify="required" autocomplete="off" placeholder="请输入用户名">
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">性别</label>
         <div class="layui-input-inline">
             <select name="sex" class="field-sex" type="select">
                 {$sex_type}
             </select>
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">昵&nbsp;&nbsp;&nbsp;&nbsp;称</label>
-        <div class="layui-input-inline">
-            <input type="text" class="layui-input field-nick" name="nick" lay-verify="required" autocomplete="off" placeholder="请输入用户名">
         </div>
     </div>
     <div class="layui-form-item">

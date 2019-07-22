@@ -97,6 +97,13 @@
             <div class="layui-form-mid" style="color: red">*</div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label">英文名</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input field-nick" name="nick" lay-verify="required" autocomplete="off" placeholder="请输入英文名">
+            </div>
+            <div class="layui-form-mid" style="color: red">*</div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">性别</label>
             <div class="layui-input-inline">
                 <select name="sex" class="field-sex" type="select">
