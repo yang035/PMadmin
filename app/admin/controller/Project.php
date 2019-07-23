@@ -1106,6 +1106,7 @@ class Project extends Admin
         $row['deal_user_id'] = $this->deal_data($row['deal_user']);
         $row['copy_user_id'] = $this->deal_data($row['copy_user']);
         $row['send_user_id'] = $this->deal_data($row['send_user']);
+        $row['user_id'] = AdminUser::getUserById($row['user_id'])['realname'];
         if ($row){
             if (!empty($row['attachment'])){
                 $attachment = explode(',',$row['attachment']);

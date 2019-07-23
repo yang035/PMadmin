@@ -72,6 +72,8 @@
                             <br>
                             抄送人：{$data_info['copy_user_id']|default=''}
                             <br>
+                            操作员：{$data_info['user_id']|default=''}
+                            <br>
                             是否确认：
                             {if condition="$data_info['u_res'] eq 'a'"}
                                 <span class="red">{$data_info['u_res_str']}</span>
