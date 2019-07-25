@@ -1750,7 +1750,8 @@ class Project extends Admin
             $excel = \service('Excel');
             $format = array('A' => 'line', 'B' => 'pid', 'C' => 'name', 'D' => 'remark', 'E' => 'score', 'F' => 'start_time', 'G' => 'end_time', 'H' => 'manager_user', 'I' => 'deal_user', 'J' => 'send_user', 'K' => 'copy_user', 'L' => 'major_item');
             $checkformat = array('A' => '序号', 'B' => '层级关系', 'C' => '名称', 'D' => '描述', 'E' => '预设值', 'F' => '开始时间', 'G' => '结束时间', 'H' => '负责人', 'I' => '参与人', 'J' => '审批人', 'K' => '抄送人', 'L' => '专业编号');
-            $res = $excel->readUploadFile($file_name, $format, 8050, $checkformat);
+            $res = $excel->readUploadFile1($file_name, $format, 8050, $checkformat);
+//            print_r($res);exit();
             if ($res['status'] == 0) {
                 $this->error($res['data']);
             } else {
@@ -1772,12 +1773,12 @@ class Project extends Admin
                     return $this->error("以下名称有重复的，请修改之后导入：<br>" . implode("<br>", $diff_row));
                 }
 
-                $d = 25569;
-                $s = 24 * 60 * 60;
+//                $d = 25569;
+//                $s = 24 * 60 * 60;
 
                 $i = 0;
                 foreach ($res['data'] as $k => $v) {
-                    if (count(trim($v['L'])) >=5 && !key_exists($v['L'],$small_major)){
+                    if (strlen(trim($v['L'])) >=5 && !key_exists($v['L'],$small_major)){
                         return $this->error("专业编号不存在");
                     }else{
                         $b_m = substr($v['L'],0,1);
@@ -1787,16 +1788,18 @@ class Project extends Admin
                         $p_node = $params['id'];
                     }
                     $prow = ProjectModel::where('node', $p_node)->limit(1)->select();
+//                    print_r($p_node);
+//                    print_r($prow);exit();
                     $where = [
                         'cid' => session('admin_user.cid'),
                         'node' => $v['B'],
                     ];
                     $f = ProjectModel::where($where)->find();
 
-                    $ff = trim($v['F']);
-                    $ff = empty($ff) ? 0 : (int)$ff;
-                    $gg = trim($v['G']);
-                    $gg = empty($gg) ? 0 : (int)$gg;
+//                    $ff = trim($v['F']);
+//                    $ff = empty($ff) ? 0 : (int)$ff;
+//                    $gg = trim($v['G']);
+//                    $gg = empty($gg) ? 0 : (int)$gg;
                     if (!$f) {
                         $tmp = [
                             'pid' => $prow[0]['id'],
@@ -1808,8 +1811,8 @@ class Project extends Admin
                             'remark' => $v['D'],
                             'cat_id' => $prow[0]['cat_id'],
                             'score' => (int)$v['E'],
-                            'start_time' => $ff > $d ? gmdate('Y-m-d H:i:s', ($ff - $d) * $s) : '0000-00-00 00:00:00',
-                            'end_time' => $gg > $d ? gmdate('Y-m-d H:i:s', ($gg - $d) * $s) : '0000-00-00 00:00:00',
+                            'start_time' => $v['F'],
+                            'end_time' => $v['G'],
                             'manager_user' => $this->userFormat($v['H']),
                             'deal_user' => $this->userFormat($v['I']),
                             'send_user' => $this->userFormat($v['J']),
@@ -1817,7 +1820,7 @@ class Project extends Admin
                             'major_cat'=>$b_m,
                             'major_cat_name'=>$big_major[$b_m],
                             'major_item' => $v['L'],
-                            'major_item_name'=>$small_major[$v['L']],
+                            'major_item_name'=>strlen(trim($v['L'])) >=5 ? $small_major[$v['L']] : '',
                             'user_id' => session('admin_user.uid'),
                         ];
                         $f1 = ProjectModel::create($tmp);
@@ -1833,8 +1836,8 @@ class Project extends Admin
                             'node' => $v['B'],
                             'remark' => $v['D'],
                             'score' => (int)$v['E'],
-                            'start_time' => $ff > $d ? gmdate('Y-m-d H:i:s', ($ff - $d) * $s) : '0000-00-00 00:00:00',
-                            'end_time' => $gg > $d ? gmdate('Y-m-d H:i:s', ($gg - $d) * $s) : '0000-00-00 00:00:00',
+                            'start_time' => $v['F'],
+                            'end_time' => $v['G'],
                             'manager_user' => $this->userFormat($v['H']),
                             'deal_user' => $this->userFormat($v['I']),
                             'send_user' => $this->userFormat($v['J'],'a'),
@@ -1842,7 +1845,7 @@ class Project extends Admin
                             'major_cat'=>$b_m,
                             'major_cat_name'=>$big_major[$b_m],
                             'major_item' => $v['L'],
-                            'major_item_name'=>$small_major[$v['L']],
+                            'major_item_name'=>strlen(trim($v['L'])) >=5 ? $small_major[$v['L']] : '',
                             'user_id' => session('admin_user.uid'),
                         ];
                         $f1 = ProjectModel::update($tmp);
