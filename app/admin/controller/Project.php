@@ -1777,7 +1777,7 @@ class Project extends Admin
 
                 $i = 0;
                 foreach ($res['data'] as $k => $v) {
-                    if (!key_exists($v['L'],$small_major)){
+                    if (count(trim($v['L'])) >=5 && !key_exists($v['L'],$small_major)){
                         return $this->error("专业编号不存在");
                     }else{
                         $b_m = substr($v['L'],0,1);
