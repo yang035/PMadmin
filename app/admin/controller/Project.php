@@ -1732,6 +1732,8 @@ class Project extends Admin
                         }
                     }
                 }
+            }else{
+                $this->error('请先完善专业配比');
             }
             $file = request()->file('file');
             $params = $this->request->post();
