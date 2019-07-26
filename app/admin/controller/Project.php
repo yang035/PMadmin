@@ -1755,8 +1755,12 @@ class Project extends Admin
             if ($res['status'] == 0) {
                 $this->error($res['data']);
             } else {
-                if ('1.1' != $res['data'][0]['B']){
-                    $this->error('层级关系列从1.1编号开始');
+//                if ('1.1' != $res['data'][0]['B']){
+//                    $this->error('层级关系列从1.1编号开始');
+//                }
+                $b = explode('.',$res['data'][0]['B']);
+                if (count(array_filter($b)) < 2){
+                    $this->error('层级关系列从1.1或2.1等格式编号开始');
                 }
                 foreach ($res['data'] as $k => $v) {
                     $res['data'][$k]['B'] = session('admin_user.cid') . '.' . $params['id'] . substr($v['B'], 1);
@@ -1817,10 +1821,10 @@ class Project extends Admin
                             'deal_user' => $this->userFormat($v['I']),
                             'send_user' => $this->userFormat($v['J']),
                             'copy_user' => $this->userFormat($v['K']),
-                            'major_cat'=>$b_m,
-                            'major_cat_name'=>$big_major[$b_m],
-                            'major_item' => $v['L'],
-                            'major_item_name'=>strlen(trim($v['L'])) >=5 ? $small_major[$v['L']] : '',
+                            'major_cat'=>array_key_exists($b_m,$big_major) ? $b_m : 0,
+                            'major_cat_name'=>array_key_exists($b_m,$big_major) ? $big_major[$b_m] : '',
+                            'major_item' => array_key_exists(trim($v['L']),$small_major) ? trim($v['L']) : 0,
+                            'major_item_name'=>array_key_exists(trim($v['L']),$small_major) ? $small_major[trim($v['L'])] : '',
                             'user_id' => session('admin_user.uid'),
                         ];
                         $f1 = ProjectModel::create($tmp);
@@ -1842,10 +1846,10 @@ class Project extends Admin
                             'deal_user' => $this->userFormat($v['I']),
                             'send_user' => $this->userFormat($v['J'],'a'),
                             'copy_user' => $this->userFormat($v['K']),
-                            'major_cat'=>$b_m,
-                            'major_cat_name'=>$big_major[$b_m],
-                            'major_item' => $v['L'],
-                            'major_item_name'=>strlen(trim($v['L'])) >=5 ? $small_major[$v['L']] : '',
+                            'major_cat'=>array_key_exists($b_m,$big_major) ? $b_m : 0,
+                            'major_cat_name'=>array_key_exists($b_m,$big_major) ? $big_major[$b_m] : '',
+                            'major_item' => array_key_exists(trim($v['L']),$small_major) ? trim($v['L']) : 0,
+                            'major_item_name'=>array_key_exists(trim($v['L']),$small_major) ? $small_major[trim($v['L'])] : '',
                             'user_id' => session('admin_user.uid'),
                         ];
                         $f1 = ProjectModel::update($tmp);

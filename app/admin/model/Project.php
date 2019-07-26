@@ -281,6 +281,19 @@ class Project extends Model
         return json_encode($data);
     }
 
+    public static function getRowJoinSubject($id=1)
+    {
+        $data = db('project')
+            ->alias('p')
+            ->join('subject_item s','p.subject_id=s.id','left')
+            ->where('p.id',$id)
+            ->where('p.cid',session('admin_user.cid'))
+            ->field('s.*')
+            ->find();
+
+        return $data;
+    }
+
     public static function inputSearchProject1(){
         $where = [
             'pid'=>0,
