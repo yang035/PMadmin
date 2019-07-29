@@ -33,7 +33,7 @@ class Project extends Model
         return $str;
     }
 
-    public static function index1($where,$p_status){
+    public static function index1($where,$p_status,$third=''){
         if ('' == $p_status){
             $st = strtotime('-3 days');
             $et = strtotime('+3 days');
@@ -68,7 +68,7 @@ class Project extends Model
             }
 //            print_r($ids);
 //            echo  $w;
-            $result1 = self::field($field)->where($where)->where($w)->order('update_time desc')->select();
+            $result1 = self::field($field)->where($where)->where($w)->where($third)->order('update_time desc')->select();
 //            echo self::getLastSql();exit();
 //            print_r($result1);exit();
             if ($result1){
@@ -95,7 +95,7 @@ class Project extends Model
         }
     }
 
-    public static function getAll($where,$p_status){
+    public static function getAll($where,$p_status,$third){
         $field = '*,DATEDIFF(end_time,NOW()) hit';
         $result = self::field($field)->where($where)->order('update_time desc')->limit(1)->select();
 //        $a = self::field($field)->where($where)->order('grade desc')->limit(1)->buildSql();
@@ -123,7 +123,8 @@ class Project extends Model
                         break;
                 }
             }
-            $result1 = self::field($field)->where($where)->where($w)->order('update_time desc')->select();
+            $result1 = self::field($field)->where($where)->where($w)->where($third)->order('update_time desc')->select();
+//            print_r(self::getLastSql());exit();
             if ($result1){
                 foreach ($result1 as $k=>$v){
                     if ($v['realper'] < 100){

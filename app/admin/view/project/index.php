@@ -63,6 +63,13 @@
                     </div>
                 </div>
                 <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <button type="button" class="layui-btn layui-btn-primary" id="person_user_id">选择人员</button>
+                        <div id="person_select_id"></div>
+                        <input type="hidden" name="person_user" id="person_user" value="{:input('get.person_user')}">
+                    </div>
+                </div>
+                <div class="layui-inline">
                     <input type="hidden" name="atype" value="{$Request.param.atype}">
                     <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
                 </div>
@@ -111,8 +118,8 @@
     var  end_time=$("input[name='end_time']").val();
     var  atype=$("input[name='atype']").val();
     var  p_status=$("select[name='p_status']").val();
-    var _url = "{:url('admin/project/index')}?project_id="+project_id+"&start_time="+start_time+"&end_time="+end_time+"&atype="+atype+"&p_status="+p_status;
-
+    var  person_user=$("input[name='person_user']").val();
+    var _url = "{:url('admin/project/index')}?project_id="+project_id+"&start_time="+start_time+"&end_time="+end_time+"&atype="+atype+"&p_status="+p_status+"&person_user="+person_user;
     layui.config({
         base: '/../../static/js/'
     }).extend({
@@ -305,6 +312,27 @@
             range: true,
             trigger: 'click',
         });
+
+        $('#person_user_id').on('click', function(){
+            var person_user = $('#person_user').val();
+            var open_url = "{:url('Tool/getTreeUser')}?m=person&u="+person_user;
+            if (open_url.indexOf('?') >= 0) {
+                open_url += '&hisi_iframe=yes';
+            } else {
+                open_url += '?hisi_iframe=yes';
+            }
+            layer.open({
+                type:2,
+                title :'员工列表',
+                maxmin: true,
+                area: ['800px', '500px'],
+                content: open_url,
+                success:function (layero, index) {
+                    var body = layer.getChildFrame('body', index);  //巧妙的地方在这里哦
+                }
+            });
+        });
+
     });
 </script>
 

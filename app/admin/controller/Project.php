@@ -94,6 +94,8 @@ class Project extends Admin
         }
         $subject_id = 0;
         $p_status = '';
+        $con = '';
+
         if ($params) {
             if (isset($params['project_id']) && !empty($params['project_id'])) {
                 $map['subject_id'] = $params['project_id'];
@@ -115,6 +117,17 @@ class Project extends Admin
                 $p_status = (int)$params['p_status'];
             }
 
+            if (!empty($params['person_user'])) {
+                $person_user = explode(',',trim($params['person_user'],','));
+                if (is_array($person_user)){
+                    foreach ($person_user as $k=>$v){
+                        if ($k > 0){
+                            $con .= ' or ';
+                        }
+                        $con .= "JSON_CONTAINS_PATH(deal_user,'one', '$.\"$v\"')";
+                    }
+                }
+            }
         }
         $cid = session('admin_user.cid');
         $map['cid'] = $cid;
@@ -122,10 +135,10 @@ class Project extends Admin
 
         if (empty($subject_id)){
             $map['pid'] = 0;
-            $list = ProjectModel::index1($map,$p_status);
+            $list = ProjectModel::index1($map,$p_status,$con);
         }else{
             $map['pid'] = 0;
-            $list = ProjectModel::getAll($map,$p_status);
+            $list = ProjectModel::getAll($map,$p_status,$con);
         }
 
 //        $aa = new ProjectModel();
