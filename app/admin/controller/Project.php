@@ -59,7 +59,7 @@ class Project extends Admin
         $x_user = [];
         if ($x_user_arr) {
             foreach ($x_user_arr as $key => $val) {
-                $real_name = AdminUser::getUserById($key)['realname'];
+                $real_name = AdminUser::getUserById($key)['nick'];
                 if ('a' == $val) {
                     $real_name = "<font style='color: blue'>" . $real_name . "</font>";
                 }
