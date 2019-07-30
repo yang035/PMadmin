@@ -33,6 +33,7 @@
             <th>商品名称</th>
             <th>数量(份)</th>
             <th>总消耗(斗)</th>
+            <th>额外支付(元)</th>
             <th>状态</th>
             <th>添加时间</th>
         </tr>
@@ -45,6 +46,7 @@
             <td class="font12">{$vo['name']}</td>
             <td class="font12">{$vo['num']}</td>
             <td class="font12">{$vo['total_score']}</td>
+            <td class="font12">{$vo['other_price']}</td>
             <td class="font12">
                 <input type="checkbox" name="status" value="{$vo['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="已申请|已发放" {if condition="$vo['status'] eq 1"}checked {/if} data-href="{:url('status')}?table=shop_order&id={$vo['id']}">
             </td>

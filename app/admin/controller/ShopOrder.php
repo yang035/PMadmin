@@ -56,7 +56,7 @@ class ShopOrder extends Admin
             $map['ShopOrder.user_id'] = session('admin_user.uid');
         }
 //print_r($map);
-        $fields = "`ShopOrder`.item_id,sum(`ShopOrder`.num) as num,sum(`ShopOrder`.total_score) as total_score,`ShopItem`.name";
+        $fields = "`ShopOrder`.item_id,sum(`ShopOrder`.num) as num,sum(`ShopOrder`.total_score) as total_score,sum(`ShopOrder`.other_price) as other_price,`ShopItem`.name";
 
         if (isset($params['export']) && 1 == $params['export']){
             set_time_limit(0);

@@ -134,7 +134,7 @@
         layer.open({
             type: 1,
             offset: 'auto', //具体配置参考：offset参数项
-            content: '<div style="padding: 20px 80px;">美好的一天快结束了，要写日报了...</div>',
+            content: '<div style="padding: 20px 80px;">美好的一天马上结束了，看看你今天满满的收获吧</div>',
             btn: '关闭',
             btnAlign: 'c', //按钮居中
             shade: 0, //不显示遮罩

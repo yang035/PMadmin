@@ -39,6 +39,7 @@
             <th>商品名称</th>
             <th>总数量(份)</th>
             <th>总消耗(斗)</th>
+            <th>总额外支付(元)</th>
             <th>添加时间</th>
             <th>操作</th>
         </tr>
@@ -52,6 +53,7 @@
             </td>
             <td class="font12">{$vo['num']}</td>
             <td class="font12">{$vo['total_score']}</td>
+            <td class="font12">{$vo['other_price']}</td>
             <td class="font12">{$vo['create_time']}</td>
             <td>
                 <div class="layui-btn-group">

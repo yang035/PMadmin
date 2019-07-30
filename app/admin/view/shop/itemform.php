@@ -32,20 +32,26 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">单价</label>
-            <div class="layui-input-inline">
-                <input type="number" class="layui-input field-marketprice" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="marketprice" value="0" lay-verify="required" autocomplete="off" placeholder="请输入单价">
-            </div>
-            <div class="layui-form-mid">元</div>
-            <div class="layui-form-mid" style="color: red">*</div>
-        </div>
-        <div class="layui-form-item">
             <label class="layui-form-label">麦粒兑换</label>
             <div class="layui-input-inline">
                 <input type="number" name="score" lay-verify="required" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" value="0" autocomplete="off" class="layui-input field-score">
             </div>
             <div class="layui-form-mid">斗</div>
             <div class="layui-form-mid" style="color: red">*</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">等价于</label>
+            <div class="layui-input-inline">
+                <input type="number" class="layui-input field-marketprice" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="marketprice" value="0" autocomplete="off" placeholder="请输入兑换价">
+            </div>
+            <div class="layui-form-mid">元</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">额外支付</label>
+            <div class="layui-input-inline">
+                <input type="number" class="layui-input field-other_price" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="other_price" value="0" autocomplete="off" placeholder="请输入额外支付价格">
+            </div>
+            <div class="layui-form-mid">元</div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">开始时间</label>
