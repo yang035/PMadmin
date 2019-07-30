@@ -76,7 +76,7 @@ class Project extends Model
                     if ($v['realper'] < 100){
                         if ($v['hit'] < 0){
                             $v['name'] = "<font style='color: red;font-weight:bold'>[逾期]</font>".$v['name'];
-                        }elseif ($v['hit'] == 0){
+                        }elseif ($v['hit'] == 0 && $v['end_time'] != '0000-00-00 00:00:00'){
                             $v['name'] = "<font style='color: blue;font-weight:bold'>[当日]</font>".$v['name'];
                         }else{
                             $v['name'] = "<font style='color: green;font-weight:bold'>[待完成]</font>".$v['name'];
@@ -130,7 +130,7 @@ class Project extends Model
                     if ($v['realper'] < 100){
                         if ($v['hit'] < 0){
                             $v['name'] = "<font style='color: red;font-weight:bold'>[逾期]</font>".$v['name'];
-                        }elseif ($v['hit'] == 0){
+                        }elseif ($v['hit'] == 0 && $v['end_time'] != '0000-00-00 00:00:00'){
                             $v['name'] = "<font style='color: blue;font-weight:bold'>[当日]</font>".$v['name'];
                         }else{
                             $v['name'] = "<font style='color: green;font-weight:bold'>[待完成]</font>".$v['name'];
