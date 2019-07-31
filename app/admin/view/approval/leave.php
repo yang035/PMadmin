@@ -84,9 +84,9 @@
     <div class="layui-form-item">
         <label class="layui-form-label">审批人</label>
         <div class="layui-input-inline">
-            <button type="button" class="layui-btn" id="send_user_id">选择汇报人</button>
-            <div id="send_select_id"></div>
-            <input type="hidden" name="send_user" id="send_user" value="" lay-verify="required">
+<!--            <button type="button" class="layui-btn" id="send_user_id">选择汇报人</button>-->
+            <div style="margin-top: 10px" id="send_select_id">默认流程(负责人级、部门级、总经理级)</div>
+            <input type="hidden" name="send_user" id="send_user" value="{$send_user}" lay-verify="required">
         </div>
         <div class="layui-form-mid" style="color: red">*</div>
     </div>

@@ -8,6 +8,7 @@
 
 namespace app\admin\controller;
 
+use app\admin\model\AdminDepartment;
 use app\admin\model\Approval as ApprovalModel;
 use app\admin\model\ApprovalLeave as LeaveModel;
 use app\admin\model\ApprovalBackleave as BackleaveModel;
@@ -16,6 +17,7 @@ use app\admin\model\ApprovalBusiness as BusinessModel;
 use app\admin\model\ApprovalProcurement as ProcurementModel;
 use app\admin\model\ApprovalOvertime as OvertimeModel;
 use app\admin\model\ApprovalGoout as GooutModel;
+use app\admin\model\ApprovalSenduser;
 use app\admin\model\ApprovalUsecar as CarModel;
 use app\admin\model\ApprovalCost as CostModel;
 use app\admin\model\ApprovalDispatch as DispatchModel;
@@ -85,6 +87,27 @@ class Approval extends Admin
             $this->assign('data_info', (array)$user);
         }
         $this->assign('project_select', ProjectModel::inputSearchProject());
+    }
+
+    public function getFlowUser($id){
+        $res = ProjectModel::getRowJoinSubject($id);
+        $uid_arr = json_decode($res['manager_user'],true);
+        $tmp = [];
+        if ($uid_arr){
+            foreach ($uid_arr as $k=>$v){
+                $tmp[$k] = AdminUser::getUserById($k)['realname'];
+            }
+        }
+
+//        $row['manager_user_id'] = $this->deal_data($res['manager_user']);
+//        $row['manager_user'] = $this->deal_data_id($res['manager_user']);
+        $chain_arr = AdminDepartment::getChainUser();
+        $chain_sub = array_slice($chain_arr,0,2);
+        array_push($chain_sub,$tmp);
+        $new_arr = array_filter($chain_sub);
+//        print_r(json_encode(user_array2(array_reverse($new_arr))));
+        $row['manager_user'] = json_encode(user_array2(array_reverse($new_arr)));
+        return $row;
     }
 
     public function deal_data($x_user)
@@ -350,6 +373,14 @@ class Approval extends Admin
                 return $this->error($result);
             }
             unset($data['id']);
+
+            $send_user = html_entity_decode($data['send_user']);
+            $send_user1 = json_decode($send_user,true);
+            $send_user2 = [];
+            foreach ($send_user1 as $k=>$v) {
+                $send_user2 += $v;
+            }
+
             // 启动事务
             Db::startTrans();
             try {
@@ -360,11 +391,23 @@ class Approval extends Admin
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
                     'user_id' => session('admin_user.uid'),
-                    'send_user' => json_encode(user_array($data['send_user'])),
+                    'send_user' => json_encode($send_user2),
                     'copy_user' => json_encode(user_array($data['copy_user'])),
                 ];
 
                 $res = ApprovalModel::create($approve);
+
+                $su = [];
+                foreach ($send_user1 as $k=>$v) {
+                    $su[$k] = [
+                        'aid' => $res['id'],
+                        'flow_num' => $k,
+                        'send_user' => json_encode($v),
+                    ];
+                }
+                $send_user_model = new ApprovalSenduser();
+                $send_user_model->saveAll($su);
+
                 $leave = [
                     'aid' => $res['id'],
                     'type' => $data['type'],
@@ -384,6 +427,9 @@ class Approval extends Admin
                 return $this->error('添加失败！');
             }
         }
+
+        $chain_user = $this->getFlowUser(0);
+        $this->assign('send_user', htmlspecialchars($chain_user['manager_user']));
         $this->assign('leave_type', LeaveModel::getOption());
         return $this->fetch();
     }
@@ -401,6 +447,14 @@ class Approval extends Admin
                 return $this->error($result);
             }
             unset($data['id']);
+
+            $send_user = html_entity_decode($data['send_user']);
+            $send_user1 = json_decode($send_user,true);
+            $send_user2 = [];
+            foreach ($send_user1 as $k=>$v) {
+                $send_user2 += $v;
+            }
+
             // 启动事务
             Db::startTrans();
             try {
@@ -412,10 +466,23 @@ class Approval extends Admin
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
                     'user_id' => session('admin_user.uid'),
-                    'send_user' => json_encode(user_array($data['send_user'])),
+                    'send_user' => json_encode($send_user2),
                     'copy_user' => json_encode(user_array($data['copy_user'])),
                 ];
                 $res = ApprovalModel::create($approve);
+
+
+                $su = [];
+                foreach ($send_user1 as $k=>$v) {
+                    $su[$k] = [
+                        'aid' => $res['id'],
+                        'flow_num' => $k,
+                        'send_user' => json_encode($v),
+                    ];
+                }
+                $send_user_model = new ApprovalSenduser();
+                $send_user_model->saveAll($su);
+
                 $leave = [
                     'aid' => $res['id'],
                     'type' => $data['type'],
@@ -461,6 +528,14 @@ class Approval extends Admin
                 return $this->error($result);
             }
             unset($data['id']);
+
+            $send_user = html_entity_decode($data['send_user']);
+            $send_user1 = json_decode($send_user,true);
+            $send_user2 = [];
+            foreach ($send_user1 as $k=>$v) {
+                $send_user2 += $v;
+            }
+
             Db::startTrans();
             try {
                 $approve = [
@@ -471,10 +546,22 @@ class Approval extends Admin
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
                     'user_id' => session('admin_user.uid'),
-                    'send_user' => json_encode(user_array($data['send_user'])),
+                    'send_user' => json_encode($send_user2),
                     'copy_user' => json_encode(user_array($data['copy_user'])),
                 ];
                 $res = ApprovalModel::create($approve);
+
+                $su = [];
+                foreach ($send_user1 as $k=>$v) {
+                    $su[$k] = [
+                        'aid' => $res['id'],
+                        'flow_num' => $k,
+                        'send_user' => json_encode($v),
+                    ];
+                }
+                $send_user_model = new ApprovalSenduser();
+                $send_user_model->saveAll($su);
+
                 $leave = [
                     'aid' => $res['id'],
                     'type' => $data['type'],
@@ -513,6 +600,14 @@ class Approval extends Admin
                 return $this->error($result);
             }
             unset($data['id']);
+
+            $send_user = html_entity_decode($data['send_user']);
+            $send_user1 = json_decode($send_user,true);
+            $send_user2 = [];
+            foreach ($send_user1 as $k=>$v) {
+                $send_user2 += $v;
+            }
+
             Db::startTrans();
             try {
                 $approve = [
@@ -524,10 +619,22 @@ class Approval extends Admin
                     'time_long' => $data['time_long'],
                     'user_id' => session('admin_user.uid'),
                     'fellow_user' => json_encode(user_array($data['fellow_user'])),
-                    'send_user' => json_encode(user_array($data['send_user'])),
+                    'send_user' => json_encode($send_user2),
                     'copy_user' => json_encode(user_array($data['copy_user'])),
                 ];
                 $res = ApprovalModel::create($approve);
+
+                $su = [];
+                foreach ($send_user1 as $k=>$v) {
+                    $su[$k] = [
+                        'aid' => $res['id'],
+                        'flow_num' => $k,
+                        'send_user' => json_encode($v),
+                    ];
+                }
+                $send_user_model = new ApprovalSenduser();
+                $send_user_model->saveAll($su);
+
                 $leave = [
                     'aid' => $res['id'],
                     'address' => $data['address'],
@@ -562,6 +669,14 @@ class Approval extends Admin
                 return $this->error($result);
             }
             unset($data['id']);
+
+            $send_user = html_entity_decode($data['send_user']);
+            $send_user1 = json_decode($send_user,true);
+            $send_user2 = [];
+            foreach ($send_user1 as $k=>$v) {
+                $send_user2 += $v;
+            }
+
             Db::startTrans();
             try {
                 $approve = [
@@ -571,10 +686,23 @@ class Approval extends Admin
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
                     'user_id' => session('admin_user.uid'),
-                    'send_user' => json_encode(user_array($data['send_user'])),
+//                    'send_user' => json_encode(user_array($data['send_user'])),
+                    'send_user' => json_encode($send_user2),
                     'copy_user' => json_encode(user_array($data['copy_user'])),
                 ];
                 $res = ApprovalModel::create($approve);
+
+                $su = [];
+                foreach ($send_user1 as $k=>$v) {
+                    $su[$k] = [
+                        'aid' => $res['id'],
+                        'flow_num' => $k,
+                        'send_user' => json_encode($v),
+                    ];
+                }
+                $send_user_model = new ApprovalSenduser();
+                $send_user_model->saveAll($su);
+
                 $leave = [
                     'aid' => $res['id'],
                     'cat_id' => $data['cat_id'],
@@ -599,6 +727,8 @@ class Approval extends Admin
                 return $this->error('添加失败！');
             }
         }
+        $chain_user = $this->getFlowUser(0);
+        $this->assign('send_user', htmlspecialchars($chain_user['manager_user']));
         $this->assign('cat_option', ItemModel::getOption());
         return $this->fetch();
 
@@ -617,6 +747,14 @@ class Approval extends Admin
                 return $this->error($result);
             }
             unset($data['id']);
+
+            $send_user = html_entity_decode($data['send_user']);
+            $send_user1 = json_decode($send_user,true);
+            $send_user2 = [];
+            foreach ($send_user1 as $k=>$v) {
+                $send_user2 += $v;
+            }
+
             $a = $data['start_time'] . ' ' . $data['start_time1'];
             $b = $data['end_time'] . ' ' . $data['end_time1'];
             $c = (int)((strtotime($b) - strtotime($a))/3600);
@@ -633,10 +771,23 @@ class Approval extends Admin
                     'end_time' => $b,
                     'time_long' => $data['time_long'],
                     'user_id' => session('admin_user.uid'),
-                    'send_user' => json_encode(user_array($data['send_user'])),
+//                    'send_user' => json_encode(user_array($data['send_user'])),
+                    'send_user' => json_encode($send_user2),
                     'copy_user' => json_encode(user_array($data['copy_user'])),
                 ];
                 $res = ApprovalModel::create($approve);
+
+                $su = [];
+                foreach ($send_user1 as $k=>$v) {
+                    $su[$k] = [
+                        'aid' => $res['id'],
+                        'flow_num' => $k,
+                        'send_user' => json_encode($v),
+                    ];
+                }
+                $send_user_model = new ApprovalSenduser();
+                $send_user_model->saveAll($su);
+
                 $leave = [
                     'aid' => $res['id'],
                     'time_long1' => $data['time_long1'],
@@ -1232,6 +1383,32 @@ class Approval extends Admin
         $list = db('approval')->alias('a')->field($fields)
             ->join("{$table} b", 'a.id = b.aid', 'left')
             ->where($map)->find();
+
+        $map1 = [
+            'aid' => $params['id']
+        ];
+        $su_list = ApprovalSenduser::where($map1)->select();
+        $su_list_count = count($su_list);
+        $status = [];
+        if ($su_list){
+            foreach ($su_list as $k=>$v) {
+                $su_list[$k]['send_user_id'] = array_keys(json_decode($v['send_user'],true));
+                $su_list[$k]['send_user'] = $this->deal_data($v['send_user']);
+                $su_list[$k]['cunzai'] = false;
+                if (in_array(session('admin_user.uid'),$su_list[$k]['send_user_id'])){
+                    $su_list[$k]['cunzai'] = true;
+                }
+                $status[$v['flow_num']] = $v['status'];
+                if ($v['flow_num'] == 0){
+                    $status[-1] = 2;
+                }
+            }
+        }else{
+            $su_list = [];
+        }
+//        print_r($su_list);
+        $this->assign('su_list', $su_list);
+        $this->assign('status', $status);
 //print_r($list);
         $res = false;
         if ($this->request->isPost()) {
@@ -1260,6 +1437,152 @@ class Approval extends Admin
                     //事务提交，保证数据一致性
                     Db::startTrans();
                     try {
+//                        if (1 == $data['class_type'] && 2 == $data['status']){
+//                            $start_time = explode(' ',$list['start_time']);
+//                            $end_time = explode(' ',$list['end_time']);
+//                            if ($start_time[0] == $end_time[0]){
+//                                $c = (int)((strtotime($list['end_time']) - strtotime($list['start_time']))/3600);
+//                            }else{
+//                                $d = round((strtotime($end_time[0])-strtotime($start_time[0]))/3600/24);
+//                                $c = 0;
+//                                for ($i=0; $i<=$d; $i++) {
+//                                    $dd = date('Y-m-d',strtotime("{$start_time[0]} +{$i} day"));
+//                                    if ($this->dealDay($dd)){
+//                                        $c++;
+//                                    }
+//                                }
+//                                $c *= 8;
+//                            }
+//
+//                            $per_score = config('score.hour_score') ? config('score.hour_score') : 0;
+//                            $gl_sub_score = $per_score*$c;
+//                            $score = [
+//                                'subject_id' => $list['project_id'],
+//                                'project_id' => 0,
+//                                'cid' => session('admin_user.cid'),
+//                                'project_code' => '',
+//                                'user' => $list['user_id'],
+//                                'gl_sub_score' => $gl_sub_score,
+//                                'remark' => "请假调休时间段{$list['start_time']}~{$list['end_time']},计算{$c}小时，扣除{$gl_sub_score}斗(编号{$list['id']})",
+//                                'user_id' => session('admin_user.uid'),
+//                                'create_time' => time(),
+//                                'update_time' => time(),
+//                            ];
+//                            db('score')->insert($score);
+//                        }
+//
+//                        if (6 == $data['class_type'] && 2 == $data['status']){
+//                            $c = (int)((strtotime($list['end_time']) - strtotime($list['start_time']))/3600);
+//                            $per_score = config('score.hour_score') ? config('score.hour_score') : 0;
+//                            $gl_add_score = $per_score*$c;
+//                            $score = [
+//                                'subject_id' => $list['project_id'],
+//                                'project_id' => 0,
+//                                'cid' => session('admin_user.cid'),
+//                                'project_code' => '',
+//                                'user' => $list['user_id'],
+//                                'gl_add_score' => $gl_add_score,
+//                                'remark' => "加班时间段{$list['start_time']}~{$list['end_time']},计算{$c}小时，鼓励{$gl_add_score}斗",
+//                                'user_id' => session('admin_user.uid'),
+//                                'create_time' => time(),
+//                                'update_time' => time(),
+//                            ];
+//                            db('score')->insert($score);
+//                        }
+//                        unset($data['atype'], $data['class_type']);
+
+                    $uid = session('admin_user.uid');
+                    $ap = [
+                        'id'=>$data['id'],
+                        'status'=>$data['status'],
+                        'mark'=>$data['mark'],
+                    ];
+                    if (!empty($su_list)){
+                        $w = [
+                            'aid'=>$data['id'],
+                            'status'=>1,
+                        ];
+                        $w1 = "JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"')";
+
+                        $u = [
+                            'status'=>$data['status'],
+                            'mark'=>$data['mark'],
+                            'update_time'=>time(),
+                        ];
+
+                        $s = new ApprovalSenduser();
+                        $s->where($w)->where($w1)->update($u);
+
+                        $sql = "UPDATE tb_approval_senduser SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE aid ={$data['id']} and status={$data['status']}";
+                        $res = ApprovalSenduser::execute($sql);
+
+                        $sql = "UPDATE tb_approval SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$data['id']}";
+                        $res = ApprovalModel::execute($sql);
+
+                        $last = ApprovalSenduser::where($map1)->order('id desc')->limit(1)->find();
+//                    print_r($last);exit();
+                        if (2 == $last['status'] || 2 != $data['status']){
+                            $res = ApprovalModel::update($ap);
+                        }
+                        if (2 == $last['status']){
+                            if (1 == $data['class_type'] && 2 == $data['status']){
+                                $start_time = explode(' ',$list['start_time']);
+                                $end_time = explode(' ',$list['end_time']);
+                                if ($start_time[0] == $end_time[0]){
+                                    $c = (int)((strtotime($list['end_time']) - strtotime($list['start_time']))/3600);
+                                }else{
+                                    $d = round((strtotime($end_time[0])-strtotime($start_time[0]))/3600/24);
+                                    $c = 0;
+                                    for ($i=0; $i<=$d; $i++) {
+                                        $dd = date('Y-m-d',strtotime("{$start_time[0]} +{$i} day"));
+                                        if ($this->dealDay($dd)){
+                                            $c++;
+                                        }
+                                    }
+                                    $c *= 8;
+                                }
+
+                                $per_score = config('score.hour_score') ? config('score.hour_score') : 0;
+                                $gl_sub_score = $per_score*$c;
+                                $score = [
+                                    'subject_id' => $list['project_id'],
+                                    'project_id' => 0,
+                                    'cid' => session('admin_user.cid'),
+                                    'project_code' => '',
+                                    'user' => $list['user_id'],
+                                    'gl_sub_score' => $gl_sub_score,
+                                    'remark' => "请假调休时间段{$list['start_time']}~{$list['end_time']},计算{$c}小时，扣除{$gl_sub_score}斗(编号{$list['id']})",
+                                    'user_id' => session('admin_user.uid'),
+                                    'create_time' => time(),
+                                    'update_time' => time(),
+                                ];
+                                db('score')->insert($score);
+                            }
+
+                            if (6 == $data['class_type'] && 2 == $data['status']){
+                                $c = (int)((strtotime($list['end_time']) - strtotime($list['start_time']))/3600);
+                                $per_score = config('score.hour_score') ? config('score.hour_score') : 0;
+                                $gl_add_score = $per_score*$c;
+                                $score = [
+                                    'subject_id' => $list['project_id'],
+                                    'project_id' => 0,
+                                    'cid' => session('admin_user.cid'),
+                                    'project_code' => '',
+                                    'user' => $list['user_id'],
+                                    'gl_add_score' => $gl_add_score,
+                                    'remark' => "加班时间段{$list['start_time']}~{$list['end_time']},计算{$c}小时，鼓励{$gl_add_score}斗",
+                                    'user_id' => session('admin_user.uid'),
+                                    'create_time' => time(),
+                                    'update_time' => time(),
+                                ];
+                                db('score')->insert($score);
+                            }
+                        }
+                    }else{
+                        ApprovalModel::update($ap);
+                        $sql = "UPDATE tb_approval SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$data['id']}";
+                        $res = ApprovalModel::execute($sql);
+
                         if (1 == $data['class_type'] && 2 == $data['status']){
                             $start_time = explode(' ',$list['start_time']);
                             $end_time = explode(' ',$list['end_time']);
@@ -1312,12 +1635,8 @@ class Approval extends Admin
                             ];
                             db('score')->insert($score);
                         }
+                    }
 
-                        unset($data['atype'], $data['class_type']);
-                        ApprovalModel::update($data);
-                        $uid = session('admin_user.uid');
-                        $sql = "UPDATE tb_approval SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$data['id']}";
-                        $res = ApprovalModel::execute($sql);
                         // 提交事务
                         Db::commit();
                     } catch (\Exception $e) {
@@ -1481,11 +1800,16 @@ class Approval extends Admin
 
     public function approvalBack($id)
     {
-        $res = ApprovalModel::where('id', $id)->setField('status', 3);
+        $res = ApprovalModel::where('id', $id)->update(['status'=>3,'update_time'=>time()]);
         if (!$res) {
             return $this->error('操作失败！');
+        }else{
+            $s = ApprovalSenduser::where('aid', $id)->select();
+            if ($s){
+                ApprovalSenduser::where('aid', $id)->update(['status'=>3,'update_time'=>time()]);
+            }
+            return $this->success('操作成功。');
         }
-        return $this->success('操作成功。');
     }
 
     public function statistics(){

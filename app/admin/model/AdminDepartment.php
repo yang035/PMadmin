@@ -321,4 +321,44 @@ class AdminDepartment extends Model
         self::getMainMenu(true);
         return true;
     }
+
+    /**
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * 正常逐级审批人员
+     */
+    public static function getChainUser(){
+        $depid = session('admin_user.depid');
+        $code_str = self::field('code')->where('id',$depid)->find();
+        $data = [];
+        if ($code_str['code']){
+            $code_arr = explode('d',$code_str['code']);
+            $code_arr = array_unique(array_filter($code_arr));
+            $id_str = implode(',',$code_arr);
+            $w = [
+                'department_id' => ['in',$id_str],
+                'is_show' => 0,
+                'status' => 1,
+            ];
+            $list = AdminUser::field('id,department_id,realname')->where($w)->select();
+            if ($list){
+                foreach ($code_arr as $k => $v) {
+//                    $data[$v] = [];
+                    foreach ($list as $key => $val) {
+                        if ($v = $val['department_id']){
+                            $tmp[$v][$val['id']] = $val['realname'];
+                        }
+                    }
+                }
+                foreach ($code_arr as $k => $v) {
+//                    $data[$v] += $tmp[$v];
+                    if (isset($tmp[$v])){
+                        $data[] = $tmp[$v];
+                    }
+                }
+            }
+        }
+        return $data;
+    }
 }

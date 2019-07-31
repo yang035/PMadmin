@@ -72,108 +72,108 @@
             结束时间：{$data_list['end_time']}<br>
             项目名称：{$project_name['name']}<br>
             {switch name="class_type"}
-            {case value="1"}
-            请假类型：{$leave_type[$data_list['type']]}<br>
-            {/case}
-            {case value="2"}
-            报销类型：{$expense_type[$data_list['type']]}<br>
-            报销明细：
-            {volist name="$data_list['detail']" id="vo"}
-            {$vo['amount']}元(说明：{$vo['mark']})&nbsp;&nbsp;|&nbsp;
-            {/volist}
-            <br>
-            合计：{$data_list['total']}元<br>
-            {/case}
-            {case value="3"}
-            费用类型：{$cost_type[$data_list['type']]}<br>
-            金额：{$data_list['money']}<br>
-            {/case}
-            {case value="4"}
-            地点：{$data_list['address']}<br>
-            同行人：{$data_list['fellow_user']}<br>
-            {/case}
-            {case value="5"}
-            物品名称：{$data_list['name']}<br>
-            数量：{$data_list['number']}<br>
-            总价：{$data_list['amount']}元<br>
-            供应商：{$data_list['supplier']}<br>
-            产品链接：<a href="{$data_list['url']}" target="_blank" style="color: #5c90d2">{$data_list['url']}</a><br>
-            {/case}
-            {case value="6"}
-            加班类型：{$overtime_type[$data_list['overtime_type']]}<br>
-            加班时长：{$data_list['time_long']}小时<br>
-            {/case}
-            {case value="7"}
-            外出地点：{$data_list['address']}<br>
-            外出时长：{$data_list['time_long']}小时<br>
-            {/case}
-            {case value="8"}
-            司机：{$data_list['deal_user']}<br>
-            同行人：{$data_list['fellow_user']}<br>
-            车辆类型：{$car_type[$data_list['car_type']]}<br>
-            发车前照片：
-            {notempty name="data_list['before_img']"}
-            <div class="image-list">
-                {volist name="data_list['before_img']" id="vo"}
-                <div class="cover"><img src="{$vo}" style="height: 30px;width: 30px;"></div>
+                {case value="1"}
+                请假类型：{$leave_type[$data_list['type']]}<br>
+                {/case}
+                {case value="2"}
+                报销类型：{$expense_type[$data_list['type']]}<br>
+                报销明细：
+                {volist name="$data_list['detail']" id="vo"}
+                {$vo['amount']}元(说明：{$vo['mark']})&nbsp;&nbsp;|&nbsp;
                 {/volist}
-            </div>
-            {else/}
-            <span>无</span>
-            {/notempty}
-            <br>
-            回来后照片：
-            {notempty name="data_list['after_img']"}
-            <div class="image-list">
-                {volist name="data_list['after_img']" id="vo"}
-                <div class="cover"><img src="{$vo}" style="height: 30px;width: 30px;"></div>
-                {/volist}
-            </div>
-            {else/}
-            <span>无</span>
-            {/notempty}
-            <br>
-            {/case}
-            {case value="9"}
-            {/case}
-            {case value="10"}
-            {/case}
-            {case value="11"}
-            {notempty name="data_list['goods']"}
-            物品清单：
-            <div>
-                {volist name="data_list['goods']" id="vo"}
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$vo['name']}:{$vo['number']}<br>
-                {/volist}
-            </div>
-            {else/}
-            <span>无</span>
-            {/notempty}
-            {/case}
-            {case value="12"}
-            用途：{$data_list['application']}<br>
-            打印类型：{$data_list['type']}<br>
-            规格：<br>{$data_list['s']}
-            打印单位：{$data_list['store_id']}<br>
-            {/case}
-            {case value="13"}
-            派遣地点：{$data_list['address']}<br>
-            执行人：{$data_list['deal_user']}<br>
-            联系人：{$data_list['contacts']}<br>
-            随身物品：{$data_list['belongs']}<br>
-            {/case}
-            {case value="14"}
-            {notempty name="data_list['borrow']"}
-            物品清单：
-            <div>
-                {volist name="data_list['borrow']" id="vo"}
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$vo}<br>
-                {/volist}
-            </div>
-            {else/}
-            <span>无</span>
-            {/notempty}
-            {/case}
+                <br>
+                合计：{$data_list['total']}元<br>
+                {/case}
+                {case value="3"}
+                费用类型：{$cost_type[$data_list['type']]}<br>
+                金额：{$data_list['money']}<br>
+                {/case}
+                {case value="4"}
+                地点：{$data_list['address']}<br>
+                同行人：{$data_list['fellow_user']}<br>
+                {/case}
+                {case value="5"}
+                物品名称：{$data_list['name']}<br>
+                数量：{$data_list['number']}<br>
+                总价：{$data_list['amount']}元<br>
+                供应商：{$data_list['supplier']}<br>
+                产品链接：<a href="{$data_list['url']}" target="_blank" style="color: #5c90d2">{$data_list['url']}</a><br>
+                {/case}
+                {case value="6"}
+                加班类型：{$overtime_type[$data_list['overtime_type']]}<br>
+                加班时长：{$data_list['time_long']}小时<br>
+                {/case}
+                {case value="7"}
+                外出地点：{$data_list['address']}<br>
+                外出时长：{$data_list['time_long']}小时<br>
+                {/case}
+                {case value="8"}
+                司机：{$data_list['deal_user']}<br>
+                同行人：{$data_list['fellow_user']}<br>
+                车辆类型：{$car_type[$data_list['car_type']]}<br>
+                发车前照片：
+                    {notempty name="data_list['before_img']"}
+                    <div class="image-list">
+                        {volist name="data_list['before_img']" id="vo"}
+                        <div class="cover"><img src="{$vo}" style="height: 30px;width: 30px;"></div>
+                        {/volist}
+                    </div>
+                    {else/}
+                    <span>无</span>
+                    {/notempty}
+                    <br>
+                    回来后照片：
+                    {notempty name="data_list['after_img']"}
+                    <div class="image-list">
+                        {volist name="data_list['after_img']" id="vo"}
+                        <div class="cover"><img src="{$vo}" style="height: 30px;width: 30px;"></div>
+                        {/volist}
+                    </div>
+                    {else/}
+                    <span>无</span>
+                    {/notempty}
+                    <br>
+                {/case}
+                {case value="9"}
+                {/case}
+                {case value="10"}
+                {/case}
+                {case value="11"}
+                    {notempty name="data_list['goods']"}
+                    物品清单：
+                    <div>
+                        {volist name="data_list['goods']" id="vo"}
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$vo['name']}:{$vo['number']}<br>
+                        {/volist}
+                    </div>
+                    {else/}
+                    <span>无</span>
+                    {/notempty}
+                {/case}
+                {case value="12"}
+                用途：{$data_list['application']}<br>
+                打印类型：{$data_list['type']}<br>
+                规格：<br>{$data_list['s']}
+                打印单位：{$data_list['store_id']}<br>
+                {/case}
+                {case value="13"}
+                派遣地点：{$data_list['address']}<br>
+                执行人：{$data_list['deal_user']}<br>
+                联系人：{$data_list['contacts']}<br>
+                随身物品：{$data_list['belongs']}<br>
+                {/case}
+                {case value="14"}
+                    {notempty name="data_list['borrow']"}
+                    物品清单：
+                    <div>
+                        {volist name="data_list['borrow']" id="vo"}
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$vo}<br>
+                        {/volist}
+                    </div>
+                    {else/}
+                    <span>无</span>
+                    {/notempty}
+                {/case}
             {/switch}
             事由：{$data_list['reason']}<br>
             附件说明：
@@ -192,21 +192,172 @@
             <br>
             审批人：{$data_list['send_user']}<br>
             抄送人：{$data_list['copy_user']}<br>
-            {if condition="($data_list['status'] eq 1) && ($Request.param.atype eq 3) "}
+
+            {notempty name="su_list"}
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>流程审批</legend>
+            </fieldset>
+            <ul class="layui-timeline">
+                {volist name="su_list" id="vo"}
+                    <li class="layui-timeline-item">
+                        <i class="layui-icon layui-timeline-axis"></i>
+                        <div class="layui-timeline-content layui-text">
+                            <div class="layui-timeline-title">
+                            {$vo['flow_num']+1}级审批(任一人审批)：{$vo['send_user']}<br>
+                            {if condition="($vo['status'] eq 1) && ($status[$vo['flow_num']-1] eq 2) && $vo['cunzai'] && ($Request.param.atype eq 3)"}
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <input type="radio" name="status" value="2" title="同意" checked>
+                                    <input type="radio" name="status" value="4" title="驳回">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">意见</label>
+                                <div class="layui-input-inline">
+                                    <textarea type="text" class="layui-textarea field-mark" name="mark" autocomplete="off" placeholder="请输入说明"></textarea>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
+                                    <input type="hidden" class="field-atype" name="atype" value="{$Request.param.atype}">
+                                    <input type="hidden" class="field-class_type" name="class_type" value="{$Request.param.class_type}">
+                                    <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
+                                    <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
+                                </div>
+                            </div>
+                            {else/}
+                            结果：{$approval_status[$vo['status']]}{eq name="vo['status']" value="4"}<font style="color: red">（流程终止）</font>{/eq}<br>
+                                {if condition="$vo['status'] neq 1"}
+                                    意见：{$vo['mark']}<br>
+                                    批示时间：{$vo['update_time']}<br>
+                                {/if}
+                            {/if}
+                            </div>
+                        </div>
+                    </li>
+                {/volist}
+            </ul>
+            {else/}
+                {if condition="($data_list['status'] eq 1) && ($Request.param.atype eq 3) "}
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="radio" name="status" value="2" title="同意" checked>
+                        <input type="radio" name="status" value="4" title="驳回">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">意见</label>
+                    <div class="layui-input-inline">
+                        <textarea type="text" class="layui-textarea field-mark" name="mark" autocomplete="off" placeholder="请输入说明"></textarea>
+                    </div>
+                </div>
+                <br>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
+                        <input type="hidden" class="field-atype" name="atype" value="{$Request.param.atype}">
+                        <input type="hidden" class="field-class_type" name="class_type" value="{$Request.param.class_type}">
+                        <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
+                        <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
+                    </div>
+                </div>
+                {else/}
+                <br>
+                结果：{$approval_status[$data_list['status']]}<br>
+                意见：{$data_list['mark']}<br>
+                批示时间：{$data_list['update_time']|date='Y-m-d H:i:s',###}<br>
+                {/if}
+            {/notempty}
             <hr>
+            {eq name="data_list['status']" value="2"}
+                {if condition="($Request.param.atype eq 4) && ($data_list['is_deal'] neq 2)"}
+                <div class="layui-form-item">
+                    <label class="layui-form-label">支付结果</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="is_deal" value="1" title="未支付">
+                        <input type="radio" name="is_deal" value="2" title="支付">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">支付备注</label>
+                    <div class="layui-input-inline">
+                        <textarea type="text" class="layui-textarea field-deal_mark" name="deal_mark" autocomplete="off" placeholder="请输入备注"></textarea>
+                    </div>
+                </div>
+                <br>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
+                        <input type="hidden" class="field-atype" name="atype" value="{$Request.param.atype}">
+                        <input type="hidden" class="field-class_type" name="class_type" value="{$Request.param.class_type}">
+                        <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
+                        <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
+                    </div>
+                </div>
+                {else/}
+                <br>
+                支付结果：{eq name="data_list['is_deal']" value="2"}已支付{else/}未支付{/eq}<br>
+                支付备注：{$data_list['deal_mark']}<br>
+                支付时间：{$data_list['deal_time']}<br>
+                {/if}
+            {/eq}
+        </div>
+    </div>
+    {if condition="($Request.param.class_type eq 8) && ($Request.param.atype eq 5) "}
+        {empty name="$data_list['before_img']"}
         <div class="layui-form-item">
-            <div class="layui-input-block">
-                <input type="radio" name="status" value="2" title="同意" checked>
-                <input type="radio" name="status" value="4" title="驳回">
+            <label class="layui-form-label" >发车前</label>
+            <div class="layui-input-block upload">
+                <button type="button" name="upload" class="layui-btn layui-btn-primary layui-upload" lay-type="image" lay-data="{exts:'{:str_replace(',', '|', config('upload.upload_image_ext'))}', accept:'file'}" id="img1">左前方照片</button>
+                <input type="hidden" class="upload-input field-before_img" name="before_img[]" value="">
+                <img src="" style="display:none;border-radius:5px;border:1px solid #ccc" width="36" height="36">
+            </div>
+            <div class="layui-input-block upload">
+                <button type="button" name="upload" class="layui-btn layui-btn-primary layui-upload" lay-type="image" lay-data="{exts:'{:str_replace(',', '|', config('upload.upload_image_ext'))}', accept:'file'}" id="img2">右前方照片</button>
+                <input type="hidden" class="upload-input field-before_img" name="before_img[]" value="">
+                <img src="" style="display:none;border-radius:5px;border:1px solid #ccc" width="36" height="36">
+            </div>
+            <div class="layui-input-block upload">
+                <button type="button" name="upload" class="layui-btn layui-btn-primary layui-upload" lay-type="image" lay-data="{exts:'{:str_replace(',', '|', config('upload.upload_image_ext'))}', accept:'file'}" id="img3">后面照片</button>
+                <input type="hidden" class="upload-input field-before_img" name="before_img[]" value="">
+                <img src="" style="display:none;border-radius:5px;border:1px solid #ccc" width="36" height="36">
+            </div>
+            <div class="layui-input-block upload">
+                <button type="button" name="upload" class="layui-btn layui-btn-primary layui-upload" lay-type="image" lay-data="{exts:'{:str_replace(',', '|', config('upload.upload_image_ext'))}', accept:'file'}" id="img4">中控照片</button>
+                <input type="hidden" class="upload-input field-before_img" name="before_img[]" value="">
+                <img src="" style="display:none;border-radius:5px;border:1px solid #ccc" width="36" height="36">
             </div>
         </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">意见</label>
-                <div class="layui-input-inline">
-                    <textarea type="text" class="layui-textarea field-mark" name="mark" autocomplete="off" placeholder="请输入说明"></textarea>
-                </div>
+        {/empty}
+        {if condition="!empty($data_list['before_img']) && empty($data_list['after_img']) "}
+        <div class="layui-form-item">
+            <label class="layui-form-label" >回来后</label>
+            <div class="layui-input-block upload">
+                <button type="button" name="upload" class="layui-btn layui-btn-primary layui-upload" lay-type="image" lay-data="{exts:'{:str_replace(',', '|', config('upload.upload_image_ext'))}', accept:'file'}" id="img11">左前方照片</button>
+                <input type="hidden" class="upload-input field-after_img" name="after_img[]" value="">
+                <img src="" style="display:none;border-radius:5px;border:1px solid #ccc" width="36" height="36">
             </div>
-            <br>
+            <div class="layui-input-block upload">
+                <button type="button" name="upload" class="layui-btn layui-btn-primary layui-upload" lay-type="image" lay-data="{exts:'{:str_replace(',', '|', config('upload.upload_image_ext'))}', accept:'file'}" id="img22">右前方照片</button>
+                <input type="hidden" class="upload-input field-after_img" name="after_img[]" value="">
+                <img src="" style="display:none;border-radius:5px;border:1px solid #ccc" width="36" height="36">
+            </div>
+            <div class="layui-input-block upload">
+                <button type="button" name="upload" class="layui-btn layui-btn-primary layui-upload" lay-type="image" lay-data="{exts:'{:str_replace(',', '|', config('upload.upload_image_ext'))}', accept:'file'}" id="img33">后面照片</button>
+                <input type="hidden" class="upload-input field-after_img" name="after_img[]" value="">
+                <img src="" style="display:none;border-radius:5px;border:1px solid #ccc" width="36" height="36">
+            </div>
+            <div class="layui-input-block upload">
+                <button type="button" name="upload" class="layui-btn layui-btn-primary layui-upload" lay-type="image" lay-data="{exts:'{:str_replace(',', '|', config('upload.upload_image_ext'))}', accept:'file'}" id="img44">中控照片</button>
+                <input type="hidden" class="upload-input field-after_img" name="after_img[]" value="">
+                <img src="" style="display:none;border-radius:5px;border:1px solid #ccc" width="36" height="36">
+            </div>
+        </div>
+        {/if}
+        <br>
+        {if condition="empty($data_list['before_img']) || empty($data_list['after_img']) "}
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
@@ -216,199 +367,96 @@
                 <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
             </div>
         </div>
-            {else/}
-            <br>
-            结果：{$approval_status[$data_list['status']]}<br>
-            意见：{$data_list['mark']}<br>
-            批示时间：{$data_list['update_time']|date='Y-m-d H:i:s',###}<br>
-            {/if}
-            <hr>
-            {eq name="data_list['status']" value="2"}
-            {if condition="($Request.param.atype eq 4) && ($data_list['is_deal'] neq 2)"}
-            <div class="layui-form-item">
-                <label class="layui-form-label">支付结果</label>
-                <div class="layui-input-block">
-                    <input type="radio" name="is_deal" value="1" title="未支付">
-                    <input type="radio" name="is_deal" value="2" title="支付">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">支付备注</label>
-                <div class="layui-input-inline">
-                    <textarea type="text" class="layui-textarea field-deal_mark" name="deal_mark" autocomplete="off" placeholder="请输入备注"></textarea>
-                </div>
-            </div>
-            <br>
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
-                    <input type="hidden" class="field-atype" name="atype" value="{$Request.param.atype}">
-                    <input type="hidden" class="field-class_type" name="class_type" value="{$Request.param.class_type}">
-                    <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
-                    <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
-                </div>
-            </div>
-            {else/}
-            <br>
-            支付结果：{eq name="data_list['is_deal']" value="2"}已支付{else/}未支付{/eq}<br>
-            支付备注：{$data_list['deal_mark']}<br>
-            支付时间：{$data_list['deal_time']}<br>
-            {/if}
-            {/eq}
-        </div>
-    </div>
-    {if condition="($Request.param.class_type eq 8) && ($Request.param.atype eq 5) "}
-    {empty name="$data_list['before_img']"}
-    <div class="layui-form-item">
-        <label class="layui-form-label" >发车前</label>
-        <div class="layui-input-block upload">
-            <button type="button" name="upload" class="layui-btn layui-btn-primary layui-upload" lay-type="image" lay-data="{exts:'{:str_replace(',', '|', config('upload.upload_image_ext'))}', accept:'file'}" id="img1">左前方照片</button>
-            <input type="hidden" class="upload-input field-before_img" name="before_img[]" value="">
-            <img src="" style="display:none;border-radius:5px;border:1px solid #ccc" width="36" height="36">
-        </div>
-        <div class="layui-input-block upload">
-            <button type="button" name="upload" class="layui-btn layui-btn-primary layui-upload" lay-type="image" lay-data="{exts:'{:str_replace(',', '|', config('upload.upload_image_ext'))}', accept:'file'}" id="img2">右前方照片</button>
-            <input type="hidden" class="upload-input field-before_img" name="before_img[]" value="">
-            <img src="" style="display:none;border-radius:5px;border:1px solid #ccc" width="36" height="36">
-        </div>
-        <div class="layui-input-block upload">
-            <button type="button" name="upload" class="layui-btn layui-btn-primary layui-upload" lay-type="image" lay-data="{exts:'{:str_replace(',', '|', config('upload.upload_image_ext'))}', accept:'file'}" id="img3">后面照片</button>
-            <input type="hidden" class="upload-input field-before_img" name="before_img[]" value="">
-            <img src="" style="display:none;border-radius:5px;border:1px solid #ccc" width="36" height="36">
-        </div>
-        <div class="layui-input-block upload">
-            <button type="button" name="upload" class="layui-btn layui-btn-primary layui-upload" lay-type="image" lay-data="{exts:'{:str_replace(',', '|', config('upload.upload_image_ext'))}', accept:'file'}" id="img4">中控照片</button>
-            <input type="hidden" class="upload-input field-before_img" name="before_img[]" value="">
-            <img src="" style="display:none;border-radius:5px;border:1px solid #ccc" width="36" height="36">
-        </div>
-    </div>
-    {/empty}
-    {if condition="!empty($data_list['before_img']) && empty($data_list['after_img']) "}
-    <div class="layui-form-item">
-        <label class="layui-form-label" >回来后</label>
-        <div class="layui-input-block upload">
-            <button type="button" name="upload" class="layui-btn layui-btn-primary layui-upload" lay-type="image" lay-data="{exts:'{:str_replace(',', '|', config('upload.upload_image_ext'))}', accept:'file'}" id="img11">左前方照片</button>
-            <input type="hidden" class="upload-input field-after_img" name="after_img[]" value="">
-            <img src="" style="display:none;border-radius:5px;border:1px solid #ccc" width="36" height="36">
-        </div>
-        <div class="layui-input-block upload">
-            <button type="button" name="upload" class="layui-btn layui-btn-primary layui-upload" lay-type="image" lay-data="{exts:'{:str_replace(',', '|', config('upload.upload_image_ext'))}', accept:'file'}" id="img22">右前方照片</button>
-            <input type="hidden" class="upload-input field-after_img" name="after_img[]" value="">
-            <img src="" style="display:none;border-radius:5px;border:1px solid #ccc" width="36" height="36">
-        </div>
-        <div class="layui-input-block upload">
-            <button type="button" name="upload" class="layui-btn layui-btn-primary layui-upload" lay-type="image" lay-data="{exts:'{:str_replace(',', '|', config('upload.upload_image_ext'))}', accept:'file'}" id="img33">后面照片</button>
-            <input type="hidden" class="upload-input field-after_img" name="after_img[]" value="">
-            <img src="" style="display:none;border-radius:5px;border:1px solid #ccc" width="36" height="36">
-        </div>
-        <div class="layui-input-block upload">
-            <button type="button" name="upload" class="layui-btn layui-btn-primary layui-upload" lay-type="image" lay-data="{exts:'{:str_replace(',', '|', config('upload.upload_image_ext'))}', accept:'file'}" id="img44">中控照片</button>
-            <input type="hidden" class="upload-input field-after_img" name="after_img[]" value="">
-            <img src="" style="display:none;border-radius:5px;border:1px solid #ccc" width="36" height="36">
-        </div>
-    </div>
-    {/if}
-    <br>
-    {if condition="empty($data_list['before_img']) || empty($data_list['after_img']) "}
-    <div class="layui-form-item">
-        <div class="layui-input-block">
-            <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
-            <input type="hidden" class="field-atype" name="atype" value="{$Request.param.atype}">
-            <input type="hidden" class="field-class_type" name="class_type" value="{$Request.param.class_type}">
-            <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
-            <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
-        </div>
-    </div>
-    {/if}
+        {/if}
     {/if}
     {if condition="$Request.param.class_type eq 4"}
-    {notin name="$Request.param.atype" value="3,4,5,6"}
-    <div class="layui-col-md6">
-        <div class="layui-card">
-            <div class="layui-card-header">出差报告</div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">内容<span style="color: red"></span></label>
-                    <div class="layui-input-inline">
-                        <textarea type="text" class="layui-textarea field-mark" name="mark" autocomplete="off" lay-verify="required" placeholder="请输入内容"></textarea>
+        {notin name="$Request.param.atype" value="3,4,5,6"}
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">出差报告</div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">内容<span style="color: red"></span></label>
+                        <div class="layui-input-inline">
+                            <textarea type="text" class="layui-textarea field-mark" name="mark" autocomplete="off" lay-verify="required" placeholder="请输入内容"></textarea>
+                        </div>
+                        <div class="layui-form-mid" style="color: red">*</div>
                     </div>
-                    <div class="layui-form-mid" style="color: red">*</div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">附件说明</label>
-                    <div class="layui-input-inline">
-                        <div class="layui-upload">
-                            <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
-                            <div class="other-div" style="display: none">
-                                <div class="layui-upload-list">
-                                    <table class="layui-table">
-                                        <thead>
-                                        <tr>
-                                            <th>文件名</th>
-                                            <th>大小</th>
-                                            <th>状态</th>
-                                            <th>操作</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="demoList"></tbody>
-                                    </table>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">附件说明</label>
+                        <div class="layui-input-inline">
+                            <div class="layui-upload">
+                                <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
+                                <div class="other-div" style="display: none">
+                                    <div class="layui-upload-list">
+                                        <table class="layui-table">
+                                            <thead>
+                                            <tr>
+                                                <th>文件名</th>
+                                                <th>大小</th>
+                                                <th>状态</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="demoList"></tbody>
+                                        </table>
+                                    </div>
+                                    <button type="button" class="layui-btn layui-btn-danger" id="testListAction">开始上传</button>
+                                    <input class="layui-input field-attachment" type="hidden" name="attachment" value="">
                                 </div>
-                                <button type="button" class="layui-btn layui-btn-danger" id="testListAction">开始上传</button>
-                                <input class="layui-input field-attachment" type="hidden" name="attachment" value="">
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <input type="hidden" class="field-id" name="aid" value="{$Request.param.id}">
-                        <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
-                        <input type="hidden" class="field-class_type" name="class_type" value="{$Request.param.class_type}">
-                        <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
-                        <a href="javascript:history.back()" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
-                    </div>
-                </div>
-        </div>
-    </div>
-    {/notin}
-    <div class="layui-col-md6">
-        <div class="layui-card">
-            <div class="layui-card-header">报告记录</div>
-            <ul class="layui-timeline">
-                {volist name="report_info" id="vo"}
-                <li class="layui-timeline-item">
-                    <i class="layui-icon layui-timeline-axis"></i>
-                    <div class="layui-timeline-content layui-text">
-                        <div class="layui-timeline-title">
-                            <span style="color: red">[{$vo['create_time']}]</span>
-                            <a onclick="open_reply({$vo['id']},{$vo['aid']})" class="layui-btn layui-btn-normal layui-btn-xs">回复</a>
-                            <br>
-                            {$vo['mark']}
-                            <br>
-                            {notempty name="vo['attachment']"}
-                            <ul>
-                                {volist name="vo['attachment']" id="v"}
-                                <li>
-                                    <a target="_blank" href="{$v}">附件{$i}</a>
-                                </li>
-                                {/volist}
-                            </ul>
-                            <br>
-                            {/notempty}
-                            <ul>
-                                {volist name="vo['reply']" id="v"}
-                                <li>
-                                    <span style="color: grey">[{$v['create_time']}回复]</span><br>
-                                    {$v['content']}
-                                </li>
-                                {/volist}
-                            </ul>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <input type="hidden" class="field-id" name="aid" value="{$Request.param.id}">
+                            <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
+                            <input type="hidden" class="field-class_type" name="class_type" value="{$Request.param.class_type}">
+                            <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
+                            <a href="javascript:history.back()" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
                         </div>
                     </div>
-                </li>
-                {/volist}
-            </ul>
+            </div>
         </div>
-    </div>
+        {/notin}
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">报告记录</div>
+                <ul class="layui-timeline">
+                    {volist name="report_info" id="vo"}
+                    <li class="layui-timeline-item">
+                        <i class="layui-icon layui-timeline-axis"></i>
+                        <div class="layui-timeline-content layui-text">
+                            <div class="layui-timeline-title">
+                                <span style="color: red">[{$vo['create_time']}]</span>
+                                <a onclick="open_reply({$vo['id']},{$vo['aid']})" class="layui-btn layui-btn-normal layui-btn-xs">回复</a>
+                                <br>
+                                {$vo['mark']}
+                                <br>
+                                {notempty name="vo['attachment']"}
+                                <ul>
+                                    {volist name="vo['attachment']" id="v"}
+                                    <li>
+                                        <a target="_blank" href="{$v}">附件{$i}</a>
+                                    </li>
+                                    {/volist}
+                                </ul>
+                                <br>
+                                {/notempty}
+                                <ul>
+                                    {volist name="vo['reply']" id="v"}
+                                    <li>
+                                        <span style="color: grey">[{$v['create_time']}回复]</span><br>
+                                        {$v['content']}
+                                    </li>
+                                    {/volist}
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    {/volist}
+                </ul>
+            </div>
+        </div>
     {/if}
 </form>
 {include file="block/layui" /}
