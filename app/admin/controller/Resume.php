@@ -51,6 +51,10 @@ class Resume extends Admin
             if ($data['data']){
                 foreach ($data['data'] as $k=>$v){
                     $data['data'][$k]['remark'] = htmlspecialchars_decode($v['remark']);
+                    if ($v['attachment']){
+                        $t = array_filter(explode(',',$v['attachment']));
+                        $data['data'][$k]['attachment'] = $t[0];
+                    }
                 }
             }
             $data['count'] = ItemModel::where($where)->count('id');
@@ -119,6 +123,10 @@ class Resume extends Admin
     {
         $row = ItemModel::where('id', $id)->find()->toArray();
         $row['remark'] = htmlspecialchars_decode($row['remark']);
+        if ($row['attachment']){
+            $t = array_filter(explode(',',$row['attachment']));
+            $row['attachment'] = $t[0];
+        }
         $this->assign('data_list', $row);
         $this->assign('cat_option',ItemModel::getCat());
         return $this->fetch();

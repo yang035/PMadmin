@@ -6,6 +6,7 @@
             <b>名称：</b>{$data_list['name']}<br>
             <b>手机号码：</b>{$data_list['mobile']}<br>
             <b>内容：</b>{$data_list['remark']}<br>
+            <b>简历：</b><a target='_blank' class='mcolor' href="{$data_list['attachment']}" >附件</a><br>
             <b>更新时间：</b>{$data_list['update_time']}<br>
         </div>
     </div>
