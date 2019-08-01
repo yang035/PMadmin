@@ -20,7 +20,7 @@
                 </div>
             </div>
             <div class="layui-inline">
-                <label class="layui-form-label">名称</label>
+                <label class="layui-form-label">姓名</label>
                 <div class="layui-input-inline">
                     <input type="text" name="name" value="{:input('get.name')}" placeholder="项目名称关键字" autocomplete="off" class="layui-input">
                 </div>
@@ -62,17 +62,19 @@
                 {field: 'cat_id', title: '类别',width:80, templet:function(d){
                         return d.cat.name;
                     }},
-                {field: 'job', title: '面试岗位'},
-                {field: 'name', title: '名称', templet:function(d){
+                {field: 'job', title: '面试岗位',width:100},
+                {field: 'name', title: '姓名',width:100, templet:function(d){
                         return "<a class='mcolor' onclick='read("+d.id+")'>"+d.name+"</a>";
                     }},
-                {field: 'mobile', title: '手机号码'},
-                {field: 'attachment', title: '简历附件', templet:function(d){
+                {field: 'mobile', title: '手机号码',width:120},
+                {field: 'attachment', title: '简历附件',width:90, templet:function(d){
                         return "<a target='_blank' class='mcolor' href='"+d.attachment+"' >附件</a>";
                     }},
                 {field: 'remark', title: '面试备注'},
+                {field: 'user_name', title: '操作员',width:80},
+                {field: 'create_time', title: '添加时间',width:160},
                 // {field: 'status', title: '状态', templet: '#statusTpl'},
-                {title: '操作', templet: '#buttonTpl'}
+                {title: '操作', templet: '#buttonTpl',width:160}
             ]]
         });
     });

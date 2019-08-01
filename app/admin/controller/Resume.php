@@ -7,6 +7,7 @@
  */
 
 namespace app\admin\controller;
+use app\admin\model\AdminUser;
 use app\admin\model\ResumeCat as CatModel;
 use app\admin\model\ResumeItem as ItemModel;
 
@@ -55,6 +56,7 @@ class Resume extends Admin
                         $t = array_filter(explode(',',$v['attachment']));
                         $data['data'][$k]['attachment'] = $t[0];
                     }
+                    $data['data'][$k]['user_name'] = AdminUser::getUserById($v['user_id'])['realname'];
                 }
             }
             $data['count'] = ItemModel::where($where)->count('id');
