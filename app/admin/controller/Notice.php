@@ -114,9 +114,6 @@ class Notice extends Admin
     {
         $row = ItemModel::where('id', $id)->find()->toArray();
         $row['content'] = htmlspecialchars_decode($row['content']);
-        if ($row['attachment']){
-            $row['attachment'] = array_filter(explode(',',$row['attachment']));
-        }
         $this->assign('data_info', $row);
         $this->assign('cat_option',ItemModel::getOption());
         return $this->fetch('read');
