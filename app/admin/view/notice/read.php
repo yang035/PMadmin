@@ -7,6 +7,13 @@
     <div>
         {$data_info['content']}
     </div>
+    <div>
+        {notempty name="data_info['attachment']"}
+        {volist name="data_info['attachment']" id="vo"}
+        <a target='_blank' class='mcolor' href="{$vo}" >附件{$i}</a><br>
+        {/volist}
+        {/notempty}
+    </div>
 </div>
 {include file="block/layui" /}
 <script>
