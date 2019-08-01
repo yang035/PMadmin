@@ -68,7 +68,7 @@
                     }},
                 {field: 'mobile', title: '手机号码'},
                 {field: 'attachment', title: '简历附件', templet:function(d){
-                        return "<a href='"+d.attachment+"' >附件</a>";
+                        return "<a class='mcolor' href='"+d.attachment+"' >附件</a>";
                     }},
                 {field: 'remark', title: '面试备注'},
                 // {field: 'status', title: '状态', templet: '#statusTpl'},
