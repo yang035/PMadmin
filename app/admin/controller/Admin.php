@@ -242,4 +242,26 @@ class Admin extends Controller
     public function scoreConfig(){
         return config('config_score');
     }
+
+    public function setKV(){
+        if ($this->request->isAjax()){
+            $data = $this->request->post();
+            $r = Db::name($data['t'])->where($data['k'],$data['v'])->find();
+            $res = false;
+            switch ($data['k']){
+                case 'mobile':
+                    if (!$r){
+                        $res = Db::name($data['t'])->where('id',$data['id'])->setField($data['k'],$data['v']);
+                    }
+                    break;
+                default:
+                    break;
+            }
+            if ($res){
+                return $this->success('操作成功');
+            }else{
+                return $this->success('操作失败');
+            }
+        }
+    }
 }

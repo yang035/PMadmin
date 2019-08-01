@@ -65,7 +65,7 @@
                     }}
                 ,{field: 'job_item', title: '岗位'}
                 ,{field: 'work_cat', title: '日常工作'}
-                ,{field: 'mobile', title: '手机号码',edit: 'text',}
+                ,{field: 'mobile', title: '手机号码',edit: 'text'}
                 ,{field: 'last_login_time', width: 150, title: '最后登陆时间'}
                 ,{field: 'status', title: '状态', templet: '#statusTpl'}
                 ,{title: '操作', templet: '#buttonTpl'}
@@ -79,6 +79,7 @@
             // layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
                 var open_url = "{:url('setKV')}";
                 $.post(open_url, {
+                    t:'admin_user',
                     id:data.id,
                     k:field,
                     v:value,

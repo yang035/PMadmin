@@ -36,7 +36,7 @@
         <a data-href="{:url('delItem')}" class="layui-btn layui-btn-primary j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>
     </div>
 </div>
-<table id="dataTable" class="layui-table" lay-filter="table1"></table>
+<table id="dataTable" class="layui-table" lay-filter="user_table"></table>
 {include file="block/layui" /}
 <script type="text/html" id="statusTpl">
     <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=resume_item&id={{ d.id }}">
@@ -62,20 +62,43 @@
                 {field: 'cat_id', title: '类别',width:80, templet:function(d){
                         return d.cat.name;
                     }},
-                {field: 'job', title: '面试岗位',width:100},
+                {field: 'job', title: '面试岗位',width:100,edit: 'text'},
                 {field: 'name', title: '姓名',width:100, templet:function(d){
                         return "<a class='mcolor' onclick='read("+d.id+")'>"+d.name+"</a>";
                     }},
-                {field: 'mobile', title: '手机号码',width:120},
+                {field: 'mobile', title: '手机号码',width:120,edit: 'text'},
                 {field: 'attachment', title: '简历附件',width:90, templet:function(d){
                         return "<a target='_blank' class='mcolor' href='"+d.attachment+"' >附件</a>";
                     }},
-                {field: 'remark', title: '面试备注'},
+                {field: 'remark', title: '面试备注',edit: 'text'},
                 {field: 'user_name', title: '操作员',width:80},
                 {field: 'create_time', title: '添加时间',width:160},
                 // {field: 'status', title: '状态', templet: '#statusTpl'},
                 {title: '操作', templet: '#buttonTpl',width:160}
             ]]
+        });
+
+        //监听单元格编辑
+        table.on('edit(user_table)', function(obj){
+            var value = obj.value //得到修改后的值
+                ,data = obj.data //得到所在行所有键值
+                ,field = obj.field; //得到字段
+            // layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+            var open_url = "{:url('setKV')}";
+            $.post(open_url, {
+                t:'resume_item',
+                id:data.id,
+                k:field,
+                v:value,
+            },function(res) {
+                if (res.code == 1) {
+                    layer.msg(res.msg);
+                    location.reload();
+                }else {
+                    layer.msg(res.msg);
+                    location.reload();
+                }
+            });
         });
     });
 
