@@ -48,6 +48,11 @@ class Resume extends Admin
             }
             $where['cid'] = session('admin_user.cid');
             $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->select();
+            if ($data['data']){
+                foreach ($data['data'] as $k=>$v){
+                    $data['data'][$k]['remark'] = htmlspecialchars_decode($v['remark']);
+                }
+            }
             $data['count'] = ItemModel::where($where)->count('id');
             $data['code'] = 0;
             $data['msg'] = '';

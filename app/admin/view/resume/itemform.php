@@ -15,17 +15,23 @@
             </div>
             <div class="layui-form-mid red">*</div>
         </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">面试岗位</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input field-job" name="job" autocomplete="off" placeholder="请输入面试岗位">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">手机号码</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input field-mobile" name="mobile" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" lay-verify="phone" maxlength="11"
+                       autocomplete="off" placeholder="请输入手机号码">
+            </div>
+        </div>
         {:editor(['ckeditor', 'ckeditor2'],'kindeditor')}
         <div class="layui-form-item">
-            <label class="layui-form-label">附件说明</label>
+            <label class="layui-form-label">简历附件</label>
             <div class="layui-input-inline">
-                <!--            <div class="layui-upload">-->
-                <!--                <button type="button" class="layui-btn" id="attachment-upload">选择附件</button>-->
-                <!--                <div class="layui-upload-list">-->
-                <!--                    <img class="layui-upload-file" id="attachment-upload-file">-->
-                <!--                    <p id="attachment-upload-text"></p>-->
-                <!--                </div>-->
-                <!--            </div>-->
                 <div class="layui-upload">
                     <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
                     <div class="other-div" style="display: none">

@@ -59,13 +59,19 @@
             }
             ,cols: [[ //表头
                 {type:'checkbox'},
+                {field: 'cat_id', title: '类别',width:80, templet:function(d){
+                        return d.cat.name;
+                    }},
+                {field: 'job', title: '面试岗位'},
                 {field: 'name', title: '名称', templet:function(d){
                         return "<a class='mcolor' onclick='read("+d.id+")'>"+d.name+"</a>";
                     }},
-                {field: 'cat_id', title: '类别', templet:function(d){
-                        return d.cat.name;
+                {field: 'mobile', title: '手机号码'},
+                {field: 'attachment', title: '简历附件', templet:function(d){
+                        return "<a href='"+d.attachment+"' >附件</a>";
                     }},
-                {field: 'status', title: '状态', templet: '#statusTpl'},
+                {field: 'remark', title: '面试备注'},
+                // {field: 'status', title: '状态', templet: '#statusTpl'},
                 {title: '操作', templet: '#buttonTpl'}
             ]]
         });
