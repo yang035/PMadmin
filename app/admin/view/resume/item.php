@@ -63,13 +63,18 @@
                         return d.cat.name;
                     }},
                 {field: 'job', title: '面试岗位',width:100,edit: 'text'},
-                {field: 'name', title: '姓名',width:100, templet:function(d){
+                {field: 'name', title: '姓名',width:120,edit: 'text',templet:function(d){
                         return "<a class='mcolor' onclick='read("+d.id+")'>"+d.name+"</a>";
                     }},
                 {field: 'mobile', title: '手机号码',width:120,edit: 'text'},
                 {field: 'attachment', title: '简历附件',width:90, templet:function(d){
                         return "<a target='_blank' class='mcolor' href='"+d.attachment+"' >附件</a>";
                     }},
+                {field: 'source', title: '来源',width:80,edit: 'text'},
+                {field: 'resume_time', title: '面试时间',width:150,edit: 'text'},
+                {field: 'is_resume', title: '是否面试',edit: 'text'},
+                {field: 'is_pass', title: '是否通过',edit: 'text'},
+                {field: 'is_duty', title: '是否到岗',edit: 'text'},
                 {field: 'remark', title: '面试备注',edit: 'text'},
                 {field: 'user_name', title: '操作员',width:80},
                 {field: 'create_time', title: '添加时间',width:160},
@@ -93,10 +98,10 @@
             },function(res) {
                 if (res.code == 1) {
                     layer.msg(res.msg);
-                    location.reload();
+                    // location.reload();
                 }else {
                     layer.msg(res.msg);
-                    location.reload();
+                    // location.reload();
                 }
             });
         });

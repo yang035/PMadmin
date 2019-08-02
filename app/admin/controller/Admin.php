@@ -246,17 +246,18 @@ class Admin extends Controller
     public function setKV(){
         if ($this->request->isAjax()){
             $data = $this->request->post();
-            $r = Db::name($data['t'])->where($data['k'],$data['v'])->find();
-            $res = false;
-            switch ($data['k']){
-                case 'mobile':
-                    if (!$r){
-                        $res = Db::name($data['t'])->where('id',$data['id'])->setField($data['k'],$data['v']);
-                    }
-                    break;
-                default:
-                    break;
-            }
+//            $r = Db::name($data['t'])->where($data['k'],$data['v'])->find();
+//            $res = false;
+//            switch ($data['k']){
+//                case 'mobile':
+//                    if (!$r){
+//                        $res = Db::name($data['t'])->where('id',$data['id'])->setField($data['k'],$data['v']);
+//                    }
+//                    break;
+//                default:
+//                    break;
+//            }
+            $res = Db::name($data['t'])->where('id',$data['id'])->setField($data['k'],$data['v']);
             if ($res){
                 return $this->success('操作成功');
             }else{

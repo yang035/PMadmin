@@ -28,7 +28,6 @@
                        autocomplete="off" placeholder="请输入手机号码">
             </div>
         </div>
-        {:editor(['ckeditor', 'ckeditor2'],'kindeditor')}
         <div class="layui-form-item">
             <label class="layui-form-label">简历附件</label>
             <div class="layui-input-inline">
@@ -55,9 +54,39 @@
             </div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label">招聘来源</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input field-source" name="source" autocomplete="off" placeholder="请输入招聘来源">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">面试时间</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input field-resume_time" name="resume_time" autocomplete="off" placeholder="请输入面试时间">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否到场</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input field-is_resume" name="is_resume" autocomplete="off" placeholder="请输入是或否">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否通过</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input field-is_pass" name="is_pass" autocomplete="off" placeholder="请输入是或否">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否到岗</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input field-is_duty" name="is_duty" autocomplete="off" placeholder="请输入是或否">
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">备注</label>
-            <div class="layui-input-block">
-                <textarea id="ckeditor" name="remark" class="field-remark"></textarea>
+            <div class="layui-input-inline">
+                <textarea  class="layui-textarea field-remark" name="remark" lay-verify="" autocomplete="off" placeholder="备注说明"></textarea>
             </div>
         </div>
         <div class="layui-form-item">
