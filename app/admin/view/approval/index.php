@@ -62,6 +62,7 @@
             <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
             <th>姓名</th>
             <th>类型</th>
+            <th>归属于</th>
             <th>时间段</th>
             <th>项目名称</th>
             <th>金额(元)</th>
@@ -82,6 +83,7 @@
                 <strong class="mcolor">{$vo['user_id']}</strong>
             </td>
             <td class="font12">{$panel_type[$vo['class_type']]['title']}</td>
+            <td class="font12">{$vo['leave_type']}</td>
             <td class="font12">{$vo['start_time']} ~ {$vo['end_time']}</td>
             <td class="font12">{$vo['project_name']}</td>
             <td class="font12">{$vo['money']}</td>
