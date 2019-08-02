@@ -879,7 +879,7 @@ function user_array($val, $old_val = '', $s1 = ',', $s2 = ',')
         }
         return $data;
     }
-    return '';
+    return [];
 }
 
 function user_array1($val, $old_val = '', $s1 = ',', $s2 = ',')
@@ -898,7 +898,7 @@ function user_array1($val, $old_val = '', $s1 = ',', $s2 = ',')
         }
         return $data;
     }
-    return '';
+    return [];
 }
 
 function user_array2($data)
@@ -919,7 +919,7 @@ function user_array2($data)
 //        }
         return $data;
     }
-    return '';
+    return [];
 }
 
 /**

@@ -360,11 +360,17 @@ class Project extends Admin
             } else {
                 $data['code'] = $this->getCode($data['code'], $data['pid']);
             }
-
-            $data['manager_user'] = json_encode(user_array($data['manager_user']));
-            $data['deal_user'] = json_encode(user_array($data['deal_user']));
-            $data['send_user'] = json_encode(user_array1($data['send_user']));
-            $data['copy_user'] = json_encode(user_array($data['copy_user']));
+            $parent_u = [
+                'manager_user'=> array_filter(explode(',',$data['manager_user'])),
+                'deal_user'=> array_filter(explode(',',$data['deal_user'])),
+                'send_user'=> array_filter(explode(',',$data['send_user'])),
+                'copy_user'=> array_filter(explode(',',$data['copy_user'])),
+            ];
+//print_r($parent_u);exit();
+            $data['manager_user'] = json_encode(user_array($data['manager_user']),JSON_FORCE_OBJECT);
+            $data['deal_user'] = json_encode(user_array($data['deal_user']),JSON_FORCE_OBJECT);
+            $data['send_user'] = json_encode(user_array1($data['send_user']),JSON_FORCE_OBJECT);
+            $data['copy_user'] = json_encode(user_array($data['copy_user']),JSON_FORCE_OBJECT);
             $data['subject_id'] = empty($p_res['pid']) ? $data['id'] : $p_res['subject_id'];
 
             unset($data['id'], $data['pname'], $data['max_score']);
@@ -383,14 +389,17 @@ class Project extends Admin
                 $w = [
                     'id' => ['in',$ids]
                 ];
-                $r = ProjectModel::where($w)->select();
-                if ($r){
-                    foreach ($r as $k=>$v){
-                        $u = [
-                            'end_time' =>$data['end_time'],
-                            'update_time'=>time(),
-                        ];
-                        ProjectModel::where('id',$v['id'])->update($u);
+                $u = [
+                    'end_time' =>$data['end_time'],
+                    'update_time'=>time(),
+                ];
+                ProjectModel::where($w)->update($u);
+                foreach ($parent_u as $k=>$v){
+                    if (!empty($v)){
+                        foreach ($v as $vv){
+                            $sql = "UPDATE tb_project SET {$k} = JSON_SET({$k}, '$.\"{$vv}\"', 'a') WHERE id in ({$ids})";
+                            $res = ProjectModel::execute($sql);
+                        }
                     }
                 }
                 Db::commit();
@@ -522,21 +531,53 @@ class Project extends Admin
                 $data['code'] = $this->getCode($data['code'], $data['pid']);
             }
 
+            $parent_u = [
+                'manager_user'=> array_filter(explode(',',$data['manager_user'])),
+                'deal_user'=> array_filter(explode(',',$data['deal_user'])),
+                'send_user'=> array_filter(explode(',',$data['send_user'])),
+                'copy_user'=> array_filter(explode(',',$data['copy_user'])),
+            ];
+
             unset($data['pname'], $data['max_score']);
             $data['user_id'] = session('admin_user.uid');
-            $data['manager_user'] = json_encode(user_array($data['manager_user']));
-            $data['deal_user'] = json_encode(user_array($data['deal_user']));
-            $data['send_user'] = json_encode(user_array1($data['send_user']));
-            $data['copy_user'] = json_encode(user_array($data['copy_user']));
+            $data['manager_user'] = json_encode(user_array($data['manager_user']),JSON_FORCE_OBJECT);
+            $data['deal_user'] = json_encode(user_array($data['deal_user']),JSON_FORCE_OBJECT);
+            $data['send_user'] = json_encode(user_array1($data['send_user']),JSON_FORCE_OBJECT);
+            $data['copy_user'] = json_encode(user_array($data['copy_user']),JSON_FORCE_OBJECT);
             // 验证
             $result = $this->validate($data, 'Project');
             if ($result !== true) {
                 return $this->error($result);
             }
-            if (!ProjectModel::update($data)) {
-                return $this->error('修改失败！');
+            Db::startTrans();
+            try{
+                $res = ProjectModel::update($data);
+                $ids = str_replace('p',',',substr(stristr($data['code'],'p'),1,-1));
+//                $w = [
+//                    'id' => ['in',$ids]
+//                ];
+//                $u = [
+//                    'end_time' =>$data['end_time'],
+//                    'update_time'=>time(),
+//                ];
+//                ProjectModel::where($w)->update($u);
+                foreach ($parent_u as $k=>$v){
+                    if (!empty($v)){
+                        foreach ($v as $vv){
+                            $sql = "UPDATE tb_project SET {$k} = JSON_SET({$k}, '$.\"{$vv}\"', 'a') WHERE id in ({$ids})";
+                            $res = ProjectModel::execute($sql);
+                        }
+                    }
+                }
+                Db::commit();
+            }catch (\Exception $e){
+                Db::rollback();
             }
-            return $this->success("修改成功{$this->score_value}", url('index'));
+
+            if (!$res) {
+                return $this->error('添加失败！');
+            }
+            return $this->success("操作成功{$this->score_value}", url('index'));
         }
 
 //        $row['time_long'] = floor((strtotime($row['end_time'])-strtotime($row['start_time']))/86400);
