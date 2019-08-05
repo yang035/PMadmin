@@ -181,7 +181,7 @@ class Project extends Admin
                                 if ($content){
                                     foreach ($content as $kk=>$vv){
                                         $content[$kk]['flag'] = $vv['flag'] ? '有' : '无';
-                                        $content[$kk]['person_user'] = $this->deal_data(json_encode(user_array($vv['person_user'])));
+                                        $content[$kk]['person_user'] = $this->deal_data(user_array($vv['person_user']));
                                         if (!isset($vv['isfinish'])){
                                             $content[$kk]['isfinish'] = 0;
                                         }
@@ -367,10 +367,10 @@ class Project extends Admin
                 'copy_user'=> array_filter(explode(',',$data['copy_user'])),
             ];
 //print_r($parent_u);exit();
-            $data['manager_user'] = json_encode(user_array($data['manager_user']),JSON_FORCE_OBJECT);
-            $data['deal_user'] = json_encode(user_array($data['deal_user']),JSON_FORCE_OBJECT);
-            $data['send_user'] = json_encode(user_array1($data['send_user']),JSON_FORCE_OBJECT);
-            $data['copy_user'] = json_encode(user_array($data['copy_user']),JSON_FORCE_OBJECT);
+            $data['manager_user'] = user_array($data['manager_user']);
+            $data['deal_user'] = user_array($data['deal_user']);
+            $data['send_user'] = user_array1($data['send_user']);
+            $data['copy_user'] = user_array($data['copy_user']);
             $data['subject_id'] = empty($p_res['pid']) ? $data['id'] : $p_res['subject_id'];
 
             unset($data['id'], $data['pname'], $data['max_score']);
@@ -464,10 +464,10 @@ class Project extends Admin
                 $data['code'] = $this->getCode($data['code'], $data['pid']);
             }
 
-            $data['manager_user'] = json_encode(user_array($data['manager_user']));
-            $data['deal_user'] = json_encode(user_array($data['deal_user']));
-            $data['send_user'] = json_encode(user_array($data['send_user']));
-            $data['copy_user'] = json_encode(user_array($data['copy_user']));
+            $data['manager_user'] = user_array($data['manager_user']);
+            $data['deal_user'] = user_array($data['deal_user']);
+            $data['send_user'] = user_array($data['send_user']);
+            $data['copy_user'] = user_array($data['copy_user']);
 
             unset($data['id'], $data['pname'], $data['max_score']);
             $data['user_id'] = session('admin_user.uid');
@@ -540,10 +540,10 @@ class Project extends Admin
 
             unset($data['pname'], $data['max_score']);
             $data['user_id'] = session('admin_user.uid');
-            $data['manager_user'] = json_encode(user_array($data['manager_user']),JSON_FORCE_OBJECT);
-            $data['deal_user'] = json_encode(user_array($data['deal_user']),JSON_FORCE_OBJECT);
-            $data['send_user'] = json_encode(user_array1($data['send_user']),JSON_FORCE_OBJECT);
-            $data['copy_user'] = json_encode(user_array($data['copy_user']),JSON_FORCE_OBJECT);
+            $data['manager_user'] = user_array($data['manager_user']);
+            $data['deal_user'] = user_array($data['deal_user']);
+            $data['send_user'] = user_array1($data['send_user']);
+            $data['copy_user'] = user_array($data['copy_user']);
             // 验证
             $result = $this->validate($data, 'Project');
             if ($result !== true) {
@@ -951,7 +951,7 @@ class Project extends Admin
                                     if ($content){
                                         foreach ($content as $kk=>$vv){
                                             $content[$kk]['flag'] = $vv['flag'] ? '有' : '无';
-                                            $content[$kk]['person_user'] = $this->deal_data(json_encode(user_array($vv['person_user'])));
+                                            $content[$kk]['person_user'] = $this->deal_data(user_array($vv['person_user']));
                                             if (!isset($vv['isfinish'])){
                                                 $content[$kk]['isfinish'] = 0;
                                             }
@@ -1237,7 +1237,7 @@ class Project extends Admin
                             if ($content){
                                 foreach ($content as $kk=>$vv){
                                     $content[$kk]['flag'] = $vv['flag'] ? '有' : '无';
-                                    $content[$kk]['person_user'] = $this->deal_data(json_encode(user_array($vv['person_user'])));
+                                    $content[$kk]['person_user'] = $this->deal_data(user_array($vv['person_user']));
                                     if (!isset($vv['isfinish'])){
                                         $content[$kk]['isfinish'] = 0;
                                     }
@@ -1694,7 +1694,7 @@ class Project extends Admin
                 if ($content){
                     foreach ($content as $key=>$val){
                         $content[$key]['flag_name'] = $val['flag'] ? '有' : '无';
-                        $content[$key]['person_select_id'] = $this->deal_data(json_encode(user_array($val['person_user'])));
+                        $content[$key]['person_select_id'] = $this->deal_data(user_array($val['person_user']));
                     }
                 }
                 $check_log[$k]['content'] = $content;

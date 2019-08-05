@@ -875,11 +875,11 @@ function user_array($val, $old_val = '', $s1 = ',', $s2 = ',')
         if (!empty($old_val)) {
             $old_val = json_decode($old_val, true);
             $new = $old_val + $data;//数字索引相加合并数组，注意顺序，保证老值不被替换
-            return $new;
+            return json_encode($new,JSON_FORCE_OBJECT);
         }
-        return $data;
+        return json_encode($data,JSON_FORCE_OBJECT);
     }
-    return [];
+    return json_encode([],JSON_FORCE_OBJECT);
 }
 
 function user_array1($val, $old_val = '', $s1 = ',', $s2 = ',')
@@ -894,11 +894,11 @@ function user_array1($val, $old_val = '', $s1 = ',', $s2 = ',')
         if (!empty($old_val)) {
             $old_val = json_decode($old_val, true);
             $new = $old_val + $data;//数字索引相加合并数组，注意顺序，保证老值不被替换
-            return $new;
+            return json_encode($new,JSON_FORCE_OBJECT);
         }
-        return $data;
+        return json_encode($data,JSON_FORCE_OBJECT);
     }
-    return [];
+    return json_encode([],JSON_FORCE_OBJECT);
 }
 
 function user_array2($data)
@@ -915,11 +915,11 @@ function user_array2($data)
 //        if (!empty($old_val)) {
 //            $old_val = json_decode($old_val, true);
 //            $new = $old_val + $data;//数字索引相加合并数组，注意顺序，保证老值不被替换
-//            return $new;
+//            return json_encode($new,JSON_FORCE_OBJECT);
 //        }
-        return $data;
+        return json_encode($data,JSON_FORCE_OBJECT);
     }
-    return [];
+    return json_encode([],JSON_FORCE_OBJECT);
 }
 
 /**

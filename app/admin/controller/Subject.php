@@ -93,10 +93,10 @@ class Subject extends Admin
     public function deal_major($big_major_str,$small_major_str){
         if (empty($big_major_str[0])){
             return [
-                'big_major'=>json_encode([]),
-                'small_major'=>json_encode([]),
-                'big_major_deal'=>json_encode([]),
-                'small_major_deal'=>json_encode([]),
+                'big_major'=>json_encode([],JSON_FORCE_OBJECT),
+                'small_major'=>json_encode([],JSON_FORCE_OBJECT),
+                'big_major_deal'=>json_encode([],JSON_FORCE_OBJECT),
+                'small_major_deal'=>json_encode([],JSON_FORCE_OBJECT),
             ];
         }
         //计算比例
@@ -380,9 +380,9 @@ class Subject extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
 
-            $data['contract_b_user'] = json_encode(user_array($data['contract_b_user']));
-            $data['finance_b_user'] = json_encode(user_array($data['finance_b_user']));
-            $data['subject_b_user'] = json_encode(user_array($data['subject_b_user']));
+            $data['contract_b_user'] = user_array($data['contract_b_user']);
+            $data['finance_b_user'] = user_array($data['finance_b_user']);
+            $data['subject_b_user'] = user_array($data['subject_b_user']);
 
             if (!ItemModel::update($data)) {
                 return $this->error('操作失败');
@@ -411,9 +411,9 @@ class Subject extends Admin
                     continue;
                 }
                 if ($k == 'send_user'){
-                    $data[$k] = json_encode(user_array1($v));
+                    $data[$k] = user_array1($v);
                 }else{
-                    $data[$k] = json_encode(user_array($v));
+                    $data[$k] = user_array($v);
                 }
 
             }

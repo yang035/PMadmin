@@ -105,8 +105,8 @@ class Approval extends Admin
         $chain_sub = array_slice($chain_arr,0,2);
         array_push($chain_sub,$tmp);
         $new_arr = array_filter($chain_sub);
-//        print_r(json_encode(user_array2(array_reverse($new_arr))));
-        $row['manager_user'] = json_encode(user_array2(array_reverse($new_arr)));
+//        print_r(user_array2(array_reverse($new_arr)));
+        $row['manager_user'] = user_array2(array_reverse($new_arr));
         return $row;
     }
 
@@ -411,7 +411,7 @@ class Approval extends Admin
                     'time_long' => $data['time_long'],
                     'user_id' => session('admin_user.uid'),
                     'send_user' => json_encode($send_user2),
-                    'copy_user' => json_encode(user_array($data['copy_user'])),
+                    'copy_user' => user_array($data['copy_user']),
                 ];
 
                 $res = ApprovalModel::create($approve);
@@ -486,7 +486,7 @@ class Approval extends Admin
                     'time_long' => $data['time_long'],
                     'user_id' => session('admin_user.uid'),
                     'send_user' => json_encode($send_user2),
-                    'copy_user' => json_encode(user_array($data['copy_user'])),
+                    'copy_user' => user_array($data['copy_user']),
                 ];
                 $res = ApprovalModel::create($approve);
 
@@ -566,7 +566,7 @@ class Approval extends Admin
                     'time_long' => $data['time_long'],
                     'user_id' => session('admin_user.uid'),
                     'send_user' => json_encode($send_user2),
-                    'copy_user' => json_encode(user_array($data['copy_user'])),
+                    'copy_user' => user_array($data['copy_user']),
                 ];
                 $res = ApprovalModel::create($approve);
 
@@ -637,9 +637,9 @@ class Approval extends Admin
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
                     'user_id' => session('admin_user.uid'),
-                    'fellow_user' => json_encode(user_array($data['fellow_user'])),
+                    'fellow_user' => user_array($data['fellow_user']),
                     'send_user' => json_encode($send_user2),
-                    'copy_user' => json_encode(user_array($data['copy_user'])),
+                    'copy_user' => user_array($data['copy_user']),
                 ];
                 $res = ApprovalModel::create($approve);
 
@@ -705,9 +705,9 @@ class Approval extends Admin
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
                     'user_id' => session('admin_user.uid'),
-//                    'send_user' => json_encode(user_array($data['send_user'])),
+//                    'send_user' => user_array($data['send_user']),
                     'send_user' => json_encode($send_user2),
-                    'copy_user' => json_encode(user_array($data['copy_user'])),
+                    'copy_user' => user_array($data['copy_user']),
                 ];
                 $res = ApprovalModel::create($approve);
 
@@ -790,9 +790,9 @@ class Approval extends Admin
                     'end_time' => $b,
                     'time_long' => $data['time_long'],
                     'user_id' => session('admin_user.uid'),
-//                    'send_user' => json_encode(user_array($data['send_user'])),
+//                    'send_user' => user_array($data['send_user']),
                     'send_user' => json_encode($send_user2),
-                    'copy_user' => json_encode(user_array($data['copy_user'])),
+                    'copy_user' => user_array($data['copy_user']),
                 ];
                 $res = ApprovalModel::create($approve);
 
@@ -855,9 +855,9 @@ class Approval extends Admin
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
                     'user_id' => session('admin_user.uid'),
-                    'fellow_user' => json_encode(user_array($data['fellow_user'])),
-                    'send_user' => json_encode(user_array($data['send_user'])),
-                    'copy_user' => json_encode(user_array($data['copy_user'])),
+                    'fellow_user' => user_array($data['fellow_user']),
+                    'send_user' => user_array($data['send_user']),
+                    'copy_user' => user_array($data['copy_user']),
                 ];
                 $res = ApprovalModel::create($approve);
                 $leave = [
@@ -907,9 +907,9 @@ class Approval extends Admin
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
                     'user_id' => session('admin_user.uid'),
-                    'deal_user' => json_encode(user_array($data['deal_user'])),
-                    'send_user' => json_encode(user_array($data['send_user'])),
-                    'copy_user' => json_encode(user_array($data['copy_user'])),
+                    'deal_user' => user_array($data['deal_user']),
+                    'send_user' => user_array($data['send_user']),
+                    'copy_user' => user_array($data['copy_user']),
                 ];
                 $res = ApprovalModel::create($approve);
                 $leave = [
@@ -980,8 +980,8 @@ class Approval extends Admin
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
                     'user_id' => session('admin_user.uid'),
-                    'send_user' => json_encode(user_array($data['send_user'])),
-                    'copy_user' => json_encode(user_array($data['copy_user'])),
+                    'send_user' => user_array($data['send_user']),
+                    'copy_user' => user_array($data['copy_user']),
                 ];
                 $res = ApprovalModel::create($approve);
                 $leave = [
@@ -1035,8 +1035,8 @@ class Approval extends Admin
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
                     'user_id' => session('admin_user.uid'),
-                    'send_user' => json_encode(user_array($data['send_user'])),
-                    'copy_user' => json_encode(user_array($data['copy_user'])),
+                    'send_user' => user_array($data['send_user']),
+                    'copy_user' => user_array($data['copy_user']),
                 ];
                 $res = ApprovalModel::create($approve);
                 $leave = [
@@ -1095,8 +1095,8 @@ class Approval extends Admin
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
                     'user_id' => session('admin_user.uid'),
-                    'send_user' => json_encode(user_array($data['send_user'])),
-                    'copy_user' => json_encode(user_array($data['copy_user'])),
+                    'send_user' => user_array($data['send_user']),
+                    'copy_user' => user_array($data['copy_user']),
                 ];
                 $res = ApprovalModel::create($approve);
                 $leave = [
@@ -1156,9 +1156,9 @@ class Approval extends Admin
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
                     'user_id' => session('admin_user.uid'),
-                    'deal_user' => json_encode(user_array($data['deal_user'])),
-                    'send_user' => json_encode(user_array($data['send_user'])),
-                    'copy_user' => json_encode(user_array($data['copy_user'])),
+                    'deal_user' => user_array($data['deal_user']),
+                    'send_user' => user_array($data['send_user']),
+                    'copy_user' => user_array($data['copy_user']),
                 ];
                 $res = ApprovalModel::create($approve);
                 $leave = [
@@ -1301,8 +1301,8 @@ class Approval extends Admin
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
                     'user_id' => session('admin_user.uid'),
-                    'send_user' => json_encode(user_array($data['send_user'])),
-                    'copy_user' => json_encode(user_array($data['copy_user'])),
+                    'send_user' => user_array($data['send_user']),
+                    'copy_user' => user_array($data['copy_user']),
                 ];
 
                 $res = ApprovalModel::create($approve);

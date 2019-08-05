@@ -75,8 +75,8 @@ class AssetPerson extends Admin
 
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
-            $data['manager_user'] = json_encode(user_array($data['manager_user']));
-            $data['deal_user'] = json_encode(user_array($data['deal_user']));
+            $data['manager_user'] = user_array($data['manager_user']);
+            $data['deal_user'] = user_array($data['deal_user']);
             unset($data['id']);
             // 验证
             $result = $this->validate($data, 'AssetPerson');
@@ -99,8 +99,8 @@ class AssetPerson extends Admin
 
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
-            $data['manager_user'] = json_encode(user_array($data['manager_user']));
-            $data['deal_user'] = json_encode(user_array($data['deal_user']));
+            $data['manager_user'] = user_array($data['manager_user']);
+            $data['deal_user'] = user_array($data['deal_user']);
             // 验证
             $result = $this->validate($data, 'AssetPerson');
             if($result !== true) {

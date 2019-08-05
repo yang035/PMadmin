@@ -121,8 +121,8 @@ class Asset extends Admin
             $tmp = $tmp1 =[];
             $tmp1['cid'] = $data['cid'] = session('admin_user.cid');
             $tmp1['user_id'] = session('admin_user.uid');
-            $tmp1['manager_user'] = json_encode(user_array($data['manager_user']));
-            $tmp1['deal_user'] = json_encode(user_array($data['deal_user']));
+            $tmp1['manager_user'] = user_array($data['manager_user']);
+            $tmp1['deal_user'] = user_array($data['deal_user']);
             $tmp1['create_time'] = time();
             $tmp1['update_time'] = time();
             // 验证
@@ -167,8 +167,8 @@ class Asset extends Admin
 
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
-            $data['manager_user'] = json_encode(user_array($data['manager_user']));
-            $data['deal_user'] = json_encode(user_array($data['deal_user']));
+            $data['manager_user'] = user_array($data['manager_user']);
+            $data['deal_user'] = user_array($data['deal_user']);
             unset($data['title']);
             // 验证
             $result = $this->validate($data, 'AssetItem');

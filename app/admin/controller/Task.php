@@ -152,10 +152,10 @@ class Task extends Admin
             }else{
                 $data['code'] = $this->getCode($data['code'],$data['pid']);
             }
-            $data['manager_user'] = json_encode(user_array($data['manager_user']));
-            $data['deal_user'] = json_encode(user_array($data['deal_user']));
-            $data['send_user'] = json_encode(user_array1($data['send_user']));
-            $data['copy_user'] = json_encode(user_array($data['copy_user']));
+            $data['manager_user'] = user_array($data['manager_user']);
+            $data['deal_user'] = user_array($data['deal_user']);
+            $data['send_user'] = user_array1($data['send_user']);
+            $data['copy_user'] = user_array($data['copy_user']);
             $data['t_type'] = 2;
 
             unset($data['id'],$data['pname'],$data['max_score']);
@@ -216,10 +216,10 @@ class Task extends Admin
             }
             unset($data['pname'],$data['max_score']);
             $data['user_id'] = session('admin_user.uid');
-            $data['manager_user'] = json_encode(user_array($data['manager_user']));
-            $data['deal_user'] = json_encode(user_array($data['deal_user']));
-            $data['send_user'] = json_encode(user_array($data['send_user']));
-            $data['copy_user'] = json_encode(user_array($data['copy_user']));
+            $data['manager_user'] = user_array($data['manager_user']);
+            $data['deal_user'] = user_array($data['deal_user']);
+            $data['send_user'] = user_array($data['send_user']);
+            $data['copy_user'] = user_array($data['copy_user']);
             // 验证
             $result = $this->validate($data, 'Project');
             if($result !== true) {

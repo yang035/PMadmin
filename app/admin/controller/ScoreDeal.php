@@ -171,9 +171,9 @@ class ScoreDeal extends Admin
 
             $p['cid'] = $data['cid'] = session('admin_user.cid');
             $p['user_id'] = session('admin_user.uid');
-            $p['score_user'] = json_encode(user_array($data['score_user']));
-            $p['send_user'] = json_encode(user_array($data['send_user']));
-            $p['copy_user'] = json_encode(user_array($data['copy_user']));
+            $p['score_user'] = user_array($data['score_user']);
+            $p['send_user'] = user_array($data['send_user']);
+            $p['copy_user'] = user_array($data['copy_user']);
             $p['create_time'] = time();
             $p['update_time'] = time();
             // 验证

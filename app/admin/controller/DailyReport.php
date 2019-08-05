@@ -220,8 +220,8 @@ class DailyReport extends Admin
             $ins_data['tips'] = json_encode(array_values(array_filter($data['tips'])));
             $ins_data['attachment'] = explode(',',$data['attachment']);
             $ins_data['attachment'] = json_encode(array_values(array_filter($ins_data['attachment'])));
-            $ins_data['send_user'] = json_encode(user_array($data['send_user']));
-            $ins_data['copy_user'] = json_encode(user_array($data['copy_user']));
+            $ins_data['send_user'] = user_array($data['send_user']);
+            $ins_data['copy_user'] = user_array($data['copy_user']);
             $ins_data['cid'] = $data['cid']= session('admin_user.cid');
             $ins_data['user_id'] = session('admin_user.uid');
             // 验证
