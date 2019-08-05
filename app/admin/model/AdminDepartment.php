@@ -14,14 +14,20 @@ class AdminDepartment extends Model
 
     public static function index($cid = 1)
     {
-        $where = ['cid' => $cid];
+        $where = [
+            'cid' => $cid,
+            'status'=>1,
+        ];
         $result = self::where($where)->select();
         return $result;
     }
 
     public static function getDepUser($cid = 1,$path=0)
     {
-        $where['cid'] = $cid;
+        $where = [
+            'cid' => $cid,
+            'status'=>1,
+        ];
         if ($path){
             $where['pid'] = ['in',session('admin_user.path')];
         }
