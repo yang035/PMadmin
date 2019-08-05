@@ -119,11 +119,11 @@ class UploadFile extends Model
          }
 
         $data['thumb'] = [];
+        $image = Image::open('.'.$data['file']);
         if ($type == 'image') {
             // 水印
             if ($water != 'no') {
                 if (!empty($water)) {// 传参优先
-                    $image = \think\Image::open('.'.$data['file']);
                     if ($water == 'text') {
                         if (is_file('.'.config('upload.text_watermark_font'))) {
                             $image->text(config('upload.text_watermark_content'), '.'.config('upload.text_watermark_font'), config('upload.text_watermark_size'), config('upload.text_watermark_color'))
@@ -136,7 +136,6 @@ class UploadFile extends Model
                         }
                     }
                 } else if (config('upload.image_watermark') == 1) {// 未传参，图片水印优先[开启图片水印]
-                    $image = \think\Image::open('.'.$data['file']);
                     if (is_file('.'.config('upload.image_watermark_pic'))) {
                         $image->water('.'.config('upload.image_watermark_pic'), config('upload.image_watermark_location'), config('upload.image_watermark_opacity'))
                         ->save('.'.$data['file']); 
@@ -155,7 +154,6 @@ class UploadFile extends Model
                     $thumb_type = config('upload.thumb_type');
                 }
                 if (!empty($thumb) && strpos($thumb, 'x')) {// 传参优先
-                    $image = \think\Image::open('.'.$data['file']);
                     // 支持多种尺寸的缩略图
                     $thumbs = explode(';', $thumb);
                     foreach ($thumbs as $k => $v) {
@@ -177,7 +175,6 @@ class UploadFile extends Model
                         $file_count++;
                     }
                 } else if (!empty(config('upload.thumb_size'))) {
-                    $image = \think\Image::open('.'.$data['file']);
                     // 支持多种尺寸的缩略图
                     $thumbs = explode(';', config('upload.thumb_size'));
                     foreach ($thumbs as $k => $v) {
