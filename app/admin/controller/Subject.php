@@ -58,7 +58,8 @@ class Subject extends Admin
             }
             $p_status = config('other.s_status');
             $where['cid'] = session('admin_user.cid');
-            $data['data'] = ItemModel::with('cat')->where($where)->page($page)->order('id desc')->limit($limit)->select();
+            $order = 'status desc,id desc';
+            $data['data'] = ItemModel::with('cat')->where($where)->page($page)->order($order)->limit($limit)->select();
 //            $carType = config('other.car_color');
             if ($data['data']){
                 foreach ($data['data'] as $k=>$v){

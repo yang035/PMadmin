@@ -77,7 +77,7 @@
                 {field: 's_status', title: '项目状态', templet:function(d){
                         return d.s_status;
                     }},
-                // {field: 'status', title: '状态', templet: '#statusTpl'},
+                {field: 'status', title: '状态', templet: '#statusTpl'},
                 {title: '操作', templet: '#buttonTpl',width:500}
             ]]
         });
