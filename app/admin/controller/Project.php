@@ -1160,7 +1160,7 @@ class Project extends Admin
         $row['deal_user_id'] = $this->deal_data($row['deal_user']);
         $row['copy_user_id'] = $this->deal_data($row['copy_user']);
         $row['send_user_id'] = $this->deal_data($row['send_user']);
-        $row['user_id'] = AdminUser::getUserById($row['user_id'])['realname'];
+        $row['user_id'] = AdminUser::getUserById($row['user_id'])['nick'];
         if ($row){
             if (!empty($row['attachment'])){
                 $attachment = explode(',',$row['attachment']);
@@ -1224,7 +1224,7 @@ class Project extends Admin
                 }else{
                     $report[$k]['span'] = '';
                 }
-                $report_user = AdminUser::getUserById($v['user_id'])['realname'];
+                $report_user = AdminUser::getUserById($v['user_id'])['nick'];
                 $report[$k]['real_name'] = !empty($report_user) ? $report_user : '';
                 $report[$k]['check_catname'] = ItemModel::getCat()[$v['check_cat']];
                 if (empty($row['child'])){
@@ -1247,7 +1247,7 @@ class Project extends Admin
                                 }
                             }
                             $reply[$key]['content'] = $content;
-                            $reply[$key]['user_name'] = AdminUser::getUserById($val['user_id'])['realname'];
+                            $reply[$key]['user_name'] = AdminUser::getUserById($val['user_id'])['nick'];
                         }
                     }
                     $report[$k]['reply'] = $reply;
