@@ -4,51 +4,50 @@
         width: auto;
     }
 </style>
-<div class="page-toolbar">
-    <div class="page-filter">
-        <form class="layui-form layui-form-pane" action="{:url()}" method="get" id="search_form">
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">真实姓名</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="realname" value="{:input('get.realname')}" placeholder="真实姓名" autocomplete="off" class="layui-input">
-                    </div>
+<div>
+    <form class="layui-form layui-form-pane" action="{:url()}" method="get" id="search_form">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">真实姓名</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="realname" value="{:input('get.realname')}" placeholder="真实姓名" autocomplete="off" class="layui-input">
                 </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">选择项目</label>
-                    <div class="layui-input-inline box box1">
-                    </div>
-                    <input id="project_name" type="hidden" name="project_name" value="{$Request.param.project_name}">
-                    <input id="project_id" type="hidden" name="project_id" value="{$Request.param.project_id}">
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">选择项目</label>
+                <div class="layui-input-inline box box1">
                 </div>
+                <input id="project_name" type="hidden" name="project_name" value="{$Request.param.project_name}">
+                <input id="project_id" type="hidden" name="project_id" value="{$Request.param.project_id}">
+            </div>
 <!--                <div class="layui-inline">-->
 <!--                    <label class="layui-form-label">任务代码</label>-->
 <!--                    <div class="layui-input-inline">-->
 <!--                        <input type="text" name="project_code" value="{:input('get.project_code')}" placeholder="任务代码" autocomplete="off" class="layui-input">-->
 <!--                    </div>-->
 <!--                </div>-->
-                <div class="layui-inline">
-                    <label class="layui-form-label">日期范围</label>
-                    <div class="layui-input-inline">
-                        <input type="text" class="layui-input" id="test2" name="search_date" placeholder="选择日期" readonly value="{$d|default=''}">
-                    </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">日期范围</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="test2" name="search_date" placeholder="选择日期" readonly value="{$d|default=''}">
                 </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">排序</label>
-                    <div class="layui-input-inline">
-                        <select name="sort_table">
-                            <option value="1" {if condition="$Request.param.sort_table eq '1' "}selected{/if} >ML+</option>
-                            <option value="2" {if condition="$Request.param.sort_table eq '2' "}selected{/if} >GL+</option>
-                        </select>
-                    </div>
-                </div>
-                <input type="hidden" name="type" value="{$Request.param.type}">
-                <input type="hidden" name="export" value="">
-                <button type="submit" class="layui-btn layui-btn-normal normal_btn">搜索</button>
-                <input type="button" class="layui-btn layui-btn-primary layui-icon export_btn" value="导出">
             </div>
-        </form>
-
+            <div class="layui-inline">
+                <label class="layui-form-label">排序</label>
+                <div class="layui-input-inline">
+                    <select name="sort_table">
+                        <option value="1" {if condition="$Request.param.sort_table eq '1' "}selected{/if} >ML+</option>
+                        <option value="2" {if condition="$Request.param.sort_table eq '2' "}selected{/if} >GL+</option>
+                    </select>
+                </div>
+            </div>
+            <input type="hidden" name="type" value="{$Request.param.type}">
+            <input type="hidden" name="export" value="">
+            <button type="submit" class="layui-btn layui-btn-normal normal_btn">搜索</button>
+            <input type="button" class="layui-btn layui-btn-primary layui-icon export_btn" value="导出">
+        </div>
+    </form>
+</div>
 <div class="layui-form">
     <table class="layui-table mt10" lay-even="" lay-skin="row">
         <colgroup>
@@ -97,8 +96,7 @@
     </table>
     {$pages}
 </div>
-    </div>
-</div>
+
 {include file="block/layui" /}
 <script src="__PUBLIC_JS__/jquery.select.js?v="></script>
 <script src="__PUBLIC_JS__/SelectBox.min.js?v="></script>
