@@ -49,6 +49,7 @@
         <thead>
         <tr>
             <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
+            <th width="30">序号</th>
             <th>员工</th>
             {notempty name="Request.param.project_id"}
             <th>项目名称</th>
@@ -65,6 +66,7 @@
         {volist name="data_list" id="vo"}
         <tr>
             <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
+            <td>{$i}</td>
             <td class="font12">
                 <strong class="mcolor">{$vo['realname']}</strong>
             </td>

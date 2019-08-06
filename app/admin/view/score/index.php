@@ -33,6 +33,15 @@
                         <input type="text" class="layui-input" id="test2" name="search_date" placeholder="选择日期" readonly value="{$d|default=''}">
                     </div>
                 </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">排序</label>
+                    <div class="layui-input-inline">
+                        <select name="sort_table">
+                            <option value="1" {if condition="$Request.param.sort_table eq '1' "}selected{/if} >ML+</option>
+                            <option value="2" {if condition="$Request.param.sort_table eq '2' "}selected{/if} >GL+</option>
+                        </select>
+                    </div>
+                </div>
                 <input type="hidden" name="type" value="{$Request.param.type}">
                 <input type="hidden" name="export" value="">
                 <button type="submit" class="layui-btn layui-btn-normal normal_btn">搜索</button>
@@ -49,6 +58,7 @@
         <thead>
         <tr>
             <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
+            <th width="30">序号</th>
             <th>员工</th>
             <th>ML+</th>
             <th>ML-</th>
@@ -63,6 +73,7 @@
         {volist name="data_list" id="vo"}
         <tr>
             <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
+            <td>{$i}</td>
             <td class="font12">
                 <strong class="mcolor">{$vo['realname']}</strong>
             </td>

@@ -49,6 +49,7 @@
         <thead>
         <tr>
             <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
+            <th width="30">序号</th>
             <th>项目名称</th>
             <th>ML+</th>
             <th>ML-</th>
@@ -61,6 +62,7 @@
         {volist name="data_list" id="vo"}
         <tr>
             <td><input type="checkbox" name="subject_id[]" class="layui-checkbox checkbox-ids" value="{$vo['subject_id']}" lay-skin="primary"></td>
+            <td>{$i}</td>
             <td class="font12">
                 <strong class="mcolor">{$vo['subject_name']}</strong>
             </td>
