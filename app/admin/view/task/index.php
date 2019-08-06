@@ -13,8 +13,8 @@
         color: #666;
     }
 </style>
-<div class="page-toolbar">
-    <div class="page-filter">
+<div>
+    <div>
         <form class="layui-form layui-form-pane" action="{:url()}" method="get">
             <div class="layui-form-item">
                 <div class="layui-inline">

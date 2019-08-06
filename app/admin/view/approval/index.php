@@ -4,52 +4,49 @@
         width: auto;
     }
 </style>
-<div class="page-toolbar">
-    <div class="page-filter">
-        <form class="layui-form layui-form-pane" action="{:url()}" method="get" id="search_form">
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">类型</label>
-                    <div class="layui-input-inline">
-                        <select name="class_type" class="field-class_type" type="select">
-                            <option value="0">全部</option>
-                            {volist name="panel_type" id="vo"}
-                            <option value="{$key}" {eq name="$Request.param.class_type" value="$key"} selected {/eq}>{$vo['title']}</option>
-                            {/volist}
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">日期范围</label>
-                    <div class="layui-input-inline">
-                        <input type="text" class="layui-input" id="test2" name="search_date" placeholder="选择日期" readonly value="{$d|default=''}">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <div class="layui-input-inline">
-                        <button type="button" class="layui-btn layui-btn-primary" id="person_user_id">选择人员</button>
-                        <div id="person_select_id"></div>
-                        <input type="hidden" name="person_user" id="person_user" value="">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <input type="hidden" name="atype" value="{$Request.param.atype}">
-                    <input type="hidden" name="export" value="">
-                    <button type="submit" class="layui-btn layui-btn-normal normal_btn">搜索</button>
-                    <input type="button" class="layui-btn layui-btn-primary layui-icon export_btn" value="导出">
+<div>
+    <form class="layui-form layui-form-pane" action="{:url()}" method="get" id="search_form">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">类型</label>
+                <div class="layui-input-inline">
+                    <select name="class_type" class="field-class_type" type="select">
+                        <option value="0">全部</option>
+                        {volist name="panel_type" id="vo"}
+                        <option value="{$key}" {eq name="$Request.param.class_type" value="$key"} selected {/eq}>{$vo['title']}</option>
+                        {/volist}
+                    </select>
                 </div>
             </div>
-        </form>
-        {if condition="($Request.param.atype eq 3) && ($Request.param.class_type > 0) "}
-        <div class="layui-btn-group fl">
-<!--            <a href="{:url('addItem')}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加</a>-->
-            <a data-href="{:url('batch',['table'=>'approval','val'=>2,'class_type'=>$Request.param.class_type])}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-play" data-table="dataTable">同意</a>
-            <a data-href="{:url('batch',['table'=>'approval','val'=>4,'class_type'=>$Request.param.class_type])}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-pause" data-table="dataTable">驳回</a>
-<!--            <a data-href="{:url('delItem')}" class="layui-btn layui-btn-primary j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>-->
+            <div class="layui-inline">
+                <label class="layui-form-label">日期范围</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="test2" name="search_date" placeholder="选择日期" readonly value="{$d|default=''}">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <div class="layui-input-inline">
+                    <button type="button" class="layui-btn layui-btn-primary" id="person_user_id">选择人员</button>
+                    <div id="person_select_id"></div>
+                    <input type="hidden" name="person_user" id="person_user" value="">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <input type="hidden" name="atype" value="{$Request.param.atype}">
+                <input type="hidden" name="export" value="">
+                <button type="submit" class="layui-btn layui-btn-normal normal_btn">搜索</button>
+                <input type="button" class="layui-btn layui-btn-primary layui-icon export_btn" value="导出">
+            </div>
         </div>
-        {/if}
+    </form>
+    {if condition="($Request.param.atype eq 3) && ($Request.param.class_type > 0) "}
+    <div class="layui-btn-group fl">
+<!--            <a href="{:url('addItem')}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加</a>-->
+        <a data-href="{:url('batch',['table'=>'approval','val'=>2,'class_type'=>$Request.param.class_type])}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-play" data-table="dataTable">同意</a>
+        <a data-href="{:url('batch',['table'=>'approval','val'=>4,'class_type'=>$Request.param.class_type])}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-pause" data-table="dataTable">驳回</a>
+<!--            <a data-href="{:url('delItem')}" class="layui-btn layui-btn-primary j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>-->
     </div>
-
+    {/if}
 </div>
 
 <div class="layui-form">

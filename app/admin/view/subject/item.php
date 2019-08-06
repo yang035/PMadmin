@@ -4,8 +4,8 @@
         width: auto;
     }
 </style>
-<div class="page-toolbar">
-    <div class="page-filter">
+<div>
+    <div>
         <form class="layui-form layui-form-pane" action="{:url()}" method="get" id="hisi-table-search">
             <div class="layui-form-item">
             <div class="layui-inline">
@@ -62,7 +62,7 @@
             elem: '#dataTable'
             ,url: '{:url()}' //数据接口
             ,page: true //开启分页
-            ,limit: 20
+            ,limit: 30
             ,text: {
                 none : '暂无相关数据'
             }

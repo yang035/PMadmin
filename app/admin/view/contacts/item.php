@@ -4,8 +4,8 @@
         width: auto;
     }
 </style>
-<div class="page-toolbar">
-    <div class="page-filter">
+<div>
+    <div>
         <form class="layui-form layui-form-pane" action="{:url()}" method="get" id="hisi-table-search">
             <div class="layui-form-item">
                 <div class="layui-inline">
@@ -61,7 +61,7 @@
             ,url: '{:url()}' //数据接口
             ,where: {subject_id: '{$Request.param.subject_id}', }
             ,page: true //开启分页
-            ,limit: 20
+            ,limit: 30
             ,text: {
                 none : '暂无相关数据'
             }
@@ -123,7 +123,7 @@
         defalut:'{$subject_name}',//默认显示内容。如果是'firstData',则默认显示第一个
         // allowInput:true,//是否允许输入
         width:200,//宽
-        height:37,//高
+        height:35,//高
         optionMaxHeight:300//下拉框最大高度
     });
 </script>
