@@ -48,8 +48,7 @@
                 <input type="button" class="layui-btn layui-btn-primary layui-icon export_btn" value="导出">
             </div>
         </form>
-    </div>
-</div>
+
 <div class="layui-form">
     <table class="layui-table mt10" lay-even="" lay-skin="row">
         <colgroup>
@@ -97,6 +96,8 @@
         </tbody>
     </table>
     {$pages}
+</div>
+    </div>
 </div>
 {include file="block/layui" /}
 <script src="__PUBLIC_JS__/jquery.select.js?v="></script>
