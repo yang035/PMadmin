@@ -778,7 +778,8 @@ class Project extends Admin
 
         switch ($params['type']) {
             case 1:
-                $con = "JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"') AND send_user LIKE '%a%'";
+//                $con = "JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"') AND send_user LIKE '%a%'";
+                $con = "JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"')";
                 break;
             case 2:
                 $con = "JSON_CONTAINS_PATH(manager_user,'one', '$.\"$uid\"')";
