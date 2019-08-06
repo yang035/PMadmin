@@ -394,11 +394,17 @@ class Project extends Admin
                     'update_time'=>time(),
                 ];
                 ProjectModel::where($w)->update($u);
+                $w['pid'] = 0;
+                $rr = ProjectModel::where($w)->find();
                 foreach ($parent_u as $k=>$v){
                     if (!empty($v)){
                         foreach ($v as $vv){
                             $sql = "UPDATE tb_project SET {$k} = JSON_SET({$k}, '$.\"{$vv}\"', 'a') WHERE id in ({$ids})";
                             $res = ProjectModel::execute($sql);
+                            if ($rr){
+                                $sql1 = "UPDATE tb_subject_item SET {$k} = JSON_SET({$k}, '$.\"{$vv}\"', 'a') WHERE id = {$rr['subject_id']}";
+                                $res = SubjectItem::execute($sql1);
+                            }
                         }
                     }
                 }
