@@ -129,7 +129,7 @@ class SubjectItem extends Model
     {
         $map = [
             'cid'=>session('admin_user.cid'),
-            'status'=>1,
+//            'status'=>1,
         ];
         $data = self::where($map)->column('name','id');
         return $data;
