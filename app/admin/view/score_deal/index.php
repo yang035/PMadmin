@@ -46,10 +46,12 @@
                 <thead>
                 <tr>
                     <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
-                    <th>姓名</th>
+                    <th>奖扣人</th>
                     <th>事件</th>
                     <th>GL(斗)</th>
+                    <th>审批人</th>
                     <th>审批状态</th>
+                    <th>添加人</th>
                     <th>添加时间</th>
                     <th>操作</th>
                 </tr>
@@ -58,12 +60,12 @@
                 {volist name="data_list" id="vo"}
                 <tr>
                     <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
-                    <td class="font12">
-                        <strong class="mcolor">{$vo['user_id']}</strong>
-                    </td>
+                    <td class="font12">{$vo['score_user']}</td>
                     <td class="font12">{$vo['rid']['fullname']}</td>
                     <td class="font12">{$vo['rid']['score']}</td>
+                    <td class="font12">{$vo['send_user']}</td>
                     <td class="font12">{$approval_status[$vo['status']]}</td>
+                    <td class="font12">{$vo['user_id']}</td>
                     <td class="font12">{$vo['create_time']}</td>
                     <td>
                         <div class="layui-btn-group" onclick="deal_read({$vo['id']},{$atype})">

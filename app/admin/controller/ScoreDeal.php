@@ -142,6 +142,8 @@ class ScoreDeal extends Admin
 
         $list = DealModel::where($map)->where($con)->order('create_time desc')->paginate(10, false, ['query' => input('get.')]);
         foreach ($list as $k=>$v){
+            $list[$k]['score_user'] = $this->deal_data($v['score_user']);
+            $list[$k]['send_user'] = $this->deal_data($v['send_user']);
             $list[$k]['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
             $list[$k]['rid'] = RuleModel::getFullName($v['rid']);
         }
