@@ -52,6 +52,7 @@ class ProjectReport extends Admin
                     'id'=>$data['project_id'],
                     'per'=>$data['per'],
                     'realper'=>$data['realper'],
+                    'update_time'=>time(),
                 ];
                 if (!Project::update($d)){
                     return $this->error('添加失败！');
