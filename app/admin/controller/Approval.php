@@ -1532,7 +1532,7 @@ class Approval extends Admin
                         $s = new ApprovalSenduser();
                         $s->where($w)->where($w1)->update($u);
 
-                        $sql = "UPDATE tb_approval_senduser SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE aid ={$data['id']} and status={$data['status']}";
+                        $sql = "UPDATE tb_approval_senduser SET send_user = JSON_REPLACE(send_user, '$.\"{$uid}\"', 'a') WHERE aid ={$data['id']} and status={$data['status']}";
                         $res = ApprovalSenduser::execute($sql);
 
                         $sql = "UPDATE tb_approval SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$data['id']}";
