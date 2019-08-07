@@ -55,6 +55,7 @@ class ScoreRule extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
             $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
             $p_res = RuleModel::getRowById($data['pid']);
             if (0 == $p_res['pid']){
                 $data['score'] = 0;
@@ -97,6 +98,7 @@ class ScoreRule extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
             $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
             $p_res = RuleModel::getRowById($data['pid']);
             if (0 == $p_res['pid']){
                 $data['score'] = 0;
