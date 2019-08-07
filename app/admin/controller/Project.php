@@ -400,10 +400,10 @@ class Project extends Admin
                     if (!empty($v)){
                         foreach ($v as $vv){
                             $sql = "UPDATE tb_project SET {$k} = JSON_SET({$k}, '$.\"{$vv}\"', 'a') WHERE id in ({$ids})";
-                            $res = ProjectModel::execute($sql);
+                            ProjectModel::execute($sql);
                             if ($rr){
                                 $sql1 = "UPDATE tb_subject_item SET {$k} = JSON_SET({$k}, '$.\"{$vv}\"', 'a') WHERE id = {$rr['subject_id']}";
-                                $res = SubjectItem::execute($sql1);
+                                SubjectItem::execute($sql1);
                             }
                         }
                     }
@@ -571,7 +571,7 @@ class Project extends Admin
                     if (!empty($v)){
                         foreach ($v as $vv){
                             $sql = "UPDATE tb_project SET {$k} = JSON_SET({$k}, '$.\"{$vv}\"', 'a') WHERE id in ({$ids})";
-                            $res = ProjectModel::execute($sql);
+                            ProjectModel::execute($sql);
                         }
                     }
                 }
