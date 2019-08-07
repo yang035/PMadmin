@@ -272,7 +272,8 @@
             {/notempty}
             <hr>
             {eq name="data_list['status']" value="2"}
-                {if condition="($Request.param.atype eq 4) && ($data_list['is_deal'] neq 2)"}
+            {in name="Request.param.class_type" value="2,3,5"}
+                {if condition="($Request.param.atype eq 4) && ($data_list['is_deal'] eq 0)"}
                 <div class="layui-form-item">
                     <label class="layui-form-label">支付结果</label>
                     <div class="layui-input-block">
@@ -302,6 +303,7 @@
                 支付备注：{$data_list['deal_mark']}<br>
                 支付时间：{$data_list['deal_time']}<br>
                 {/if}
+            {/in}
             {/eq}
         </div>
     </div>
