@@ -16,7 +16,7 @@ class Index extends Admin
             return $this->fetch('iframe');
         } else {
             $p = explode('/',$_SERVER['REQUEST_URI']);
-            if (count($p) <= 2){
+            if (count($p) <= 4){
                 if (session('admin_user.role_id') > 3) {
                     $this->redirect(url('Project/mytask', ['type' => 1]));
                 }
