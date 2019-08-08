@@ -101,18 +101,22 @@ class Project extends Admin
                 $map['subject_id'] = $params['project_id'];
                 $subject_id = $params['project_id'];
             }
-
             if (isset($params['start_time']) && !empty($params['start_time'])) {
                 $start_time = $params['start_time'];
-                $start_time_arr = explode(' - ', $start_time);//这里分隔符两边加空格
-                $map['start_time'] = ['between', [$start_time_arr['0'], $start_time_arr['1']]];
+                $con .= " '{$start_time}' between DATE_FORMAT(start_time,'%Y-%m-%d') and DATE_FORMAT(end_time,'%Y-%m-%d') ";
             }
 
-            if (isset($params['end_time']) && !empty($params['end_time'])) {
-                $end_time = $params['end_time'];
-                $end_time_arr = explode(' - ', $end_time);//这里分隔符两边加空格
-                $map['end_time'] = ['between', [$end_time_arr['0'], $end_time_arr['1']]];
-            }
+//            if (isset($params['start_time']) && !empty($params['start_time'])) {
+//                $start_time = $params['start_time'];
+//                $start_time_arr = explode(' - ', $start_time);//这里分隔符两边加空格
+//                $map['start_time'] = ['between', [$start_time_arr['0'], $start_time_arr['1']]];
+//            }
+//
+//            if (isset($params['end_time']) && !empty($params['end_time'])) {
+//                $end_time = $params['end_time'];
+//                $end_time_arr = explode(' - ', $end_time);//这里分隔符两边加空格
+//                $map['end_time'] = ['between', [$end_time_arr['0'], $end_time_arr['1']]];
+//            }
             if (isset($params['p_status'])) {
                 $p_status = (int)$params['p_status'];
             }
@@ -120,6 +124,9 @@ class Project extends Admin
             if (!empty($params['person_user'])) {
                 $person_user = explode(',',trim($params['person_user'],','));
                 if (is_array($person_user)){
+                    if (!empty($con)){
+                        $con .= ' and ';
+                    }
                     foreach ($person_user as $k=>$v){
                         if ($k > 0){
                             $con .= ' or ';
@@ -720,6 +727,7 @@ class Project extends Admin
         $map['t_type'] = 1;
         $subject_id = 0;
         $p_status = '';
+        $mm = '';
 
         if ($params) {
             if (!empty($params['project_id']) && is_numeric($params['project_id'])){
@@ -728,18 +736,22 @@ class Project extends Admin
             }else{
                 $map['pid'] = 0;
             }
-
             if (isset($params['start_time']) && !empty($params['start_time'])) {
                 $start_time = $params['start_time'];
-                $start_time_arr = explode(' - ', $start_time);//这里分隔符两边加空格
-                $map['start_time'] = ['between', [$start_time_arr['0'].' 00:00:00', $start_time_arr['1'].' 23:59:59']];
+                $mm = " '{$start_time}' between DATE_FORMAT(start_time,'%Y-%m-%d') and DATE_FORMAT(end_time,'%Y-%m-%d') ";
             }
 
-            if (isset($params['end_time']) && !empty($params['end_time'])) {
-                $end_time = $params['end_time'];
-                $end_time_arr = explode(' - ', $end_time);//这里分隔符两边加空格
-                $map['end_time'] = ['between', [$end_time_arr['0'].' 00:00:00', $end_time_arr['1'].' 23:59:59']];
-            }
+//            if (isset($params['start_time']) && !empty($params['start_time'])) {
+//                $start_time = $params['start_time'];
+//                $start_time_arr = explode(' - ', $start_time);//这里分隔符两边加空格
+//                $map['start_time'] = ['between', [$start_time_arr['0'].' 00:00:00', $start_time_arr['1'].' 23:59:59']];
+//            }
+//
+//            if (isset($params['end_time']) && !empty($params['end_time'])) {
+//                $end_time = $params['end_time'];
+//                $end_time_arr = explode(' - ', $end_time);//这里分隔符两边加空格
+//                $map['end_time'] = ['between', [$end_time_arr['0'].' 00:00:00', $end_time_arr['1'].' 23:59:59']];
+//            }
             if (!empty($params['name'])) {
                 $map['name'] = ['like', '%' . $params['name'] . '%'];
             }
@@ -844,7 +856,7 @@ class Project extends Admin
                 $ids = array_column($result,'id');
                 $map['subject_id'] = ['in',implode(',',$ids)];
                 $map['pid'] =['<>',0];
-                $result1 = ProjectModel::field($field)->where($map)->where($con)->where($w)->order('grade desc,create_time desc')->select();
+                $result1 = ProjectModel::field($field)->where($map)->where($con)->where($mm)->where($w)->order('grade desc,create_time desc')->select();
                 if ($result1){
                     foreach ($result1 as $k=>$v){
                         if ($v['realper'] < 100){
@@ -872,7 +884,7 @@ class Project extends Admin
             if ($result){
                 $map['subject_id'] = $result[0]['id'];
                 unset($map['id']);
-                $result1 = ProjectModel::field($field)->where($map)->where($con)->where($w)->order('grade desc,create_time desc')->select();
+                $result1 = ProjectModel::field($field)->where($map)->where($con)->where($mm)->where($w)->order('grade desc,create_time desc')->select();
                 if ($result1){
                     foreach ($result1 as $k=>$v){
                         if ($v['realper'] < 100){

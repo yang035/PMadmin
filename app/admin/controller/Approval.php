@@ -1118,7 +1118,7 @@ class Approval extends Admin
                 }
                 $send_user_model = new ApprovalSenduser();
                 $send_user_model->saveAll($su);
-                
+
                 $leave = [
                     'aid' => $res['id'],
                     'type' => $data['type'],

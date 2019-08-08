@@ -51,15 +51,9 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">开始时段</label>
+                    <label class="layui-form-label">日期</label>
                     <div class="layui-input-inline">
                         <input type="text" class="layui-input field-start_time" name="start_time" value="{:input('get.start_time')}" readonly autocomplete="off" placeholder="选择开始日期段">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">结束时段</label>
-                    <div class="layui-input-inline">
-                        <input type="text" class="layui-input field-end_time" name="end_time" value="{:input('get.end_time')}" readonly autocomplete="off" placeholder="选择结束日期段">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -304,7 +298,6 @@
         var $ = layui.jquery, laydate = layui.laydate, upload = layui.upload;
         laydate.render({
             elem: '.field-start_time',
-            range: true,
             trigger: 'click',
         });
         laydate.render({
