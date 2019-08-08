@@ -165,7 +165,8 @@
     <div class="layui-form-item">
         <label class="layui-form-label">审批人</label>
         <div class="layui-input-inline">
-            <button type="button" class="layui-btn" id="send_user_id">选择审批人</button>
+<!--            <button type="button" class="layui-btn" id="send_user_id">选择审批人</button>-->
+            <div style="margin-top: 10px" id="send_select_id">默认流程(负责人级、部门级、总经理级)</div>
             <div id="send_select_id"></div>
             <input type="hidden" name="send_user" id="send_user" value="" lay-verify="required">
         </div>
@@ -408,6 +409,7 @@
         if ('' != result.id){
             $('#project_name').val(result.name);
             $('#project_id').val(result.id);
+            select_union(result.id)
         }
     },{
         dataName:'name',//option的html
@@ -431,5 +433,24 @@
         height:37,//高
         optionMaxHeight:300//下拉框最大高度
     });
+
+    function select_union(id){
+        $.ajax({
+            type: 'POST',
+            url: "{:url('getFlowUser')}",
+            data: {id:id},
+            dataType:  'json',
+            success: function(data){
+                // $("#c_id").html("");
+                // $.each(data, function(key, val) {
+                //     var option1 = $("<option>").val(val.areaId).text(val.fullname);
+                // $('#send_select_id').html(data.manager_user_id);
+                $('#send_user').val(data.manager_user);
+                // form.render('select');
+                // });
+                // $("#c_id").get(0).selectedIndex=0;
+            }
+        });
+    }
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>
