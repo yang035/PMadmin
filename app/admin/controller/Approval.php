@@ -10,6 +10,7 @@ namespace app\admin\controller;
 
 use app\admin\model\AdminDepartment;
 use app\admin\model\Approval as ApprovalModel;
+use app\admin\model\ApprovalBills;
 use app\admin\model\ApprovalLeave as LeaveModel;
 use app\admin\model\ApprovalBackleave as BackleaveModel;
 use app\admin\model\ApprovalExpense as ExpenseModel;
@@ -1349,6 +1350,93 @@ class Approval extends Admin
         return $this->fetch();
     }
 
+    public function signBills()
+    {
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            if ('' == $data['project_id']){
+                return $this->error('请选择项目');
+            }
+            // 验证
+            $result = $this->validate($data, 'ApprovalBills');
+            if ($result !== true) {
+                return $this->error($result);
+            }
+            unset($data['id']);
+
+            if (!empty($data['num'])){
+                foreach ($data['num'] as $k=>$v){
+                    if (empty($v)){
+                        unset($data['num'][$k],$data['quality'][$k],$data['size_type'][$k]);
+                    }
+                }
+            }
+
+            $send_user = html_entity_decode($data['send_user']);
+            $send_user1 = json_decode($send_user,true);
+            $send_user2 = [];
+            foreach ($send_user1 as $k=>$v) {
+                $send_user2 += $v;
+            }
+
+            Db::startTrans();
+            try {
+                $approve = [
+                    'project_id' => $data['project_id'],
+                    'class_type' => $data['class_type'],
+                    'cid' => session('admin_user.cid'),
+                    'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
+                    'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
+                    'time_long' => $data['time_long'],
+                    'user_id' => session('admin_user.uid'),
+//                    'send_user' => user_array($data['send_user']),
+                    'send_user' => json_encode($send_user2),
+                    'copy_user' => user_array($data['copy_user']),
+                ];
+                $res = ApprovalModel::create($approve);
+
+                $su = [];
+                foreach ($send_user1 as $k=>$v) {
+                    $su[$k] = [
+                        'aid' => $res['id'],
+                        'flow_num' => $k,
+                        'send_user' => json_encode($v),
+                    ];
+                }
+                $send_user_model = new ApprovalSenduser();
+                $send_user_model->saveAll($su);
+
+                $leave = [
+                    'aid' => $res['id'],
+                    'date' => $data['date'],
+                    'hour' => $data['hour'],
+                    'day' => $data['day'],
+                    'square' => $data['square'],
+                    'ton' => $data['ton'],
+                    'total' => $data['total'],
+                    'reason' => $data['reason'],
+                    'attachment' => $data['attachment'],
+                ];
+                $flag = ApprovalBills::create($leave);
+                // 提交事务
+                Db::commit();
+            } catch (\Exception $e) {
+                // 回滚事务
+                Db::rollback();
+            }
+            if ($flag) {
+                return $this->success("操作成功{$this->score_value}", 'index');
+            } else {
+                return $this->error('添加失败！');
+            }
+        }
+        $per_price = config('other.job_per_price');
+        $this->assign('job_option', ApprovalBills::getJobOption());
+        $this->assign('per_price', json_encode($per_price));
+        $this->assign('mytask', ProjectModel::getMyTask(0));
+        return $this->fetch();
+    }
+
     public function read()
     {
         $params = $this->request->param();
@@ -1409,6 +1497,10 @@ class Approval extends Admin
             case 15:
                 $table = 'tb_approval_backleave';
                 $f = 'b.leave_id,b.reason,b.attachment';
+                break;
+            case 16:
+                $table = 'tb_approval_bills';
+                $f = 'b.reason,b.date,b.hour,b.day,b.square,b.ton,b.total,b.attachment';
                 break;
             default:
                 $table = 'tb_approval_leave';
@@ -1811,6 +1903,13 @@ class Approval extends Admin
                 $list1['type'] = $leave_type[$list1['type']];
                 $list1['project_name'] = $project_data['name'];
                 $this->assign('list1', $list1);
+                break;
+            case 16:
+                $per_price = config('other.job_per_price');
+                $list['hour_money'] = $list['hour'] * $per_price['hour'];
+                $list['day_money'] = $list['day'] * $per_price['day'];
+                $list['square_money'] = $list['square'] * $per_price['square'];
+                $list['ton_money'] = $list['ton'] * $per_price['ton'];
                 break;
             default:
                 break;

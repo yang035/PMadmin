@@ -174,6 +174,14 @@
                     <span>无</span>
                     {/notempty}
                 {/case}
+                {case value="16"}
+                日期：{$data_list['date']}<br>
+                点工：{$data_list['hour']}时&nbsp;&nbsp;{$data_list['hour_money']}元<br>
+                日工：{$data_list['day']}天&nbsp;&nbsp;{$data_list['day_money']}元<br>
+                计量工：{$data_list['square']}方&nbsp;&nbsp;{$data_list['square_money']}元<br>
+                物料名：{$data_list['ton']}吨&nbsp;&nbsp;{$data_list['ton_money']}元<br>
+                合计：{$data_list['total']}元<br>
+                {/case}
             {/switch}
             事由：{$data_list['reason']}<br>
             附件说明：

@@ -72,6 +72,18 @@ return [
         2=>'B打印店',
         3=>'C打印店',
     ],
+    'job_rule' =>[
+        1=>'点工',
+        2=>'日工',
+        3=>'计量工',
+        4=>'物料名',
+    ],
+    'job_per_price' =>[
+        'hour'=>'15',
+        'day'=>'90',
+        'square'=>'0',
+        'ton'=>'0',
+    ],
     'product_type' =>[
         1=>'建筑',
         2=>'景观',
@@ -182,6 +194,10 @@ return [
         15=>[
             'title'=>'销假',
             'href'=>'admin/Approval/backLeave'
+        ],
+        16=>[
+            'title'=>'施工签单',
+            'href'=>'admin/Approval/signBills'
         ],
     ],
     'car_type' => [
