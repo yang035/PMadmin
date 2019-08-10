@@ -14,14 +14,22 @@
     }
 </style>
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
-        <div class="layui-form-item">
-            <label class="layui-form-label">选择项目</label>
-            <div class="layui-input-inline">
-                <select name="project_id" class="field-project_id" type="select" lay-filter="project_type">
-                    {$mytask}
-                </select>
-            </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">选择项目</label>
+        <div class="layui-input-inline">
+            <select name="project_id" class="field-project_id" type="select" lay-filter="project_type">
+                {$mytask}
+            </select>
         </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">施工员</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-send_select_id" name="send_select_id" onblur="check_name()" autocomplete="off" placeholder="姓名">
+            <input type="hidden" name="send_user" id="send_user" value="" lay-verify="required">
+        </div>
+        <div class="layui-form-mid" style="color: red">*</div>
+    </div>
     <div class="layui-form-item hide">
         <label class="layui-form-label">开始时间</label>
         <div class="layui-input-inline" style="width: 250px">
@@ -62,33 +70,43 @@
         <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">点工</label>
+        <label class="layui-form-label">计时工</label>
         <div class="layui-input-inline" style="width: 100px">
             <input type="number" class="layui-input field-hour" name="hour" onblur="amout_sum()" autocomplete="off" value="0">
         </div>
-        <div class="layui-form-mid">小时(15元/时)&nbsp;&nbsp;<span class="red hour"></span></div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">日工</label>
+        <div class="layui-form-mid">小时</div>
+        <label class="layui-form-label">单价</label>
         <div class="layui-input-inline" style="width: 100px">
-            <input type="number" class="layui-input field-day" name="day" onblur="amout_sum()" autocomplete="off" value="0">
+            <input type="number" class="layui-input field-per_hour" name="per_hour" onblur="amout_sum()" autocomplete="off" value="0">
         </div>
-        <div class="layui-form-mid">天(90元/天)&nbsp;&nbsp;<span class="red day"></span></div>
+        <div class="layui-form-mid">元/时&nbsp;&nbsp;<span class="red hour"></span></div>
     </div>
+<!--    <div class="layui-form-item">-->
+<!--        <label class="layui-form-label">日工</label>-->
+<!--        <div class="layui-input-inline" style="width: 100px">-->
+<!--            <input type="number" class="layui-input field-day" name="day" onblur="amout_sum()" autocomplete="off" value="0">-->
+<!--        </div>-->
+<!--        <div class="layui-form-mid">天(90元/天)&nbsp;&nbsp;<span class="red day"></span></div>-->
+<!--    </div>-->
     <div class="layui-form-item">
         <label class="layui-form-label">计量工</label>
         <div class="layui-input-inline" style="width: 100px">
             <input type="number" class="layui-input field-square" name="square" onblur="amout_sum()" autocomplete="off" value="0">
         </div>
-        <div class="layui-form-mid">方&nbsp;&nbsp;<span class="red square"></span></div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">物料名</label>
+        <div class="layui-form-mid">单位</div>
+        <label class="layui-form-label">单价</label>
         <div class="layui-input-inline" style="width: 100px">
-            <input type="number" class="layui-input field-ton" name="ton" onblur="amout_sum()" autocomplete="off" value="0">
+            <input type="number" class="layui-input field-per_square" name="per_square" onblur="amout_sum()" autocomplete="off" value="0">
         </div>
-        <div class="layui-form-mid">吨&nbsp;&nbsp;<span class="red ton"></span></div>
+        <div class="layui-form-mid">元/单位&nbsp;&nbsp;<span class="red square"></span></div>
     </div>
+<!--    <div class="layui-form-item">-->
+<!--        <label class="layui-form-label">物料名</label>-->
+<!--        <div class="layui-input-inline" style="width: 100px">-->
+<!--            <input type="number" class="layui-input field-ton" name="ton" onblur="amout_sum()" autocomplete="off" value="0">-->
+<!--        </div>-->
+<!--        <div class="layui-form-mid">吨&nbsp;&nbsp;<span class="red ton"></span></div>-->
+<!--    </div>-->
     <div class="layui-form-item">
         <label class="layui-form-label">合计</label>
         <div class="layui-input-inline" style="width: 200px;">
@@ -127,16 +145,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">审批人</label>
-        <div class="layui-input-inline">
-            <!--            <button type="button" class="layui-btn" id="send_user_id">选择审批人</button>-->
-            <div style="margin-top: 10px" id="send_select_id">默认流程(负责人级、部门级、总经理级)</div>
-            <div id="send_select_id"></div>
-            <input type="hidden" name="send_user" id="send_user" value="" lay-verify="required">
-        </div>
-        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">抄送人</label>
@@ -392,25 +400,53 @@
     });
 
     function select_union(id){
+        var name = "{$data_info['hr_finance_user_id']}",uid = "{$data_info['hr_finance_user']}";
         $.ajax({
             type: 'POST',
             url: "{:url('getFlowUser')}",
-            data: {id:id},
+            data: {id:id,p:1},
             dataType:  'json',
             success: function(data){
-                // $("#c_id").html("");
-                // $.each(data, function(key, val) {
-                //     var option1 = $("<option>").val(val.areaId).text(val.fullname);
-                // $('#send_select_id').html(data.manager_user_id);
-                $('#send_user').val(data.manager_user);
-                // form.render('select');
-                // });
-                // $("#c_id").get(0).selectedIndex=0;
+                if (data.uid) {
+                    $('#copy_select_id').text(name+','+data.name);
+                    $('#copy_user').val(uid+','+data.uid);
+                }
+            }
+        });
+    }
+
+    function check_name(){
+        var name = $('.field-send_select_id').val();
+        $.ajax({
+            type: 'POST',
+            url: "{:url('checkName')}",
+            data: {name:name},
+            dataType:  'json',
+            success: function(data){
+                if (data) {
+                    $('#send_user').val(data);
+                }else {
+                    layer.alert('施工员不存在');
+                }
             }
         });
     }
 
     function amout_sum() {
+        var total = 0,
+            hour = $('.field-hour').val() * $('.field-per_hour').val(),
+            square = $('.field-square').val() * $('.field-per_square').val();
+        if (hour > 0){
+            $('.hour').html(hour+'元');
+        }
+        if (square > 0){
+            $('.square').html(square+'元');
+        }
+        total = hour+square;
+        $('.field-total').val(total);
+    }
+
+    function amout_sum1() {
         var total = 0,
             per_price = {$per_price};
             hour = $('.field-hour').val() * per_price['hour'],

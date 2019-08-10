@@ -90,9 +90,34 @@ class Approval extends Admin
         $this->assign('project_select', ProjectModel::inputSearchProject());
     }
 
-    public function getFlowUser($id){
+    public function checkName($name){
+        $where = [
+            'company_id'=>session('admin_user.cid'),
+            'realname'=>$name,
+        ];
+        $name = AdminUser::where($where)->select();
+        $uid = '';
+        if (count($name) == 1){
+            $uid = $name[0]['id'];
+        }
+        return $uid;
+    }
+
+    public function getFlowUser($id,$p=0){
         $res = ProjectModel::getRowJoinSubject($id);
         $uid_arr = json_decode($res['manager_user'],true);
+        if ($p){
+            if ($uid_arr){
+                $row['uid'] = implode(',',array_keys($uid_arr));
+                $row['name'] = strip_tags($this->deal_data($res['manager_user']));
+            }else{
+                $row = [
+                    'uid'=>'',
+                    'name'=>''
+                ];
+            }
+            return $row;
+        }
         $tmp = [];
         if ($uid_arr){
             foreach ($uid_arr as $k=>$v){
@@ -1364,21 +1389,6 @@ class Approval extends Admin
             }
             unset($data['id']);
 
-            if (!empty($data['num'])){
-                foreach ($data['num'] as $k=>$v){
-                    if (empty($v)){
-                        unset($data['num'][$k],$data['quality'][$k],$data['size_type'][$k]);
-                    }
-                }
-            }
-
-            $send_user = html_entity_decode($data['send_user']);
-            $send_user1 = json_decode($send_user,true);
-            $send_user2 = [];
-            foreach ($send_user1 as $k=>$v) {
-                $send_user2 += $v;
-            }
-
             Db::startTrans();
             try {
                 $approve = [
@@ -1390,29 +1400,20 @@ class Approval extends Admin
                     'time_long' => $data['time_long'],
                     'user_id' => session('admin_user.uid'),
 //                    'send_user' => user_array($data['send_user']),
-                    'send_user' => json_encode($send_user2),
+                    'send_user' => user_array($data['send_user']),
                     'copy_user' => user_array($data['copy_user']),
                 ];
                 $res = ApprovalModel::create($approve);
-
-                $su = [];
-                foreach ($send_user1 as $k=>$v) {
-                    $su[$k] = [
-                        'aid' => $res['id'],
-                        'flow_num' => $k,
-                        'send_user' => json_encode($v),
-                    ];
-                }
-                $send_user_model = new ApprovalSenduser();
-                $send_user_model->saveAll($su);
 
                 $leave = [
                     'aid' => $res['id'],
                     'date' => $data['date'],
                     'hour' => $data['hour'],
-                    'day' => $data['day'],
+                    'per_hour' => $data['per_hour'],
+//                    'day' => $data['day'],
                     'square' => $data['square'],
-                    'ton' => $data['ton'],
+                    'per_square' => $data['per_square'],
+//                    'ton' => $data['ton'],
                     'total' => $data['total'],
                     'reason' => $data['reason'],
                     'attachment' => $data['attachment'],
@@ -1500,7 +1501,7 @@ class Approval extends Admin
                 break;
             case 16:
                 $table = 'tb_approval_bills';
-                $f = 'b.reason,b.date,b.hour,b.day,b.square,b.ton,b.total,b.attachment';
+                $f = 'b.reason,b.date,b.hour,b.per_hour,b.day,b.square,b.per_square,b.ton,b.total,b.attachment';
                 break;
             default:
                 $table = 'tb_approval_leave';
@@ -1905,11 +1906,11 @@ class Approval extends Admin
                 $this->assign('list1', $list1);
                 break;
             case 16:
-                $per_price = config('other.job_per_price');
-                $list['hour_money'] = $list['hour'] * $per_price['hour'];
-                $list['day_money'] = $list['day'] * $per_price['day'];
-                $list['square_money'] = $list['square'] * $per_price['square'];
-                $list['ton_money'] = $list['ton'] * $per_price['ton'];
+//                $per_price = config('other.job_per_price');
+                $list['hour_money'] = $list['hour'] * $list['per_hour'];
+//                $list['day_money'] = $list['day'] * $per_price['day'];
+                $list['square_money'] = $list['square'] * $list['per_square'];
+//                $list['ton_money'] = $list['ton'] * $per_price['ton'];
                 break;
             default:
                 break;
