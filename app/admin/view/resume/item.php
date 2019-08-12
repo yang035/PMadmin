@@ -59,11 +59,11 @@
             }
             ,cols: [[ //表头
                 {type:'checkbox'},
-                {field: 'cat_id', title: '类别',width:80, templet:function(d){
-                        return d.cat.name;
-                    }},
+                // {field: 'cat_id', title: '类别',width:80, templet:function(d){
+                //         return d.cat.name;
+                //     }},
                 {field: 'job', title: '面试岗位',width:100,edit: 'text'},
-                {field: 'name', title: '姓名',width:120,edit: 'text',templet:function(d){
+                {field: 'name', title: '姓名',width:80,edit: 'text',templet:function(d){
                         return "<a class='mcolor' onclick='read("+d.id+")'>"+d.name+"</a>";
                     }},
                 {field: 'mobile', title: '手机号码',width:120,edit: 'text'},
@@ -75,7 +75,7 @@
                 {field: 'is_resume', title: '是否面试',width:100,edit: 'text'},
                 {field: 'is_pass', title: '是否通过',width:100,edit: 'text'},
                 {field: 'is_duty', title: '是否到岗',width:100,edit: 'text'},
-                {field: 'remark', title: '面试备注',edit: 'text'},
+                {field: 'remark', title: '面试备注',width:150,edit: 'text'},
                 {field: 'status', title: '状态',width:120, templet: '#statusTpl'},
                 {field: 'user_name', title: '操作员',width:80},
                 {field: 'create_time', title: '添加时间',width:160},
