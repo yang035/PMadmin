@@ -92,8 +92,8 @@
         <div class="layui-form-item">
             <label class="layui-form-label">状态</label>
             <div class="layui-input-inline">
-                <input type="radio" class="field-status" name="status" value="1" title="启用" checked>
-                <input type="radio" class="field-status" name="status" value="0" title="禁用">
+                <input type="radio" class="field-status" name="status" value="1" title="正常" checked>
+                <input type="radio" class="field-status" name="status" value="0" title="黑名单">
             </div>
         </div>
     </div>
