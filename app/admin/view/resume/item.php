@@ -76,9 +76,9 @@
                 {field: 'is_pass', title: '是否通过',width:100,edit: 'text'},
                 {field: 'is_duty', title: '是否到岗',width:100,edit: 'text'},
                 {field: 'remark', title: '面试备注',edit: 'text'},
+                {field: 'status', title: '状态',width:120, templet: '#statusTpl'},
                 {field: 'user_name', title: '操作员',width:80},
                 {field: 'create_time', title: '添加时间',width:160},
-                {field: 'status', title: '状态',width:120, templet: '#statusTpl'},
                 {title: '操作', templet: '#buttonTpl',width:160}
             ]]
         });
