@@ -48,7 +48,7 @@ class Resume extends Admin
                 $where['name'] = ['like', "%{$name}%"];
             }
             $where['cid'] = session('admin_user.cid');
-            $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->select();
+            $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->order('id desc')->select();
             if ($data['data']){
                 foreach ($data['data'] as $k=>$v){
                     $data['data'][$k]['remark'] = htmlspecialchars_decode($v['remark']);

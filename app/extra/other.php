@@ -211,14 +211,14 @@ return [
             'title'=>'日报',
             'href'=>'admin/DailyReport/add'
         ],
-        2=>[
-            'title'=>'年度总结',
-            'href'=>'admin/DailyReport/annualSummary'
-        ],
-        3=>[
-            'title'=>'年度计划',
-            'href'=>'admin/DailyReport/annualPlan'
-        ],
+//        2=>[
+//            'title'=>'年度总结',
+//            'href'=>'admin/DailyReport/annualSummary'
+//        ],
+//        3=>[
+//            'title'=>'年度计划',
+//            'href'=>'admin/DailyReport/annualPlan'
+//        ],
     ],
     'index_tab' => [
         1=>[
