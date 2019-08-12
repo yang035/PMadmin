@@ -39,7 +39,7 @@
 <table id="dataTable" class="layui-table" lay-filter="user_table"></table>
 {include file="block/layui" /}
 <script type="text/html" id="statusTpl">
-    <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=resume_item&id={{ d.id }}">
+    <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|黑名单" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=resume_item&id={{ d.id }}">
 </script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
     <a onclick="read({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">查看</a>
@@ -78,7 +78,7 @@
                 {field: 'remark', title: '面试备注',edit: 'text'},
                 {field: 'user_name', title: '操作员',width:80},
                 {field: 'create_time', title: '添加时间',width:160},
-                // {field: 'status', title: '状态', templet: '#statusTpl'},
+                {field: 'status', title: '状态',width:120, templet: '#statusTpl'},
                 {title: '操作', templet: '#buttonTpl',width:160}
             ]]
         });
