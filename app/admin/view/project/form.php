@@ -209,6 +209,13 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-inline">
+            <input type="radio" class="field-status" name="status" value="1" title="启用" checked>
+            <input type="radio" class="field-status" name="status" value="0" title="禁用">
+        </div>
+    </div>
+    <div class="layui-form-item">
         <div class="layui-input-block">
             <input type="hidden" class="field-id" name="id" value="{$p_res.id|default='0'}">
             <input type="hidden" class="field-pid" name="pid" value="{$p_res.pid|default='0'}">

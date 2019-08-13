@@ -119,8 +119,8 @@ class UploadFile extends Model
          }
 
         $data['thumb'] = [];
-        $image = Image::open('.'.$data['file']);
         if ($type == 'image') {
+            $image = Image::open('.'.$data['file']);
             // 水印
             if ($water != 'no') {
                 if (!empty($water)) {// 传参优先
