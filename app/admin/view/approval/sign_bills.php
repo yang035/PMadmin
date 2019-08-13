@@ -464,6 +464,7 @@
                 }
             });
         });
+        total = total.toFixed(2);
         $('.field-money').val(total);
     }
 
