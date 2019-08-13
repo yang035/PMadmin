@@ -450,12 +450,12 @@
     function amout_sum() {
         var total = 0;
         $("input[name^='num']").each(function (i, el) {
-            var num = parseInt($(this).val());
+            var num = parseFloat($(this).val());
             if (isNaN(num)){
                 num = 0;
             }
             $("input[name^='per_price']").each(function (n, e) {
-                var per_price = parseInt($(this).val());
+                var per_price = parseFloat($(this).val());
                 if (isNaN(per_price)){
                     per_price = 0;
                 }
