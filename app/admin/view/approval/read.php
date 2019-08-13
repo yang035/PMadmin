@@ -176,9 +176,13 @@
                 {/case}
                 {case value="16"}
                 日期：{$data_list['date']}<br>
-                点工：{$data_list['hour']}时&nbsp;&nbsp;{$data_list['hour_money']}元<br>
-                计量工：{$data_list['square']}方&nbsp;&nbsp;{$data_list['square_money']}元<br>
-                合计：{$data_list['total']}元<br>
+                内容明细：<br>
+                {volist name="$data_list['detail']" id="vo"}
+                    说明：{$vo['content']}&nbsp;&nbsp;|&nbsp;&nbsp;计量：{$vo['num']}{$unit_type[$vo['unit']]}&nbsp;&nbsp;|&nbsp;&nbsp;单价：{$vo['per_price']}元（合计：{$vo['num']*$vo['per_price']}元）<br>
+                {/volist}
+                <br>
+                总计：{$data_list['money']}元<br>
+                施工员：{$data_list['shigong_user']}<br>
                 {/case}
             {/switch}
             事由：{$data_list['reason']}<br>

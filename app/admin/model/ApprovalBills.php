@@ -41,9 +41,9 @@ class ApprovalBills extends Model
         return $str;
     }
 
-    public static function getQualityOption($type = 0)
+    public static function getUnitOption($type = 0)
     {
-        $leaveType = config('other.quality_type');
+        $leaveType = config('other.unit2');
         $str = '';
         foreach ($leaveType as $k => $v) {
             if ($type == $k) {

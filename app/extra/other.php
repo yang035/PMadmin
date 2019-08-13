@@ -211,14 +211,10 @@ return [
             'title'=>'日报',
             'href'=>'admin/DailyReport/add'
         ],
-//        2=>[
-//            'title'=>'年度总结',
-//            'href'=>'admin/DailyReport/annualSummary'
-//        ],
-//        3=>[
-//            'title'=>'年度计划',
-//            'href'=>'admin/DailyReport/annualPlan'
-//        ],
+        2=>[
+            'title'=>'行政日报',
+            'href'=>'admin/DailyReport/administration'
+        ],
     ],
     'index_tab' => [
         1=>[
@@ -304,6 +300,13 @@ return [
         10=>'卷',
         11=>'把',
         12=>'块',
+    ],
+    'unit2' => [
+        1=>'小时',
+        2=>'米',
+        3=>'平方',
+        4=>'吨',
+        5=>'天',
     ],
     'bbs_url' => 'http://bbs.imlgl.com/?user-login.htm',
     'partnership_grade' => [

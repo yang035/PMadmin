@@ -106,18 +106,6 @@ class Approval extends Admin
     public function getFlowUser($id,$p=0){
         $res = ProjectModel::getRowJoinSubject($id);
         $uid_arr = json_decode($res['manager_user'],true);
-        if ($p){
-            if ($uid_arr){
-                $row['uid'] = implode(',',array_keys($uid_arr));
-                $row['name'] = strip_tags($this->deal_data($res['manager_user']));
-            }else{
-                $row = [
-                    'uid'=>'',
-                    'name'=>''
-                ];
-            }
-            return $row;
-        }
         $tmp = [];
         if ($uid_arr){
             foreach ($uid_arr as $k=>$v){
@@ -1382,12 +1370,25 @@ class Approval extends Admin
             if ('' == $data['project_id']){
                 return $this->error('请选择项目');
             }
+            if (empty($data['shigong_user'])){
+                return $this->error('施工员不存在，请输入正确姓名');
+            }
+            $data['content'] = array_unique(array_filter($data['content']));
             // 验证
             $result = $this->validate($data, 'ApprovalBills');
             if ($result !== true) {
                 return $this->error($result);
             }
             unset($data['id']);
+
+            $send_user = html_entity_decode($data['send_user']);
+            $send_user1 = json_decode($send_user,true);
+            array_unshift($send_user1,[$data['shigong_user']=>'']);//在头部插入元素
+            array_pop($send_user1);//删除尾部的元素
+            $send_user2 = [];
+            foreach ($send_user1 as $k=>$v) {
+                $send_user2 += $v;
+            }
 
             Db::startTrans();
             try {
@@ -1400,24 +1401,39 @@ class Approval extends Admin
                     'time_long' => $data['time_long'],
                     'user_id' => session('admin_user.uid'),
 //                    'send_user' => user_array($data['send_user']),
-                    'send_user' => user_array($data['send_user']),
+                    'send_user' => json_encode($send_user2),
                     'copy_user' => user_array($data['copy_user']),
                 ];
                 $res = ApprovalModel::create($approve);
 
+                $su = [];
+                foreach ($send_user1 as $k=>$v) {
+                    $su[$k] = [
+                        'aid' => $res['id'],
+                        'flow_num' => $k,
+                        'send_user' => json_encode($v),
+                    ];
+                }
+                $send_user_model = new ApprovalSenduser();
+                $send_user_model->saveAll($su);
+
                 $leave = [
                     'aid' => $res['id'],
                     'date' => $data['date'],
-                    'hour' => $data['hour'],
-                    'per_hour' => $data['per_hour'],
-//                    'day' => $data['day'],
-                    'square' => $data['square'],
-                    'per_square' => $data['per_square'],
-//                    'ton' => $data['ton'],
-                    'total' => $data['total'],
+                    'money' => $data['money'],
+                    'shigong_user' => $data['shigong_user'],
                     'reason' => $data['reason'],
                     'attachment' => $data['attachment'],
                 ];
+                if ($data['content']) {
+                    foreach ($data['content'] as $k => $v) {
+                        $leave['detail'][$k]['content'] = $v;
+                        $leave['detail'][$k]['num'] = !empty($data['num'][$k]) ? $data['num'][$k] : 0;
+                        $leave['detail'][$k]['unit'] = !empty($data['unit'][$k]) ? $data['unit'][$k] : 1;
+                        $leave['detail'][$k]['per_price'] = !empty($data['per_price'][$k]) ? $data['per_price'][$k] : 0;
+                    }
+                }
+                $leave['detail'] = json_encode($leave['detail']);
                 $flag = ApprovalBills::create($leave);
                 // 提交事务
                 Db::commit();
@@ -1431,9 +1447,7 @@ class Approval extends Admin
                 return $this->error('添加失败！');
             }
         }
-        $per_price = config('other.job_per_price');
-        $this->assign('job_option', ApprovalBills::getJobOption());
-        $this->assign('per_price', json_encode($per_price));
+        $this->assign('unit_option', ApprovalBills::getUnitOption());
         $this->assign('mytask', ProjectModel::getMyTask(0));
         return $this->fetch();
     }
@@ -1501,7 +1515,7 @@ class Approval extends Admin
                 break;
             case 16:
                 $table = 'tb_approval_bills';
-                $f = 'b.reason,b.date,b.hour,b.per_hour,b.day,b.square,b.per_square,b.ton,b.total,b.attachment';
+                $f = 'b.reason,b.date,b.detail,b.money,b.shigong_user,b.attachment';
                 break;
             default:
                 $table = 'tb_approval_leave';
@@ -1906,11 +1920,10 @@ class Approval extends Admin
                 $this->assign('list1', $list1);
                 break;
             case 16:
-//                $per_price = config('other.job_per_price');
-                $list['hour_money'] = $list['hour'] * $list['per_hour'];
-//                $list['day_money'] = $list['day'] * $per_price['day'];
-                $list['square_money'] = $list['square'] * $list['per_square'];
-//                $list['ton_money'] = $list['ton'] * $per_price['ton'];
+                $list['detail'] = json_decode($list['detail'], true);
+                $list['shigong_user'] = AdminUser::getUserById($list['shigong_user'])['realname'];
+                $unit2_type = config('other.unit2');
+                $this->assign('unit_type', $unit2_type);
                 break;
             default:
                 break;

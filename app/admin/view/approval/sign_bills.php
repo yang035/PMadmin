@@ -14,22 +14,24 @@
     }
 </style>
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
-    <div class="layui-form-item">
-        <label class="layui-form-label">选择项目</label>
-        <div class="layui-input-inline">
-            <select name="project_id" class="field-project_id" type="select" lay-filter="project_type">
-                {$mytask}
-            </select>
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择项目</label>
+            <div class="layui-input-inline">
+                <select name="project_id" class="field-project_id" type="select" lay-filter="project_type">
+                    {$mytask}
+                </select>
+            </div>
         </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">施工员</label>
-        <div class="layui-input-inline">
-            <input type="text" class="layui-input field-send_select_id" name="send_select_id" onblur="check_name()" autocomplete="off" placeholder="姓名">
-            <input type="hidden" name="send_user" id="send_user" value="" lay-verify="required">
-        </div>
-        <div class="layui-form-mid" style="color: red">*</div>
-    </div>
+<!--    <div class="layui-form-item">-->
+<!--        <label class="layui-form-label">选择项目</label>-->
+<!--        <div class="layui-input-inline">-->
+<!--            <div class="layui-input-inline box box1">-->
+<!--            </div>-->
+<!--            <input id="project_name" type="hidden" name="project_name" value="{$Request.param.project_name}">-->
+<!--            <input id="project_id" type="hidden" name="project_id" value="{$Request.param.project_id}">-->
+<!--        </div>-->
+<!--        <div class="layui-form-mid red">*</div>-->
+<!--    </div>-->
     <div class="layui-form-item hide">
         <label class="layui-form-label">开始时间</label>
         <div class="layui-input-inline" style="width: 250px">
@@ -56,6 +58,13 @@
             <input type="text" class="layui-input field-time_long" readonly name="time_long" autocomplete="off">
         </div>
     </div>
+    <div class="layui-form-item hide">
+        <label class="layui-form-label">申请事由</label>
+        <div class="layui-input-inline">
+            <textarea type="text" class="layui-textarea field-reason" name="reason" autocomplete="off" placeholder="请输入申请事由"></textarea>
+        </div>
+        <div class="layui-form-mid" style="color: red">*</div>
+    </div>
     <div class="layui-form-item">
         <label class="layui-form-label">日期</label>
         <div class="layui-input-inline" style="width: 250px">
@@ -63,69 +72,38 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">申请事由</label>
-        <div class="layui-input-inline">
-            <textarea type="text" class="layui-textarea field-reason" name="reason" lay-verify="required" autocomplete="off" placeholder="请输入申请事由"></textarea>
+        <label class="layui-form-label">内容</label>
+        <div class="layui-input-inline" style="width: 200px">
+            <input type="text" class="layui-input field-content" name="content[]" autocomplete="off" placeholder="描述">
         </div>
-        <div class="layui-form-mid" style="color: red">*</div>
+        <div class="layui-input-inline" style="width: 100px">
+            <input type="number" class="layui-input field-num" name="num[]" onblur="amout_sum()" autocomplete="off" placeholder="计量">
+        </div>
+        <div class="layui-input-inline" style="width: 100px">
+            <select name="unit[]" class="field-unit" type="select">
+                {$unit_option}
+            </select>
+        </div>
+        <div class="layui-input-inline" style="width: 100px">
+            <input type="number" class="layui-input field-per_price" name="per_price[]" onblur="amout_sum()" autocomplete="off" placeholder="单价">
+        </div>
+        <div class="layui-form-mid" style="color: red">元</div>
     </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">计时工</label>
-        <div class="layui-input-inline" style="width: 100px">
-            <input type="number" class="layui-input field-hour" name="hour" onblur="amout_sum()" autocomplete="off" value="0">
-        </div>
-        <div class="layui-form-mid">小时</div>
-        <label class="layui-form-label">单价</label>
-        <div class="layui-input-inline" style="width: 100px">
-            <input type="number" class="layui-input field-per_hour" name="per_hour" onblur="amout_sum()" autocomplete="off" value="0">
-        </div>
-        <div class="layui-form-mid">元/时&nbsp;&nbsp;<span class="red hour"></span></div>
+    <div class="new_task">
+        <a href="javascript:void(0);" class="aicon ai-tianjia field-guige-add" style="float: left;margin-left:650px;font-size: 30px;"></a>
     </div>
-<!--    <div class="layui-form-item">-->
-<!--        <label class="layui-form-label">日工</label>-->
-<!--        <div class="layui-input-inline" style="width: 100px">-->
-<!--            <input type="number" class="layui-input field-day" name="day" onblur="amout_sum()" autocomplete="off" value="0">-->
-<!--        </div>-->
-<!--        <div class="layui-form-mid">天(90元/天)&nbsp;&nbsp;<span class="red day"></span></div>-->
-<!--    </div>-->
-    <div class="layui-form-item">
-        <label class="layui-form-label">计量工</label>
-        <div class="layui-input-inline" style="width: 100px">
-            <input type="number" class="layui-input field-square" name="square" onblur="amout_sum()" autocomplete="off" value="0">
-        </div>
-        <div class="layui-form-mid">单位</div>
-        <label class="layui-form-label">单价</label>
-        <div class="layui-input-inline" style="width: 100px">
-            <input type="number" class="layui-input field-per_square" name="per_square" onblur="amout_sum()" autocomplete="off" value="0">
-        </div>
-        <div class="layui-form-mid">元/单位&nbsp;&nbsp;<span class="red square"></span></div>
-    </div>
-<!--    <div class="layui-form-item">-->
-<!--        <label class="layui-form-label">物料名</label>-->
-<!--        <div class="layui-input-inline" style="width: 100px">-->
-<!--            <input type="number" class="layui-input field-ton" name="ton" onblur="amout_sum()" autocomplete="off" value="0">-->
-<!--        </div>-->
-<!--        <div class="layui-form-mid">吨&nbsp;&nbsp;<span class="red ton"></span></div>-->
-<!--    </div>-->
     <div class="layui-form-item">
         <label class="layui-form-label">合计</label>
-        <div class="layui-input-inline" style="width: 200px;">
-            <input type="text" class="layui-input field-total" name="total" value="0" readonly>
+        <div class="layui-input-inline">
+            <input type="number" class="layui-input field-money" name="money" autocomplete="off" placeholder="0">
         </div>
         <div class="layui-form-mid">元</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">附件说明</label>
         <div class="layui-input-inline">
-            <!--            <div class="layui-upload">-->
-            <!--                <button type="button" class="layui-btn" id="attachment-upload">选择附件</button>-->
-            <!--                <div class="layui-upload-list">-->
-            <!--                    <img class="layui-upload-file" id="attachment-upload-file">-->
-            <!--                    <p id="attachment-upload-text"></p>-->
-            <!--                </div>-->
-            <!--            </div>-->
             <div class="layui-upload">
-                <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>(附上采购物品图片)
+                <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>(工作量清单、现场照片等)
                 <div class="other-div" style="display: none">
                     <div class="layui-upload-list">
                         <table class="layui-table">
@@ -147,10 +125,27 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">施工员</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-shigong_select_id" name="shigong_select_id" onblur="check_name()" autocomplete="off" placeholder="姓名">
+            <input type="hidden" name="shigong_user" id="shigong_user" value="" lay-verify="required">
+        </div>
+        <div class="layui-form-mid" style="color: red">*</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">项目经理</label>
+        <div class="layui-input-inline">
+            <!--            <button type="button" class="layui-btn" id="send_user_id">选择审批人</button>-->
+            <div style="margin-top: 10px" id="send_select_id">默认项目经理级</div>
+            <div id="send_select_id"></div>
+            <input type="hidden" name="send_user" id="send_user" value="" lay-verify="required">
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">抄送人</label>
         <div class="layui-input-inline">
-            <button type="button" class="layui-btn" id="copy_user_id">选择抄送人</button>
-            <div id="copy_select_id">{$data_info['hr_finance_user_id']|default=''}</div>
+<!--            <button type="button" class="layui-btn" id="copy_user_id">选择抄送人</button>-->
+            <div style="margin-top: 10px" id="copy_select_id">项目管理部</div>
             <input type="hidden" name="copy_user" id="copy_user" value="{$data_info['hr_finance_user']|default=''}">
         </div>
     </div>
@@ -177,6 +172,8 @@
             calendar: true,
             trigger: 'click',
             value: new Date(),
+            min:0,
+            max:0,
         });
         laydate.render({
             elem: '.field-start_time',
@@ -309,6 +306,28 @@
             });
         });
 
+        $(".field-guige-add").click(function(){
+            $(".new_task").before("<div class=\"layui-form-item\">\n" +
+                "        <label class=\"layui-form-label\">内容</label>\n" +
+                "        <div class=\"layui-input-inline\" style=\"width: 200px\">\n" +
+                "            <input type=\"text\" class=\"layui-input field-content\" name=\"content[]\" autocomplete=\"off\" placeholder=\"描述\">\n" +
+                "        </div>\n" +
+                "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
+                "            <input type=\"number\" class=\"layui-input field-num\" name=\"num[]\" onblur=\"amout_sum()\" autocomplete=\"off\" placeholder=\"计量\">\n" +
+                "        </div>\n" +
+                "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
+                "            <select name=\"unit[]\" class=\"field-unit\" type=\"select\">\n" +
+                "                {$unit_option}\n" +
+                "            </select>\n" +
+                "        </div>\n" +
+                "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
+                "            <input type=\"number\" class=\"layui-input field-per_price\" name=\"per_price[]\" onblur=\"amout_sum()\" autocomplete=\"off\" placeholder=\"单价\">\n" +
+                "        </div>\n" +
+                "        <div class=\"layui-form-mid\" style=\"color: red\">元</div>\n" +
+                "    </div>");
+            form.render();
+        });
+
         //多文件列表示例
         var demoListView = $('#demoList'),uploadListIns = upload.render({
             elem: '#testList',
@@ -400,23 +419,19 @@
     });
 
     function select_union(id){
-        var name = "{$data_info['hr_finance_user_id']}",uid = "{$data_info['hr_finance_user']}";
         $.ajax({
             type: 'POST',
             url: "{:url('getFlowUser')}",
-            data: {id:id,p:1},
+            data: {id:id},
             dataType:  'json',
             success: function(data){
-                if (data.uid) {
-                    $('#copy_select_id').text(name+','+data.name);
-                    $('#copy_user').val(uid+','+data.uid);
-                }
+                $('#send_user').val(data.manager_user);
             }
         });
     }
 
     function check_name(){
-        var name = $('.field-send_select_id').val();
+        var name = $('.field-shigong_select_id').val();
         $.ajax({
             type: 'POST',
             url: "{:url('checkName')}",
@@ -424,7 +439,7 @@
             dataType:  'json',
             success: function(data){
                 if (data) {
-                    $('#send_user').val(data);
+                    $('#shigong_user').val(data);
                 }else {
                     layer.alert('施工员不存在');
                 }
@@ -433,40 +448,25 @@
     }
 
     function amout_sum() {
-        var total = 0,
-            hour = $('.field-hour').val() * $('.field-per_hour').val(),
-            square = $('.field-square').val() * $('.field-per_square').val();
-        if (hour > 0){
-            $('.hour').html(hour+'元');
-        }
-        if (square > 0){
-            $('.square').html(square+'元');
-        }
-        total = hour+square;
-        $('.field-total').val(total);
+        var total = 0;
+        $("input[name^='num']").each(function (i, el) {
+            var num = parseInt($(this).val());
+            if (isNaN(num)){
+                num = 0;
+            }
+            $("input[name^='per_price']").each(function (n, e) {
+                var per_price = parseInt($(this).val());
+                if (isNaN(per_price)){
+                    per_price = 0;
+                }
+                if (i == n){
+                    total += num * per_price;
+                }
+            });
+        });
+        $('.field-money').val(total);
     }
 
-    function amout_sum1() {
-        var total = 0,
-            per_price = {$per_price};
-            hour = $('.field-hour').val() * per_price['hour'],
-            day = $('.field-day').val() * per_price['day'],
-            square = $('.field-square').val() * per_price['square'],
-            ton = $('.field-ton').val() * per_price['ton'];
-        if (hour > 0){
-            $('.hour').html(hour+'元');
-        }
-        if (day > 0){
-            $('.day').html(day+'元');
-        }
-        if (square > 0){
-            $('.square').html(square+'元');
-        }
-        if (ton > 0){
-            $('.ton').html(ton+'元');
-        }
-        total = hour+day+square+ton;
-        $('.field-total').val(total);
-    }
+
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>

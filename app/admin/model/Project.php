@@ -226,12 +226,13 @@ class Project extends Model
         $cid = session('admin_user.cid');
         $map['cid'] = $cid;
         $map['pid'] = 0;
+        $map['status'] = 1;
         $uid = session('admin_user.uid');
         $con = "JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"')";
         $list = self::where($map)->where($con)->order('grade desc,create_time desc')->column('name','id');
         if ($list){
             if ($option){
-                $str = "<option value='0' selected>其他</option>";
+                $str = "<option value='0'>其他</option>";
                 foreach ($list as $k => $v) {
                     if ($id == $k) {
                         $str .= "<option value='".$k."' selected>".$v."</option>";
