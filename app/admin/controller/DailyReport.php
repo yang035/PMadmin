@@ -181,7 +181,7 @@ class DailyReport extends Admin
                 $sc = [
                     'project_id'=>$row['project_id'],
                     'cid'=>session('admin_user.cid'),
-                    'user'=>session('admin_user.uid'),
+                    'user'=>$row['user_id'],
                     'ml_add_score'=>$sum,
                     'ml_sub_score'=>0,
                     'gl_add_score'=>0,
