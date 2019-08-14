@@ -61,7 +61,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">ML合计</label>
         <div class="layui-input-inline">
-            <input type="number" class="layui-input field-total" name="total" autocomplete="off" placeholder="0">
+            <input type="number" class="layui-input field-total" name="total" readonly autocomplete="off" placeholder="0">
         </div>
         <div class="layui-form-mid">斗</div>
     </div>

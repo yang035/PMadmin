@@ -147,10 +147,16 @@ class DailyReport extends Admin
 
     public function read($id){
         $params = $this->request->param();
+        $where = [
+            'id'=>$params['id']
+        ];
+        $row = DailyReportModel::where($where)->find()->toArray();
         if ($this->request->isPost()) {
             $tmp = [];
             if ($params['content']){
+                $sum = 0;
                 foreach ($params['content'] as $k=>$v){
+                    $sum += !empty($params['ml'][$k]) ? $params['ml'][$k] : 0;
                     $tmp[$k]['cid'] = session('admin_user.cid');
                     $tmp[$k]['content'] = $v;
                     $tmp[$k]['ml'] = $params['ml'][$k];
@@ -167,14 +173,25 @@ class DailyReport extends Admin
                         AppraiseOption::where($w)->update($tmp[$k]);
                     }
                 }
+                //计算得分
+                $sc = [
+                    'project_id'=>$row['project_id'],
+                    'cid'=>session('admin_user.cid'),
+                    'user'=>session('admin_user.uid'),
+                    'ml_add_score'=>$sum,
+                    'ml_sub_score'=>0,
+                    'gl_add_score'=>0,
+                    'gl_sub_score'=>0,
+                    'remark' => '行政日报得分'
+                ];
+                if (ScoreModel::addScore($sc)){
+                    return $this->success("操作成功，奖励{$sum}ML斗。",'DailyReport/index?atype=2');
+                }else{
+                    return $this->error('操作失败');
+                }
             }
-            return $this->success('操作成功！');
         }
 
-        $where = [
-            'id'=>$params['id']
-        ];
-        $row = DailyReportModel::where($where)->find()->toArray();
         if ($row){
             $row['content'] = json_decode($row['content'],true);
             $row['plan'] = json_decode($row['plan'],true);
