@@ -147,7 +147,9 @@
     <div class="layui-form-item">
         <div class="layui-input-block">
             <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
+            {eq name="Request.param.atype" value="3"}
             <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">确认</button>
+            {/eq}
             {notempty name="Request.param.atype"}
             <a href="{:url('index',['atype'=>$Request.param.atype])}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
             {else/}

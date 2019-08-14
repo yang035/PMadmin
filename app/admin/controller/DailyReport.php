@@ -173,6 +173,10 @@ class DailyReport extends Admin
                         AppraiseOption::where($w)->update($tmp[$k]);
                     }
                 }
+                //标记已读
+                $uid = session('admin_user.uid');
+                $sql = "UPDATE tb_daily_report SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
+                DailyReportModel::execute($sql);
                 //计算得分
                 $sc = [
                     'project_id'=>$row['project_id'],
@@ -205,21 +209,21 @@ class DailyReport extends Admin
             $row['work_option'] = WorkModel::getOption4($row['work_option']);
         }
         //标记已读
-        $uid = session('admin_user.uid');
-        if (isset($params['atype'])){
-            switch ($params['atype']){
-                case 3:
-                    $sql = "UPDATE tb_daily_report SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
-                    break;
-                case 4:
-                    $sql = "UPDATE tb_daily_report SET copy_user = JSON_SET(copy_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
-                    break;
-                default:
-                    $sql = "UPDATE tb_daily_report SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
-                    break;
-            }
-            ProjectModel::execute($sql);
-        }
+//        $uid = session('admin_user.uid');
+//        if (isset($params['atype'])){
+//            switch ($params['atype']){
+//                case 3:
+//                    $sql = "UPDATE tb_daily_report SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
+//                    break;
+//                case 4:
+//                    $sql = "UPDATE tb_daily_report SET copy_user = JSON_SET(copy_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
+//                    break;
+//                default:
+//                    $sql = "UPDATE tb_daily_report SET send_user = JSON_SET(copy_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
+//                    break;
+//            }
+//            DailyReportModel::execute($sql);
+//        }
 
         $coment = ReportReply::getAll($params['id'],5,1);
         if (!empty($row['project_id'])){
