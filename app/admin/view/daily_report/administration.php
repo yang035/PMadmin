@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="__ADMIN_JS__/pictureViewer/css/pictureViewer.css">
 <style>
     .layui-upload-img {
         width: 92px;
@@ -14,174 +13,114 @@
     input[type="number"] {
         -moz-appearance: textfield;
     }
-    .layui-input,.layui-form-selected dl {
-        width: 500px;
+    .layui-input,.layui-input-block{
+        width: 298px;
     }
-    .layui-form-select .layui-edge {
-        right: -200px;
+    /*.layui-form-select  {*/
+
+    /*}*/
+    .layui-form-item{
+        margin-bottom: 5px;
     }
-    span{
-        line-height:35px;
-        height:50px;
+    .new_task{
+        margin-left: 630px;
+    }
+    .layui-form-mid1 {
+        float: left;
+        display: block;
+        padding: 9px 0!important;
+        line-height: 20px;
+        margin-right: 10px;
         font-size: 15px;
+        color: grey;
     }
 </style>
-
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-form-item">
-        <label class="layui-form-label">提交人</label>
+        <label class="layui-form-label">项目名</label>
         <div class="layui-input-inline">
-            <span>{$data_list['real_name']}</span>
+            <select name="project_id" class="layui-input field-project_id" type="select" lay-search>
+                {$mytask}
+            </select>
         </div>
+        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">任务名</label>
+        <label class="layui-form-label">事项</label>
         <div class="layui-input-inline">
-            <span>{$data_list['project_name']}</span>
+            <input type="text" class="layui-input field-content" name="content[]" autocomplete="off" placeholder="描述">
         </div>
+        <div class="layui-input-inline" style="width: 100px">
+            <input type="number" class="layui-input field-ml" style="width: 100px" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="ML值">
+        </div>
+        <div class="layui-form-mid" style="color: red">不能超过20斗*</div>
     </div>
-    {empty name="data_list['detail']"}
+    <div class="new_task">
+        <a href="javascript:void(0);" class="aicon ai-tianjia field-task-add" style="float: left;font-size: 30px;"></a>
+    </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">完成情况</label>
+        <label class="layui-form-label">ML合计</label>
         <div class="layui-input-inline">
-            <span>{$data_list['real_per']}%</span>
+            <input type="number" class="layui-input field-total" name="total" autocomplete="off" placeholder="0">
         </div>
+        <div class="layui-form-mid">斗</div>
     </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">工作内容</label>
-        {notempty name="data_list['content']"}
-        {volist name="data_list['content']" id="vo"}
-        <div class="layui-input-block">
-            <span>{$i}:{$vo}</span>
-        </div>
-        {/volist}
-        {else/}
-        <span>无</span>
-        {/notempty}
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">基础工作</label>
-        <div class="layui-input-block">
-            {$data_list['work_option']}
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">明日计划</label>
-        {notempty name="data_list['plan']"}
-        {volist name="data_list['plan']" id="vo"}
-        <div class="layui-input-block">
-            <span>{$i}:{$vo}</span>
-        </div>
-        {/volist}
-        {else/}
-        <span>无</span>
-        {/notempty}
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">存在问题</label>
-        {notempty name="data_list['question']"}
-        {volist name="data_list['question']" id="vo"}
-        <div class="layui-input-block">
-            <span>{$i}:{$vo}</span>
-        </div>
-        {/volist}
-        {else/}
-        <span>无</span>
-        {/notempty}
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">心得</label>
-        {notempty name="data_list['tips']"}
-        {volist name="data_list['tips']" id="vo"}
-        <div class="layui-input-block">
-            <span>{$i}:{$vo}</span>
-        </div>
-        {/volist}
-        {else/}
-        <span>无</span>
-        {/notempty}
-    </div>
-    {else/}
-        {volist name="data_list['detail']" id="vo"}
-        <div class="layui-form-item">
-            <label class="layui-form-label">事项</label>
-            <div class="layui-input-inline">
-                <input type="text" class="layui-input field-content" name="content[]" value="{$vo['content']}" readonly autocomplete="off" placeholder="描述">
-            </div>
-            <div class="layui-input-inline" style="width: 100px">
-                <input type="number" class="layui-input field-ml" style="width: 100px" value="{$vo['ml']}" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="ML值">
-            </div>
-            <div class="layui-form-mid" style="color: red">不能超过20斗*</div>
-        </div>
-        {/volist}
-    {/empty}
     <div class="layui-form-item">
         <label class="layui-form-label">附件说明</label>
-        <div class="layui-input-inline">
-            {notempty name="data_list['attachment']"}
-<!--            <div class="image-list">-->
-            <ul>
-            {volist name="data_list['attachment']" id="vo"}
-<!--                <div class="cover"><img src="{$vo}" style="height: 30px;width: 30px;"></div>-->
-                <li>&nbsp;&nbsp;&nbsp;&nbsp;<a target="_blank" href="{$vo}" style="color: #5c90d2">附件{$i}</a></li>
-            {/volist}
-            </ul>
-<!--            </div>-->
-            {else/}
-            <span>无</span>
-            {/notempty}
+        <div class="layui-input-block">
+            <div class="layui-upload">
+                <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
+                <div class="other-div" style="display: none">
+                    <div class="layui-upload-list">
+                        <table class="layui-table">
+                            <thead>
+                            <tr>
+                                <th>文件名</th>
+                                <th>大小</th>
+                                <th>上传进度</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="demoList"></tbody>
+                        </table>
+                    </div>
+                    <button type="button" class="layui-btn layui-btn-danger" id="testListAction">开始上传</button>
+                    <input class="layui-input field-attachment" type="hidden" name="attachment" value="">
+                </div>
+            </div>
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">汇报给</label>
         <div class="layui-input-inline">
-            <span>{$data_list['send_user']}</span>
+            <button type="button" class="layui-btn" id="send_user_id">选择汇报人</button>
+            <div id="send_select_id"></div>
+            <input type="hidden" name="send_user" id="send_user" value="">
         </div>
+        <div class="layui-form-mid red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">抄送给</label>
         <div class="layui-input-inline">
-            <span>{$data_list['copy_user']}</span>
+            <button type="button" class="layui-btn" id="copy_user_id">选择抄送人</button>
+            <div id="copy_select_id">{$data_info['copy_user_id']|default=''}</div>
+            <input type="hidden" name="copy_user" id="copy_user" value="{$data_info['copy_user']|default=''}">
         </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
-            <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">确认</button>
-            {notempty name="Request.param.atype"}
-            <a href="{:url('index',['atype'=>$Request.param.atype])}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
-            {else/}
-            <a href="javascript:history.back()" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
-            {/notempty}
-            <a onclick="open_reply(0,{$data_list['id']},{$data_list['project_id']})" class="layui-btn layui-btn-normal">留言</a>
+            <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
+            <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
         </div>
-    </div>
-    <hr>
-    <div class="layui-form-item">
-    {volist name="coment" id="v"}
-    <li>
-        <span style="color: grey">[{$v['create_time']} 留言]</span>
-        {$v['content']}
-        <a onclick="open_reply({$v['id']},{$v['report_id']},{$v['project_id']})" class="layui-btn layui-btn-normal layui-btn-xs">回复</a>
-        <br>
-        {volist name="v['child']" id="vo"}
-        <li>
-            <span style="color: grey;margin-left: 20px;font-size: 14px;">[{$vo['create_time']} 回复]{$vo['content']}</span>
-            <br>
-        </li>
-        {/volist}
-    </li>
-    {/volist}
     </div>
 </form>
 {include file="block/layui" /}
-<script src="__ADMIN_JS__/pictureViewer/js/pictureViewer.js"></script>
-<script src="__ADMIN_JS__/pictureViewer/js/jquery.mousewheel.min.js"></script>
 <script>
     var formData = {:json_encode($data_info)};
 
-    layui.use(['jquery', 'laydate','upload'], function() {
-        var $ = layui.jquery, laydate = layui.laydate,upload = layui.upload;
+    layui.use(['jquery', 'laydate','element','upload','form'], function() {
+        var $ = layui.jquery, laydate = layui.laydate,element = layui.element,upload = layui.upload,form = layui.form;
         laydate.render({
             elem: '.field-start_time',
             type: 'date'
@@ -234,7 +173,8 @@
         });
 
         $('#manager_user_id').on('click', function(){
-            var open_url = "{:url('Tool/getTreeUser')}?m=manager";
+            var manager_user = $('#manager_user').val();
+            var open_url = "{:url('Tool/getTreeUser')}?m=manager&u="+manager_user;
             if (open_url.indexOf('?') >= 0) {
                 open_url += '&hisi_iframe=yes';
             } else {
@@ -253,7 +193,8 @@
         });
 
         $('#deal_user_id').on('click', function(){
-            var open_url = "{:url('Tool/getTreeUser')}?m=deal";
+            var deal_user = $('#deal_user').val();
+            var open_url = "{:url('Tool/getTreeUser')}?m=deal&u="+deal_user;
             if (open_url.indexOf('?') >= 0) {
                 open_url += '&hisi_iframe=yes';
             } else {
@@ -272,7 +213,8 @@
         });
 
         $('#send_user_id').on('click', function(){
-            var open_url = "{:url('Tool/getTreeUser')}?m=send"+'&path=1';
+            var send_user = $('#send_user').val();
+            var open_url = "{:url('Tool/getTreeUser')}?m=send&u="+send_user+'&path=1';
             if (open_url.indexOf('?') >= 0) {
                 open_url += '&hisi_iframe=yes';
             } else {
@@ -291,7 +233,8 @@
         });
 
         $('#copy_user_id').on('click', function(){
-            var open_url = "{:url('Tool/getTreeUser')}?m=copy";
+            var copy_user = $('#copy_user').val();
+            var open_url = "{:url('Tool/getTreeUser')}?m=copy&u="+copy_user;
             if (open_url.indexOf('?') >= 0) {
                 open_url += '&hisi_iframe=yes';
             } else {
@@ -309,6 +252,19 @@
             });
         });
 
+        $(".field-task-add").click(function(){
+            $(".new_task").before("<div class=\"layui-form-item\">\n" +
+                "        <label class=\"layui-form-label\">事项</label>\n" +
+                "        <div class=\"layui-input-inline\">\n" +
+                "            <input type=\"text\" class=\"layui-input field-content\" name=\"content[]\" autocomplete=\"off\" placeholder=\"描述\">\n" +
+                "        </div>\n" +
+                "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
+                "            <input type=\"number\" class=\"layui-input field-ml\" style=\"width: 100px\" onblur=\"check_ml(this)\" onkeypress=\"return (/[\\d]/.test(String.fromCharCode(event.keyCode)))\" name=\"ml[]\" autocomplete=\"off\" placeholder=\"ML值\">\n" +
+                "        </div>\n" +
+                "        <div class=\"layui-form-mid\" style=\"color: red\">不能超过20斗*</div>\n" +
+                "    </div>");
+            form.render();
+        });
         $(".field-content-add").click(function(){
             $(".field-content-add").before("<div class=\"layui-input-block\">\n" +
                 "            <input type=\"text\" class=\"layui-input fl field-content\" name=\"content[]\" autocomplete=\"off\" placeholder=\"增加内容\">\n" +
@@ -330,20 +286,23 @@
                 "        </div>");
         });
 
-        //点击预览图片
-        $('.image-list').on('click', '.cover', function () {
-            var this_ = $(this);
-            var images = this_.parents('.image-list').find('.cover');
-            var imagesArr = new Array();
-            $.each(images, function (i, image) {
-                imagesArr.push($(image).children('img').attr('src'));
-            });
-            $.pictureViewer({
-                images: imagesArr, //需要查看的图片，数据类型为数组
-                initImageIndex: this_.index() + 1, //初始查看第几张图片，默认1
-                scrollSwitch: true //是否使用鼠标滚轮切换图片，默认false
-            });
-        });
+        //创建监听函数
+        var xhrOnProgress=function(fun) {
+            xhrOnProgress.onprogress = fun; //绑定监听
+            //使用闭包实现监听绑
+            return function() {
+                //通过$.ajaxSettings.xhr();获得XMLHttpRequest对象
+                var xhr = $.ajaxSettings.xhr();
+                //判断监听函数是否为函数
+                if (typeof xhrOnProgress.onprogress !== 'function')
+                    return xhr;
+                //如果有监听函数并且xhr对象支持绑定时就把监听函数绑定上去
+                if (xhrOnProgress.onprogress && xhr.upload) {
+                    xhr.upload.onprogress = xhrOnProgress.onprogress;
+                }
+                return xhr;
+            }
+        };
 
         //多文件列表示例
         var demoListView = $('#demoList'),uploadListIns = upload.render({
@@ -354,13 +313,29 @@
             multiple: true,
             auto: false,
             bindAction: '#testListAction',
+            xhr:xhrOnProgress,
+            progress:function(value,obj){
+                $("#demoList").find('.layui-progress ').each(function () {
+                    if ($(this).attr("file") == obj.name) {
+                        var progressBarName = $(this).attr("lay-filter");
+                        var percent = Math.floor((value.loaded / value.total) * 100);//计算百分比
+                        element.progress(progressBarName, percent + '%');//设置页面进度条
+                    }
+                })},
             choose: function(obj){
                 var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+                var count = 0;
                 //读取本地文件
                 obj.preview(function(index, file, result){
+                    count++;
                     var tr = $(['<tr id="upload-'+ index +'">'
                         ,'<td>'+ file.name +'</td>'
                         ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
+                        ,'<td>'
+                        +'<div  file="'+file.name+'" class="layui-progress layui-progress-big" lay-showpercent="true"   lay-filter="progressBar'+count+'">'
+                        +'<div  class="layui-progress-bar layui-bg-red" lay-percent="0%"></div>'
+                        +'</div>'
+                        , '</td>'
                         ,'<td>等待上传</td>'
                         ,'<td>'
                         ,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
@@ -388,8 +363,8 @@
                 if(res.code == 1){ //上传成功
                     var tr = demoListView.find('tr#upload-'+ index)
                         ,tds = tr.children();
-                    tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
-                    tds.eq(3).html(''); //清空操作
+                    tds.eq(3).html('<span style="color: #5FB878;">上传成功</span>');
+                    tds.eq(4).html(''); //清空操作
                     var new_value = $('.field-attachment').val();
                     new_value += res.data.file+',';
                     $('.field-attachment').val(new_value);
@@ -400,33 +375,13 @@
             ,error: function(index, upload){
                 var tr = demoListView.find('tr#upload-'+ index)
                     ,tds = tr.children();
-                tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
-                tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+                tds.eq(3).html('<span style="color: #FF5722;">上传失败</span>');
+                tds.eq(4).find('.demo-reload').removeClass('layui-hide'); //显示重传
             }
         });
+        form.render();
+        $('.field-item').find('input').removeAttr("readonly");
     });
-
-    function open_reply(pid,report_id,project_id) {
-        var open_url = "{:url('ReportReply/add')}?id="+report_id+"&project_id="+project_id+"&type=1";
-        if (open_url.indexOf('?') >= 0) {
-            open_url += '&hisi_iframe=yes';
-        } else {
-            open_url += '?hisi_iframe=yes';
-        }
-        layer.open({
-            type:2,
-            maxmin: true,
-            title :'回复',
-            area: ['600px', '400px'],
-            content: open_url,
-            success:function (layero, index) {
-                var body = layer.getChildFrame('body', index);  //巧妙的地方在这里哦
-                body.contents().find(".field-pid").val(pid);
-                body.contents().find(".field-report_id").val(report_id);
-                body.contents().find(".field-project_id").val(project_id);
-            }
-        });
-    }
 
     function check_ml(e) {
         var num = parseInt($(e).val());
