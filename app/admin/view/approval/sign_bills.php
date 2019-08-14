@@ -17,7 +17,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">选择项目</label>
             <div class="layui-input-inline">
-                <select name="project_id" class="field-project_id" type="select" lay-filter="project_type">
+                <select name="project_id" class="field-project_id" type="select" lay-filter="project_type" lay-search="">
                     {$mytask}
                 </select>
             </div>

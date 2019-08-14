@@ -228,11 +228,16 @@ class Project extends Model
         $map['pid'] = 0;
         $map['status'] = 1;
         $uid = session('admin_user.uid');
-        $con = "JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"')";
+        $role_id = session('admin_user.role_id');
+        $con = '';
+        if ($role_id > 3){
+            $con .= "JSON_CONTAINS_PATH(manager_user,'one', '$.\"$uid\"') or JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') or JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"') or JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"')";
+        }
+
         $list = self::where($map)->where($con)->order('grade desc,create_time desc')->column('name','id');
         if ($list){
             if ($option){
-                $str = "<option value='0'>其他</option>";
+                $str = "<option value=''>搜索</option>";
                 foreach ($list as $k => $v) {
                     if ($id == $k) {
                         $str .= "<option value='".$k."' selected>".$v."</option>";
@@ -240,6 +245,7 @@ class Project extends Model
                         $str .= "<option value='".$k."'>".$v."</option>";
                     }
                 }
+                $str .= "<option value='0'>其他</option>";
                 return $str;
             }else{
                 return $list;
@@ -270,11 +276,17 @@ class Project extends Model
     }
 
     public static function inputSearchProject(){
-        $where = [
-            'pid'=>0,
-            'cid'=>session('admin_user.cid'),
-        ];
-        $data = self::field('id,name')->where($where)->select();
+        $cid = session('admin_user.cid');
+        $map['cid'] = $cid;
+        $map['pid'] = 0;
+        $map['status'] = 1;
+        $uid = session('admin_user.uid');
+        $role_id = session('admin_user.role_id');
+        $con = '';
+        if ($role_id > 3){
+            $con .= "JSON_CONTAINS_PATH(manager_user,'one', '$.\"$uid\"') or JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') or JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"') or JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"')";
+        }
+        $data = self::field('id,name')->where($map)->where($con)->select();
         $tmp = [
             'id'=>0,
             'name'=>'其他'
