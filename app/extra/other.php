@@ -197,7 +197,7 @@ return [
             'href'=>'admin/Approval/backLeave'
         ],
         16=>[
-            'title'=>'施工签单',
+            'title'=>'工作清单',
             'href'=>'admin/Approval/signBills'
         ],
     ],
@@ -213,7 +213,7 @@ return [
             'href'=>'admin/DailyReport/add'
         ],
         2=>[
-            'title'=>'行政日报',
+            'title'=>'项目部日报',
             'href'=>'admin/DailyReport/administration'
         ],
     ],
@@ -308,6 +308,8 @@ return [
         3=>'平方',
         4=>'吨',
         5=>'天',
+        6=>'立方',
+        7=>'株',
     ],
     'bbs_url' => 'http://bbs.imlgl.com/?user-login.htm',
     'partnership_grade' => [
