@@ -213,7 +213,7 @@ return [
             'href'=>'admin/DailyReport/add'
         ],
         2=>[
-            'title'=>'项目部日报',
+            'title'=>'项目管理日报',
             'href'=>'admin/DailyReport/administration'
         ],
     ],
