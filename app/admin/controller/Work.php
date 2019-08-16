@@ -191,6 +191,8 @@ class Work extends Admin
                 $title = explode("\r\n",trim($data['group']));
                 $title = array_map('trim',array_filter(array_unique($title)));
                 $data['group'] = json_encode($title);
+            }else{
+                $data['group'] = json_encode([]);
             }
             if (!CatModel::create($data)) {
                 return $this->error('添加失败');
@@ -216,6 +218,8 @@ class Work extends Admin
                 $title = explode("\r\n",trim($data['group']));
                 $title = array_map('trim',array_filter(array_unique($title)));
                 $data['group'] = json_encode($title);
+            }else{
+                $data['group'] = json_encode([]);
             }
             if (!CatModel::update($data)) {
                 return $this->error('修改失败');
