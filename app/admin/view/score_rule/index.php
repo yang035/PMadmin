@@ -49,7 +49,7 @@
                 treeSpid: 0,
                 treeIdName: 'id',
                 treePidName: 'pid',
-                treeDefaultClose: true,
+                treeDefaultClose: false,
                 treeLinkage: false,
                 elem: '#table1',
                 url: _url,
