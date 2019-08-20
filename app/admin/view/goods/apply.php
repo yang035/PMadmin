@@ -50,6 +50,7 @@
                     </div>
                 </div>
                 <input type="hidden" class="field-cat_id" name="cat_id">
+                <input type="hidden" class="field-atype" name="atype" value="{$Request.param.atype}">
                 <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
             </div>
         </form>
@@ -72,7 +73,7 @@
         var table = layui.table;
         table.render({
             elem: '#dataTable'
-            ,url: "{:url('apply',[$atype])}" //数据接口
+            ,url: "{:url('apply',['atype'=>$atype])}" //数据接口
             ,page: true //开启分页
             ,limit: 20
             ,text: {

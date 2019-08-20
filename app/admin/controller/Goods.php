@@ -185,7 +185,7 @@ class Goods extends Admin
         if ($this->request->isAjax()) {
             $page = input('param.page/d', 1);
             $limit = input('param.limit/d', 15);
-            $atype = input('param.0/d', 3);
+            $atype = input('param.atype/d',3);
 
             if (1 != session('admin_user.role_id')){
                 $where['a.cid'] = session('admin_user.cid');
