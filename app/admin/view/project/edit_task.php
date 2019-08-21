@@ -197,7 +197,7 @@
                                     {volist name="vo['reply']" id="v"}
                                     <li>
                                         <span style="color: green">[{$v['real_name']}]</span>
-                                        <span style="color: grey">[{$v['create_time']}评价]</span><br>
+                                        <span style="color: grey">[{$v['create_time']}评价]</span>&nbsp;&nbsp;<span style="color: green">[{$v['realper']}%]</span><br>
                                         {$v['content']}
                                     </li>
                                     {/volist}

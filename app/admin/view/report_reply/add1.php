@@ -9,13 +9,6 @@
 </style>
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-form-item">
-        <label class="layui-form-label">完成情况</label>
-        <div class="layui-input-inline">
-            <input type="number" class="layui-input field-realper" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="realper" autocomplete="off" placeholder="请输整数">
-        </div>
-        <div class="layui-form-mid red">%</div>
-    </div>
-    <div class="layui-form-item">
         <label class="layui-form-label">内容</label>
         <div class="layui-input-inline">
             <textarea type="text" rows="8" class="layui-textarea field-content" name="content" lay-verify="required" autocomplete="off" placeholder="请输入内容"></textarea>
