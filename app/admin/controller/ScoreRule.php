@@ -103,7 +103,7 @@ class ScoreRule extends Admin
             if (0 == $p_res['pid']){
                 $data['score'] = 0;
             }
-            if ($p_res){
+            if ($p_res['pid']){
                 $data['code'] = $p_res['code'].$p_res['id'].'r';
             }else{
                 $data['code'] = $data['cid'].'r';
