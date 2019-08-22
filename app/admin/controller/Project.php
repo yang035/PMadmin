@@ -140,6 +140,7 @@ class Project extends Admin
         $cid = session('admin_user.cid');
         $map['cid'] = $cid;
         $map['t_type'] = 1;
+        $map['status'] = 1;
 
         if (empty($subject_id)){
             $map['pid'] = 0;
