@@ -51,9 +51,9 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">日期</label>
+                    <label class="layui-form-label">结束时间≤</label>
                     <div class="layui-input-inline">
-                        <input type="text" class="layui-input field-start_time" name="start_time" value="{:input('get.start_time')}" readonly autocomplete="off" placeholder="选择开始日期段">
+                        <input type="text" class="layui-input field-start_time" name="start_time" value="{:input('get.start_time')}" readonly autocomplete="off" placeholder="选择结束时间">
                     </div>
                 </div>
                 <div class="layui-inline">

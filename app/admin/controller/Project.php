@@ -103,7 +103,8 @@ class Project extends Admin
             }
             if (isset($params['start_time']) && !empty($params['start_time'])) {
                 $start_time = $params['start_time'];
-                $con .= " '{$start_time}' between DATE_FORMAT(start_time,'%Y-%m-%d') and DATE_FORMAT(end_time,'%Y-%m-%d') ";
+                $con .= " '{$start_time}' <= DATE_FORMAT(end_time,'%Y-%m-%d') ";
+//                $con .= " '{$start_time}' between DATE_FORMAT(start_time,'%Y-%m-%d') and DATE_FORMAT(end_time,'%Y-%m-%d') ";
             }
 
 //            if (isset($params['start_time']) && !empty($params['start_time'])) {
