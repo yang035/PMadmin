@@ -220,10 +220,15 @@ class ScoreDeal extends Admin
                 $score[$k]['url'] = $this->request->url();
                 $score[$k]['remark'] = "事件积分({$realname})审批,{$rule_row['name']}";
                 $score[$k]['user_id'] = session('admin_user.uid');
-                if ($rule_row['score'] > 0){
-                    $score[$k]['gl_add_score'] = $rule_row['score'];
+                if ($rule_row['ml'] > 0){
+                    $score[$k]['ml_add_score'] = $rule_row['ml'];
                 }else{
-                    $score[$k]['gl_sub_score'] = abs($rule_row['score']);
+                    $score[$k]['ml_sub_score'] = abs($rule_row['ml']);
+                }
+                if ($rule_row['gl'] > 0){
+                    $score[$k]['gl_add_score'] = $rule_row['gl'];
+                }else{
+                    $score[$k]['gl_sub_score'] = abs($rule_row['gl']);
                 }
                 $score[$k]['create_time'] = $score[$k]['update_time'] = time();
             }

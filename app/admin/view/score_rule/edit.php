@@ -14,10 +14,17 @@
         </div>
         <div class="layui-form-mid" style="color: red">*</div>
     </div>
-    <div class="layui-form-item" style="display: none;" id="tuijian_div">
-        <label class="layui-form-label">产量</label>
+    <div class="layui-form-item" style="display: none;" id="tuijian_ml">
+        <label class="layui-form-label">ML</label>
         <div class="layui-input-inline">
-            <input type="number" class="layui-input field-score" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="score" autocomplete="off" placeholder="请输入预设值">
+            <input type="number" class="layui-input field-ml" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml" autocomplete="off" placeholder="请输入奖扣值">
+        </div>
+        <div class="layui-form-mid">斗</div>
+    </div>
+    <div class="layui-form-item" style="display: none;" id="tuijian_gl">
+        <label class="layui-form-label">GL</label>
+        <div class="layui-input-inline">
+            <input type="number" class="layui-input field-gl" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="gl" autocomplete="off" placeholder="请输入奖扣值">
         </div>
         <div class="layui-form-mid">斗</div>
     </div>
@@ -43,13 +50,16 @@
         var $ = layui.jquery, form = layui.form;
 
         if ((formData.code).length > 2){
-            $('#tuijian_div').show();
+            $('#tuijian_ml').show();
+            $('#tuijian_gl').show();
         }
         form.on('select(pid)', function(data){
             if(1 == data.value){
-                $('#tuijian_div').hide();
+                $('#tuijian_ml').hide();
+                $('#tuijian_gl').hide();
             }else {
-                $('#tuijian_div').show();
+                $('#tuijian_ml').show();
+                $('#tuijian_gl').show();
             }
         });
         // form.render();

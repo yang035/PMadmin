@@ -48,6 +48,7 @@
                     <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
                     <th>奖扣人</th>
                     <th>事件</th>
+                    <th>ML(斗)</th>
                     <th>GL(斗)</th>
                     <th>审批人</th>
                     <th>审批状态</th>
@@ -62,7 +63,8 @@
                     <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
                     <td class="font12">{$vo['score_user']}</td>
                     <td class="font12">{$vo['rid']['fullname']}</td>
-                    <td class="font12">{$vo['rid']['score']}</td>
+                    <td class="font12">{$vo['rid']['ml']}</td>
+                    <td class="font12">{$vo['rid']['gl']}</td>
                     <td class="font12">{$vo['send_user']}</td>
                     <td class="font12">{$approval_status[$vo['status']]}</td>
                     <td class="font12">{$vo['user_id']}</td>

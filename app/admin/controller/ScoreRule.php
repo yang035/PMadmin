@@ -58,7 +58,7 @@ class ScoreRule extends Admin
             $data['user_id'] = session('admin_user.uid');
             $p_res = RuleModel::getRowById($data['pid']);
             if (0 == $p_res['pid']){
-                $data['score'] = 0;
+                $data['ml'] = $data['gl'] = 0;
             }
             if ($p_res['pid']){
                 $data['code'] = $p_res['code'].$p_res['id'].'r';
@@ -101,7 +101,7 @@ class ScoreRule extends Admin
             $data['user_id'] = session('admin_user.uid');
             $p_res = RuleModel::getRowById($data['pid']);
             if (0 == $p_res['pid']){
-                $data['score'] = 0;
+                $data['ml'] = $data['gl'] = 0;
             }
             if ($p_res['pid']){
                 $data['code'] = $p_res['code'].$p_res['id'].'r';
@@ -156,8 +156,8 @@ class ScoreRule extends Admin
 //            print_r($file_name);exit();
             set_time_limit(0);
             $excel = \service('Excel');
-            $format = array('A' => 'line', 'B' => 'pid', 'C' => 'name', 'D' => 'score');
-            $checkformat = array('A' => '序号', 'B' => '类别', 'C' => '项目', 'D' => '分数');
+            $format = array('A' => 'line', 'B' => 'pid', 'C' => 'name', 'D' => 'ml', 'E' => 'gl');
+            $checkformat = array('A' => '序号', 'B' => '类别', 'C' => '项目', 'D' => 'ML', 'E' => 'GL');
             $res = $excel->readUploadFile($file_name, $format, 8050, $checkformat);
             if ($res['status'] == 0) {
                 $this->error($res['data']);
@@ -176,7 +176,8 @@ class ScoreRule extends Admin
                                 'pid' => 1,
                                 'cid' => session('admin_user.cid'),
                                 'name' => $v,
-                                'score' => 0,
+                                'ml' => 0,
+                                'gl' => 0,
                                 'user_id' => session('admin_user.uid'),
                             ];
                             RuleModel::create($tmp);
@@ -207,7 +208,8 @@ class ScoreRule extends Admin
                             'pid' => $t[$v['B']],
                             'cid' => session('admin_user.cid'),
                             'name' => $v['C'],
-                            'score' => $v['D'],
+                            'ml' => $v['D'],
+                            'gl' => $v['E'],
                             'user_id' => session('admin_user.uid'),
                         ];
                         $f1 = RuleModel::create($tmp);
@@ -218,7 +220,8 @@ class ScoreRule extends Admin
                             'pid' => $t[$v['B']],
                             'cid' => session('admin_user.cid'),
                             'name' => $v['C'],
-                            'score' => $v['D'],
+                            'ml' => $v['D'],
+                            'gl' => $v['E'],
                             'user_id' => session('admin_user.uid'),
                         ];
                         $f1 = RuleModel::update($tmp);

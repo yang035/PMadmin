@@ -40,7 +40,8 @@
             事件名称：{$data_list['rid']['fullname']}<br>
             说明：{$data_list['remark']}<br>
             奖扣人：{$data_list['score_user']}<br>
-            GL值：{$data_list['rid']['score']}（斗）<br>
+            ML值：{$data_list['rid']['ml']}（斗）<br>
+            GL值：{$data_list['rid']['gl']}（斗）<br>
             审批人：{$data_list['send_user']}<br>
             抄送人：{$data_list['copy_user']}<br>
             添加人：{$data_list['user_id']}<br>
