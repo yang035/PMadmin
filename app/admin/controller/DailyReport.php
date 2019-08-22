@@ -364,6 +364,7 @@ class DailyReport extends Admin
             }
             unset($data['id']);
             $ins_data['project_id'] = $data['project_id'];
+            $ins_data['plan'] = json_encode(array_values(array_filter($data['plan'])));
             $ins_data['attachment'] = explode(',',$data['attachment']);
             $ins_data['attachment'] = json_encode(array_values(array_filter($ins_data['attachment'])));
             $ins_data['send_user'] = user_array($data['send_user']);

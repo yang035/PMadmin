@@ -14,7 +14,7 @@
         -moz-appearance: textfield;
     }
     .layui-input,.layui-input-block{
-        width: 298px;
+        width: 450px;
     }
     /*.layui-form-select  {*/
 
@@ -24,6 +24,9 @@
     }
     .new_task{
         margin-left: 630px;
+    }
+    .layui-form-select .layui-input {
+        width: 298px
     }
     .layui-form-mid1 {
         float: left;
@@ -47,7 +50,7 @@
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">事项</label>
-        <div class="layui-input-inline">
+        <div class="layui-input-inline" style="width: 450px">
             <input type="text" class="layui-input field-content" name="content[]" autocomplete="off" placeholder="描述">
         </div>
         <div class="layui-input-inline" style="width: 100px">
@@ -61,9 +64,22 @@
     <div class="layui-form-item">
         <label class="layui-form-label">ML合计</label>
         <div class="layui-input-inline">
-            <input type="number" class="layui-input field-total" name="total" readonly autocomplete="off" placeholder="0">
+            <input type="number" class="layui-input field-total" name="total" readonly autocomplete="off" placeholder="0" style="width: 298px">
         </div>
         <div class="layui-form-mid">斗</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">明日计划</label>
+        <div class="layui-input-block">
+            <input type="text" class="layui-input field-plan" name="plan[]" autocomplete="off" placeholder="计划1">
+        </div>
+        <div class="layui-input-block">
+            <input type="text" class="layui-input field-plan" name="plan[]" autocomplete="off" placeholder="计划2">
+        </div>
+        <div class="layui-input-block">
+            <input type="text" class="layui-input fl field-plan" name="plan[]" autocomplete="off" placeholder="计划3">
+        </div>
+        <a href="javascript:void(0);" class="aicon ai-tianjia field-plan-add" style="float: left;font-size: 30px;"></a>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">附件说明</label>
@@ -255,7 +271,7 @@
         $(".field-task-add").click(function(){
             $(".new_task").before("<div class=\"layui-form-item\">\n" +
                 "        <label class=\"layui-form-label\">事项</label>\n" +
-                "        <div class=\"layui-input-inline\">\n" +
+                "        <div class=\"layui-input-inline\" style=\"width: 450px\">\n" +
                 "            <input type=\"text\" class=\"layui-input field-content\" name=\"content[]\" autocomplete=\"off\" placeholder=\"描述\">\n" +
                 "        </div>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +

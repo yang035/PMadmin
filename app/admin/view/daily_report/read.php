@@ -70,7 +70,7 @@
         {notempty name="data_list['plan']"}
         {volist name="data_list['plan']" id="vo"}
         <div class="layui-input-block">
-            <span>{$i}:{$vo}</span>
+            <span>{$i}：{$vo}</span>
         </div>
         {/volist}
         {else/}
@@ -82,7 +82,7 @@
         {notempty name="data_list['question']"}
         {volist name="data_list['question']" id="vo"}
         <div class="layui-input-block">
-            <span>{$i}:{$vo}</span>
+            <span>{$i}：{$vo}</span>
         </div>
         {/volist}
         {else/}
@@ -94,7 +94,7 @@
         {notempty name="data_list['tips']"}
         {volist name="data_list['tips']" id="vo"}
         <div class="layui-input-block">
-            <span>{$i}:{$vo}</span>
+            <span>{$i}：{$vo}</span>
         </div>
         {/volist}
         {else/}
@@ -105,7 +105,7 @@
         {volist name="data_list['detail']" id="vo"}
         <div class="layui-form-item">
             <label class="layui-form-label">事项</label>
-            <div class="layui-input-inline">
+            <div class="layui-input-inline" style="width: 450px">
                 <input type="text" class="layui-input field-content" name="content[]" value="{$vo['content']}" readonly autocomplete="off" placeholder="描述">
             </div>
             <div class="layui-input-inline" style="width: 100px">
@@ -114,6 +114,18 @@
             <div class="layui-form-mid" style="color: red">不能超过20斗*</div>
         </div>
         {/volist}
+    <div class="layui-form-item">
+        <label class="layui-form-label">明日计划</label>
+        {notempty name="data_list['plan']"}
+        {volist name="data_list['plan']" id="vo"}
+        <div class="layui-input-block">
+            <span>{$i}：{$vo}</span>
+        </div>
+        {/volist}
+        {else/}
+        <span>无</span>
+        {/notempty}
+    </div>
     {/empty}
     <div class="layui-form-item">
         <label class="layui-form-label">附件说明</label>
