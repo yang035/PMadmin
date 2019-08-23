@@ -155,6 +155,9 @@ class DailyReport extends Admin
             $tmp = [];
             if ($params['content']){
                 $sum = 0;
+                foreach ($params['plan'] as $k=>$v) {
+                    $sum += !empty($params['ml'][$k]) ? $params['ml'][$k] : 0;
+                }
                 foreach ($params['content'] as $k=>$v){
                     $sum += !empty($params['ml'][$k]) ? $params['ml'][$k] : 0;
                     $tmp[$k]['cid'] = session('admin_user.cid');
@@ -186,7 +189,7 @@ class DailyReport extends Admin
                     'ml_sub_score'=>0,
                     'gl_add_score'=>0,
                     'gl_sub_score'=>0,
-                    'remark' => '行政日报得分'
+                    'remark' => '项目管理汇报得分'
                 ];
                 if (ScoreModel::addScore($sc)){
                     return $this->success("操作成功，奖励{$sum}ML斗。",'DailyReport/index?atype=2');
@@ -202,6 +205,7 @@ class DailyReport extends Admin
             $row['question'] = json_decode($row['question'],true);
             $row['tips'] = json_decode($row['tips'],true);
             $row['detail'] = json_decode($row['detail'],true);
+            $row['p_detail'] = json_decode($row['p_detail'],true);
             $row['attachment'] = json_decode($row['attachment'],true);
             $row['send_user'] = $this->deal_data($row['send_user']);
             $row['copy_user'] = $this->deal_data($row['copy_user']);
@@ -364,7 +368,7 @@ class DailyReport extends Admin
             }
             unset($data['id']);
             $ins_data['project_id'] = $data['project_id'];
-            $ins_data['plan'] = json_encode(array_values(array_filter($data['plan'])));
+//            $ins_data['plan'] = json_encode(array_values(array_filter($data['plan'])));
             $ins_data['attachment'] = explode(',',$data['attachment']);
             $ins_data['attachment'] = json_encode(array_values(array_filter($ins_data['attachment'])));
             $ins_data['send_user'] = user_array($data['send_user']);
@@ -381,12 +385,22 @@ class DailyReport extends Admin
                 foreach ($data['content'] as $k => $v) {
                     $ins_data['detail'][$k]['content'] = $v;
                     $ins_data['detail'][$k]['ml'] = !empty($data['ml'][$k]) ? $data['ml'][$k] : 0;
-                    if ($ins_data['detail'][$k]['ml'] > 20){
-                        return $this->error('每项ML不能超过20斗');
+                    if ($ins_data['detail'][$k]['ml'] > 10){
+                        return $this->error('每项ML不能超过10斗');
                     }
                 }
             }
-            $ins_data['detail'] = json_encode($ins_data['detail']);
+            if ($data['plan']) {
+                foreach ($data['plan'] as $k => $v) {
+                    $ins_data['p_detail'][$k]['plan'] = $v;
+                    $ins_data['p_detail'][$k]['ml'] = !empty($data['ml'][$k]) ? $data['ml'][$k] : 0;
+                    if ($ins_data['p_detail'][$k]['ml'] > 10){
+                        return $this->error('每项ML不能超过10斗');
+                    }
+                }
+            }
+            $ins_data['detail'] = json_encode($ins_data['detail'],JSON_FORCE_OBJECT);
+            $ins_data['p_detail'] = json_encode($ins_data['p_detail'],JSON_FORCE_OBJECT);
             $res = DailyReportModel::create($ins_data);
             if ($res) {
                 return $this->success("操作成功", 'index');

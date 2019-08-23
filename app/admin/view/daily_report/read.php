@@ -111,21 +111,21 @@
             <div class="layui-input-inline" style="width: 100px">
                 <input type="number" class="layui-input field-ml" style="width: 100px" value="{$vo['ml']}" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="ML值">
             </div>
-            <div class="layui-form-mid" style="color: red">不能超过20斗*</div>
+            <div class="layui-form-mid" style="color: red">不能超过10斗*</div>
         </div>
         {/volist}
+    {volist name="data_list['p_detail']" id="vo"}
     <div class="layui-form-item">
-        <label class="layui-form-label">明日计划</label>
-        {notempty name="data_list['plan']"}
-        {volist name="data_list['plan']" id="vo"}
-        <div class="layui-input-block">
-            <span>{$i}：{$vo}</span>
+        <label class="layui-form-label">计划</label>
+        <div class="layui-input-inline" style="width: 450px">
+            <input type="text" class="layui-input field-plan" name="plan[]" value="{$vo['plan']}" readonly autocomplete="off" placeholder="计划">
         </div>
-        {/volist}
-        {else/}
-        <span>无</span>
-        {/notempty}
+        <div class="layui-input-inline" style="width: 100px">
+            <input type="number" class="layui-input field-ml" style="width: 100px" value="{$vo['ml']}" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="ML值">
+        </div>
+        <div class="layui-form-mid" style="color: red">不能超过10斗*</div>
     </div>
+    {/volist}
     {/empty}
     <div class="layui-form-item">
         <label class="layui-form-label">附件说明</label>

@@ -22,7 +22,7 @@
     .layui-form-item{
         margin-bottom: 5px;
     }
-    .new_task{
+    .new_task,.new_task1{
         margin-left: 630px;
     }
     .layui-form-select .layui-input {
@@ -56,10 +56,23 @@
         <div class="layui-input-inline" style="width: 100px">
             <input type="number" class="layui-input field-ml" style="width: 100px" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="ML值">
         </div>
-        <div class="layui-form-mid" style="color: red">不能超过20斗*</div>
+        <div class="layui-form-mid" style="color: red">不能超过10斗*</div>
     </div>
     <div class="new_task">
         <a href="javascript:void(0);" class="aicon ai-tianjia field-task-add" style="float: left;font-size: 30px;"></a>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">计划</label>
+        <div class="layui-input-inline" style="width: 450px">
+            <input type="text" class="layui-input field-plan" name="plan[]" autocomplete="off" placeholder="计划">
+        </div>
+        <div class="layui-input-inline" style="width: 100px">
+            <input type="number" class="layui-input field-ml" style="width: 100px" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="ML值">
+        </div>
+        <div class="layui-form-mid" style="color: red">不能超过10斗*</div>
+    </div>
+    <div class="new_task1">
+        <a href="javascript:void(0);" class="aicon ai-tianjia field-task1-add" style="float: left;font-size: 30px;"></a>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">ML合计</label>
@@ -67,19 +80,6 @@
             <input type="number" class="layui-input field-total" name="total" readonly autocomplete="off" placeholder="0" style="width: 298px">
         </div>
         <div class="layui-form-mid">斗</div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">明日计划</label>
-        <div class="layui-input-block">
-            <input type="text" class="layui-input field-plan" name="plan[]" autocomplete="off" placeholder="计划1">
-        </div>
-        <div class="layui-input-block">
-            <input type="text" class="layui-input field-plan" name="plan[]" autocomplete="off" placeholder="计划2">
-        </div>
-        <div class="layui-input-block">
-            <input type="text" class="layui-input fl field-plan" name="plan[]" autocomplete="off" placeholder="计划3">
-        </div>
-        <a href="javascript:void(0);" class="aicon ai-tianjia field-plan-add" style="float: left;font-size: 30px;"></a>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">附件说明</label>
@@ -277,7 +277,20 @@
                 "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
                 "            <input type=\"number\" class=\"layui-input field-ml\" style=\"width: 100px\" onblur=\"check_ml(this)\" onkeypress=\"return (/[\\d]/.test(String.fromCharCode(event.keyCode)))\" name=\"ml[]\" autocomplete=\"off\" placeholder=\"ML值\">\n" +
                 "        </div>\n" +
-                "        <div class=\"layui-form-mid\" style=\"color: red\">不能超过20斗*</div>\n" +
+                "        <div class=\"layui-form-mid\" style=\"color: red\">不能超过10斗*</div>\n" +
+                "    </div>");
+            form.render();
+        });
+        $(".field-task1-add").click(function(){
+            $(".new_task1").before("<div class=\"layui-form-item\">\n" +
+                "        <label class=\"layui-form-label\">计划</label>\n" +
+                "        <div class=\"layui-input-inline\" style=\"width: 450px\">\n" +
+                "            <input type=\"text\" class=\"layui-input field-plan\" name=\"plan[]\" autocomplete=\"off\" placeholder=\"计划\">\n" +
+                "        </div>\n" +
+                "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
+                "            <input type=\"number\" class=\"layui-input field-ml\" style=\"width: 100px\" onblur=\"check_ml(this)\" onkeypress=\"return (/[\\d]/.test(String.fromCharCode(event.keyCode)))\" name=\"ml[]\" autocomplete=\"off\" placeholder=\"ML值\">\n" +
+                "        </div>\n" +
+                "        <div class=\"layui-form-mid\" style=\"color: red\">不能超过10斗*</div>\n" +
                 "    </div>");
             form.render();
         });
@@ -404,8 +417,8 @@
         if (isNaN(num)) {
             num = 0;
         }
-        if (num > 20) {
-            layer.msg('ML不能超过20');
+        if (num > 10) {
+            layer.msg('ML不能超过10');
         }
         var total = 0;
         $("input[name^='ml']").each(function (i, el) {
