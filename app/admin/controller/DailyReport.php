@@ -152,7 +152,6 @@ class DailyReport extends Admin
         ];
         $row = DailyReportModel::where($where)->find()->toArray();
         if ($this->request->isPost()) {
-            print_r($params);
             $tmp = [];
             if ($params['content']){
                 $sum = 0;
@@ -174,7 +173,6 @@ class DailyReport extends Admin
                         AppraiseOption::where($w)->update($tmp[$k]);
                     }
                 }
-                print_r($sum);exit();
                 //标记已读
                 $uid = session('admin_user.uid');
                 $sql = "UPDATE tb_daily_report SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
