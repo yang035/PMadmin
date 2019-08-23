@@ -41,7 +41,7 @@ class Project extends Model
         }
 
         $field = '*,DATEDIFF(end_time,NOW()) hit';
-        $result = self::field($field)->where($where)->order('update_time desc')->select();
+        $result = self::field($field)->where($where)->where($third)->order('update_time desc')->select();
 //        print_r($result[0]['id']);exit();
         if ($result) {
             $ids = array_column($result, 'id');
