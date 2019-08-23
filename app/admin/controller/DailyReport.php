@@ -155,8 +155,10 @@ class DailyReport extends Admin
             $tmp = [];
             if ($params['content']){
                 $sum = 0;
-                foreach ($params['plan'] as $k=>$v) {
-                    $sum += !empty($params['ml'][$k]) ? $params['ml'][$k] : 0;
+                if (isset($params['plan']) && !empty($params['plan'])) {
+                    foreach ($params['plan'] as $k => $v) {
+                        $sum += !empty($params['ml'][$k]) ? $params['ml'][$k] : 0;
+                    }
                 }
                 foreach ($params['content'] as $k=>$v){
                     $sum += !empty($params['ml'][$k]) ? $params['ml'][$k] : 0;
