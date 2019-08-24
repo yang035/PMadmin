@@ -159,6 +159,7 @@
     <div class="layui-form-item">
         <div class="layui-input-block">
             <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
+            <input type="hidden" class="field-atype" name="atype" value="{$Request.param.atype}">
             {eq name="Request.param.atype" value="3"}
             <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">确认</button>
             {/eq}
