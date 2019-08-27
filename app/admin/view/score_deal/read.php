@@ -37,11 +37,11 @@
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-card">
         <div class="layui-card-body">
-            事件名称：{$data_list['rid']['fullname']}<br>
+            事件名称：{$data_list['rule']['fullname']}<br>
             说明：{$data_list['remark']}<br>
             奖扣人：{$data_list['score_user']}<br>
-            ML值：{$data_list['rid']['ml']}（斗）<br>
-            GL值：{$data_list['rid']['gl']}（斗）<br>
+            ML值：{$data_list['rule']['ml']}（斗）<br>
+            GL值：{$data_list['rule']['gl']}（斗）<br>
             审批人：{$data_list['send_user']}<br>
             抄送人：{$data_list['copy_user']}<br>
             添加人：{$data_list['user_id']}<br>
@@ -63,6 +63,7 @@
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
+                <input type="hidden" class="field-rid" name="rid" value="{$data_list['rid']}">
                 <input type="hidden" class="field-atype" name="atype" value="{$Request.param.atype}">
                 <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
                 <a href="javascript:history.back()" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>

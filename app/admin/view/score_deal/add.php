@@ -43,8 +43,8 @@
         <label class="layui-form-label">审批人</label>
         <div class="layui-input-inline">
             <button type="button" class="layui-btn" id="send_user_id">选择审批人</button>
-            <div id="send_select_id"></div>
-            <input type="hidden" name="send_user" id="send_user" value="" lay-verify="required">
+            <div id="send_select_id">{$data_info['copy_user_id']|default=''}</div>
+            <input type="hidden" name="send_user" id="send_user" value="{$data_info['copy_user']|default=''}" lay-verify="required">
         </div>
         <div class="layui-form-mid" style="color: red">*</div>
     </div>

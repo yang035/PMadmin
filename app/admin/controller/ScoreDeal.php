@@ -236,6 +236,9 @@ class ScoreDeal extends Admin
             Db::startTrans();
             try{
                 DealModel::update($data);
+                if (2 == $data['status']){
+                    RuleModel::where('id',$data['rid'])->setInc('num');
+                }
                 $score_model = new ScoreModel();
                 $res = $score_model->insertAll($score);
                 //事务提交
@@ -253,7 +256,7 @@ class ScoreDeal extends Admin
 
 //        print_r($score);exit();
         if ($list){
-            $list['rid'] = RuleModel::getFullName($list['rid']);
+            $list['rule'] = RuleModel::getFullName($list['rid']);
             $list['score_user'] = $this->deal_data($list['score_user']);
             $list['send_user'] = $this->deal_data($list['send_user']);
             $list['copy_user'] = $this->deal_data($list['copy_user']);
