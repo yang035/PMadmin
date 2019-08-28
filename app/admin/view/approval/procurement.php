@@ -159,6 +159,7 @@
             calendar: true,
             trigger: 'click',
             value: new Date(),
+            min: 0,
             showBottom: false,
             done: function (value, date, endDate) {
                 $("input[name='end_time']").val(value);
@@ -175,6 +176,7 @@
             elem: '.field-end_time',
             type: 'date',
             calendar: true,
+            min: 0,
             trigger: 'click',
             value: new Date(),
         });

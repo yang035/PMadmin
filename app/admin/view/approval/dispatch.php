@@ -156,7 +156,7 @@
             type: 'date',
             calendar: true,
             trigger: 'click',
-            min: -30,
+            min: 0,
             value: new Date(),
             showBottom: false,
             done: function (value, date, endDate) {
@@ -177,7 +177,7 @@
             type: 'date',
             calendar: true,
             trigger: 'click',
-            min: -30,
+            min: 0,
             value: new Date(),
         });
         laydate.render({
