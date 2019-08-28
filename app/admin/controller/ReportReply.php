@@ -53,7 +53,7 @@ class ReportReply extends Admin
                 ProjectReport::where('id',$data['report_id'])->update($tmp);
                 Project::where('id',$data['project_id'])->update($tmp);
             }
-            return $this->success("操作成功{$this->score_value}",'');
+            return $this->success("操作成功{$this->score_value}");
         }
         $this->assign('row', $row);
         return $this->fetch();
@@ -80,7 +80,7 @@ class ReportReply extends Admin
             if (!ReplyModel::create($data)) {
                 return $this->error('添加失败！');
             }
-            return $this->success("操作成功{$this->score_value}",'');
+            return $this->success("操作成功{$this->score_value}");
         }
         $this->assign('row', $row);
         return $this->fetch();
