@@ -107,9 +107,13 @@ class Approval extends Admin
         $res = ProjectModel::getRowJoinSubject($id);
         $uid_arr = json_decode($res['manager_user'],true);
         $tmp = [];
+        $uid = session('admin_user.uid');
         if ($uid_arr){
             foreach ($uid_arr as $k=>$v){
                 $tmp[$k] = AdminUser::getUserById($k)['realname'];
+            }
+            if (array_key_exists($uid,$tmp)){
+                $tmp = [];
             }
         }
 
