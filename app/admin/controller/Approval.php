@@ -1582,6 +1582,23 @@ class Approval extends Admin
 
                     $res = CarModel::where('aid', $data['id'])->update($tmp);
                 } elseif (3 == $data['atype']) {
+                    //延迟审批扣除对应GL
+                    $day_len = floor((time()-$list['update_time'])/3600/24);
+                    if ($day_len > 0){
+                        $score = [
+                            'subject_id' => $list['project_id'],
+                            'project_id' => 0,
+                            'cid' => session('admin_user.cid'),
+                            'project_code' => '',
+                            'user' => session('admin_user.uid'),
+                            'gl_sub_score' => $day_len * 10,//每超过一天扣10斗
+                            'remark' => "日常审批时差".date('Y-m-d H:i:s')."~".date('Y-m-d H:i:s',$list['update_time']).",超过{$day_len}天，扣除". $day_len * 10 ."斗，编号[{$list['id']}]",
+                            'user_id' => session('admin_user.uid'),
+                            'create_time' => time(),
+                            'update_time' => time(),
+                        ];
+                        db('score')->insert($score);
+                    }
 //                $res= ApprovalModel::where('id',$data['id'])->setField('status',$data['status']);
 
                     //事务提交，保证数据一致性
@@ -1646,6 +1663,7 @@ class Approval extends Admin
                         'id'=>$data['id'],
                         'status'=>$data['status'],
                         'mark'=>$data['mark'],
+                        'update_time'=>time(),
                     ];
                     if (!empty($su_list)){
                         $w = [
@@ -1666,7 +1684,7 @@ class Approval extends Admin
                         $sql = "UPDATE tb_approval_senduser SET send_user = JSON_REPLACE(send_user, '$.\"{$uid}\"', 'a') WHERE aid ={$data['id']} and status={$data['status']}";
                         $res = ApprovalSenduser::execute($sql);
 
-                        $sql = "UPDATE tb_approval SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$data['id']}";
+                        $sql = "UPDATE tb_approval SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a'),update_time=UNIX_TIMESTAMP() WHERE id ={$data['id']}";
                         $res = ApprovalModel::execute($sql);
 
                         $last = ApprovalSenduser::where($map1)->order('id desc')->limit(1)->find();
