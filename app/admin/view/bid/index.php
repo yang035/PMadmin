@@ -59,7 +59,7 @@
                 <a href="{:url('read',['id'=>$vo['id'],'atype'=>$atype])}"><strong class="mcolor">{$vo['project_name']}</strong></a>
             </td>
             <td class="font12">{$vo['user_id']}</td>
-            <td class="font12"><input type="checkbox" name="status" value="{$vo['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {eq name="vo['status']" value='1'}'checked' {else/} '' {/eq} data-href="{:url('status')}?table=bid&id={$vo['id']}"></td>
+            <td class="font12"><input type="checkbox" name="status" value="{$vo['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {eq name="vo['status']" value='1'} checked {/eq} data-href="{:url('status')}?table=bid&id={$vo['id']}"></td>
             <td class="font12">{$vo['create_time']}</td>
             <td>
                 <div class="layui-btn-group">

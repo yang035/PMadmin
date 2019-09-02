@@ -42,46 +42,38 @@
     </div>
     {notempty name="data_list['detail']"}
         {volist name="data_list['detail']" id="vo"}
+    <div class="layui-form-item">
+        <label class="layui-form-label">问题{$i}</label>
+        <div class="layui-input-inline">
+            <span>{$vo['question']}</span>
+        </div>
+    </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">条件</label>
-            <div class="layui-input-inline" style="width: 450px">
-                <input type="text" class="layui-input field-content" name="content[]" value="{$vo['content']}" readonly autocomplete="off" placeholder="描述">
+            <label class="layui-form-label">答案{$i}</label>
+            <div class="layui-input-inline">
+                <span>{$vo['answer']}--【<a href="{$vo['attachment']}"><font style="color: #5c90d2">附件</font></a>】</span>
             </div>
+            {if condition="$Request.param.atype eq 2"}
             <div class="layui-input-inline" style="width: 100px">
                 <input type="number" class="layui-input field-ml" style="width: 100px" value="{$vo['ml']}" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="ML值">
             </div>
+            {/if}
+            {if condition="$Request.param.atype eq 3"}
+            <div class="layui-input-inline" style="width: 100px">
+                <input type="number" class="layui-input field-ml" style="width: 100px" value="{$vo['ml']}" onblur="check_ml(this)" readonly onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="ML值">
+            </div>
+            {/if}
         </div>
         {/volist}
     {/notempty}
+    {if condition="$Request.param.atype eq 2"}
     <div class="layui-form-item">
-        <label class="layui-form-label">附件说明</label>
+        <label class="layui-form-label">专家团队</label>
         <div class="layui-input-inline">
-            {notempty name="data_list['attachment']"}
-<!--            <div class="image-list">-->
-            <ul>
-            {volist name="data_list['attachment']" id="vo"}
-<!--                <div class="cover"><img src="{$vo}" style="height: 30px;width: 30px;"></div>-->
-                <li>&nbsp;&nbsp;&nbsp;&nbsp;<a target="_blank" href="{$vo}" style="color: #5c90d2">附件{$i}</a></li>
-            {/volist}
-            </ul>
-<!--            </div>-->
-            {else/}
-            <span>无</span>
-            {/notempty}
+            <span>{$data_list['expert_user']}</span>
         </div>
     </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">汇报给</label>
-        <div class="layui-input-inline">
-            <span>{$data_list['send_user']}</span>
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">抄送给</label>
-        <div class="layui-input-inline">
-            <span>{$data_list['copy_user']}</span>
-        </div>
-    </div>
+    {/if}
     <div class="layui-form-item">
         <div class="layui-input-block">
             <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">

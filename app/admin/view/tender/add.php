@@ -51,7 +51,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">条件</label>
         <div class="layui-input-inline" style="width: 450px">
-            <input type="text" class="layui-input field-content" name="content[]" autocomplete="off" placeholder="描述">
+            <input type="text" class="layui-input field-question" name="question[]" autocomplete="off" placeholder="描述">
         </div>
         <div class="layui-input-inline" style="width: 100px">
             <input type="number" class="layui-input field-ml" style="width: 100px" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="ML值">
@@ -60,25 +60,20 @@
     <div class="new_task">
         <a href="javascript:void(0);" class="aicon ai-tianjia field-task-add" style="float: left;font-size: 30px;"></a>
     </div>
-<!--    <div class="layui-form-item">-->
-<!--        <label class="layui-form-label">计划</label>-->
-<!--        <div class="layui-input-inline" style="width: 450px">-->
-<!--            <input type="text" class="layui-input field-plan" name="plan[]" autocomplete="off" placeholder="计划">-->
-<!--        </div>-->
-<!--        <div class="layui-input-inline" style="width: 100px">-->
-<!--            <input type="number" class="layui-input field-ml" style="width: 100px" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="ML值">-->
-<!--        </div>-->
-<!--        <div class="layui-form-mid" style="color: red">不能超过10斗*</div>-->
-<!--    </div>-->
-<!--    <div class="new_task1">-->
-<!--        <a href="javascript:void(0);" class="aicon ai-tianjia field-task1-add" style="float: left;font-size: 30px;"></a>-->
-<!--    </div>-->
     <div class="layui-form-item">
         <label class="layui-form-label">ML合计</label>
         <div class="layui-input-inline">
             <input type="number" class="layui-input field-total" name="total" readonly autocomplete="off" placeholder="0" style="width: 298px">
         </div>
         <div class="layui-form-mid">斗</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">招标性质</label>
+        <div class="layui-input-inline">
+            <select name="p_type" class="field-p_type" type="select">
+                {$p_type}
+            </select>
+        </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">附件说明</label>
@@ -107,20 +102,36 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">汇报给</label>
+        <label class="layui-form-label">审批人</label>
         <div class="layui-input-inline">
-            <button type="button" class="layui-btn" id="send_user_id">选择汇报人</button>
+            <button type="button" class="layui-btn" id="send_user_id">选择审批人</button>
             <div id="send_select_id"></div>
             <input type="hidden" name="send_user" id="send_user" value="">
         </div>
         <div class="layui-form-mid red">*</div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">抄送给</label>
+        <label class="layui-form-label">专家团队</label>
+        <div class="layui-input-inline">
+            <button type="button" class="layui-btn" id="expert_user_id">选择专家</button>
+            <div id="expert_select_id"></div>
+            <input type="hidden" name="expert_user" id="expert_user" value="">
+        </div>
+        <div class="layui-form-mid red">*</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">抄送人</label>
         <div class="layui-input-inline">
             <button type="button" class="layui-btn" id="copy_user_id">选择抄送人</button>
             <div id="copy_select_id">{$data_info['copy_user_id']|default=''}</div>
             <input type="hidden" name="copy_user" id="copy_user" value="{$data_info['copy_user']|default=''}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-inline">
+            <input type="radio" class="field-status" name="status" value="1" title="公示" checked>
+            <input type="radio" class="field-status" name="status" value="0" title="关闭">
         </div>
     </div>
     <div class="layui-form-item">
@@ -246,6 +257,25 @@
                 }
             });
         });
+        $('#expert_user_id').on('click', function(){
+            var expert_user = $('#expert_user').val();
+            var open_url = "{:url('Tool/getTreeUser')}?m=expert&u="+expert_user+'&path=1';
+            if (open_url.indexOf('?') >= 0) {
+                open_url += '&hisi_iframe=yes';
+            } else {
+                open_url += '?hisi_iframe=yes';
+            }
+            layer.open({
+                type:2,
+                title :'员工列表',
+                maxmin: true,
+                area: ['800px', '500px'],
+                content: open_url,
+                success:function (layero, index) {
+                    var body = layer.getChildFrame('body', index);  //巧妙的地方在这里哦
+                }
+            });
+        });
 
         $('#copy_user_id').on('click', function(){
             var copy_user = $('#copy_user').val();
@@ -271,7 +301,7 @@
             $(".new_task").before("<div class=\"layui-form-item\">\n" +
                 "        <label class=\"layui-form-label\">条件</label>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 450px\">\n" +
-                "            <input type=\"text\" class=\"layui-input field-content\" name=\"content[]\" autocomplete=\"off\" placeholder=\"描述\">\n" +
+                "            <input type=\"text\" class=\"layui-input field-question\" name=\"question[]\" autocomplete=\"off\" placeholder=\"描述\">\n" +
                 "        </div>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
                 "            <input type=\"number\" class=\"layui-input field-ml\" style=\"width: 100px\" onblur=\"check_ml(this)\" onkeypress=\"return (/[\\d]/.test(String.fromCharCode(event.keyCode)))\" name=\"ml[]\" autocomplete=\"off\" placeholder=\"ML值\">\n" +

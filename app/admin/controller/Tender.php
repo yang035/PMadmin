@@ -105,6 +105,7 @@ class Tender extends Admin
         }
 
         $list = TenderModel::where($map)->where($con)->order('create_time desc')->paginate(30, false, ['query' => input('get.')]);
+//        print_r($list);exit();
         foreach ($list as $k=>$v){
             $v['send_user'] = $this->deal_data($v['send_user']);
             $v['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
@@ -136,25 +137,25 @@ class Tender extends Admin
         $row = TenderModel::where($where)->find()->toArray();
         if ($this->request->isPost()) {
             $tmp = [];
-            if (isset($params['content']) && $params['content']){
+            if (isset($params['question']) && $params['question']){
                 $sum = 0;
                 $sum = array_sum($params['ml']);
-                foreach ($params['content'] as $k=>$v){
+                foreach ($params['question'] as $k=>$v){
                     $tmp[$k]['cid'] = session('admin_user.cid');
-                    $tmp[$k]['content'] = $v;
+                    $tmp[$k]['question'] = $v;
                     $tmp[$k]['ml'] = $params['ml'][$k];
                     $tmp[$k]['user_id'] = session('admin_user.uid');
 
                     $w = [
                         'cid'=>session('admin_user.cid'),
-                        'content'=>$v
+                        'question'=>$v
                     ];
-                    $f = AppraiseOption::where($w)->find();
-                    if (!$f){
-                        AppraiseOption::create($tmp[$k]);
-                    }else{
-                        AppraiseOption::where($w)->update($tmp[$k]);
-                    }
+//                    $f = AppraiseOption::where($w)->find();
+//                    if (!$f){
+//                        AppraiseOption::create($tmp[$k]);
+//                    }else{
+//                        AppraiseOption::where($w)->update($tmp[$k]);
+//                    }
                 }
                 //标记已读
                 $uid = session('admin_user.uid');
@@ -164,23 +165,6 @@ class Tender extends Admin
                 }else{
                     return $this->error('操作失败');
                 }
-            }else{
-                $uid = session('admin_user.uid');
-                if (isset($params['atype'])){
-                    switch ($params['atype']){
-                        case 3:
-                            $sql = "UPDATE tb_tender SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
-                            break;
-                        case 4:
-                            $sql = "UPDATE tb_tender SET copy_user = JSON_SET(copy_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
-                            break;
-                        default:
-                            $sql = "UPDATE tb_tender SET send_user = JSON_SET(copy_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
-                            break;
-                    }
-                    TenderModel::execute($sql);
-                    return $this->success("操作成功");
-                }
             }
         }
 
@@ -188,8 +172,10 @@ class Tender extends Admin
             $row['detail'] = json_decode($row['detail'],true);
             $row['attachment'] = json_decode($row['attachment'],true);
             $row['send_user'] = $this->deal_data($row['send_user']);
+            $row['expert_user'] = $this->deal_data($row['expert_user']);
             $row['copy_user'] = $this->deal_data($row['copy_user']);
             $row['real_name'] = AdminUser::getUserById($row['user_id'])['realname'];
+            $row['status'] = $row['status'] ? '公示' : '关闭';
         }
         //标记已读
 
@@ -203,6 +189,7 @@ class Tender extends Admin
 
         $this->assign('data_list', $row);
         $this->assign('coment', $coment);
+        $this->assign('p_type', config('other.p_type'));
         return $this->fetch();
     }
 
@@ -231,7 +218,7 @@ class Tender extends Admin
             if ($data['total'] > 100){
                 return $this->error('合计ML不能超过100斗');
             }
-            $data['content'] = array_unique(array_filter($data['content']));
+            $data['question'] = array_unique(array_filter($data['question']));
             // 验证
             $result = $this->validate($data, 'Tender');
             if ($result !== true) {
@@ -239,39 +226,28 @@ class Tender extends Admin
             }
             unset($data['id']);
             $ins_data['project_id'] = $data['project_id'];
-//            $ins_data['plan'] = json_encode(array_values(array_filter($data['plan'])));
             $ins_data['attachment'] = explode(',',$data['attachment']);
             $ins_data['attachment'] = json_encode(array_values(array_filter($ins_data['attachment'])));
             $ins_data['send_user'] = user_array($data['send_user']);
+            $ins_data['expert_user'] = user_array($data['expert_user']);
             $ins_data['copy_user'] = user_array($data['copy_user']);
             $ins_data['cid'] = $data['cid']= session('admin_user.cid');
             $ins_data['user_id'] = session('admin_user.uid');
+            $ins_data['p_type'] = $data['p_type'];
+            $ins_data['status'] = $data['status'];
             // 验证
             $result = $this->validate($data, 'Tender');
             if($result !== true) {
                 return $this->error($result);
             }
 
-            if ($data['content']) {
-                foreach ($data['content'] as $k => $v) {
-                    $ins_data['detail'][$k]['content'] = $v;
+            if ($data['question']) {
+                foreach ($data['question'] as $k => $v) {
+                    $ins_data['detail'][$k]['question'] = $v;
                     $ins_data['detail'][$k]['ml'] = !empty($data['ml'][$k]) ? $data['ml'][$k] : 0;
-//                    if ($ins_data['detail'][$k]['ml'] > 10){
-//                        return $this->error('每项ML不能超过10斗');
-//                    }
                 }
             }
-//            if ($data['plan']) {
-//                foreach ($data['plan'] as $k => $v) {
-//                    $ins_data['p_detail'][$k]['plan'] = $v;
-//                    $ins_data['p_detail'][$k]['ml'] = !empty($data['ml'][$k]) ? $data['ml'][$k] : 0;
-//                    if ($ins_data['p_detail'][$k]['ml'] > 10){
-//                        return $this->error('每项ML不能超过10斗');
-//                    }
-//                }
-//            }
             $ins_data['detail'] = json_encode($ins_data['detail'],JSON_FORCE_OBJECT);
-//            $ins_data['p_detail'] = json_encode($ins_data['p_detail'],JSON_FORCE_OBJECT);
             $res = TenderModel::create($ins_data);
             if ($res) {
                 return $this->success("操作成功", 'index');
@@ -300,6 +276,7 @@ class Tender extends Admin
         $this->assign('row', $row1);
 
         $this->assign('mytask', ProjectModel::getMyTask(null));
+        $this->assign('p_type', TenderModel::getPType(null));
         return $this->fetch();
     }
 

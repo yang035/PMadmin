@@ -31,8 +31,8 @@
     </div>
     <div class="layui-btn-group fl">
         <a href="{:url('add')}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加</a>
-        <a data-href="{:url('status?table=tender&val=1')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-play" data-table="dataTable">&nbsp;启用</a>
-        <a data-href="{:url('status?table=tender&val=0')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-pause" data-table="dataTable">&nbsp;禁用</a>
+        <a data-href="{:url('status?table=tender&val=1')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-play" data-table="dataTable">&nbsp;公示</a>
+        <a data-href="{:url('status?table=tender&val=0')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-pause" data-table="dataTable">&nbsp;关闭</a>
         <a data-href="{:url('delItem')}" class="layui-btn layui-btn-primary j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>
     </div>
 </div>
@@ -46,7 +46,7 @@
             <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
             <th>名称</th>
             <th>姓名</th>
-            <th>汇报人</th>
+            <th>审批人</th>
             <th>状态</th>
             <th>添加时间</th>
             <th>操作</th>
@@ -61,7 +61,7 @@
             </td>
             <td class="font12">{$vo['user_id']}</td>
             <td class="font12">{$vo['send_user']}</td>
-            <td class="font12"><input type="checkbox" name="status" value="{$vo['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {eq name="vo['status']" value='1'}'checked' {else/} '' {/eq} data-href="{:url('status')}?table=tender&id={$vo['id']}"></td>
+            <td class="font12"><input type="checkbox" name="status" value="{$vo['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="公示|关闭" {eq name="vo['status']" value='1'} checked {/eq} data-href="{:url('status')}?table=tender&id={$vo['id']}"></td>
             <td class="font12">{$vo['create_time']}</td>
             <td>
                 <div class="layui-btn-group">

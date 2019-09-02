@@ -30,16 +30,16 @@ class Bid extends Admin
                 'url' => 'admin/Bid/index',
                 'params' =>['atype'=>1],
             ],
-//            [
-//                'title' => "我的审批<span class='layui-badge'>{$sta_count['send_num']}</span>",
-//                'url' => 'admin/Bid/index',
-//                'params' =>['atype'=>2],
-//            ],
-//            [
-//                'title' => "抄送我的<span class='layui-badge layui-bg-orange'>{$sta_count['copy_num']}</span>",
-//                'url' => 'admin/Bid/index',
-//                'params' =>['atype'=>3],
-//            ],
+            [
+                'title' => "专家评审<span class='layui-badge'>{$sta_count['expert_user']}</span>",
+                'url' => 'admin/Bid/index',
+                'params' =>['atype'=>2],
+            ],
+            [
+                'title' => "已评审<span class='layui-badge layui-bg-orange'>{$sta_count['has_expert']}</span>",
+                'url' => 'admin/Bid/index',
+                'params' =>['atype'=>3],
+            ],
 //            [
 //                'title' => "已审阅<span class='layui-badge layui-bg-orange'>{$sta_count['has_num']}</span>",
 //                'url' => 'admin/Bid/index',
@@ -51,11 +51,15 @@ class Bid extends Admin
     }
 
     public function getApprovalCount(){
-        $map['cid'] = session('admin_user.cid');
-        $map['create_time'] = ['>','2019-02-01 00:00:00'];
+        $map['a.cid'] = session('admin_user.cid');
+        $map['a.create_time'] = ['>','2019-02-01 00:00:00'];
         $uid = session('admin_user.uid');
-        $fields = "SUM(IF(user_id='{$uid}',1,0)) user_num";
-        $count = BidModel::field($fields)->where($map)->find()->toArray();
+        $fields = "SUM(IF(a.user_id='{$uid}',1,0)) user_num,
+        SUM(IF(JSON_EXTRACT(b.expert_user,'$.\"$uid\"') = '',1,0)) expert_user,
+        SUM(IF(JSON_EXTRACT(b.expert_user,'$.\"$uid\"') = 'a',1,0)) has_expert";
+        $count = db('bid')->alias('a')->field($fields)
+            ->join("tender b", 'a.tender_id = b.id', 'left')
+            ->where($map)->find();
         return $count;
     }
 
@@ -64,7 +68,7 @@ class Bid extends Admin
         $params = $this->request->param();
         $map = [];
         $cid = session('admin_user.cid');
-        $map['cid'] = $cid;
+        $map['a.cid'] = $cid;
         if ($params){
             if (!empty($params['project_id'])){
                 $code = ProjectModel::where('id',$params['project_id'])->column('code');
@@ -76,48 +80,48 @@ class Bid extends Admin
                 $ids = ProjectModel::where($w)->column('id');
                 array_unshift($ids,$params['project_id']);
 //                print_r(implode(',',$ids));exit();
-                $map['project_id'] = ['in', implode(',',$ids)];
+                $map['a.project_id'] = ['in', implode(',',$ids)];
             }
             if (!empty($params['user_id'])){
-                $map['user_id'] = $params['user_id'];
+                $map['a.user_id'] = $params['user_id'];
             }
         }
         $uid = session('admin_user.uid');
         $con = '';
         switch ($params['atype']){
             case 1:
-                $map['user_id'] = session('admin_user.uid');
+                $map['a.user_id'] = session('admin_user.uid');
                 break;
             case 2:
-                $con = "JSON_EXTRACT(send_user,'$.\"$uid\"') = ''";
+                $con = "JSON_EXTRACT(b.expert_user,'$.\"$uid\"') = ''";
                 break;
             case 3:
-                $con = "JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"')";
-                break;
-            case 4:
-                $con = "JSON_EXTRACT(send_user,'$.\"$uid\"') = 'a'";
+                $con = "JSON_EXTRACT(b.expert_user,'$.\"$uid\"') = 'a'";
                 break;
             default:
                 $con = "";
                 break;
         }
-
-        $list = BidModel::where($map)->where($con)->order('create_time desc')->paginate(30, false, ['query' => input('get.')]);
+        $fields = "a.*,b.expert_user";
+        $list1 = db('bid')->alias('a')->field($fields)
+            ->join("tender b", 'a.tender_id = b.id', 'left')
+            ->where($map)->where($con)->order('a.create_time desc')->paginate(30, false, ['query' => input('get.')]);
+        $list = $list1->items();
         foreach ($list as $k=>$v){
 //            $v['send_user'] = $this->deal_data($v['send_user']);
-            $v['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
+            $list[$k]['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
             if (!empty($v['project_id'])){
-                $v['project_name'] = ProjectModel::index(['id'=>$v['project_id']])[0]['name'];
+                $list[$k]['project_name'] = ProjectModel::index(['id'=>$v['project_id']])[0]['name'];
             }else{
-                $v['project_name'] = '其他';
+                $list[$k]['project_name'] = '其他';
             }
         }
-//        print_r(ProjectModel::inputSearchProject());
+//        print_r($list);exit();
         $this->assign('tab_data', $this->tab_data);
         $this->assign('tab_type', 1);
         $this->assign('isparams', 1);
         $this->assign('atype', $params['atype']);
-        $pages = $list->render();
+        $pages = $list1->render();
         $this->assign('tab_url', url('index',['atype'=>$params['atype']]));
         $this->assign('data_list', $list);
         $this->assign('project_select', ProjectModel::inputSearchProject());
@@ -129,55 +133,27 @@ class Bid extends Admin
     public function read($id){
         $params = $this->request->param();
         $where = [
-            'id'=>$params['id']
+            'a.id'=>$params['id']
         ];
-        $row = BidModel::where($where)->find()->toArray();
+        $fields = "a.*,b.expert_user";
+        $row = db('bid')->alias('a')->field($fields)
+            ->join("tender b", 'a.tender_id = b.id', 'left')
+            ->where($where)->find();
         if ($this->request->isPost()) {
-            $tmp = [];
-            if (isset($params['content']) && $params['content']){
+            $uid = session('admin_user.uid');
+            if (isset($params['ml']) && $params['ml']){
                 $sum = 0;
                 $sum = array_sum($params['ml']);
-                foreach ($params['content'] as $k=>$v){
-                    $tmp[$k]['cid'] = session('admin_user.cid');
-                    $tmp[$k]['content'] = $v;
-                    $tmp[$k]['ml'] = $params['ml'][$k];
-                    $tmp[$k]['user_id'] = session('admin_user.uid');
-
-                    $w = [
-                        'cid'=>session('admin_user.cid'),
-                        'content'=>$v
-                    ];
-                    $f = AppraiseOption::where($w)->find();
-                    if (!$f){
-                        AppraiseOption::create($tmp[$k]);
-                    }else{
-                        AppraiseOption::where($w)->update($tmp[$k]);
-                    }
+                foreach ($params['ml'] as $k=>$v){
+                    $sql = "UPDATE tb_bid SET detail = JSON_REPLACE(detail, '$.\"{$k}\".\"ml\"', {$v}) WHERE id ={$params['id']}";
+                    $res = BidModel::execute($sql);
                 }
-                //标记已读
-                $uid = session('admin_user.uid');
-                $sql = "UPDATE tb_bid SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
+                $sql = "UPDATE tb_tender SET expert_user = JSON_REPLACE(expert_user, '$.\"{$uid}\"', 'a') WHERE id ={$row['tender_id']}";
+//                $res = BidModel::execute($sql);
                 if (BidModel::execute($sql)){
                     return $this->success("操作成功",'Bid/index?atype=1');
                 }else{
                     return $this->error('操作失败');
-                }
-            }else{
-                $uid = session('admin_user.uid');
-                if (isset($params['atype'])){
-                    switch ($params['atype']){
-                        case 3:
-                            $sql = "UPDATE tb_bid SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
-                            break;
-                        case 4:
-                            $sql = "UPDATE tb_bid SET copy_user = JSON_SET(copy_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
-                            break;
-                        default:
-                            $sql = "UPDATE tb_bid SET send_user = JSON_SET(copy_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
-                            break;
-                    }
-                    BidModel::execute($sql);
-                    return $this->success("操作成功");
                 }
             }
         }
@@ -185,13 +161,12 @@ class Bid extends Admin
         if ($row){
             $row['detail'] = json_decode($row['detail'],true);
             $row['attachment'] = json_decode($row['attachment'],true);
-            $row['send_user'] = $this->deal_data($row['send_user']);
-            $row['copy_user'] = $this->deal_data($row['copy_user']);
+            $row['expert_user'] = $this->deal_data($row['expert_user']);
             $row['real_name'] = AdminUser::getUserById($row['user_id'])['realname'];
         }
         //标记已读
 
-        $coment = ReportReply::getAll($params['id'],5,1);
+//        $coment = ReportReply::getAll($params['id'],5,1);
         if (!empty($row['project_id'])){
             $row['project_name'] = ProjectModel::index(['id'=>$row['project_id']])[0]['name'];
         }else{
@@ -200,7 +175,7 @@ class Bid extends Admin
 //        print_r($row);
 
         $this->assign('data_list', $row);
-        $this->assign('coment', $coment);
+//        $this->assign('coment', $coment);
         return $this->fetch();
     }
 
@@ -230,10 +205,12 @@ class Bid extends Admin
             $tmp = [];
             $data['cid'] = session('admin_user.cid');
             $data['tender_id'] = $params['id'];
+            $data['project_id'] = $row['project_id'];
             $data['user_id'] = session('admin_user.uid');
-            if (isset($params['content']) && $params['content']) {
-                foreach ($params['content'] as $k => $v) {
-                    $tmp[$k]['content'] = $v;
+            if (isset($params['question']) && $params['question']) {
+                foreach ($params['question'] as $k => $v) {
+                    $tmp[$k]['question'] = $v;
+                    $tmp[$k]['answer'] = $params['answer'][$k];
                     $tmp[$k]['attachment'] = $params['attachment'][$k];
                     $tmp[$k]['ml'] = 0;
                 }

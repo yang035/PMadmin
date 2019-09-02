@@ -48,10 +48,11 @@
             <br>
             {notempty name="data_list['detail']"}
             {volist name="data_list['detail']" id="vo"}
-            条件{$i}：{$vo['content']}
+            条件{$i}：{$vo['question']}
             <div class="layui-form-item">
                 <div class="layui-input-inline" style="width: 450px">
-                    <textarea type="text" class="layui-textarea field-content" name="content[{$key}]" value="" autocomplete="off" placeholder="描述"></textarea>
+                    <input type="hidden" class="field-question" name="question[{$key}]" value="{$vo['question']}">
+                    <textarea type="text" class="layui-textarea field-answer" name="answer[{$key}]" value="" autocomplete="off" placeholder="描述"></textarea>
                 </div>
             </div>
             <div class="layui-form-item upload">

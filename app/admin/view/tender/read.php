@@ -45,7 +45,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">条件</label>
             <div class="layui-input-inline" style="width: 450px">
-                <input type="text" class="layui-input field-content" name="content[]" value="{$vo['content']}" readonly autocomplete="off" placeholder="描述">
+                <input type="text" class="layui-input field-question" name="question[]" value="{$vo['question']}" readonly autocomplete="off" placeholder="描述">
             </div>
             <div class="layui-input-inline" style="width: 100px">
                 <input type="number" class="layui-input field-ml" style="width: 100px" value="{$vo['ml']}" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="ML值">
@@ -71,15 +71,33 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">汇报给</label>
+        <label class="layui-form-label">审批人</label>
         <div class="layui-input-inline">
             <span>{$data_list['send_user']}</span>
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">抄送给</label>
+        <label class="layui-form-label">专家团队</label>
+        <div class="layui-input-inline">
+            <span>{$data_list['expert_user']}</span>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">抄送人</label>
         <div class="layui-input-inline">
             <span>{$data_list['copy_user']}</span>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">招标性质</label>
+        <div class="layui-input-inline">
+            <span>{$p_type[$data_list['p_type']]}</span>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-inline">
+            <span>{$data_list['status']}</span>
         </div>
     </div>
     <div class="layui-form-item">
