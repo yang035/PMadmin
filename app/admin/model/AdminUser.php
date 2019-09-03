@@ -336,6 +336,18 @@ class AdminUser extends Model
         return [];
     }
 
+    public static function getUserById1($id=1){
+        $where = [
+            'id'=>$id,
+            'status'=>1,
+        ];
+        $res = self::where($where)->find();
+        if ($res){
+            return $res;
+        }
+        return [];
+    }
+
     public static function inputSearchUser(){
         $where = [
             'status' => 1,

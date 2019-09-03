@@ -110,7 +110,10 @@ class Approval extends Admin
         $uid = session('admin_user.uid');
         if ($uid_arr){
             foreach ($uid_arr as $k=>$v){
-                $tmp[$k] = AdminUser::getUserById($k)['realname'];
+                $u_row = AdminUser::getUserById1($k);
+                if ($u_row){
+                    $tmp[$k] = $u_row['realname'];
+                }
             }
             if (array_key_exists($uid,$tmp)){
                 $tmp = [];
