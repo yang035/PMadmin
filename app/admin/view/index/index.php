@@ -30,7 +30,7 @@
 
         $(function(){
             if(navigator.userAgent.match(/mobile/i)) {
-                $('#daka').show();
+                // $('#daka').show();
                 setTimeout(function(){
                     navigator.geolocation.getCurrentPosition(showPosition1,showError);
                 }, 1000);
