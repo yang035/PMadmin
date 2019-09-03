@@ -54,14 +54,14 @@
             <input type="text" class="layui-input field-question" name="question[]" autocomplete="off" placeholder="描述">
         </div>
         <div class="layui-input-inline" style="width: 100px">
-            <input type="number" class="layui-input field-ml" style="width: 100px" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="ML值">
+            <input type="number" class="layui-input field-ml" style="width: 100px" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="分值">
         </div>
     </div>
     <div class="new_task">
         <a href="javascript:void(0);" class="aicon ai-tianjia field-task-add" style="float: left;font-size: 30px;"></a>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">ML合计</label>
+        <label class="layui-form-label">分值合计</label>
         <div class="layui-input-inline">
             <input type="number" class="layui-input field-total" name="total" readonly autocomplete="off" placeholder="0" style="width: 298px">
         </div>
@@ -119,14 +119,14 @@
         </div>
         <div class="layui-form-mid red">*</div>
     </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">抄送人</label>
-        <div class="layui-input-inline">
-            <button type="button" class="layui-btn" id="copy_user_id">选择抄送人</button>
-            <div id="copy_select_id">{$data_info['copy_user_id']|default=''}</div>
-            <input type="hidden" name="copy_user" id="copy_user" value="{$data_info['copy_user']|default=''}">
-        </div>
-    </div>
+<!--    <div class="layui-form-item">-->
+<!--        <label class="layui-form-label">抄送人</label>-->
+<!--        <div class="layui-input-inline">-->
+<!--            <button type="button" class="layui-btn" id="copy_user_id">选择抄送人</button>-->
+<!--            <div id="copy_select_id">{$data_info['copy_user_id']|default=''}</div>-->
+<!--            <input type="hidden" name="copy_user" id="copy_user" value="{$data_info['copy_user']|default=''}">-->
+<!--        </div>-->
+<!--    </div>-->
     <div class="layui-form-item">
         <label class="layui-form-label">状态</label>
         <div class="layui-input-inline">
@@ -136,7 +136,7 @@
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
+            <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">发布</button>
             <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
         </div>
     </div>
@@ -304,7 +304,7 @@
                 "            <input type=\"text\" class=\"layui-input field-question\" name=\"question[]\" autocomplete=\"off\" placeholder=\"描述\">\n" +
                 "        </div>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
-                "            <input type=\"number\" class=\"layui-input field-ml\" style=\"width: 100px\" onblur=\"check_ml(this)\" onkeypress=\"return (/[\\d]/.test(String.fromCharCode(event.keyCode)))\" name=\"ml[]\" autocomplete=\"off\" placeholder=\"ML值\">\n" +
+                "            <input type=\"number\" class=\"layui-input field-ml\" style=\"width: 100px\" onblur=\"check_ml(this)\" onkeypress=\"return (/[\\d]/.test(String.fromCharCode(event.keyCode)))\" name=\"ml[]\" autocomplete=\"off\" placeholder=\"分值\">\n" +
                 "        </div>\n" +
                 "    </div>");
             form.render();
