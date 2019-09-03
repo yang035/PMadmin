@@ -62,7 +62,7 @@
                 审批人：{$list1['send_user']}<br>
                 抄送人：{$list1['copy_user']}<br>
                 结果：{$approval_status[$list1['status']]}<br>
-                意见：{$list1['mark']}<br>
+                备注：{$list1['mark']}<br>
                 批示时间：{$list1['update_time']|date='Y-m-d H:i:s',###}<br>
             </blockquote>
             {/if}
@@ -222,9 +222,9 @@
                                 </div>
                             </div>
                             <div class="layui-form-item">
-                                <label class="layui-form-label">意见</label>
+                                <label class="layui-form-label">备注</label>
                                 <div class="layui-input-inline">
-                                    <textarea type="text" class="layui-textarea field-mark" name="mark" autocomplete="off" placeholder="请输入说明"></textarea>
+                                    <textarea type="text" class="layui-textarea field-mark" name="mark" autocomplete="off" placeholder=""></textarea>
                                 </div>
                             </div>
                             <br>
@@ -240,7 +240,7 @@
                             {else/}
                             结果：{$approval_status[$vo['status']]}{eq name="vo['status']" value="4"}<font style="color: red">（流程终止）</font>{/eq}<br>
                                 {if condition="$vo['status'] neq 1"}
-                                    意见：{$vo['mark']}<br>
+                                    备注：{$vo['mark']}<br>
                                     批示时间：{$vo['update_time']}<br>
                                 {/if}
                             {/if}
@@ -258,9 +258,9 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">意见</label>
+                    <label class="layui-form-label">备注</label>
                     <div class="layui-input-inline">
-                        <textarea type="text" class="layui-textarea field-mark" name="mark" autocomplete="off" placeholder="请输入说明"></textarea>
+                        <textarea type="text" class="layui-textarea field-mark" name="mark" autocomplete="off" placeholder=""></textarea>
                     </div>
                 </div>
                 <br>
@@ -276,7 +276,7 @@
                 {else/}
                 <br>
                 结果：{$approval_status[$data_list['status']]}<br>
-                意见：{$data_list['mark']}<br>
+                备注：{$data_list['mark']}<br>
                 批示时间：{$data_list['update_time']|date='Y-m-d H:i:s',###}<br>
                 {/if}
             {/notempty}
