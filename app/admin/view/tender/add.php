@@ -49,7 +49,7 @@
         <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">条件</label>
+        <label class="layui-form-label">要求</label>
         <div class="layui-input-inline" style="width: 450px">
             <input type="text" class="layui-input field-question" name="question[]" autocomplete="off" placeholder="描述">
         </div>
@@ -299,7 +299,7 @@
 
         $(".field-task-add").click(function(){
             $(".new_task").before("<div class=\"layui-form-item\">\n" +
-                "        <label class=\"layui-form-label\">条件</label>\n" +
+                "        <label class=\"layui-form-label\">要求</label>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 450px\">\n" +
                 "            <input type=\"text\" class=\"layui-input field-question\" name=\"question[]\" autocomplete=\"off\" placeholder=\"描述\">\n" +
                 "        </div>\n" +

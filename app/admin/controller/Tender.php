@@ -230,7 +230,7 @@ class Tender extends Admin
             $ins_data['attachment'] = json_encode(array_values(array_filter($ins_data['attachment'])));
             $ins_data['send_user'] = user_array($data['send_user']);
             $ins_data['expert_user'] = user_array($data['expert_user']);
-            $ins_data['copy_user'] = user_array($data['copy_user']);
+//            $ins_data['copy_user'] = user_array($data['copy_user']);
             $ins_data['cid'] = $data['cid']= session('admin_user.cid');
             $ins_data['user_id'] = session('admin_user.uid');
             $ins_data['p_type'] = $data['p_type'];
