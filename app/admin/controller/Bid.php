@@ -51,15 +51,13 @@ class Bid extends Admin
     }
 
     public function getApprovalCount(){
-        $map['a.cid'] = session('admin_user.cid');
-        $map['a.create_time'] = ['>','2019-02-01 00:00:00'];
+        $map['cid'] = session('admin_user.cid');
+        $map['create_time'] = ['>','2019-02-01 00:00:00'];
         $uid = session('admin_user.uid');
-        $fields = "SUM(IF(a.user_id='{$uid}',1,0)) user_num,
-        SUM(IF(JSON_EXTRACT(b.expert_user,'$.\"$uid\"') = '',1,0)) expert_user,
-        SUM(IF(JSON_EXTRACT(b.expert_user,'$.\"$uid\"') = 'a',1,0)) has_expert";
-        $count = db('bid')->alias('a')->field($fields)
-            ->join("tender b", 'a.tender_id = b.id', 'left')
-            ->where($map)->find();
+        $fields = "SUM(IF(user_id='{$uid}',1,0)) user_num,
+        SUM(IF(JSON_EXTRACT(expert_user,'$.\"$uid\"') = '',1,0)) expert_user,
+        SUM(IF(JSON_EXTRACT(expert_user,'$.\"$uid\"') = 'a',1,0)) has_expert";
+        $count = BidModel::field($fields)->where($map)->find()->toArray();
         return $count;
     }
 
@@ -68,7 +66,7 @@ class Bid extends Admin
         $params = $this->request->param();
         $map = [];
         $cid = session('admin_user.cid');
-        $map['a.cid'] = $cid;
+        $map['cid'] = $cid;
         if ($params){
             if (!empty($params['project_id'])){
                 $code = ProjectModel::where('id',$params['project_id'])->column('code');
@@ -80,33 +78,29 @@ class Bid extends Admin
                 $ids = ProjectModel::where($w)->column('id');
                 array_unshift($ids,$params['project_id']);
 //                print_r(implode(',',$ids));exit();
-                $map['a.project_id'] = ['in', implode(',',$ids)];
+                $map['project_id'] = ['in', implode(',',$ids)];
             }
             if (!empty($params['user_id'])){
-                $map['a.user_id'] = $params['user_id'];
+                $map['user_id'] = $params['user_id'];
             }
         }
         $uid = session('admin_user.uid');
         $con = '';
         switch ($params['atype']){
             case 1:
-                $map['a.user_id'] = session('admin_user.uid');
+                $map['user_id'] = session('admin_user.uid');
                 break;
             case 2:
-                $con = "JSON_EXTRACT(b.expert_user,'$.\"$uid\"') = ''";
+                $con = "JSON_EXTRACT(expert_user,'$.\"$uid\"') = ''";
                 break;
             case 3:
-                $con = "JSON_EXTRACT(b.expert_user,'$.\"$uid\"') = 'a'";
+                $con = "JSON_EXTRACT(expert_user,'$.\"$uid\"') = 'a'";
                 break;
             default:
                 $con = "";
                 break;
         }
-        $fields = "a.*,b.expert_user";
-        $list1 = db('bid')->alias('a')->field($fields)
-            ->join("tender b", 'a.tender_id = b.id', 'left')
-            ->where($map)->where($con)->order('a.create_time desc')->paginate(30, false, ['query' => input('get.')]);
-        $list = $list1->items();
+        $list = BidModel::where($map)->where($con)->order('create_time desc')->paginate(30, false, ['query' => input('get.')]);
         foreach ($list as $k=>$v){
 //            $v['send_user'] = $this->deal_data($v['send_user']);
             $list[$k]['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
@@ -121,7 +115,7 @@ class Bid extends Admin
         $this->assign('tab_type', 1);
         $this->assign('isparams', 1);
         $this->assign('atype', $params['atype']);
-        $pages = $list1->render();
+        $pages = $list->render();
         $this->assign('tab_url', url('index',['atype'=>$params['atype']]));
         $this->assign('data_list', $list);
         $this->assign('project_select', ProjectModel::inputSearchProject());
@@ -133,24 +127,42 @@ class Bid extends Admin
     public function read($id){
         $params = $this->request->param();
         $where = [
-            'a.id'=>$params['id']
+            'id'=>$params['id']
         ];
-        $fields = "a.*,b.expert_user";
-        $row = db('bid')->alias('a')->field($fields)
-            ->join("tender b", 'a.tender_id = b.id', 'left')
-            ->where($where)->find();
+        $row = BidModel::where($where)->find()->toArray();
+        $uid = session('admin_user.uid');
         if ($this->request->isPost()) {
-            $uid = session('admin_user.uid');
             if (isset($params['ml']) && $params['ml']){
                 $sum = 0;
                 $sum = array_sum($params['ml']);
-                foreach ($params['ml'] as $k=>$v){
-                    $sql = "UPDATE tb_bid SET detail = JSON_REPLACE(detail, '$.\"{$k}\".\"ml\"', {$v}) WHERE id ={$params['id']}";
-                    $res = BidModel::execute($sql);
+                $expert_score = implode(',',$params['ml']);
+                $expert_sumscore = json_encode($sum,JSON_FORCE_OBJECT);
+                $sql = "UPDATE tb_bid SET expert_user = JSON_REPLACE(expert_user, '$.\"{$uid}\"', 'a'),
+                        expert_score = JSON_SET(expert_score, '$.\"{$uid}\"', '{$expert_score}'),
+                        expert_sumscore = JSON_SET(expert_sumscore, '$.\"{$uid}\"', '{$expert_sumscore}') WHERE id ={$params['id']}";
+                $flag = BidModel::execute($sql);
+
+                $row1 = BidModel::where($where)->find()->toArray();
+//                $row1 = BidModel::where('id',12)->find()->toArray();
+                $expert_user_count = count(json_decode($row1['expert_user'],true));
+                $expert_sumscore_count = count(json_decode($row1['expert_sumscore'],true));
+                if ($expert_user_count == $expert_sumscore_count){
+                    $expert_sumscore = json_decode($row1['expert_sumscore'],true);
+                    asort($expert_sumscore);//排序保持键值不变
+                    array_shift($expert_sumscore);//去除第一个即最小值
+                    array_pop($expert_sumscore);//去除最后一个即最大值
+                    $last_score = round(array_sum($expert_sumscore)/count($expert_sumscore),2);//剩下的计算平均数
+
+                    BidModel::where($where)->setField('last_score',$last_score);
                 }
-                $sql = "UPDATE tb_tender SET expert_user = JSON_REPLACE(expert_user, '$.\"{$uid}\"', 'a') WHERE id ={$row['tender_id']}";
+
+//                foreach ($params['ml'] as $k=>$v){
+//                    $sql = "UPDATE tb_bid SET detail = JSON_REPLACE(detail, '$.\"{$k}\".\"ml\"', {$v}) WHERE id ={$params['id']}";
+//                    $res = BidModel::execute($sql);
+//                }
+//                $sql = "UPDATE tb_tender SET expert_user = JSON_REPLACE(expert_user, '$.\"{$uid}\"', 'a') WHERE id ={$row['tender_id']}";
 //                $res = BidModel::execute($sql);
-                if (BidModel::execute($sql)){
+                if ($flag){
                     return $this->success("操作成功",'Bid/index?atype=1');
                 }else{
                     return $this->error('操作失败');
@@ -163,7 +175,22 @@ class Bid extends Admin
             $row['attachment'] = json_decode($row['attachment'],true);
             $row['expert_user'] = $this->deal_data($row['expert_user']);
             $row['real_name'] = AdminUser::getUserById($row['user_id'])['realname'];
+            if ($params['atype'] == 3){
+                $my_expert = json_decode($row['expert_score'],true);
+                $my_expert = explode(',',$my_expert[$uid]);
+                if ($row['detail']){
+                    foreach ($row['detail'] as $k=>$v) {
+                        $row['detail'][$k]['ml'] = $my_expert[$k];
+                    }
+                }
+                $expert_sumscore = json_decode($row['expert_sumscore'],true);
+                asort($expert_sumscore);//排序保持键值不变
+                $row['sum_score'] = $expert_sumscore[$uid];
+                sort($expert_sumscore);//排序保持键值不变
+                $row['sum_score_num'] = array_flip($expert_sumscore)[$row['sum_score']];
+            }
         }
+//        print_r($row);
         //标记已读
 
 //        $coment = ReportReply::getAll($params['id'],5,1);
@@ -206,6 +233,9 @@ class Bid extends Admin
             $data['cid'] = session('admin_user.cid');
             $data['tender_id'] = $params['id'];
             $data['project_id'] = $row['project_id'];
+            $data['expert_user'] = $row['expert_user'];
+            $data['expert_score'] = json_encode([],JSON_FORCE_OBJECT);
+            $data['expert_sumscore'] = json_encode([],JSON_FORCE_OBJECT);
             $data['user_id'] = session('admin_user.uid');
             if (isset($params['question']) && $params['question']) {
                 foreach ($params['question'] as $k => $v) {

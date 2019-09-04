@@ -66,7 +66,9 @@
             <td>
                 <div class="layui-btn-group">
                     <a href="{:url('read',['id'=>$vo['id'],'atype'=>$atype])}" class="layui-btn layui-btn-normal layui-btn-xs">查看</a>
+                    {eq name="vo['status']" value="1"}
                     <a href="{:url('Bid/add',['id'=>$vo['id'],'atype'=>$atype])}" class="layui-btn layui-btn-normal layui-btn-xs">投标</a>
+                    {/eq}
                 </div>
             </td>
         </tr>

@@ -74,6 +74,20 @@
         </div>
     </div>
     {/if}
+    {if condition="$Request.param.atype eq 3"}
+    <div class="layui-form-item">
+        <label class="layui-form-label">总分</label>
+        <div class="layui-input-inline">
+            <span>{$data_list['sum_score']}分</span>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">平均分</label>
+        <div class="layui-input-inline">
+            <span>{$data_list['last_score']}分</span>
+        </div>
+    </div>
+    {/if}
     <div class="layui-form-item">
         <div class="layui-input-block">
             <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">

@@ -46,6 +46,7 @@
             <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
             <th>名称</th>
             <th>姓名</th>
+            <th>平均分</th>
             <th>状态</th>
             <th>添加时间</th>
             <th>操作</th>
@@ -59,11 +60,20 @@
                 <a href="{:url('read',['id'=>$vo['id'],'atype'=>$atype])}"><strong class="mcolor">{$vo['project_name']}</strong></a>
             </td>
             <td class="font12">{$vo['user_id']}</td>
-            <td class="font12"><input type="checkbox" name="status" value="{$vo['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {eq name="vo['status']" value='1'} checked {/eq} data-href="{:url('status')}?table=bid&id={$vo['id']}"></td>
+            <td class="font12">
+                {if condition="$vo['last_score'] > 0 "}
+                {$vo['last_score']}
+                {else/}
+                评审未结束
+                {/if}
+            </td>
+            <td class="font12"><input type="checkbox" name="status" value="{$vo['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|作废" {eq name="vo['status']" value='1'} checked {/eq} data-href="{:url('status')}?table=bid&id={$vo['id']}"></td>
             <td class="font12">{$vo['create_time']}</td>
             <td>
                 <div class="layui-btn-group">
+                    {eq name="vo['status']" value="1"}
                     <a href="{:url('read',['id'=>$vo['id'],'atype'=>$atype])}" class="layui-btn layui-btn-normal layui-btn-xs">查看</a>
+                    {/eq}
                 </div>
             </td>
         </tr>

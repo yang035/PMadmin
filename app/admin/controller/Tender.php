@@ -25,7 +25,7 @@ class Tender extends Admin
         $sta_count = $this->getApprovalCount();
         $tab_data['menu'] = [
             [
-                'title' => "我的发布<span class='layui-badge layui-bg-orange'>{$sta_count['user_num']}</span>",
+                'title' => "已发布<span class='layui-badge layui-bg-orange'>{$sta_count['user_num']}</span>",
                 'url' => 'admin/Tender/index',
                 'params' =>['atype'=>1],
             ],
@@ -88,7 +88,7 @@ class Tender extends Admin
         $con = '';
         switch ($params['atype']){
             case 1:
-                $map['user_id'] = session('admin_user.uid');
+//                $map['user_id'] = session('admin_user.uid');
                 break;
             case 2:
                 $con = "JSON_EXTRACT(send_user,'$.\"$uid\"') = ''";
