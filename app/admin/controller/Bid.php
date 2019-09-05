@@ -228,9 +228,13 @@ class Bid extends Admin
     public function add($id){
         $params = $this->request->param();
         $where = [
-            'id'=>$params['id']
+            'id'=>$params['id'],
+            'status'=>1,
         ];
-        $row = TenderModel::where($where)->find()->toArray();
+        $row = TenderModel::where($where)->find();
+        if (!$row){
+            return $this->error('项目已经关闭或投标期限已过');
+        }
         if ($this->request->isPost()) {
             $tmp = [];
             $data['cid'] = session('admin_user.cid');
