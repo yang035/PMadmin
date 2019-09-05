@@ -40,6 +40,12 @@
             <span>{$data_list['project_name']}</span>
         </div>
     </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">项目描述</label>
+        <div class="layui-input-inline">
+            <span>{$data_list['pro']['remark']}</span>
+        </div>
+    </div>
     {notempty name="data_list['detail']"}
         {volist name="data_list['detail']" id="vo"}
     <div class="layui-form-item">

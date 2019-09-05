@@ -134,7 +134,12 @@ class Tender extends Admin
         $where = [
             'id'=>$params['id']
         ];
-        $row = TenderModel::where($where)->find()->toArray();
+        $row = TenderModel::where($where)->find();
+        if ($row){
+            $row['pro'] = ProjectModel::where('id',$row['project_id'])->find();
+        }else{
+            return $this->error('项目不存在');
+        }
         if ($this->request->isPost()) {
             $tmp = [];
             if (isset($params['question']) && $params['question']){

@@ -32,6 +32,7 @@
         <div class="layui-card-body">
             发布时间：{$data_list['create_time']}<br>
             项目名：{$data_list['project_name']}<br>
+            描述：{$data_list['pro']['remark']}<br>
             附件说明：
             {notempty name="data_list['attachment'][0]"}
             <!--            <div class="image-list">-->

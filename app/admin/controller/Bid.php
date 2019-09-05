@@ -130,6 +130,11 @@ class Bid extends Admin
             'id'=>$params['id']
         ];
         $row = BidModel::where($where)->find()->toArray();
+        if ($row){
+            $row['pro'] = ProjectModel::where('id',$row['project_id'])->find();
+        }else{
+            return $this->error('项目不存在');
+        }
         $uid = session('admin_user.uid');
         if ($this->request->isPost()) {
             if (isset($params['ml']) && $params['ml']){
@@ -232,7 +237,9 @@ class Bid extends Admin
             'status'=>1,
         ];
         $row = TenderModel::where($where)->find();
-        if (!$row){
+        if ($row){
+            $row['pro'] = ProjectModel::where('id',$row['project_id'])->find();
+        }else{
             return $this->error('项目已经关闭或投标期限已过');
         }
         if ($this->request->isPost()) {
