@@ -76,13 +76,13 @@
     {/if}
     {if condition="$Request.param.atype eq 3"}
     <div class="layui-form-item">
-        <label class="layui-form-label">总分</label>
+        <label class="layui-form-label">给定评分</label>
         <div class="layui-input-inline">
             <span>{$data_list['sum_score']}分</span>
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">平均分</label>
+        <label class="layui-form-label">最终得分</label>
         <div class="layui-input-inline">
             <span>{$data_list['last_score']}分</span>
         </div>
