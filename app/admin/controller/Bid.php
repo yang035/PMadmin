@@ -147,10 +147,13 @@ class Bid extends Admin
                 $expert_user_count = count(json_decode($row1['expert_user'],true));
                 $expert_sumscore_count = count(json_decode($row1['expert_sumscore'],true));
                 if ($expert_user_count == $expert_sumscore_count){
+                    //去掉最高值和最小值，计算平均数
                     $expert_sumscore = json_decode($row1['expert_sumscore'],true);
                     asort($expert_sumscore);//排序保持键值不变
-                    array_shift($expert_sumscore);//去除第一个即最小值
-                    array_pop($expert_sumscore);//去除最后一个即最大值
+                    if (count($expert_sumscore) > 2){
+                        array_shift($expert_sumscore);//去除第一个即最小值
+                        array_pop($expert_sumscore);//去除最后一个即最大值
+                    }
                     $last_score = round(array_sum($expert_sumscore)/count($expert_sumscore),2);//剩下的计算平均数
 
                     BidModel::where($where)->setField('last_score',$last_score);
