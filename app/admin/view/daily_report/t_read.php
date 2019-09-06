@@ -34,17 +34,21 @@
         <div class="layui-input-inline">
             <span>{$vo['project_name']}</span>
         </div>
-        <label class="layui-form-label">完成情况</label>
-        <div class="layui-input-inline">
-            <span>{$vo['real_per']}%</span>
-        </div>
     </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">工作内容</label>
-        <div class="layui-input-inline">
-            <span>{$vo['content']}</span>
+        {empty name="data_list['detail']"}
+        <div class="layui-form-item">
+            <label class="layui-form-label">完成情况</label>
+            <div class="layui-input-inline">
+                <span>{$vo['real_per']}%</span>
+            </div>
         </div>
-    </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">工作内容</label>
+            <div class="layui-input-inline">
+                <span>{$vo['content']}</span>
+            </div>
+        </div>
+        {/empty}
     {/volist}
     {empty name="data_list['detail']"}
     <div class="layui-form-item">
