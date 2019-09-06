@@ -55,7 +55,7 @@ class Bid extends Admin
         $map['create_time'] = ['>','2019-02-01 00:00:00'];
         $uid = session('admin_user.uid');
         $fields = "SUM(IF(user_id='{$uid}',1,0)) user_num,
-        SUM(IF(JSON_EXTRACT(expert_user,'$.\"$uid\"') = '',1,0)) expert_user,
+        SUM(IF(JSON_EXTRACT(expert_user,'$.\"$uid\"') = '' and status=1,1,0)) expert_user,
         SUM(IF(JSON_EXTRACT(expert_user,'$.\"$uid\"') = 'a',1,0)) has_expert";
         $count = BidModel::field($fields)->where($map)->find()->toArray();
         return $count;
@@ -92,6 +92,7 @@ class Bid extends Admin
                 break;
             case 2:
                 $con = "JSON_EXTRACT(expert_user,'$.\"$uid\"') = ''";
+                $map['status'] = 1;
                 break;
             case 3:
                 $con = "JSON_EXTRACT(expert_user,'$.\"$uid\"') = 'a'";
