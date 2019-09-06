@@ -112,9 +112,9 @@ class DailyReport extends Admin
                 $con = "JSON_EXTRACT(send_user,'$.\"$uid\"') = ''";
                 break;
             case 4:
-                if ($role_id > 3){
+//                if ($role_id > 3){
                     $con = "JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"')";
-                }
+//                }
                 break;
             case 5:
                 $con = "JSON_EXTRACT(send_user,'$.\"$uid\"') = 'a'";
