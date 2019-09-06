@@ -102,6 +102,7 @@ class DailyReport extends Admin
             }
         }
         $uid = session('admin_user.uid');
+        $role_id = session('admin_user.role_id');
         $con = '';
         switch ($params['atype']){
             case 2:
@@ -111,7 +112,9 @@ class DailyReport extends Admin
                 $con = "JSON_EXTRACT(send_user,'$.\"$uid\"') = ''";
                 break;
             case 4:
-                $con = "JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"')";
+                if ($role_id > 3){
+                    $con = "JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"')";
+                }
                 break;
             case 5:
                 $con = "JSON_EXTRACT(send_user,'$.\"$uid\"') = 'a'";
