@@ -46,6 +46,7 @@
         </div>
     </div>
     {/volist}
+    {empty name="data_list['detail']"}
     <div class="layui-form-item">
         <label class="layui-form-label">基础工作</label>
         <div class="layui-input-block">
@@ -89,6 +90,32 @@
         <span>无</span>
         {/notempty}
     </div>
+    {else/}
+    {volist name="data_list['detail']" id="vo"}
+    <div class="layui-form-item">
+        <label class="layui-form-label">事项</label>
+        <div class="layui-input-inline" style="width: 450px">
+            <input type="text" class="layui-input field-content" name="content[]" value="{$vo['content']}" readonly autocomplete="off" placeholder="描述">
+        </div>
+        <div class="layui-input-inline" style="width: 100px">
+            <input type="number" class="layui-input field-ml" style="width: 100px" value="{$vo['ml']}" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="ML值">
+        </div>
+        <div class="layui-form-mid" style="color: red">不能超过10斗*</div>
+    </div>
+    {/volist}
+    {volist name="data_list['p_detail']" id="vo"}
+    <div class="layui-form-item">
+        <label class="layui-form-label">计划</label>
+        <div class="layui-input-inline" style="width: 450px">
+            <input type="text" class="layui-input field-plan" name="plan[]" value="{$vo['plan']}" readonly autocomplete="off" placeholder="计划">
+        </div>
+        <div class="layui-input-inline" style="width: 100px">
+            <input type="number" class="layui-input field-ml" style="width: 100px" value="{$vo['ml']}" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="ML值">
+        </div>
+        <div class="layui-form-mid" style="color: red">不能超过10斗*</div>
+    </div>
+    {/volist}
+    {/empty}
     <div class="layui-form-item">
         <label class="layui-form-label">附件说明</label>
         <div class="layui-input-inline">

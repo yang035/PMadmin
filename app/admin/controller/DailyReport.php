@@ -564,6 +564,9 @@ class DailyReport extends Admin
             $data_list['attachment'] = json_decode($row[0]['attachment'],true);
             $data_list['send_user'] = $this->deal_data($row[0]['send_user']);
             $data_list['copy_user'] = $this->deal_data($row[0]['copy_user']);
+            $data_list['detail'] = json_decode($row[0]['detail'],true);
+            $data_list['p_detail'] = json_decode($row[0]['p_detail'],true);
+            $data_list['real_name'] = AdminUser::getUserById($row[0]['user_id'])['realname'];
             $data_list['work_option'] = WorkModel::getOption4($row[0]['work_option']);
         }
 //        print_r($data_list);
