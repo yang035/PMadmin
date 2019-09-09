@@ -320,6 +320,7 @@ class Shop extends Admin
             'user' => session('admin_user.uid'),
             'status' => 1,
             'is_lock' => 0,
+            'create_time'=>['>','2019-06-01 00:00:00']
         ];
         $fields = "(SUM(gl_add_score)-SUM(gl_sub_score)) AS unuse_score";
         $score = ScoreModel::field($fields)->where($map)->find()->toArray();

@@ -32,7 +32,7 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">麦粒兑换</label>
+            <label class="layui-form-label">谷粒兑换</label>
             <div class="layui-input-inline">
                 <input type="number" name="score" lay-verify="required" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" value="0" autocomplete="off" class="layui-input field-score">
             </div>

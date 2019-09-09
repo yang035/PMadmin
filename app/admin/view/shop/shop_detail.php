@@ -15,7 +15,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">兑换数量</label>
             <div class="layui-input-inline">
-                <input type="number" class="layui-input field-num" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="num" value="1" lay-verify="required" autocomplete="off" placeholder="请输入数量">
+                <input type="number" class="layui-input field-num" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="num" value="1" lay-verify="required" autocomplete="off" readonly placeholder="请输入数量">
             </div>
             <div class="layui-form-mid">份</div>
             <div class="layui-form-mid" style="color: red" id="cost"></div>
