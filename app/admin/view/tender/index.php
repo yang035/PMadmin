@@ -45,8 +45,10 @@
         <tr>
             <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
             <th>名称</th>
+            {eq name="$Think.session.admin_user.role_id" value='3'}
             <th>姓名</th>
             <th>审批人</th>
+            {/eq}
             <th>状态</th>
             <th>添加时间</th>
             <th>操作</th>
@@ -59,8 +61,10 @@
             <td class="font12">
                 <a href="{:url('read',['id'=>$vo['id'],'atype'=>$atype])}"><strong class="mcolor">{$vo['project_name']}</strong></a>
             </td>
+            {eq name="$Think.session.admin_user.role_id" value='3'}
             <td class="font12">{$vo['user_id']}</td>
             <td class="font12">{$vo['send_user']}</td>
+            {/eq}
             <td class="font12"><input type="checkbox" name="status" value="{$vo['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="公示|关闭" {eq name="vo['status']" value='1'} checked {/eq} data-href="{:url('status')}?table=tender&id={$vo['id']}"></td>
             <td class="font12">{$vo['create_time']}</td>
             <td>

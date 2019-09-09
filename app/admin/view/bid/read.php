@@ -28,12 +28,14 @@
 </style>
 
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
+    {eq name="$Think.session.admin_user.role_id" value='3'}
     <div class="layui-form-item">
         <label class="layui-form-label">提交人</label>
         <div class="layui-input-inline">
             <span>{$data_list['real_name']}</span>
         </div>
     </div>
+    {/eq}
     <div class="layui-form-item">
         <label class="layui-form-label">项目名</label>
         <div class="layui-input-inline">

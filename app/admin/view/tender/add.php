@@ -76,6 +76,20 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">开始时间</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-start_time" name="start_time" lay-verify="required" readonly autocomplete="off" style="width: 298px" placeholder="选择开始时间">
+        </div>
+        <div class="layui-form-mid red">*</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">结束时间</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-end_time" name="end_time" lay-verify="required" readonly autocomplete="off" style="width: 298px" placeholder="选择结束时间">
+        </div>
+        <div class="layui-form-mid red">*</div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">附件说明</label>
         <div class="layui-input-block">
             <div class="layui-upload">
@@ -153,10 +167,7 @@
         });
         laydate.render({
             elem: '.field-end_time',
-            type: 'date',
-            done: function(value, date, endDate){
-                getTimeLong(value);
-            },
+            type: 'date'
         });
         //计算两个时间差
         function getTimeLong(value) {

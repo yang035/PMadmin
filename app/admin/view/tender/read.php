@@ -29,12 +29,6 @@
 
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-form-item">
-        <label class="layui-form-label">提交人</label>
-        <div class="layui-input-inline">
-            <span>{$data_list['real_name']}</span>
-        </div>
-    </div>
-    <div class="layui-form-item">
         <label class="layui-form-label">项目名</label>
         <div class="layui-input-inline">
             <span>{$data_list['project_name']}</span>
@@ -44,6 +38,18 @@
         <label class="layui-form-label">项目描述</label>
         <div class="layui-input-inline">
             <span>{$data_list['pro']['remark']}</span>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">开始时间</label>
+        <div class="layui-input-inline">
+            <span>{$data_list['start_time']}</span>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">结束时间</label>
+        <div class="layui-input-inline">
+            <span>{$data_list['end_time']}</span>
         </div>
     </div>
     {notempty name="data_list['detail']"}
@@ -76,6 +82,7 @@
             {/notempty}
         </div>
     </div>
+    {eq name="$Think.session.admin_user.role_id" value='3'}
     <div class="layui-form-item">
         <label class="layui-form-label">审批人</label>
         <div class="layui-input-inline">
@@ -94,6 +101,13 @@
             <span>{$data_list['copy_user']}</span>
         </div>
     </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">提交人</label>
+        <div class="layui-input-inline">
+            <span>{$data_list['real_name']}</span>
+        </div>
+    </div>
+    {/eq}
     <div class="layui-form-item">
         <label class="layui-form-label">招标性质</label>
         <div class="layui-input-inline">
@@ -380,9 +394,9 @@
         if (isNaN(num)) {
             num = 0;
         }
-        if (num > 20) {
-            layer.msg('ML不能超过20');
-        }
+        // if (num > 20) {
+        //     layer.msg('ML不能超过20');
+        // }
         var total = 0;
         $("input[name^='ml']").each(function (i, el) {
             var num = parseFloat($(this).val());

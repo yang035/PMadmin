@@ -240,6 +240,8 @@ class Tender extends Admin
             $ins_data['user_id'] = session('admin_user.uid');
             $ins_data['p_type'] = $data['p_type'];
             $ins_data['status'] = $data['status'];
+            $ins_data['start_time'] = $data['start_time'].' 00:00:00';
+            $ins_data['end_time'] = $data['end_time'].' 23:59:59';
             // 验证
             $result = $this->validate($data, 'Tender');
             if($result !== true) {

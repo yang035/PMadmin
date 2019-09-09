@@ -45,7 +45,9 @@
         <tr>
             <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
             <th>名称</th>
+            {eq name="$Think.session.admin_user.role_id" value='3'}
             <th>姓名</th>
+            {/eq}
             <th>平均分</th>
             {eq name="Request.param.atype" value="1"}
             <th>状态</th>
@@ -64,7 +66,9 @@
             <td class="font12">
                 <a href="{:url('read',['id'=>$vo['id'],'atype'=>$atype])}"><strong class="mcolor">{$vo['project_name']}</strong></a>
             </td>
+            {eq name="$Think.session.admin_user.role_id" value='3'}
             <td class="font12">{$vo['user_id']}</td>
+            {/eq}
             <td class="font12">
                 {if condition="$vo['last_score'] > 0 "}
                 {$vo['last_score']}
