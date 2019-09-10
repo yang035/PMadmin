@@ -163,10 +163,10 @@ class Approval extends Admin
         $uid = session('admin_user.uid');
         $fields = "SUM(IF(user_id='{$uid}',1,0)) user_num,
         SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status=1 and class_type <> 11,1,0)) send_num,
-        SUM(IF(JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"'),1,0)) copy_num,
-        SUM(IF(JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"'),1,0)) deal_num,
-        SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status>1,1,0)) has_num,
-        SUM(IF(JSON_CONTAINS_PATH(fellow_user,'one', '$.\"$uid\"'),1,0)) follow_num";
+        SUM(IF(JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"') and status <> 3,1,0)) copy_num,
+        SUM(IF(JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"') and status <> 3,1,0)) deal_num,
+        SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status not in (1,3),1,0)) has_num,
+        SUM(IF(JSON_CONTAINS_PATH(fellow_user,'one', '$.\"$uid\"') and status <> 3,1,0)) follow_num";
         $count = ApprovalModel::field($fields)->where($map)->find()->toArray();
         return $count;
     }
@@ -221,16 +221,19 @@ class Approval extends Admin
                 if (31 != $uid){
                     $con = "JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"')";
                 }
+                $map['status'] = ['neq',3];
                 break;
             case 5:
                 $con = "JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"')";
+                $map['status'] = ['neq',3];
                 break;
             case 6:
                 $con = "JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"')";
-                $map['status'] = ['>', 1];
+                $map['status'] = ['not in', '1,3'];
                 break;
             case 7:
                 $con = "JSON_CONTAINS_PATH(fellow_user,'one', '$.\"$uid\"')";
+                $map['status'] = ['neq',3];
                 break;
             default:
                 $con = "";
