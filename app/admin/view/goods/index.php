@@ -184,7 +184,9 @@
                 ,{field: 'kucun', title: '库存数', templet:function(d){
                         return "<span class='red'>"+ (d.total-d.sales) + "</span>";
                     }}
-                ,{field: 'sales',  title: '分发数'}
+                ,{field: 'sales',  title: '分发数', templet:function(d){
+                            return "<a class='mcolor' href=\"{:url('Asset/index')}?good_id="+d.id+"\">"+d.sales+"</a>";
+                        }}
                 ,{field: 'total',  title: '总数'}
                 ,{field: 'viewcount', title: '浏览次数'}
                 ,{field: 'status', title: '状态', templet: '#statusTpl'}

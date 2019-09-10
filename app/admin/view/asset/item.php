@@ -47,9 +47,10 @@
 <script type="text/javascript">
     layui.use(['jquery','table'], function() {
         var $ = layui.jquery,table = layui.table;
+        var _url = "{:url('')}?good_id={$Request.param.good_id}";
         table.render({
             elem: '#dataTable'
-            ,url: '{:url()}' //数据接口
+            ,url: _url //数据接口
             ,page: true //开启分页
             ,limit: 20
             ,text: {

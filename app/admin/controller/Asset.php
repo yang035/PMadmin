@@ -50,6 +50,10 @@ class Asset extends Admin
                 $where['a.user_id'] = session('admin_user.uid');
             }
 
+            if (isset($params['good_id']) && !empty($params['good_id'])){
+                $where['a.good_id'] = $params['good_id'];
+            }
+
             if (isset($params['name']) && !empty($params['name'])){
                 $where['g.title'] = ['like',"%{$params['name']}%"];
             }
