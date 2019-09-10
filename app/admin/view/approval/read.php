@@ -106,6 +106,7 @@
                 {case value="7"}
                 外出地点：{$data_list['address']}<br>
                 外出时长：{$data_list['time_long']}小时<br>
+                同行人：{$data_list['fellow_user']}<br>
                 {/case}
                 {case value="8"}
                 司机：{$data_list['deal_user']}<br>
