@@ -149,12 +149,12 @@
         $(".field-code").val(code);
         $("#treediv").hide();
     }
-
+    var _url = "{:url()}?name={$Request.param.name}";
     layui.use(['table'], function() {
         var table = layui.table;
         table.render({
             elem: '#dataTable'
-            ,url: '{:url()}' //数据接口
+            ,url: _url //数据接口
             ,page: true //开启分页
             ,limit: 30
             ,text: {

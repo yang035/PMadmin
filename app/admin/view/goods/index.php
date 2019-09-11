@@ -188,6 +188,9 @@
                             return "<a class='mcolor' href=\"{:url('Asset/index')}?good_id="+d.id+"\">"+d.sales+"</a>";
                         }}
                 ,{field: 'total',  title: '总数'}
+                ,{title: '入库记录', templet:function(d){
+                        return "<a class='mcolor' href=\"{:url('ShoppingRecord/index')}?name="+d.title+"\">入库记录</a>";
+                    }}
                 ,{field: 'viewcount', title: '浏览次数'}
                 ,{field: 'status', title: '状态', templet: '#statusTpl'}
                 ,{title: '操作', templet: '#buttonTpl'}
