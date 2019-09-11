@@ -182,6 +182,7 @@
                 ,{field: 'description', title: '概述'}
                 ,{field: 'marketprice', title: '价格(元)'}
                 ,{field: 'total',  title: '总数'}
+                ,{field: 'user_id',  title: '操作员'}
                 ,{field: 'create_time', title: '入库时间',width: 170}
                 // ,{title: '操作', templet: '#buttonTpl'}
             ]]

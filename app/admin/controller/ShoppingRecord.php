@@ -45,6 +45,9 @@ class ShoppingRecord extends Admin
             }
 
             $data['data'] = RecordModel::with('category')->where($where)->order('create_time desc')->page($page)->limit($limit)->select();
+            foreach ($data['data'] as $k => $v) {
+                $data['data'][$k]['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
+            }
             $data['count'] = RecordModel::where($where)->count('id');
             $data['code'] = 0;
             $data['msg'] = '';
