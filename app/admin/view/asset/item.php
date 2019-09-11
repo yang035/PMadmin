@@ -33,11 +33,45 @@
         <a data-href="{:url('delItem')}" class="layui-btn layui-btn-primary j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>
     </div>
 </div>
-<table id="dataTable" class="layui-table" lay-filter="table1"></table>
+<div class="layui-form">
+    <table id="dataTable" class="layui-table mt10" lay-even="" lay-skin="row">
+        <colgroup>
+            <col width="50">
+        </colgroup>
+        <thead>
+        <tr>
+            <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
+            <th>名称</th>
+            <th>数量</th>
+            <th>存储人</th>
+            <th>使用人</th>
+            <th>操作员</th>
+            <th>操作时间</th>
+            <th>状态</th>
+        </tr>
+        </thead>
+        <tbody>
+        {volist name="data_list" id="vo"}
+        <tr>
+            <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
+            <td class="font12">
+                <strong class="mcolor">{$vo['title']}</strong>
+            </td>
+            <td class="font12">{$vo['number']}</td>
+            <td class="font12">{$vo['manager_user']}</td>
+            <td class="font12">{$vo['deal_user']}</td>
+            <td class="font12">{$vo['realname']}</td>
+            <td class="font12">{$vo['update_time']}</td>
+            <td class="font12">
+                <input type="checkbox" name="status" value="{$vo['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {if condition="$vo['status'] eq 1"}checked {/if} data-href="{:url('status')}?table=asset_item&id={$vo['id']}">
+            </td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+    {$pages}
+</div>
 {include file="block/layui" /}
-<script type="text/html" id="statusTpl">
-    <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=asset_item&id={{ d.id }}">
-</script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
     {eq name="$Think.session.admin_user.role_id" value='3'}
 <!--    <a href="{:url('editItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a>-->
@@ -47,28 +81,6 @@
 <script type="text/javascript">
     layui.use(['jquery','table'], function() {
         var $ = layui.jquery,table = layui.table;
-        var _url = "{:url('')}?good_id={$Request.param.good_id}";
-        table.render({
-            elem: '#dataTable'
-            ,url: _url //数据接口
-            ,page: true //开启分页
-            ,limit: 20
-            ,text: {
-                none : '暂无相关数据'
-            }
-            ,cols: [[ //表头
-                {type:'checkbox'},
-                {field: 'title', title: '名称'},
-                {field: 'number', title: '数量'},
-                {field: 'manager_user', title: '存储人'},
-                {field: 'deal_user', title: '使用人'},
-                {field: 'realname', title: '操作员'},
-                {field: 'update_time', title: '操作时间'},
-                {field: 'status', title: '状态', templet: '#statusTpl'},
-                {title: '操作', templet: '#buttonTpl'}
-            ]]
-        });
-
         $('#add_id').on('click', function(){
             var good_cat = $('#good_cat').val();
             var open_url = "{:url('addItem')}";

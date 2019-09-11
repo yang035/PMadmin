@@ -35,60 +35,39 @@ class Asset extends Admin
 
     public function index($q = '')
     {
-//        print_r(session('admin_user'));
         $params = $this->request->param();
-        if ($this->request->isAjax()) {
-            $where = $data = [];
-
-            $page = input('param.page/d', 1);
-            $limit = input('param.limit/d', 15);
-
-            if (1 != session('admin_user.role_id')){
+        $where = $data = [];
+        if ($params) {
+            if (1 != session('admin_user.role_id')) {
                 $where['a.cid'] = session('admin_user.cid');
             }
-            if (session('admin_user.role_id') > 3){
+            if (session('admin_user.role_id') > 3) {
                 $where['a.user_id'] = session('admin_user.uid');
             }
 
-            if (isset($params['good_id']) && !empty($params['good_id'])){
+            if (isset($params['good_id']) && !empty($params['good_id'])) {
                 $where['a.good_id'] = $params['good_id'];
             }
 
-            if (isset($params['name']) && !empty($params['name'])){
-                $where['g.title'] = ['like',"%{$params['name']}%"];
+            if (isset($params['name']) && !empty($params['name'])) {
+                $where['g.title'] = ['like', "%{$params['name']}%"];
             }
-
-            $fields = 'a.*,g.cat_id,g.title,u.realname';
-            $data['data'] = Db::table('tb_asset_item a')
-                ->field($fields)
-                ->join('tb_shopping_goods g','a.good_id=g.id','left')
-                ->join('tb_admin_user u','a.user_id=u.id','left')
-                ->where($where)
-                ->order('a.id desc')
-                ->page($page)
-                ->limit($limit)
-                ->select();
-            if ($data['data']){
-                foreach ($data['data'] as $k=>$v) {
-                    $data['data'][$k]['manager_user'] = $this->deal_data($v['manager_user']);
-                    $data['data'][$k]['deal_user'] = $this->deal_data($v['deal_user']);
-                    $data['data'][$k]['update_time'] = date('Y-m-d H:i:s',$v['update_time']);
-                }
+        }
+        $fields = 'a.*,g.cat_id,g.title,u.realname';
+        $list = Db::table('tb_asset_item a')
+            ->field($fields)
+            ->join('tb_shopping_goods g', 'a.good_id=g.id', 'left')
+            ->join('tb_admin_user u', 'a.user_id=u.id', 'left')
+            ->where($where)
+            ->order('a.id desc')
+            ->paginate(30, false, ['query' => input('get.')]);
+        $items = $list->items();
+        if ($items) {
+            foreach ($items as $k => $v) {
+                $items[$k]['manager_user'] = $this->deal_data($v['manager_user']);
+                $items[$k]['deal_user'] = $this->deal_data($v['deal_user']);
+                $items[$k]['update_time'] = date('Y-m-d H:i:s', $v['update_time']);
             }
-
-            $data['count'] = Db::table('tb_asset_item a')
-                ->field($fields)
-                ->join('tb_shopping_goods g','a.good_id=g.id','left')
-                ->join('tb_admin_user u','a.user_id=u.id','left')
-                ->where($where)
-                ->order('a.create_time desc')
-                ->page($page)
-                ->limit($limit)
-                ->count();
-            $data['code'] = 0;
-            $data['msg'] = '';
-//            print_r($data);
-            return json($data);
         }
 
         // 分页
@@ -97,7 +76,12 @@ class Asset extends Admin
 
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 1);
-        $this->assign('cat_option',ItemModel::getOption());
+        $this->assign('cat_option', ItemModel::getOption());
+        $pages = $list->render();
+        $this->assign('tab_url', url('index'));
+        $this->assign('data_list', $items);
+        $this->assign('list', $list);
+        $this->assign('pages', $pages);
         return $this->fetch('item');
     }
 
