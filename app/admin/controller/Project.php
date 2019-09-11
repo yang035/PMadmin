@@ -1430,6 +1430,16 @@ class Project extends Admin
         ];
         $row = ProjectModel::where($map)->find()->toArray();
         $manager = json_decode($row['manager_user'],true);
+        //判断用户是否禁用
+        $u_list = AdminUser::inputSearchUser();
+        $u_list = array_column(json_decode($u_list,true),'id');
+        if ($manager){
+            foreach ($manager as $k=>$v) {
+                if (!in_array($k,$u_list)){
+                    unset($manager[$k]);
+                }
+            }
+        }
         $where = [
             'project_id' => $params['id'],
             'user_id' =>$uid,
@@ -1438,9 +1448,16 @@ class Project extends Admin
 //        print_r($params);
 //        print_r($manager);
 //        print_r($count);exit();
-        $cc = ScorelogModel::where('project_id',$params['id'])->count('DISTINCT user_id');
+        $cc = ScorelogModel::where('project_id',$params['id'])->column('user_id','id');
+        if ($cc){
+            foreach ($cc as $k=>$v) {
+                if (!in_array($v,$u_list)){
+                    unset($cc[$k]);
+                }
+            }
+        }
         $p = [
-            count($manager),$cc+1
+            count($manager),count($cc)
         ];
 
 //        print_r(ScorelogModel::where('project_id',$params['id'])->count());
@@ -1526,8 +1543,15 @@ class Project extends Admin
                 } else {
                     return $this->error('之前已经操作成功，等待系统计算');
                 }
-                $c = ScorelogModel::where('project_id',$params['id'])->count('DISTINCT user_id');
-                if ($c == count($manager)){
+                $c = ScorelogModel::where('project_id',$params['id'])->column('user_id','id');
+                if ($c){
+                    foreach ($c as $k=>$v) {
+                        if (!in_array($v,$u_list)){
+                            unset($c[$k]);
+                        }
+                    }
+                }
+                if (count($c) == count($manager)){
                     $s_d = ScorelogModel::where('project_id',$params['id'])->select();
                     $s = [];
                     if ($s_d){
