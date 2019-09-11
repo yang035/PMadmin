@@ -87,15 +87,15 @@
     </div>
     <div class="layui-btn-group fl">
 <!--        <a href="{:url('add')}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加</a>-->
-        <a data-href="{:url('status?table=shopping_goods&val=1')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-play" data-table="dataTable">&nbsp;启用</a>
-        <a data-href="{:url('status?table=shopping_goods&val=0')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-pause" data-table="dataTable">&nbsp;禁用</a>
+        <a data-href="{:url('status?table=shopping_record&val=1')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-play" data-table="dataTable">&nbsp;启用</a>
+        <a data-href="{:url('status?table=shopping_record&val=0')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-pause" data-table="dataTable">&nbsp;禁用</a>
         <a data-href="{:url('del')}" class="layui-btn layui-btn-primary j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>
-        <a href="javascript:import_excel();" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;导入</a>
+<!--        <a href="javascript:import_excel();" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;导入</a>-->
     </div>
 </div>
 <table id="dataTable" class="layui-table" lay-filter="table1"></table>
 <script type="text/html" id="statusTpl">
-    <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=shopping_goods&id={{ d.id }}">
+    <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=shopping_record&id={{ d.id }}">
 </script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
     <a href="{:url('edit')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a>
@@ -181,21 +181,14 @@
                     }}
                 ,{field: 'description', title: '概述'}
                 ,{field: 'marketprice', title: '价格(元)'}
-                ,{field: 'kucun', title: '库存数', templet:function(d){
-                        return "<span class='red'>"+ (d.total-d.sales) + "</span>";
-                    }}
-                ,{field: 'sales',  title: '分发数', templet:function(d){
-                            return "<a class='mcolor' href=\"{:url('Asset/index')}?good_id="+d.id+"\">"+d.sales+"</a>";
-                        }}
                 ,{field: 'total',  title: '总数'}
-                ,{field: 'viewcount', title: '浏览次数'}
-                ,{field: 'status', title: '状态', templet: '#statusTpl'}
-                ,{title: '操作', templet: '#buttonTpl'}
+                ,{field: 'create_time', title: '入库时间',width: 170}
+                // ,{title: '操作', templet: '#buttonTpl'}
             ]]
         });
     });
     function open_div(id){
-        var open_url = "{:url('Goods/read')}?id="+id;
+        var open_url = "{:url('ShoppingRecord/read')}?id="+id;
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {

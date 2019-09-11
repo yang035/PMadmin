@@ -1,7 +1,6 @@
 <?php
 namespace app\admin\controller;
 
-use app\admin\model\Goods as GoodsModel;
 use app\admin\model\ShoppingRecord as RecordModel;
 use app\admin\model\Category as CategoryModel;
 use think\Db;
@@ -11,7 +10,7 @@ use app\admin\model\Approval as ApprovalModel;
 use app\admin\model\Score as ScoreModel;
 use app\admin\model\AssetItem;
 
-class Goods extends Admin
+class ShoppingRecord extends Admin
 {
     public $tab_data = [];
     protected function _initialize()
@@ -21,7 +20,7 @@ class Goods extends Admin
         $tab_data['menu'] = [
             [
                 'title' => '商品明细',
-                'url' => 'admin/Goods/index',
+                'url' => 'admin/ShoppingRecord/index',
             ],
         ];
         $this->tab_data = $tab_data;
@@ -45,8 +44,8 @@ class Goods extends Admin
                 $where['title'] = ['like',"%{$params['name']}%"];
             }
 
-            $data['data'] = GoodsModel::with('category')->where($where)->order('id desc')->page($page)->limit($limit)->select();
-            $data['count'] = GoodsModel::where($where)->count('id');
+            $data['data'] = RecordModel::with('category')->where($where)->order('create_time desc')->page($page)->limit($limit)->select();
+            $data['count'] = RecordModel::where($where)->count('id');
             $data['code'] = 0;
             $data['msg'] = '';
             return json($data);
@@ -76,14 +75,14 @@ class Goods extends Admin
                 return $this->error($result);
             }
 //            print_r($data);exit();
-            if (!GoodsModel::create($data)) {
+            if (!RecordModel::create($data)) {
                 return $this->error('添加失败');
             }
             return $this->success("操作成功{$this->score_value}",url('index'));
         }
 
         $this->assign('menu_list', '');
-        $this->assign('unit_option', GoodsModel::getOption());
+        $this->assign('unit_option', RecordModel::getOption());
 
         return $this->fetch();
     }
@@ -103,7 +102,7 @@ class Goods extends Admin
                 return $this->error($result);
             }
 //            print_r($data);exit();
-            if (!GoodsModel::update($data)) {
+            if (!RecordModel::update($data)) {
                 return $this->error('修改失败');
             }
             return $this->success('修改成功',url('index'));
@@ -111,14 +110,14 @@ class Goods extends Admin
         $where = [
             'id'=>$params['id'],
         ];
-        $data_info = GoodsModel::with('category')->where($where)->find();
+        $data_info = RecordModel::with('category')->where($where)->find();
         if ($data_info){
             if (!empty($data_info['attachment'])){
                 $attachment = explode(',',$data_info['attachment']);
                 $data_info['attachment_show'] = array_filter($attachment);
             }
         }
-        $this->assign('unit_option', GoodsModel::getOption());
+        $this->assign('unit_option', RecordModel::getOption());
         $this->assign('data_info', $data_info);
         return $this->fetch('add');
     }
@@ -127,7 +126,7 @@ class Goods extends Admin
     public function del()
     {
         $id = input('param.id/a');
-        $model = new GoodsModel();
+        $model = new RecordModel();
         if (!$model->del($id)) {
             return $this->error($model->getError());
         }
@@ -140,9 +139,9 @@ class Goods extends Admin
         $where = [
             'id'=>$params['id'],
         ];
-        $data_info = GoodsModel::with('category')->where($where)->find();
+        $data_info = RecordModel::with('category')->where($where)->find();
         $data_info['content'] = htmlspecialchars_decode($data_info['content']);
-        $this->assign('unit_option', GoodsModel::getOption());
+        $this->assign('unit_option', RecordModel::getOption());
         $this->assign('data_info', $data_info);
         return $this->fetch();
     }
@@ -285,12 +284,12 @@ class Goods extends Admin
 //                print_r($data);exit();
                 if (!empty($data['number'])) {
                     foreach ($data['number'] as $k => $v) {
-                        $good = GoodsModel::getRowById($data['good_id'][$k]);
+                        $good = RecordModel::getRowById($data['good_id'][$k]);
                         $free = $good['total'] - $good['sales'];
                         if ($v > $free) {
                             return $this->error('库存不足，请刷新查看最新库存');
                         }
-                        GoodsModel::where('id', $data['good_id'][$k])->setInc('sales',$v);
+                        RecordModel::where('id', $data['good_id'][$k])->setInc('sales',$v);
 
                         $tmp1 =[];
                         $tmp1['good_id'] = $data['good_id'][$k];
@@ -330,7 +329,7 @@ class Goods extends Admin
             $row['status'] = $approval_status[$row['status']];
             $row['create_time'] = date('Y-m-d H:i:s',$row['create_time']);
             foreach ($row['goods'] as $k=>$v){
-                $good = GoodsModel::getRowById($v['id']);
+                $good = RecordModel::getRowById($v['id']);
                 $row['goods'][$k]['free'] = $good['total']-$good['sales'];
             }
         }
@@ -442,20 +441,7 @@ class Goods extends Admin
                         'cid' => session('admin_user.cid'),
                         'title' => $v['C'],
                     ];
-                    $f = GoodsModel::where($where)->find();
-                    $tmp = [
-                        'cat_id' => $t[$v['B']],
-                        'title' => $v['C'],
-                        'description' => $v['D'],
-                        'marketprice' => $v['E'],
-                        'total' => $v['F'],
-                        'unit' => $u[$v['G']],
-                        'content' => $v['H'],
-                        'goodssn' => $v['I'],
-                        'cid' => session('admin_user.cid'),
-                        'user_id' => session('admin_user.uid'),
-                    ];
-                    RecordModel::create($tmp);
+                    $f = RecordModel::where($where)->find();
                     if (!$f) {
                         $tmp = [
                             'cat_id' => $t[$v['B']],
@@ -469,7 +455,7 @@ class Goods extends Admin
                             'cid' => session('admin_user.cid'),
                             'user_id' => session('admin_user.uid'),
                         ];
-                        $f1 = GoodsModel::create($tmp);
+                        $f1 = RecordModel::create($tmp);
                     }else{
                         $tmp = [
                             'id'=>$f['id'],
@@ -484,7 +470,7 @@ class Goods extends Admin
                             'cid' => session('admin_user.cid'),
                             'user_id' => session('admin_user.uid'),
                         ];
-                        $f1 = GoodsModel::update($tmp);
+                        $f1 = RecordModel::update($tmp);
                     }
                     if ($f1){
                         $i++;
