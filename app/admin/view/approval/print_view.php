@@ -132,7 +132,7 @@
 
     <div class="layui-form-item">
         <label class="layui-form-label">附件说明</label>
-        <div class="layui-input-inline">
+        <div class="layui-input-inline" style="width: 500px">
             <!--            <div class="layui-upload">-->
             <!--                <button type="button" class="layui-btn" id="attachment-upload">选择附件</button>-->
             <!--                <div class="layui-upload-list">-->
@@ -149,6 +149,7 @@
                             <tr>
                                 <th>文件名</th>
                                 <th>大小</th>
+                                <th>上传进度</th>
                                 <th>状态</th>
                                 <th>操作</th>
                             </tr>
@@ -195,8 +196,8 @@
 <script>
     var formData = {:json_encode($data_info)};
 
-    layui.use(['jquery', 'laydate','upload','form'], function() {
-        var $ = layui.jquery, laydate = layui.laydate,upload = layui.upload,form = layui.form;
+    layui.use(['jquery', 'laydate','element','upload','form'], function() {
+        var $ = layui.jquery, laydate = layui.laydate,upload = layui.upload,element = layui.element,form = layui.form;
         laydate.render({
             elem: '.field-start_time',
             type: 'date',
@@ -346,6 +347,23 @@
             form.render();
         });
 
+        //创建监听函数
+        var xhrOnProgress=function(fun) {
+            xhrOnProgress.onprogress = fun; //绑定监听
+            //使用闭包实现监听绑
+            return function() {
+                //通过$.ajaxSettings.xhr();获得XMLHttpRequest对象
+                var xhr = $.ajaxSettings.xhr();
+                //判断监听函数是否为函数
+                if (typeof xhrOnProgress.onprogress !== 'function')
+                    return xhr;
+                //如果有监听函数并且xhr对象支持绑定时就把监听函数绑定上去
+                if (xhrOnProgress.onprogress && xhr.upload) {
+                    xhr.upload.onprogress = xhrOnProgress.onprogress;
+                }
+                return xhr;
+            }
+        };
         //多文件列表示例
         var demoListView = $('#demoList'),uploadListIns = upload.render({
             elem: '#testList',
@@ -355,13 +373,29 @@
             multiple: true,
             auto: false,
             bindAction: '#testListAction',
+            xhr:xhrOnProgress,
+            progress:function(value,obj){
+                $("#demoList").find('.layui-progress ').each(function () {
+                    if ($(this).attr("file") == obj.name) {
+                        var progressBarName = $(this).attr("lay-filter");
+                        var percent = Math.floor((value.loaded / value.total) * 100);//计算百分比
+                        element.progress(progressBarName, percent + '%');//设置页面进度条
+                    }
+                })},
             choose: function(obj){
                 var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+                var count = 0;
                 //读取本地文件
                 obj.preview(function(index, file, result){
+                    count++;
                     var tr = $(['<tr id="upload-'+ index +'">'
                         ,'<td>'+ file.name +'</td>'
                         ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
+                        ,'<td>'
+                        +'<div  file="'+file.name+'" class="layui-progress layui-progress-big" lay-showpercent="true"   lay-filter="progressBar'+count+'">'
+                        +'<div  class="layui-progress-bar layui-bg-red" lay-percent="0%"></div>'
+                        +'</div>'
+                        , '</td>'
                         ,'<td>等待上传</td>'
                         ,'<td>'
                         ,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
@@ -389,8 +423,8 @@
                 if(res.code == 1){ //上传成功
                     var tr = demoListView.find('tr#upload-'+ index)
                         ,tds = tr.children();
-                    tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
-                    tds.eq(3).html(''); //清空操作
+                    tds.eq(3).html('<span style="color: #5FB878;">上传成功</span>');
+                    tds.eq(4).html(''); //清空操作
                     var new_value = $('.field-attachment').val();
                     new_value += res.data.file+',';
                     $('.field-attachment').val(new_value);
@@ -401,10 +435,11 @@
             ,error: function(index, upload){
                 var tr = demoListView.find('tr#upload-'+ index)
                     ,tds = tr.children();
-                tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
-                tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+                tds.eq(3).html('<span style="color: #FF5722;">上传失败</span>');
+                tds.eq(4).find('.demo-reload').removeClass('layui-hide'); //显示重传
             }
         });
+        form.render();
     });
 
     new SelectBox($('.box1'),{$project_select},function(result){
