@@ -138,8 +138,8 @@
 <script>
     var formData = {:json_encode($data_info)};
 
-    layui.use(['jquery', 'laydate','element','upload'], function() {
-        var $ = layui.jquery, laydate = layui.laydate,element = layui.element,upload = layui.upload;
+    layui.use(['jquery', 'laydate','element','upload','form'], function() {
+        var $ = layui.jquery, laydate = layui.laydate,element = layui.element,upload = layui.upload,form = layui.form;
         laydate.render({
             elem: '.field-start_time',
             type: 'date',
