@@ -329,7 +329,8 @@ class Category extends Model
             'cat_id'=>['>',0],
             'status'=>1,
         ];
-        $goods = Goods::where($map)->select();
+        $con = "total - sales > 0";
+        $goods = Goods::where($map)->where($con)->select();
         foreach ($goods as $k => $v) {
             $goods[$k]['gid'] = '10000' . $v->id;
             $goods[$k]['kucun'] = $v['total'] - $v['sales'];
