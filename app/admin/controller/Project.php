@@ -29,8 +29,11 @@ class Project extends Admin
     protected function _initialize()
     {
         parent::_initialize();
-
-        $tab_data['menu'] = $this->getMenu();
+        if ($this->request->action() == 'index1'){
+            $tab_data['menu'] = $this->getMenu1();
+        }else{
+            $tab_data['menu'] = $this->getMenu();
+        }
         $tab_data['current'] = url('index', ['atype' => 0]);
         $this->tab_data = $tab_data;
     }
@@ -47,6 +50,24 @@ class Project extends Admin
             $res[] = [
                 'title' => $v,
                 'url' => 'admin/Project/index',
+                'params' => ['atype' => $k],
+            ];
+        }
+        return $res;
+    }
+
+    public function getMenu1(){
+        $where = [
+            'cid'=>session('admin_user.cid'),
+        ];
+        $list = [];
+        $list = SubjectCat::where($where)->column('name','id');
+        $tmp = [0=>'全部'];
+        $data = $tmp + $list;
+        foreach ($data as $k=>$v){
+            $res[] = [
+                'title' => $v,
+                'url' => 'admin/Project/index1',
                 'params' => ['atype' => $k],
             ];
         }
@@ -233,7 +254,6 @@ class Project extends Admin
     {
         $map = [];
         $params = $this->request->param();
-//        print_r($params['atype']);exit();
         $params['atype'] = isset($params['atype']) ? $params['atype'] : 1;
         switch ($params['atype']) {
             case 0:
@@ -243,60 +263,153 @@ class Project extends Admin
                 break;
         }
         $subject_id = 0;
+        $p_status = '';
+        $con = '';
+
         if ($params) {
             if (isset($params['project_id']) && !empty($params['project_id'])) {
                 $map['subject_id'] = $params['project_id'];
                 $subject_id = $params['project_id'];
             }
-
             if (isset($params['start_time']) && !empty($params['start_time'])) {
                 $start_time = $params['start_time'];
-                $start_time_arr = explode(' - ', $start_time);//这里分隔符两边加空格
-                $map['start_time'] = ['between', [$start_time_arr['0'], $start_time_arr['1']]];
+//                $con .= " '{$start_time}' <= DATE_FORMAT(end_time,'%Y-%m-%d') ";
+                $con .= " '{$start_time}' between DATE_FORMAT(start_time,'%Y-%m-%d') and DATE_FORMAT(end_time,'%Y-%m-%d') ";
+            }else{
+                $start_time = date('Y-m-d');
+                $con .= " '{$start_time}' between DATE_FORMAT(start_time,'%Y-%m-%d') and DATE_FORMAT(end_time,'%Y-%m-%d') ";
             }
 
-            if (isset($params['end_time']) && !empty($params['end_time'])) {
-                $end_time = $params['end_time'];
-                $end_time_arr = explode(' - ', $end_time);//这里分隔符两边加空格
-                $map['end_time'] = ['between', [$end_time_arr['0'], $end_time_arr['1']]];
+            if (isset($params['p_status'])) {
+                $p_status = (int)$params['p_status'];
+            }
+
+            if (!empty($params['person_user'])){
+                $u_id = $params['person_user'];
+                if (!empty($con)){
+                    $con .= ' and ';
+                }
+                $con .= " JSON_CONTAINS_PATH(deal_user,'one', '$.\"$u_id\"') ";
+            }
+        }
+        $w = '';
+        if ($p_status){
+            switch ($p_status){
+                case 1:
+                    $w = " realper < 100 and DATEDIFF(end_time,NOW()) = 0";
+                    break;
+                case 2:
+                    $w = " realper < 100 and DATEDIFF(end_time,NOW()) < 0";
+                    break;
+                case 3:
+                    $w = " realper < 100 and DATEDIFF(end_time,NOW()) > 0";
+                    break;
+                case 4:
+                    $w = " realper >= 100 and real_score = 0";
+                    break;
+                default :
+                    break;
             }
         }
         $cid = session('admin_user.cid');
         $map['cid'] = $cid;
         $map['t_type'] = 1;
+        $map['status'] = 1;
+        $map['pid'] =['<>',0];
+        $field = "*,DATEDIFF(end_time,NOW()) hit";
 
-        if (empty($subject_id)){
-            $map['pid'] = 0;
-            $list = ProjectModel::index1($map);
-        }else{
-            $map['pid'] = 0;
-            $list = ProjectModel::getAll($map);
-        }
-
-//        $aa = new ProjectModel();
-//        echo $aa->getLastSql();exit();
-        $grade_type = config('other.grade_type');
-        foreach ($list as $k => $v) {
-            $list[$k]['manager_user'] = $this->deal_data($v['manager_user']);
-            $list[$k]['deal_user'] = $this->deal_data($v['deal_user']);
-            $list[$k]['copy_user'] = $this->deal_data($v['copy_user']);
-            $list[$k]['send_user'] = $this->deal_data($v['send_user']);
-            $list[$k]['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
-            $list[$k]['grade'] = $grade_type[$v['grade']];
-        }
         if ($this->request->isAjax()) {
-            $data = [];
+            $page = input('param.page/d', 1);
+            $limit = input('param.limit/d', 30);
+            $list= ProjectModel::field($field)->where($map)->where($con)->where($w)->order('grade desc,create_time desc')->page($page)->limit($limit)->select();
+            $data['count'] = ProjectModel::field($field)->where($map)->where($con)->where($w)->count('id');
+            $grade_type = config('other.grade_type');
+            $myPro = ProjectModel::getProTask(0,0);
+
+            foreach ($list as $kk => $vv) {
+                $list[$kk]['manager_user'] = $this->deal_data($vv['manager_user']);
+                $list[$kk]['deal_user'] = $this->deal_data($vv['deal_user']);
+                $list[$kk]['copy_user'] = $this->deal_data($vv['copy_user']);
+                $list[$kk]['send_user'] = $this->deal_data($vv['send_user']);
+                $list[$kk]['user_id'] = AdminUser::getUserById($vv['user_id'])['realname'];
+                $list[$kk]['grade'] = $grade_type[$vv['grade']];
+
+                if ($vv['realper'] < 100){
+                    if ($vv['hit'] < 0){
+                        $vv['name'] = "<font style='color: red;font-weight:bold'>[逾期]</font>".$vv['name'];
+                    }elseif ($vv['hit'] == 0 && $vv['end_time'] != '0000-00-00 00:00:00'){
+                        $vv['name'] = "<font style='color: blue;font-weight:bold'>[当日]</font>".$vv['name'];
+                    }else{
+                        $vv['name'] = "<font style='color: green;font-weight:bold'>[待完成]</font>".$vv['name'];
+                    }
+                }else{
+                    if ($vv['real_score'] == 0){
+                        $vv['name'] = "<font style='color: darkturquoise;font-weight:bold'>[待评定]</font>".$vv['name'];
+                    }
+                }
+
+                if (0 != $vv['pid']){
+                    $list[$kk]['project_name'] = $myPro[$vv['subject_id']];
+                }else{
+                    $list[$kk]['project_name'] = $vv['name'];
+                }
+
+                $report = ProjectReport::getAll(5,$vv['id']);
+
+                if ($report) {
+                    foreach ($report as $k => $v) {
+                        if (!empty($v['attachment'])){
+                            $attachment = explode(',',$v['attachment']);
+                            $report[$k]['attachment'] = array_filter($attachment);
+                        }
+                        $report_user = AdminUser::getUserById($v['user_id'])['realname'];
+                        $report[$k]['real_name'] = !empty($report_user) ? $report_user : '';
+                        $report[$k]['check_catname'] = ItemModel::getCat()[$v['check_cat']];
+                        if (empty($row['child'])){
+                            $report[$k]['reply'] = ReportReply::getAll($v['id'], 5,2);
+                        }else{
+                            $reply = ReportCheck::getAll($v['id'], 1);
+                            if ($reply){
+                                foreach ($reply as $key=>$val){
+                                    $content = json_decode($val['content'], true);
+                                    if ($content){
+                                        foreach ($content as $kk=>$vv){
+                                            $content[$kk]['flag'] = $vv['flag'] ? '有' : '无';
+                                            $content[$kk]['person_user'] = $this->deal_data(user_array($vv['person_user']));
+                                            if (!isset($vv['isfinish'])){
+                                                $content[$kk]['isfinish'] = 0;
+                                            }
+                                            if (!isset($vv['remark'])){
+                                                $content[$kk]['remark'] = '';
+                                            }
+                                        }
+                                    }
+                                    $reply[$key]['content'] = $content;
+                                    $reply[$key]['user_name'] = AdminUser::getUserById($val['user_id'])['realname'];
+                                }
+                            }
+                            $report[$k]['reply'] = $reply;
+                        }
+
+                    }
+                    $list[$kk]['report'] = $report;
+                }
+
+            }
+            $data['data']=$list;
             $data['code'] = 0;
-            $data['msg'] = 'ok';
-            $data['data'] = $list;
+            $data['msg'] = '';
             return json($data);
         }
         $this->assign('tab_data', $this->tab_data);
         $this->assign('tab_type', 1);
-        $this->assign('tab_url', url('index', ['atype' => $params['atype']]));
+        $this->assign('tab_url', url('index1', ['atype' => $params['atype']]));
         $this->assign('isparams', 1);
         $this->assign('atype', $params['atype']);
+        $this->assign('start_time', $start_time);
+        $this->assign('p_status', ProjectModel::getPStatus($p_status));
         $this->assign('subject_item', SubjectItem::getItemOption($subject_id,$params['atype']));
+        $this->assign('user_select', AdminUser::inputSearchUser());
         return $this->fetch();
     }
 
