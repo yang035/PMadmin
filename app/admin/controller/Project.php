@@ -313,7 +313,7 @@ class Project extends Admin
         }
         $cid = session('admin_user.cid');
         $map['cid'] = $cid;
-        $map['t_type'] = 1;
+//        $map['t_type'] = 1;
         $map['status'] = 1;
         $map['pid'] =['<>',0];
         $field = "*,DATEDIFF(end_time,NOW()) hit";
