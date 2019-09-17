@@ -321,7 +321,7 @@ class Project extends Admin
         if ($this->request->isAjax()) {
             $page = input('param.page/d', 1);
             $limit = input('param.limit/d', 30);
-            $list= ProjectModel::field($field)->where($map)->where($con)->where($w)->order('grade desc,create_time desc')->page($page)->limit($limit)->select();
+            $list= ProjectModel::field($field)->where($map)->where($con)->where($w)->order('grade desc,subject_id desc')->page($page)->limit($limit)->select();
             $data['count'] = ProjectModel::field($field)->where($map)->where($con)->where($w)->count('id');
             $grade_type = config('other.grade_type');
             $myPro = ProjectModel::getProTask(0,0);
