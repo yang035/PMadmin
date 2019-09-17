@@ -268,8 +268,15 @@ class Project extends Admin
 
         if ($params) {
             if (isset($params['project_id']) && !empty($params['project_id'])) {
-                $map['subject_id'] = $params['project_id'];
                 $subject_id = $params['project_id'];
+                $a = [
+                    'pid'=>0,
+                    'subject_id'=>$params['project_id'],
+                ];
+                $result = ProjectModel::where($a)->order('update_time desc')->limit(1)->select();
+                if ($result){
+                    $map['subject_id'] = $result[0]['id'];
+                }
             }
             if (isset($params['start_time']) && !empty($params['start_time'])) {
                 $start_time = $params['start_time'];
