@@ -21,10 +21,10 @@ class Assignment extends Admin
         parent::_initialize();
 
         $tab_data['menu'] = [
-            [
-                'title' => '任务类型',
-                'url' => 'admin/Assignment/cat',
-            ],
+//            [
+//                'title' => '任务类型',
+//                'url' => 'admin/Assignment/cat',
+//            ],
             [
                 'title' => '任务列表',
                 'url' => 'admin/Assignment/index',
