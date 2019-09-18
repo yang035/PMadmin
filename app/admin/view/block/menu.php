@@ -8,7 +8,7 @@
     }
 </style>
 <div class="layui-header" style="z-index:999!important;">
-    <div class="fl header-logo1"><span>{$admin_user['company']}</span><br><span id="date_clock" style="font-size: 15px;"></span></div>
+    <div class="fl header-logo1"><a href="{:url('Assignment/addItem')}"><span>{$admin_user['company']}</span><br><span id="date_clock" style="font-size: 15px;"></span></a></div>
     <div class="fl header-fold"><a href="javascript:;" title="打开/关闭左侧导航" class="aicon ai-caidan" id="foldSwitch"></a></div>
     <ul class="layui-nav fl nobg main-nav">
         {volist name="_admin_menu" id="vo"}
