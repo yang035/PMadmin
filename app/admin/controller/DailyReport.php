@@ -368,6 +368,9 @@ class DailyReport extends Admin
             if ($result !== true) {
                 return $this->error($result);
             }
+            if (empty($data['content'])){
+                return $this->error('具体事项不能为空');
+            }
             unset($data['id']);
             $ins_data['project_id'] = $data['project_id'];
 //            $ins_data['plan'] = json_encode(array_values(array_filter($data['plan'])));

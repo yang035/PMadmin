@@ -49,9 +49,9 @@
         <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">事项</label>
+        <label class="layui-form-label">今日事项</label>
         <div class="layui-input-inline" style="width: 450px">
-            <input type="text" class="layui-input field-content" name="content[]" autocomplete="off" placeholder="描述">
+            <input type="text" class="layui-input field-content" name="content[]" autocomplete="off" placeholder="时间+工作内容+结果汇报">
         </div>
         <div class="layui-input-inline" style="width: 100px">
             <input type="number" class="layui-input field-ml" style="width: 100px" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="ML值">
@@ -62,9 +62,9 @@
         <a href="javascript:void(0);" class="aicon ai-tianjia field-task-add" style="float: left;font-size: 30px;"></a>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">计划</label>
+        <label class="layui-form-label">明日计划</label>
         <div class="layui-input-inline" style="width: 450px">
-            <input type="text" class="layui-input field-plan" name="plan[]" autocomplete="off" placeholder="计划">
+            <input type="text" class="layui-input field-plan" name="plan[]" autocomplete="off" placeholder="">
         </div>
         <div class="layui-input-inline" style="width: 100px">
             <input type="number" class="layui-input field-ml" style="width: 100px" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="ML值">
@@ -270,9 +270,9 @@
 
         $(".field-task-add").click(function(){
             $(".new_task").before("<div class=\"layui-form-item\">\n" +
-                "        <label class=\"layui-form-label\">事项</label>\n" +
+                "        <label class=\"layui-form-label\">今日事项</label>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 450px\">\n" +
-                "            <input type=\"text\" class=\"layui-input field-content\" name=\"content[]\" autocomplete=\"off\" placeholder=\"描述\">\n" +
+                "            <input type=\"text\" class=\"layui-input field-content\" name=\"content[]\" autocomplete=\"off\" placeholder=\"时间+工作内容+结果汇报\">\n" +
                 "        </div>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
                 "            <input type=\"number\" class=\"layui-input field-ml\" style=\"width: 100px\" onblur=\"check_ml(this)\" onkeypress=\"return (/[\\d]/.test(String.fromCharCode(event.keyCode)))\" name=\"ml[]\" autocomplete=\"off\" placeholder=\"ML值\">\n" +
@@ -283,9 +283,9 @@
         });
         $(".field-task1-add").click(function(){
             $(".new_task1").before("<div class=\"layui-form-item\">\n" +
-                "        <label class=\"layui-form-label\">计划</label>\n" +
+                "        <label class=\"layui-form-label\">明日计划</label>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 450px\">\n" +
-                "            <input type=\"text\" class=\"layui-input field-plan\" name=\"plan[]\" autocomplete=\"off\" placeholder=\"计划\">\n" +
+                "            <input type=\"text\" class=\"layui-input field-plan\" name=\"plan[]\" autocomplete=\"off\" placeholder=\"\">\n" +
                 "        </div>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
                 "            <input type=\"number\" class=\"layui-input field-ml\" style=\"width: 100px\" onblur=\"check_ml(this)\" onkeypress=\"return (/[\\d]/.test(String.fromCharCode(event.keyCode)))\" name=\"ml[]\" autocomplete=\"off\" placeholder=\"ML值\">\n" +
