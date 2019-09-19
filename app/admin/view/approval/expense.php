@@ -397,7 +397,7 @@
     function amout_sum() {
         var total = 0;
         $("input[name^='amount']").each(function (i, el) {
-            var amout = parseInt($(this).val());
+            var amout = parseFloat($(this).val());
             if (isNaN(amout)){
                 amout = 0;
             }
