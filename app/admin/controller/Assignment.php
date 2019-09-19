@@ -230,8 +230,8 @@ class Assignment extends Admin
         $row['remark'] = htmlspecialchars_decode($row['remark']);
         $row['tmp_user_id'] = $this->deal_data($row['deal_user']);
         $row['tmp_user'] = $this->deal_data_id($row['deal_user']);
-        $row['manager_user_id'] = $this->deal_data($row['send_user']);
-        $row['manager_user'] = $this->deal_data_id($row['send_user']);
+        $row['assignment_user_id'] = $this->deal_data($row['send_user']);
+        $row['assignment_user'] = $this->deal_data_id($row['send_user']);
 
         $this->assign('data_info', $row);
         $this->assign('cat_option',ItemModel::getOption(1));

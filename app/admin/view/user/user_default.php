@@ -80,6 +80,14 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">任务单默认</label>
+        <div class="layui-input-inline">
+            <button type="button" class="layui-btn" id="assignment_user_id">选择</button>
+            <div id="assignment_select_id">{$data_info['assignment_user_id']|default=''}</div>
+            <input type="hidden" name="assignment_user" id="assignment_user" value="{$data_info['assignment_user']|default=''}">
+        </div>
+    </div>
+    <div class="layui-form-item">
         <div class="layui-input-block">
             <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
             <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
@@ -236,6 +244,26 @@
         $('#own_user_id').on('click', function(){
             var own_user = $('#own_user').val();
             var open_url = "{:url('Tool/getTreeUser')}?m=own&u="+own_user;
+            if (open_url.indexOf('?') >= 0) {
+                open_url += '&hisi_iframe=yes';
+            } else {
+                open_url += '?hisi_iframe=yes';
+            }
+            layer.open({
+                type:2,
+                title :'员工列表',
+                maxmin: true,
+                area: ['800px', '500px'],
+                content: open_url,
+                success:function (layero, index) {
+                    var body = layer.getChildFrame('body', index);  //巧妙的地方在这里哦
+                }
+            });
+        });
+
+        $('#assignment_user_id').on('click', function(){
+            var assignment_user = $('#assignment_user').val();
+            var open_url = "{:url('Tool/getTreeUser')}?m=assignment&u="+assignment_user;
             if (open_url.indexOf('?') >= 0) {
                 open_url += '&hisi_iframe=yes';
             } else {

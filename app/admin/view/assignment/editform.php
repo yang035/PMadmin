@@ -83,8 +83,8 @@
         <label class="layui-form-label">发送给</label>
         <div class="layui-input-inline">
             <button type="button" class="layui-btn" id="send_user_id">选择发送人</button>
-            <div id="send_select_id">{$data_info['manager_user_id']|default=''}</div>
-            <input type="hidden" name="send_user" id="send_user" value="{$data_info['manager_user']|default=''}">
+            <div id="send_select_id">{$data_info['assignment_user_id']|default=''}</div>
+            <input type="hidden" name="send_user" id="send_user" value="{$data_info['assignment_user']|default=''}">
         </div>
     </div>
     <div class="layui-form-item">
