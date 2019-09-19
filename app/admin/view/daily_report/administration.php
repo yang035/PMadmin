@@ -51,7 +51,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">今日事项</label>
         <div class="layui-input-inline" style="width: 450px">
-            <input type="text" class="layui-input field-content" name="content[]" autocomplete="off" placeholder="时间+工作内容+结果汇报">
+            <textarea type="text" class="layui-textarea field-content" name="content[]" autocomplete="off" placeholder="时间+工作内容+结果汇报"></textarea>
         </div>
         <div class="layui-input-inline" style="width: 100px">
             <input type="number" class="layui-input field-ml" style="width: 100px" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="ML值">
@@ -64,7 +64,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">明日计划</label>
         <div class="layui-input-inline" style="width: 450px">
-            <input type="text" class="layui-input field-plan" name="plan[]" autocomplete="off" placeholder="">
+            <textarea type="text" class="layui-textarea field-plan" name="plan[]" autocomplete="off" placeholder=""></textarea>
         </div>
         <div class="layui-input-inline" style="width: 100px">
             <input type="number" class="layui-input field-ml" style="width: 100px" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="ML值">
@@ -272,7 +272,7 @@
             $(".new_task").before("<div class=\"layui-form-item\">\n" +
                 "        <label class=\"layui-form-label\">今日事项</label>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 450px\">\n" +
-                "            <input type=\"text\" class=\"layui-input field-content\" name=\"content[]\" autocomplete=\"off\" placeholder=\"时间+工作内容+结果汇报\">\n" +
+                "            <textarea type=\"text\" class=\"layui-textarea field-content\" name=\"content[]\" autocomplete=\"off\" placeholder=\"时间+工作内容+结果汇报\"></textarea>\n" +
                 "        </div>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
                 "            <input type=\"number\" class=\"layui-input field-ml\" style=\"width: 100px\" onblur=\"check_ml(this)\" onkeypress=\"return (/[\\d]/.test(String.fromCharCode(event.keyCode)))\" name=\"ml[]\" autocomplete=\"off\" placeholder=\"ML值\">\n" +
@@ -285,7 +285,7 @@
             $(".new_task1").before("<div class=\"layui-form-item\">\n" +
                 "        <label class=\"layui-form-label\">明日计划</label>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 450px\">\n" +
-                "            <input type=\"text\" class=\"layui-input field-plan\" name=\"plan[]\" autocomplete=\"off\" placeholder=\"\">\n" +
+                "            <textarea type=\"text\" class=\"layui-textarea field-plan\" name=\"plan[]\" autocomplete=\"off\" placeholder=\"\"></textarea>\n" +
                 "        </div>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
                 "            <input type=\"number\" class=\"layui-input field-ml\" style=\"width: 100px\" onblur=\"check_ml(this)\" onkeypress=\"return (/[\\d]/.test(String.fromCharCode(event.keyCode)))\" name=\"ml[]\" autocomplete=\"off\" placeholder=\"ML值\">\n" +
