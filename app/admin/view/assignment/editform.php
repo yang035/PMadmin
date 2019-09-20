@@ -33,7 +33,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">任务</label>
         <div class="layui-input-block" style="width: 536px">
-            <input type="text" class="layui-input field-content" name="content[]" autocomplete="off" placeholder="描述">
+            <textarea type="text" class="layui-textarea field-content" name="content[]" autocomplete="off" placeholder="描述"></textarea>
         </div>
         <div class="layui-input-inline" style="width: 100px;margin-left: 109px">
             <input type="number" class="layui-input field-ml" name="ml[]" autocomplete="off" placeholder="ML">

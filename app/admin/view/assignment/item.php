@@ -62,11 +62,13 @@
                 // {field: 'cat_id', title: '类别',width:80, templet:function(d){
                 //         return d.cat.name;
                 //     }},
-                {field: 'project_name', title: '项目名'},
-                {field: 'content', title: '任务名', templet:function(d){
+                {field: 'project_name', title: '项目名',width:200,},
+                {field: 'content', title: '任务名',width:200, templet:function(d){
                         var open_url = "{:url('editItem')}?id="+d.id;
                         return "<a class='mcolor' href='"+open_url+"'>"+d.content+"</a>";
                 }},
+                {field: 'remark', title: '执行情况',width:150,edit: 'text'},
+                {title: '操作', templet: '#buttonTpl',width:160},
                 {field: 'ml', title: 'ML',width:80},
                 {field: 'gl', title: 'GL',width:80},
                 {field: 'time_type', title: '日期类型',width:100},
@@ -74,10 +76,8 @@
                 {field: 'end_time', title: '结束日期',width:110},
                 {field: 'send_user', title: '发送给',width:110},
                 {field: 'deal_user', title: '执行人',width:110},
-                {field: 'remark', title: '备注',width:150,edit: 'text'},
                 {field: 'user_name', title: '添加人',width:80},
                 {field: 'create_time', title: '添加时间',width:160},
-                {title: '操作', templet: '#buttonTpl',width:160}
             ]]
         });
 

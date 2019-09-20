@@ -33,7 +33,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">任务</label>
         <div class="layui-input-block" style="width: 536px">
-            <input type="text" class="layui-input field-content" name="content[]" autocomplete="off" placeholder="描述">
+            <textarea type="text" class="layui-textarea field-content" name="content[]" autocomplete="off" placeholder="描述"></textarea>
         </div>
         <div class="layui-input-inline" style="width: 100px;margin-left: 109px">
             <input type="number" class="layui-input field-ml" name="ml[]" autocomplete="off" placeholder="ML">
@@ -121,24 +121,10 @@
             trigger: 'click',
         });
         laydate.render({
-            elem: '.field-start_time1',
-            type: 'time',
-            // format: 'HH',
-            trigger: 'click',
-            value: getStartTime(),
-        });
-        laydate.render({
             elem: '.field-end_time',
             type: 'date',
             calendar: true,
             trigger: 'click',
-        });
-        laydate.render({
-            elem: '.field-end_time1',
-            type: 'time',
-            // format: 'HH',
-            trigger: 'click',
-            value: getEndTime(),
         });
         $('.field-reason').focus(function () {
             var time1 = $('.field-start_time').val()+' '+$('.field-start_time1').val();
@@ -256,10 +242,11 @@
         });
 
         $(".field-guige-add").click(function(){
+            var idNum = getRandomNum();//获取随机数
             $(".new_task").before("<div class=\"layui-form-item\">\n" +
                 "        <label class=\"layui-form-label\">任务</label>\n" +
                 "        <div class=\"layui-input-block\" style=\"width: 536px\">\n" +
-                "            <input type=\"text\" class=\"layui-input field-content\" name=\"content[]\" autocomplete=\"off\" placeholder=\"描述\">\n" +
+                "            <textarea type=\"text\" class=\"layui-textarea field-content\" name=\"content[]\" autocomplete=\"off\" placeholder=\"描述\"></textarea>\n" +
                 "        </div>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 100px;margin-left: 109px\">\n" +
                 "            <input type=\"number\" class=\"layui-input field-ml\" name=\"ml[]\" autocomplete=\"off\" placeholder=\"ML\">\n" +
@@ -273,12 +260,24 @@
                 "            </select>\n" +
                 "        </div>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
-                "            <input type=\"text\" class=\"layui-input field-start_time\" name=\"start_time[]\" autocomplete=\"off\" readonly placeholder=\"开始时间\">\n" +
+                "            <input type=\"text\" class=\"layui-input field-start_time\" name=\"start_time[]\" id=\"start_"+idNum+"\" autocomplete=\"off\" readonly placeholder=\"开始时间\">\n" +
                 "        </div>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
-                "            <input type=\"text\" class=\"layui-input field-end_time\" name=\"end_time[]\" autocomplete=\"off\" readonly placeholder=\"结束时间\">\n" +
+                "            <input type=\"text\" class=\"layui-input field-end_time\" name=\"end_time[]\" id=\"end_"+idNum+"\" autocomplete=\"off\" readonly placeholder=\"结束时间\">\n" +
                 "        </div>\n" +
                 "    </div>");
+            laydate.render({
+                elem: '#start_'+idNum,
+                type: 'date',
+                calendar: true,
+                trigger: 'click',
+            });
+            laydate.render({
+                elem: '#end_'+idNum,
+                type: 'date',
+                calendar: true,
+                trigger: 'click',
+            });
             form.render();
         });
 
@@ -387,6 +386,10 @@
                 $('#send_user').val(data.manager_user);
             }
         });
+    }
+
+    function getRandomNum() {
+        return parseInt(Math.random()*50);
     }
 
     function check_name(){
