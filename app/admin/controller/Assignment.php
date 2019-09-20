@@ -192,7 +192,7 @@ class Assignment extends Admin
             }
 
             $data['cid'] = session('admin_user.cid');
-            $data['user_id'] = session('admin_user.uid');
+//            $data['user_id'] = session('admin_user.uid');
             $data['content'] = array_unique(array_filter($data['content']));
             $data['deal_user'] = user_array($data['deal_user']);
             $data['send_user'] = user_array1($data['send_user']);
