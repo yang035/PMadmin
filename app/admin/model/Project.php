@@ -104,6 +104,7 @@ class Project extends Model
         if ($result) {
             unset($where['pid']);
             $where['subject_id'] = $result[0]['id'];
+            $where['pid'] =['<>',0];
             $w = '';
             if ($p_status){
                 switch ($p_status){

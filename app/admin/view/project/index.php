@@ -118,12 +118,42 @@
         base: '/../../static/js/'
     }).extend({
         treetable: 'treetable-lay/treetable'
-    }).use(['layer', 'table','element', 'treetable'], function () {
-        var $ = layui.jquery;
+    }).use(['layer', 'table','element', 'treetable','jquery','laydate','upload'], function () {
         var element = layui.element;
         var table = layui.table;
         var layer = layui.layer;
         var treetable = layui.treetable;
+
+        var $ = layui.jquery, laydate = layui.laydate, upload = layui.upload;
+        laydate.render({
+            elem: '.field-start_time',
+            trigger: 'click',
+        });
+        laydate.render({
+            elem: '.field-end_time',
+            range: true,
+            trigger: 'click',
+        });
+
+        $('#person_user_id').on('click', function(){
+            var person_user = $('#person_user').val();
+            var open_url = "{:url('Tool/getTreeUser')}?m=person&u="+person_user;
+            if (open_url.indexOf('?') >= 0) {
+                open_url += '&hisi_iframe=yes';
+            } else {
+                open_url += '?hisi_iframe=yes';
+            }
+            layer.open({
+                type:2,
+                title :'员工列表',
+                maxmin: true,
+                area: ['800px', '500px'],
+                content: open_url,
+                success:function (layero, index) {
+                    var body = layer.getChildFrame('body', index);  //巧妙的地方在这里哦
+                }
+            });
+        });
 
         // 渲染表格
         var renderTable = function () {
@@ -292,40 +322,6 @@
                 }
             }
         });
-    });
-
-    layui.use(['jquery', 'laydate','upload'], function() {
-        var $ = layui.jquery, laydate = layui.laydate, upload = layui.upload;
-        laydate.render({
-            elem: '.field-start_time',
-            trigger: 'click',
-        });
-        laydate.render({
-            elem: '.field-end_time',
-            range: true,
-            trigger: 'click',
-        });
-
-        $('#person_user_id').on('click', function(){
-            var person_user = $('#person_user').val();
-            var open_url = "{:url('Tool/getTreeUser')}?m=person&u="+person_user;
-            if (open_url.indexOf('?') >= 0) {
-                open_url += '&hisi_iframe=yes';
-            } else {
-                open_url += '?hisi_iframe=yes';
-            }
-            layer.open({
-                type:2,
-                title :'员工列表',
-                maxmin: true,
-                area: ['800px', '500px'],
-                content: open_url,
-                success:function (layero, index) {
-                    var body = layer.getChildFrame('body', index);  //巧妙的地方在这里哦
-                }
-            });
-        });
-
     });
 </script>
 

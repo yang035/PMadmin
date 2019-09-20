@@ -1005,6 +1005,7 @@ class Project extends Admin
             $result = ProjectModel::field($field)->where($map)->where($con)->order('grade desc,create_time desc')->limit(1)->select();
             if ($result){
                 $map['subject_id'] = $result[0]['id'];
+                $map['pid'] =['<>',0];
                 unset($map['id']);
                 $result1 = ProjectModel::field($field)->where($map)->where($con)->where($mm)->where($w)->order('grade desc,create_time desc')->select();
                 if ($result1){
