@@ -279,6 +279,7 @@ class Project extends Model
         $cid = session('admin_user.cid');
         $map['cid'] = $cid;
         $map['pid'] = 0;
+        $map['status'] = 1;
         $list = self::where($map)->order('grade desc,create_time desc')->column('name','id');
         if ($list){
             if ($option){

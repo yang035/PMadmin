@@ -4,7 +4,7 @@
             <b>项目名：</b>{$data_list['project_name']}<br>
             <b>任务名：</b>{$data_list['content']}<br>
             <b>ML(斗)：</b>{$data_list['ml']}<br>
-            <b>GL(斗)：</b>{$data_list['gl']}<br>
+<!--            <b>GL(斗)：</b>{$data_list['gl']}<br>-->
             <b>日期类型：</b>{$data_list['time_type']}<br>
             <b>开始日期：</b>{$data_list['start_time']}<br>
             <b>结束日期：</b>{$data_list['end_time']}<br>

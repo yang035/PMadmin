@@ -70,7 +70,7 @@
                 {field: 'remark', title: '执行情况',width:150,edit: 'text'},
                 {title: '操作', templet: '#buttonTpl',width:160},
                 {field: 'ml', title: 'ML',width:80},
-                {field: 'gl', title: 'GL',width:80},
+                // {field: 'gl', title: 'GL',width:80},
                 {field: 'time_type', title: '日期类型',width:100},
                 {field: 'start_time', title: '开始日期',width:110},
                 {field: 'end_time', title: '结束日期',width:110},

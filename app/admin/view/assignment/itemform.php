@@ -39,9 +39,6 @@
             <input type="number" class="layui-input field-ml" name="ml[]" autocomplete="off" placeholder="ML">
         </div>
         <div class="layui-input-inline" style="width: 100px">
-            <input type="number" class="layui-input field-gl" name="gl[]" autocomplete="off" placeholder="GL">
-        </div>
-        <div class="layui-input-inline" style="width: 100px">
             <select name="time_type[]" class="field-time_type" type="select">
                 {$time_type}
             </select>
@@ -250,9 +247,6 @@
                 "        </div>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 100px;margin-left: 109px\">\n" +
                 "            <input type=\"number\" class=\"layui-input field-ml\" name=\"ml[]\" autocomplete=\"off\" placeholder=\"ML\">\n" +
-                "        </div>\n" +
-                "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
-                "            <input type=\"number\" class=\"layui-input field-gl\" name=\"gl[]\" autocomplete=\"off\" placeholder=\"GL\">\n" +
                 "        </div>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
                 "            <select name=\"unit[]\" class=\"field-unit\" type=\"select\">\n" +
