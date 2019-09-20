@@ -1613,8 +1613,21 @@ class Approval extends Admin
                             'create_time' => time(),
                             'update_time' => time(),
                         ];
-                        db('score')->insert($score);
+                    }else{
+                        $score = [
+                            'subject_id' => $list['project_id'],
+                            'project_id' => 0,
+                            'cid' => session('admin_user.cid'),
+                            'project_code' => '',
+                            'user' => session('admin_user.uid'),
+                            'gl_add_score' => 10,//正常审批奖励10
+                            'remark' => "及时审批奖励10斗，编号[{$list['id']}]",
+                            'user_id' => session('admin_user.uid'),
+                            'create_time' => time(),
+                            'update_time' => time(),
+                        ];
                     }
+                    db('score')->insert($score);
 //                $res= ApprovalModel::where('id',$data['id'])->setField('status',$data['status']);
 
                     //事务提交，保证数据一致性
