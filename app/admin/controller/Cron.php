@@ -12,6 +12,7 @@ namespace app\admin\controller;
 use think\Controller;
 use think\Db;
 use app\admin\model\Score as ScoreModel;
+use app\admin\model\Approval as ApprovalModel;
 
 class Cron extends Controller
 {
@@ -131,6 +132,18 @@ class Cron extends Controller
                     echo '更新成功\r\n';
                 }
             }
+        }
+    }
+
+    public function dealApproval(){
+        $where = [
+            'status' => 1,
+            'cid' => session('admin_user.cid'),
+            'create_time' => ['<=',time() - 3600],
+        ];
+        $flag = ApprovalModel::where($where)->setField('status',6);
+        if ($flag) {
+            echo '更新成功\r\n';
         }
     }
 
