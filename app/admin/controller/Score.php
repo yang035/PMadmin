@@ -199,7 +199,7 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
         $where = [
             'cid' =>session('admin_user.cid'),
             'ml_add_score|gl_add_score|ml_sub_score|gl_sub_score' =>['>',5],
-            'user'=>['not in','21,30'],
+            'user'=>['not in','21,30,31'],
         ];
         $list = ScoreModel::hasWhere('adminUser')->field("`Score`.*, `AdminUser`.realname")->where($where)->order('id desc')->limit(30)->select();
         $r = [
