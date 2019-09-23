@@ -134,7 +134,7 @@
                                     if (n > 1){
                                         t += '<br>';
                                     }
-                                    t += '('+ n +')'+value.mark;
+                                    t += '('+ value.create_time +')'+'<br>'+value.mark;
                                     if (value.attachment.length > 0){
                                         t += '<br>';
                                         $.each(value.attachment,function(i,v){
