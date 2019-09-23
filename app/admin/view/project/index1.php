@@ -102,7 +102,7 @@
     var  p_status=$("select[name='p_status']").val();
     var  person_user=$("input[name='user_id']").val();
     var _url = "{:url('admin/project/index1')}?project_id="+project_id+"&start_time="+start_time+"&end_time="+end_time+"&atype="+atype+"&p_status="+p_status+"&person_user="+person_user;
-    layui.use(['layer','element', 'table','laydate','element'], function () {
+    layui.use(['layer','element', 'table','laydate'], function () {
         var $ = layui.jquery,laydate = layui.laydate,table = layui.table,layer = layui.layer,element = layui.element;
 
         laydate.render({
