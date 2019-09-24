@@ -19,6 +19,7 @@ use app\admin\model\SubjectCat;
 use app\admin\model\SubjectItem;
 use app\admin\controller\ReportCheck;
 use app\admin\model\Score as ScoreModel;
+use app\admin\model\DailyReport as DailyReportModel;
 use think\Db;
 use think\Exception;
 
@@ -29,8 +30,25 @@ class Project extends Admin
     protected function _initialize()
     {
         parent::_initialize();
-        if ($this->request->action() == 'index1'){
-            $tab_data['menu'] = $this->getMenu1();
+        $action = $this->request->action();
+        if (in_array($action,['index1','dailyreport'])){
+            $tab_data['menu'] = [
+                [
+                    'title' => "设计",
+                    'url' => 'admin/project/index1',
+                    'params' => ['atype' => 0],
+                ],
+//                [
+//                    'title' => "工程",
+//                    'url' => 'admin/project/index1',
+//                    'params' => ['atype' => 1],
+//                ],
+                [
+                    'title' => "行政",
+                    'url' => 'admin/project/dailyreport',
+                    'params' => ['atype' => 2],
+                ],
+            ];
         }else{
             $tab_data['menu'] = $this->getMenu();
         }
@@ -416,6 +434,78 @@ class Project extends Admin
         $this->assign('start_time', $start_time);
         $this->assign('p_status', ProjectModel::getPStatus($p_status));
         $this->assign('subject_item', SubjectItem::getItemOption($subject_id,$params['atype']));
+        $this->assign('user_select', AdminUser::inputSearchUser());
+        return $this->fetch();
+    }
+
+    public function dailyReport()
+    {
+        $map = [];
+        $params = $this->request->param();
+        $params['atype'] = isset($params['atype']) ? $params['atype'] : 1;
+
+        if ($params) {
+            if (!empty($params['project_id'])){
+                $code = ProjectModel::where('id',$params['project_id'])->column('code');
+                $t = substr($code[0],-1);
+                $like = $code[0].$params['project_id'].$t;
+                $w = [
+                    'code' => ['like',"{$like}%"],
+                ];
+                $ids = ProjectModel::where($w)->column('id');
+                array_unshift($ids,$params['project_id']);
+//                print_r(implode(',',$ids));exit();
+                $map['project_id'] = ['in', implode(',',$ids)];
+            }
+            if (!empty($params['person_user'])){
+                $map['user_id'] = $params['person_user'];
+            }
+            if (isset($params['start_time']) && !empty($params['start_time'])) {
+                $start_time = $params['start_time'];
+                $map['create_time'] = ['like',"%{$start_time}%"];
+            }else{
+                $start_time = date('Y-m-d');
+                $map['create_time'] = ['like',"%{$start_time}%"];
+            }
+
+        }
+        $cid = session('admin_user.cid');
+        $map['cid'] = $cid;
+
+        if ($this->request->isAjax()) {
+            $page = input('param.page/d', 1);
+            $limit = input('param.limit/d', 30);
+            $list = DailyReportModel::where($map)->order('create_time desc')->page($page)->limit($limit)->select();
+
+            $data['count'] = DailyReportModel::where($map)->order('create_time desc')->count('id');
+            foreach ($list as $k=>$v){
+                $v['detail'] = json_decode($v['detail'],true);
+                $v['p_detail'] = json_decode($v['p_detail'],true);
+                $v['attachment'] = json_decode($v['attachment'],true);
+                $v['send_user'] = $this->deal_data($v['send_user']);
+                $v['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
+                if (!empty($v['project_id'])){
+                    $v['project_name'] = ProjectModel::index(['id'=>$v['project_id']])[0]['name'];
+                }else{
+                    $v['project_name'] = '其他';
+                }
+            }
+
+//            print_r($list);exit();
+
+            $data['data']=$list;
+            $data['code'] = 0;
+            $data['msg'] = '';
+            return json($data);
+        }
+        $this->assign('tab_data', $this->tab_data);
+        $this->assign('tab_type', 1);
+        $this->assign('tab_url', url('dailyReport', ['atype' => $params['atype']]));
+        $this->assign('isparams', 1);
+        $this->assign('atype', $params['atype']);
+        $this->assign('start_time', $start_time);
+//        $this->assign('subject_item', SubjectItem::getItemOption(0,$params['atype']));
+        $this->assign('project_select', ProjectModel::inputSearchProject());
         $this->assign('user_select', AdminUser::inputSearchUser());
         return $this->fetch();
     }

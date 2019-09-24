@@ -13,7 +13,7 @@
         font-size: 12px;
         color: #666;
     }
-    .laytable-cell-1-0-5,.laytable-cell-1-0-6 {
+    .laytable-cell-1-0-4 {
         height: auto;
         line-height: 28px;
         padding: 0 15px;
@@ -36,11 +36,10 @@
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label">项目名称</label>
-                    <div class="layui-input-inline">
-                        <select name="project_id" class="field-project_id" type="select" lay-search>
-                            {$subject_item}
-                        </select>
+                    <div class="layui-input-inline box box1">
                     </div>
+                    <input id="project_name" type="hidden" name="project_name" value="{$Request.param.project_name}">
+                    <input id="project_id" type="hidden" name="project_id" value="{$Request.param.project_id}">
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">真实姓名</label>
@@ -53,14 +52,6 @@
                     <label class="layui-form-label">日期</label>
                     <div class="layui-input-inline">
                         <input type="text" class="layui-input field-start_time" name="start_time" value="{$start_time}" readonly autocomplete="off" placeholder="选择日期">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">状态</label>
-                    <div class="layui-input-inline">
-                        <select name="p_status" class="field-p_status" type="select" lay-search>
-                            {$p_status}
-                        </select>
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -95,13 +86,16 @@
 </script>
 
 <script>
-    var  project_id=$("select[name='project_id']").val();
+    var  project_id=$("input[name='project_id']").val();
+    if (typeof(project_id) == 'undefined'){
+        project_id = 0;
+    }
     var  start_time=$("input[name='start_time']").val();
     var  end_time=$("input[name='end_time']").val();
     var  atype=$("input[name='atype']").val();
     var  p_status=$("select[name='p_status']").val();
     var  person_user=$("input[name='user_id']").val();
-    var _url = "{:url('admin/project/index1')}?project_id="+project_id+"&start_time="+start_time+"&end_time="+end_time+"&atype="+atype+"&p_status="+p_status+"&person_user="+person_user;
+    var _url = "{:url('admin/project/dailyreport')}?project_id="+project_id+"&start_time="+start_time+"&end_time="+end_time+"&atype="+atype+"&p_status="+p_status+"&person_user="+person_user;
     layui.use(['layer','element', 'table','laydate'], function () {
         var $ = layui.jquery,laydate = layui.laydate,table = layui.table,layer = layui.layer,element = layui.element;
 
@@ -120,45 +114,38 @@
                     none : '暂无相关数据'
                 },
                 cols: [[
-                    {field: 'project_name', title: '项目名',width: 250},
-                    {field: 'name', title: '任务名',width: 250,templet:function (d) {
-                            var open_url = "{:url('editTask')}?id="+d.id+"&pid="+d.pid+"&type=2"+"&child="+d.child+"&project_name="+d.project_name;
-                            return "<a class='mcolor' href='"+open_url+"'>"+d.name+"</a>";
+                    {field: 'project_name', title: '项目名',width: 250,templet:function (d) {
+                            var open_url = "{:url('DailyReport/read')}?id="+d.id;
+                            return "<a class='mcolor' href='"+open_url+"'>"+d.project_name+"</a>";
                     }},
-                    {field: 'deal_user', title: '参与人',width: 150},
-                    {title: '成果展示',width: 300,templet:function (d) {
+                    {title: '今日汇报',width: 300,templet:function (d) {
                             var t = '';
-                            if (d.report){
-                                $.each(d.report,function(index,value){
+                            if (d.detail){
+                                $.each(d.detail,function(index,value){
                                     var n = parseInt(index)+1;
                                     if (n > 1){
                                         t += '<br>';
                                     }
-                                    t += '('+ value.create_time +')'+'<br>'+value.mark;
-                                    if (value.attachment.length > 0){
-                                        t += '<br>';
-                                        $.each(value.attachment,function(i,v){
-                                            var m = parseInt(i)+1;
-                                            t += '<a target="_blank" href="'+v+'" style="color: red">附件'+m+'</a>,';
-                                        });
-                                    }
-
-                                    if (value.reply.length > 0){
-                                        t += '<br>';
-                                        $.each(value.reply,function(k,val){
-                                            t += '意见：<font style="color: blue">'+val.content+'</font>';
-                                        });
-                                    }
-
+                                    t += '('+ n +')'+'<br>'+value.content;
                                 });
                             }
                             return t;
                         }},
-                    {field: 'realper', title: '进度',width: 70, templet:'#oper-col-1'},
-                    {field: 'start_time', title: '开始时间',width: 110},
-                    {field: 'end_time', title: '结束时间',width: 110},
-                    // {field: 'score', title: '计划斗',width: 80},
-                    // {field: 'real_score', title: '实际斗',width: 80},
+                    {title: '明日计划',width: 300,templet:function (d) {
+                            var t = '';
+                            if (d.p_detail){
+                                $.each(d.p_detail,function(index,value){
+                                    var n = parseInt(index)+1;
+                                    if (n > 1){
+                                        t += '<br>';
+                                    }
+                                    t += '('+ n +')'+'<br>'+value.plan;
+                                });
+                            }
+                            return t;
+                        }},
+                    {field: 'user_id', title: '提交人',width: 150},
+                    {field: 'create_time', title: '提交时间',width: 110},
                     {templet: '#oper-col', title: '操作',width: 80,}
                 ]],
             done: function () {
@@ -190,7 +177,7 @@
                 });
             }else if (layEvent === 'read') {
                 // var open_url = "{:url('read')}?id="+id+"&atype="+atype;
-                var open_url = "{:url('editTask')}?id="+id+"&pid="+pid+"&type=2"+"&child="+child+"&project_name="+project_name;
+                var open_url = "{:url('DailyReport/read')}?id="+id;
                 window.location.href = open_url;
             } else if (layEvent === 'add') {
                 var reg = /<[^>]+>/g;
@@ -234,6 +221,35 @@
             }
         });
     });
+
+    new SelectBox($('.box1'),{$project_select},function(result){
+        if ('' != result.id){
+            $('#project_name').val(result.name);
+            $('#project_id').val(result.id);
+        }
+    },{
+        dataName:'name',//option的html
+        dataId:'id',//option的value
+        fontSize:'14',//字体大小
+        optionFontSize:'14',//下拉框字体大小
+        textIndent:4,//字体缩进
+        color:'#000',//输入框字体颜色
+        optionColor:'#000',//下拉框字体颜色
+        arrowColor:'#D2D2D2',//箭头颜色
+        backgroundColor:'#fff',//背景色颜色
+        borderColor:'#D2D2D2',//边线颜色
+        hoverColor:'#009688',//下拉框HOVER颜色
+        borderWidth:1,//边线宽度
+        arrowBorderWidth:0,//箭头左侧分割线宽度。如果为0则不显示
+        // borderRadius:5,//边线圆角
+        placeholder:'输入关键字',//默认提示
+        defalut:'{$Request.param.project_name}',//默认显示内容。如果是'firstData',则默认显示第一个
+        // allowInput:true,//是否允许输入
+        width:200,//宽
+        height:37,//高
+        optionMaxHeight:300//下拉框最大高度
+    });
+
 
     new SelectBox($('.box2'),{$user_select},function(result){
         if ('' != result.id){
