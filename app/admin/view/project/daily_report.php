@@ -126,7 +126,7 @@
                                     if (n > 1){
                                         t += '<br>';
                                     }
-                                    t += '('+ n +')'+'<br>'+value.content;
+                                    t += '('+ n +')'+value.content;
                                 });
                             }
                             return t;
@@ -139,7 +139,7 @@
                                     if (n > 1){
                                         t += '<br>';
                                     }
-                                    t += '('+ n +')'+'<br>'+value.plan;
+                                    t += '('+ n +')'+value.plan;
                                 });
                             }
                             return t;
