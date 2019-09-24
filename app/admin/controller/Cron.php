@@ -139,7 +139,7 @@ class Cron extends Controller
         $where = [
             'status' => 1,
             'cid' => session('admin_user.cid'),
-            'create_time' => ['<=',time() - 3600],
+            'create_time' => ['<=',time() - 24*3600],
         ];
         $flag = ApprovalModel::where($where)->setField('status',6);
         if ($flag) {
