@@ -131,6 +131,16 @@
                             }
                             return t;
                         }},
+                    {title: '附件',width: 100,templet:function (d) {
+                            var t = '';
+                            if (d.attachment){
+                                $.each(d.attachment,function(index,value){
+                                    var m = parseInt(index)+1;
+                                    t += '<a target="_blank" href="'+value+'" style="color: red">附件'+m+'</a>,';
+                                });
+                            }
+                            return t;
+                        }},
                     {title: '明日计划',width: 300,templet:function (d) {
                             var t = '';
                             if (d.p_detail){
