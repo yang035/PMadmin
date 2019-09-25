@@ -149,10 +149,13 @@ class AdminMenu extends Model
                         return $trees;
                     }
                     // 过滤没访问权限的节点
-                    if (!RoleModel::checkAuth($v['id'])) {
-                        unset($data[$k]);
-                        continue;
+                    if (!in_array($v['pid'],[1,4])){
+                        if (!RoleModel::checkAuth($v['id'])) {
+                            unset($data[$k]);
+                            continue;
+                        }
                     }
+
                     // 多语言支持
                     if (config('sys.multi_language') == 1) {
                         $title = Db::name('admin_menu_lang')->where(['menu_id' => $v['id'], 'lang' => dblang('admin')])->value('title');
