@@ -138,7 +138,7 @@ class Cron extends Controller
     public function dealApproval(){
         $where = [
             'status' => 1,
-            'cid' => session('admin_user.cid'),
+            'cid' => 2,
             'create_time' => ['<=',time() - 24*3600],
         ];
         $flag = ApprovalModel::where($where)->setField('status',6);
