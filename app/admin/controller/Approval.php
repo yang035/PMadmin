@@ -178,7 +178,8 @@ class Approval extends Admin
         $d = '';
         $cid = session('admin_user.cid');
         $map['cid'] = $cid;
-        $panel_type = config('other.panel_type');
+        $panel_type1 = $panel_type = config('other.panel_type');
+        unset($panel_type1[2]);
         $approval_status = config('other.approval_status');
         $params['atype'] = isset($params['atype']) ? $params['atype'] : 1;
         if (1 == $params['atype']) {
@@ -187,7 +188,7 @@ class Approval extends Admin
             $this->assign('isparams', 1);
             $this->assign('atype', $params['atype']);
             $this->assign('tab_url', url('index', ['atype' => $params['atype']]));
-            $this->assign('panel_type', $panel_type);
+            $this->assign('panel_type', $panel_type1);
             return $this->fetch('panel');
         }
         if ($params) {
