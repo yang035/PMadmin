@@ -20,64 +20,68 @@
     }
 </style>
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
-<!--    <div class="layui-form-item">-->
-<!--        <label class="layui-form-label">选择项目</label>-->
-<!--        <div class="layui-input-inline">-->
-<!--            <select name="project_id" class="field-project_id" type="select">-->
-<!--                {$mytask}-->
-<!--            </select>-->
-<!--        </div>-->
-<!--    </div>-->
-    <div class="layui-form-item">
-        <label class="layui-form-label">选择项目</label>
-        <div class="layui-input-inline">
-            <div class="layui-input-inline box box1">
-            </div>
-            <input id="project_name" type="hidden" name="project_name" value="{$Request.param.project_name}">
-            <input id="project_id" type="hidden" name="project_id" value="{$Request.param.project_id}">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <blockquote class="layui-elem-quote" style="color: grey">
+                {if condition="($Request.param.ct eq 4) && $list1"}
+                    申请时间：{$list1['create_time']|date='Y-m-d H:i:s',###}<br>
+                    姓名：{$list1['real_name']}<br>
+                    开始时间：{$list1['start_time']}<br>
+                    结束时间：{$list1['end_time']}<br>
+                    项目名称：{$list1['project_name']}<br>
+                    地点：{$list1['address']}<br>
+                    同行人：{$list1['fellow_user']}<br>
+                    事由：{$list1['reason']}<br>
+                    附件说明：
+                    {notempty name="list1['attachment'][0]"}
+                    <!--            <div class="image-list">-->
+                    <ul>
+                        {volist name="list1['attachment']" id="vo"}
+                        <!--                <div class="cover"><img src="{$vo}" style="height: 30px;width: 30px;"></div>-->
+                        <li>&nbsp;&nbsp;&nbsp;&nbsp;<a target="_blank" href="{$vo}" style="color: #5c90d2">附件{$i}</a></li>
+                        {/volist}
+                    </ul>
+                    <!--            </div>-->
+                    {else/}
+                    <span>无</span>
+                    {/notempty}
+                    <br>
+                    审批人：{$list1['send_user']}<br>
+                    抄送人：{$list1['copy_user']}<br>
+                    结果：{$approval_status[$list1['status']]}<br>
+                    备注：{$list1['mark']}<br>
+                    批示时间：{$list1['update_time']|date='Y-m-d H:i:s',###}<br>
+                {elseif condition="($Request.param.ct eq 3) && $list1" /}
+                    申请时间：{$list1['create_time']|date='Y-m-d H:i:s',###}<br>
+                    姓名：{$list1['real_name']}<br>
+                    开始时间：{$list1['start_time']}<br>
+                    结束时间：{$list1['end_time']}<br>
+                    项目名称：{$list1['project_name']}<br>
+                    费用类型：{$cost_type[$list1['type']]}<br>
+                    金额：{$list1['money']}<br>
+                    事由：{$list1['reason']}<br>
+                    附件说明：
+                    {notempty name="list1['attachment'][0]"}
+                    <!--            <div class="image-list">-->
+                    <ul>
+                        {volist name="list1['attachment']" id="vo"}
+                        <!--                <div class="cover"><img src="{$vo}" style="height: 30px;width: 30px;"></div>-->
+                        <li>&nbsp;&nbsp;&nbsp;&nbsp;<a target="_blank" href="{$vo}" style="color: #5c90d2">附件{$i}</a></li>
+                        {/volist}
+                    </ul>
+                    <!--            </div>-->
+                    {else/}
+                    <span>无</span>
+                    {/notempty}
+                    <br>
+                    审批人：{$list1['send_user']}<br>
+                    抄送人：{$list1['copy_user']}<br>
+                    结果：{$approval_status[$list1['status']]}<br>
+                    备注：{$list1['mark']}<br>
+                    批示时间：{$list1['update_time']|date='Y-m-d H:i:s',###}<br>
+                {/if}
+            </blockquote>
         </div>
-        <div class="layui-form-mid red">*</div>
-    </div>
-<!--    <div class="layui-form-item">-->
-<!--        <label class="layui-form-label">报销类型</label>-->
-<!--        <div class="layui-input-inline">-->
-<!--            <select name="type" class="field-type" type="select">-->
-<!--                {$expense_type}-->
-<!--            </select>-->
-<!--        </div>-->
-<!--    </div>-->
-    <div class="layui-form-item">
-        <label class="layui-form-label">开始时间</label>
-        <div class="layui-input-inline" style="width: 250px">
-            <input type="text" class="layui-input field-start_time" name="start_time" lay-verify="required" autocomplete="off" readonly placeholder="选择开始时间">
-        </div>
-        <div class="layui-input-inline" style="width: 100px">
-            <input type="text" class="layui-input field-start_time1" name="start_time1" autocomplete="off" readonly placeholder="选择开始时间">
-        </div>
-        <div class="layui-form-mid" style="color: red">*</div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">结束时间</label>
-        <div class="layui-input-inline" style="width: 250px">
-            <input type="text" class="layui-input field-end_time" name="end_time" lay-verify="required" autocomplete="off" readonly placeholder="选择结束时间">
-        </div>
-        <div class="layui-input-inline" style="width: 100px">
-            <input type="text" class="layui-input field-end_time1" name="end_time1" autocomplete="off" readonly placeholder="选择开始时间">
-        </div>
-        <div class="layui-form-mid" style="color: red">*</div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">历时</label>
-        <div class="layui-input-inline">
-            <input type="text" class="layui-input field-time_long" readonly name="time_long" autocomplete="off">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">事由</label>
-        <div class="layui-input-inline">
-            <textarea type="text" class="layui-textarea field-reason" name="reason" autocomplete="off" placeholder="请输入报销事由" lay-verify="required"></textarea>
-        </div>
-        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">报销明细</label>
@@ -151,7 +155,8 @@
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <input type="hidden" class="field-id" name="id">
+            <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
+            <input type="hidden" class="field-id" name="ct" value="{$Request.param.ct}">
             <input type="hidden" class="field-class_type" name="class_type" value="{$Request.param.class_type}">
             <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
             <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
@@ -421,6 +426,9 @@
         });
         $('.field-total').val(total);
     }
+
+    select_union({$list1['project_id']});
+
     new SelectBox($('.box1'),{$project_select},function(result){
         if ('' != result.id){
             $('#project_name').val(result.name);

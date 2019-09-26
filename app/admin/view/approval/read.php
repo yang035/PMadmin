@@ -36,6 +36,70 @@
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-card">
         <div class="layui-card-body">
+            {if condition="$class_type eq 2 && $list1"}
+            {eq name="ct" value='4'}
+            <blockquote class="layui-elem-quote" style="color: grey">
+                申请时间：{$list1['create_time']|date='Y-m-d H:i:s',###}<br>
+                姓名：{$list1['real_name']}<br>
+                开始时间：{$list1['start_time']}<br>
+                结束时间：{$list1['end_time']}<br>
+                项目名称：{$list1['project_name']}<br>
+                地点：{$list1['address']}<br>
+                同行人：{$list1['fellow_user']}<br>
+                事由：{$list1['reason']}<br>
+                附件说明：
+                {notempty name="list1['attachment'][0]"}
+                <!--            <div class="image-list">-->
+                <ul>
+                    {volist name="list1['attachment']" id="vo"}
+                    <!--                <div class="cover"><img src="{$vo}" style="height: 30px;width: 30px;"></div>-->
+                    <li>&nbsp;&nbsp;&nbsp;&nbsp;<a target="_blank" href="{$vo}" style="color: #5c90d2">附件{$i}</a></li>
+                    {/volist}
+                </ul>
+                <!--            </div>-->
+                {else/}
+                <span>无</span>
+                {/notempty}
+                <br>
+                审批人：{$list1['send_user']}<br>
+                抄送人：{$list1['copy_user']}<br>
+                结果：{$approval_status[$list1['status']]}<br>
+                备注：{$list1['mark']}<br>
+                批示时间：{$list1['update_time']|date='Y-m-d H:i:s',###}<br>
+            </blockquote>
+            {/eq}
+            {eq name="ct" value='3'}
+            <blockquote class="layui-elem-quote" style="color: grey">
+                申请时间：{$list1['create_time']|date='Y-m-d H:i:s',###}<br>
+                姓名：{$list1['real_name']}<br>
+                开始时间：{$list1['start_time']}<br>
+                结束时间：{$list1['end_time']}<br>
+                项目名称：{$list1['project_name']}<br>
+                费用类型：{$expense_type[$list1['type']]}<br>
+                金额：{$list1['money']}<br>
+                事由：{$list1['reason']}<br>
+                附件说明：
+                {notempty name="list1['attachment'][0]"}
+                <!--            <div class="image-list">-->
+                <ul>
+                    {volist name="list1['attachment']" id="vo"}
+                    <!--                <div class="cover"><img src="{$vo}" style="height: 30px;width: 30px;"></div>-->
+                    <li>&nbsp;&nbsp;&nbsp;&nbsp;<a target="_blank" href="{$vo}" style="color: #5c90d2">附件{$i}</a></li>
+                    {/volist}
+                </ul>
+                <!--            </div>-->
+                {else/}
+                <span>无</span>
+                {/notempty}
+                <br>
+                审批人：{$list1['send_user']}<br>
+                抄送人：{$list1['copy_user']}<br>
+                结果：{$approval_status[$list1['status']]}<br>
+                备注：{$list1['mark']}<br>
+                批示时间：{$list1['update_time']|date='Y-m-d H:i:s',###}<br>
+            </blockquote>
+            {/eq}
+            {/if}
             {if condition="$class_type eq 15"}
             <blockquote class="layui-elem-quote" style="color: grey">
                 申请时间：{$list1['create_time']|date='Y-m-d H:i:s',###}<br>
@@ -76,16 +140,14 @@
                 请假类型：{$leave_type[$data_list['type']]}<br>
                 {/case}
                 {case value="2"}
-                报销类型：{$expense_type[$data_list['type']]}<br>
-                报销明细：
+                报销明细：<br>
                 {volist name="$data_list['detail']" id="vo"}
-                {$vo['amount']}元(说明：{$vo['mark']})&nbsp;&nbsp;|&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;{$expense_type[$vo['type']]} ~ {$vo['amount']}元(说明：{$vo['mark']})<br>
                 {/volist}
-                <br>
                 合计：{$data_list['total']}元<br>
                 {/case}
                 {case value="3"}
-                费用类型：{$cost_type[$data_list['type']]}<br>
+                费用类型：{$expense_type[$data_list['type']]}<br>
                 金额：{$data_list['money']}<br>
                 {/case}
                 {case value="4"}

@@ -109,8 +109,8 @@
                     <a class="layui-btn layui-btn-normal layui-btn-xs">撤销</a>
                 </div>
                 {/if}
-                {if condition="($vo['status'] eq 2) && ($Request.param.atype eq 2) "}
-                <div class="layui-btn-group" onclick="expense({$vo['id']},'{$panel_type[$vo['class_type']]['title']}')">
+                {if condition="($vo['status'] eq 2) && ($Request.param.atype == 2 or $Request.param.atype == 7) && ($vo['class_type'] == 3 or $vo['class_type'] == 4)"}
+                <div class="layui-btn-group" onclick="expense({$vo['id']},'{$vo['class_type']}')">
                     <a class="layui-btn layui-btn-danger layui-btn-xs">报销</a>
                 </div>
                 {/if}
@@ -213,21 +213,8 @@
 
     }
 
-    function expense(id,cls_name){
-        var open_url = "{:url('Approval/expense')}?id="+id+"&class_type=2";
-        if (open_url.indexOf('?') >= 0) {
-            open_url += '&hisi_iframe=yes';
-        } else {
-            open_url += '?hisi_iframe=yes';
-        }
-        layer.open({
-            type:2,
-            title :cls_name,
-            maxmin: true,
-            area: ['800px', '500px'],
-            content: open_url,
-            success:function (layero, index) {
-            }
-        });
+    function expense(id,ct){
+        var open_url = "{:url('Approval/expense')}?id="+id+"&class_type=2&ct="+ct;
+        window.location.href = open_url;
     }
 </script>

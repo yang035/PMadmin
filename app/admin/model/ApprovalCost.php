@@ -15,7 +15,7 @@ class ApprovalCost extends Model
 {
     public static function getOption($type = 0)
     {
-        $leaveType = config('other.cost_type');
+        $leaveType = config('other.expense_type');
         $str = '';
         foreach ($leaveType as $k => $v) {
             if ($type == $k) {

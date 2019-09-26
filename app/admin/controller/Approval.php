@@ -489,84 +489,218 @@ class Approval extends Admin
 
     public function expense()
     {
-        if ($this->request->isPost()) {
-            $data = $this->request->post();
-            if ('' == $data['project_id']){
-                return $this->error('请选择项目');
-            }
-            // 验证
-            $result = $this->validate($data, 'ApprovalExpense');
-            if ($result !== true) {
-                return $this->error($result);
-            }
-            unset($data['id']);
-
-            $send_user = html_entity_decode($data['send_user']);
-            $send_user1 = json_decode($send_user,true);
-            $send_user1 = array_unique($send_user1, SORT_REGULAR);
-            $send_user2 = [];
-            foreach ($send_user1 as $k=>$v) {
-                $send_user2 += $v;
-            }
-
-            // 启动事务
-            Db::startTrans();
-            try {
-                $approve = [
-                    'project_id' => $data['project_id'],
-                    'class_type' => $data['class_type'],
-                    'cid' => session('admin_user.cid'),
-                    'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
-                    'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
-                    'time_long' => $data['time_long'],
-                    'user_id' => session('admin_user.uid'),
-                    'send_user' => json_encode($send_user2),
-                    'copy_user' => user_array($data['copy_user']),
+        $params = $this->request->param();
+        if (isset($params['id']) && !empty($params['id'])){
+            $list1 = [];
+            if (4 == $params['ct']){
+                $table = 'tb_approval_business';
+                $f = 'b.reason,b.address,b.attachment';
+                $map = [
+                    'a.id' => $params['id']
                 ];
-                $res = ApprovalModel::create($approve);
-
-
-                $su = [];
-                foreach ($send_user1 as $k=>$v) {
-                    $su[$k] = [
-                        'aid' => $res['id'],
-                        'flow_num' => $k,
-                        'send_user' => json_encode($v),
+                $fields = 'a.*,' . $f;
+                $list1 = db('approval')->alias('a')->field($fields)
+                    ->join("{$table} b", 'a.id = b.aid', 'left')
+                    ->where($map)->find();
+                $list1['attachment'] = explode(',', substr($list1['attachment'], 0, -1));
+                $list1['real_name'] = AdminUser::getUserById($list1['user_id'])['realname'];
+                $list1['deal_user'] = $this->deal_data($list1['deal_user']);
+                $list1['fellow_user'] = $this->deal_data($list1['fellow_user']);
+                $list1['send_user'] = $this->deal_data($list1['send_user']);
+                $list1['copy_user'] = $this->deal_data($list1['copy_user']);
+                if ($list1['project_id']){
+                    $project_data = ProjectModel::getRowById($list1['project_id']);
+                }else{
+                    $project_data = [
+                        'name'=>'其他',
                     ];
                 }
-                $send_user_model = new ApprovalSenduser();
-                $send_user_model->saveAll($su);
-
-                $leave = [
-                    'aid' => $res['id'],
-                    'type' => $data['type'],
-                    'reason' => $data['reason'],
-                    'attachment' => $data['attachment'],
-                    'total' => $data['total'],
+                $list1['project_name'] = $project_data['name'];
+                $approval_status = config('other.approval_status');
+                $this->assign('approval_status', $approval_status);
+                $this->assign('list1', $list1);
+            }elseif (3 == $params['ct']){
+                $table = 'tb_approval_cost';
+                $f = 'b.type,b.reason,b.money,b.attachment';
+                $map = [
+                    'a.id' => $params['id']
                 ];
-                if ($data['amount']) {
-                    foreach ($data['amount'] as $k => $v) {
-                        $leave['detail'][$k]['amount'] = $v;
-                        $leave['detail'][$k]['mark'] = $data['mark'][$k];
-                    }
+                $fields = 'a.*,' . $f;
+                $list1 = db('approval')->alias('a')->field($fields)
+                    ->join("{$table} b", 'a.id = b.aid', 'left')
+                    ->where($map)->find();
+                $list1['attachment'] = explode(',', substr($list1['attachment'], 0, -1));
+                $list1['real_name'] = AdminUser::getUserById($list1['user_id'])['realname'];
+                $list1['send_user'] = $this->deal_data($list1['send_user']);
+                $list1['copy_user'] = $this->deal_data($list1['copy_user']);
+                if ($list1['project_id']){
+                    $project_data = ProjectModel::getRowById($list1['project_id']);
+                }else{
+                    $project_data = [
+                        'name'=>'其他',
+                    ];
                 }
-                $leave['detail'] = json_encode($leave['detail']);
-                $flag = ExpenseModel::create($leave);
-                // 提交事务
-                Db::commit();
-            } catch (\Exception $e) {
-                // 回滚事务
-                Db::rollback();
+                $list1['project_name'] = $project_data['name'];
+                $approval_status = config('other.approval_status');
+                $cost_type = config('other.expense_type');
+                $this->assign('cost_type', $cost_type);
+                $this->assign('approval_status', $approval_status);
+                $this->assign('list1', $list1);
             }
-            if ($flag) {
-                return $this->success("操作成功{$this->score_value}", 'index');
-            } else {
-                return $this->error('添加失败！');
+
+            if ($this->request->isPost()) {
+                $data = $this->request->post();
+                $data['amount'] = array_filter($data['amount']);
+
+                $send_user = html_entity_decode($data['send_user']);
+                $send_user1 = json_decode($send_user,true);
+                $send_user1 = array_unique($send_user1, SORT_REGULAR);
+                $send_user2 = [];
+                foreach ($send_user1 as $k=>$v) {
+                    $send_user2 += $v;
+                }
+
+                // 启动事务
+                Db::startTrans();
+                try {
+                    $approve = [
+                        'project_id' => $list1['project_id'],
+                        'class_type' => $data['class_type'],
+                        'cid' => session('admin_user.cid'),
+                        'start_time' => $list1['start_time'],
+                        'end_time' => date('Y-m-d H:i:s'),
+                        'time_long' => $list1['time_long'],
+                        'user_id' => session('admin_user.uid'),
+                        'send_user' => json_encode($send_user2),
+                        'copy_user' => user_array($data['copy_user']),
+                    ];
+//                print_r($approve);exit();
+                    $res = ApprovalModel::create($approve);
+
+                    $su = [];
+                    foreach ($send_user1 as $k=>$v) {
+                        $su[$k] = [
+                            'aid' => $res['id'],
+                            'flow_num' => $k,
+                            'send_user' => json_encode($v),
+                        ];
+                    }
+                    $send_user_model = new ApprovalSenduser();
+                    $send_user_model->saveAll($su);
+
+                    $leave = [
+                        'aid' => $res['id'],
+                        'a_aid' => $list1['id'],
+                        'reason' => $list1['reason'],
+                        'attachment' => $data['attachment'],
+                        'total' => $data['total'],
+                    ];
+                    if ($data['amount']) {
+                        foreach ($data['amount'] as $k => $v) {
+                            $leave['detail'][$k]['amount'] = $v;
+                            $leave['detail'][$k]['type'] = $data['type'][$k];
+                            $leave['detail'][$k]['mark'] = $data['mark'][$k];
+                        }
+                    }
+                    $leave['detail'] = json_encode($leave['detail']);
+                    $flag = ExpenseModel::create($leave);
+                    // 提交事务
+                    Db::commit();
+                } catch (\Exception $e) {
+                    // 回滚事务
+                    Db::rollback();
+                }
+                if ($flag) {
+                    return $this->success("操作成功{$this->score_value}", 'index');
+                } else {
+                    return $this->error('添加失败！');
+                }
             }
+            $this->assign('expense_type', ExpenseModel::getOption());
+            $this->assign('mytask', ProjectModel::getMyTask(0));
+            return $this->fetch('expense1');
+        }else{
+            if ($this->request->isPost()) {
+                $data = $this->request->post();
+                if ('' == $data['project_id']){
+                    return $this->error('请选择项目');
+                }
+                $data['amount'] = array_filter($data['amount']);
+                // 验证
+                $result = $this->validate($data, 'ApprovalExpense');
+                if ($result !== true) {
+                    return $this->error($result);
+                }
+                unset($data['id']);
+
+                $send_user = html_entity_decode($data['send_user']);
+                $send_user1 = json_decode($send_user,true);
+                $send_user1 = array_unique($send_user1, SORT_REGULAR);
+                $send_user2 = [];
+                foreach ($send_user1 as $k=>$v) {
+                    $send_user2 += $v;
+                }
+
+                // 启动事务
+                Db::startTrans();
+                try {
+                    $approve = [
+                        'project_id' => $data['project_id'],
+                        'class_type' => $data['class_type'],
+                        'cid' => session('admin_user.cid'),
+                        'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
+                        'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
+                        'time_long' => $data['time_long'],
+                        'user_id' => session('admin_user.uid'),
+                        'send_user' => json_encode($send_user2),
+                        'copy_user' => user_array($data['copy_user']),
+                    ];
+                    $res = ApprovalModel::create($approve);
+
+
+                    $su = [];
+                    foreach ($send_user1 as $k=>$v) {
+                        $su[$k] = [
+                            'aid' => $res['id'],
+                            'flow_num' => $k,
+                            'send_user' => json_encode($v),
+                        ];
+                    }
+                    $send_user_model = new ApprovalSenduser();
+                    $send_user_model->saveAll($su);
+
+                    $leave = [
+                        'aid' => $res['id'],
+//                        'type' => $data['type'],
+                        'reason' => $data['reason'],
+                        'attachment' => $data['attachment'],
+                        'total' => $data['total'],
+                    ];
+                    if ($data['amount']) {
+                        foreach ($data['amount'] as $k => $v) {
+                            $leave['detail'][$k]['amount'] = $v;
+                            $leave['detail'][$k]['type'] = $data['type'][$k];
+                            $leave['detail'][$k]['mark'] = $data['mark'][$k];
+                        }
+                    }
+                    $leave['detail'] = json_encode($leave['detail']);
+                    $flag = ExpenseModel::create($leave);
+                    // 提交事务
+                    Db::commit();
+                } catch (\Exception $e) {
+                    // 回滚事务
+                    Db::rollback();
+                }
+                if ($flag) {
+                    return $this->success("操作成功{$this->score_value}", 'index');
+                } else {
+                    return $this->error('添加失败！');
+                }
+            }
+            $this->assign('expense_type', ExpenseModel::getOption());
+            $this->assign('mytask', ProjectModel::getMyTask(0));
+            return $this->fetch();
         }
-        $this->assign('expense_type', ExpenseModel::getOption());
-        $this->assign('mytask', ProjectModel::getMyTask(0));
-        return $this->fetch();
     }
 
     public function cost()
@@ -1494,7 +1628,7 @@ class Approval extends Admin
                 break;
             case 2:
                 $table = 'tb_approval_expense';
-                $f = 'b.type,b.reason,b.detail,b.total,b.attachment';
+                $f = 'b.a_aid,b.type,b.reason,b.detail,b.total,b.attachment';
                 break;
             case 3:
                 $table = 'tb_approval_cost';
@@ -1890,13 +2024,79 @@ class Approval extends Admin
                 $this->assign('leave_type', $leave_type);
                 break;
             case 2:
+                $ct = ApprovalModel::where('id',$list['a_aid'])->column('class_type');
+                if ($ct){
+                    if (!empty($list['a_aid']) && $ct[0] == 4){
+                        $table = 'tb_approval_business';
+                        $f = 'b.reason,b.address,b.attachment';
+                        $map = [
+                            'a.id' => $list['a_aid']
+                        ];
+                        $fields = 'a.*,' . $f;
+                        $list1 = db('approval')->alias('a')->field($fields)
+                            ->join("{$table} b", 'a.id = b.aid', 'left')
+                            ->where($map)->find();
+                        $list1['attachment'] = explode(',', substr($list1['attachment'], 0, -1));
+                        $list1['real_name'] = AdminUser::getUserById($list1['user_id'])['realname'];
+                        $list1['deal_user'] = $this->deal_data($list1['deal_user']);
+                        $list1['fellow_user'] = $this->deal_data($list1['fellow_user']);
+                        $list1['send_user'] = $this->deal_data($list1['send_user']);
+                        $list1['copy_user'] = $this->deal_data($list1['copy_user']);
+                        if ($list1['project_id']){
+                            $project_data = ProjectModel::getRowById($list1['project_id']);
+                        }else{
+                            $project_data = [
+                                'name'=>'其他',
+                            ];
+                        }
+                        $list1['project_name'] = $project_data['name'];
+                    }elseif (!empty($list['a_aid']) && $ct[0] == 3){
+                        $table = 'tb_approval_cost';
+                        $f = 'b.type,b.reason,b.money,b.attachment';
+                        $map = [
+                            'a.id' => $list['a_aid']
+                        ];
+                        $fields = 'a.*,' . $f;
+                        $list1 = db('approval')->alias('a')->field($fields)
+                            ->join("{$table} b", 'a.id = b.aid', 'left')
+                            ->where($map)->find();
+                        $list1['attachment'] = explode(',', substr($list1['attachment'], 0, -1));
+                        $list1['real_name'] = AdminUser::getUserById($list1['user_id'])['realname'];
+                        $list1['deal_user'] = $this->deal_data($list1['deal_user']);
+                        $list1['fellow_user'] = $this->deal_data($list1['fellow_user']);
+                        $list1['send_user'] = $this->deal_data($list1['send_user']);
+                        $list1['copy_user'] = $this->deal_data($list1['copy_user']);
+                        if ($list1['project_id']){
+                            $project_data = ProjectModel::getRowById($list1['project_id']);
+                        }else{
+                            $project_data = [
+                                'name'=>'其他',
+                            ];
+                        }
+                        $list1['project_name'] = $project_data['name'];
+                    }else{
+                        $list1 = [];
+                    }
+                }else{
+                    $ct[0] = 0;
+                    $list1 = [];
+                }
+
                 $list['detail'] = json_decode($list['detail'], true);
+                if (!isset($list['detail'][0]['type'])){
+                    foreach ($list['detail'] as $k=>$v) {
+                        $list['detail'][$k]['type'] = 1;
+                    }
+                }
+
                 $expense_type = config('other.expense_type');
+                $this->assign('ct', $ct[0]);
                 $this->assign('expense_type', $expense_type);
+                $this->assign('list1', $list1);
                 break;
             case 3:
-                $cost_type = config('other.cost_type');
-                $this->assign('cost_type', $cost_type);
+                $cost_type = config('other.expense_type');
+                $this->assign('expense_type', $cost_type);
                 break;
             case 4:
                 $report = ApprovalReport::getAll(5);

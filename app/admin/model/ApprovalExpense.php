@@ -19,9 +19,9 @@ class ApprovalExpense extends Model
         $str = '';
         foreach ($leaveType as $k => $v) {
             if ($type == $k) {
-                $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+                $str .= "<option value='".$k."' selected>".$v."</option>";
             } else {
-                $str .= '<option value="'.$k.'">'.$v.'</option>';
+                $str .= "<option value='".$k."'>".$v."</option>";
             }
         }
         return $str;
