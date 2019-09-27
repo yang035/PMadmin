@@ -425,7 +425,7 @@ class Approval extends Admin
             $send_user1 = json_decode($send_user,true);
             $start_time = $data['start_time'] . ' ' . $data['start_time1'];
             $end_time = $data['end_time'] . ' ' . $data['end_time1'];
-            $send_user1 = array_unique($send_user1, SORT_REGULAR);
+            $send_user1 = array_values(array_unique($send_user1, SORT_REGULAR));
             if ((strtotime($end_time) - strtotime($start_time) <= 24*3600) && count($send_user1) > 2){
                 array_pop($send_user1);
             }
@@ -555,7 +555,7 @@ class Approval extends Admin
 
                 $send_user = html_entity_decode($data['send_user']);
                 $send_user1 = json_decode($send_user,true);
-                $send_user1 = array_unique($send_user1, SORT_REGULAR);
+                $send_user1 = array_values(array_unique($send_user1, SORT_REGULAR));
                 $send_user2 = [];
                 foreach ($send_user1 as $k=>$v) {
                     $send_user2 += $v;
@@ -636,7 +636,7 @@ class Approval extends Admin
 
                 $send_user = html_entity_decode($data['send_user']);
                 $send_user1 = json_decode($send_user,true);
-                $send_user1 = array_unique($send_user1, SORT_REGULAR);
+                $send_user1 = array_values(array_unique($send_user1, SORT_REGULAR));
                 $send_user2 = [];
                 foreach ($send_user1 as $k=>$v) {
                     $send_user2 += $v;
@@ -720,7 +720,7 @@ class Approval extends Admin
 
             $send_user = html_entity_decode($data['send_user']);
             $send_user1 = json_decode($send_user,true);
-            $send_user1 = array_unique($send_user1, SORT_REGULAR);
+            $send_user1 = array_values(array_unique($send_user1, SORT_REGULAR));
             $send_user2 = [];
             foreach ($send_user1 as $k=>$v) {
                 $send_user2 += $v;
@@ -793,7 +793,7 @@ class Approval extends Admin
 
             $send_user = html_entity_decode($data['send_user']);
             $send_user1 = json_decode($send_user,true);
-            $send_user1 = array_unique($send_user1, SORT_REGULAR);
+            $send_user1 = array_values(array_unique($send_user1, SORT_REGULAR));
             if (count($send_user1) > 2){
                 array_pop($send_user1);
             }
@@ -866,7 +866,7 @@ class Approval extends Admin
 
             $send_user = html_entity_decode($data['send_user']);
             $send_user1 = json_decode($send_user,true);
-            $send_user1 = array_unique($send_user1, SORT_REGULAR);
+            $send_user1 = array_values(array_unique($send_user1, SORT_REGULAR));
             $send_user2 = [];
             foreach ($send_user1 as $k=>$v) {
                 $send_user2 += $v;
@@ -945,7 +945,7 @@ class Approval extends Admin
 
             $send_user = html_entity_decode($data['send_user']);
             $send_user1 = json_decode($send_user,true);
-            $send_user1 = array_unique($send_user1, SORT_REGULAR);
+            $send_user1 = array_values(array_unique($send_user1, SORT_REGULAR));
             if (count($send_user1) > 2){
                 array_pop($send_user1);
             }
@@ -1266,7 +1266,7 @@ class Approval extends Admin
 
             $send_user = html_entity_decode($data['send_user']);
             $send_user1 = json_decode($send_user,true);
-            $send_user1 = array_unique($send_user1, SORT_REGULAR);
+            $send_user1 = array_values(array_unique($send_user1, SORT_REGULAR));
             $send_user2 = [];
             foreach ($send_user1 as $k=>$v) {
                 $send_user2 += $v;
