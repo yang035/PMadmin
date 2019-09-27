@@ -2240,7 +2240,7 @@ class Approval extends Admin
 
         $fields = 'u.id,u.realname,tmp.*';
         $panel_type = config('other.panel_type');
-        $t = '';
+        $t = ',SUM(IF(class_type=6,TIMESTAMPDIFF(HOUR,start_time,end_time),0)) over_time ';
         foreach ($panel_type as $k=>$v){
             $t.=",sum(if(class_type={$k},1,0)) num_{$k} ";
         }
@@ -2268,7 +2268,7 @@ class Approval extends Admin
             set_time_limit(0);
             $data_list = Db::table('tb_admin_user u')->field($fields)
                 ->join("(SELECT user_id{$t} FROM tb_approval WHERE cid={$cid} and status=2 and create_time between '{$d0}' and '{$d1}' GROUP BY user_id) tmp",'u.id=tmp.user_id','left')
-                ->where($where)->order('u.id asc')->select();
+                ->where($where)->order('over_time desc,u.id asc')->select();
             vendor('PHPExcel.PHPExcel');
             $objPHPExcel = new \PHPExcel();
             $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
@@ -2290,7 +2290,7 @@ class Approval extends Admin
                 ->setCellValue('D1', '费用')
                 ->setCellValue('E1', '出差')
                 ->setCellValue('F1', '采购')
-                ->setCellValue('G1', '加班')
+                ->setCellValue('G1', '加班(小时)')
                 ->setCellValue('H1', '外出')
                 ->setCellValue('I1', '用车')
                 ->setCellValue('J1', '申领物品')
@@ -2307,7 +2307,7 @@ class Approval extends Admin
                     ->setCellValue('D' . $num, $v['num_3'])
                     ->setCellValue('E' . $num, $v['num_4'])
                     ->setCellValue('F' . $num, $v['num_5'])
-                    ->setCellValue('G' . $num, $v['num_6'])
+                    ->setCellValue('G' . $num, $v['over_time'])
                     ->setCellValue('H' . $num, $v['num_7'])
                     ->setCellValue('I' . $num, $v['num_8'])
                     ->setCellValue('J' . $num, $v['num_11'])
@@ -2328,7 +2328,7 @@ class Approval extends Admin
 
         $data_list = Db::table('tb_admin_user u')->field($fields)
             ->join("(SELECT user_id{$t} FROM tb_approval WHERE cid={$cid} and status=2 and create_time between {$d0} and {$d1} GROUP BY user_id) tmp",'u.id=tmp.user_id','left')
-            ->where($where)->order('u.id asc')->paginate(30, false, ['query' => input('get.')]);
+            ->where($where)->order('over_time desc,u.id asc')->paginate(30, false, ['query' => input('get.')]);
 //        $data_list = Db::table('tb_admin_user u')->field($fields)
 //        ->join("(SELECT user_id,class_type{$t} FROM tb_approval WHERE cid={$cid} and status=2 and create_time between {$d0} and {$d1} GROUP BY user_id,class_type) tmp",'u.id=tmp.user_id','left')
 //            ->where($where)->buildSql();

@@ -53,7 +53,13 @@
             <td class="font12">
                 {empty name="vo['num_'.$key]"}0
                 {else/}
-                <strong style="color: red">{$vo['num_'.$key]}</strong>
+                <strong style="color: red">
+                    {neq name="$key" value="6"}
+                        {$vo['num_'.$key]}
+                    {else/}
+                        {$vo['over_time']}h
+                    {/neq}
+                </strong>
                 {/empty}
             </td>
             {/volist}
