@@ -64,6 +64,7 @@ class Subject extends Admin
             if ($data['data']){
                 foreach ($data['data'] as $k=>$v){
                     $v['s_status'] = $p_status[$v['s_status']];
+                    $v['manager_user'] = $this->deal_data($v['manager_user']);
                 }
             }
             $data['count'] = ItemModel::where($where)->count('id');
