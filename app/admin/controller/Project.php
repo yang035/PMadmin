@@ -464,8 +464,9 @@ class Project extends Admin
                 $start_time = $params['start_time'];
                 $map['create_time'] = ['like',"%{$start_time}%"];
             }else{
-                $start_time = date('Y-m-d');
-                $map['create_time'] = ['like',"%{$start_time}%"];
+//                $start_time = date('Y-m-d');
+//                $map['create_time'] = ['like',"%{$start_time}%"];
+                $start_time = '';
             }
 
         }
