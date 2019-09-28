@@ -19,14 +19,17 @@ class Publics extends Common
             if (!$model->login($username, $password)) {
                 return $this->error($model->getError(), url('index'));
             }
-            return $this->success('登陆成功，页面跳转中...', url('index/index'),'',1);
+            if (session('admin_user.role_id') > 3) {
+                $this->assign('_admin_menu_current', array('url'=>'project/mytask'));
+                return $this->success('登陆成功，页面跳转中...', url('Project/mytask', ['type' => 1]),'',1);
+            }
+            $this->assign('_admin_menu_current', array('url'=>'Assignment/mytask'));
+            return $this->success('登陆成功，页面跳转中...', url('Assignment/index'),'',1);
         }
 
         if ($model->isLogin()) {
-            $this->redirect(url('index/index', '', true, true));
+            $this->redirect(url('Assignment/index', '', true, true));
         }
-//        echo 123;exit();
-//        $this->assign('_admin_menu_current', array('url'=>''));
         return $this->fetch();
     }
 
