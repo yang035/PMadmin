@@ -51,6 +51,42 @@
                     结果：{$approval_status[$list1['status']]}<br>
                     备注：{$list1['mark']}<br>
                     批示时间：{$list1['update_time']|date='Y-m-d H:i:s',###}<br>
+
+                    <div class="layui-card-header">报告记录</div>
+                    <ul class="layui-timeline">
+                        {volist name="report_info" id="vo"}
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis"></i>
+                            <div class="layui-timeline-content layui-text">
+                                <div class="layui-timeline-title">
+                                    <span style="color: red">[{$vo['create_time']}]</span>
+                                    <br>
+                                    {$vo['mark']}
+                                    <br>
+                                    {notempty name="vo['attachment']"}
+                                    <ul>
+                                        {volist name="vo['attachment']" id="v"}
+                                        <li>
+                                            <a target="_blank" href="{$v}">附件{$i}</a>
+                                        </li>
+                                        {/volist}
+                                    </ul>
+                                    <br>
+                                    {/notempty}
+                                    <ul>
+                                        {volist name="vo['reply']" id="v"}
+                                        <li>
+                                            <span style="color: grey">[{$v['create_time']}回复]</span><br>
+                                            {$v['content']}
+                                        </li>
+                                        {/volist}
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                        {/volist}
+                    </ul>
+
                 {elseif condition="($Request.param.ct eq 3) && $list1" /}
                     申请时间：{$list1['create_time']|date='Y-m-d H:i:s',###}<br>
                     姓名：{$list1['real_name']}<br>

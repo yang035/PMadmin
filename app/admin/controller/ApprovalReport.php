@@ -12,8 +12,10 @@ use app\admin\model\ApprovalReport as ReportModel;
 
 class ApprovalReport extends Admin
 {
-    public static function getAll($limit=0){
-        $project_id = input('id/d');
+    public static function getAll($limit=0,$project_id=0){
+        if (empty($project_id)){
+            $project_id = input('id/d');
+        }
         $map['aid'] = $project_id;
         $map['cid'] = session('admin_user.cid');
 //        $map['user_id'] = session('admin_user.uid');

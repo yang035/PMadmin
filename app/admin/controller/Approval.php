@@ -518,6 +518,21 @@ class Approval extends Admin
                 }
                 $list1['project_name'] = $project_data['name'];
                 $approval_status = config('other.approval_status');
+
+                $report = ApprovalReport::getAll(5,$list1['id']);
+                if ($report) {
+                    foreach ($report as $k => $v) {
+                        if (!empty($v['attachment'])){
+                            $attachment = explode(',',$v['attachment']);
+                            $report[$k]['attachment'] = array_filter($attachment);
+                        }
+                        $report[$k]['reply'] = ApprovalReportReply::getAll($v['id'], 5);
+                    }
+                }else{
+                    return $this->error('请先补充出差报告！');
+                }
+                $this->assign('report_info', $report);
+
                 $this->assign('approval_status', $approval_status);
                 $this->assign('list1', $list1);
             }elseif (3 == $params['ct']){
@@ -2051,6 +2066,19 @@ class Approval extends Admin
                             ];
                         }
                         $list1['project_name'] = $project_data['name'];
+
+                        $report = ApprovalReport::getAll(5,$list1['id']);
+                        if ($report) {
+                            foreach ($report as $k => $v) {
+                                if (!empty($v['attachment'])){
+                                    $attachment = explode(',',$v['attachment']);
+                                    $report[$k]['attachment'] = array_filter($attachment);
+                                }
+                                $report[$k]['reply'] = ApprovalReportReply::getAll($v['id'], 5);
+                            }
+                        }
+                        $this->assign('report_info', $report);
+
                     }elseif (!empty($list['a_aid']) && $ct[0] == 3){
                         $table = 'tb_approval_cost';
                         $f = 'b.type,b.reason,b.money,b.attachment';
