@@ -12,7 +12,17 @@ class AdminDepartment extends Model
     // 自动写入时间戳
     protected $autoWriteTimestamp = true;
 
-    public static function index($cid = 1,$path=0)
+    public static function index($cid = 1)
+    {
+        $where = [
+            'cid' => $cid,
+            'status' => 1,
+        ];
+        $result = self::where($where)->select();
+        return $result;
+    }
+
+    public static function getDepUser1($cid = 1,$path=0)
     {
         $where = [
             'cid' => $cid,

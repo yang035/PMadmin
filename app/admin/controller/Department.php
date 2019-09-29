@@ -23,7 +23,7 @@ class Department extends Admin
     public function index()
     {
         $cid = session('admin_user.cid');
-        $list = AdminDepartment::index($cid);
+        $list = AdminDepartment::getDepUser1($cid);
         if ($this->request->isAjax()) {
             $data = [];
             $data['code'] = 0;
