@@ -311,11 +311,11 @@ class Project extends Model
             $con .= "JSON_CONTAINS_PATH(manager_user,'one', '$.\"$uid\"') or JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') or JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"') or JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"')";
         }
         $data = self::field('id,name')->where($map)->where($con)->select();
-        $tmp = [
-            'id'=>0,
-            'name'=>'其他'
-        ];
-        $data[] = $tmp;
+//        $tmp = [
+//            'id'=>0,
+//            'name'=>'其他'
+//        ];
+//        $data[] = $tmp;
         return json_encode($data);
     }
 
