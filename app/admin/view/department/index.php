@@ -21,10 +21,14 @@
 <table id="table1" class="layui-table" lay-filter="table1"></table>
 <!-- 操作列 -->
 <script type="text/html" id="oper-col">
+    {{#  if(d.flag == 0){ }}
     <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="add">添加</a>
     <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">修改</a>
 <!--    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
     <a class="layui-btn layui-btn-xs" lay-event="dep_auth">设置权限</a>
+    {{# }else{ }}
+    <a href="{:url('User/editUser')}?id={{ d.id.substring(5) }}&flag={{ d.flag }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
+    {{# } }}
 </script>
 <script>
     var _url = "{:url('admin/department/index')}";
@@ -47,7 +51,7 @@
                 treeSpid: 0,
                 treeIdName: 'id',
                 treePidName: 'pid',
-                treeDefaultClose: true,
+                treeDefaultClose: false,
                 treeLinkage: false,
                 elem: '#table1',
                 url: _url,
@@ -55,7 +59,6 @@
                 cols: [[
                     {type: 'numbers'},
                     {field: 'name', title: '名称'},
-                    {field: 'remark', title: '说明'},
                     {templet: '#oper-col', title: '操作'}
                 ]],
                 done: function () {

@@ -12,14 +12,37 @@ class AdminDepartment extends Model
     // 自动写入时间戳
     protected $autoWriteTimestamp = true;
 
-    public static function index($cid = 1)
+    public static function index($cid = 1,$path=0)
     {
         $where = [
             'cid' => $cid,
             'status'=>1,
         ];
+        if ($path){
+            $where['pid'] = ['in',session('admin_user.path')];
+        }
         $result = self::where($where)->select();
-        return $result;
+        if ($result){
+            foreach ($result as $k=>$v) {
+                $v['name'] = "<font color='#009688'>{$v['name']}</font>";
+                $result[$k]['flag'] = 0;
+            }
+        }
+        $map = [
+            'company_id' => $cid,
+            'department_id'=>['>',0],
+            'status'=>1,
+            'is_show'=>0,
+        ];
+        $user = AdminUser::where($map)->select();
+        foreach ($user as $k => $v) {
+            $user[$k]['id'] = '10000' . $v->id;
+            $user[$k]['pid'] = $v['department_id'];
+            $user[$k]['name'] = "{$v['realname']}[{$v['nick']}]";
+            $user[$k]['flag'] = 1;
+        }
+        $data = array_merge($user, $result);
+        return $data;
     }
 
     public static function getDepUser($cid = 1,$path=0)
