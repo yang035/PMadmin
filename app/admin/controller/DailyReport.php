@@ -56,7 +56,7 @@ class DailyReport extends Admin
 
     public function getApprovalCount(){
         $map['cid'] = session('admin_user.cid');
-        $map['create_time'] = ['>','2019-02-01 00:00:00'];
+        $map['create_time'] = ['>','2019-10-01 00:00:00'];
         $uid = session('admin_user.uid');
         $fields = "SUM(IF(user_id='{$uid}',1,0)) user_num,
         SUM(IF(JSON_EXTRACT(send_user,'$.\"$uid\"') = '',1,0)) send_num,
@@ -72,7 +72,7 @@ class DailyReport extends Admin
         $map = [];
         $cid = session('admin_user.cid');
         $map['cid'] = $cid;
-        $map['create_time'] = ['>','2019-02-01 00:00:00'];
+        $map['create_time'] = ['>','2019-10-01 00:00:00'];
         $params['atype'] = isset($params['atype']) ? $params['atype'] : 1;
         if (1 == $params['atype']){
             $panel_type = config('other.report_type');
