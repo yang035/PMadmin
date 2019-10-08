@@ -54,7 +54,7 @@
             <textarea type="text" class="layui-textarea field-content" name="content[]" autocomplete="off" placeholder="时间+工作内容+结果汇报"></textarea>
         </div>
         <div class="layui-input-inline" style="width: 100px">
-            <input type="number" class="layui-input field-ml" style="width: 100px" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="ML值">
+            <input type="number" class="layui-input field-ml" style="width: 100px" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="GL值">
         </div>
         <div class="layui-form-mid" style="color: red">不能超过10斗*</div>
     </div>
@@ -67,7 +67,7 @@
             <textarea type="text" class="layui-textarea field-plan" name="plan[]" autocomplete="off" placeholder=""></textarea>
         </div>
         <div class="layui-input-inline" style="width: 100px">
-            <input type="number" class="layui-input field-ml" style="width: 100px" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="ML值">
+            <input type="number" class="layui-input field-ml" style="width: 100px" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="GL值">
         </div>
         <div class="layui-form-mid" style="color: red">不能超过10斗*</div>
     </div>
@@ -75,7 +75,7 @@
         <a href="javascript:void(0);" class="aicon ai-tianjia field-task1-add" style="float: left;font-size: 30px;"></a>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">ML合计</label>
+        <label class="layui-form-label">GL合计</label>
         <div class="layui-input-inline">
             <input type="number" class="layui-input field-total" name="total" readonly autocomplete="off" placeholder="0" style="width: 298px">
         </div>
@@ -275,7 +275,7 @@
                 "            <textarea type=\"text\" class=\"layui-textarea field-content\" name=\"content[]\" autocomplete=\"off\" placeholder=\"时间+工作内容+结果汇报\"></textarea>\n" +
                 "        </div>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
-                "            <input type=\"number\" class=\"layui-input field-ml\" style=\"width: 100px\" onblur=\"check_ml(this)\" onkeypress=\"return (/[\\d]/.test(String.fromCharCode(event.keyCode)))\" name=\"ml[]\" autocomplete=\"off\" placeholder=\"ML值\">\n" +
+                "            <input type=\"number\" class=\"layui-input field-ml\" style=\"width: 100px\" onblur=\"check_ml(this)\" onkeypress=\"return (/[\\d]/.test(String.fromCharCode(event.keyCode)))\" name=\"ml[]\" autocomplete=\"off\" placeholder=\"GL值\">\n" +
                 "        </div>\n" +
                 "        <div class=\"layui-form-mid\" style=\"color: red\">不能超过10斗*</div>\n" +
                 "    </div>");
@@ -288,7 +288,7 @@
                 "            <textarea type=\"text\" class=\"layui-textarea field-plan\" name=\"plan[]\" autocomplete=\"off\" placeholder=\"\"></textarea>\n" +
                 "        </div>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
-                "            <input type=\"number\" class=\"layui-input field-ml\" style=\"width: 100px\" onblur=\"check_ml(this)\" onkeypress=\"return (/[\\d]/.test(String.fromCharCode(event.keyCode)))\" name=\"ml[]\" autocomplete=\"off\" placeholder=\"ML值\">\n" +
+                "            <input type=\"number\" class=\"layui-input field-ml\" style=\"width: 100px\" onblur=\"check_ml(this)\" onkeypress=\"return (/[\\d]/.test(String.fromCharCode(event.keyCode)))\" name=\"ml[]\" autocomplete=\"off\" placeholder=\"GL值\">\n" +
                 "        </div>\n" +
                 "        <div class=\"layui-form-mid\" style=\"color: red\">不能超过10斗*</div>\n" +
                 "    </div>");
@@ -418,7 +418,7 @@
             num = 0;
         }
         if (num > 10) {
-            layer.msg('ML不能超过10');
+            layer.msg('GL不能超过10');
         }
         var total = 0;
         $("input[name^='ml']").each(function (i, el) {

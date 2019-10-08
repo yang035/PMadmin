@@ -185,14 +185,14 @@ class DailyReport extends Admin
                     'project_id'=>$row['project_id'],
                     'cid'=>session('admin_user.cid'),
                     'user'=>$row['user_id'],
-                    'ml_add_score'=>$sum,
+                    'ml_add_score'=>0,
                     'ml_sub_score'=>0,
-                    'gl_add_score'=>0,
+                    'gl_add_score'=>$sum,
                     'gl_sub_score'=>0,
                     'remark' => '项目管理汇报得分'
                 ];
                 if (ScoreModel::addScore($sc)){
-                    return $this->success("操作成功，奖励{$sum}ML斗。",'DailyReport/index?atype=2');
+                    return $this->success("操作成功，奖励{$sum}GL斗。",'DailyReport/index?atype=2');
                 }else{
                     return $this->error('操作失败');
                 }
@@ -360,7 +360,7 @@ class DailyReport extends Admin
                 return $this->error('请选择项目');
             }
             if ($data['total'] > 100){
-                return $this->error('合计ML不能超过100斗');
+                return $this->error('合计GL不能超过100斗');
             }
             $data['content'] = array_unique(array_filter($data['content']));
             // 验证
@@ -391,7 +391,7 @@ class DailyReport extends Admin
                     $ins_data['detail'][$k]['content'] = $v;
                     $ins_data['detail'][$k]['ml'] = !empty($data['ml'][$k]) ? $data['ml'][$k] : 0;
                     if ($ins_data['detail'][$k]['ml'] > 10){
-                        return $this->error('每项ML不能超过10斗');
+                        return $this->error('每项GL不能超过10斗');
                     }
                 }
             }
@@ -400,7 +400,7 @@ class DailyReport extends Admin
                     $ins_data['p_detail'][$k]['plan'] = $v;
                     $ins_data['p_detail'][$k]['ml'] = !empty($data['ml'][$k]) ? $data['ml'][$k] : 0;
                     if ($ins_data['p_detail'][$k]['ml'] > 10){
-                        return $this->error('每项ML不能超过10斗');
+                        return $this->error('每项GL不能超过10斗');
                     }
                 }
             }

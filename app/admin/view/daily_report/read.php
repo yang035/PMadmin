@@ -109,7 +109,7 @@
                 <textarea type="text" class="layui-textarea field-content" name="content[]" readonly autocomplete="off" placeholder="描述">{$vo['content']}</textarea>
             </div>
             <div class="layui-input-inline" style="width: 100px">
-                <input type="number" class="layui-input field-ml" style="width: 100px" value="{$vo['ml']}" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="ML值">
+                <input type="number" class="layui-input field-ml" style="width: 100px" value="{$vo['ml']}" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="GL值">
             </div>
             <div class="layui-form-mid" style="color: red">不能超过10斗*</div>
         </div>
@@ -121,7 +121,7 @@
             <textarea type="text" class="layui-textarea field-plan" name="plan[]" readonly autocomplete="off" placeholder="计划">{$vo['plan']}</textarea>
         </div>
         <div class="layui-input-inline" style="width: 100px">
-            <input type="number" class="layui-input field-ml" style="width: 100px" value="{$vo['ml']}" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="ML值">
+            <input type="number" class="layui-input field-ml" style="width: 100px" value="{$vo['ml']}" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="GL值">
         </div>
         <div class="layui-form-mid" style="color: red">不能超过10斗*</div>
     </div>
