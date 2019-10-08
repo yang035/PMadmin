@@ -67,7 +67,7 @@
             <textarea type="text" class="layui-textarea field-plan" name="plan[]" autocomplete="off" placeholder=""></textarea>
         </div>
         <div class="layui-input-inline" style="width: 100px">
-            <input type="number" class="layui-input field-ml" style="width: 100px" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="GL值">
+            <input type="number" class="layui-input field-p_ml" style="width: 100px" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="p_ml[]" autocomplete="off" placeholder="GL值">
         </div>
         <div class="layui-form-mid" style="color: red">不能超过10斗*</div>
     </div>
@@ -288,7 +288,7 @@
                 "            <textarea type=\"text\" class=\"layui-textarea field-plan\" name=\"plan[]\" autocomplete=\"off\" placeholder=\"\"></textarea>\n" +
                 "        </div>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
-                "            <input type=\"number\" class=\"layui-input field-ml\" style=\"width: 100px\" onblur=\"check_ml(this)\" onkeypress=\"return (/[\\d]/.test(String.fromCharCode(event.keyCode)))\" name=\"ml[]\" autocomplete=\"off\" placeholder=\"GL值\">\n" +
+                "            <input type=\"number\" class=\"layui-input field-p_ml\" style=\"width: 100px\" onblur=\"check_ml(this)\" onkeypress=\"return (/[\\d]/.test(String.fromCharCode(event.keyCode)))\" name=\"p_ml[]\" autocomplete=\"off\" placeholder=\"GL值\">\n" +
                 "        </div>\n" +
                 "        <div class=\"layui-form-mid\" style=\"color: red\">不能超过10斗*</div>\n" +
                 "    </div>");
@@ -422,6 +422,13 @@
         }
         var total = 0;
         $("input[name^='ml']").each(function (i, el) {
+            var num = parseFloat($(this).val());
+            if (isNaN(num)){
+                num = 0;
+            }
+            total += num;
+        });
+        $("input[name^='p_ml']").each(function (i, el) {
             var num = parseFloat($(this).val());
             if (isNaN(num)){
                 num = 0;

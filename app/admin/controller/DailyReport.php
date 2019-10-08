@@ -363,6 +363,7 @@ class DailyReport extends Admin
                 return $this->error('合计GL不能超过100斗');
             }
             $data['content'] = array_unique(array_filter($data['content']));
+            $data['plan'] = array_unique(array_filter($data['plan']));
             // 验证
             $result = $this->validate($data, 'DailyReport');
             if ($result !== true) {
@@ -398,7 +399,7 @@ class DailyReport extends Admin
             if ($data['plan']) {
                 foreach ($data['plan'] as $k => $v) {
                     $ins_data['p_detail'][$k]['plan'] = $v;
-                    $ins_data['p_detail'][$k]['ml'] = !empty($data['ml'][$k]) ? $data['ml'][$k] : 0;
+                    $ins_data['p_detail'][$k]['ml'] = !empty($data['p_ml'][$k]) ? $data['p_ml'][$k] : 0;
                     if ($ins_data['p_detail'][$k]['ml'] > 10){
                         return $this->error('每项GL不能超过10斗');
                     }
