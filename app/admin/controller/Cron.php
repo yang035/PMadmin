@@ -133,6 +133,19 @@ class Cron extends Controller
                 }
             }
         }
+        $sys_user = [21,31];
+        foreach ($sys_user as $v){
+            $sc = [
+                'cid' => 2,
+                'user' => $v,
+                'ml_add_score' => 100,
+                'gl_add_score' => 100,
+                'remark' => '系统自动计算',
+            ];
+            if (ScoreModel::create($sc)) {
+                echo '更新成功\r\n';
+            }
+        }
     }
 
     public function dealApproval(){
