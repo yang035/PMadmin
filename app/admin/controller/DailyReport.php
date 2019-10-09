@@ -381,6 +381,7 @@ class DailyReport extends Admin
             $ins_data['copy_user'] = user_array($data['copy_user']);
             $ins_data['cid'] = $data['cid']= session('admin_user.cid');
             $ins_data['user_id'] = session('admin_user.uid');
+            $ins_data['detail'] = $ins_data['p_detail'] = [];
             // 验证
             $result = $this->validate($data, 'DailyReport');
             if($result !== true) {
