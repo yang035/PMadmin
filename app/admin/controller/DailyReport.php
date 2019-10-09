@@ -59,7 +59,7 @@ class DailyReport extends Admin
         $map['create_time'] = ['>','2019-02-01 00:00:00'];
         $uid = session('admin_user.uid');
         $fields = "SUM(IF(user_id='{$uid}',1,0)) user_num,
-        SUM(IF(JSON_EXTRACT(send_user,'$.\"$uid\"') = '',1,0)) send_num,
+        SUM(IF(JSON_EXTRACT(send_user,'$.\"$uid\"') = '' && status = 1,1,0)) send_num,
         SUM(IF(JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"'),1,0)) copy_num,
         SUM(IF(JSON_EXTRACT(send_user,'$.\"$uid\"') = 'a',1,0)) has_num";
         $count = DailyReportModel::field($fields)->where($map)->find()->toArray();
@@ -109,7 +109,7 @@ class DailyReport extends Admin
                 $map['user_id'] = session('admin_user.uid');
                 break;
             case 3:
-                $con = "JSON_EXTRACT(send_user,'$.\"$uid\"') = ''";
+                $con = "JSON_EXTRACT(send_user,'$.\"$uid\"') = '' && status = 1";
                 break;
             case 4:
 //                if ($role_id > 3){
@@ -117,7 +117,7 @@ class DailyReport extends Admin
 //                }
                 break;
             case 5:
-                $con = "JSON_EXTRACT(send_user,'$.\"$uid\"') = 'a'";
+                $con = "JSON_EXTRACT(send_user,'$.\"$uid\"') = 'a' || status = 0";
                 break;
             default:
                 $con = "";
@@ -178,11 +178,11 @@ class DailyReport extends Admin
                 }
                 //标记已读
                 $uid = session('admin_user.uid');
-                $sql = "UPDATE tb_daily_report SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
+                $sql = "UPDATE tb_daily_report SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a'),status=0 WHERE id ={$params['id']}";
                 DailyReportModel::execute($sql);
                 //计算得分
                 $sc = [
-                    'project_id'=>$row['project_id'],
+                    'subject_id'=>$row['project_id'],
                     'cid'=>session('admin_user.cid'),
                     'user'=>$row['user_id'],
                     'ml_add_score'=>0,
@@ -373,11 +373,20 @@ class DailyReport extends Admin
                 return $this->error('具体事项不能为空');
             }
             unset($data['id']);
+
+            $send_user = html_entity_decode($data['send_user']);
+            $send_user1 = json_decode($send_user,true);
+            $send_user1 = array_values(array_unique($send_user1, SORT_REGULAR));
+            $send_user2 = [];
+            foreach ($send_user1 as $k=>$v) {
+                $send_user2 += $v;
+            }
+
             $ins_data['project_id'] = $data['project_id'];
 //            $ins_data['plan'] = json_encode(array_values(array_filter($data['plan'])));
             $ins_data['attachment'] = explode(',',$data['attachment']);
             $ins_data['attachment'] = json_encode(array_values(array_filter($ins_data['attachment'])));
-            $ins_data['send_user'] = user_array($data['send_user']);
+            $ins_data['send_user'] = json_encode($send_user2);
             $ins_data['copy_user'] = user_array($data['copy_user']);
             $ins_data['cid'] = $data['cid']= session('admin_user.cid');
             $ins_data['user_id'] = session('admin_user.uid');

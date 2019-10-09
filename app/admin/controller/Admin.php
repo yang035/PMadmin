@@ -8,6 +8,8 @@ use app\admin\model\AdminUser as UserModel;
 use app\admin\model\AdminLog as LogModel;
 use app\admin\model\Score as ScoreModel;
 use app\admin\model\NoticeItem as NoticeModel;
+use app\admin\model\Project as ProjectModel;
+use app\admin\model\AdminDepartment;
 use think\Controller;
 use think\Db;
 /**
@@ -264,5 +266,67 @@ class Admin extends Controller
                 return $this->success('操作失败');
             }
         }
+    }
+
+    public function getFlowUser($id,$p=0){
+        $res = ProjectModel::getRowJoinSubject($id);
+        $uid_arr = json_decode($res['manager_user'],true);
+        $tmp = [];
+        $uid = session('admin_user.uid');
+        if ($uid_arr){
+            foreach ($uid_arr as $k=>$v){
+                $u_row = UserModel::getUserById1($k);
+                if ($u_row){
+                    $tmp[$k] = $u_row['realname'];
+                }
+            }
+            if (array_key_exists($uid,$tmp)){
+                $tmp = [];
+            }
+        }
+
+//        $row['manager_user_id'] = $this->deal_data($res['manager_user']);
+//        $row['manager_user'] = $this->deal_data_id($res['manager_user']);
+        $chain_arr = AdminDepartment::getChainUser();
+        $chain_sub = array_slice($chain_arr,0,2);
+        array_push($chain_sub,$tmp);
+        $new_arr = array_filter($chain_sub);
+        $new_arr = array_reverse($new_arr);
+        $row['manager_user'] = user_array2($new_arr);
+        $s = '';
+        if ($new_arr){
+            foreach ($new_arr as $k=>$v) {
+                $k++;
+                $s .= "[{$k}]".implode(',',$v).' ';
+            }
+        }
+        $row['manager_user_id'] = $s;
+        return $row;
+    }
+
+    public function deal_data($x_user)
+    {
+        $x_user_arr = json_decode($x_user, true);
+        $x_user = [];
+        if ($x_user_arr) {
+            foreach ($x_user_arr as $key => $val) {
+                $real_name = UserModel::getUserById($key)['realname'];
+                if ('a' == $val) {
+                    $real_name = "<font style='color: blue'>" . $real_name . "</font>";
+                }
+                $x_user[] = $real_name;
+            }
+            return implode(',', $x_user);
+        }
+    }
+
+    public function deal_data_id($x_user)
+    {
+        $x_user_arr = json_decode($x_user, true);
+        if ($x_user_arr) {
+            $tmp = array_keys($x_user_arr);
+            return implode(',', $tmp);
+        }
+        return '';
     }
 }

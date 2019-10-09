@@ -42,7 +42,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">项目名</label>
         <div class="layui-input-inline">
-            <select name="project_id" class="layui-input field-project_id" type="select" lay-search>
+            <select name="project_id" class="layui-input field-project_id" type="select" lay-filter="job_cat" lay-search>
                 {$mytask}
             </select>
         </div>
@@ -110,9 +110,11 @@
     <div class="layui-form-item">
         <label class="layui-form-label">汇报给</label>
         <div class="layui-input-inline">
-            <button type="button" class="layui-btn" id="send_user_id">选择汇报人</button>
-            <div id="send_select_id"></div>
-            <input type="hidden" name="send_user" id="send_user" value="">
+<!--            <button type="button" class="layui-btn" id="send_user_id">选择汇报人</button>-->
+<!--            <div id="send_select_id"></div>-->
+<!--            <input type="hidden" name="send_user" id="send_user" value="">-->
+            <div style="margin-top: 10px" id="send_select_id">默认流程(负责人级、部门级、总经理级)</div>
+            <input type="hidden" name="send_user" id="send_user" value="" lay-verify="required">
         </div>
         <div class="layui-form-mid red">*</div>
     </div>
@@ -333,6 +335,10 @@
             }
         };
 
+        form.on('select(job_cat)', function(data){
+            select_union(data.value);
+        });
+
         //多文件列表示例
         var demoListView = $('#demoList'),uploadListIns = upload.render({
             elem: '#testList',
@@ -436,6 +442,25 @@
             total += num;
         });
         $('.field-total').val(total);
+    }
+
+    function select_union(id){
+        $.ajax({
+            type: 'POST',
+            url: "{:url('getFlowUser')}",
+            data: {id:id},
+            dataType:  'json',
+            success: function(data){
+                // $("#c_id").html("");
+                // $.each(data, function(key, val) {
+                //     var option1 = $("<option>").val(val.areaId).text(val.fullname);
+                $('#send_select_id').html(data.manager_user_id);
+                $('#send_user').val(data.manager_user);
+                // form.render('select');
+                // });
+                // $("#c_id").get(0).selectedIndex=0;
+            }
+        });
     }
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>

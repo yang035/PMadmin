@@ -400,7 +400,7 @@ function select_union(id){
             // $("#c_id").html("");
             // $.each(data, function(key, val) {
             //     var option1 = $("<option>").val(val.areaId).text(val.fullname);
-            // $('#send_select_id').html(data.manager_user_id);
+            $('#send_select_id').html(data.manager_user_id);
             $('#send_user').val(data.manager_user);
             // form.render('select');
             // });
