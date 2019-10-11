@@ -59,7 +59,7 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">申请事由</label>
+        <label class="layui-form-label">内容用途</label>
         <div class="layui-input-inline">
             <textarea type="text" class="layui-textarea field-reason" name="reason" lay-verify="required" autocomplete="off" placeholder="请输入申请事由"></textarea>
         </div>
