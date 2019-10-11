@@ -26,7 +26,7 @@
                                 <b>等价于：</b>{$data_list['marketprice']}(元)<br>
                                 <b>额外支付：</b>{$data_list['other_price']}(元)<br>
                                 <b>描述：</b>{$data_list['remark']}<br>
-                                <p><a href="{:url('admin.php/shop/shopDetail',['id'=>$data_list['id']])}" class="btn btn-primary btn-sm">兑换</a></p>
+                                <p><a href="{:url('admin.php/shop/shopDetail',['id'=>$data_list['id']])}" class="btn btn-primary btn-sm">兑换购买</a></p>
                             </div>
                         </div>
                     </div>

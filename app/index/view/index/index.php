@@ -263,7 +263,7 @@
                         <h2>{$vo['name']}</h2>
                     </div>
                 </a>
-                <a href="{:url('admin.php/shop/shopDetail',['id'=>$vo['id']])}" class="btn btn-primary btn-sm">兑换</a>
+                <a href="{:url('admin.php/shop/shopDetail',['id'=>$vo['id']])}" class="btn btn-primary btn-sm">兑换购买</a>
             </div>
             {/volist}
             <div class="clearfix visible-lg-block visible-md-block"></div>
