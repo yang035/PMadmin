@@ -253,18 +253,17 @@
         </div>
         <div class="row">
             {volist name="top_shop" id="vo"}
-            <div class="col-md-4">
+            <div class="col-md-4" style="text-align: center">
                 <a href="{:url('detail1',['id'=>$vo['id']])}" target="_blank" class="gtco-card-item has-text">
                     <figure>
                         <div class="overlay"><i class="ti-plus"></i></div>
-                        <img src="{$vo['thumb']}" alt="Image" class="img-responsive">
+                        <img style="width: 350px;height: 195px" src="{$vo['thumb']}" alt="Image" class="img-responsive">
                     </figure>
                     <div class="gtco-text text-left">
                         <h2>{$vo['name']}</h2>
-                        <p><a href="{:url('admin.php/shop/shopDetail',['id'=>$vo['id']])}" class="btn btn-primary btn-sm">兑换</a></p>
-                        <!--                        <p class="gtco-category">{$vo['create_time']}</p>-->
                     </div>
                 </a>
+                <a href="{:url('admin.php/shop/shopDetail',['id'=>$vo['id']])}" class="btn btn-primary btn-sm">兑换</a>
             </div>
             {/volist}
             <div class="clearfix visible-lg-block visible-md-block"></div>
