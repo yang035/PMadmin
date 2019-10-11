@@ -241,7 +241,37 @@
             </div>
         </div>
     </div>
+</div>
 
+<div id="gtco-blog" data-section="blog">
+    <div class="gtco-container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 text-center gtco-heading">
+                <h2>福利销购</h2>
+                <p>福利、礼品、商品兑换或购买</p>
+            </div>
+        </div>
+        <div class="row">
+            {volist name="top_shop" id="vo"}
+            <div class="col-md-4">
+                <a href="{:url('detail1',['id'=>$vo['id']])}" target="_blank" class="gtco-card-item has-text">
+                    <figure>
+                        <div class="overlay"><i class="ti-plus"></i></div>
+                        <img src="{$vo['thumb']}" alt="Image" class="img-responsive">
+                    </figure>
+                    <div class="gtco-text text-left">
+                        <h2>{$vo['name']}</h2>
+                        <p><a href="{:url('admin.php/shop/shopDetail',['id'=>$vo['id']])}" class="btn btn-primary btn-sm">兑换</a></p>
+                        <!--                        <p class="gtco-category">{$vo['create_time']}</p>-->
+                    </div>
+                </a>
+            </div>
+            {/volist}
+            <div class="clearfix visible-lg-block visible-md-block"></div>
+            <div class="clearfix visible-sm-block"></div>
+
+        </div>
+    </div>
 </div>
 
 <div id="gtco-blog" data-section="blog">

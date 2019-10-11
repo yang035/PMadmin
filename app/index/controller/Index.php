@@ -11,6 +11,7 @@ namespace app\index\controller;
 
 use think\Controller;
 use app\admin\model\HomeItem as ItemModel;
+use app\admin\model\ShopItem;
 
 class Index extends Controller
 {
@@ -30,6 +31,7 @@ class Index extends Controller
         $this->assign('data_video',$this->getVideo());
         $this->assign('ispush',$this->isPush());
         $this->assign('data_project',$this->getProject());
+        $this->assign('top_shop',$this->getTopShop());
         $this->assign('data_tpo',$this->getTpo());
         $this->assign('data_live',$this->getLive());
         return $this->fetch();
@@ -80,6 +82,32 @@ class Index extends Controller
         return $this->fetch();
     }
 
+    public function detail1($id)
+    {
+        $today = date('Y-m-d');
+        $where = [
+            'id' => $id,
+//            'cid' => session('admin_user.cid'),
+            'status' => 1,
+            'start_time' => ['elt',"{$today}"],
+            'end_time' => ['egt',"{$today}"],
+        ];
+        $row = ShopItem::where($where)->find();
+        if (!$row){
+            return $this->error('商品不存在');
+        }else{
+            $startdate=strtotime($row['start_time']);
+            $enddate=strtotime($today);
+            $days=round(($enddate-$startdate)/3600/24);
+            if ($row['time_interval'] != 0){
+                $row['score'] += floor($days/$row['time_interval'])*$row['add_score'];
+            }
+        }
+        $row['remark'] = htmlspecialchars_decode($row['remark']);
+        $this->assign('data_list', $row);
+        return $this->fetch();
+    }
+
     public function isPush(){
         $map = [];
         if (session('admin_user') && 1 != session('admin_user.role_id')) {
@@ -125,6 +153,32 @@ class Index extends Controller
         $map['cat_id'] = 11;
         $data_list = ItemModel::where($map)->order('id desc')->paginate(3, false, ['query' => input('get.')]);
         return $data_list;
+    }
+    public function getTopShop(){
+        $today = date('Y-m-d');
+        $where = [
+//                'cid' => session('admin_user.cid'),
+            'status' => 1,
+            'start_time' => ['elt',"{$today}"],
+            'end_time' => ['egt',"{$today}"],
+        ];
+
+        $cat_id = input('param.cat_id/d');
+        if ($cat_id){
+            $where['cat_id'] = $cat_id;
+        }
+        $data['data'] = ShopItem::with('cat')->where($where)->order('id desc')->paginate(3, false, ['query' => input('get.')]);
+        if ($data['data']){
+            foreach ($data['data'] as $k=>$v){
+                $startdate=strtotime($v['start_time']);
+                $enddate=strtotime($today);
+                $days=round(($enddate-$startdate)/3600/24);
+                if ($v['time_interval'] != 0){
+                    $data['data'][$k]['score'] += floor($days/$v['time_interval'])*$v['add_score'];
+                }
+            }
+        }
+        return $data['data'];
     }
     public function getLive(){
         $map = [];
