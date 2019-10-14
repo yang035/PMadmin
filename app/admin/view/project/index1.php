@@ -126,7 +126,7 @@
                             return "<a class='mcolor' href='"+open_url+"'>"+d.name+"</a>";
                     }},
                     {field: 'deal_user', title: '参与人',width: 150},
-                    {title: '成果展示',width: 300,templet:function (d) {
+                    {title: '成果展示',width: 400,templet:function (d) {
                             var t = '';
                             if (d.report){
                                 $.each(d.report,function(index,value){
@@ -155,7 +155,7 @@
                             return t;
                         }},
                     {field: 'realper', title: '进度',width: 70, templet:'#oper-col-1'},
-                    {field: 'start_time', title: '开始时间',width: 110},
+                    // {field: 'start_time', title: '开始时间',width: 110},
                     {field: 'end_time', title: '结束时间',width: 110},
                     // {field: 'score', title: '计划斗',width: 80},
                     // {field: 'real_score', title: '实际斗',width: 80},

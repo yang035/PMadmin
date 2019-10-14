@@ -86,6 +86,57 @@ class User extends Admin
         return $this->fetch();
     }
 
+    public function other($q = '')
+    {
+        if ($this->request->isAjax()) {
+            if (!in_array(session('admin_user.uid'),[21,31])){
+                return $this->error('暂无相关数据');
+            }
+            $where = $data = [];
+            $page = input('param.page/d', 1);
+            $limit = input('param.limit/d', 15);
+            if ($q) {
+                if (preg_match("/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/", $q)) {// 邮箱
+                    $where['email'] = $q;
+                } elseif (preg_match("/^1\d{10}$/", $q)) {// 手机号
+                    $where['mobile'] = $q;
+                } else {// 用户名、昵称
+                    $where['username'] = ['like', '%'.$q.'%'];
+                }
+            }
+            $where['id'] = ['neq', 1];
+            $where['is_show'] = ['eq', 0];
+            $where['company_id'] = ['neq', 2];
+
+            $order = 'status desc,id desc';
+
+            $data['data'] = UserModel::with('role')->with('dep')->where($where)->order($order)->page($page)->limit($limit)->select();
+            if ($data['data']){
+                foreach ($data['data'] as $k=>$v){
+                    $data['data'][$k]['job_item'] = !empty($v['job_item']) ? JobItemModel::getItem()[$v['job_item']] : '无';
+                    $data['data'][$k]['work_cat'] = !empty($v['work_cat']) ? WorkCat::getItem()[$v['work_cat']] : '无';
+                }
+            }
+            $data['count'] = UserModel::where($where)->count('id');
+            $data['code'] = 0;
+            $data['msg'] = '';
+            return json($data);
+        }
+
+        // 分页
+        $tab_data['menu'] = [
+            [
+                'title' => '其他账户',
+                'url' => 'admin/user/other',
+            ],
+        ];
+        $tab_data['current'] = url('');
+
+        $this->assign('tab_data', $tab_data);
+        $this->assign('tab_type', 1);
+        return $this->fetch();
+    }
+
     public function iframe()
     {
         $val = UserModel::where('id', ADMIN_ID)->value('iframe');
