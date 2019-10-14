@@ -105,7 +105,7 @@ class User extends Admin
                 }
             }
             $where['id'] = ['neq', 1];
-            $where['is_show'] = ['eq', 0];
+//            $where['is_show'] = ['eq', 0];
             $where['company_id'] = ['neq', 2];
 
             $order = 'status desc,id desc';
