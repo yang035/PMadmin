@@ -178,7 +178,7 @@ class DailyReport extends Admin
                 }
                 //标记已读
                 $uid = session('admin_user.uid');
-                $sql = "UPDATE tb_daily_report SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a'),status=0 WHERE id ={$params['id']}";
+                $sql = "UPDATE tb_daily_report SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a'),real_total={$params['real_total']},status=0 WHERE id ={$params['id']}";
                 DailyReportModel::execute($sql);
                 //计算得分
                 $sc = [
@@ -390,6 +390,7 @@ class DailyReport extends Admin
             $ins_data['copy_user'] = user_array($data['copy_user']);
             $ins_data['cid'] = $data['cid']= session('admin_user.cid');
             $ins_data['user_id'] = session('admin_user.uid');
+            $ins_data['total'] = $data['total'];
             $ins_data['detail'] = $ins_data['p_detail'] = [];
             // 验证
             $result = $this->validate($data, 'DailyReport');
