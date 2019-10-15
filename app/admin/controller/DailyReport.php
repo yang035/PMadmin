@@ -45,7 +45,7 @@ class DailyReport extends Admin
                 'params' =>['atype'=>4],
             ],
             [
-                'title' => "汇报人已读<span class='layui-badge layui-bg-orange'>{$sta_count['has_num']}</span>",
+                'title' => "汇报人已阅<span class='layui-badge layui-bg-orange'>{$sta_count['has_num']}</span>",
                 'url' => 'admin/DailyReport/index',
                 'params' =>['atype'=>5],
             ],
