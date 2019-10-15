@@ -220,7 +220,7 @@ class Goods extends Admin
                 ->join('tb_admin_user u','a.user_id=u.id','left')
                 ->where($where)
                 ->where($con)
-                ->order('a.status desc')
+                ->order('a.update_time desc')
                 ->page($page)
                 ->limit($limit)
                 ->select();
