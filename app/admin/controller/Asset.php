@@ -38,13 +38,6 @@ class Asset extends Admin
         $params = $this->request->param();
         $where = $data = [];
         if ($params) {
-            if (1 != session('admin_user.role_id')) {
-                $where['a.cid'] = session('admin_user.cid');
-            }
-            if (session('admin_user.role_id') > 3) {
-                $where['a.user_id'] = session('admin_user.uid');
-            }
-
             if (isset($params['good_id']) && !empty($params['good_id'])) {
                 $where['a.good_id'] = $params['good_id'];
             }
@@ -53,6 +46,14 @@ class Asset extends Admin
                 $where['g.title'] = ['like', "%{$params['name']}%"];
             }
         }
+
+        if (1 != session('admin_user.role_id')) {
+            $where['a.cid'] = session('admin_user.cid');
+        }
+        if (session('admin_user.role_id') > 3) {
+            $where['a.user_id'] = session('admin_user.uid');
+        }
+        
         $fields = 'a.*,g.cat_id,g.title,u.realname';
         $list = Db::table('tb_asset_item a')
             ->field($fields)
