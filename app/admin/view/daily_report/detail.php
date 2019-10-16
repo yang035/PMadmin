@@ -34,6 +34,7 @@
                 <tr>
                     <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
                     <th>姓名</th>
+                    <th>收获(斗)</th>
                     <th>时间</th>
                     <th>操作</th>
                 </tr>
@@ -45,6 +46,7 @@
                     <td class="font12">
                         <strong class="mcolor">{$vo['realname']}</strong>
                     </td>
+                    <td class="font12">{$vo['real_total']}</td>
                     <td class="font12">{$vo['create_time']}</td>
                     <td><a href="{:url('tRead',['id'=>$vo['id'],'user_id'=>$vo['user_id'],'create_time'=>$vo['create_time']])}" class="layui-btn layui-btn-normal layui-btn-xs">明细</a></td>
                 </tr>

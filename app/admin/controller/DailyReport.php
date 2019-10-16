@@ -466,7 +466,7 @@ class DailyReport extends Admin
         $d0 = $d_arr[0].' 00:00:00';
         $d1 = $d_arr[1].' 23:59:59';
 
-        $fields = 'u.id,u.realname,tmp.num';
+        $fields = 'u.id,u.realname,tmp.num,tmp.score';
         $where =[
             'u.company_id'=>$cid,
             'u.role_id'=>['not in',[1,2]],
@@ -483,7 +483,7 @@ class DailyReport extends Admin
         if (isset($params['export']) && 1 == $params['export']){
             set_time_limit(0);
             $data_list = Db::table('tb_admin_user u')->field($fields)
-                ->join("(SELECT user_id,COUNT(DISTINCT create_time) AS num FROM tb_daily_report WHERE cid={$cid} and create_time between '{$d0}' and '{$d1}' GROUP BY user_id) tmp",'u.id=tmp.user_id','left')
+                ->join("(SELECT user_id,COUNT(DISTINCT create_time) AS num,sum(real_total) as score FROM tb_daily_report WHERE cid={$cid} and create_time between '{$d0}' and '{$d1}' GROUP BY user_id) tmp",'u.id=tmp.user_id','left')
                 ->where($where)->order('u.id asc')->select();
 //            $data_list = Db::table('tb_admin_user u')->field($fields)
 //                ->join("(SELECT user_id,COUNT(DISTINCT create_time) AS num FROM tb_daily_report WHERE cid={$cid} and create_time between '{$d0}' and '{$d1}' GROUP BY user_id) tmp",'u.id=tmp.user_id','left')
@@ -492,15 +492,18 @@ class DailyReport extends Admin
             $objPHPExcel = new \PHPExcel();
             $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
             $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(10);
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A1', '姓名')
-                ->setCellValue('B1', '数量');
+                ->setCellValue('B1', '数量')
+                ->setCellValue('C1', '收获(斗)');
             foreach ($data_list as $k => $v) {
                 $num = $k + 2;
                 $objPHPExcel->setActiveSheetIndex(0)
                     //Excel的第A列，uid是你查出数组的键值，下面以此类推
                     ->setCellValue('A' . $num, $v['realname'])
-                    ->setCellValue('B' . $num, $v['num']);
+                    ->setCellValue('B' . $num, $v['num'])
+                    ->setCellValue('C' . $num, $v['score']);
             }
             $name = $d.'日报统计';
             $objPHPExcel->getActiveSheet()->setTitle($d);
@@ -513,7 +516,7 @@ class DailyReport extends Admin
             exit;
         }
         $data_list = Db::table('tb_admin_user u')->field($fields)
-            ->join("(SELECT user_id,COUNT(DISTINCT create_time) AS num FROM tb_daily_report WHERE cid={$cid} and create_time between '{$d0}' and '{$d1}' GROUP BY user_id) tmp",'u.id=tmp.user_id','left')
+            ->join("(SELECT user_id,COUNT(DISTINCT create_time) AS num,sum(real_total) as score FROM tb_daily_report WHERE cid={$cid} and create_time between '{$d0}' and '{$d1}' GROUP BY user_id) tmp",'u.id=tmp.user_id','left')
             ->where($where)->order('u.id asc')->paginate(30, false, ['query' => input('get.')]);
 //        $data_list = Db::table('tb_admin_user u')->field($fields)
 //            ->join("(SELECT user_id,COUNT(DISTINCT create_time) AS num FROM tb_daily_report WHERE cid={$cid} and create_time between '{$d0}' and '{$d1}' GROUP BY user_id) tmp",'u.id=tmp.user_id','left')
@@ -583,6 +586,7 @@ class DailyReport extends Admin
             $data_list['p_detail'] = json_decode($row[0]['p_detail'],true);
             $data_list['real_name'] = AdminUser::getUserById($row[0]['user_id'])['realname'];
             $data_list['work_option'] = WorkModel::getOption4($row[0]['work_option']);
+            $data_list['real_total'] = $row[0]['real_total'];
         }
 //        print_r($data_list);
         //标记已读

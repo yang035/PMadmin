@@ -119,6 +119,13 @@
         <div class="layui-form-mid" style="color: red">不能超过10斗*</div>
     </div>
     {/volist}
+    <div class="layui-form-item">
+        <label class="layui-form-label">当日收获</label>
+        <div class="layui-input-inline">
+            <input type="number" class="layui-input field-real_total" name="real_total" readonly autocomplete="off" placeholder="0" style="width: 298px" value="{$data_list['real_total']}">
+        </div>
+        <div class="layui-form-mid">斗</div>
+    </div>
     {/empty}
     <div class="layui-form-item">
         <label class="layui-form-label">附件说明</label>

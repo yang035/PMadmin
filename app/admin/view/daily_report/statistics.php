@@ -36,6 +36,7 @@
             <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
             <th>姓名</th>
             <th>数量</th>
+            <th>收获(斗)</th>
         </tr>
         </thead>
         <tbody>
@@ -51,6 +52,7 @@
                 <a href="{:url('detail',['uid'=>$vo['id'],'realname'=>$vo['realname'],'search_date'=>$d])}"><strong class="mcolor">{$vo['num']}</strong></a>
                 {/empty}
             </td>
+            <td class="font12">{$vo['score']}</td>
         </tr>
         {/volist}
         </tbody>
