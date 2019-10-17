@@ -221,10 +221,10 @@ return [
         4 =>'车辆4',
     ],
     'report_type' => [
-        1=>[
-            'title'=>'日报',
-            'href'=>'admin/DailyReport/add'
-        ],
+//        1=>[
+//            'title'=>'日报',
+//            'href'=>'admin/DailyReport/add'
+//        ],
         2=>[
             'title'=>'项目管理日报',
             'href'=>'admin/DailyReport/administration'
