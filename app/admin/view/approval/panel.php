@@ -1,4 +1,5 @@
 {include file="block/layui" /}
+<div class="layui-input-block">所有申请仅限24小时内有效，请及时关注及审批</div>
 {volist name="panel_type" id="vo"}
 <div class="layui-col-xs3 layui-col-sm3 layui-col-md3">
 <div class="layui-card" style="margin: 10px">
