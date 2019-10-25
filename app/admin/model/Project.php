@@ -246,7 +246,7 @@ class Project extends Model
                         $str .= "<option value='".$k."'>".$v."</option>";
                     }
                 }
-                $str .= "<option value='0'>其他</option>";
+//                $str .= "<option value='0'>其他</option>";
                 return $str;
             }else{
                 return $list;
