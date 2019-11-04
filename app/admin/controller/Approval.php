@@ -2120,7 +2120,7 @@ class Approval extends Admin
                 foreach ($list['num'] as $k=>$v){
                     $list['s'] .= $size_type[$list['size_type'][$k]].'--'.$quality_type[$list['quality'][$k]].'--'.$v."--页<br>";
                 }
-                $list['type'] = $print_type[$list['store_id']];
+                $list['type'] = $print_type[$list['type']];
                 $list['store_id'] = $store_type[$list['store_id']];
                 break;
             case 13:
