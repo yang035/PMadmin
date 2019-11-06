@@ -8,6 +8,7 @@
 
 namespace app\admin\controller;
 
+use app\admin\model\AdminDepartment;
 use app\admin\model\SubjectCat as CatModel;
 use app\admin\model\SubjectItem as ItemModel;
 use app\admin\model\AdminUser;
@@ -406,6 +407,84 @@ class Subject extends Admin
 
     public function addBaseUser($id = 0)
     {
+        $row = ItemModel::where('id', $id)->find()->toArray();
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            $t = [];
+            foreach ($data as $k => $v) {
+                if ('id' == $k) {
+                    continue;
+                }
+                if ($k == 'send_user'){
+                    $data[$k] = user_array1($v);
+                }elseif ($k == 'copy_user'){
+                    $data[$k] = user_array($v);
+                }else{
+                    $t[explode('_',$k)[0]] = trim($v, ',');
+                    unset($data[$k]);
+                }
+            }
+
+            if ($row['small_major_deal']){
+                $a = json_decode($row['small_major_deal'],true);
+                foreach ($a as $k=>$v) {
+                    foreach ($v['child'] as $kk=>$vv) {
+                        $a[$k]['child'][$kk]['dep'] = $t[$vv['id']];
+                    }
+                }
+                $data['small_major_deal'] = json_encode($a,JSON_FORCE_OBJECT);
+            }else{
+                return $this->error('请填写专业配比！');
+            }
+            Db::startTrans();
+            try{
+                ItemModel::update($data);
+                $where = [
+                    'pid'=>0,
+                    'subject_id'=>$data['id'],
+                ];
+                $tmp = [
+//                    'manager_user'=>$data['manager_user'],
+                    'send_user'=>$data['send_user'],
+//                    'deal_user'=>$data['deal_user'],
+                    'copy_user'=>$data['copy_user'],
+                    'small_major_deal'=>$data['small_major_deal'],
+                ];
+                $res = ProjectModel::where($where)->update($tmp);
+//                // 提交事务
+                Db::commit();
+            } catch (\Exception $e) {
+                // 回滚事务
+                Db::rollback();
+            }
+            if ($res){
+                return $this->success("操作成功{$this->score_value}");
+            }else{
+                return $this->error('添加失败');
+            }
+        }
+
+        if ($row) {
+            $row['small_major_deal_arr'] = json_decode($row['small_major_deal'],true);
+            if ($row['small_major_deal_arr']) {
+                foreach ($row['small_major_deal_arr'] as $k => $v) {
+                    foreach ($v['child'] as $kk => $vv) {
+                        $row['small_major_deal_arr'][$k]['child'][$kk]['dep_name'] = isset($vv['dep']) ? $this->deal_dep($vv['dep']) : null;
+                    }
+                }
+            }
+            $row['send_user_id'] = $this->deal_data($row['send_user']);
+            $row['send_user'] = $this->deal_data_id($row['send_user']);
+            $row['copy_user_id'] = $this->deal_data($row['copy_user']);
+            $row['copy_user'] = $this->deal_data_id($row['copy_user']);
+        }
+        $this->assign('data_info', $row);
+        return $this->fetch();
+
+    }
+
+    public function addBaseUser1($id = 0)
+    {
         if ($this->request->isPost()) {
             $data = $this->request->post();
             foreach ($data as $k => $v) {
@@ -475,6 +554,22 @@ class Subject extends Admin
                 $x_user[] = $real_name;
             }
             return implode(',', $x_user);
+        }
+    }
+
+    public function deal_dep($dep)
+    {
+        if (!is_array($dep) && !empty($dep)) {
+            $where = [
+                'cid' => session('admin_user.cid'),
+                'status' => 1,
+                'id'=>['in',$dep],
+            ];
+            $result = AdminDepartment::where($where)->select();
+            $dep_name = array_column($result,'name');
+            return implode(',',$dep_name);
+        }else{
+            return null;
         }
     }
 

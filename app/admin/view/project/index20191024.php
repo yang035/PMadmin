@@ -13,7 +13,7 @@
         font-size: 12px;
         color: #666;
     }
-    .laytable-cell-1-0-1,.laytable-cell-1-0-6 {
+    .laytable-cell-1-0-5 {
         height: auto;
         line-height: 28px;
         padding: 0 15px;
@@ -25,6 +25,9 @@
     }
     .layui-table-box{
         float: left;
+    }
+    .layui-table, .layui-table-view {
+        margin: 45px 0;
     }
 </style>
 <div class="page-toolbar">
@@ -64,20 +67,28 @@
                     <input type="hidden" name="atype" value="{$Request.param.atype}">
                     <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
                 </div>
+                <div class="layui-inline fr">
+                    <label class="layui-form-label">辅助搜索</label>
+                    <div class="layui-input-inline">
+                        <input id="edt-search" type="text" class="layui-input field-search-name" placeholder="名称关键字" style="width: 120px;"/>
+                    </div>
+                </div>
             </div>
         </form>
+        <div class="layui-btn-group fl">
+            <!--            <a href="{:url('add',['atype'=>$Request.param.atype])}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加项目</a>-->
+            <button class="layui-btn" id="btn-expand">全部展开</button>
+            <button class="layui-btn" id="btn-fold">全部折叠</button>
+            <button class="layui-btn" id="btn-refresh">刷新表格</button>
+        </div>
     </div>
-    <div class="layui-btn-group fl">
-        <a href="{:url('add')}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加</a>
-        <a href="{:url('addTemplate')}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">手动计划模板</a>
-        <a href="{:url('addTemplate1')}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">自动计划模板</a>
-    </div>
+
 </div>
 <table id="table1" class="layui-table" lay-filter="table1"></table>
 <!-- 操作列 -->
 <script type="text/html" id="oper-col">
     <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="read">详情</a>
-<!--    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="add">添加计划</a>-->
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="add">添加计划</a>
     {{#  if(d.pid > 0){ }}
     <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">修改</a>
     {{#  }else{ }}
@@ -103,10 +114,15 @@
     var  p_status=$("select[name='p_status']").val();
     var  person_user=$("input[name='person_user']").val();
     var _url = "{:url('admin/project/index')}?project_id="+project_id+"&start_time="+start_time+"&end_time="+end_time+"&atype="+atype+"&p_status="+p_status+"&person_user="+person_user;
-    layui.use(['layer', 'table','element','jquery','laydate','upload'], function () {
+    layui.config({
+        base: '/../../static/js/'
+    }).extend({
+        treetable: 'treetable-lay/treetable'
+    }).use(['layer', 'table','element', 'treetable','jquery','laydate','upload'], function () {
         var element = layui.element;
         var table = layui.table;
         var layer = layui.layer;
+        var treetable = layui.treetable;
 
         var $ = layui.jquery, laydate = layui.laydate, upload = layui.upload;
         laydate.render({
@@ -142,18 +158,25 @@
         // 渲染表格
         var renderTable = function () {
             layer.load(2);
-            table.render({
+            treetable.render({
+                treeColIndex: 1,
+                treeSpid: 0,
+                treeIdName: 'id',
+                treePidName: 'pid',
+                treeDefaultClose: false,
+                treeLinkage: true,
                 elem: '#table1',
                 url: _url,
-                page: true,
-                limit: 30,
-                text: {
-                none : '暂无相关数据'
-                },
+                page: false,
                 cols: [[
-                    {field: 'xuhao', title: '序号',type: 'numbers'},
-                    {field: 'project_name',merge: true, title: '项目名',width: 100},
-                    {field: 'name', title: '任务名',width: 250},
+                    {title: '编号',width: 70,templet:function (d) {
+                        if (d.pid == 0){
+                            return d.id;
+                        }else {
+                            return '';
+                        }
+                    }},
+                    {field: 'name', title: '项目名称',width: 250},
                     {field: 'deal_user', title: '参与人',width: 80},
                     {title: '成果展示',width: 300,templet:function (d) {
                         var t = '';
@@ -197,6 +220,41 @@
         };
 
         renderTable();
+
+        $('#btn-expand').click(function () {
+            treetable.expandAll('#table1');
+        });
+
+        $('#btn-fold').click(function () {
+            treetable.foldAll('#table1');
+        });
+
+        $('#btn-refresh').click(function () {
+            renderTable();
+        });
+
+        $('#edt-search').keyup(function () {
+            var keyword = $('#edt-search').val();
+            var searchCount = 0;
+            $('#table1').next('.treeTable').find('.layui-table-body tbody tr td').each(function () {
+                $(this).css('background-color', 'transparent');
+                var text = $(this).text();
+                if (keyword != '' && text.indexOf(keyword) >= 0) {
+                    $(this).css('background-color', 'rgba(250,230,160,0.5)');
+                    if (searchCount == 0) {
+                        treetable.expandAll('#table1');
+                        $('html,body').stop(true);
+                        $('html,body').animate({scrollTop: $(this).offset().top - 150}, 500);
+                    }
+                    searchCount++;
+                }
+            });
+            if (keyword == '') {
+                layer.msg("请输入搜索内容", {icon: 5});
+            } else if (searchCount == 0) {
+                layer.msg("没有匹配结果", {icon: 5});
+            }
+        });
 
         //监听工具条
         table.on('tool(table1)', function (obj) {

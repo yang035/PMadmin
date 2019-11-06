@@ -400,6 +400,27 @@ class Project extends Model
         return $str;
     }
 
+    public static function getBigMajorArr($id = 0,$type = 0)
+    {
+        $map = [
+            'cid'=>session('admin_user.cid'),
+            'id'=>$id,
+        ];
+        $fields = 'big_major_deal,major_cat';
+        $data = self::field($fields)->where($map)->find();
+
+        $r[0] = '无';
+        if ($data){
+            $big_major_deal = json_decode($data['big_major_deal'],true);
+            if ($big_major_deal){
+                foreach ($big_major_deal as $k => $v) {
+                    $r[$v['id']] = $v['name'];
+                }
+            }
+        }
+        return $r;
+    }
+
     public static function getChilds($id=1,$major_cat=0,$major_item=0)
     {
         $map = [
@@ -408,7 +429,7 @@ class Project extends Model
         ];
         $fields = 'small_major_deal,major_item';
         $data = self::field($fields)->where($map)->find();
-        $str = '<option value="0" selected>无</option>';
+        $str = '<option value="0" selected>请选择</option>';
         if ($data){
             $small_major_deal = json_decode($data['small_major_deal'],true);
             if ($small_major_deal){
@@ -419,6 +440,45 @@ class Project extends Model
                                 $str .= '<option value="'.$v['id'].'" selected>'.$v['name'].'</option>';
                             } else {
                                 $str .= '<option value="'.$v['id'].'">'.$v['name'].'</option>';
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        return $str;
+    }
+    public static function getChilds1($id=1,$major_cat=0,$major_item=0,$change_user=0)
+    {
+        $map = [
+            'cid'=>session('admin_user.cid'),
+            'id'=>$id,
+        ];
+        $fields = 'small_major_deal,major_item';
+        $data = self::field($fields)->where($map)->find();
+        $str = '<option value="0" selected>请选择</option>';
+        if ($data){
+            $small_major_deal = json_decode($data['small_major_deal'],true);
+            if ($small_major_deal){
+                foreach ($small_major_deal as $key => $val) {
+                    if ($major_cat == $val['id']){
+                        foreach ($val['child'] as $k => $v) {
+                            if ($major_item == $v['id'] && !empty($v['dep'])) {
+
+                                $map = [
+                                    'company_id'=>session('admin_user.cid'),
+                                    'status'=>1,
+                                    'department_id'=>['in',$v['dep']],
+                                ];
+
+                                $user = AdminUser::where($map)->column('realname','id');
+                                if ($user){
+                                    foreach ($user as $kk=>$vv) {
+                                        $str .= '<option value="'.$kk.'">'.$vv.'</option>';
+                                    }
+                                }
+                                break;
                             }
                         }
                         break;

@@ -10,6 +10,7 @@ namespace app\admin\controller;
 use app\admin\model\AdminUser;
 use app\admin\model\AssignmentCat as CatModel;
 use app\admin\model\AssignmentItem as ItemModel;
+use app\admin\model\CheckItem;
 use app\admin\model\Project as ProjectModel;
 
 
@@ -62,24 +63,68 @@ class Assignment extends Admin
             $where['cid'] = session('admin_user.cid');
             $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->order('id desc')->select();
             if ($data['data']){
-                foreach ($data['data'] as $k=>$v){
-                    $data['data'][$k]['remark'] = htmlspecialchars_decode($v['remark']);
-                    $data['data'][$k]['time_type'] = $time_type[$v['time_type']];
-                    $data['data'][$k]['send_user'] = strip_tags($this->deal_data($v['send_user']));
-                    $data['data'][$k]['deal_user'] = strip_tags($this->deal_data($v['deal_user']));
-                    if ($v['attachment']){
-                        $t = array_filter(explode(',',$v['attachment']));
-                        $data['data'][$k]['attachment'] = $t[0];
+                foreach ($data['data'] as $kk=>$vv){
+                    $data['data'][$kk]['remark'] = htmlspecialchars_decode($vv['remark']);
+                    $data['data'][$kk]['time_type'] = $time_type[$vv['time_type']];
+                    $data['data'][$kk]['send_user'] = strip_tags($this->deal_data($vv['send_user']));
+                    $data['data'][$kk]['deal_user'] = strip_tags($this->deal_data($vv['deal_user']));
+                    if ($vv['attachment']){
+                        $t = array_filter(explode(',',$vv['attachment']));
+                        $data['data'][$kk]['attachment'] = $t[0];
                     }
-                    if ($v['project_id']){
-                        $project_data = ProjectModel::getRowById($v['project_id']);
+                    if ($vv['project_id']){
+                        $project_data = ProjectModel::getRowById($vv['project_id']);
                     }else{
                         $project_data = [
                             'name'=>'其他',
                         ];
                     }
-                    $data['data'][$k]['project_name'] = $project_data['name'];
-                    $data['data'][$k]['user_name'] = AdminUser::getUserById($v['user_id'])['realname'];
+                    $data['data'][$kk]['project_name'] = $project_data['name'];
+                    $data['data'][$kk]['user_name'] = AdminUser::getUserById($vv['user_id'])['realname'];
+
+                    if ($vv['p_id']){
+                        $report = ProjectReport::getAll(5,$vv['p_id']);
+
+                        if ($report) {
+                            foreach ($report as $k => $v) {
+                                if (!empty($v['attachment'])){
+                                    $attachment = explode(',',$v['attachment']);
+                                    $report[$k]['attachment'] = array_filter($attachment);
+                                }
+                                $report_user = AdminUser::getUserById($v['user_id'])['realname'];
+                                $report[$k]['real_name'] = !empty($report_user) ? $report_user : '';
+                                $report[$k]['check_catname'] = CheckItem::getCat()[$v['check_cat']];
+                                if (empty($row['child'])){
+                                    $report[$k]['reply'] = ReportReply::getAll($v['id'], 5,2);
+                                }else{
+                                    $reply = ReportCheck::getAll($v['id'], 1);
+                                    if ($reply){
+                                        foreach ($reply as $key=>$val){
+                                            $content = json_decode($val['content'], true);
+                                            if ($content){
+                                                foreach ($content as $kk=>$vv){
+                                                    $content[$kk]['flag'] = $vv['flag'] ? '有' : '无';
+                                                    $content[$kk]['person_user'] = $this->deal_data(user_array($vv['person_user']));
+                                                    if (!isset($vv['isfinish'])){
+                                                        $content[$kk]['isfinish'] = 0;
+                                                    }
+                                                    if (!isset($vv['remark'])){
+                                                        $content[$kk]['remark'] = '';
+                                                    }
+                                                }
+                                            }
+                                            $reply[$key]['content'] = $content;
+                                            $reply[$key]['user_name'] = AdminUser::getUserById($val['user_id'])['realname'];
+                                        }
+                                    }
+                                    $report[$k]['reply'] = $reply;
+                                }
+
+                            }
+                            $data['data'][$kk]['report'] = $report;
+                        }
+                    }
+
                 }
             }
             $data['count'] = ItemModel::where($where)->count('id');

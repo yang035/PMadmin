@@ -13,7 +13,7 @@
         font-size: 12px;
         color: #666;
     }
-    .laytable-cell-1-0-1,.laytable-cell-1-0-4,.laytable-cell-1-0-3 {
+    .laytable-cell-1-0-2,.laytable-cell-1-0-3 {
         height: auto;
         line-height: 28px;
         padding: 0 15px;
@@ -25,6 +25,9 @@
     }
     .layui-table-box{
         float: left;
+    }
+    .layui-table, .layui-table-view {
+        margin: 50px 0;
     }
 </style>
 <div class="page-toolbar">
@@ -54,17 +57,18 @@
                 </div>
                 <div class="layui-inline">
                     <input type="hidden" name="type" value="{$Request.param.type}">
-                    <button type="submit" id="submit" class="layui-btn layui-btn-normal">搜索</button>
+                    <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
                 </div>
             </div>
         </form>
+        <div class="layui-btn-group fl">
+            <!--            <a href="{:url('add',['atype'=>$Request.param.atype])}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加项目</a>-->
+            <button class="layui-btn" id="btn-expand">全部展开</button>
+            <button class="layui-btn" id="btn-fold">全部折叠</button>
+            <button class="layui-btn" id="btn-refresh">刷新表格</button>
+        </div>
     </div>
-    <div class="layui-btn-group fl">
-        <button onclick="ajax_send(1)" type="button" class="layui-btn layui-btn-primary layui-btn-radius">当日未完成</button>
-        <button onclick="ajax_send(2)" type="button" class="layui-btn layui-btn-danger layui-btn-radius">逾期</button>
-        <button onclick="ajax_send(3)" type="button" class="layui-btn layui-btn-normal layui-btn-radius">待完成</button>
-        <button onclick="ajax_send(4)" type="button" class="layui-btn layui-btn-warm layui-btn-radius">待评定</button>
-    </div>
+
 </div>
 <table id="table1" class="layui-table" lay-filter="table1"></table>
 <script type="text/html" id="oper-col-1">
@@ -132,28 +136,40 @@
     }
     var _url = "{:url('admin/project/mytask')}?project_id="+project_id+"&start_time="+start_time+"&end_time="+end_time+"&type="+atype+"&p_status="+p_status;
     var type = "{$Request.param.type}";
-    layui.use(['layer', 'table','element'], function () {
+    layui.config({
+        base: '/../../static/js/'
+    }).extend({
+        treetable: 'treetable-lay/treetable'
+    }).use(['layer', 'table','element', 'treetable'], function () {
         var $ = layui.jquery;
         var element = layui.element;
         var table = layui.table;
         var layer = layui.layer;
+        var treetable = layui.treetable;
 
         // 渲染表格
         var renderTable = function () {
             layer.load(2);
             element.render();
-            table.render({
+            treetable.render({
+                treeColIndex: 1,
+                treeSpid: 0,
+                treeIdName: 'id',
+                treePidName: 'pid',
+                treeDefaultClose: false,
+                treeLinkage: true,
                 elem: '#table1',
                 url: _url,
-                page: true,
-                limit: 30,
-                text: {
-                    none : '暂无相关数据'
-                },
+                page: false,
                 cols: [[
-                    {field: 'xuhao', title: '序号',type: 'numbers'},
-                    {field: 'project_name',merge: true, title: '项目名',width: 100},
-                    {field: 'name', title: '任务名',width: 250},
+                    {title: '编号',width: 70,templet:function (d) {
+                            if (d.pid == 0){
+                                return d.id;
+                            }else {
+                                return '';
+                            }
+                        }},
+                    {field: 'name', title: '项目名称',width: 250},
                     {field: 'start_time', title: '开始时间',width: 110},
                     {field: 'end_time', title: '结束时间',width: 110},
                     {field: 'score', title: '计划产量(斗)',width: 70},
@@ -296,11 +312,6 @@
             success:function (layero, index) {
             }
         });
-    }
-
-    function ajax_send(p_status){
-        $("select[name='p_status']").val(p_status);
-        $("#submit").click();
     }
     function accept_task(id,type) {
         var open_url = "{:url('setConfirm')}?id="+id+"&type="+type;

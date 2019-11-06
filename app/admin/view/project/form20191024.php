@@ -15,23 +15,23 @@
     }
 </style>
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
+        {notempty name="Request.param.id"}
     <div class="layui-form-item">
-        <label class="layui-form-label">项目名</label>
+        <label class="layui-form-label">上级标题</label>
         <div class="layui-input-inline">
-            <select name="project_id" class="layui-input field-project_id" type="select" lay-filter="project" lay-search>
-                {$mytask}
-            </select>
+            <input type="text" class="layui-input field-pname" name="pname" value="{$p_res.name}" readonly lay-verify="required" autocomplete="off" placeholder="请输入名称">
         </div>
-        <div class="layui-form-mid" style="color: red">*</div>
     </div>
+        {/notempty}
     <div class="layui-form-item">
         <label class="layui-form-label">专业类型</label>
         <div class="layui-input-inline">
-            <select name="major_cat" class="field-major_cat" type="select" lay-filter="major_cat" id="c_id">
+            <select name="major_cat" class="field-major_cat" type="select" lay-filter="major_cat">
+                {$major_option}
             </select>
         </div>
         <div class="layui-input-inline">
-            <select name="major_item" class="field-major_item" type="select" lay-filter="rid" id="i_id">
+            <select name="major_item" class="field-major_item" type="select" lay-filter="rid" id="c_id">
             </select>
         </div>
     </div>
@@ -244,13 +244,8 @@ layui.use(['jquery', 'laydate','upload','form'], function() {
         };
     });
 
-    form.on('select(project)', function(data){
-        select_union('',1,1,data.value);
-        select_union($("select[name='project_id']").val(),1);
-    });
-
     form.on('select(major_cat)', function(data){
-        select_union($("select[name='project_id']").val(),data.value);
+        select_union('{$Request.param.id}',data.value);
     });
     if (formData.major_cat){
         select_union('{$Request.param.id}',formData.major_cat,formData.major_item);
@@ -258,19 +253,20 @@ layui.use(['jquery', 'laydate','upload','form'], function() {
         select_union('{$Request.param.id}',1,1);
     }
 
-    function select_union(id,major_cat=0,major_item=0,project_id=0){
+    function select_union(id,major_cat=0,major_item=0){
         $.ajax({
             type: 'POST',
             url: "{:url('getMajorItem')}",
-            data: {id:id,major_cat:major_cat,major_item:major_item,project_id:project_id},
+            data: {id:id,major_cat:major_cat,major_item:major_item},
             dataType:  'json',
             success: function(data){
-                if (project_id){
-                    $('#c_id').html(data);
-                } else {
-                    $('#i_id').html(data);
-                }
+                // $("#c_id").html("");
+                // $.each(data, function(key, val) {
+                //     var option1 = $("<option>").val(val.areaId).text(val.fullname);
+                $('#c_id').html(data);
                 form.render('select');
+                // });
+                // $("#c_id").get(0).selectedIndex=0;
             }
         });
     }

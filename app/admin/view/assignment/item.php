@@ -44,6 +44,12 @@
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
     <a onclick="read({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">查看</a>
     <a href="{:url('editItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
+    {{#  if(d.p_id){ }}
+    <a href="{:url('Project/edittask')}?id={{ d.p_id }}&pid={{ d.p_id }}&type=2&project_name={{ d.project_name }}" class="layui-btn layui-btn-xs layui-btn-danger">结果</a>
+    {{#  }else{ }}
+    <a href="{:url('Project/addAssignment')}?assignment_id={{ d.id }}&project_id={{ d.project_id }}&name={{ d.content }}" class="layui-btn layui-btn-xs layui-btn-normal">发布</a>
+    {{#  } }}
+
 <!--    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
 </script>
 <script type="text/javascript">
@@ -67,7 +73,41 @@
                         var open_url = "{:url('editItem')}?id="+d.id;
                         return "<a class='mcolor' href='"+open_url+"'>"+d.content+"</a>";
                 }},
-                {field: 'remark', title: '执行情况',width:150,edit: 'text'},
+                {title: '成果展示',width: 400,templet:function (d) {
+                        var t = '';
+                        if (d.report){
+                            $.each(d.report,function(index,value){
+                                var n = parseInt(index)+1;
+                                if (n > 1){
+                                    t += '<br>';
+                                }
+                                t += '('+ value.create_time +')'+'<br>'+value.mark;
+                                if (value.attachment.length > 0){
+                                    t += '<br>';
+                                    $.each(value.attachment,function(i,v){
+                                        var m = parseInt(i)+1;
+                                        t += '<a target="_blank" href="'+v+'" style="color: red">附件'+m+'</a>,';
+                                    });
+                                }
+
+                                if (value.reply.length > 0){
+                                    t += '<br>';
+                                    $.each(value.reply,function(k,val){
+                                        t += '意见：<font style="color: blue">'+val.content+'</font>';
+                                    });
+                                }
+
+                            });
+                        }
+                        return t;
+                    }},
+                {title: '执行情况',width:90, templet:function(d){
+                        if (d.p_id){
+                            return '已下发';
+                        } else {
+                            return '';
+                        }
+                    }},
                 {title: '操作', templet: '#buttonTpl',width:160},
                 {field: 'ml', title: 'ML',width:80},
                 // {field: 'gl', title: 'GL',width:80},

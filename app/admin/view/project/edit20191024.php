@@ -15,30 +15,30 @@
     }
 </style>
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
+        {notempty name="Request.param.pid"}
     <div class="layui-form-item">
-        <label class="layui-form-label">项目名</label>
+        <label class="layui-form-label">上级标题</label>
         <div class="layui-input-inline">
-            <select name="project_id" class="layui-input field-project_id" type="select" lay-filter="project" lay-search>
-                {$mytask}
-            </select>
+            <input type="text" class="layui-input field-pname" name="pname" value="{$pname}" readonly lay-verify="required" autocomplete="off" placeholder="请输入名称">
         </div>
-        <div class="layui-form-mid" style="color: red">*</div>
     </div>
+        {/notempty}
     <div class="layui-form-item">
         <label class="layui-form-label">专业类型</label>
         <div class="layui-input-inline">
-            <select name="major_cat" class="field-major_cat" type="select" lay-filter="major_cat" id="c_id">
+            <select name="major_cat" class="field-major_cat" type="select" lay-filter="major_cat">
+                {$major_option}
             </select>
         </div>
         <div class="layui-input-inline">
-            <select name="major_item" class="field-major_item" type="select" lay-filter="rid" id="i_id">
+            <select name="major_item" class="field-major_item" type="select" lay-filter="rid" id="c_id">
             </select>
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">名称</label>
         <div class="layui-input-inline">
-            <input type="text" class="layui-input field-name" name="name" lay-verify="required" autocomplete="off" placeholder="请输入名称">
+            <input type="text" class="layui-input field-name" name="name" lay-verify="required" autocomplete="off" readonly placeholder="请输入名称">
         </div>
         <div class="layui-form-mid red">*</div>
     </div>
@@ -49,7 +49,7 @@
         </div>
         <div class="layui-form-mid red">*</div>
     </div>
-<!--    {empty name="Request.param.id"}-->
+<!--    {empty name="Request.param.pid"}-->
 <!--    <div class="layui-form-item">-->
 <!--        <label class="layui-form-label">项目类别</label>-->
 <!--        <div class="layui-input-inline">-->
@@ -58,11 +58,7 @@
 <!--            </select>-->
 <!--        </div>-->
 <!--    </div>-->
-<!--    {else/}-->
-<!--    <input type="hidden" class="layui-input field-cat_id" name="cat_id" value="{$p_res.cat_id}">-->
-<!--    {/empty}-->
 <!--    <div id="div_show">-->
-<!--    {empty name="Request.param.id"}-->
 <!--    <div class="layui-form-item">-->
 <!--        <label class="layui-form-label">建设单位</label>-->
 <!--        <div class="layui-input-inline">-->
@@ -93,7 +89,6 @@
 <!--            <input type="text" class="layui-input field-area" name="area" autocomplete="off" placeholder="请输入项目面积">-->
 <!--        </div>-->
 <!--    </div>-->
-<!---->
 <!--    <div class="layui-form-item">-->
 <!--        <label class="layui-form-label">项目来源</label>-->
 <!--        <div class="layui-input-inline">-->
@@ -102,16 +97,17 @@
 <!--            </select>-->
 <!--        </div>-->
 <!--    </div>-->
+<!--    </div>-->
 <!--    <hr>-->
 <!--    {/empty}-->
-<!--    </div>-->
+
     <div class="layui-form-item">
         <label class="layui-form-label">预设产量</label>
         <div class="layui-input-inline">
-            <input type="number" class="layui-input field-score" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="score" lay-verify="required" autocomplete="off" placeholder="请输入预设值">
+            <input type="number" class="layui-input field-score" name="score" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" lay-verify="required" autocomplete="off" placeholder="请输入预设值">
         </div>
-        {notempty name="Request.param.id"}
-        <div class="layui-form-mid">不能超过<span id="max_score" style="color: red;">{$p_res.max_score}</span>斗</div>
+        {notempty name="Request.param.pid"}
+        <div class="layui-form-mid">不能超过<span id="max_score" style="color: red;">{$max_score}</span>斗</div>
         {/notempty}
         <div class="layui-form-mid red">*</div>
     </div>
@@ -173,6 +169,18 @@
                     <input class="layui-input field-attachment" type="hidden" name="attachment" value="">
                 </div>
             </div>
+            <div class="layui-timeline-content layui-text">
+                {notempty name="data_info['attachment_show']"}
+                <ul>
+                    {volist name="data_info['attachment_show']" id="v"}
+                    <li>
+                        <a target="_blank" href="{$v}">附件{$i}</a>
+                    </li>
+                    {/volist}
+                </ul>
+                <br>
+                {/notempty}
+            </div>
         </div>
     </div>
     <div class="layui-form-item">
@@ -187,8 +195,8 @@
         <label class="layui-form-label">参与人</label>
         <div class="layui-input-inline">
             <button type="button" class="layui-btn" id="deal_user_id">选择参与人</button>(此任务具体哪些人做)
-            <div id="deal_select_id"></div>
-            <input type="hidden" name="deal_user" id="deal_user" value="">
+            <div id="deal_select_id">{$data_info['deal_user_id']|default=''}</div>
+            <input type="hidden" name="deal_user" id="deal_user" value="{$data_info['deal_user']|default=''}">
         </div>
     </div>
     <div class="layui-form-item">
@@ -209,20 +217,13 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">状态</label>
-        <div class="layui-input-inline">
-            <input type="radio" class="field-status" name="status" value="1" title="启用" checked>
-            <input type="radio" class="field-status" name="status" value="0" title="禁用">
-        </div>
-    </div>
-    <div class="layui-form-item">
         <div class="layui-input-block">
-            <input type="hidden" class="field-id" name="id" value="{$p_res.id|default='0'}">
-            <input type="hidden" class="field-pid" name="pid" value="{$p_res.pid|default='0'}">
-            <input type="hidden" class="field-code" name="code" value="{$p_res.code|default=''}">
-            <input type="hidden" class="field-cat_id" name="cat_id" value="{$Request.param.atype|default=''}">
-            {notempty name="Request.param.id"}
-            <input type="hidden" class="field-max_score" name="max_score" value="{$p_res.max_score}">
+            <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
+            <input type="hidden" class="field-pid" name="pid" value="{$Request.param.pid}">
+            <input type="hidden" class="field-code" name="code" value="{$Request.param.code}">
+            <input type="hidden" class="field-cat_id" name="cat_id" value="{$Request.param.cat_id}">
+            {notempty name="Request.param.pid"}
+            <input type="hidden" class="field-max_score" name="max_score" value="{$max_score}">
             {/notempty}
             <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
             <a href="javascript:history.back();" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
@@ -244,13 +245,8 @@ layui.use(['jquery', 'laydate','upload','form'], function() {
         };
     });
 
-    form.on('select(project)', function(data){
-        select_union('',1,1,data.value);
-        select_union($("select[name='project_id']").val(),1);
-    });
-
     form.on('select(major_cat)', function(data){
-        select_union($("select[name='project_id']").val(),data.value);
+        select_union('{$Request.param.id}',data.value);
     });
     if (formData.major_cat){
         select_union('{$Request.param.id}',formData.major_cat,formData.major_item);
@@ -258,19 +254,20 @@ layui.use(['jquery', 'laydate','upload','form'], function() {
         select_union('{$Request.param.id}',1,1);
     }
 
-    function select_union(id,major_cat=0,major_item=0,project_id=0){
+    function select_union(id,major_cat=0,major_item=0){
         $.ajax({
             type: 'POST',
             url: "{:url('getMajorItem')}",
-            data: {id:id,major_cat:major_cat,major_item:major_item,project_id:project_id},
+            data: {id:id,major_cat:major_cat,major_item:major_item},
             dataType:  'json',
             success: function(data){
-                if (project_id){
-                    $('#c_id').html(data);
-                } else {
-                    $('#i_id').html(data);
-                }
+                // $("#c_id").html("");
+                // $.each(data, function(key, val) {
+                //     var option1 = $("<option>").val(val.areaId).text(val.fullname);
+                $('#c_id').html(data);
                 form.render('select');
+                // });
+                // $("#c_id").get(0).selectedIndex=0;
             }
         });
     }
@@ -279,7 +276,6 @@ layui.use(['jquery', 'laydate','upload','form'], function() {
         elem: '.field-start_time',
         type: 'datetime',
         trigger: 'click',
-        value: getSatrtDate(),
         change: function(value){
             // $(".laydate-btns-time").click();
         },
@@ -287,13 +283,11 @@ layui.use(['jquery', 'laydate','upload','form'], function() {
             // $("input[name='end_time']").val(value);
         }
     });
-
     laydate.render({
         elem: '.field-end_time',
         type: 'datetime',
         trigger: 'click',
-        value: getEndDate(),
-        // min: $("input[name='end_time']").val(),
+        // min: $("input[name='start_time']").val(),
         change: function(value){
             // $(".laydate-btns-time").click();
         },
@@ -301,16 +295,6 @@ layui.use(['jquery', 'laydate','upload','form'], function() {
             getTimeLong(value);
         },
     });
-    // function getNowDate() {
-    //     var time = new Date().getTime();
-    //     return new Date(time).Format('yyyy-MM-dd') + ' 08:30:00';
-    // }
-    // function getNextDate() {
-    //     var time = new Date().getTime();
-    //     return new Date(time).Format('yyyy-MM-dd') + ' 18:00:00';
-    // }
-    //写入时长
-    getTimeLong(getEndDate());
     //计算两个时间差
     function getTimeLong(value) {
         var timeLong,time1 = $('.field-start_time').val();

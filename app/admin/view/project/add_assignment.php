@@ -18,11 +18,9 @@
     <div class="layui-form-item">
         <label class="layui-form-label">项目名</label>
         <div class="layui-input-inline">
-            <select name="project_id" class="layui-input field-project_id" type="select" lay-filter="project" lay-search>
-                {$mytask}
-            </select>
+            <div class="layui-form-mid" style="color: red">{$p_res['name']}</div>
+            <input type="hidden" name="project_id" value="{$Request.param.project_id}">
         </div>
-        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">专业类型</label>
@@ -38,14 +36,14 @@
     <div class="layui-form-item">
         <label class="layui-form-label">名称</label>
         <div class="layui-input-inline">
-            <input type="text" class="layui-input field-name" name="name" lay-verify="required" autocomplete="off" placeholder="请输入名称">
+            <input type="text" class="layui-input field-name" name="name" value="{$Request.param.name}" lay-verify="required" autocomplete="off" placeholder="请输入名称">
         </div>
         <div class="layui-form-mid red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">描述</label>
         <div class="layui-input-inline">
-            <textarea type="text" class="layui-textarea field-remark" name="remark" lay-verify="required" autocomplete="off" placeholder="请输入描述"></textarea>
+            <textarea type="text" class="layui-textarea field-remark" name="remark" lay-verify="required" autocomplete="off" placeholder="请输入描述">{$Request.param.name}</textarea>
         </div>
         <div class="layui-form-mid red">*</div>
     </div>
@@ -219,6 +217,7 @@
         <div class="layui-input-block">
             <input type="hidden" class="field-id" name="id" value="{$p_res.id|default='0'}">
             <input type="hidden" class="field-pid" name="pid" value="{$p_res.pid|default='0'}">
+            <input type="hidden" class="field-assignment_id" name="assignment_id" value="{$Request.param.assignment_id|default='0'}">
             <input type="hidden" class="field-code" name="code" value="{$p_res.code|default=''}">
             <input type="hidden" class="field-cat_id" name="cat_id" value="{$Request.param.atype|default=''}">
             {notempty name="Request.param.id"}
@@ -252,11 +251,9 @@ layui.use(['jquery', 'laydate','upload','form'], function() {
     form.on('select(major_cat)', function(data){
         select_union($("select[name='project_id']").val(),data.value);
     });
-    if (formData.major_cat){
-        select_union('{$Request.param.id}',formData.major_cat,formData.major_item);
-    }else {
-        select_union('{$Request.param.id}',1,1);
-    }
+
+    select_union('',1,1,'{$Request.param.project_id}');
+    select_union('{$Request.param.project_id}',1);
 
     function select_union(id,major_cat=0,major_item=0,project_id=0){
         $.ajax({
