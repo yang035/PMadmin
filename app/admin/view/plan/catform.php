@@ -8,6 +8,12 @@
             <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label">代码</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input field-code" name="code" autocomplete="off" placeholder="请输入简写代码">
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">分类简介</label>
             <div class="layui-input-inline">
                 <textarea  class="layui-textarea field-remark" name="remark" lay-verify="" autocomplete="off" placeholder="[选填]分类简介"></textarea>
