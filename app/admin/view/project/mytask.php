@@ -132,11 +132,20 @@
     }
     var _url = "{:url('admin/project/mytask')}?project_id="+project_id+"&start_time="+start_time+"&end_time="+end_time+"&type="+atype+"&p_status="+p_status;
     var type = "{$Request.param.type}";
-    layui.use(['layer', 'table','element'], function () {
-        var $ = layui.jquery;
+    layui.use(['layer', 'table','element', 'laydate','upload'], function () {
+        var $ = layui.jquery,laydate = layui.laydate, upload = layui.upload;
         var element = layui.element;
         var table = layui.table;
         var layer = layui.layer;
+        laydate.render({
+            elem: '.field-start_time',
+            trigger: 'click',
+        });
+        laydate.render({
+            elem: '.field-end_time',
+            range: true,
+            trigger: 'click',
+        });
 
         // 渲染表格
         var renderTable = function () {
@@ -204,41 +213,6 @@
 
         renderTable();
 
-        $('#btn-expand').click(function () {
-            treetable.expandAll('#table1');
-        });
-
-        $('#btn-fold').click(function () {
-            treetable.foldAll('#table1');
-        });
-
-        $('#btn-refresh').click(function () {
-            renderTable();
-        });
-
-        $('#edt-search').keyup(function () {
-            var keyword = $('#edt-search').val();
-            var searchCount = 0;
-            $('#table1').next('.treeTable').find('.layui-table-body tbody tr td').each(function () {
-                $(this).css('background-color', 'transparent');
-                var text = $(this).text();
-                if (keyword != '' && text.indexOf(keyword) >= 0) {
-                    $(this).css('background-color', 'rgba(250,230,160,0.5)');
-                    if (searchCount == 0) {
-                        treetable.expandAll('#table1');
-                        $('html,body').stop(true);
-                        $('html,body').animate({scrollTop: $(this).offset().top - 150}, 500);
-                    }
-                    searchCount++;
-                }
-            });
-            if (keyword == '') {
-                layer.msg("请输入搜索内容", {icon: 5});
-            } else if (searchCount == 0) {
-                layer.msg("没有匹配结果", {icon: 5});
-            }
-        });
-
         //监听工具条
         table.on('tool(table1)', function (obj) {
             var data = obj.data;
@@ -264,19 +238,6 @@
                     window.location.href = open_url;
                 }
             }
-        });
-    });
-
-    layui.use(['jquery', 'laydate','upload'], function() {
-        var $ = layui.jquery, laydate = layui.laydate, upload = layui.upload;
-        laydate.render({
-            elem: '.field-start_time',
-            trigger: 'click',
-        });
-        laydate.render({
-            elem: '.field-end_time',
-            range: true,
-            trigger: 'click',
         });
     });
 
