@@ -385,7 +385,7 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
         $map['Score.cid'] = session('admin_user.cid');
         $fields = "`Score`.id,`Score`.subject_id,`Score`.user,sum(`Score`.ml_add_score) as ml_add_sum,sum(`Score`.ml_sub_score) as ml_sub_sum,sum(`Score`.gl_add_score) as gl_add_sum,sum(`Score`.gl_sub_score) as gl_sub_sum,Project.name,Project.major_cat,Project.major_cat_name,Project.major_item,Project.major_item_name";
 
-        $data_list = model('Score')::hasWhere('scoreProject')->field($fields)->group('major_item')->where($map)->paginate(10000, false, ['query' => input('get.')])->toArray();
+        $data_list = model('Score')::hasWhere('scoreProject')->field($fields)->group('user,major_item')->where($map)->paginate(10000, false, ['query' => input('get.')])->toArray();
         $data_list = $data_list['data'];
 //        print_r($data_list);exit();
         $tmp = [];
@@ -393,7 +393,7 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
         if ($data_list) {
             $orderRatio = $this->getOrderRatio();
             $small_major_deal = ProjectModel::smallMajorDeal($params['project_id']);
-            $major_item = array_column($data_list, 'major_item');
+            $major_item = array_unique(array_column($data_list, 'major_item'));
             $major_user = array_unique(array_column($data_list, 'user'));
             $myPro = ProjectModel::getProTask(0,0);
             if (is_array($major_item)) {
