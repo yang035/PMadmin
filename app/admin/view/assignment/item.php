@@ -81,19 +81,20 @@
                                 if (n > 1){
                                     t += '<br>';
                                 }
-                                t += '('+ value.create_time +')'+'<br>'+value.mark;
+                                t += value.real_name+'('+ value.create_time +')  '+value.realper+'%<br>'+value.mark;
+                                t += '  <a onclick="open_reply('+ value.id +','+ value.project_id +')" class="layui-btn layui-btn-normal layui-btn-xs">意见</a>';
                                 if (value.attachment.length > 0){
                                     t += '<br>';
                                     $.each(value.attachment,function(i,v){
                                         var m = parseInt(i)+1;
-                                        t += '<a target="_blank" href="'+v+'" style="color: red">附件'+m+'</a>,';
+                                        t += '<a target="_blank" href="'+v+'" style="color: red">'+v.split('.').pop()+m+'</a>,';
                                     });
                                 }
 
                                 if (value.reply.length > 0){
                                     t += '<br>';
                                     $.each(value.reply,function(k,val){
-                                        t += '意见：<font style="color: blue">'+val.content+'</font>';
+                                        t += '意见：<font style="color: blue">'+val.content+'</font>  ';
                                     });
                                 }
 
@@ -159,6 +160,27 @@
             area: ['800px', '600px'],
             content: open_url,
             success:function (layero, index) {
+            }
+        });
+    }
+
+    function open_reply(id,project_id) {
+        var open_url = "{:url('ReportReply/add')}?id="+id+"&project_id="+project_id+"&type=2";
+        if (open_url.indexOf('?') >= 0) {
+            open_url += '&hisi_iframe=yes';
+        } else {
+            open_url += '?hisi_iframe=yes';
+        }
+        layer.open({
+            type:2,
+            maxmin: true,
+            title :'评价',
+            area: ['600px', '400px'],
+            content: open_url,
+            success:function (layero, index) {
+                var body = layer.getChildFrame('body', index);  //巧妙的地方在这里哦
+                body.contents().find(".field-report_id").val(id);
+                body.contents().find(".field-project_id").val(project_id);
             }
         });
     }

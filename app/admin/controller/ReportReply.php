@@ -47,11 +47,13 @@ class ReportReply extends Admin
             if (!ReplyModel::create($data)) {
                 return $this->error('添加失败！');
             }else{
-                $tmp = [
-                    'realper'=>$data['realper'],
-                ];
-                ProjectReport::where('id',$data['report_id'])->update($tmp);
-                Project::where('id',$data['project_id'])->update($tmp);
+                if (!empty($data['realper'])){
+                    $tmp = [
+                        'realper'=>$data['realper'],
+                    ];
+                    ProjectReport::where('id',$data['report_id'])->update($tmp);
+                    Project::where('id',$data['project_id'])->update($tmp);
+                }
             }
             return $this->success("操作成功{$this->score_value}");
         }
