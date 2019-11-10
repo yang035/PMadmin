@@ -160,6 +160,14 @@
             </div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label">打分机制</label>
+            <div class="layui-input-inline">
+                <select name="level" class="field-level" type="select" lay-filter="level">
+                    {$three_level}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">项目属性</label>
             <div class="layui-input-inline">
                 <select name="t_type" class="field-t_type" type="select" lay-filter="t_type">

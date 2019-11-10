@@ -44,7 +44,14 @@
         {/volist}
         {/notempty}
 
-
+        <div class="layui-form-item">
+            <label class="layui-form-label">总负责人</label>
+            <div class="layui-input-inline">
+                <button type="button" class="layui-btn" id="leader_user_id" onclick="open_div1('leader')">选择总负责人</button>
+                <div id="leader_select_id">{$data_info['leader_user_id']|default=''}</div>
+                <input type="hidden" name="leader_user" id="leader_user" value="{$data_info['leader_user']|default=''}">
+            </div>
+        </div>
         <div class="layui-form-item">
             <label class="layui-form-label">审批人</label>
             <div class="layui-input-inline">

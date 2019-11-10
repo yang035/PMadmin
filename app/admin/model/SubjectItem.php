@@ -111,6 +111,20 @@ class SubjectItem extends Model
         return $str;
     }
 
+    public static function getThreeLevel($grade = 0)
+    {
+        $grade_type = config('other.three_level');
+        $str = '';
+        foreach ($grade_type as $k => $v) {
+            if ($grade == $k) {
+                $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+            } else {
+                $str .= '<option value="'.$k.'">'.$v.'</option>';
+            }
+        }
+        return $str;
+    }
+
     public function cat()
     {
         return $this->hasOne('SubjectCat', 'id', 'cat_id');

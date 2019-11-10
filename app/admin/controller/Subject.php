@@ -215,6 +215,7 @@ class Subject extends Admin
         }
         $this->assign('subject_option', ItemModel::getOption(null));
         $this->assign('p_source', ItemModel::getPsource());
+        $this->assign('three_level', ItemModel::getThreeLevel());
         $this->assign('grade_type', ProjectModel::getGrade());
         $this->assign('cur_time', date('YmdHis'));
         $this->assign('t_type', ProjectModel::getTType());
@@ -283,6 +284,7 @@ class Subject extends Admin
         $this->assign('data_info', $row);
         $this->assign('subject_option', ItemModel::getOption($row['cat_id']));
         $this->assign('p_source', ItemModel::getPsource());
+        $this->assign('three_level', ItemModel::getThreeLevel());
         $this->assign('grade_type', ProjectModel::getGrade());
         $this->assign('t_type', ProjectModel::getTType());
         $this->assign('s_status', ItemModel::getSStatus($row['s_status']));
@@ -417,7 +419,7 @@ class Subject extends Admin
                 }
                 if ($k == 'send_user'){
                     $data[$k] = user_array1($v);
-                }elseif ($k == 'copy_user'){
+                }elseif ($k == 'copy_user' || $k == 'leader_user'){
                     $data[$k] = user_array($v);
                 }else{
                     $t[explode('_',$k)[0]] = trim($v, ',');
@@ -446,7 +448,7 @@ class Subject extends Admin
                 $tmp = [
 //                    'manager_user'=>$data['manager_user'],
                     'send_user'=>$data['send_user'],
-//                    'deal_user'=>$data['deal_user'],
+                    'leader_user'=>$data['leader_user'],
                     'copy_user'=>$data['copy_user'],
                     'small_major_deal'=>$data['small_major_deal'],
                 ];
@@ -473,6 +475,8 @@ class Subject extends Admin
                     }
                 }
             }
+            $row['leader_user_id'] = $this->deal_data($row['leader_user']);
+            $row['leader_user'] = $this->deal_data_id($row['leader_user']);
             $row['send_user_id'] = $this->deal_data($row['send_user']);
             $row['send_user'] = $this->deal_data_id($row['send_user']);
             $row['copy_user_id'] = $this->deal_data($row['copy_user']);
