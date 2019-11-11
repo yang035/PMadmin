@@ -130,7 +130,7 @@ class ScoreDeal extends Admin
                 break;
             case 3:
 //                $con = "JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"')";
-                $map['status'] = ['>',1];
+                $map['status'] = 2;
                 break;
             case 4:
                 $con = "JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"')";
