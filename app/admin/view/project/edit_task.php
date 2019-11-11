@@ -190,9 +190,7 @@
                                 附件：
                                 <ul>
                                     {volist name="vo['attachment']" id="v"}
-                                    <li>
                                         <a target="_blank" href="{$v['path']}">{$v['suffix']}{$i}</a>
-                                    </li>
                                     {/volist}
                                 </ul>
                                 <br>

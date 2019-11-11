@@ -13,7 +13,7 @@
         font-size: 12px;
         color: #666;
     }
-    .laytable-cell-1-0-5,.laytable-cell-1-0-6 {
+    .laytable-cell-1-0-0,.laytable-cell-1-0-1,.laytable-cell-1-0-4 {
         height: auto;
         line-height: 28px;
         padding: 0 15px;

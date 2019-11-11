@@ -6,6 +6,16 @@
     a:hover{
         cursor:pointer
     }
+    .laytable-cell-1-0-1,.laytable-cell-1-0-2,.laytable-cell-1-0-13 {
+        height: auto;
+        line-height: 28px;
+        padding: 0 15px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+        box-sizing: border-box;
+    }
 </style>
 <div class="page-toolbar">
     <div class="page-filter">
@@ -118,7 +128,7 @@
                 {field: 'send_user', title: '发送给',width:110},
                 {field: 'deal_user', title: '执行人',width:110},
                 {field: 'user_name', title: '添加人',width:80},
-                {field: 'create_time', title: '添加时间',width:160},
+                {field: 'create_time', title: '添加时间',width:110},
             ]]
         });
 
