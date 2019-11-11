@@ -213,6 +213,8 @@ class Project extends Admin
 
             $grade_type = config('other.grade_type');
             $myPro = ProjectModel::getProTask(0, 0);
+            $suffix = config('upload.upload_image_ext');
+            $suffix = explode(',',$suffix);
             if ($list) {
                 foreach ($list as $kk => $vv) {
                     $bigMajorArr = ProjectModel::getBigMajorArr($vv['subject_id']);
@@ -248,7 +250,17 @@ class Project extends Admin
                         foreach ($report as $k => $v) {
                             if (!empty($v['attachment'])) {
                                 $attachment = explode(',', $v['attachment']);
-                                $report[$k]['attachment'] = array_filter($attachment);
+                                $attachment = array_filter($attachment);
+                                $tmp = [];
+                                foreach ($attachment as $kk=>$vv) {
+                                    $tmp[$kk]['path'] = $vv;
+                                    $tmp[$kk]['suffix'] = explode('.', $vv)[1];
+                                    $tmp[$kk]['is_img'] = true;
+                                    if (!in_array($tmp[$kk]['suffix'],$suffix)){
+                                        $tmp[$kk]['is_img'] = false;
+                                    }
+                                }
+                                $report[$k]['attachment'] = $tmp;
                             }
                             $report_user = AdminUser::getUserById($v['user_id'])['realname'];
                             $report[$k]['real_name'] = !empty($report_user) ? $report_user : '';

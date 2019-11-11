@@ -172,7 +172,12 @@
                                         t += '<ul class="liulan">';
                                         $.each(value.attachment,function(i,v){
                                             var m = parseInt(i)+1;
-                                            t += '<img data-original="'+v+'" src="/upload/anli.png" style="width: 30px;height: 30px">  ';
+                                            if (v.is_img) {
+                                                t += '<img data-original="'+v.path+'" src="/upload/anli.png" style="width: 30px;height: 30px">  ';
+                                            }else {
+                                                t += '<a target="_blank" href="'+v.path+'" style="color: red">'+v.path.split('.').pop()+m+'</a>,';
+                                            }
+
                                         });
                                         t += '</ul>';
                                     }
