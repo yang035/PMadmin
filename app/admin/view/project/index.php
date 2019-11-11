@@ -172,7 +172,7 @@
                                         t += '<ul class="liulan">';
                                         $.each(value.attachment,function(i,v){
                                             var m = parseInt(i)+1;
-                                            t += '<img data-original="'+v+'" src="'+v+'" style="width: 30px;height: 30px">  ';
+                                            t += '<img data-original="'+v+'" src="/upload/anli.png" style="width: 30px;height: 30px">  ';
                                         });
                                         t += '</ul>';
                                     }
