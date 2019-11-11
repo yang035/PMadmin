@@ -29,7 +29,11 @@
     input[type="number"] {
         -moz-appearance: textfield;
     }
+    img{
+        cursor:pointer
+    }
 </style>
+<link rel="stylesheet" href="__ADMIN_JS__/viewer/viewer.min.css">
 <div style="padding: 20px; background-color: #F2F2F2;">
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md5">
@@ -187,7 +191,7 @@
                                 <ul>
                                     {volist name="vo['attachment']" id="v"}
                                     <li>
-                                        <a target="_blank" href="{$v}">附件{$i}</a>
+                                        <a target="_blank" href="{$v['path']}">{$v['suffix']}{$i}</a>
                                     </li>
                                     {/volist}
                                 </ul>
@@ -313,6 +317,7 @@
 </div>
 
 {include file="block/layui" /}
+<script src="__ADMIN_JS__/viewer/viewer.min.js"></script>
 <script>
     var formData = {:json_encode($data_info)};
     layui.use(['jquery', 'laydate','element','flow', 'upload'], function () {
@@ -326,6 +331,10 @@
             var days = Math.floor(date3 / (24 * 3600 * 1000));
             $('.field-time_long').val(days);
         }
+
+        $('.liulan').viewer({
+            url: 'data-original',
+        });
 
         var uploadInst = upload.render({
             elem: '#attachment-upload'

@@ -2280,7 +2280,13 @@ class Project extends Admin
             foreach ($report as $k => $v) {
                 if (!empty($v['attachment'])){
                     $attachment = explode(',',$v['attachment']);
-                    $report[$k]['attachment'] = array_filter($attachment);
+                    $attachment = array_filter($attachment);
+                    $tmp = [];
+                    foreach ($attachment as $kk=>$vv) {
+                        $tmp[$kk]['path'] = $vv;
+                        $tmp[$kk]['suffix'] = explode('.', $vv)[1];
+                    }
+                    $report[$k]['attachment'] = $tmp;
                 }
                 if ($v['create_time'] > $row['end_time']){
                     $report[$k]['span'] = "(限定完成时间{$row['end_time']})";
