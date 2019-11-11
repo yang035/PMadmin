@@ -67,7 +67,7 @@ class ScoreDeal extends Admin
         $uid = session('admin_user.uid');
         $fields = "SUM(IF(user_id='{$uid}',1,0)) user_num,
         SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status = 1,1,0)) send_num,
-        SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status = 2,1,0)) has_num,
+        SUM(IF(status = 2,1,0)) has_num,
         SUM(IF(JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"'),1,0)) copy_num";
         $count = DealModel::field($fields)->where($map)->find()->toArray();
         return $count;
@@ -129,7 +129,7 @@ class ScoreDeal extends Admin
                 $map['status'] = 1;
                 break;
             case 3:
-                $con = "JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"')";
+//                $con = "JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"')";
                 $map['status'] = ['>',1];
                 break;
             case 4:
@@ -140,7 +140,7 @@ class ScoreDeal extends Admin
                 break;
         }
 
-        $list = DealModel::where($map)->where($con)->order('create_time desc')->paginate(10, false, ['query' => input('get.')]);
+        $list = DealModel::where($map)->where($con)->order('create_time desc')->paginate(30, false, ['query' => input('get.')]);
         foreach ($list as $k=>$v){
             $list[$k]['score_user'] = $this->deal_data($v['score_user']);
             $list[$k]['send_user'] = $this->deal_data($v['send_user']);
