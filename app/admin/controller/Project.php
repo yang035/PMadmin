@@ -309,7 +309,8 @@ class Project extends Admin
         $this->assign('isparams', 1);
         $this->assign('atype', $params['atype']);
         $this->assign('p_status', ProjectModel::getPStatus($p_status));
-        $this->assign('subject_item', SubjectItem::getItemOption($subject_id, $params['atype']));
+//        $this->assign('subject_item', SubjectItem::getItemOption($subject_id, $params['atype']));
+        $this->assign('subject_item', ProjectModel::getProTask1($subject_id, 1));
         return $this->fetch();
     }
 
@@ -640,7 +641,8 @@ class Project extends Admin
         $this->assign('atype', $params['atype']);
         $this->assign('start_time', $start_time);
         $this->assign('p_status', ProjectModel::getPStatus($p_status));
-        $this->assign('subject_item', SubjectItem::getItemOption($subject_id,$params['atype']));
+        //        $this->assign('subject_item', SubjectItem::getItemOption($subject_id, $params['atype']));
+        $this->assign('subject_item', ProjectModel::getProTask1($subject_id, 1));
         $this->assign('user_select', AdminUser::inputSearchUser());
         return $this->fetch();
     }
