@@ -49,7 +49,7 @@ class Assignment extends Admin
         if ($this->request->isAjax()) {
             $where = $data = [];
             $page = input('param.page/d', 1);
-            $limit = input('param.limit/d', 30);
+            $limit = input('param.limit/d', 20);
 
             $cat_id = input('param.project_id/d');
             if ($cat_id){
