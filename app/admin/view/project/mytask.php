@@ -28,6 +28,9 @@
     .layui-table-box{
         float: left;
     }
+    img{
+        cursor:pointer
+    }
 </style>
 <div class="page-toolbar">
     <div class="page-filter">

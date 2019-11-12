@@ -19,6 +19,9 @@
         white-space: normal;
         box-sizing: border-box;
     }
+    img{
+        cursor:pointer
+    }
 </style>
 <div class="page-toolbar">
     <div class="page-filter">

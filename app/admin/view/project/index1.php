@@ -31,6 +31,9 @@
     .layui-table, .layui-table-view {
         margin: 45px 0;
     }
+    img{
+        cursor:pointer
+    }
 </style>
 <div class="page-toolbar">
     <div class="page-filter">
