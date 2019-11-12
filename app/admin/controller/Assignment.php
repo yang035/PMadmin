@@ -93,12 +93,12 @@ class Assignment extends Admin
                                     $attachment = explode(',', $v['attachment']);
                                     $attachment = array_filter($attachment);
                                     $tmp = [];
-                                    foreach ($attachment as $kk=>$vv) {
-                                        $tmp[$kk]['path'] = $vv;
-                                        $tmp[$kk]['suffix'] = explode('.', $vv)[1];
-                                        $tmp[$kk]['is_img'] = true;
-                                        if (!in_array($tmp[$kk]['suffix'],$suffix)){
-                                            $tmp[$kk]['is_img'] = false;
+                                    foreach ($attachment as $kkk=>$vvv) {
+                                        $tmp[$kkk]['path'] = $vvv;
+                                        $tmp[$kkk]['suffix'] = explode('.', $vvv)[1];
+                                        $tmp[$kkk]['is_img'] = true;
+                                        if (!in_array($tmp[$kkk]['suffix'],$suffix)){
+                                            $tmp[$kkk]['is_img'] = false;
                                         }
                                     }
                                     $report[$k]['attachment'] = $tmp;
