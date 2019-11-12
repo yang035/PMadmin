@@ -456,6 +456,18 @@ class DailyReport extends Admin
     }
 
     public function statistics(){
+        $tab_data['menu'] = [
+            [
+                'title' => '行政日报',
+                'url' => 'admin/DailyReport/statistics',
+            ],
+            [
+                'title' => '设计汇报',
+                'url' => 'admin/DailyReport/projectStatistics',
+            ],
+        ];
+        $tab_data['current'] = url('statistics');
+
         $params = $this->request->param();
         $cid = session('admin_user.cid');
         $d = date('Y-m-d',strtotime('-1 day')).' - '.date('Y-m-d');
@@ -524,6 +536,88 @@ class DailyReport extends Admin
 //            ->where($where)->buildSql();
 //        print_r($data_list);
         // 分页
+        $this->assign('tab_data', $tab_data);
+        $this->assign('tab_type', 1);
+        $pages = $data_list->render();
+        $this->assign('data_list', $data_list);
+        $this->assign('pages', $pages);
+        $this->assign('d', $d);
+        return $this->fetch();
+    }
+
+    public function projectStatistics(){
+        $tab_data['menu'] = [
+            [
+                'title' => '行政日报',
+                'url' => 'admin/DailyReport/statistics',
+            ],
+            [
+                'title' => '设计汇报',
+                'url' => 'admin/DailyReport/projectStatistics',
+            ],
+        ];
+        $tab_data['current'] = url('projectStatistics');
+
+        $params = $this->request->param();
+        $cid = session('admin_user.cid');
+        $d = date('Y-m-d',strtotime('-1 day')).' - '.date('Y-m-d');
+        if (isset($params['search_date']) && !empty($params['search_date'])){
+            $d = $params['search_date'];
+        }
+        $d_arr = explode(' - ',$d);
+        $d0 = $d_arr[0].' 00:00:00';
+        $d1 = $d_arr[1].' 23:59:59';
+
+        $fields = 'u.id,u.realname,tmp.num';
+        $where =[
+            'u.company_id'=>$cid,
+            'u.role_id'=>['not in',[1,2]],
+            'u.status'=>1,
+            'u.is_show'=>0,
+            'u.department_id'=>['>',2],
+            'u.id'=>['not in',[21,30,31]],
+        ];
+
+        if ($params){
+            if (!empty($params['realname'])){
+                $where['u.realname'] = ['like', '%'.$params['realname'].'%'];
+            }
+        }
+        if (isset($params['export']) && 1 == $params['export']){
+            set_time_limit(0);
+            $data_list = Db::table('tb_admin_user u')->field($fields)
+                ->join("(SELECT user_id,COUNT(DISTINCT create_time) AS num FROM tb_project_report WHERE cid={$cid} and from_unixtime(create_time) between '{$d0}' and '{$d1}' GROUP BY user_id) tmp",'u.id=tmp.user_id','left')
+                ->where($where)->order('u.id asc')->select();
+            vendor('PHPExcel.PHPExcel');
+            $objPHPExcel = new \PHPExcel();
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A1', '姓名')
+                ->setCellValue('B1', '数量');
+            foreach ($data_list as $k => $v) {
+                $num = $k + 2;
+                $objPHPExcel->setActiveSheetIndex(0)
+                    //Excel的第A列，uid是你查出数组的键值，下面以此类推
+                    ->setCellValue('A' . $num, $v['realname'])
+                    ->setCellValue('B' . $num, $v['num']);
+            }
+            $name = $d.'设计汇报统计';
+            $objPHPExcel->getActiveSheet()->setTitle($d);
+            $objPHPExcel->setActiveSheetIndex(0);
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="' . $name . '.xls"');
+            header('Cache-Control: max-age=0');
+            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            $objWriter->save('php://output');
+            exit;
+        }
+        $data_list = Db::table('tb_admin_user u')->field($fields)
+            ->join("(SELECT user_id,COUNT(DISTINCT create_time) AS num FROM tb_project_report WHERE cid={$cid} and from_unixtime(create_time) between '{$d0}' and '{$d1}' GROUP BY user_id) tmp",'u.id=tmp.user_id','left')
+            ->where($where)->order('u.id asc')->paginate(30, false, ['query' => input('get.')]);
+        // 分页
+        $this->assign('tab_data', $tab_data);
+        $this->assign('tab_type', 1);
         $pages = $data_list->render();
         $this->assign('data_list', $data_list);
         $this->assign('pages', $pages);
@@ -545,6 +639,38 @@ class DailyReport extends Admin
         // 分页
         $pages = $data_list->render();
         $this->assign('data_list', $data_list);
+        $this->assign('pages', $pages);
+        $this->assign('d', urldecode($params['search_date']));
+        return $this->fetch();
+    }
+
+    public function projectDetail(){
+        $params = $this->request->param();
+        $search_date = explode(' - ',urldecode($params['search_date']));
+        $where =[
+            'r.user_id'=>$params['uid'],
+            'r.create_time'=>['between', [strtotime($search_date[0].' 00:00:00'),strtotime($search_date[1].' 23:59:59')]],
+        ];
+        $fields = 'r.*,FROM_UNIXTIME(r.create_time) dtime,u.realname,p.name,p.pid,p.subject_id';
+        $data_list = Db::table('tb_project_report r')->field($fields)
+            ->join('tb_admin_user u','r.user_id=u.id','left')
+            ->join('tb_project p','r.project_id=p.id','left')
+            ->where($where)->group('r.create_time')->order('r.create_time desc')->paginate(30, false, ['query' => input('get.')]);
+        $items = $data_list->items();
+        if ($items){
+            $myPro = ProjectModel::getProTask(0, 0);
+            foreach ($items as $k=>$v) {
+                if (0 != $v['pid']) {
+                    $items[$k]['project_name'] = $myPro[$v['subject_id']];
+                } else {
+                    $items[$k]['project_name'] = $v['name'];
+                }
+
+            }
+        }
+        // 分页
+        $pages = $data_list->render();
+        $this->assign('data_list', $items);
         $this->assign('pages', $pages);
         $this->assign('d', urldecode($params['search_date']));
         return $this->fetch();

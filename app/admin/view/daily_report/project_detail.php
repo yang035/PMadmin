@@ -36,9 +36,10 @@
         <tr>
             <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
             <th>姓名</th>
-            <th>收获(斗)</th>
+            <th>项目名</th>
+            <th>任务名</th>
             <th>时间</th>
-            <th>操作</th>
+<!--            <th>操作</th>-->
         </tr>
         </thead>
         <tbody>
@@ -48,9 +49,10 @@
             <td class="font12">
                 <strong class="mcolor">{$vo['realname']}</strong>
             </td>
-            <td class="font12">{$vo['real_total']}</td>
-            <td class="font12">{$vo['create_time']}</td>
-            <td><a href="{:url('tRead',['id'=>$vo['id'],'user_id'=>$vo['user_id'],'create_time'=>$vo['create_time']])}" class="layui-btn layui-btn-normal layui-btn-xs">明细</a></td>
+            <td class="font12">{$vo['project_name']}</td>
+            <td class="font12">{$vo['name']}</td>
+            <td class="font12">{$vo['dtime']}</td>
+<!--            <td><a href="{:url('Project/editTask',['id'=>$vo['project_id'],'pid'=>$vo['pid'],'type'=>2,'project_name'=>$vo['project_name'],'p'=>'statistics'])}" class="layui-btn layui-btn-normal layui-btn-xs">明细</a></td>-->
         </tr>
         {/volist}
         </tbody>
