@@ -120,7 +120,7 @@
                     none : '暂无相关数据'
                 },
                 cols: [[
-                    {field: 'project_name', title: '项目名',width: 250},
+                    {field: 'project_name', title: '项目名',width: 100},
                     {field: 'name', title: '任务名',width: 250,templet:function (d) {
                             var open_url = "{:url('editTask')}?id="+d.id+"&pid="+d.pid+"&type=2"+"&child="+d.child+"&project_name="+d.project_name;
                             return "<a class='mcolor' href='"+open_url+"'>"+d.name+"</a>";
