@@ -62,6 +62,8 @@ class Assignment extends Admin
             $time_type = config('other.time_type');
             $where['cid'] = session('admin_user.cid');
             $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->order('id desc')->select();
+            $suffix = config('upload.upload_image_ext');
+            $suffix = explode(',',$suffix);
             if ($data['data']){
                 foreach ($data['data'] as $kk=>$vv){
                     $data['data'][$kk]['remark'] = htmlspecialchars_decode($vv['remark']);
@@ -87,9 +89,19 @@ class Assignment extends Admin
 
                         if ($report) {
                             foreach ($report as $k => $v) {
-                                if (!empty($v['attachment'])){
-                                    $attachment = explode(',',$v['attachment']);
-                                    $report[$k]['attachment'] = array_filter($attachment);
+                                if (!empty($v['attachment'])) {
+                                    $attachment = explode(',', $v['attachment']);
+                                    $attachment = array_filter($attachment);
+                                    $tmp = [];
+                                    foreach ($attachment as $kk=>$vv) {
+                                        $tmp[$kk]['path'] = $vv;
+                                        $tmp[$kk]['suffix'] = explode('.', $vv)[1];
+                                        $tmp[$kk]['is_img'] = true;
+                                        if (!in_array($tmp[$kk]['suffix'],$suffix)){
+                                            $tmp[$kk]['is_img'] = false;
+                                        }
+                                    }
+                                    $report[$k]['attachment'] = $tmp;
                                 }
                                 $report_user = AdminUser::getUserById($v['user_id'])['realname'];
                                 $report[$k]['real_name'] = !empty($report_user) ? $report_user : '';

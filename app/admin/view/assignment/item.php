@@ -1,3 +1,6 @@
+{include file="block/layui" /}
+<link rel="stylesheet" href="__ADMIN_JS__/viewer/viewer.min.css">
+<script src="__ADMIN_JS__/viewer/viewer.min.js"></script>
 <style>
     .layui-form-item .layui-input-inline {
         float: left;
@@ -47,7 +50,7 @@
     </div>
 </div>
 <table id="dataTable" class="layui-table" lay-filter="user_table"></table>
-{include file="block/layui" /}
+
 <script type="text/html" id="statusTpl">
     <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|黑名单" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=assignment_item&id={{ d.id }}">
 </script>
@@ -94,11 +97,17 @@
                                 t += value.real_name+'('+ value.create_time +')  '+value.realper+'%<br>'+value.mark;
                                 t += '  <a onclick="open_reply('+ value.id +','+ value.project_id +')" class="layui-btn layui-btn-normal layui-btn-xs">意见</a>';
                                 if (value.attachment.length > 0){
-                                    t += '<br>';
+                                    t += '<ul class="liulan">';
                                     $.each(value.attachment,function(i,v){
                                         var m = parseInt(i)+1;
-                                        t += '<a target="_blank" href="'+v+'" style="color: red">'+v.split('.').pop()+m+'</a>,';
+                                        if (v.is_img) {
+                                            t += '<img data-original="'+v.path+'" src="/upload/anli.png" style="width: 30px;height: 30px">  ';
+                                        }else {
+                                            t += '<a target="_blank" href="'+v.path+'" style="color: red">'+v.path.split('.').pop()+m+'</a>,';
+                                        }
+
                                     });
+                                    t += '</ul>';
                                 }
 
                                 if (value.reply.length > 0){
@@ -129,7 +138,13 @@
                 {field: 'deal_user', title: '执行人',width:110},
                 {field: 'user_name', title: '添加人',width:80},
                 {field: 'create_time', title: '添加时间',width:110},
-            ]]
+            ]],
+            done: function () {
+                $('.liulan').viewer({
+                    url: 'data-original',
+                });
+                layer.closeAll('loading');
+            }
         });
 
         //监听单元格编辑
