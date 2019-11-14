@@ -270,7 +270,7 @@ class Admin extends Controller
 
     public function getFlowUser($id,$p=0){
         $res = ProjectModel::getRowJoinSubject($id);
-        $uid_arr = json_decode($res['manager_user'],true);
+        $uid_arr = json_decode($res['leader_user'],true);
         $tmp = [];
         $uid = session('admin_user.uid');
         if ($uid_arr){
