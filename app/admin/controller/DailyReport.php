@@ -201,7 +201,7 @@ class DailyReport extends Admin
                 if (isset($params['atype'])){
                     switch ($params['atype']){
                         case 3:
-                            $sql = "UPDATE tb_daily_report SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
+                            $sql = "UPDATE tb_daily_report SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a'),status=0 WHERE id ={$params['id']}";
                             break;
                         case 4:
                             $sql = "UPDATE tb_daily_report SET copy_user = JSON_SET(copy_user, '$.\"{$uid}\"', 'a') WHERE id ={$params['id']}";
@@ -228,6 +228,10 @@ class DailyReport extends Admin
             $row['copy_user'] = $this->deal_data($row['copy_user']);
             $row['real_name'] = AdminUser::getUserById($row['user_id'])['realname'];
             $row['work_option'] = WorkModel::getOption4($row['work_option']);
+            //1未批 0已批
+            if (1 == $row['status']){
+                $row['real_total'] = $row['total'];
+            }
         }
         //标记已读
 
