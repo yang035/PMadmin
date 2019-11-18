@@ -449,6 +449,18 @@ class Project extends Model
         }
         return $str;
     }
+
+    /**
+     * @param int $id
+     * @param int $major_cat
+     * @param int $major_item
+     * @param int $change_user
+     * @return string
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * 根据部门id选择人员
+     */
     public static function getChilds1($id=1,$major_cat=0,$major_item=0,$change_user=0)
     {
         $map = [
@@ -470,6 +482,57 @@ class Project extends Model
                                     'company_id'=>session('admin_user.cid'),
                                     'status'=>1,
                                     'department_id'=>['in',$v['dep']],
+                                ];
+
+                                $user = AdminUser::where($map)->column('realname','id');
+                                if ($user){
+                                    foreach ($user as $kk=>$vv) {
+                                        $str .= '<option value="'.$kk.'">'.$vv.'</option>';
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        return $str;
+    }
+
+    /**
+     * @param int $id
+     * @param int $major_cat
+     * @param int $major_item
+     * @param int $change_user
+     * @return string
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * 根据人员id选择人员
+     */
+    public static function getChilds2($id=1,$major_cat=0,$major_item=0,$change_user=0)
+    {
+        $map = [
+            'cid'=>session('admin_user.cid'),
+            'id'=>$id,
+        ];
+        $fields = 'small_major_deal,major_item';
+        $data = self::field($fields)->where($map)->find();
+        $str = '<option value="0" selected>请选择</option>';
+        if ($data){
+            $small_major_deal = json_decode($data['small_major_deal'],true);
+            if ($small_major_deal){
+                foreach ($small_major_deal as $key => $val) {
+                    if ($major_cat == $val['id']){
+                        foreach ($val['child'] as $k => $v) {
+                            if ($major_item == $v['id'] && !empty($v['dep'])) {
+
+                                $map = [
+                                    'company_id'=>session('admin_user.cid'),
+                                    'status'=>1,
+                                    'id'=>['in',$v['dep']],
                                 ];
 
                                 $user = AdminUser::where($map)->column('realname','id');

@@ -1257,7 +1257,7 @@ class Project extends Admin
         if ($project_id){
             $child_option = ProjectModel::getOption1($m_id);
         }elseif ($change_user){
-            $child_option = ProjectModel::getChilds1($m_id,$major_cat,$major_item,$change_user);
+            $child_option = ProjectModel::getChilds2($m_id,$major_cat,$major_item,$change_user);
         }else{
             $child_option = ProjectModel::getChilds($m_id,$major_cat,$major_item);
         }
