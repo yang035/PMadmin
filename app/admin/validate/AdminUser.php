@@ -39,6 +39,6 @@ class AdminUser extends Validate
         //登录
         'login'  =>  ['username|mobile' => 'require|token', 'password' => 'length:6,20'],
         //更新
-        'register'  =>  ['username', 'realname', 'password' => 'length:6,20|confirm', 'mobile'],
+        'register'  =>  ['username', 'password' => 'length:6,20|confirm', 'mobile'],
     ];
 }

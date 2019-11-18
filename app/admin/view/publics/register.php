@@ -111,14 +111,14 @@
                 </div>
                 <div class="layui-form-mid" style="color: red">*</div>
             </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">真实姓名</label>
-                <div class="layui-input-inline">
-                    <input type="text" class="layui-input field-realname" name="realname" lay-verify="required"
-                           autocomplete="off" placeholder="请输入真实姓名">
-                </div>
-                <div class="layui-form-mid" style="color: red">*</div>
-            </div>
+<!--            <div class="layui-form-item">-->
+<!--                <label class="layui-form-label">真实姓名</label>-->
+<!--                <div class="layui-input-inline">-->
+<!--                    <input type="text" class="layui-input field-realname" name="realname" lay-verify="required"-->
+<!--                           autocomplete="off" placeholder="请输入真实姓名">-->
+<!--                </div>-->
+<!--                <div class="layui-form-mid" style="color: red">*</div>-->
+<!--            </div>-->
             <div class="layui-form-item">
                 <label class="layui-form-label">联系手机</label>
                 <div class="layui-input-inline">
@@ -143,13 +143,13 @@
                 </div>
                 <div class="layui-form-mid" style="color: red">*</div>
             </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">联系邮箱</label>
-                <div class="layui-input-inline">
-                    <input type="text" class="layui-input field-email" name="email" autocomplete="off"
-                           placeholder="请输入邮箱地址">
-                </div>
-            </div>
+<!--            <div class="layui-form-item">-->
+<!--                <label class="layui-form-label">联系邮箱</label>-->
+<!--                <div class="layui-input-inline">-->
+<!--                    <input type="text" class="layui-input field-email" name="email" autocomplete="off"-->
+<!--                           placeholder="请输入邮箱地址">-->
+<!--                </div>-->
+<!--            </div>-->
             {:token('__token__', 'sha1')}
             <div class="layui-form-item">
                 <div class="layui-input-block">
