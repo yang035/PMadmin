@@ -33,7 +33,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">{$v['name']}</label>
                 <div class="layui-input-inline">
-                    <button type="button" class="layui-btn" id="{$v['id']}_user_id" onclick="open_div1({$v['id']})">选择人员</button>
+                    <button type="button" class="layui-btn" id="{$v['id']}_user_id" onclick="open_div({$v['id']})">选择专业组</button>
                     <div id="{$v['id']}_select_id">{$v['dep_name']|default=''}</div>
                     <input type="hidden" name="{$v['id']}_user" id="{$v['id']}_user" value="{$v['dep']|default=''}">
                 </div>

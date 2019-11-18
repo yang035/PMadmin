@@ -413,6 +413,90 @@ class Subject extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
             $t = [];
+            $deal_user = '';
+            foreach ($data as $k => $v) {
+                if ('id' == $k) {
+                    continue;
+                }
+                $deal_user .= ','.$v;
+                if ($k == 'send_user'){
+                    $data[$k] = user_array1($v);
+                }elseif ($k == 'copy_user' || $k == 'leader_user'){
+                    $data[$k] = user_array($v);
+                }else{
+                    $t[explode('_',$k)[0]] = trim($v, ',');
+                    unset($data[$k]);
+                }
+            }
+            $data['deal_user'] = user_array(implode(',',array_unique(explode(',',$deal_user))));
+            if ($row['small_major_deal']){
+                $a = json_decode($row['small_major_deal'],true);
+                foreach ($a as $k=>$v) {
+                    foreach ($v['child'] as $kk=>$vv) {
+                        $a[$k]['child'][$kk]['dep'] = $t[$vv['id']];
+                    }
+                }
+                $data['small_major_deal'] = json_encode($a,JSON_FORCE_OBJECT);
+            }else{
+                return $this->error('请填写专业配比！');
+            }
+            Db::startTrans();
+            try{
+                ItemModel::update($data);
+                $where = [
+                    'pid'=>0,
+                    'subject_id'=>$data['id'],
+                ];
+                $tmp = [
+//                    'manager_user'=>$data['manager_user'],
+                    'send_user'=>$data['send_user'],
+                    'leader_user'=>$data['leader_user'],
+                    'deal_user'=>$data['deal_user'],
+                    'copy_user'=>$data['copy_user'],
+                    'small_major_deal'=>$data['small_major_deal'],
+                ];
+                $res = ProjectModel::where($where)->update($tmp);
+//                // 提交事务
+                Db::commit();
+            } catch (\Exception $e) {
+                // 回滚事务
+                Db::rollback();
+            }
+            if ($res){
+                return $this->success("操作成功{$this->score_value}");
+            }else{
+                return $this->error('添加失败');
+            }
+        }
+
+        if ($row) {
+            $row['small_major_deal_arr'] = json_decode($row['small_major_deal'],true);
+            if ($row['small_major_deal_arr']) {
+                foreach ($row['small_major_deal_arr'] as $k => $v) {
+                    foreach ($v['child'] as $kk => $vv) {
+                        $row['small_major_deal_arr'][$k]['child'][$kk]['dep_name'] = isset($vv['dep']) ? $this->deal_user($vv['dep']) : null;
+                    }
+                }
+            }
+            $row['leader_user_id'] = $this->deal_data($row['leader_user']);
+            $row['leader_user'] = $this->deal_data_id($row['leader_user']);
+            $row['send_user_id'] = $this->deal_data($row['send_user']);
+            $row['send_user'] = $this->deal_data_id($row['send_user']);
+            $row['copy_user_id'] = $this->deal_data($row['copy_user']);
+            $row['copy_user'] = $this->deal_data_id($row['copy_user']);
+        }
+        $this->assign('data_info', $row);
+        return $this->fetch();
+
+    }
+
+    //原来选定项目组挂钩
+    public function addBaseUser20191118($id = 0)
+    {
+        $row = ItemModel::where('id', $id)->find()->toArray();
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            $t = [];
             foreach ($data as $k => $v) {
                 if ('id' == $k) {
                     continue;
@@ -487,6 +571,7 @@ class Subject extends Admin
 
     }
 
+    //原来选定人员挂钩
     public function addBaseUser1($id = 0)
     {
         if ($this->request->isPost()) {
@@ -558,6 +643,22 @@ class Subject extends Admin
                 $x_user[] = $real_name;
             }
             return implode(',', $x_user);
+        }
+    }
+
+    public function deal_user($dep)
+    {
+        if (!is_array($dep) && !empty($dep)) {
+            $where = [
+                'company_id' => session('admin_user.cid'),
+                'status' => 1,
+                'id'=>['in',$dep],
+            ];
+            $result = AdminUser::where($where)->select();
+            $dep_name = array_column($result,'realname');
+            return implode(',',$dep_name);
+        }else{
+            return null;
         }
     }
 
