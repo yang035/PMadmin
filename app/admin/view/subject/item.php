@@ -54,6 +54,7 @@
     <a href="#" onclick="discuss_record({{ d.id }},'{{ d.name }}')" class="layui-btn layui-btn-xs layui-btn-warm">洽商记录</a>
     <a href="#" onclick="contract({{ d.id }},'{{ d.name }}')" class="layui-btn layui-btn-xs layui-btn-normal">拟定合同</a>
     <a href="#" onclick="zujian_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">组建项目组</a>
+    <a href="#" onclick="partner_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">合伙配置</a>
 </script>
 <script type="text/javascript">
     layui.use(['jquery','table'], function() {
@@ -69,17 +70,17 @@
             ,cols: [[ //表头
                 {type:'checkbox'},
                 {field: 'xuhao', title: '序号',type: 'numbers'},
-                {field: 'name', title: '名称'},
-                {field: 'idcard', title: '项目编号'},
-                {field: 'cat_id', title: '类别', templet:function(d){
+                {field: 'name', title: '名称',width:300},
+                {field: 'idcard', title: '项目编号',width:150},
+                {field: 'cat_id', title: '类别',width:80, templet:function(d){
                         return d.cat.name;
                     }},
-                {field: 's_status', title: '项目状态', templet:function(d){
-                        return d.s_status;
-                    }},
-                {field: 'leader_user', title: '总负责人'},
-                {field: 'status', title: '状态', templet: '#statusTpl'},
-                {title: '操作', templet: '#buttonTpl',width:500}
+                // {field: 's_status', title: '项目状态', templet:function(d){
+                //         return d.s_status;
+                //     }},
+                {field: 'leader_user', title: '总负责人',width:150},
+                {field: 'status', title: '状态',width:100, templet: '#statusTpl'},
+                {title: '操作', templet: '#buttonTpl',minWidth:550}
             ]]
         });
     });
@@ -124,6 +125,25 @@
 
     function zujian_user(id) {
         var open_url = "{:url('addBaseUser')}?id="+id;
+        if (open_url.indexOf('?') >= 0) {
+            open_url += '&hisi_iframe=yes';
+        } else {
+            open_url += '?hisi_iframe=yes';
+        }
+        layer.open({
+            type:2,
+            title :'添加人员',
+            maxmin: true,
+            area: ['900px', '600px'],
+            content: open_url,
+            success:function (layero, index) {
+                var body = layer.getChildFrame('body', index);  //巧妙的地方在这里哦
+            }
+        });
+    }
+
+    function partner_user(id) {
+        var open_url = "{:url('configPartner')}?id="+id;
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {

@@ -13,6 +13,7 @@ use app\admin\model\SubjectCat as CatModel;
 use app\admin\model\SubjectItem as ItemModel;
 use app\admin\model\AdminUser;
 use app\admin\model\Project as ProjectModel;
+use app\admin\model\Partner as PartnerModel;
 use think\Db;
 use traits\think\Instance;
 
@@ -407,6 +408,51 @@ class Subject extends Admin
 
     }
 
+    public function configPartner($id = 0)
+    {
+        $row = ItemModel::field('id,partner_user')->where('id', $id)->find()->toArray();
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            $data['partner_user'] = json_encode($data['partner_user']);
+            Db::startTrans();
+            try{
+                ItemModel::update($data);
+                $where = [
+                    'pid'=>0,
+                    'subject_id'=>$data['id'],
+                ];
+                unset($data['id']);
+                $res = ProjectModel::where($where)->update($data);
+//                // 提交事务
+                Db::commit();
+            } catch (\Exception $e) {
+                // 回滚事务
+                Db::rollback();
+            }
+            if ($res){
+                return $this->success("操作成功{$this->score_value}");
+            }else{
+                return $this->error('添加失败');
+            }
+        }
+
+        if ($row) {
+            $row['partner_user'] = json_decode($row['partner_user'],true);
+            if ($row['partner_user']) {
+                foreach ($row['partner_user'] as $k => $v) {
+                    $row['partner_user'][$k] = [
+                        'realname'=>AdminUser::getUserById($k)['realname'],
+                        'p'=>$v,
+                    ];
+                }
+            }
+        }
+        $this->assign('data_info', $row);
+        $this->assign('partner_grade', PartnerModel::getPartnerGrade());
+        return $this->fetch();
+
+    }
+
     public function addBaseUser($id = 0)
     {
         $row = ItemModel::where('id', $id)->find()->toArray();
@@ -428,7 +474,7 @@ class Subject extends Admin
                     unset($data[$k]);
                 }
             }
-            $data['deal_user'] = user_array(implode(',',array_unique(explode(',',$deal_user))));
+            $data['partner_user'] = $data['deal_user'] = user_array(implode(',',array_unique(explode(',',$deal_user))));
             if ($row['small_major_deal']){
                 $a = json_decode($row['small_major_deal'],true);
                 foreach ($a as $k=>$v) {
@@ -452,6 +498,7 @@ class Subject extends Admin
                     'send_user'=>$data['send_user'],
                     'leader_user'=>$data['leader_user'],
                     'deal_user'=>$data['deal_user'],
+                    'partner_user'=>$data['deal_user'],
                     'copy_user'=>$data['copy_user'],
                     'small_major_deal'=>$data['small_major_deal'],
                 ];
