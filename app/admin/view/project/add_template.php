@@ -48,10 +48,12 @@
         <div class="layui-input-inline" style="width: 100px">
             <input type="text" class="layui-input field-end_time" name="end_time[]" autocomplete="off" readonly placeholder="结束时间">
         </div>
+        <div class="layui-form-mid">负责人</div>
         <div class="layui-input-inline" style="width: 100px">
             <select name="manager_user[]" class="field-manager_user" type="select" lay-filter="manager_id" id="manager_id">
             </select>
         </div>
+        <div class="layui-form-mid">参与人</div>
         <div class="layui-input-inline" style="width: 100px">
             <select name="deal_user[]" class="field-deal_user" type="select" lay-filter="copy_id" id="copy_id">
             </select>
@@ -160,10 +162,12 @@ layui.use(['jquery', 'laydate','upload','form','element'], function() {
             "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
             "            <input type=\"text\" class=\"layui-input field-end_time\" name=\"end_time["+len+"]\" id=\"end_"+idNum+"\" autocomplete=\"off\" readonly placeholder=\"结束时间\">\n" +
             "        </div>\n" +
+                "<div class=\"layui-form-mid\">负责人</div>"+
             "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
             "            <select name=\"manager_user["+len+"]\" class=\"field-manager_user\" type=\"select\" lay-filter=\"manager_id\" id=\"manager_id"+idNum+"\">\n" +
             "            </select>\n" +
             "        </div>\n" +
+                "<div class=\"layui-form-mid\">参与人</div>"+
             "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
             "            <select name=\"deal_user["+len+"]\" class=\"field-deal_user\" type=\"select\" lay-filter=\"copy_id\" id=\"copy_id"+idNum+"\">\n" +
             "            </select>\n" +
