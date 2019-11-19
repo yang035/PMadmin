@@ -7,6 +7,7 @@
  */
 
 namespace app\admin\controller;
+use app\admin\model\AdminCompany;
 use app\admin\model\Project as ProjectModel;
 use app\admin\model\AdminUser;
 use app\admin\model\Score as ScoreModel;
@@ -463,7 +464,8 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
     }
 
     public function getOrderRatio(){
-        $map['cid'] = session('admin_user.cid');
+        $cid = session('admin_user.cid');
+        $map['cid'] = $cid;
         $map1['id'] = ['neq', 1];
         $map1['is_show'] = ['eq', 0];
         $map1['status'] = 1;
@@ -471,12 +473,13 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
         $data_list = ScoreModel::hasWhere('adminUser',$map1)->field($fields)->where($map)->group('`Score`.user')->order('gl_add_sum desc')->paginate(30, false, ['query' => input('get.')]);
         $tmp = [];
         if ($data_list) {
+            $rankratio = AdminCompany::getCompanyById($cid);
             foreach ($data_list as $k => $v) {
                 $tmp[$v['user']] = $k + 1;
             }
 
-            $a = 0.5;
-            $b = 1.2;
+            $a = $rankratio['min_rankratio'];
+            $b = $rankratio['max_rankratio'];
             $n = count($tmp);
             foreach ($tmp as $k => $v) {
                 $tmp[$k] = round($b - ($b - $a) / ($n -1) * ($v-1),4);

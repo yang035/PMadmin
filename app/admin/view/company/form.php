@@ -1,3 +1,26 @@
+<style>
+    .layui-form-pane .layui-form-label {
+        width: 150px;
+        padding: 8px 15px;
+        height: 38px;
+        line-height: 20px;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 2px 0 0 2px;
+        text-align: center;
+        background-color: #FBFBFB;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        box-sizing: border-box;
+    }
+    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+</style>
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-form-item">
         <label class="layui-form-label">公司名称</label>
@@ -53,6 +76,18 @@
         <label class="layui-form-label">网站备案号</label>
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-record_number" name="record_number" autocomplete="off" placeholder="请输入网站备案号">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">GL排名系数最大值</label>
+        <div class="layui-input-inline">
+            <input type="number" class="layui-input field-max_rankratio" name="max_rankratio" autocomplete="off" placeholder="GL排名系数最大值" value="1.00">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">GL排名系数最小值</label>
+        <div class="layui-input-inline">
+            <input type="number" class="layui-input field-min_rankratio" name="min_rankratio" autocomplete="off" placeholder="GL排名系数最小值" value="1.00">
         </div>
     </div>
     <div class="layui-form-item">
