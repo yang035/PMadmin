@@ -210,12 +210,10 @@ function checkScore(i='',v){
                     if (isNaN(score)){
                         score = 0;
                     }
-                    k++;
                     if ($("#i_id"+k).val() == major_item) {
                         total += score;
                     }
                 });
-                console.log(total);
                 if (total > data[major_item]) {
                     layer.msg("["+major_item_name+"]总和不能超过["+data[major_item]+"]斗", {icon: 5});
                 }

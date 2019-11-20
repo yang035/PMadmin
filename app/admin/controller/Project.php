@@ -1241,9 +1241,13 @@ class Project extends Admin
         return $this->fetch('form');
     }
 
-    public function getSmallMajorScore($id,$major_cat=0,$major_item=0){
+    public function getSmallMajorScore($id,$major_cat=0,$major_item=0,$f=0){
         $score = ProjectModel::getSmallMajorScore($id,$major_cat,$major_item);
-        echo json_encode($score);
+        if (!$f){
+            echo json_encode($score);
+        }else{
+            return $score;
+        }
     }
 
     public function getMajorItem($id,$major_cat=0,$major_item=0,$project_id=0,$change_user=0){
@@ -3116,6 +3120,7 @@ class Project extends Admin
                 }
             }
             $data = [];
+            $tmp = [];
 //            print_r($params);
             foreach ($params as $k=>$v) {
                 if (is_array($v)){
@@ -3144,6 +3149,7 @@ class Project extends Admin
                                 $data[$kk]['copy_user'] = $p_res['copy_user'];
                                 $data[$kk]['create_time'] = time();
                                 $data[$kk]['update_time'] = time();
+                                $tmp[$params['major_item'][$kk]] = 0;
                             }else{
                                 return $this->error("{$params['name'][$kk]},请补充完整信息");
                             }
@@ -3154,6 +3160,16 @@ class Project extends Admin
                 }
             }
             if ($data){
+                //添加验证按照计算不能超过最大值
+                foreach ($data as $k=>$v) {
+                    $tmp[$v['major_item']] += $v['score'];
+                }
+                $small_major_score = $this->getSmallMajorScore($params['project_id'],$params['major_cat'],0,1);
+                foreach ($tmp as $k=>$v) {
+                    if ($v > $small_major_score[$k]){
+                        $this->error('专业比例产值超过最大值['.$small_major_score[$k].']');
+                    }
+                }
                 $res = db('project')->insertAll($data);
                 if (!$res) {
                     return $this->error('添加失败！');
@@ -3203,6 +3219,7 @@ class Project extends Admin
                     }
                 }
                 $data = [];
+                $tmp = [];
 //            print_r($params);
                 foreach ($params as $k=>$v) {
                     if (is_array($v)){
@@ -3231,6 +3248,7 @@ class Project extends Admin
                                     $data[$kk]['copy_user'] = $p_res['copy_user'];
                                     $data[$kk]['create_time'] = time();
                                     $data[$kk]['update_time'] = time();
+                                    $tmp[$params['major_item'][$kk]] = 0;
                                 }else{
                                     return $this->error("{$params['name'][$kk]},请补充完整信息");
                                 }
@@ -3241,6 +3259,16 @@ class Project extends Admin
                     }
                 }
                 if ($data){
+                    //添加验证按照计算不能超过最大值
+                    foreach ($data as $k=>$v) {
+                        $tmp[$v['major_item']] += $v['score'];
+                    }
+                    $small_major_score = $this->getSmallMajorScore($params['project_id'],$params['major_cat'],0,1);
+                    foreach ($tmp as $k=>$v) {
+                        if ($v > $small_major_score[$k]){
+                            $this->error('专业比例产值超过最大值['.$small_major_score[$k].']');
+                        }
+                    }
                     $res = db('project')->insertAll($data);
                     if (!$res) {
                         return $this->error('添加失败！');
