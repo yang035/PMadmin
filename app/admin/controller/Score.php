@@ -388,9 +388,9 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
 
         $data_list = model('Score')::hasWhere('scoreProject')->field($fields)->group('user,major_item')->where($map)->paginate(10000, false, ['query' => input('get.')])->toArray();
         $data_list = $data_list['data'];
-//        print_r($data_list);exit();
         $tmp = [];
         $major_score_new = [];
+        $small_major_deal = $major_item = [];
         if ($data_list) {
             $orderRatio = $this->getOrderRatio();
             $small_major_deal = ProjectModel::smallMajorDeal($params['project_id']);
@@ -408,16 +408,18 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                     }
                 }
                 foreach ($major_user as $key => $val) {
-                    foreach ($major_item as $k => $v) {
-                        $tmp[$val][$v] = [
-                            'old'=>0,
-                            'new'=>0
-                        ];
+                    if (key_exists($val,$orderRatio)){
+                        foreach ($major_item as $k => $v) {
+                            $tmp[$val][$v] = [
+                                'old'=>0,
+                                'new'=>0
+                            ];
+                        }
                     }
                 }
                 foreach ($tmp as $key => $val) {
                     foreach ($data_list as $k => $v) {
-                        if ($key = $v['user']) {
+                        if ($key == $v['user']) {
                             foreach ($val as $k1 => $v1) {
                                 $tmp[$key][$k1]['old'] += $v[$k1];
                                 $tmp[$key][$k1]['new'] += $v[$k1]*($orderRatio[$key] ? $orderRatio[$key] : 0);
@@ -428,7 +430,7 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                         $tmp[$key]['user'] = $v['user'];
                         $tmp[$key]['name'] = $v['name'];
                     }
-                    break;
+//                    break;
                 }
                 foreach ($major_item as $key => $val) {
                     $major_score_new[$val] = 0;
@@ -437,8 +439,14 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                     }
                 }
                 foreach ($major_score_new as $key => $val) {
-                    foreach ($tmp as $k => $v) {
-                        $tmp[$k][$key]['ratio'] = round($v[$key]['new']/$val,3);
+                    if (!empty($val)){
+                        foreach ($tmp as $k => $v) {
+                            $tmp[$k][$key]['ratio'] = round($v[$key]['new']/$val,3);
+                        }
+                    }else{
+                        foreach ($tmp as $k => $v) {
+                            $tmp[$k][$key]['ratio'] = 1;
+                        }
                     }
                 }
                 foreach ($tmp as $k=>$v){
