@@ -1241,6 +1241,11 @@ class Project extends Admin
         return $this->fetch('form');
     }
 
+    public function getSmallMajorScore($id,$major_cat=0,$major_item=0){
+        $score = ProjectModel::getSmallMajorScore($id,$major_cat,$major_item);
+        echo json_encode($score);
+    }
+
     public function getMajorItem($id,$major_cat=0,$major_item=0,$project_id=0,$change_user=0){
         if ($project_id){
             $id = $project_id;

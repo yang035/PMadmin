@@ -44,6 +44,9 @@ class AdminDepartment extends Model
             'status'=>1,
             'is_show'=>0,
         ];
+        if ($map['company_id'] == 3){
+            $map['id'] = session('admin_user.uid');
+        }
         $user = AdminUser::where($map)->select();
         foreach ($user as $k => $v) {
             $user[$k]['id'] = '10000' . $v->id;

@@ -421,6 +421,31 @@ class Project extends Model
         return $r;
     }
 
+    public static function getSmallMajorScore($id=1,$major_cat=0,$major_item=0)
+    {
+        $map = [
+            'cid'=>session('admin_user.cid'),
+            'id'=>$id,
+        ];
+        $fields = 'score,small_major_deal';
+        $data = self::field($fields)->where($map)->find();
+        $tmp = [];
+        if ($data){
+            $small_major_deal = json_decode($data['small_major_deal'],true);
+            if ($small_major_deal){
+                foreach ($small_major_deal as $key => $val) {
+                    if ($major_cat == $val['id']){
+                        foreach ($val['child'] as $k => $v) {
+                            $tmp[$v['id']] = $data['score'] * $val['value']/100 * $v['value']/100;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        return $tmp;
+    }
+
     public static function getChilds($id=1,$major_cat=0,$major_item=0)
     {
         $map = [

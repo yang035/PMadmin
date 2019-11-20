@@ -53,7 +53,7 @@
             </select>
         </div>
         <div class="layui-input-inline" style="width: 100px">
-            <input type="number" class="layui-input field-score" name="score[]" autocomplete="off" placeholder="预设值" value="{$vo['ml']}">
+            <input type="number" class="layui-input field-score" name="score[]" autocomplete="off" placeholder="预设值" value="{$vo['ml']}" onblur="checkScore({$i},this.value)">
         </div>
         <div class="layui-input-inline" style="width: 100px">
             <input type="text" class="layui-input field-start_time" name="start_time[]" autocomplete="off" readonly placeholder="开始时间">
@@ -151,7 +151,7 @@ layui.use(['jquery', 'laydate','upload','form','element'], function() {
             "            </select>\n" +
             "        </div>\n" +
             "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
-            "            <input type=\"number\" class=\"layui-input field-score\" name=\"score["+len+"]\" autocomplete=\"off\" placeholder=\"预设值\">\n" +
+            "            <input type=\"number\" class=\"layui-input field-score\" name=\"score["+len+"]\" autocomplete=\"off\" placeholder=\"预设值\" onblur=\"checkScore("+idNum+",this.value)\">\n" +
             "        </div>\n" +
             "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
             "            <input type=\"text\" class=\"layui-input field-start_time\" name=\"start_time["+len+"]\" id=\"start_"+idNum+"\" autocomplete=\"off\" readonly placeholder=\"开始时间\">\n" +
@@ -193,5 +193,35 @@ layui.use(['jquery', 'laydate','upload','form','element'], function() {
     element.render();
     form.render();
 });
+
+function checkScore(i,v){
+    var id={$Request.param.project_id},major_cat={$Request.param.major_cat},major_item=$("#i_id"+i).val(),major_item_name=$("#i_id"+i).find("option:selected").text(),total = 0;
+    if (major_item > 0){
+        $.ajax({
+            type: 'POST',
+            url: "{:url('getSmallMajorScore')}",
+            data: {id:id,major_cat:major_cat,major_item:major_item},
+            dataType:  'json',
+            success: function(data){
+                $("input[name^='score']").each(function (k, el) {
+                    var score = parseFloat($(this).val());
+                    if (isNaN(score)){
+                        score = 0;
+                    }
+                    k++;
+                    if ($("#i_id"+k).val() == major_item) {
+                        total += score;
+                    }
+                });
+                if (total > data[major_item]) {
+                    layer.msg("["+major_item_name+"]总和不能超过["+data[major_item]+"]斗", {icon: 5});
+                }
+            }
+        });
+    } else {
+        layer.msg("请选择专业", {icon: 5});
+    }
+
+}
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>

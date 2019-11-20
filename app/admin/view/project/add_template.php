@@ -36,11 +36,11 @@
             <input type="text" class="layui-input field-name" name="name[]" autocomplete="off" placeholder="名称">
         </div>
         <div class="layui-input-inline" style="width: 100px">
-            <select name="major_item[]" class="field-major_item" type="select" lay-filter="rid" id="i_id">
+            <select name="major_item[]" class="field-major_item" type="select" lay-filter="rid" id="i_id0">
             </select>
         </div>
         <div class="layui-input-inline" style="width: 100px">
-            <input type="number" class="layui-input field-score" name="score[]" autocomplete="off" placeholder="预设值">
+            <input type="number" class="layui-input field-score" name="score[0]" autocomplete="off" placeholder="预设值" onblur="checkScore(0,this.value)">
         </div>
         <div class="layui-input-inline" style="width: 100px">
             <input type="text" class="layui-input field-start_time" name="start_time[]" autocomplete="off" readonly placeholder="开始时间">
@@ -141,7 +141,6 @@ layui.use(['jquery', 'laydate','upload','form','element'], function() {
     }
 
     $(".new_task").click(function(){
-        var idNum = getRandomNum();//获取随机数
         var len= $('#editForm').children('div').length - 4;
         // console.log(len);
         $(".new_task").before("<div class=\"layui-form-item\">\n" +
@@ -150,45 +149,45 @@ layui.use(['jquery', 'laydate','upload','form','element'], function() {
             "            <input type=\"text\" class=\"layui-input field-name\" name=\"name["+len+"]\" autocomplete=\"off\" placeholder=\"名称\">\n" +
             "        </div>\n" +
             "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
-            "            <select name=\"major_item["+len+"]\" class=\"field-major_item\" type=\"select\" lay-filter=\"rid"+idNum+"\" id=\"i_id"+idNum+"\">\n" +
+            "            <select name=\"major_item["+len+"]\" class=\"field-major_item\" type=\"select\" lay-filter=\"rid"+len+"\" id=\"i_id"+len+"\">\n" +
             "            </select>\n" +
             "        </div>\n" +
             "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
-            "            <input type=\"number\" class=\"layui-input field-score\" name=\"score["+len+"]\" autocomplete=\"off\" placeholder=\"预设值\">\n" +
+            "            <input type=\"number\" class=\"layui-input field-score\" name=\"score["+len+"]\" autocomplete=\"off\" placeholder=\"预设值\" onblur=\"checkScore("+len+",this.value)\">\n" +
             "        </div>\n" +
             "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
-            "            <input type=\"text\" class=\"layui-input field-start_time\" name=\"start_time["+len+"]\" id=\"start_"+idNum+"\" autocomplete=\"off\" readonly placeholder=\"开始时间\">\n" +
+            "            <input type=\"text\" class=\"layui-input field-start_time\" name=\"start_time["+len+"]\" id=\"start_"+len+"\" autocomplete=\"off\" readonly placeholder=\"开始时间\">\n" +
             "        </div>\n" +
             "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
-            "            <input type=\"text\" class=\"layui-input field-end_time\" name=\"end_time["+len+"]\" id=\"end_"+idNum+"\" autocomplete=\"off\" readonly placeholder=\"结束时间\">\n" +
+            "            <input type=\"text\" class=\"layui-input field-end_time\" name=\"end_time["+len+"]\" id=\"end_"+len+"\" autocomplete=\"off\" readonly placeholder=\"结束时间\">\n" +
             "        </div>\n" +
                 "<div class=\"layui-form-mid\">负责人</div>"+
             "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
-            "            <select name=\"manager_user["+len+"]\" class=\"field-manager_user\" type=\"select\" lay-filter=\"manager_id\" id=\"manager_id"+idNum+"\">\n" +
+            "            <select name=\"manager_user["+len+"]\" class=\"field-manager_user\" type=\"select\" lay-filter=\"manager_id\" id=\"manager_id"+len+"\">\n" +
             "            </select>\n" +
             "        </div>\n" +
                 "<div class=\"layui-form-mid\">参与人</div>"+
             "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
-            "            <select name=\"deal_user["+len+"]\" class=\"field-deal_user\" type=\"select\" lay-filter=\"copy_id\" id=\"copy_id"+idNum+"\">\n" +
+            "            <select name=\"deal_user["+len+"]\" class=\"field-deal_user\" type=\"select\" lay-filter=\"copy_id\" id=\"copy_id"+len+"\">\n" +
             "            </select>\n" +
             "        </div>\n" +
             "    </div>");
         laydate.render({
-            elem: '#start_'+idNum,
+            elem: '#start_'+len,
             type: 'date',
             calendar: true,
             trigger: 'click',
         });
         laydate.render({
-            elem: '#end_'+idNum,
+            elem: '#end_'+len,
             type: 'date',
             calendar: true,
             trigger: 'click',
         });
 
-        select_union($("select[name='project_id']").val(),$("select[name='major_cat']").val(),0,0,0,idNum);
-        form.on('select(rid'+idNum+')', function(data){
-            select_union($("select[name='project_id']").val(),$("select[name='major_cat']").val(),data.value,0,1,idNum);
+        select_union($("select[name='project_id']").val(),$("select[name='major_cat']").val(),0,0,0,len);
+        form.on('select(rid'+len+')', function(data){
+            select_union($("select[name='project_id']").val(),$("select[name='major_cat']").val(),data.value,0,1,len);
         });
         element.render();
         form.render();
@@ -196,5 +195,36 @@ layui.use(['jquery', 'laydate','upload','form','element'], function() {
     element.render();
     form.render();
 });
+
+function checkScore(i='',v){
+    var id=$("select[name='project_id']").val(),major_cat=$("select[name='major_cat']").val(),major_item=$("#i_id"+i).val(),major_item_name=$("#i_id"+i).find("option:selected").text(),total = 0;
+    if (major_item > 0){
+        $.ajax({
+            type: 'POST',
+            url: "{:url('getSmallMajorScore')}",
+            data: {id:id,major_cat:major_cat,major_item:major_item},
+            dataType:  'json',
+            success: function(data){
+                $("input[name^='score']").each(function (k, el) {
+                    var score = parseFloat($(this).val());
+                    if (isNaN(score)){
+                        score = 0;
+                    }
+                    k++;
+                    if ($("#i_id"+k).val() == major_item) {
+                        total += score;
+                    }
+                });
+                console.log(total);
+                if (total > data[major_item]) {
+                    layer.msg("["+major_item_name+"]总和不能超过["+data[major_item]+"]斗", {icon: 5});
+                }
+            }
+        });
+    } else {
+        layer.msg("请选择专业", {icon: 5});
+    }
+
+}
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>
