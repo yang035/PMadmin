@@ -424,13 +424,10 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                                 $tmp[$key][$k1]['old'] += $v[$k1];
                                 $tmp[$key][$k1]['new'] += $v[$k1]*($orderRatio[$key] ? $orderRatio[$key] : 0);
                             }
+                            $tmp[$key]['subject_id'] = $v['subject_id'];
+                            $tmp[$key]['user'] = $v['user'];
                         }
-                        $tmp[$key]['id'] = $v['id'];
-                        $tmp[$key]['subject_id'] = $v['subject_id'];
-                        $tmp[$key]['user'] = $v['user'];
-                        $tmp[$key]['name'] = $v['name'];
                     }
-//                    break;
                 }
                 foreach ($major_item as $key => $val) {
                     $major_score_new[$val] = 0;
@@ -456,9 +453,6 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
             }
 
         }
-//        print_r($major_score_new);
-//        print_r($tmp);exit();
-
         // 分页
 //        $pages = $data_list->render();
         $this->assign('data_list', $tmp);

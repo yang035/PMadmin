@@ -53,9 +53,7 @@
             <th>项目名称</th>
             {/notempty}
             {volist name="major_item" id="vo"}
-            {notempty name="vo"}
             <th>{$small_major_deal[$vo]}</th>
-            {/notempty}
             {/volist}
             <th>操作</th>
         </tr>
@@ -63,8 +61,8 @@
         <tbody>
         {volist name="data_list" id="vo"}
         <tr>
-            <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
-            <td>{$i}</td>
+            <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['user']}" lay-skin="primary"></td>
+            <td>{$key}</td>
             <td class="font12">
                 <strong class="mcolor">{$vo['realname']}</strong>
             </td>
@@ -72,16 +70,12 @@
             <td class="font12">{$vo['subject_name']}</td>
             {/notempty}
             {volist name="major_item" id="v"}
-            {notempty name="v"}
             <th>{$vo[$v]['old']}&nbsp;|&nbsp;{$vo[$v]['new']}&nbsp;|&nbsp;{$vo[$v]['ratio']}</th>
-            {/notempty}
             {/volist}
             <td>
                 <div class="layui-btn-group">
                     <div class="layui-btn-group">
                         <a href="{:url('detailByMajor',['user'=>$vo['user'],'project_id'=>$Request.param.project_id])}" class="layui-btn layui-btn-primary layui-btn-sm">明细</a>
-                        <!--                                <a href="{:url('edit?id='.$vo['id'])}" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe642;</i></a>-->
-                        <!--                                <a data-href="{:url('del?table=admin_company&ids='.$vo['id'])}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>-->
                     </div>
                 </div>
             </td>

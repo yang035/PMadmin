@@ -586,7 +586,9 @@ class Project extends Model
         $data = self::field('small_major_deal')->where($map)->find();
         if ($data){
             $small_major_deal = json_decode($data['small_major_deal'],true);
-            $tmp = [];
+            $tmp = [
+                0=>'其他'
+            ];
             if ($small_major_deal){
                 foreach ($small_major_deal as $key => $val) {
                     foreach ($val['child'] as $k => $v) {
