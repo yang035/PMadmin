@@ -64,7 +64,7 @@
             <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['user']}" lay-skin="primary"></td>
             <td>{$key}</td>
             <td class="font12">
-                <strong class="mcolor">{$vo['realname']}</strong>
+                <strong class="mcolor">{$vo['realname']}</strong>[{$vo['partner_grade']}]
             </td>
             {notempty name="Request.param.project_id"}
             <td class="font12">{$vo['subject_name']}</td>

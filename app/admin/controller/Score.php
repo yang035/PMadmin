@@ -394,6 +394,7 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
         if ($data_list) {
             $orderRatio = $this->getOrderRatio();
             $small_major_deal = ProjectModel::smallMajorDeal($params['project_id']);
+            $partner_user = ProjectModel::getPartner($params['project_id']);
             $major_item = array_unique(array_column($data_list, 'major_item'));
             $major_user = array_unique(array_column($data_list, 'user'));
             $myPro = ProjectModel::getProTask(0,0);
@@ -426,6 +427,7 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                             }
                             $tmp[$key]['subject_id'] = $v['subject_id'];
                             $tmp[$key]['user'] = $v['user'];
+                            $tmp[$key]['partner_grade'] = $partner_user[$v['user']];
                         }
                     }
                 }

@@ -599,4 +599,24 @@ class Project extends Model
         }
         return $tmp;
     }
+
+    public static function getPartner($id){
+        $map = [
+            'cid'=>session('admin_user.cid'),
+            'id'=>$id,
+        ];
+        $data = self::field('partner_user')->where($map)->find();
+        if ($data) {
+            $partner_user = json_decode($data['partner_user'], true);
+            $grade_type = config('other.partnership_grade');
+            if (!empty($partner_user)){
+                foreach ($partner_user as $k=>$v) {
+                    $partner_user[$k] = !empty($v) ? $grade_type[$v] : '无';
+                }
+            }
+            return $partner_user;
+        }else{
+            return [];
+        }
+    }
 }
