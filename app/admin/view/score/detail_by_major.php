@@ -31,59 +31,58 @@
                 <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
             </div>
         </form>
-        <div class="layui-form">
-            <table class="layui-table mt10" lay-even="" lay-skin="row">
-                <colgroup>
-                    <col width="50">
-                </colgroup>
-                <thead>
-                <tr>
-                    <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
-                    <th width="30">序号</th>
-                    <th>员工</th>
-                    <th>项目名称</th>
-                    <th>任务名</th>
-                    <th>ML+</th>
-                    <th>ML-</th>
-                    <th>GL+</th>
-                    <th>GL-</th>
-                    <th>备注</th>
-                    <th>添加时间</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                {volist name="data_list" id="vo"}
-                <tr>
-                    <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
-                    <td>{$i}</td>
-                    <td class="font12">
-                        <strong class="mcolor">{$vo['realname']}</strong>
-                    </td>
-                    <td class="font12">{$vo['subject_name']}</td>
-                    <td class="font12">{$vo['pname']}</td>
-                    <td class="font12">{$vo['ml_add_score']}</td>
-                    <td class="font12">{$vo['ml_sub_score']}</td>
-                    <td class="font12">{$vo['gl_add_score']}</td>
-                    <td class="font12">{$vo['gl_sub_score']}</td>
-                    <td class="font12">{$vo['remark']}</td>
-                    <td class="font12">{$vo['create_time']}</td>
-                    <td>
-                        <div class="layui-btn-group">
-                            <div class="layui-btn-group">
-                                <a href="{:url('index',['project_name'=>$vo['subject_name'],'project_id'=>$vo['subject_id']])}" class="layui-btn layui-btn-primary layui-btn-sm">项目明细</a>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                {/volist}
-                </tbody>
-            </table>
-            {$pages}
-        </div>
     </div>
 </div>
-
+<div class="layui-form">
+    <table class="layui-table mt10" lay-even="" lay-skin="row">
+        <colgroup>
+            <col width="50">
+        </colgroup>
+        <thead>
+        <tr>
+            <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
+            <th width="30">序号</th>
+            <th>员工</th>
+            <th>项目名称</th>
+            <th>任务名</th>
+            <th>ML+</th>
+            <th>ML-</th>
+            <th>GL+</th>
+            <th>GL-</th>
+            <th>备注</th>
+            <th>添加时间</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {volist name="data_list" id="vo"}
+        <tr>
+            <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
+            <td>{$i}</td>
+            <td class="font12">
+                <strong class="mcolor">{$vo['realname']}</strong>
+            </td>
+            <td class="font12">{$vo['subject_name']}</td>
+            <td class="font12">{$vo['pname']}</td>
+            <td class="font12">{$vo['ml_add_score']}</td>
+            <td class="font12">{$vo['ml_sub_score']}</td>
+            <td class="font12">{$vo['gl_add_score']}</td>
+            <td class="font12">{$vo['gl_sub_score']}</td>
+            <td class="font12">{$vo['remark']}</td>
+            <td class="font12">{$vo['create_time']}</td>
+            <td>
+                <div class="layui-btn-group">
+                    <div class="layui-btn-group">
+                        <a href="{:url('index',['project_name'=>$vo['subject_name'],'project_id'=>$vo['subject_id']])}" class="layui-btn layui-btn-primary layui-btn-sm">项目明细</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+    {$pages}
+</div>
 {include file="block/layui" /}
 <script src="__PUBLIC_JS__/jquery.select.js?v="></script>
 <script src="__PUBLIC_JS__/SelectBox.min.js?v="></script>
