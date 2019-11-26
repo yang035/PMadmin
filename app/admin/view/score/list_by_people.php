@@ -75,7 +75,7 @@
             <td>
                 <div class="layui-btn-group">
                     <div class="layui-btn-group">
-                        <a href="{:url('detailByMajor',['user'=>$vo['user'],'project_id'=>$Request.param.project_id])}" class="layui-btn layui-btn-primary layui-btn-sm">明细</a>
+                        <a href="{:url('detailByMajor',['user'=>$vo['user'],'project_id'=>$Request.param.project_id])}" class="layui-btn layui-btn-primary layui-btn-sm">人员明细</a>
                     </div>
                 </div>
             </td>
