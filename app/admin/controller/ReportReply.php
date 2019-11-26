@@ -36,6 +36,9 @@ class ReportReply extends Admin
 
         if ($this->request->isPost()){
             $data = $this->request->post();
+            if ($data['realper'] > $row['realper']){
+                return $this->error("完成情况不能超过最大值[{$row['realper']}]");
+            }
 
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
