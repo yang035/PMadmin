@@ -366,7 +366,7 @@ layui.use(['jquery', 'laydate','upload','form'], function() {
 
     $('#manager_user_id').on('click', function(){
         var manager_user = $('#manager_user').val();
-        var open_url = "{:url('Tool/getTreeUser')}?m=manager&u="+manager_user;
+        var open_url = "{:url('Tool/getTreeUser')}?m=manager&u="+manager_user+'&f=1';
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {
@@ -386,7 +386,7 @@ layui.use(['jquery', 'laydate','upload','form'], function() {
 
     $('#deal_user_id').on('click', function(){
         var deal_user = $('#deal_user').val();
-        var open_url = "{:url('Tool/getTreeUser')}?m=deal&u="+deal_user;
+        var open_url = "{:url('Tool/getTreeUser')}?m=deal&u="+deal_user+'&f=1';
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {

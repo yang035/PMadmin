@@ -21,6 +21,7 @@ class Tool extends Admin
     }
 
     public function getTreeUser(){
+        $params = $this->request->param();
         if ($this->request->isPost()){
             $data = $this->request->post();
             if (1 != session('admin_user.role_id')){
@@ -35,7 +36,12 @@ class Tool extends Admin
             }
             return $result;
         }
-        return $this->fetch();
+        if (!isset($params['f'])){
+            return $this->fetch();
+        }else{
+            return $this->fetch('get_tree_user2');
+        }
+
     }
 
     public function getTreeDepartment(){
