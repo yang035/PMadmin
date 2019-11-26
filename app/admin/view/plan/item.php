@@ -61,7 +61,7 @@
                 {field: 'cat_id', title: '类别', templet:function(d){
                         return d.cat.name;
                     }},
-                {field: 'ml', title: 'ML'},
+                // {field: 'ml', title: 'ML'},
                 {field: 'status', title: '状态', templet: '#statusTpl'},
                 {title: '操作', templet: '#buttonTpl'}
             ]]

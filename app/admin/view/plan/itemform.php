@@ -15,13 +15,13 @@
             </div>
             <div class="layui-form-mid red">*</div>
         </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">ML</label>
-            <div class="layui-input-inline">
-                <input type="number" class="layui-input field-ml" name="ml" lay-verify="required" autocomplete="off" value="0">
-            </div>
-            <div class="layui-form-mid red">斗</div>
-        </div>
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">ML</label>-->
+<!--            <div class="layui-input-inline">-->
+<!--                <input type="number" class="layui-input field-ml" name="ml" lay-verify="required" autocomplete="off" value="0">-->
+<!--            </div>-->
+<!--            <div class="layui-form-mid red">斗</div>-->
+<!--        </div>-->
         <div class="layui-form-item">
             <label class="layui-form-label">备注</label>
             <div class="layui-input-inline">

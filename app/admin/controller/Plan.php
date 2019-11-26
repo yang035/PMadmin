@@ -198,6 +198,14 @@ class Plan extends Admin
         return $this->success('删除成功');
     }
 
+    /**
+     * @return mixed|void
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * 导入模板功能
+     * 20191126暂时屏蔽ML列
+     */
     public function doimport(){
         if ($this->request->isAjax()) {
             $file = request()->file('file');
@@ -215,8 +223,10 @@ class Plan extends Admin
 //            print_r($file_name);exit();
             set_time_limit(0);
             $excel = \service('Excel');
-            $format = array('A' => 'line', 'B' => 'cat_id', 'C' => 'name', 'D' => 'ml');
-            $checkformat = array('A' => '序号', 'B' => '专业大类', 'C' => '名称', 'D' => 'ML');
+//            $format = array('A' => 'line', 'B' => 'cat_id', 'C' => 'name', 'D' => 'ml');
+//            $checkformat = array('A' => '序号', 'B' => '专业大类', 'C' => '名称', 'D' => 'ML');
+            $format = array('A' => 'line', 'B' => 'cat_id', 'C' => 'name');
+            $checkformat = array('A' => '序号', 'B' => '专业大类', 'C' => '名称');
             $res = $excel->readUploadFile($file_name, $format, 8050, $checkformat);
             $cid = session('admin_user.cid');
             if ($res['status'] == 0) {
@@ -261,7 +271,7 @@ class Plan extends Admin
                         $tmp = [
                             'cat_id' => $t[$v['B']],
                             'name' => $v['C'],
-                            'ml' => (int)$v['D'],
+//                            'ml' => (int)$v['D'],
                             'cid' => session('admin_user.cid'),
                             'user_id' => session('admin_user.uid'),
                         ];
@@ -271,7 +281,7 @@ class Plan extends Admin
                             'id'=>$f['id'],
                             'cat_id' => $t[$v['B']],
                             'name' => $v['C'],
-                            'ml' => (int)$v['D'],
+//                            'ml' => (int)$v['D'],
                             'cid' => session('admin_user.cid'),
                             'user_id' => session('admin_user.uid'),
                         ];
