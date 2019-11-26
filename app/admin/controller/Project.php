@@ -3114,6 +3114,10 @@ class Project extends Admin
             foreach ($params as $k=>$v) {
                 if (is_array($v)){
                     $params[$k] = array_filter($v);
+                    //添加判断当参与人为空时，参与人默认是负责人
+                    if ($k == 'deal_user' && empty($params[$k])){
+                        $params['deal_user'] = $params['manager_user'];
+                    }
                     if (empty($params[$k])){
                         return $this->error('请补充完整信息');
                     }
@@ -3121,11 +3125,15 @@ class Project extends Admin
             }
             $data = [];
             $tmp = [];
-//            print_r($params);
+
             foreach ($params as $k=>$v) {
                 if (is_array($v)){
                     if ($params['score']){
                         foreach ($params['score'] as $kk=>$vv) {
+                            //添加判断当存在负责人而不存在参与人时候，参与人默认负责人
+                            if (isset($params['manager_user'][$kk]) && !isset($params['deal_user'][$kk])){
+                                $params['deal_user'][$kk] = $params['manager_user'][$kk];
+                            }
 //                            echo $params[$k][$kk];
                             if (isset($params[$k][$kk])){
                                 $data[$kk]['subject_id'] = $params['project_id'];
@@ -3209,10 +3217,13 @@ class Project extends Admin
                 }
 
                 $data['code'] = $p_res['code'];
-//            print_r($params);
                 foreach ($params as $k=>$v) {
                     if (is_array($v)){
                         $params[$k] = array_filter($v);
+                        //添加判断当参与人为空时，参与人默认是负责人
+                        if ($k == 'deal_user' && empty($params[$k])){
+                            $params['deal_user'] = $params['manager_user'];
+                        }
                         if (empty($params[$k])){
                             return $this->error('请补充完整信息');
                         }
@@ -3220,11 +3231,15 @@ class Project extends Admin
                 }
                 $data = [];
                 $tmp = [];
-//            print_r($params);
+
                 foreach ($params as $k=>$v) {
                     if (is_array($v)){
                         if ($params['score']){
                             foreach ($params['score'] as $kk=>$vv) {
+                                //添加判断当存在负责人而不存在参与人时候，参与人默认负责人
+                                if (isset($params['manager_user'][$kk]) && !isset($params['deal_user'][$kk])){
+                                    $params['deal_user'][$kk] = $params['manager_user'][$kk];
+                                }
                                 //当score有值的时候，同行都必填
                                 if (isset($params['name'][$kk]) && isset($params['major_item'][$kk]) && isset($params['score'][$kk]) && isset($params['start_time'][$kk]) && isset($params['end_time'][$kk]) && isset($params['manager_user'][$kk]) && isset($params['deal_user'][$kk])){
                                     $data[$kk]['subject_id'] = $params['project_id'];
