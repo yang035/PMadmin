@@ -9,6 +9,7 @@
 namespace app\admin\controller;
 
 
+use app\admin\model\AdminCompany;
 use think\Controller;
 use think\Db;
 use app\admin\model\Score as ScoreModel;
@@ -157,6 +158,52 @@ class Cron extends Controller
         $flag = ApprovalModel::where($where)->setField('status',6);
         if ($flag) {
             echo '更新成功\r\n';
+        }
+    }
+
+    /**
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * 系统定时计算排名系数
+     */
+    public function dealRank(){
+        $cid = 2;
+        $map['cid'] = $cid;
+        $map1['id'] = ['neq', 1];
+        $map1['is_show'] = ['eq', 0];
+        $map1['status'] = 1;
+        $fields = "`Score`.id,`Score`.subject_id,`Score`.user,sum(`Score`.ml_add_score) as ml_add_sum,sum(`Score`.ml_sub_score) as ml_sub_sum,sum(`Score`.gl_add_score) as gl_add_sum,sum(`Score`.gl_sub_score) as gl_sub_sum,`AdminUser`.realname";
+        $data_list = ScoreModel::hasWhere('adminUser',$map1)->field($fields)->where($map)->group('`Score`.user')->order('gl_add_sum desc')->select();
+        $tmp = [];
+        if ($data_list) {
+            $rankratio = AdminCompany::getCompanyById($cid);
+            foreach ($data_list as $k => $v) {
+                $tmp[$v['user']] = $k + 1;
+            }
+
+            $a = $rankratio['min_rankratio'];
+            $b = $rankratio['max_rankratio'];
+            $n = count($tmp);
+            foreach ($tmp as $k => $v) {
+                $tmp[$k] = round($b - ($b - $a) / ($n -1) * ($v-1),4);
+            }
+        }
+        $where = [
+            'cid' => $cid,
+            'create_time' => ['between', [strtotime('yesterday'), strtotime(date('Y-m-d'))-1]],
+        ];
+        if ($tmp){
+            $i = 1;
+            foreach ($tmp as $k=>$v) {
+                $where['user'] = $k;
+                $data = [
+                    'time_rank'=>$i,
+                    'time_ratio'=>$v,
+                ];
+                ScoreModel::where($where)->update($data);
+                $i++;
+            }
         }
     }
 
