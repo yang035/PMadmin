@@ -177,7 +177,7 @@
                                 完成情况：<span style="color: green">[{$vo['realper']}%]</span>
                                 工作量：<span style="color: green">[{$vo['per']}%]</span>
                                 {if condition="$type neq 1 and $vo['status'] eq 1"}
-                                <a onclick="open_reply({$vo['id']},{$vo['project_id']})" class="layui-btn layui-btn-normal layui-btn-xs">意见</a>
+                                <a onclick="open_reply({$vo['id']},{$vo['project_id']})" class="layui-btn layui-btn-normal layui-btn-xs">评定</a>
                                 {/if}
                                 <br>
                                 {$vo['mark']}

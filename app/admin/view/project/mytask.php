@@ -116,12 +116,12 @@
 <!--            </div>-->
     {{#  if(d.realper >= 100 && d.real_score == 0){ }}
     <div class="layui-btn-group" onclick="add_score({{ d.id }},'{{ d.code }}','{{ d.name.replace(/<[^>]+>/g,\'\') }}')">
-        <a class="layui-btn layui-btn-normal layui-btn-xs">评分</a>
+<!--        <a class="layui-btn layui-btn-normal layui-btn-xs">评分</a>-->
     </div>
     {{#  }else if(d.realper < 100){ }}
-    <span style="color: green;">待完成</span>
+<!--    <span style="color: green;">待完成</span>-->
     {{#  }else{ }}
-    <span style="color: red;">已评定</span>
+<!--    <span style="color: red;">已评定</span>-->
     {{#  } }}
     {{#  } }}
 </script>
