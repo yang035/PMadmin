@@ -14,7 +14,7 @@
             <input type="number" class="layui-input field-realper" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" onblur="check_realper(this.value)" name="realper" autocomplete="off" placeholder="请输整数">
         </div>
         <div class="layui-form-mid red">%</div>
-        <div class="layui-form-mid">不能超过 <span id="realper">{$row_report['realper']}</span></div>
+        <div class="layui-form-mid">不能超过 <span id="realper">{$row['realper']}</span></div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">内容</label>
@@ -47,7 +47,7 @@
     });
     function check_realper(v) {
         var r = $('#realper').text();
-        if (Number(v) > Number(r)){
+        if (v > r){
             layer.msg('不能超过最大值'+r);
         }
     }

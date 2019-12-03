@@ -244,9 +244,7 @@ class Project extends Admin
                         $list[$kk]['project_name'] = $vv['name'];
                     }
 
-//                    $report = ProjectReport::getAll(5, $vv['id']);
-                    $subQuery = "SELECT * FROM (SELECT *,FROM_UNIXTIME(create_time,\"%Y-%m-%d\") AS t FROM tb_project_report WHERE  project_id={$vv['id']} AND cid={$cid} ORDER BY id DESC LIMIT 100) r GROUP BY r.t ORDER BY id DESC";
-                    $report = Db::query($subQuery);
+                    $report = ProjectReport::getAll(5, $vv['id']);
 
                     if ($report) {
                         foreach ($report as $k => $v) {
@@ -264,7 +262,6 @@ class Project extends Admin
                                 }
                                 $report[$k]['attachment'] = $tmp;
                             }
-                            $report[$k]['create_time'] = date('Y-m-d H:i:s',$v['create_time']);
                             $report_user = AdminUser::getUserById($v['user_id'])['realname'];
                             $report[$k]['real_name'] = !empty($report_user) ? $report_user : '';
                             $report[$k]['check_catname'] = ItemModel::getCat()[$v['check_cat']];
@@ -580,9 +577,7 @@ class Project extends Admin
                     $list[$kk]['project_name'] = $vv['name'];
                 }
 
-//                $report = ProjectReport::getAll(5,$vv['id']);
-                $subQuery = "SELECT * FROM (SELECT *,FROM_UNIXTIME(create_time,\"%Y-%m-%d\") AS t FROM tb_project_report WHERE  project_id={$vv['id']} AND cid={$cid} ORDER BY id DESC LIMIT 100) r GROUP BY r.t ORDER BY id DESC";
-                $report = Db::query($subQuery);
+                $report = ProjectReport::getAll(5,$vv['id']);
 
                 if ($report) {
                     foreach ($report as $k => $v) {
@@ -600,7 +595,6 @@ class Project extends Admin
                             }
                             $report[$k]['attachment'] = $tmp;
                         }
-                        $report[$k]['create_time'] = date('Y-m-d H:i:s',$v['create_time']);
                         $report_user = AdminUser::getUserById($v['user_id'])['realname'];
                         $report[$k]['real_name'] = !empty($report_user) ? $report_user : '';
                         $report[$k]['check_catname'] = ItemModel::getCat()[$v['check_cat']];
@@ -2271,17 +2265,7 @@ class Project extends Admin
         $map['id'] = $params['id'];
         $field = "*,JSON_EXTRACT(manager_user,'$.\"{$uid}\"') m_res,JSON_EXTRACT(send_user,'$.\"{$uid}\"') s_res,JSON_EXTRACT(deal_user,'$.\"{$uid}\"') d_res,JSON_EXTRACT(copy_user,'$.\"{$uid}\"') c_res";
         $row = ProjectModel::field($field)->where($map)->find()->toArray();
-
-        $time = ' 00:00:00';
-        $start_time = strtotime(explode(' ',$row['start_time'])[0].$time);
-        $end_time = strtotime ("+1 day", strtotime(explode(' ',$row['end_time'])[0].$time));
-        $now_time = strtotime(date('Y-m-d').$time);
-        $start = explode(' ',$row['start_time'])[0];
-        $end = explode(' ',$row['end_time'])[0];
-        $fenzhi = 1;
-        $fenmu = ($end_time-$start_time)/86400;
-
-        $row['time_long'] = $fenmu;
+        $row['time_long'] = floor((strtotime($row['end_time']) - strtotime($row['start_time'])) / 86400);
         $row['manager_user_id'] = $this->deal_data($row['manager_user']);
         $row['deal_user_id'] = $this->deal_data($row['deal_user']);
         $row['copy_user_id'] = $this->deal_data($row['copy_user']);
@@ -2301,22 +2285,20 @@ class Project extends Admin
         }else{
             $row['child'] = 0;
         }
-
         if (!($row['start_time'] == '0000-00-00 00:00:00' || $row['end_time'] == '0000-00-00 00:00:00' || $row['start_time'] >= $row['end_time'])){
-            if ($now_time < $start_time){
-                $row['time_per'] = 0;
-                $row['span'] = '任务未开始';
-            }elseif ($now_time > $end_time){
-                $row['time_per'] = 100;
-                $row['span'] = '任务已结束';
-            }else{
-                $row['time_per'] = round($fenzhi/$fenmu*100,2);
-                $row['span'] = "(耗时{$fenmu}天,起止日期{$start}~{$end})";
-            }
+            $fenzhi = (strtotime(date('Y-m-d').'23:59:59') - strtotime($row['start_time']))/3600;
+            $fenmu = (strtotime($row['end_time']) - strtotime($row['start_time'])) / 3600;
+            $row['time_per'] = ceil($fenzhi/$fenmu*100);
+            $row['time_per'] = $row['time_per'] > 100 ? 100 : $row['time_per'];
         }else{
             $row['time_per'] = 0;
+        }
+        if (time() > $row['end_time']){
+            $row['span'] = "(限定完成时间{$row['end_time']})";
+        }else{
             $row['span'] = '';
         }
+
 
         switch ($params['type']) {
             case 1:
@@ -2339,10 +2321,7 @@ class Project extends Admin
         $u_res_conf = config('other.res_type');
         $row['u_res_str'] = $u_res_conf[$row['u_res']];
 //print_r($row);
-//        $report = ProjectReport::getAll(5);
-        //按日期查看每天最新的一条记录
-        $subQuery = "SELECT * FROM (SELECT *,FROM_UNIXTIME(create_time,\"%Y-%m-%d\") AS t FROM tb_project_report WHERE  project_id={$params['id']} AND cid={$cid} ORDER BY id DESC LIMIT 100) r GROUP BY r.t ORDER BY id DESC";
-        $report = Db::query($subQuery);
+        $report = ProjectReport::getAll(5);
 
         if ($report) {
             foreach ($report as $k => $v) {
@@ -2356,13 +2335,11 @@ class Project extends Admin
                     }
                     $report[$k]['attachment'] = $tmp;
                 }
-                $report[$k]['create_time'] = $v['create_time'] = date('Y-m-d H:i:s',$v['create_time']);
                 if ($v['create_time'] > $row['end_time']){
                     $report[$k]['span'] = "(限定完成时间{$row['end_time']})";
                 }else{
                     $report[$k]['span'] = '';
                 }
-
                 $report_user = AdminUser::getUserById($v['user_id'])['nick'];
                 $report[$k]['real_name'] = !empty($report_user) ? $report_user : '';
                 $report[$k]['check_catname'] = ItemModel::getCat()[$v['check_cat']];

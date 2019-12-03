@@ -97,11 +97,11 @@
                 <div class="layui-card-header">成果反馈</div>
                 <form class="layui-form layui-form-pane" action="{:url('ProjectReport/add')}" method="post" id="editForm">
                     <div class="layui-form-item">
-                        <label class="layui-form-label">工作量</label>
+                        <label class="layui-form-label">计划完成百分比</label>
                         <div class="layui-form-mid red">{$data_info['time_per']}%{$data_info['span']}</div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label">完成情况</label>
+                        <label class="layui-form-label">实际完成百分比</label>
                         <div class="layui-input-inline">
                             <input type="number" class="layui-input field-realper" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="realper" lay-verify="required" autocomplete="off" placeholder="请输完成情况">
                         </div>
@@ -174,11 +174,11 @@
                             <div class="layui-timeline-title">
                                 <span style="color: red">[{$vo['real_name']}]</span>
                                 <span style="color: red">[{$vo['create_time']}]</span>
-                                完成情况：<span style="color: green">[{$vo['realper']}%]</span>
-                                工作量：<span style="color: green">[{$vo['per']}%]</span>
-                                {if condition="$type neq 1 and $vo['status'] eq 1"}
+                                完成百分比：<span style="color: green">[{$vo['realper']}%]</span>
+                                {neq name="type" value='1'}
+                                计划百分比：<span style="color: green">[{$vo['per']}%]</span>
                                 <a onclick="open_reply({$vo['id']},{$vo['project_id']})" class="layui-btn layui-btn-normal layui-btn-xs">意见</a>
-                                {/if}
+                                {/neq}
                                 <br>
                                 {$vo['mark']}
                                 <br>
