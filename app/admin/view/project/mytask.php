@@ -70,6 +70,11 @@
         <button onclick="ajax_send(3)" type="button" class="layui-btn layui-btn-normal layui-btn-radius">待完成</button>
         <button onclick="ajax_send(4)" type="button" class="layui-btn layui-btn-warm layui-btn-radius">待评定</button>
     </div>
+    {if condition="$Request.param.type eq 2"}
+    <div class="layui-btn-group fl">
+        <a href="{:url('managerReport')}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">汇总汇报</a>
+    </div>
+    {/if}
 </div>
 <table id="table1" class="layui-table" lay-filter="table1"></table>
 <script type="text/html" id="oper-col-1">

@@ -1256,7 +1256,7 @@ class Project extends Admin
         }
     }
 
-    public function getMajorItem($id,$major_cat=0,$major_item=0,$project_id=0,$change_user=0){
+    public function getMajorItem($id,$major_cat=0,$major_item=0,$project_id=0,$change_user=0,$filter_str=''){
         if ($project_id){
             $id = $project_id;
         }
@@ -1274,7 +1274,7 @@ class Project extends Admin
         }elseif ($change_user){
             $child_option = ProjectModel::getChilds2($m_id,$major_cat,$major_item,$change_user);
         }else{
-            $child_option = ProjectModel::getChilds($m_id,$major_cat,$major_item);
+            $child_option = ProjectModel::getChilds($m_id,$major_cat,$major_item,$filter_str);
         }
 
         echo json_encode($child_option);
@@ -2346,52 +2346,115 @@ class Project extends Admin
 
         if ($report) {
             foreach ($report as $k => $v) {
-                if (!empty($v['attachment'])){
-                    $attachment = explode(',',$v['attachment']);
-                    $attachment = array_filter($attachment);
-                    $tmp = [];
-                    foreach ($attachment as $kk=>$vv) {
-                        $tmp[$kk]['path'] = $vv;
-                        $tmp[$kk]['suffix'] = explode('.', $vv)[1];
+                if (empty($v['report_ids'])){
+                    if (!empty($v['attachment'])){
+                        $attachment = explode(',',$v['attachment']);
+                        $attachment = array_filter($attachment);
+                        $tmp = [];
+                        foreach ($attachment as $kk=>$vv) {
+                            $tmp[$kk]['path'] = $vv;
+                            $tmp[$kk]['suffix'] = explode('.', $vv)[1];
+                        }
+                        $report[$k]['attachment'] = $tmp;
                     }
-                    $report[$k]['attachment'] = $tmp;
-                }
-                $report[$k]['create_time'] = $v['create_time'] = date('Y-m-d H:i:s',$v['create_time']);
-                if ($v['create_time'] > $row['end_time']){
-                    $report[$k]['span'] = "(限定完成时间{$row['end_time']})";
-                }else{
-                    $report[$k]['span'] = '';
-                }
+                    $report[$k]['create_time'] = $v['create_time'] = date('Y-m-d H:i:s',$v['create_time']);
+                    if ($v['create_time'] > $row['end_time']){
+                        $report[$k]['span'] = "(限定完成时间{$row['end_time']})";
+                    }else{
+                        $report[$k]['span'] = '';
+                    }
 
-                $report_user = AdminUser::getUserById($v['user_id'])['nick'];
-                $report[$k]['real_name'] = !empty($report_user) ? $report_user : '';
-                $report[$k]['check_catname'] = ItemModel::getCat()[$v['check_cat']];
-                if (empty($row['child'])){
-                    $report[$k]['reply'] = ReportReply::getAll($v['id'], 5,2);
-                }else{
-                    $reply = ReportCheck::getAll($v['id'], 1);
-                    if ($reply){
-                        foreach ($reply as $key=>$val){
-                            $content = json_decode($val['content'], true);
-                            if ($content){
-                                foreach ($content as $kk=>$vv){
-                                    $content[$kk]['flag'] = $vv['flag'] ? '有' : '无';
-                                    $content[$kk]['person_user'] = $this->deal_data(user_array($vv['person_user']));
-                                    if (!isset($vv['isfinish'])){
-                                        $content[$kk]['isfinish'] = 0;
-                                    }
-                                    if (!isset($vv['remark'])){
-                                        $content[$kk]['remark'] = '';
+                    $report_user = AdminUser::getUserById($v['user_id'])['nick'];
+                    $report[$k]['real_name'] = !empty($report_user) ? $report_user : '';
+                    $report[$k]['check_catname'] = ItemModel::getCat()[$v['check_cat']];
+                    if (empty($row['child'])){
+                        $report[$k]['reply'] = ReportReply::getAll($v['id'], 5,2);
+                    }else{
+                        $reply = ReportCheck::getAll($v['id'], 1);
+                        if ($reply){
+                            foreach ($reply as $key=>$val){
+                                $content = json_decode($val['content'], true);
+                                if ($content){
+                                    foreach ($content as $kk=>$vv){
+                                        $content[$kk]['flag'] = $vv['flag'] ? '有' : '无';
+                                        $content[$kk]['person_user'] = $this->deal_data(user_array($vv['person_user']));
+                                        if (!isset($vv['isfinish'])){
+                                            $content[$kk]['isfinish'] = 0;
+                                        }
+                                        if (!isset($vv['remark'])){
+                                            $content[$kk]['remark'] = '';
+                                        }
                                     }
                                 }
+                                $reply[$key]['content'] = $content;
+                                $reply[$key]['user_name'] = AdminUser::getUserById($val['user_id'])['nick'];
                             }
-                            $reply[$key]['content'] = $content;
-                            $reply[$key]['user_name'] = AdminUser::getUserById($val['user_id'])['nick'];
+                        }
+                        $report[$k]['reply'] = $reply;
+                    }
+                }else{
+                    if (!empty($v['attachment'])){
+                        $attachment = explode(',',$v['attachment']);
+                        $attachment = array_filter($attachment);
+                        $tmp = [];
+                        foreach ($attachment as $kk=>$vv) {
+                            $tmp[$kk]['path'] = $vv;
+                            $tmp[$kk]['suffix'] = explode('.', $vv)[1];
+                        }
+                        $report[$k]['attachment'] = $tmp;
+                    }
+                    $report[$k]['create_time'] = $v['create_time'] = date('Y-m-d H:i:s',$v['create_time']);
+
+                    $report_user = AdminUser::getUserById($v['user_id'])['nick'];
+                    $report[$k]['real_name'] = !empty($report_user) ? $report_user : '';
+                    $report[$k]['check_catname'] = ItemModel::getCat()[$v['check_cat']];
+                    $w = [
+                        'id'=>['in',$v['report_ids']]
+                    ];
+                    $report1 = \app\admin\model\ProjectReport::where($w)->select();
+                    foreach ($report1 as $k1=>$v1) {
+                        if (!empty($v1['attachment'])){
+                            $attachment = explode(',',$v1['attachment']);
+                            $attachment = array_filter($attachment);
+                            $tmp = [];
+                            foreach ($attachment as $kk=>$vv) {
+                                $tmp[$kk]['path'] = $vv;
+                                $tmp[$kk]['suffix'] = explode('.', $vv)[1];
+                            }
+                            $report1[$k1]['attachment'] = $tmp;
+                        }
+
+                        $report_user = AdminUser::getUserById($v1['user_id'])['nick'];
+                        $report1[$k1]['real_name'] = !empty($report_user) ? $report_user : '';
+                        $report1[$k1]['check_catname'] = ItemModel::getCat()[$v1['check_cat']];
+                        if (empty($row['child'])){
+                            $report1[$k1]['reply'] = ReportReply::getAll($v1['id'], 5,2);
+                        }else{
+                            $reply = ReportCheck::getAll($v1['id'], 1);
+                            if ($reply){
+                                foreach ($reply as $key=>$val){
+                                    $content = json_decode($val['content'], true);
+                                    if ($content){
+                                        foreach ($content as $kk=>$vv){
+                                            $content[$kk]['flag'] = $vv['flag'] ? '有' : '无';
+                                            $content[$kk]['person_user'] = $this->deal_data(user_array($vv['person_user']));
+                                            if (!isset($vv['isfinish'])){
+                                                $content[$kk]['isfinish'] = 0;
+                                            }
+                                            if (!isset($vv['remark'])){
+                                                $content[$kk]['remark'] = '';
+                                            }
+                                        }
+                                    }
+                                    $reply[$key]['content'] = $content;
+                                    $reply[$key]['user_name'] = AdminUser::getUserById($val['user_id'])['nick'];
+                                }
+                            }
+                            $report1[$k1]['reply'] = $reply;
                         }
                     }
-                    $report[$k]['reply'] = $reply;
+                    $report[$k]['report1'] = $report1;
                 }
-
             }
         }
 //        print_r($report);
@@ -3340,6 +3403,125 @@ class Project extends Admin
             }
 
             $this->assign('plan', $plan);
+            $this->assign('mytask', ProjectModel::getMyTask(null));
+            return $this->fetch();
+        }
+
+    }
+
+    public function managerReport()
+    {
+        $p = $this->request->param();
+        if (empty($p)){
+            $this->assign('mytask', ProjectModel::getMyTask(null));
+            return $this->fetch('manager_r');
+        }else{
+            if ($this->request->isPost()){
+                $params = $this->request->post();
+                if (empty($params['project_id'])){
+                    return $this->error('请选择项目');
+                }
+                if (empty($params['major_item'])){
+                    return $this->error('请选择【项目负责】角色');
+                }
+
+                $p_res = ProjectModel::where('id', $params['project_id'])->find();
+                if (!$p_res) {
+                    return $this->error('项目不存在');
+                }
+
+                $time = ' 00:00:00';
+                $start_time = strtotime(explode(' ',$p_res['start_time'])[0].$time);
+                $end_time = strtotime ("+1 day", strtotime(explode(' ',$p_res['end_time'])[0].$time));
+                $now_time = strtotime(date('Y-m-d').$time);
+                $input_realper_max = ($end_time-$now_time)/86400*100;
+                $fenzhi = 1;
+                $fenmu = ($end_time-$start_time)/86400;
+                if ($now_time < $start_time){
+                    $data['per'] = 0;
+                }elseif ($now_time > $end_time){
+                    $data['per'] = 100;
+                }else{
+                    $data['per'] = round($fenzhi/$fenmu*100,2);
+                }
+
+                $small_major = ProjectModel::smallMajorDeal($params['project_id']);
+                $small_major_score = ProjectModel::getSmallMajorScore($params['project_id'],$params['major_cat']);
+                $uid = session('admin_user.uid');
+                $cid = session('admin_user.cid');
+
+                $data['cid'] = $cid;
+                $data['subject_id'] = $params['project_id'];
+                $data['name'] = $params['name'];
+                $data['remark'] = $params['name'];
+                $data['start_time'] = date('Y-m-d').' 00:00:00';
+                $data['end_time'] = date('Y-m-d').' 23:59:59';
+                $data['score'] = $small_major_score[$params['major_item']];
+//                $data['realper'] = $small_major_score[$params['major_item']];
+                $data['major_cat'] = $params['major_cat'];
+                $data['major_item'] = $params['major_item'];
+                $data['major_cat_name'] = $params['major_cat_name'];
+                $data['major_item_name'] = $small_major[$params['major_item']];
+                $data['user_id'] = $uid;
+                $data['pid'] = $params['project_id'];
+                $data['code'] = $this->getCode($p_res['code'], $params['project_id']);
+                $manager_user = json_decode($p_res['manager_user'],true);
+                if (key_exists($uid,$manager_user)){
+                    $data['manager_user'] = $p_res['copy_user'];
+                }else{
+                    $data['manager_user'] = $p_res['manager_user'];
+                }
+                $data['deal_user'] = user_array($uid);
+                $data['send_user'] = $p_res['send_user'];
+                $data['copy_user'] = $p_res['copy_user'];
+                $res = ProjectModel::create($data);
+                $r = [
+                    'cid'=>$cid,
+                    'project_id'=>$res['id'],
+                    'per'=>$data['per'],
+                    'realper'=>100,
+                    'mark'=>$params['mark'],
+                    'attachment'=>$params['attachment'],
+                    'user_id'=>$uid,
+                    'report_ids'=>implode(',',$params['report_ids']),
+                ];
+                $t = \app\admin\model\ProjectReport::create($r);
+                if (!$t) {
+                    return $this->error('添加失败！');
+                }
+                return $this->success("操作成功{$this->score_value}", url('index'));
+            }
+            $cid = session('admin_user.cid');
+            $where = [
+                'p.cid'=>$cid,
+                'p.subject_id'=>$p['project_id'],
+                'p.major_cat'=>1,
+                'r.report_ids'=>['=',''],
+                'r.create_time'=>['BETWEEN',[strtotime(date('Y-m-d')),time()]],
+            ];
+            $fields = "p.name,r.*";
+            $table = 'tb_project_report';
+            $p_res = db('project')->alias('p')->field($fields)
+                ->join("{$table} r", 'p.id = r.project_id', 'left')
+                ->where($where)->select();
+
+            if (!$p_res) {
+                return $this->error('任务不存在');
+            }else{
+                foreach ($p_res as $k=>$v) {
+                    $p_res[$k]['realname'] = AdminUser::getUserById($v['user_id'])['realname'];
+                }
+            }
+
+            $redis = service('Redis');
+            $default_user = $redis->get("pm:user:{$cid}");
+            if ($default_user) {
+                $user = json_decode($default_user);
+                $this->assign('data_info', (array)$user);
+            }
+            $task_name = date('Ymd').session('admin_user.realname').'汇总汇报';
+            $this->assign('task_name', $task_name);
+            $this->assign('p_res', $p_res);
             $this->assign('mytask', ProjectModel::getMyTask(null));
             return $this->fetch();
         }

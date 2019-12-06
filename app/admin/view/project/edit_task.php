@@ -195,6 +195,7 @@
                                 </ul>
                                 <br>
                                 {/notempty}
+                                {empty name="vo['report1']"}
                                 <ul>
                                     {volist name="vo['reply']" id="v"}
                                     <li>
@@ -204,6 +205,51 @@
                                     </li>
                                     {/volist}
                                 </ul>
+                                {else/}
+                                <ul class="layui-timeline">
+                                    {volist name="vo['report1']" id="vv"}
+                                    <li class="layui-timeline-item">
+                                        <i class="layui-icon layui-timeline-axis"></i>
+                                        <div class="layui-timeline-content layui-text">
+                                            <div class="layui-timeline-title">
+                                                <span style="color: red">[{$vv['real_name']}]</span>
+                                                <span style="color: red">[{$vv['create_time']}]</span>
+                                                完成情况：<span style="color: green">[{$vv['realper']}%]</span>
+                                                工作量：<span style="color: green">[{$vv['per']}%]</span>
+                                                {if condition="$type neq 1 and $vv['status'] eq 1"}
+                                                <a onclick="open_reply({$vv['id']},{$vv['project_id']})" class="layui-btn layui-btn-normal layui-btn-xs">评定</a>
+                                                {/if}
+                                                <br>
+                                                {$vv['mark']}
+                                                <br>
+                                                {notempty name="vv['span']"}
+                                                {$vv['span']}
+                                                <br>
+                                                {/notempty}
+                                                {notempty name="vv['attachment']"}
+                                                附件：
+                                                <ul>
+                                                    {volist name="vv['attachment']" id="v"}
+                                                    <a target="_blank" href="{$v['path']}">{$v['suffix']}{$i}</a>
+                                                    {/volist}
+                                                </ul>
+                                                <br>
+                                                {/notempty}
+                                                <ul>
+                                                    {volist name="vv['reply']" id="v"}
+                                                    <li>
+                                                        <span style="color: green">[{$v['real_name']}]</span>
+                                                        <span style="color: grey">[{$v['create_time']}评价]</span>&nbsp;&nbsp;<span style="color: green">[{$v['realper']}%]</span><br>
+                                                        {$v['content']}
+                                                    </li>
+                                                    {/volist}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {/volist}
+                                </ul>
+                                {/empty}
                             </div>
                         </div>
                     </li>

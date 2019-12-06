@@ -446,7 +446,7 @@ class Project extends Model
         return $tmp;
     }
 
-    public static function getChilds($id=1,$major_cat=0,$major_item=0)
+    public static function getChilds($id=1,$major_cat=0,$major_item=0,$filter_str='')
     {
         $map = [
             'cid'=>session('admin_user.cid'),
@@ -461,10 +461,20 @@ class Project extends Model
                 foreach ($small_major_deal as $key => $val) {
                     if ($major_cat == $val['id']){
                         foreach ($val['child'] as $k => $v) {
-                            if ($major_item == $v['id']) {
-                                $str .= '<option value="'.$v['id'].'" selected>'.$v['name'].'</option>';
-                            } else {
-                                $str .= '<option value="'.$v['id'].'">'.$v['name'].'</option>';
+                            if (empty($filter_str)){
+                                if ($major_item == $v['id']) {
+                                    $str .= '<option value="'.$v['id'].'" selected>'.$v['name'].'</option>';
+                                } else {
+                                    $str .= '<option value="'.$v['id'].'">'.$v['name'].'</option>';
+                                }
+                            }else{
+                                if (strstr($v['name'],$filter_str)){
+                                    if ($major_item == $v['id']) {
+                                        $str .= '<option value="'.$v['id'].'" selected>'.$v['name'].'</option>';
+                                    } else {
+                                        $str .= '<option value="'.$v['id'].'">'.$v['name'].'</option>';
+                                    }
+                                }
                             }
                         }
                         break;
