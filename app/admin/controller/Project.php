@@ -3496,14 +3496,15 @@ class Project extends Admin
                 'p.cid'=>$cid,
                 'p.subject_id'=>$p['project_id'],
                 'p.major_cat'=>1,
-                'r.report_ids'=>['=',''],
                 'r.create_time'=>['BETWEEN',[strtotime(date('Y-m-d')),time()]],
             ];
             $fields = "p.name,r.*";
             $table = 'tb_project_report';
             $p_res = db('project')->alias('p')->field($fields)
                 ->join("{$table} r", 'p.id = r.project_id', 'left')
-                ->where($where)->select();
+                ->where($where)
+                ->where("r.report_ids is null")
+                ->select();
 
             if (!$p_res) {
                 return $this->error('任务不存在');

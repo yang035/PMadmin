@@ -191,7 +191,10 @@
                                     if (n > 1){
                                         t += '<br>';
                                     }
-                                    t += '('+ n +')'+value.mark;
+                                    t += value.real_name+'('+ value.create_time +')  '+value.realper+'%<br>'+value.mark;
+                                    if(1 == value.status && 2 == type){
+                                        t += '  <a onclick="open_reply('+ value.id +','+ value.project_id +')" class="layui-btn layui-btn-normal layui-btn-xs">评定</a>';
+                                    }
                                     if (value.attachment.length > 0){
                                         t += '<ul class="liulan">';
                                         $.each(value.attachment,function(i,v){
@@ -209,7 +212,7 @@
                                     if (value.reply.length > 0){
                                         t += '<br>';
                                         $.each(value.reply,function(k,val){
-                                            t += '意见：<font style="color: blue">'+val.content+'</font>';
+                                            t += '意见：<font style="color: blue">'+val.content+'</font>  ';
                                         });
                                     }
 
