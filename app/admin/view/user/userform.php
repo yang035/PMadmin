@@ -293,7 +293,8 @@
             select_union(1);
         }
 
-        function select_union(id,gid=0){
+        function select_union(id,gid){
+            var id=id,gid=gid||0;
             $.ajax({
                 type: 'POST',
                 url: "{:url('getJobItem')}",

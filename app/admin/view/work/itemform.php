@@ -118,7 +118,8 @@
             select_union(formData.cat_id,formData.group_id);
         }
 
-        function select_union(id,gid=0){
+        function select_union(id,gid){
+            var id=id,gid=gid||0;
             $.ajax({
                 type: 'POST',
                 url: "{:url('getGroupItem')}",

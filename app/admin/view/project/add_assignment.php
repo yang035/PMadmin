@@ -255,7 +255,8 @@ layui.use(['jquery', 'laydate','upload','form'], function() {
     select_union('',1,1,'{$Request.param.project_id}');
     select_union('{$Request.param.project_id}',1);
 
-    function select_union(id,major_cat=0,major_item=0,project_id=0){
+    function select_union(id,major_cat,major_item,project_id){
+        var id=id,major_cat=major_cat||0,major_item=major_item||0,project_id=project_id||0;
         $.ajax({
             type: 'POST',
             url: "{:url('getMajorItem')}",
