@@ -8,7 +8,7 @@ class AdminUser extends Validate
     //定义验证规则
     protected $rule = [
         'username|用户名' => 'require|alphaNum|unique:admin_user',
-        'realname|真实姓名'       => 'require|unique:admin_user',
+        'realname|真实姓名'       => 'require',
         'role_id|角色'    => 'requireWith:role_id|notIn:0,1',
         'email|邮箱'     => 'requireWith:email|email|unique:admin_user',
         'password|密码'  => 'require|length:6,20|confirm',
