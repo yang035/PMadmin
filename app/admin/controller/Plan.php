@@ -29,6 +29,9 @@ class Plan extends Admin
                 'url' => 'admin/plan/index',
             ],
         ];
+        if (2 != session('admin_user.cid')){
+            array_shift($tab_data['menu']);
+        }
         $this->tab_data = $tab_data;
     }
 
@@ -235,7 +238,7 @@ class Plan extends Admin
                 $plan_type = array_unique(array_column($res['data'], 'B'));
 
                 $w = [
-                    'cid'=>$cid,
+                    'cid'=>2,//读取2的专业大类
                     'status'=>1,
                 ];
                 $m_t = CatModel::where($w)->column('name','id');

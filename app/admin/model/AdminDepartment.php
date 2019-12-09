@@ -44,7 +44,7 @@ class AdminDepartment extends Model
             'status'=>1,
             'is_show'=>0,
         ];
-        if ($map['company_id'] == 3){
+        if ($map['company_id'] == 4){
             $map['id'] = session('admin_user.uid');
         }
         $user = AdminUser::where($map)->select();

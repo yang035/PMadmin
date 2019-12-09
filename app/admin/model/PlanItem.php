@@ -17,7 +17,7 @@ class PlanItem extends Model
     public static function getOption($type = 0)
     {
         $map = [
-            'cid'=>session('admin_user.cid'),
+            'cid'=>2,//只有公司为2的才可以添加模板类型
             'status'=>1,
         ];
         $data = CatModel::where($map)->select();
