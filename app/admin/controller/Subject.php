@@ -458,6 +458,7 @@ class Subject extends Admin
         $row = ItemModel::where('id', $id)->find()->toArray();
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data['manager_user'] = $data['leader_user'];
             $t = [];
             $deal_user = '';
             foreach ($data as $k => $v) {
@@ -467,7 +468,7 @@ class Subject extends Admin
                 $deal_user .= ','.$v;
                 if ($k == 'send_user'){
                     $data[$k] = user_array1($v);
-                }elseif ($k == 'copy_user' || $k == 'leader_user'){
+                }elseif ($k == 'copy_user' || $k == 'leader_user' || $k == 'manager_user'){
                     $data[$k] = user_array($v);
                 }else{
                     $t[explode('_',$k)[0]] = trim($v, ',');
@@ -494,7 +495,7 @@ class Subject extends Admin
                     'subject_id'=>$data['id'],
                 ];
                 $tmp = [
-//                    'manager_user'=>$data['manager_user'],
+                    'manager_user'=>$data['manager_user'],
                     'send_user'=>$data['send_user'],
                     'leader_user'=>$data['leader_user'],
                     'deal_user'=>$data['deal_user'],

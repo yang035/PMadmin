@@ -906,7 +906,8 @@ class Approval extends Admin
 
             $send_user = html_entity_decode($data['send_user']);
             $send_user1 = json_decode($send_user,true);
-            $send_user1 = array_values(array_unique($send_user1, SORT_REGULAR));
+//            $send_user1 = array_values(array_unique($send_user1, SORT_REGULAR));
+            $send_user1 = array_values($send_user1);
             if (count($send_user1) > 2){
                 array_pop($send_user1);
             }
