@@ -185,8 +185,8 @@
         <label class="layui-form-label">抄送人</label>
         <div class="layui-input-inline">
             <button type="button" class="layui-btn" id="copy_user_id">选择抄送人</button>
-            <div id="copy_select_id">{$data_info['hr_finance_user_id']|default=''}</div>
-            <input type="hidden" name="copy_user" id="copy_user" value="{$data_info['hr_finance_user']|default=''}">
+            <div id="copy_select_id">{$data_info['finance_user_id']|default=''}</div>
+            <input type="hidden" name="copy_user" id="copy_user" value="{$data_info['finance_user']|default=''}">
         </div>
     </div>
     <div class="layui-form-item">
