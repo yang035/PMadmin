@@ -872,6 +872,7 @@ class Project extends Admin
         $this->assign('grade_type', ProjectModel::getGrade());
         $this->assign('cat_id', ProjectModel::getPtype());
         $this->assign('p_source', ProjectModel::getPsource());
+        $this->assign('is_period', ProjectModel::getPeriod());
         $this->assign('major_option', ProjectModel::getOption1());
         $this->assign('mytask', ProjectModel::getMyTask(null));
         return $this->fetch('form');
@@ -1130,6 +1131,7 @@ class Project extends Admin
         $this->assign('grade_type', ProjectModel::getGrade($row['grade']));
         $this->assign('cat_id', ProjectModel::getPtype($row['cat_id']));
         $this->assign('p_source', ProjectModel::getPsource($row['p_source']));
+        $this->assign('is_period', ProjectModel::getPeriod($row['is_period']));
         $this->assign('major_option', ProjectModel::getOption1($m_id,$row['major_cat']));
         $this->assign('mytask', ProjectModel::getMyTask($row['subject_id']));
         return $this->fetch();
@@ -1247,8 +1249,8 @@ class Project extends Admin
         return $this->fetch('form');
     }
 
-    public function getSmallMajorScore($id,$major_cat=0,$major_item=0,$f=0){
-        $score = ProjectModel::getSmallMajorScore($id,$major_cat,$major_item);
+    public function getSmallMajorScore($id,$major_cat=0,$major_item=0,$f=0,$t_s=0){
+        $score = ProjectModel::getSmallMajorScore($id,$major_cat,$major_item,$t_s);
         if (!$f){
             echo json_encode($score);
         }else{
@@ -2280,13 +2282,14 @@ class Project extends Admin
         $end = explode(' ',$row['end_time'])[0];
         $fenzhi = 1;
         $fenmu = ($end_time-$start_time)/86400;
-
+        $is_period = config('other.is_period');
         $row['time_long'] = $fenmu;
         $row['manager_user_id'] = $this->deal_data($row['manager_user']);
         $row['deal_user_id'] = $this->deal_data($row['deal_user']);
         $row['copy_user_id'] = $this->deal_data($row['copy_user']);
         $row['send_user_id'] = $this->deal_data($row['send_user']);
         $row['user_id'] = AdminUser::getUserById($row['user_id'])['nick'];
+        $row['is_period'] = $is_period[$row['is_period']];
         if ($row){
             if (!empty($row['attachment'])){
                 $attachment = explode(',',$row['attachment']);
@@ -3406,6 +3409,208 @@ class Project extends Admin
             $this->assign('mytask', ProjectModel::getMyTask(null));
             return $this->fetch();
         }
+
+    }
+
+    public function addTemplate2()
+    {
+        $p = $this->request->param();
+        if (empty($p['id'])){
+            return $this->error('不能修改编号');
+        }
+
+        $p_res = ProjectModel::where('id', $p['id'])->find();
+        if (!$p_res) {
+            return $this->error('任务不存在');
+        }else{
+            $p_res['manager_user_id'] = $this->deal_data($p_res['manager_user']);
+        }
+//        print_r($p_res);
+        if ($this->request->isPost()){
+            $params = $this->request->post();
+            $data['code'] = $p_res['code'];
+//            print_r($params);
+            foreach ($params as $k=>$v) {
+                if (is_array($v)){
+                    $params[$k] = array_filter($v);
+                    //添加判断当参与人为空时，参与人默认是负责人
+                    if (empty($params[$k])){
+                        return $this->error('请补充完整信息');
+                    }
+                }
+            }
+            $data = [];
+            foreach ($params as $k=>$v) {
+                if (is_array($v)){
+                    if ($params['score']){
+                        foreach ($params['score'] as $kk=>$vv) {
+                            if (isset($params[$k][$kk])){
+                                $data[$kk]['subject_id'] = $p_res['subject_id'];
+                                $data[$kk]['major_cat'] = $p_res['major_cat'];
+                                if($params['start_time'][$kk] > $params['end_time'][$kk]){
+                                    return $this->error('结束时间不能小于开始时间');
+                                }
+                                if($params['end_time'][$kk] > $p_res['end_time']){
+                                    return $this->error('结束时间不能大于上级任务结束时间');
+                                }
+                                $data[$kk]['name'] = $params['name'][$kk];
+                                $data[$kk]['remark'] = $params['name'][$kk];
+                                $data[$kk]['major_item'] = $p_res['major_item'];
+                                $data[$kk]['major_cat_name'] = $p_res['major_cat_name'];
+                                $data[$kk]['major_item_name'] = $p_res['major_item_name'];
+                                $data[$kk]['score'] = $params['score'][$kk];
+                                $data[$kk]['start_time'] = $params['start_time'][$kk].' 00:00:00';
+                                $data[$kk]['end_time'] = $params['end_time'][$kk].' 23:59:59';
+                                $data[$kk]['cid'] = session('admin_user.cid');
+                                $data[$kk]['user_id'] = session('admin_user.uid');
+                                $data[$kk]['pid'] = $params['id'];
+                                $data[$kk]['code'] = $this->getCode($p_res['code'], $params['id']);
+                                $data[$kk]['manager_user'] = $p_res['deal_user'];
+                                $data[$kk]['deal_user'] = user_array($params['deal_user'][$kk]);
+                                $data[$kk]['send_user'] = $p_res['send_user'];
+                                $data[$kk]['copy_user'] = $p_res['copy_user'];
+                                $data[$kk]['create_time'] = time();
+                                $data[$kk]['update_time'] = time();
+                            }else{
+                                return $this->error("{$params['name'][$kk]},请补充完整信息");
+                            }
+                        }
+                    }else{
+                        return $this->error('任务至少添加一行');
+                    }
+                }
+            }
+            $score = array_sum(array_column($data,'score'));
+            $old_score = $p_res['score'] - $p_res['real_score'];
+            if ($score >= $old_score){
+                return $this->error("斗值总和不能超过上级任务剩余斗值{$old_score}");
+            }
+            if ($data){
+                $res = db('project')->insertAll($data);
+                if (!$res) {
+                    return $this->error("添加失败！");
+                }
+                return $this->success("操作成功{$this->score_value}", url('index'));
+            }
+        }
+
+        $this->assign('p_data', $p_res);
+        $this->assign('select_user', AdminUser::selectUser());
+        return $this->fetch();
+    }
+
+    public function addTemplate3()
+    {
+        $p = $this->request->param();
+        if (empty($p['id'])){
+            return $this->error('不能修改编号');
+        }
+
+        $p_res = ProjectModel::where('id', $p['id'])->find();
+        if (!$p_res) {
+            return $this->error('任务不存在');
+        }else{
+            $p_res['manager_user_id'] = $this->deal_data($p_res['manager_user']);
+        }
+        if ($this->request->isPost()){
+            $params = $this->request->post();
+
+            $data['code'] = $p_res['code'];
+            foreach ($params as $k=>$v) {
+                if (is_array($v)){
+                    $params[$k] = array_filter($v);
+                    if (empty($params[$k])){
+                        return $this->error('请补充完整信息');
+                    }
+                }
+            }
+            $data = [];
+            $tmp = [];
+            $big_major = ProjectModel::getBigMajorArr($p_res['subject_id']);
+            $small_major = ProjectModel::smallMajorDeal($p_res['subject_id']);
+            foreach ($params as $k=>$v) {
+                if (is_array($v)){
+                    if ($params['score']){
+                        foreach ($params['score'] as $kk=>$vv) {
+                            //当score有值的时候，同行都必填
+                            if (isset($params['name'][$kk]) && isset($params['major_item'][$kk]) && isset($params['score'][$kk]) && isset($params['start_time'][$kk]) && isset($params['end_time'][$kk]) && isset($params['deal_user'][$kk])){
+                                $data[$kk]['subject_id'] = $p_res['subject_id'];
+                                $data[$kk]['major_cat'] = $p_res['major_cat'];
+                                if($params['start_time'][$kk] > $params['end_time'][$kk]){
+                                    return $this->error('结束时间不能小于开始时间');
+                                }
+                                if($params['end_time'][$kk] > $p_res['end_time']){
+                                    return $this->error('结束时间不能大于阶段任务结束时间');
+                                }
+                                $data[$kk]['name'] = $params['name'][$kk];
+                                $data[$kk]['remark'] = $params['name'][$kk];
+                                $data[$kk]['major_item'] = $params['major_item'][$kk];
+                                $data[$kk]['major_cat_name'] = $big_major[$p_res['major_cat']];
+                                $data[$kk]['major_item_name'] = $small_major[$params['major_item'][$kk]];
+                                $data[$kk]['score'] = $params['score'][$kk];
+                                $data[$kk]['start_time'] = $params['start_time'][$kk].' 00:00:00';
+                                $data[$kk]['end_time'] = $params['end_time'][$kk].' 23:59:59';
+                                $data[$kk]['cid'] = session('admin_user.cid');
+                                $data[$kk]['user_id'] = session('admin_user.uid');
+                                $data[$kk]['pid'] = $p_res['id'];
+                                $data[$kk]['code'] = $this->getCode($p_res['code'], $p_res['id']);
+                                $data[$kk]['manager_user'] = $p_res['deal_user'];
+                                $data[$kk]['deal_user'] = user_array($params['deal_user'][$kk]);
+                                $data[$kk]['send_user'] = $p_res['send_user'];
+                                $data[$kk]['copy_user'] = $p_res['copy_user'];
+                                $data[$kk]['create_time'] = time();
+                                $data[$kk]['update_time'] = time();
+                                $tmp[$params['major_item'][$kk]] = 0;
+                            }else{
+                                return $this->error("{$params['name'][$kk]},请补充完整信息");
+                            }
+                        }
+                    }else{
+                        return $this->error('任务至少添加一行');
+                    }
+                }
+            }
+            if ($data){
+                //添加验证按照计算不能超过最大值
+                foreach ($data as $k=>$v) {
+                    $tmp[$v['major_item']] += $v['score'];
+                }
+                $small_major_score = $this->getSmallMajorScore($p_res['subject_id'],$p_res['major_cat'],0,1,$p_res['score']-$p_res['real_score']);
+                foreach ($tmp as $k=>$v) {
+                    if ($v > $small_major_score[$k]){
+                        $this->error('专业比例产值超过最大值['.$small_major_score[$k].']');
+                    }
+                }
+                $res = db('project')->insertAll($data);
+                if (!$res) {
+                    return $this->error('添加失败！');
+                }
+                return $this->success("操作成功{$this->score_value}", url('index'));
+            }
+        }
+
+        $w = [
+            'cid' => session('admin_user.cid'),
+            'cat_id' => $p_res['major_cat'],
+            'status' => 1
+        ];
+        $plan = PlanModel::where($w)->select();
+        if (!$plan) {
+            return $this->error('专业分类不存在对应模板，请选择手工添加');
+        }
+
+        $cid = session('admin_user.cid');
+        $redis = service('Redis');
+        $default_user = $redis->get("pm:user:{$cid}");
+        if ($default_user) {
+            $user = json_decode($default_user);
+            $this->assign('data_info', (array)$user);
+        }
+
+        $this->assign('plan', $plan);
+        $this->assign('p_data', $p_res);
+        $this->assign('mytask', ProjectModel::getMyTask(null));
+        return $this->fetch();
 
     }
 

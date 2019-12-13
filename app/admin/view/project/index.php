@@ -84,9 +84,14 @@
     <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="read">详情</a>
 <!--    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="add">添加计划</a>-->
     {{#  if(d.pid > 0){ }}
+    {eq name="$Think.session.admin_user.role_id" value='3'}
     <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">修改</a>
+    {/eq}
     {{#  }else{ }}
     <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="import">导入</a>
+    {{#  } }}
+    {{#  if(d.is_period == 2){ }}
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="handout">下发</a>
     {{#  } }}
     <!--            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
 </script>
@@ -250,6 +255,9 @@
                     var open_url = "{:url('edit')}?id="+id+"&atype="+atype;
                     window.location.href = open_url;
                 }
+            }else if (layEvent === 'handout') {
+                var open_url = "{:url('addTemplate3')}?id="+id+"&atype="+atype+"&project_name="+project_name;
+                window.location.href = open_url;
             } else if (layEvent === 'dep_auth') {
                 var open_url = "{:url('depAuth')}?id=" + id;
                 window.location.href = open_url;

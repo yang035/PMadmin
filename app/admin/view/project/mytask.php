@@ -115,6 +115,11 @@
         <a class="layui-btn layui-btn-normal layui-btn-xs">确认</a>
     </div>
     {{#  } }}
+        {{#  if(d.status == 1 && type == 1 && d.child == 0 && d.realper < 100){ }}
+        <div class="layui-btn-group" onclick="add_template({{ d.id }},'{{ d.code }}','{{ d.name.replace(/<[^>]+>/g,\'\') }}')">
+            <a class="layui-btn layui-btn-normal layui-btn-xs">协助</a>
+        </div>
+        {{#  } }}
     {{#  if(d.status == 1 && type == 2 && d.child == 0){ }}
 <!--            <div class="layui-btn-group" onclick="check_result({{ d.id }},'{{ d.name }}')">-->
 <!--                <a class="layui-btn layui-btn-normal layui-btn-xs">审核</a>-->
@@ -279,6 +284,11 @@
             success:function (layero, index) {
             }
         });
+    }
+
+    function add_template(id,code,pname){
+        var open_url = "{:url('addTemplate2')}?id="+id+"&code="+code+"&pname="+pname;
+        window.location.href = open_url;
     }
 
     function ajax_send(p_status){

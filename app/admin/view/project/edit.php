@@ -101,7 +101,14 @@
 <!--    </div>-->
 <!--    <hr>-->
 <!--    {/empty}-->
-
+    <div class="layui-form-item">
+        <label class="layui-form-label">任务类型</label>
+        <div class="layui-input-inline">
+            <select name="is_period" class="field-is_period" type="select" lay-filter="is_period">
+                {$is_period}
+            </select>
+        </div>
+    </div>
     <div class="layui-form-item">
         <label class="layui-form-label">预设产量</label>
         <div class="layui-input-inline">

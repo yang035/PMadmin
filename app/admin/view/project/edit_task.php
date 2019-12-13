@@ -49,6 +49,8 @@
                             <br>
                             专业类型：{$data_info['major_cat_name']}--{$data_info['major_item_name']}
                             <br>
+                            任务类型：{$data_info['is_period']}
+                            <br>
                             预设产量：{$data_info['score']}
                             <br>
                             开始时间：{$data_info['start_time']}

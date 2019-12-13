@@ -106,6 +106,14 @@
 <!--    {/empty}-->
 <!--    </div>-->
     <div class="layui-form-item">
+        <label class="layui-form-label">任务类型</label>
+        <div class="layui-input-inline">
+            <select name="is_period" class="field-is_period" type="select" lay-filter="is_period">
+                {$is_period}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">预设产量</label>
         <div class="layui-input-inline">
             <input type="number" class="layui-input field-score" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="score" lay-verify="required" autocomplete="off" placeholder="请输入预设值">

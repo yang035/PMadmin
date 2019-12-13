@@ -421,7 +421,7 @@ class Project extends Model
         return $r;
     }
 
-    public static function getSmallMajorScore($id=1,$major_cat=0,$major_item=0)
+    public static function getSmallMajorScore($id=1,$major_cat=0,$major_item=0,$t_s=0)
     {
         $map = [
             'cid'=>session('admin_user.cid'),
@@ -431,6 +431,9 @@ class Project extends Model
         $data = self::field($fields)->where($map)->find();
         $tmp = [];
         if ($data){
+            if ($t_s > 0){
+                $data['score'] = $t_s;
+            }
             $small_major_deal = json_decode($data['small_major_deal'],true);
             if ($small_major_deal){
                 foreach ($small_major_deal as $key => $val) {
@@ -628,5 +631,19 @@ class Project extends Model
         }else{
             return [];
         }
+    }
+
+    public static function getPeriod($type = 0)
+    {
+        $p_status = config('other.is_period');
+        $str = '';
+        foreach ($p_status as $k => $v) {
+            if ($type == $k) {
+                $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+            } else {
+                $str .= '<option value="'.$k.'">'.$v.'</option>';
+            }
+        }
+        return $str;
     }
 }

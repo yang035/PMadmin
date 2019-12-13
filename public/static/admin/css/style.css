@@ -123,7 +123,7 @@ body {background-color:#fff}
 .layui-layout-admin {min-width:1000px}
 .layui-form-label {min-width:90px}
 .layui-tab-title li {padding:0 10px}
-.layui-form-mid {font-size:12px!important}
+/*.layui-form-mid {font-size:12px!important}*/
 .layui-table-cell {min-height:28px;height:auto!important}
 .hisi-themes {overflow:hidden;width:282px}
 .hisi-themes li {float:left;width:40px;height:40px;overflow:hidden;margin:2px;border:1px solid #efefef;cursor:pointer}
