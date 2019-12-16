@@ -1,6 +1,6 @@
 {include file="block/layui" /}
-<link rel="stylesheet" href="__ADMIN_JS__/viewer/viewer.min.css">
-<script src="__ADMIN_JS__/viewer/viewer.min.js"></script>
+<!--<link rel="stylesheet" href="__ADMIN_JS__/viewer/viewer.min.css">-->
+<!--<script src="__ADMIN_JS__/viewer/viewer.min.js"></script>-->
 <style>
     .layui-form-item .layui-input-inline {
         float: left;
@@ -104,7 +104,7 @@
                                     $.each(value.attachment,function(i,v){
                                         var m = parseInt(i)+1;
                                         if (v.is_img) {
-                                            t += '<img data-original="'+v.path+'" src="/upload/anli.png" style="width: 30px;height: 30px">  ';
+                                            t += '<a target="_blank" href="'+v.path+'" style="color: red"><img src="/upload/anli.png" style="width: 30px;height: 30px"></a>  ';
                                         }else {
                                             t += '<a target="_blank" href="'+v.path+'" style="color: red">'+v.path.split('.').pop()+m+'</a>,';
                                         }
@@ -143,9 +143,9 @@
                 {field: 'user_name', title: '添加人',width:80},
             ]],
             done: function () {
-                $('.liulan').viewer({
-                    url: 'data-original',
-                });
+                // $('.liulan').viewer({
+                //     url: 'data-original',
+                // });
                 layer.closeAll('loading');
             }
         });
