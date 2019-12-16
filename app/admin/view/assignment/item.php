@@ -104,7 +104,7 @@
                                     $.each(value.attachment,function(i,v){
                                         var m = parseInt(i)+1;
                                         if (v.is_img) {
-                                            t += '<a target="_blank" href="'+v.path+'" style="color: red"><img src="/upload/anli.png" style="width: 30px;height: 30px"></a>  ';
+                                            t += '<a href="'+v.path+'" style="color: red"><img src="/upload/anli.png" style="width: 30px;height: 30px"></a>  ';
                                         }else {
                                             t += '<a target="_blank" href="'+v.path+'" style="color: red">'+v.path.split('.').pop()+m+'</a>,';
                                         }
