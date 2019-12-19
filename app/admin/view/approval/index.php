@@ -64,6 +64,7 @@
             <th>项目名称</th>
             <th>金额(元)</th>
             <th>审批人</th>
+            <th>同行人</th>
             <th>添加时间</th>
             <th>状态</th>
             <th>审批意见</th>
@@ -85,6 +86,7 @@
             <td class="font12">{$vo['project_name']}</td>
             <td class="font12">{$vo['money']}</td>
             <td class="font12">{$vo['send_user']}</td>
+            <td class="font12">{$vo['fellow_user']}</td>
             <td class="font12">{$vo['create_time']}</td>
             <td class="font12">{$approval_status[$vo['status']]}</td>
             <td class="font12">{$vo['mark']}</td>

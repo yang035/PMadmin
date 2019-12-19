@@ -194,6 +194,7 @@ class Approval extends Admin
 //        print_r($list);exit();
             foreach ($list as $k => $v) {
                 $list[$k]['send_user'] = strip_tags($this->deal_data($v['send_user']));
+                $list[$k]['fellow_user'] = strip_tags($this->deal_data($v['fellow_user']));
                 $list[$k]['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
 
                 $list[$k]['money'] = '#';
@@ -253,6 +254,7 @@ class Approval extends Admin
             $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
             $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(10);
             $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(30);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(30);
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A1', '姓名')
                 ->setCellValue('B1', '类型')
@@ -266,7 +268,8 @@ class Approval extends Admin
                 ->setCellValue('J1', '状态')
                 ->setCellValue('K1', '审批意见')
                 ->setCellValue('L1', '审批时间')
-                ->setCellValue('M1', '支付结果');
+                ->setCellValue('M1', '支付结果')
+                ->setCellValue('N1', '同行人');
 //            print_r($data_list);exit();
             foreach ($list as $k => $v) {
                 $num = $k + 2;
@@ -284,7 +287,8 @@ class Approval extends Admin
                     ->setCellValue('J' . $num, $approval_status[$v['status']])
                     ->setCellValue('K' . $num, $v['mark'])
                     ->setCellValue('L' . $num, $v['update_time'])
-                    ->setCellValue('M' . $num, $v['deal_mark']);
+                    ->setCellValue('M' . $num, $v['deal_mark'])
+                    ->setCellValue('N' . $num, $v['fellow_user']);
             }
             $d = !empty($d) ? $d : '全部';
             $name = $d.'日常审批统计';
@@ -302,6 +306,7 @@ class Approval extends Admin
 
         foreach ($list as $k => $v) {
             $list[$k]['send_user'] = $this->deal_data($v['send_user']);
+            $list[$k]['fellow_user'] = strip_tags($this->deal_data($v['fellow_user']));
             $list[$k]['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
             $list[$k]['money'] = '#';
             $list[$k]['leave_type'] = '#';
