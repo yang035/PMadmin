@@ -285,7 +285,7 @@
                                 <ul>
                                     {volist name="vo['attachment']" id="v"}
                                     <li>
-                                        <a target="_blank" href="{$v}">附件{$i}</a>
+                                        <a target="_blank" href="{$v['path']}">{$v['suffix']}{$i}</a>
                                     </li>
                                     {/volist}
                                 </ul>
