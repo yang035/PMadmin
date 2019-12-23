@@ -239,7 +239,8 @@ class Project extends Admin
                     $list[$kk]['grade'] = $grade_type[$vv['grade']];
 
                     if (0 != $vv['pid']) {
-                        $list[$kk]['project_name'] = $myPro[$vv['subject_id']]."[{$bigMajorArr[$vv['major_cat']]}]";
+                        $big_major_name = isset($bigMajorArr[$vv['major_cat']]) ? $bigMajorArr[$vv['major_cat']] : '无';
+                        $list[$kk]['project_name'] = $myPro[$vv['subject_id']]."[{$big_major_name}]";
                     } else {
                         $list[$kk]['project_name'] = $vv['name'];
                     }
