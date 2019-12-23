@@ -274,8 +274,8 @@
                                 计划百分比：<span style="color: green">[{$vo['per']}%]</span>
                                 <a onclick="check_result({$vo['id']},{$vo['project_id']},{$vo['check_cat']},'{$data_info['name']}')" class="layui-btn layui-btn-normal layui-btn-xs">审核校对</a>
                                 {/neq}
-                                <br>
-                                审核类型：{$vo['check_catname']}
+<!--                                <br>-->
+<!--                                审核类型：{$vo['check_catname']}-->
                                 <br>
                                 {$vo['mark']}
                                 <br>
