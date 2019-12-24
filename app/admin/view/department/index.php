@@ -108,7 +108,7 @@
         table.on('tool(table1)', function (obj) {
             var data = obj.data;
             var layEvent = obj.event;
-            var id=data.id,pid=data.pid,code=data.code,pname=data.name;
+            var id=data.id,pid=data.pid,code=data.code,pname=data.name.replace(/<.*?>/g,"");
 
             if (layEvent === 'del') {
                 var open_url = "{:url('del')}?ids="+id;
