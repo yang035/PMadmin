@@ -20,7 +20,8 @@ class Block
         //我们的链是一个数组，实际生产中应该保存下来
         $previous_block = $blockchain[0];
         for ($i = 0; $i <= 10; $i++) {
-            if (!($new_block = dig($previous_block))) {
+            $new_block = dig($previous_block);
+            if (!$new_block) {
                 continue;
             }
             $blockchain[] = $new_block;
