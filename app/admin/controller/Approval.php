@@ -1988,6 +1988,14 @@ class Approval extends Admin
             return $this->success("操作成功{$this->score_value}");
         }
 
+        if ($list['project_id']){
+            $project_data = ProjectModel::getRowById($list['project_id']);
+        }else{
+            $project_data = [
+                'name'=>'其他',
+            ];
+        }
+
         switch ($params['class_type']) {
             case 1:
                 $leave_type = config('other.leave_type');
@@ -2082,6 +2090,12 @@ class Approval extends Admin
                 $this->assign('expense_type', $cost_type);
                 break;
             case 4:
+                $copy_user_arr = json_decode($list['copy_user'],true);
+                if ($project_data['is_private'] && key_exists(session('admin_user.uid'),$copy_user_arr)){
+                    $list['address'] = '***';
+                    $list['fellow_user'] = '***';
+                    $list['reason'] = '***';
+                }
                 $report = ApprovalReport::getAll(5);
                 if ($report) {
                     foreach ($report as $k => $v) {
@@ -2179,13 +2193,7 @@ class Approval extends Admin
         $list['fellow_user'] = $this->deal_data($list['fellow_user']);
         $list['send_user'] = $this->deal_data($list['send_user']);
         $list['copy_user'] = $this->deal_data($list['copy_user']);
-        if ($list['project_id']){
-            $project_data = ProjectModel::getRowById($list['project_id']);
-        }else{
-            $project_data = [
-                'name'=>'其他',
-            ];
-        }
+
 //        print_r($list);
         $approval_status = config('other.approval_status');
         $this->assign('data_list', $list);

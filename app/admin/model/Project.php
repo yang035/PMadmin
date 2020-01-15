@@ -646,4 +646,18 @@ class Project extends Model
         }
         return $str;
     }
+
+    public static function getPrivate($type = 0)
+    {
+        $p_status = config('other.is_private');
+        $str = '';
+        foreach ($p_status as $k => $v) {
+            if ($type == $k) {
+                $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+            } else {
+                $str .= '<option value="'.$k.'">'.$v.'</option>';
+            }
+        }
+        return $str;
+    }
 }

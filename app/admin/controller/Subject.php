@@ -221,6 +221,7 @@ class Subject extends Admin
         $this->assign('cur_time', date('YmdHis'));
         $this->assign('t_type', ProjectModel::getTType());
         $this->assign('s_status', ItemModel::getSStatus(1));
+        $this->assign('is_private', ProjectModel::getPrivate());
         return $this->fetch('itemform');
     }
 
@@ -289,6 +290,7 @@ class Subject extends Admin
         $this->assign('grade_type', ProjectModel::getGrade());
         $this->assign('t_type', ProjectModel::getTType());
         $this->assign('s_status', ItemModel::getSStatus($row['s_status']));
+        $this->assign('is_private', ProjectModel::getPrivate($row['is_private']));
         return $this->fetch('itemedit');
     }
 
