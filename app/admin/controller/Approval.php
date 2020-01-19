@@ -2092,7 +2092,7 @@ class Approval extends Admin
             case 4:
                 $send_user_arr = json_decode($list['send_user'],true);
                 $send_user_arr = array_keys($send_user_arr);
-                array_push($send_user_arr,session('admin_user.uid'));
+                array_push($send_user_arr,$list['user_id']);
                 if (!($project_data['is_private'] && in_array(session('admin_user.uid'),$send_user_arr))){
                     $list['address'] = '***';
                     $list['fellow_user'] = '***';
