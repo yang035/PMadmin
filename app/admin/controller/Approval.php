@@ -2090,8 +2090,10 @@ class Approval extends Admin
                 $this->assign('expense_type', $cost_type);
                 break;
             case 4:
-                $copy_user_arr = json_decode($list['copy_user'],true);
-                if ($project_data['is_private'] && key_exists(session('admin_user.uid'),$copy_user_arr)){
+                $send_user_arr = json_decode($list['send_user'],true);
+                $send_user_arr = array_keys($send_user_arr);
+                array_push($send_user_arr,session('admin_user.uid'));
+                if (!($project_data['is_private'] && in_array(session('admin_user.uid'),$send_user_arr))){
                     $list['address'] = '***';
                     $list['fellow_user'] = '***';
                     $list['reason'] = '***';
