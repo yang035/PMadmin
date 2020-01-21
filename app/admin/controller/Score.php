@@ -336,7 +336,51 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
 
         $map['cid'] = session('admin_user.cid');
         $fields = "subject_id,sum(ml_add_score) as ml_add_sum,sum(ml_sub_score) as ml_sub_sum,sum(gl_add_score) as gl_add_sum,sum(gl_sub_score) as gl_sub_sum";
+        if (isset($params['export']) && 1 == $params['export']) {
+            set_time_limit(0);
+            $data_list = ScoreModel::field($fields)->where($map)->group('subject_id')->order('subject_id desc')->select();
+//        print_r($data_list);
+            $myPro = ProjectModel::getProTask(0,0);
+            foreach ($data_list as $k=>$v){
+                $data_list[$k]['subject_name'] = $v['subject_id'] ? $myPro[$v['subject_id']] : '其他';
+            }
 
+            vendor('PHPExcel.PHPExcel');
+            $objPHPExcel = new \PHPExcel();
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(10);
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A1', '项目名称')
+                ->setCellValue('B1', 'ML+')
+                ->setCellValue('C1', 'ML-')
+                ->setCellValue('D1', 'GL+')
+                ->setCellValue('E1', 'GL-');
+//            print_r($data_list);exit();
+            foreach ($data_list as $k => $v) {
+                $num = $k + 2;
+                $objPHPExcel->setActiveSheetIndex(0)
+                    //Excel的第A列，uid是你查出数组的键值，下面以此类推
+                    ->setCellValue('A' . $num, $v['subject_name'])
+                    ->setCellValue('B' . $num, $v['ml_add_sum'])
+                    ->setCellValue('C' . $num, $v['ml_sub_sum'])
+                    ->setCellValue('D' . $num, $v['gl_add_sum'])
+                    ->setCellValue('E' . $num, $v['gl_sub_sum']);
+            }
+            $d = !empty($d) ? $d : '全部日期';
+            $p = !empty($params['subject_name']) ? $params['subject_name'] : '';
+            $name = $p . $d . 'ML/GL按项目统计';
+            $objPHPExcel->getActiveSheet()->setTitle($d);
+            $objPHPExcel->setActiveSheetIndex(0);
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="' . $name . '.xls"');
+            header('Cache-Control: max-age=0');
+            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            $objWriter->save('php://output');
+            exit;
+        }
         $data_list = ScoreModel::field($fields)->where($map)->group('subject_id')->order('subject_id desc')->paginate(30, false, ['query' => input('get.')]);
 //        print_r($data_list);
         $myPro = ProjectModel::getProTask(0,0);
