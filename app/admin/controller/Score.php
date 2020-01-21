@@ -427,7 +427,7 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                             }
                             $tmp[$key]['subject_id'] = $v['subject_id'];
                             $tmp[$key]['user'] = $v['user'];
-                            $tmp[$key]['partner_grade'] = $partner_user[$v['user']];
+                            $tmp[$key]['partner_grade'] = isset($partner_user[$v['user']]) ? $partner_user[$v['user']] : 0;
                         }
                     }
                 }
