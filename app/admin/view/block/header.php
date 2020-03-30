@@ -45,7 +45,7 @@ $ca = strtolower(request()->controller().'/'.request()->action());
                     <li><a href="javascript:void(0);">{$v['title']}</a></li>
                 {/if}
             {/volist}
-            <li><a href="{:url('admin/menu/quick?id='.$_admin_menu_current['id'])}" title="添加到首页快捷菜单" class="j-ajax">[+]</a></li>
+<!--            <li><a href="{:url('admin/menu/quick?id='.$_admin_menu_current['id'])}" title="添加到首页快捷菜单" class="j-ajax">[+]</a></li>-->
             <li style="float: right">
                 <span class="layui-badge layui-bg-orange yd"></span>
                 <span class="layui-badge td"></span>
