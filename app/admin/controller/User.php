@@ -176,9 +176,24 @@ class User extends Admin
             if($result !== true) {
                 return $this->error($result);
             }
-            if (!UserModel::create($data)) {
+            $u = UserModel::create($data);
+            if (!$u) {
                 return $this->error('添加失败');
             }
+            $score = [
+                'subject_id' => 0,
+                'project_id' => 0,
+                'cid' => $data['company_id'],
+                'project_code' => '',
+                'user' => $u['id'],
+                'gl_add_score' => config('other.gl_give'),
+                'remark' => "新入职用户所得GL",
+                'user_id' => 0,
+                'is_lock' => 0,
+                'create_time' => time(),
+                'update_time' => time(),
+            ];
+            db('score')->insert($score);
             return $this->success("操作成功{$this->score_value}",url('index'));
         }
 
