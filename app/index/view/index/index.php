@@ -8,7 +8,7 @@
                     <div class="col-md-10 col-md-offset-1 text-center js-fullheight slider-text">
                         <div class="slider-text-inner">
                             <h2>联合 协作 创新 发展</h2>
-                            <p><a href="{:url('detail',['id'=>$vo['id']])}" class="btn btn-primary btn-lg">{$vo.title}</a></p>
+<!--                            <p><a href="{:url('detail',['id'=>$vo['id']])}" class="btn btn-primary btn-lg">{$vo.title}</a></p>-->
                         </div>
                     </div>
                 </div>
