@@ -14,6 +14,7 @@ use app\admin\model\SubjectItem as ItemModel;
 use app\admin\model\AdminUser;
 use app\admin\model\Project as ProjectModel;
 use app\admin\model\Partner as PartnerModel;
+use app\admin\model\FlowItem as FlowModel;
 use think\Db;
 use traits\think\Instance;
 
@@ -327,6 +328,82 @@ class Subject extends Admin
         $tab_data['current'] = url('');
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 1);
+        return $this->fetch();
+    }
+
+    public function flow()
+    {
+        $params = $this->request->param();
+        $field = 'id,cat_id,idcard,name,area,remark';
+        $row = ItemModel::where('id', $params['id'])->field($field)->find()->toArray();
+        if ($row){
+            $d = CatModel::where('id',$row['cat_id'])->field('flow')->find();
+            if ($d){
+                $d = json_decode($d['flow'],true);
+                if (is_array($d)){
+                    $map = [
+                        'cid'=>session('admin_user.cid'),
+                        'status'=>1,
+                        'id'=>['in',$d]
+                    ];
+                    $flow_data = FlowModel::where($map)->select();
+                    $flow=[];
+                    if ($flow_data){
+                        foreach ($flow_data as $k=>$v) {
+                            $flow[$v['cat_id']][$v['id']] = $v['name'];
+                        }
+                    }
+//                    print_r($flow);
+                    $flow_cat = FlowModel::getCat();
+                    $this->assign('flow_cat', $flow_cat);
+                    $this->assign('flow', $flow);
+                }
+            }else{
+                return $this->error('请先在项目类型中配置流程');
+            }
+            $row = [
+                1=>$row['name'],
+                2=>$row['idcard'],
+                3=>$row['area'].'平方',
+                4=>'待定',
+                5=>'GL待定',
+                6=>'GL待定',
+                7=>$row['remark'],
+            ];
+        }
+        $this->assign('row', $row);
+        return $this->fetch();
+    }
+
+    public function setFlow()
+    {
+        $params = $this->request->param();
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            $data['flow'] = json_encode($data['flow']);
+            // 验证
+            if (!CatModel::update($data)) {
+                return $this->error('配置失败');
+            }
+            return $this->success("操作成功{$this->score_value}");
+        }
+
+        $flow_cat = FlowModel::getCat();
+        $field = 'id,cat_id,name';
+        $flow_data = FlowModel::getItem1($field);
+        $flow=[];
+        if ($flow_data){
+            foreach ($flow_data as $k=>$v) {
+                $flow[$v['cat_id']][$v['id']] = $v['name'];
+            }
+        }
+        $d = CatModel::where('id',$params['id'])->field('flow')->find();
+        if ($d){
+            $d = json_decode($d['flow'],true);
+            $this->assign('d', $d);
+        }
+        $this->assign('flow_cat', $flow_cat);
+        $this->assign('flow', $flow);
         return $this->fetch();
     }
 
