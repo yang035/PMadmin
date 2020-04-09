@@ -112,7 +112,8 @@ class UploadFile extends Model
         ];
 
         // 记录入库
-         self::create($data);
+         $r = self::create($data);
+         $data['id'] = $r['id'];
          $group_info = GroupModel::where('name', $group)->find();
          if (!$group_info) {
              GroupModel::create(['name' => $group]);

@@ -10,11 +10,13 @@ namespace app\admin\controller;
 
 use app\admin\model\AdminDepartment;
 use app\admin\model\SubjectCat as CatModel;
+use app\admin\model\SubjectFlow;
 use app\admin\model\SubjectItem as ItemModel;
 use app\admin\model\AdminUser;
 use app\admin\model\Project as ProjectModel;
 use app\admin\model\Partner as PartnerModel;
 use app\admin\model\FlowItem as FlowModel;
+use app\admin\model\SubjectFlow as SubjectFlowModel;
 use think\Db;
 use traits\think\Instance;
 
@@ -335,10 +337,11 @@ class Subject extends Admin
     {
         $params = $this->request->param();
         $field = 'id,cat_id,idcard,name,area,remark';
+        $row = $flow_cat = $flow = $subject_flow = [];
         $row = ItemModel::where('id', $params['id'])->field($field)->find()->toArray();
         if ($row){
             $d = CatModel::where('id',$row['cat_id'])->field('flow')->find();
-            if ($d){
+            if (!empty($d['flow'])){
                 $d = json_decode($d['flow'],true);
                 if (is_array($d)){
                     $map = [
@@ -346,18 +349,24 @@ class Subject extends Admin
                         'status'=>1,
                         'id'=>['in',$d]
                     ];
+
                     $flow_data = FlowModel::where($map)->select();
-                    $flow=[];
                     if ($flow_data){
                         foreach ($flow_data as $k=>$v) {
                             $flow[$v['cat_id']][$v['id']] = $v['name'];
                         }
                     }
-//                    print_r($flow);
                     $flow_cat = FlowModel::getCat();
-                    $this->assign('flow_cat', $flow_cat);
-                    $this->assign('flow', $flow);
+
+                    $s_flow = SubjectFlow::getOption($params['id']);
+                    if ($s_flow){
+                        foreach ($s_flow as $v) {
+                            $v['create_time'] = date('Y-m-d H:i:s',$v['create_time']);
+                            $subject_flow[$v['flow_id']][] = $v;
+                        }
+                    }
                 }
+
             }else{
                 return $this->error('请先在项目类型中配置流程');
             }
@@ -372,6 +381,35 @@ class Subject extends Admin
             ];
         }
         $this->assign('row', $row);
+        $this->assign('flow_cat', $flow_cat);
+        $this->assign('flow', $flow);
+        $this->assign('subject_flow', $subject_flow);
+        return $this->fetch();
+    }
+
+    public function addContent(){
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
+            if (empty($data['remark']) && empty($data['upload_id'])){
+                return $this->error('描述和附件不能都为空');
+            }
+            $where = [
+                'cid'=>$data['cid'],
+                'remark'=>$data['remark'],
+                'upload_id'=>$data['upload_id'],
+            ];
+            $flag = SubjectFlowModel::where($where)->find();
+            if ($flag){
+                return $this->error('不能重复提交');
+            }
+            // 验证
+            if (!SubjectFlowModel::create($data)) {
+                return $this->error('提交失败');
+            }
+            return $this->success("操作成功{$this->score_value}");
+        }
         return $this->fetch();
     }
 
