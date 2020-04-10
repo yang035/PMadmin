@@ -337,7 +337,7 @@ class Subject extends Admin
     {
         $params = $this->request->param();
         $field = 'id,cat_id,idcard,name,area,remark';
-        $row = $flow_cat = $flow = $subject_flow = [];
+        $row = $flow_cat = $flow = $subject_flow = $score = [];
         $row = ItemModel::where('id', $params['id'])->field($field)->find()->toArray();
         if ($row){
             $d = CatModel::where('id',$row['cat_id'])->field('flow')->find();
@@ -353,7 +353,11 @@ class Subject extends Admin
                     $flow_data = FlowModel::where($map)->select();
                     if ($flow_data){
                         foreach ($flow_data as $k=>$v) {
-                            $flow[$v['cat_id']][$v['id']] = $v['name'];
+                            $flow[$v['cat_id']][$v['id']] = [
+                                'id'=>$v['id'],
+                                'name'=>$v['name'],
+                                'ratio'=>$v['ratio'],
+                            ];
                         }
                     }
                     $flow_cat = FlowModel::getCat();
@@ -363,6 +367,18 @@ class Subject extends Admin
                         foreach ($s_flow as $v) {
                             $v['create_time'] = date('Y-m-d H:i:s',$v['create_time']);
                             $subject_flow[$v['flow_id']][] = $v;
+                        }
+                        foreach ($subject_flow as $k=>$v) {
+                            $score[$k] = $v[0]['ratio'];
+                        }
+                        foreach ($flow as $k=>$v) {
+                            $cat_sum = 0;
+                            foreach ($score as $kk=>$vv) {
+                                if (key_exists($kk,$v)){
+                                    $cat_sum += $vv;
+                                }
+                            }
+                            $score_arr[$k] = $cat_sum;
                         }
                     }
                 }
@@ -384,6 +400,7 @@ class Subject extends Admin
         $this->assign('flow_cat', $flow_cat);
         $this->assign('flow', $flow);
         $this->assign('subject_flow', $subject_flow);
+        $this->assign('score_arr', $score_arr);
         return $this->fetch();
     }
 

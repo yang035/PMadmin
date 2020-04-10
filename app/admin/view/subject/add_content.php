@@ -1,6 +1,13 @@
 <form class="layui-form" action="{:url()}" method="post">
     <div class="layui-tab-item layui-show layui-form-pane">
         <div class="layui-form-item">
+            <label class="layui-form-label">完成比例</label>
+            <div class="layui-input-inline">
+                <input type="number" class="layui-input field-ratio" name="ratio" value="0" min="0" max="{$Request.param.placeholder}" onblur="check_ratio(this)" autocomplete="off" placeholder="请输入完成比例">
+            </div>
+            <div class="layui-form-mid red">% 最大值  {$Request.param.placeholder}</div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">描述</label>
             <div class="layui-input-inline">
                 <textarea  class="layui-textarea field-remark" name="remark" lay-verify="" autocomplete="off" placeholder="[选填]分类简介"></textarea>
@@ -57,5 +64,20 @@
             }
         });
     });
+    function check_ratio(e) {
+        var num = parseInt($(e).val()),ma=e.getAttribute('max'),mi=e.getAttribute('min');
+        if (isNaN(num)) {
+            num = 0;
+        }
+        if (num > ma) {
+            layer.msg('比例只能在'+mi+'~'+ma+'之间');
+            num = ma;
+        }
+        if (num < mi) {
+            layer.msg('比例只能在'+mi+'~'+ma+'之间');
+            num = mi;
+        }
+        $('.field-ratio').val(num);
+    }
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>

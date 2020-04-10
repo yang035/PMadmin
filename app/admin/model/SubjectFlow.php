@@ -25,7 +25,8 @@ class SubjectFlow extends Model
             ->alias('s')
             ->where($map)
             ->field($field)
-            ->join('tb_upload_file f','s.upload_id = f.id')
+            ->join('tb_upload_file f','s.upload_id = f.id','left')
+            ->order('s.id desc')
             ->select();
         return $data;
     }
