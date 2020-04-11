@@ -1,5 +1,6 @@
 <form class="layui-form" action="{:url()}" method="post">
     <div class="layui-tab-item layui-show layui-form-pane">
+        {notempty name="Request.param.placeholder"}
         <div class="layui-form-item">
             <label class="layui-form-label">完成比例</label>
             <div class="layui-input-inline">
@@ -7,6 +8,7 @@
             </div>
             <div class="layui-form-mid red">% 最大值  {$Request.param.placeholder}</div>
         </div>
+        {/notempty}
         <div class="layui-form-item">
             <label class="layui-form-label">描述</label>
             <div class="layui-input-inline">
