@@ -337,7 +337,7 @@ class Subject extends Admin
     {
         $params = $this->request->param();
         $field = 'id,cat_id,idcard,name,area,remark';
-        $row = $flow_cat = $flow = $subject_flow = $score = [];
+        $row = $flow_cat = $flow = $subject_flow = $score = $score_arr = [];
         $row = ItemModel::where('id', $params['id'])->field($field)->find()->toArray();
         if ($row){
             $d = CatModel::where('id',$row['cat_id'])->field('flow')->find();
