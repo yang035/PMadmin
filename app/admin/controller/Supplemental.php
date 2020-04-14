@@ -7,11 +7,11 @@
  */
 
 namespace app\admin\controller;
-use app\admin\model\ProfessionalCat as CatModel;
-use app\admin\model\ProfessionalItem as ItemModel;
+use app\admin\model\SupplementalCat as CatModel;
+use app\admin\model\SupplementalItem as ItemModel;
 
 
-class Professional extends Admin
+class Supplemental extends Admin
 {
     public $tab_data = [];
     protected function _initialize()
@@ -20,12 +20,12 @@ class Professional extends Admin
 
         $tab_data['menu'] = [
             [
-                'title' => '专业类型',
-                'url' => 'admin/Professional/cat',
+                'title' => '条款分类',
+                'url' => 'admin/Supplemental/cat',
             ],
             [
-                'title' => '专业设置',
-                'url' => 'admin/Professional/index',
+                'title' => '条款内容',
+                'url' => 'admin/Supplemental/index',
             ],
         ];
         $this->tab_data = $tab_data;
@@ -72,7 +72,7 @@ class Professional extends Admin
             $data['user_id'] = session('admin_user.uid');
             unset($data['id']);
             // 验证
-            $result = $this->validate($data, 'ProfessionalItem');
+            $result = $this->validate($data, 'SupplementalItem');
             if($result !== true) {
                 return $this->error($result);
             }
@@ -93,7 +93,7 @@ class Professional extends Admin
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
             // 验证
-            $result = $this->validate($data, 'ProfessionalItem');
+            $result = $this->validate($data, 'SupplementalItem');
             if($result !== true) {
                 return $this->error($result);
             }
@@ -161,7 +161,7 @@ class Professional extends Admin
             $data['user_id'] = session('admin_user.uid');
             unset($data['id']);
             // 验证
-            $result = $this->validate($data, 'ProfessionalCat');
+            $result = $this->validate($data, 'SupplementalCat');
             if($result !== true) {
                 return $this->error($result);
             }
@@ -181,7 +181,7 @@ class Professional extends Admin
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
             // 验证
-            $result = $this->validate($data, 'ProfessionalCat');
+            $result = $this->validate($data, 'SupplementalCat');
             if($result !== true) {
                 return $this->error($result);
             }

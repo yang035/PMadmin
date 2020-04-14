@@ -11,11 +11,11 @@ namespace app\admin\validate;
 
 use think\Validate;
 
-class ProfessionalItem extends Validate
+class SupplementalItem extends Validate
 {
     //定义验证规则
     protected $rule = [
-        'name|名称' => 'require|unique:professional_item,cid^name',
+        'name|名称' => 'require|unique:supplemental_item,cid^name',
         'status|状态设置'  => 'require|in:0,1',
     ];
 

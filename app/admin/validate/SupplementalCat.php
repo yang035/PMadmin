@@ -11,11 +11,11 @@ namespace app\admin\validate;
 
 use think\Validate;
 
-class ProfessionalCat extends Validate
+class SupplementalCat extends Validate
 {
     //定义验证规则
     protected $rule = [
-        'name|分类名称' => 'require|unique:professional_cat,cid^name',
+        'name|分类名称' => 'require|unique:supplemental_cat,cid^name',
         'status|状态设置'  => 'require|in:0,1',
     ];
 

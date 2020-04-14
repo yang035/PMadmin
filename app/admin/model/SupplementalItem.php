@@ -10,9 +10,9 @@ namespace app\admin\model;
 
 
 use think\Model;
-use app\admin\model\ProfessionalCat as CatModel;
+use app\admin\model\SupplementalCat as CatModel;
 
-class ProfessionalItem extends Model
+class SupplementalItem extends Model
 {
     public static function getOption($type = 0)
     {
@@ -57,7 +57,7 @@ class ProfessionalItem extends Model
 
     public function cat()
     {
-        return $this->hasOne('ProfessionalCat', 'id', 'cat_id');
+        return $this->hasOne('SupplementalCat', 'id', 'cat_id');
     }
 
     public static function getCat()

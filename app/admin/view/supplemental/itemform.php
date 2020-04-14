@@ -9,18 +9,11 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">专业名称</label>
+            <label class="layui-form-label">内容</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input field-name" name="name" lay-verify="required" autocomplete="off" placeholder="请输入专业名称">
+                <textarea  class="layui-textarea field-name" name="name" lay-verify="required" autocomplete="off"></textarea>
             </div>
             <div class="layui-form-mid red">*</div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">专业系数</label>
-            <div class="layui-input-inline">
-                <input type="text" class="layui-input field-ratio" name="ratio" value="1.0" lay-verify="required" autocomplete="off" placeholder="请输入系数">
-            </div>
-            <div class="layui-form-mid" style="color: red">*</div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">备注</label>

@@ -10,9 +10,9 @@ namespace app\admin\model;
 
 
 use think\Model;
-use app\admin\model\ProfessionalItem as ItemModel;
+use app\admin\model\SupplementalItem as ItemModel;
 
-class ProfessionalCat extends Model
+class SupplementalCat extends Model
 {
     public static function getOption1($type = 0)
     {
