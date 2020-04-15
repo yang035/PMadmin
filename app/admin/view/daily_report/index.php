@@ -26,6 +26,9 @@
                 <input type="hidden" name="type" value="{$Request.param.type}">
                 <input type="hidden" name="atype" value="{$Request.param.atype}">
                 <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
+                {eq name="$atype" value="3"}
+                <a data-href="{:url('agree')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-play" data-table="dataTable">&nbsp;批复</a>
+                {/eq}
             </div>
         </form>
     </div>
@@ -39,6 +42,7 @@
         <tr>
             <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
             <th>名称</th>
+            <th>内容</th>
             <th>姓名</th>
             <th>汇报人</th>
 <!--            <th>计划完成(%)</th>-->
@@ -55,6 +59,19 @@
             <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
             <td class="font12">
                 <a href="{:url('read',['id'=>$vo['id'],'atype'=>$atype])}"><strong class="mcolor">{$vo['project_name']}</strong></a>
+            </td>
+            <td class="font12">
+                内容:
+                {volist name="vo['detail']" id="v"}
+                {$v['content']}({$v['ml']})<br>
+                {/volist}
+                计划:
+                {volist name="vo['p_detail']" id="v"}
+                {$v['plan']}({$v['ml']})<br>
+                {/volist}
+                {eq name="atype" value="3"}
+                    <a href="#" onclick="ajax_agree({$vo['id']})" class="layui-btn layui-btn-normal layui-btn-xs">批复</a>
+                {/eq}
             </td>
             <td class="font12">{$vo['user_id']}</td>
             <td class="font12">{$vo['send_user']}</td>
@@ -86,6 +103,19 @@
 
 
     });
+
+    function ajax_agree(id) {
+        var open_url = "{:url('agree')}?id="+id;
+        $.post(open_url, function(res) {
+            if (res.code == 1) {
+                layer.msg(res.msg);
+                location.reload();
+            }else {
+                layer.msg(res.msg);
+                location.reload();
+            }
+        });
+    }
 
     function add_score(id,pname){
         var open_url = "{:url('ProjectScore/add')}?id="+id+"&pname="+pname;

@@ -126,6 +126,8 @@ class DailyReport extends Admin
 
         $list = DailyReportModel::where($map)->where($con)->order('create_time desc')->paginate(30, false, ['query' => input('get.')]);
         foreach ($list as $k=>$v){
+            $v['detail'] = json_decode($v['detail'],true);
+            $v['p_detail'] = json_decode($v['p_detail'],true);
             $v['send_user'] = $this->deal_data($v['send_user']);
             $v['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
             if (!empty($v['project_id'])){
@@ -134,7 +136,6 @@ class DailyReport extends Admin
                 $v['project_name'] = '其他';
             }
         }
-//        print_r(ProjectModel::inputSearchProject());
         $this->assign('tab_data', $this->tab_data);
         $this->assign('tab_type', 1);
         $this->assign('isparams', 1);
@@ -146,6 +147,45 @@ class DailyReport extends Admin
         $this->assign('user_select', AdminUser::inputSearchUser());
         $this->assign('pages', $pages);
         return $this->fetch();
+    }
+
+    public function agree($id)
+    {
+        $ids   = input('param.ids/a') ? input('param.ids/a') : input('param.id/a');
+        if ($ids){
+            $num = count($ids);
+            foreach ($ids as $id) {
+                $where = [
+                    'id'=>$id
+                ];
+                $row = DailyReportModel::where($where)->find()->toArray();
+                //标记已读
+                $uid = session('admin_user.uid');
+                $sql = "UPDATE tb_daily_report SET send_user = JSON_SET(send_user, '$.\"{$uid}\"', 'a'),real_total={$row['total']},status=0 WHERE id ={$id}";
+                DailyReportModel::execute($sql);
+                //计算得分
+                $sc = [
+                    'subject_id'=>$row['project_id'],
+                    'cid'=>session('admin_user.cid'),
+                    'user'=>$row['user_id'],
+                    'ml_add_score'=>0,
+                    'ml_sub_score'=>0,
+                    'gl_add_score'=>$row['total'],
+                    'gl_sub_score'=>0,
+                    'remark' => '项目管理汇报得分'
+                ];
+                if (1 == $num){
+                    if (ScoreModel::addScore($sc)){
+                        return $this->success("操作成功，奖励{$row['total']}GL斗。",'DailyReport/index?atype=2');
+                    }else{
+                        return $this->error('操作失败');
+                    }
+                }else{
+                    ScoreModel::addScore($sc);
+                }
+            }
+            return $this->success('操作成功');
+        }
     }
 
     public function read($id){
