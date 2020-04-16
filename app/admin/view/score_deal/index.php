@@ -37,6 +37,9 @@
         </form>
         <div class="layui-btn-group fl">
             <a href="{:url('add',['atype'=>$Request.param.atype])}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加奖扣</a>
+            {eq name="$atype" value="2"}
+            <a data-href="{:url('agree')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-play" data-table="dataTable">&nbsp;同意</a>
+            {/eq}
         </div>
         <div class="layui-form">
             <table class="layui-table mt10" lay-even="" lay-skin="row">
@@ -62,7 +65,13 @@
                 <tr>
                     <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
                     <td class="font12">{$vo['score_user']}</td>
-                    <td class="font12">{$vo['rid']['fullname']}</td>
+                    <td class="font12">
+                        {$vo['rid']['fullname']}<br>
+                        事由:{$vo['remark']}<br>
+                        {eq name="atype" value="2"}
+                        <a href="#" onclick="ajax_agree({$vo['id']})" class="layui-btn layui-btn-normal layui-btn-xs">同意</a>
+                        {/eq}
+                    </td>
                     <td class="font12">{$vo['rid']['ml']}</td>
                     <td class="font12">{$vo['rid']['gl']}</td>
                     <td class="font12">{$vo['send_user']}</td>
@@ -108,6 +117,19 @@
             trigger: 'click',
         });
     });
+
+    function ajax_agree(id) {
+        var open_url = "{:url('agree')}?id="+id;
+        $.post(open_url, function(res) {
+            if (res.code == 1) {
+                layer.msg(res.msg);
+                location.reload();
+            }else {
+                layer.msg(res.msg);
+                location.reload();
+            }
+        });
+    }
 
     function deal_read(id,atype){
         var open_url = "{:url('ScoreDeal/read')}?id="+id+"&atype="+atype;

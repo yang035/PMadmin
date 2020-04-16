@@ -166,6 +166,67 @@ class ScoreDeal extends Admin
         echo json_encode($child_option);
     }
 
+    public function agree($id)
+    {
+        $ids = input('param.ids/a') ? input('param.ids/a') : input('param.id/a');
+        if ($ids) {
+            $num = count($ids);
+            foreach ($ids as $id) {
+                $list = DealModel::getRowById($id);
+                $data = [
+                    'id' => $id,
+                    'rid' => $list['rid'],
+                    'status' => 2,
+                ];
+                $score_user = json_decode($list['score_user'], true);
+                $score = [];
+                $realname = session('admin_user.realname');
+                $rule_row = RuleModel::getRowById($list['rid']);
+                foreach ($score_user as $k => $v) {
+                    $score[$k]['cid'] = session('admin_user.cid');
+                    $score[$k]['user'] = $k;
+                    $score[$k]['url'] = $this->request->url();
+                    $score[$k]['remark'] = "事件积分({$realname})审批,{$rule_row['name']}";
+                    $score[$k]['user_id'] = session('admin_user.uid');
+                    if ($rule_row['ml'] > 0) {
+                        $score[$k]['ml_add_score'] = $rule_row['ml'];
+                    } else {
+                        $score[$k]['ml_sub_score'] = abs($rule_row['ml']);
+                    }
+                    if ($rule_row['gl'] > 0) {
+                        $score[$k]['gl_add_score'] = $rule_row['gl'];
+                    } else {
+                        $score[$k]['gl_sub_score'] = abs($rule_row['gl']);
+                    }
+                    $score[$k]['create_time'] = $score[$k]['update_time'] = time();
+                }
+                //开启事务
+                Db::startTrans();
+                try {
+                    DealModel::update($data);
+                    if (2 == $data['status']) {
+                        RuleModel::where('id', $data['rid'])->setInc('num');
+                    }
+                    $score_model = new ScoreModel();
+                    $res = $score_model->insertAll($score);
+                    //事务提交
+                    Db::commit();
+                } catch (\Exception $e) {
+                    //事务回滚
+                    Db::rollback();
+                }
+                if (1 == $num) {
+                    if ($res) {
+                        return $this->success("操作成功{$this->score_value}");
+                    } else {
+                        return $this->error('操作失败');
+                    }
+                }
+            }
+            return $this->success('操作成功');
+        }
+    }
+
     public function add()
     {
         if ($this->request->isPost()) {
@@ -178,6 +239,10 @@ class ScoreDeal extends Admin
             $p['copy_user'] = user_array($data['copy_user']);
             $p['create_time'] = time();
             $p['update_time'] = time();
+            $s = json_decode($p['send_user'],true);
+            if (empty($s)){
+                return $this->error('审批人不能为空或不能选择自己');
+            }
             // 验证
             $result = $this->validate($data, 'ScoreDeal');
             if($result !== true) {
