@@ -69,7 +69,16 @@
                 {volist name="vo['p_detail']" id="v"}
                 {$v['plan']}({$v['ml']})<br>
                 {/volist}
+                附件:
+                {notempty name="vo['attachment']"}
+                    {volist name="vo['attachment']" id="v"}
+                    &nbsp;&nbsp;&nbsp;&nbsp;<a target="_blank" href="{$v}" style="color: #5c90d2">附件{$i}</a>
+                    {/volist}
+                {else/}
+                <span>无</span>
+                {/notempty}
                 {eq name="atype" value="3"}
+                <br>
                     <a href="#" onclick="ajax_agree({$vo['id']})" class="layui-btn layui-btn-normal layui-btn-xs">批复</a>
                 {/eq}
             </td>

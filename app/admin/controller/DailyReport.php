@@ -130,6 +130,7 @@ class DailyReport extends Admin
             $v['p_detail'] = json_decode($v['p_detail'],true);
             $v['send_user'] = $this->deal_data($v['send_user']);
             $v['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
+            $v['attachment'] = json_decode($v['attachment'],true);
             if (!empty($v['project_id'])){
                 $v['project_name'] = ProjectModel::index(['id'=>$v['project_id']])[0]['name'];
             }else{
