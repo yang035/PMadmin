@@ -39,18 +39,14 @@ class Partnership extends Model
 
     public static function getPartnerGrade($grade = 0)
     {
-        $grade_type = config('other.partnership_grade');
         $map = [
             'cid'=>session('admin_user.cid'),
         ];
-        $data = self::where($map)->column('partnership_grade','id');
-        $tmp = [];
-        if ($data){
-            foreach ($data as $k=>$v) {
-                $tmp[$v] = $grade_type[$v];
-            }
+        $data = self::where($map)->column('name','id');
+        if (!$data){
+            $data = [];
         }
-        return $tmp;
+        return $data;
     }
 
 }

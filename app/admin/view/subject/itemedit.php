@@ -6,6 +6,27 @@
         display: none;
     }
 
+    .layui-form-label1 {
+        width: 110px;
+        padding: 8px 15px;
+        height: 38px;
+        line-height: 20px;
+        border-width: 1px;
+        /* border-style: solid; */
+        border-radius: 2px 0 0 2px;
+        text-align: center;
+        /* background-color: #FBFBFB; */
+        overflow: hidden;
+        white-space: nowrap;
+        /* text-overflow: ellipsis; */
+        box-sizing: border-box;
+    }
+    .layui-input-inline1 {
+        display: inline-block;
+        vertical-align: middle;
+        width: 110px;
+    }
+
     input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
         -webkit-appearance: none;
     }
@@ -30,13 +51,13 @@
                 </select>
             </div>
         </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">类型系数</label>
-            <div class="layui-input-inline">
-                <input type="text" class="layui-input field-ratio" name="ratio" value="1.0" lay-verify="required" autocomplete="off" placeholder="请输入系数">
-            </div>
-            <div class="layui-form-mid" style="color: red">*</div>
-        </div>
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">类型系数</label>-->
+<!--            <div class="layui-input-inline">-->
+<!--                <input type="text" class="layui-input field-ratio" name="ratio" value="1.0" lay-verify="required" autocomplete="off" placeholder="请输入系数">-->
+<!--            </div>-->
+<!--            <div class="layui-form-mid" style="color: red">*</div>-->
+<!--        </div>-->
         <div class="layui-form-item">
             <label class="layui-form-label">项目编号</label>
             <div class="layui-input-inline">
@@ -57,46 +78,28 @@
                 <textarea  class="layui-textarea field-remark" name="remark" lay-verify="" autocomplete="off" placeholder="项目描述"></textarea>
             </div>
         </div>
-        {notempty name="data_info['big_major']"}
-        {volist name="data_info['big_major']" id="vo"}
-        <div class="layui-form-item">
-            <label class="layui-form-label">专业配比</label>
-            <div class="layui-input-inline">
-                <input type="text" class="layui-input field-big_major1" name="big_major[]" autocomplete="off" onblur='big_major_match()' placeholder="大专业配比" value="{$vo}">
+        {volist name="data_info['small_major_deal']" id="f"}
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+            <legend>
+                <div class="layui-form-item">
+                    <label class="layui-form-label1">{$f['name']}</label>
+                    <div class="layui-input-inline1">
+                        <input type="text" class="layui-input field-cat_ratio" name="cat_name[{$f['id']}][ratio]" value="{$f['value']/100}" lay-verify="required" >
+                        <input type="hidden" class="layui-input field-cat_name" name="cat_name[{$f['id']}][name]" value="{$f['name']}" lay-verify="required" >
+                    </div>
+                </div>
+            </legend>
+        </fieldset>
+        {volist name="f['child']" id="f1"}
+        <div class="layui-form-item" style="margin-left: 100px">
+            <label class="layui-form-label1">{$f1['name']}</label>
+            <div class="layui-input-inline1">
+                <input type="text" class="layui-input field-item_ratio" name="item_name[{$f['id']}][{$f1['id']}][ratio]" value="{$f1['value']/100}" lay-verify="required" >
+                <input type="hidden" class="layui-input field-item_name" name="item_name[{$f['id']}][{$f1['id']}][name]" value="{$f1['name']}" lay-verify="required" >
             </div>
-            <div class="layui-form-mid red"></div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-input-block">
-                <textarea type="text" class="layui-textarea field-small_major1" name="small_major[]" onblur='small_major_match()' autocomplete="off" placeholder="小专业配比">{$data_info['small_major'][$key]}</textarea>
-            </div>
-            <div class="layui-form-mid red"></div>
         </div>
         {/volist}
-        {else/}
-        <div class="layui-form-item">
-            <label class="layui-form-label">专业配比</label>
-            <div class="layui-input-inline">
-                <input type="text" class="layui-input field-big_major1" name="big_major[]" onblur='big_major_match()' autocomplete="off" placeholder="大专业配比">
-            </div>
-            <div class="layui-form-mid red"></div>
-        </div>
-        <div class="layui-field-box" style="margin-left: 100px;width: 519px; color: #666;">
-            <font style="color: red">规则 </font>方案设计：100
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-input-block">
-                <textarea type="text" class="layui-textarea field-small_major1" name="small_major[]" onblur='small_major_match()' autocomplete="off" placeholder="小专业配比"></textarea>
-            </div>
-            <div class="layui-form-mid red"></div>
-        </div>
-        <div class="layui-field-box" style="margin-left: 100px;width: 519px; color: #666;">
-            <font style="color: red">规则 </font>方案创意：25，文本：16，效果表现：35，估算：2，植物：3，审核校对：4，项目负责：10，设计服务：5
-        </div>
-        {/notempty}
-        <div class="new_task">
-            <a href="javascript:void(0);" class="aicon ai-tianjia field-task-add" style="float: left;font-size: 30px;"></a>
-        </div>
+        {/volist}
         <div class="layui-form-item">
             <label class="layui-form-label">项目面积</label>
             <div class="layui-input-inline">

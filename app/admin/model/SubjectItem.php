@@ -139,6 +139,23 @@ class SubjectItem extends Model
         $data = CatModel::where($map)->column('name','id');
         return $data;
     }
+
+    public static function getCat1()
+    {
+        $map = [
+            'cid'=>session('admin_user.cid'),
+            'status'=>1,
+        ];
+        $data = CatModel::where($map)->select();
+        $tmp = [];
+        if ($data){
+            foreach ($data as $v) {
+                $tmp[$v['id']] = $v;
+            }
+        }
+        return $tmp;
+    }
+
     public static function getItem()
     {
         $map = [

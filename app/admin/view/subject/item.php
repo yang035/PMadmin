@@ -3,6 +3,9 @@
         float: left;
         width: auto;
     }
+    a:hover{
+        cursor:pointer
+    }
 </style>
 <div>
     <div>
@@ -62,6 +65,7 @@
         var $ = layui.jquery,table = layui.table;
         table.render({
             elem: '#dataTable'
+            ,height: 'full-200'
             ,url: '{:url()}' //数据接口
             ,page: true //开启分页
             ,limit: 30
@@ -69,9 +73,11 @@
                 none : '暂无相关数据'
             }
             ,cols: [[ //表头
-                {type:'checkbox'},
-                {field: 'xuhao', title: '序号',type: 'numbers'},
-                {field: 'name', title: '名称',width:300},
+                {type:'checkbox',fixed: 'left'},
+                {field: 'xuhao', title: '序号',type: 'numbers',fixed: 'left'},
+                {field: 'name', title: '名称',width:200,fixed: 'left', templet:function(d){
+                        return "<a class='mcolor' onclick='read("+d.id+")'>"+d.name+"</a>";
+                    }},
                 {field: 'idcard', title: '项目编号',width:150},
                 {field: 'cat_id', title: '类别',width:80, templet:function(d){
                         return d.cat.name;
@@ -81,7 +87,7 @@
                 //     }},
                 {field: 'leader_user', title: '总负责人',width:150},
                 {field: 'status', title: '状态',width:100, templet: '#statusTpl'},
-                {title: '操作', templet: '#buttonTpl',minWidth:550}
+                {fixed: 'right',title: '操作', templet: '#buttonTpl',minWidth:600}
             ]]
         });
     });
@@ -196,6 +202,24 @@
             content: open_url,
             success:function (layero, index) {
                 var body = layer.getChildFrame('body', index);  //巧妙的地方在这里哦
+            }
+        });
+    }
+
+    function read(id){
+        var open_url = "{:url('read')}?id="+id;
+        if (open_url.indexOf('?') >= 0) {
+            open_url += '&hisi_iframe=yes';
+        } else {
+            open_url += '?hisi_iframe=yes';
+        }
+        layer.open({
+            type:2,
+            title :'详情',
+            maxmin: true,
+            area: ['800px', '600px'],
+            content: open_url,
+            success:function (layero, index) {
             }
         });
     }

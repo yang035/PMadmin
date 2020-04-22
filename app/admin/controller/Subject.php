@@ -15,8 +15,10 @@ use app\admin\model\SubjectItem as ItemModel;
 use app\admin\model\AdminUser;
 use app\admin\model\Project as ProjectModel;
 use app\admin\model\Partner as PartnerModel;
+use app\admin\model\Partnership as Partnership;
 use app\admin\model\FlowItem as FlowModel;
 use app\admin\model\SubjectFlow as SubjectFlowModel;
+use app\admin\model\ProfessionalItem as ProfessionalItem;
 use think\Db;
 use traits\think\Instance;
 
@@ -89,6 +91,62 @@ class Subject extends Admin
         return $this->fetch('item');
     }
 
+    public function deal_major($cat_name,$item_name){
+        if (empty($cat_name)){
+            return $this->error('专业配比必填');
+        }
+        $big_major = $small_major_str = $big_major_arr =$small_total = $small_major_arr =[];
+        $big_total = 0;
+        //计算比例
+        if ($cat_name){
+            foreach ($cat_name as $k=>$v) {
+                $big_total += $v['ratio']*100;
+                $big_major[$k] = $v['name'].'：'.$v['ratio']*100;
+                $big_major_arr[$k] = [
+                    'id'=>$k,
+                    'name'=>$v['name'],
+                    'value'=>$v['ratio']*100,
+                ];
+            }
+            if ($big_total > 100){
+                return $this->error('专业类型之和不能超过1');
+            }
+        }
+        if ($item_name){
+            foreach ($item_name as $k=>$v) {
+                foreach ($v as $kk=>$vv) {
+                    $small_major_str[$kk] = $vv['name'].'：'.$vv['ratio']*100;
+                    $small_total[$k][$kk] = [
+                        'id'=>10000+$kk,
+                        'name'=>$vv['name'],
+                        'value'=>$vv['ratio']*100,
+                    ];
+                }
+                if (array_sum(array_column($small_total[$k],'value')) > 100){
+                    return $this->error('各类型下专业系数之和不能超过1');
+                }
+            }
+        }
+        if ($big_major_arr){
+            $small_major_arr = $big_major_arr;
+            foreach ($big_major_arr as $k=>$v) {
+                $small_major_arr[$k]['child'] = [];
+                foreach ($small_total as $kk=>$vv) {
+                    if ($kk == $v['id']){
+                        $small_major_arr[$k]['child'] = $vv;
+                    }
+                }
+            }
+        }
+        $res = [
+            'big_major'=>json_encode($big_major),
+            'small_major'=>json_encode($small_major_str),
+            'big_major_deal'=>json_encode($big_major_arr),
+            'small_major_deal'=>json_encode($small_major_arr),
+        ];
+        return $res;
+    }
+
     /**
      * @param $big_major_str
      * @param $small_major_str
@@ -97,7 +155,7 @@ class Subject extends Admin
      * $big_major_str="方案设计：50"
      * $small_major_str="方案创意：25，文本：16，效果表现：35，估算：2，植物：3，审核校对：4，项目负责：10，设计服务：5"
      */
-    public function deal_major($big_major_str,$small_major_str){
+    public function deal_major1($big_major_str,$small_major_str){
         if (empty($big_major_str[0])){
             return [
                 'big_major'=>json_encode([],JSON_FORCE_OBJECT),
@@ -182,6 +240,152 @@ class Subject extends Admin
                 return $this->error($result);
             }
 
+            $major = $this->deal_major($data['cat_name'],$data['item_name']);
+            $data['big_major'] = $major['big_major'];
+            $data['small_major'] = $major['small_major'];
+            $data['big_major_deal'] = $major['big_major_deal'];
+            $data['small_major_deal'] = $major['small_major_deal'];
+            unset($data['cat_name'],$data['item_name']);
+//            $flag = ItemModel::create($data);
+//            print_r($flag);exit();
+            Db::startTrans();
+            try{
+                $flag = ItemModel::create($data);
+//                unset($data['idcard']);
+
+                $code = (1 == $data['t_type']) ? session('admin_user.cid').'p' : session('admin_user.cid').'t';
+                $data['pid'] = 0;
+                $data['code'] = $code;
+                $data['subject_id'] = $flag['id'];
+                $flag1 = ProjectModel::create($data);
+                $res = ProjectModel::where('id',$flag1['id'])->setField('node',$data['cid'].'.'.$flag1['id']);
+                // 提交事务
+                Db::commit();
+            } catch (\Exception $e) {
+                // 回滚事务
+                Db::rollback();
+            }
+//            if (!ItemModel::create($data)) {
+//                return $this->error('添加失败');
+//            }
+            if ($res){
+                return $this->success("操作成功{$this->score_value}");
+            }else{
+                return $this->error('添加失败');
+            }
+
+        }
+        $this->assign('subject_option', ItemModel::getOption(null));
+        $this->assign('p_source', ItemModel::getPsource());
+        $this->assign('three_level', ItemModel::getThreeLevel());
+        $this->assign('grade_type', ProjectModel::getGrade());
+        $this->assign('cur_time', date('YmdHis'));
+        $this->assign('t_type', ProjectModel::getTType());
+        $this->assign('s_status', ItemModel::getSStatus(1));
+        $this->assign('is_private', ProjectModel::getPrivate());
+        $this->assign('professional_cat', ProfessionalItem::getPCat());
+        $this->assign('professional_item', ProfessionalItem::getPItem());
+        return $this->fetch('itemform');
+    }
+
+    public function editItem($id = 0)
+    {
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
+            // 验证
+            $result = $this->validate($data, 'SubjectItem');
+            if ($result !== true) {
+                return $this->error($result);
+            }
+            $major = $this->deal_major($data['cat_name'],$data['item_name']);
+            $data['big_major'] = $major['big_major'];
+            $data['small_major'] = $major['small_major'];
+            $data['big_major_deal'] = $major['big_major_deal'];
+            $data['small_major_deal'] = $major['small_major_deal'];
+            unset($data['cat_name'],$data['item_name']);
+
+//            $res = [];
+            Db::startTrans();
+            try{
+                $flag = ItemModel::update($data);
+                unset($data['id']);
+                $code = (1 == $data['t_type']) ? session('admin_user.cid').'p' : session('admin_user.cid').'t';
+                $data['pid'] = 0;
+                $data['code'] = $code;
+                $where = [
+                    'subject_id' => $flag['id'],
+                    'pid' => 0,
+                ];
+                $res = ProjectModel::where($where)->update($data);
+//                // 提交事务
+                Db::commit();
+            } catch (\Exception $e) {
+                // 回滚事务
+                Db::rollback();
+            }
+            if ($res){
+                return $this->success("操作成功{$this->score_value}");
+            }else{
+                return $this->error('添加失败');
+            }
+//            if (!ItemModel::update($data)) {
+//                return $this->error('修改失败');
+//            }
+            return $this->success('修改成功');
+        }
+
+        $row = ItemModel::where('id', $id)->find()->toArray();
+        if ($row){
+//            $row['big_major'] = json_decode($row['big_major'],true);
+            $row['small_major_deal'] = json_decode($row['small_major_deal'],true);
+            if (!empty($row['attachment'])){
+                $attachment = explode(',',$row['attachment']);
+                $row['attachment_show'] = array_filter($attachment);
+            }
+        }
+//        print_r($row);
+        $this->assign('cur_time', empty($row['idcard']) ? date('YmdHis') : $row['idcard']);
+        $this->assign('data_info', $row);
+        $this->assign('subject_option', ItemModel::getOption($row['cat_id']));
+        $this->assign('p_source', ItemModel::getPsource());
+        $this->assign('three_level', ItemModel::getThreeLevel());
+        $this->assign('grade_type', ProjectModel::getGrade());
+        $this->assign('t_type', ProjectModel::getTType());
+        $this->assign('s_status', ItemModel::getSStatus($row['s_status']));
+        $this->assign('is_private', ProjectModel::getPrivate($row['is_private']));
+        return $this->fetch('itemedit');
+    }
+
+    public function read($id = 0)
+    {
+        $row = ItemModel::where('id', $id)->find()->toArray();
+        if ($row){
+            $row['small_major_deal'] = json_decode($row['small_major_deal'],true);
+            if (!empty($row['attachment'])){
+                $attachment = explode(',',$row['attachment']);
+                $row['attachment_show'] = array_filter($attachment);
+            }
+        }
+        $this->assign('data_info', $row);
+        $this->assign('subject_cat', ItemModel::getCat1());
+        return $this->fetch();
+    }
+
+    public function addItem1()
+    {
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
+            unset($data['id']);
+            // 验证
+            $result = $this->validate($data, 'SubjectItem');
+            if ($result !== true) {
+                return $this->error($result);
+            }
+
             $major = $this->deal_major($data['big_major'],$data['small_major']);
             $data['big_major'] = $major['big_major'];
             $data['small_major'] = $major['small_major'];
@@ -228,7 +432,7 @@ class Subject extends Admin
         return $this->fetch('itemform');
     }
 
-    public function editItem($id = 0)
+    public function editItem1($id = 0)
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
@@ -582,7 +786,7 @@ class Subject extends Admin
             }
         }
         $this->assign('data_info', $row);
-        $this->assign('partner_grade', PartnerModel::getPartnerGrade());
+        $this->assign('partner_grade', Partnership::getPartnerGrade());
         return $this->fetch();
 
     }
