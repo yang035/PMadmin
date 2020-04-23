@@ -15,7 +15,7 @@
                         <th>ML(斗)</th>
                         <th>合伙系数</th>
                         <th>协议单价</th>
-                        <th>参考总价</th>
+                        <th>总价</th>
                     </tr>
                     </thead>
                     <tbody>

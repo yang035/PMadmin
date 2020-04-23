@@ -71,7 +71,7 @@
             <td>
                 <div class="layui-btn-group">
                     <div class="layui-btn-group">
-                        <a href="{:url('listByPeople',['project_name'=>$vo['subject_name'],'project_id'=>$vo['subject_id']])}" class="layui-btn layui-btn-primary layui-btn-sm">项目明细</a>
+                        <a href="{:url('listProjectDetail',['project_name'=>$vo['subject_name'],'id'=>$vo['subject_id']])}" class="layui-btn layui-btn-primary layui-btn-sm">项目明细</a>
                     </div>
                 </div>
             </td>

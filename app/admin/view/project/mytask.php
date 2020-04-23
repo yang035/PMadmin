@@ -338,6 +338,27 @@
         });
     }
 
+    function open_reply(id,project_id) {
+        var open_url = "{:url('ReportReply/add')}?id="+id+"&project_id="+project_id+"&type=2";
+        if (open_url.indexOf('?') >= 0) {
+            open_url += '&hisi_iframe=yes';
+        } else {
+            open_url += '?hisi_iframe=yes';
+        }
+        layer.open({
+            type:2,
+            maxmin: true,
+            title :'评价',
+            area: ['600px', '400px'],
+            content: open_url,
+            success:function (layero, index) {
+                var body = layer.getChildFrame('body', index);  //巧妙的地方在这里哦
+                body.contents().find(".field-report_id").val(id);
+                body.contents().find(".field-project_id").val(project_id);
+            }
+        });
+    }
+
     new SelectBox($('.box1'),{$project_select},function(result){
         if ('' != result.id){
             $('#project_name').val(result.name);

@@ -117,7 +117,7 @@ class Subject extends Admin
                 foreach ($v as $kk=>$vv) {
                     $small_major_str[$kk] = $vv['name'].'：'.$vv['ratio']*100;
                     $small_total[$k][$kk] = [
-                        'id'=>10000+$kk,
+                        'id'=>$kk,
                         'name'=>$vv['name'],
                         'value'=>$vv['ratio']*100,
                     ];
@@ -290,6 +290,7 @@ class Subject extends Admin
 
     public function editItem($id = 0)
     {
+        $row = ItemModel::where('id', $id)->find()->toArray();
         if ($this->request->isPost()) {
             $data = $this->request->post();
             $data['cid'] = session('admin_user.cid');
@@ -299,11 +300,14 @@ class Subject extends Admin
             if ($result !== true) {
                 return $this->error($result);
             }
-            $major = $this->deal_major($data['cat_name'],$data['item_name']);
-            $data['big_major'] = $major['big_major'];
-            $data['small_major'] = $major['small_major'];
-            $data['big_major_deal'] = $major['big_major_deal'];
-            $data['small_major_deal'] = $major['small_major_deal'];
+            $partner_user = json_decode($row['partner_user'],true);
+            if (empty($partner_user)){
+                $major = $this->deal_major($data['cat_name'],$data['item_name']);
+                $data['big_major'] = $major['big_major'];
+                $data['small_major'] = $major['small_major'];
+                $data['big_major_deal'] = $major['big_major_deal'];
+                $data['small_major_deal'] = $major['small_major_deal'];
+            }
             unset($data['cat_name'],$data['item_name']);
 
 //            $res = [];
@@ -336,7 +340,6 @@ class Subject extends Admin
             return $this->success('修改成功');
         }
 
-        $row = ItemModel::where('id', $id)->find()->toArray();
         if ($row){
 //            $row['big_major'] = json_decode($row['big_major'],true);
             $row['small_major_deal'] = json_decode($row['small_major_deal'],true);
@@ -361,15 +364,56 @@ class Subject extends Admin
     public function read($id = 0)
     {
         $row = ItemModel::where('id', $id)->find()->toArray();
-        if ($row){
-            $row['small_major_deal'] = json_decode($row['small_major_deal'],true);
+        if ($row) {
+            $row['small_major_deal_arr'] = json_decode($row['small_major_deal'],true);
+            $p_data = Partnership::getPartnerGrade1();
+            $p_data1 = [];
+            $partner_user = json_decode($row['partner_user'],true);
+            $subject_cat = ItemModel::getCat1();
+            if (empty($partner_user)){
+                return $this->error('请先配置合伙级别');
+            }
+            if ((float)$row['total_price'] <=0){
+                return $this->error('合同总价不能小于0');
+            }
+            if (!$p_data){
+                return $this->error('请联系管理员,合伙级别内容为空');
+            }else{
+                foreach ($p_data as $k=>$v) {
+                    $p_data1[$v['id']] = [
+                        'name'=>$v['name'],
+                        'ratio'=>$v['ratio'],
+                    ];
+                }
+            }
+
+            if ($row['small_major_deal_arr']) {
+                foreach ($row['small_major_deal_arr'] as $k => $v) {
+                    foreach ($v['child'] as $kk => $vv) {
+                        $tmp = [];
+                        $row['small_major_deal_arr'][$k]['child'][$kk]['dep_name'] = isset($vv['dep']) ? $this->deal_user($vv['dep']) : null;
+                        if (isset($vv['dep']) && !empty($partner_user) && isset($partner_user[$vv['dep']]) && isset($p_data1[$partner_user[$vv['dep']]])){
+                            $tmp = $p_data1[$partner_user[$vv['dep']]];
+                        }
+                        $row['small_major_deal_arr'][$k]['child'][$kk]['hehuo_name'] = $tmp;
+                        $row['small_major_deal_arr'][$k]['child'][$kk]['ml'] = round($row['score'] * $subject_cat[$row['cat_id']]['ratio'] * $v['value']/100 * $vv['value']/100 * 1.00,2);
+                        $row['small_major_deal_arr'][$k]['child'][$kk]['per_price'] = round($row['total_price']/$row['score']*$tmp['ratio'],2);
+                    }
+                }
+            }
+            $row['leader_user_id'] = $this->deal_data($row['leader_user']);
+            $row['leader_user'] = $this->deal_data_id($row['leader_user']);
+            $row['send_user_id'] = $this->deal_data($row['send_user']);
+            $row['send_user'] = $this->deal_data_id($row['send_user']);
+            $row['copy_user_id'] = $this->deal_data($row['copy_user']);
+            $row['copy_user'] = $this->deal_data_id($row['copy_user']);
             if (!empty($row['attachment'])){
                 $attachment = explode(',',$row['attachment']);
                 $row['attachment_show'] = array_filter($attachment);
             }
         }
         $this->assign('data_info', $row);
-        $this->assign('subject_cat', ItemModel::getCat1());
+        $this->assign('subject_cat', $subject_cat);
         return $this->fetch();
     }
 

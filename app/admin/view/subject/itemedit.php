@@ -101,6 +101,13 @@
         {/volist}
         {/volist}
         <div class="layui-form-item">
+            <label class="layui-form-label">合同总价</label>
+            <div class="layui-input-inline">
+                <input type="number" class="layui-input field-total_price" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="total_price" lay-verify="required" autocomplete="off" >
+            </div>
+            <div class="layui-form-mid red">元*</div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">项目面积</label>
             <div class="layui-input-inline">
                 <input type="number" class="layui-input field-area" name="area" autocomplete="off" placeholder="请输入项目面积">

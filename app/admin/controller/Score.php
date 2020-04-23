@@ -11,6 +11,8 @@ use app\admin\model\AdminCompany;
 use app\admin\model\Project as ProjectModel;
 use app\admin\model\AdminUser;
 use app\admin\model\Score as ScoreModel;
+use app\admin\model\Partnership as Partnership;
+use app\admin\model\SubjectItem as ItemModel;
 use think\Db;
 
 class Score extends Admin
@@ -244,8 +246,8 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
         $name_arr = ProjectModel::getColumn('name');
         $myPro = ProjectModel::getProTask(0,0);
         foreach ($data_list as $k=>$v){
-            $data_list[$k]['pname'] = $v['project_id'] ? $name_arr[$v['project_id']] : '无';
-            $data_list[$k]['subject_name'] = $v['subject_id'] ? $myPro[$v['subject_id']] : '其他';
+            $data_list[$k]['pname'] = isset($v['project_id']) && isset($name_arr[$v['project_id']]) ? $name_arr[$v['project_id']] : '无';
+            $data_list[$k]['subject_name'] = isset($v['subject_id']) && isset($myPro[$v['subject_id']])? $myPro[$v['subject_id']] : '其他';
         }
         // 分页
         $pages = $data_list->render();
@@ -342,7 +344,7 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
 //        print_r($data_list);
             $myPro = ProjectModel::getProTask(0,0);
             foreach ($data_list as $k=>$v){
-                $data_list[$k]['subject_name'] = $v['subject_id'] ? $myPro[$v['subject_id']] : '其他';
+                $data_list[$k]['subject_name'] = isset($v['subject_id']) && isset($myPro[$v['subject_id']]) ? $myPro[$v['subject_id']] : '其他';
             }
 
             vendor('PHPExcel.PHPExcel');
@@ -385,7 +387,7 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
 //        print_r($data_list);
         $myPro = ProjectModel::getProTask(0,0);
         foreach ($data_list as $k=>$v){
-            $data_list[$k]['subject_name'] = $v['subject_id'] ? $myPro[$v['subject_id']] : '其他';
+            $data_list[$k]['subject_name'] = isset($v['subject_id']) && isset($myPro[$v['subject_id']]) ? $myPro[$v['subject_id']] : '其他';
         }
 
         // 分页
@@ -398,15 +400,93 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
         return $this->fetch();
     }
 
+    public function listProjectDetail($id = 0)
+    {
+        if (!isset($id)){
+            return $this->error('项目不存在');
+        }
+        $map['Score.subject_id'] = $id;
+        $map['Score.cid'] = session('admin_user.cid');
+        $fields = "`Score`.id,`Score`.subject_id,`Score`.user,sum(`Score`.ml_add_score) as ml_add_sum,sum(`Score`.ml_sub_score) as ml_sub_sum,sum(`Score`.gl_add_score) as gl_add_sum,sum(`Score`.gl_sub_score) as gl_sub_sum,Project.name,Project.major_cat,Project.major_cat_name,Project.major_item,Project.major_item_name";
+
+        $data_list = model('Score')::hasWhere('scoreProject')->field($fields)->group('user,major_item')->where($map)->paginate(10000, false, ['query' => input('get.')])->toArray();
+        $data_list = $data_list['data'];
+        $ml = [];
+        if ($data_list){
+            foreach ($data_list as $k=>$v) {
+                $ml[$v['major_item']] = $v['ml_add_sum'];
+            }
+        }
+        if (empty($ml)){
+            return $this->error('这个项目ML不存在');
+        }
+
+        $row = ProjectModel::where('id', $id)->find()->toArray();
+        if ($row) {
+            $row['small_major_deal_arr'] = json_decode($row['small_major_deal'],true);
+            $p_data = Partnership::getPartnerGrade1();
+            $p_data1 = [];
+            $partner_user = json_decode($row['partner_user'],true);
+            $subject_cat = ItemModel::getCat1();
+            if (empty($partner_user)){
+                return $this->error('请先配置合伙级别');
+            }
+            if ((float)$row['total_price'] <=0){
+                return $this->error('合同总价不能小于0');
+            }
+            if (!$p_data){
+                return $this->error('请联系管理员,合伙级别内容为空');
+            }else{
+                foreach ($p_data as $k=>$v) {
+                    $p_data1[$v['id']] = [
+                        'name'=>$v['name'],
+                        'ratio'=>$v['ratio'],
+                    ];
+                }
+            }
+
+            if ($row['small_major_deal_arr']) {
+                foreach ($row['small_major_deal_arr'] as $k => $v) {
+                    foreach ($v['child'] as $kk => $vv) {
+                        $tmp = [];
+                        $row['small_major_deal_arr'][$k]['child'][$kk]['dep_name'] = isset($vv['dep']) ? $this->deal_user($vv['dep']) : null;
+                        if (isset($vv['dep']) && !empty($partner_user) && isset($partner_user[$vv['dep']]) && isset($p_data1[$partner_user[$vv['dep']]])){
+                            $tmp = $p_data1[$partner_user[$vv['dep']]];
+                        }
+                        $row['small_major_deal_arr'][$k]['child'][$kk]['hehuo_name'] = $tmp;
+                        $row['small_major_deal_arr'][$k]['child'][$kk]['ml'] = round(isset($ml[$vv['id']]) ? $ml[$vv['id']] : 0,2);
+                        $row['small_major_deal_arr'][$k]['child'][$kk]['per_price'] = round($row['total_price']/$row['score']*$tmp['ratio'],2);
+                    }
+                }
+            }
+        }
+        $this->assign('data_info', $row);
+        $this->assign('subject_cat', $subject_cat);
+        return $this->fetch();
+    }
+
+    public function deal_user($dep)
+    {
+        if (!is_array($dep) && !empty($dep)) {
+            $where = [
+                'company_id' => session('admin_user.cid'),
+                'status' => 1,
+                'id'=>['in',$dep],
+            ];
+            $result = AdminUser::where($where)->select();
+            $dep_name = array_column($result,'realname');
+            return implode(',',$dep_name);
+        }else{
+            return null;
+        }
+    }
+
     public function listByPeople($q = '')
     {
 //        echo strtotime('2019-04-31 23:59:59');
         $map = [];
         $map1 = [];
         $params = $this->request->param();
-        if (!isset($params['project_id'])){
-            return $this->error('此菜单已禁用');
-        }
         $d = '';
         if ($params){
             if (!empty($params['realname'])){

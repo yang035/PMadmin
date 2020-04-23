@@ -48,5 +48,16 @@ class Partnership extends Model
         }
         return $data;
     }
+    public static function getPartnerGrade1($grade = 0)
+    {
+        $map = [
+            'cid'=>session('admin_user.cid'),
+        ];
+        $data = self::where($map)->select();
+        if (!$data){
+            $data = [];
+        }
+        return $data;
+    }
 
 }
