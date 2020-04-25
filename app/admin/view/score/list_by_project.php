@@ -7,12 +7,12 @@
 <div>
     <form class="layui-form layui-form-pane" action="{:url()}" method="get" id="search_form">
         <div class="layui-form-item">
-            <div class="layui-inline">
-                <label class="layui-form-label">真实姓名</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="realname" value="{:input('get.realname')}" placeholder="真实姓名" autocomplete="off" class="layui-input">
-                </div>
-            </div>
+<!--            <div class="layui-inline">-->
+<!--                <label class="layui-form-label">真实姓名</label>-->
+<!--                <div class="layui-input-inline">-->
+<!--                    <input type="text" name="realname" value="{:input('get.realname')}" placeholder="真实姓名" autocomplete="off" class="layui-input">-->
+<!--                </div>-->
+<!--            </div>-->
             <div class="layui-inline">
                 <label class="layui-form-label">选择项目</label>
                 <div class="layui-input-inline box box1">

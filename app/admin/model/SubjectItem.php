@@ -212,4 +212,18 @@ class SubjectItem extends Model
         return true;
     }
 
+    public static function getPart($type = 0)
+    {
+        $p_status = config('other.part');
+        $str = '';
+        foreach ($p_status as $k => $v) {
+            if ($type == $k) {
+                $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+            } else {
+                $str .= '<option value="'.$k.'">'.$v.'</option>';
+            }
+        }
+        return $str;
+    }
+
 }

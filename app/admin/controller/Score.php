@@ -332,7 +332,7 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                 $d_arr = explode(' - ',$d);
                 $d0 = strtotime($d_arr[0].' 00:00:00');
                 $d1 = strtotime($d_arr[1].' 23:59:59');
-                $map['Score.create_time'] = ['between',["$d0","$d1"]];
+                $map['create_time'] = ['between',["$d0","$d1"]];
             }
         }
 
@@ -405,6 +405,7 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
         if (!isset($id)){
             return $this->error('项目不存在');
         }
+
         $map['Score.subject_id'] = $id;
         $map['Score.cid'] = session('admin_user.cid');
         $fields = "`Score`.id,`Score`.subject_id,`Score`.user,sum(`Score`.ml_add_score) as ml_add_sum,sum(`Score`.ml_sub_score) as ml_sub_sum,sum(`Score`.gl_add_score) as gl_add_sum,sum(`Score`.gl_sub_score) as gl_sub_sum,Project.name,Project.major_cat,Project.major_cat_name,Project.major_item,Project.major_item_name";
@@ -423,6 +424,14 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
 
         $row = ProjectModel::where('id', $id)->find()->toArray();
         if ($row) {
+            $sql = "SELECT ratio FROM (SELECT * FROM tb_subject_flow WHERE subject_id = {$row['subject_id']} ORDER BY id DESC LIMIT 10000) c GROUP BY c.flow_id";
+            $r = Db::query($sql);
+            if (empty($r)){
+                return $this->error('请负责人先汇总项目进度');
+            }else{
+                $jindu = array_sum(array_column($r,'ratio'))/100;
+            }
+
             $row['small_major_deal_arr'] = json_decode($row['small_major_deal'],true);
             $p_data = Partnership::getPartnerGrade1();
             $p_data1 = [];
@@ -454,7 +463,8 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                             $tmp = $p_data1[$partner_user[$vv['dep']]];
                         }
                         $row['small_major_deal_arr'][$k]['child'][$kk]['hehuo_name'] = $tmp;
-                        $row['small_major_deal_arr'][$k]['child'][$kk]['ml'] = round(isset($ml[$vv['id']]) ? $ml[$vv['id']] : 0,2);
+                        $row['small_major_deal_arr'][$k]['child'][$kk]['jindu'] = $jindu;
+                        $row['small_major_deal_arr'][$k]['child'][$kk]['ml'] = round(isset($ml[$vv['id']]) ? $ml[$vv['id']]*$jindu : 0,2);
                         $row['small_major_deal_arr'][$k]['child'][$kk]['per_price'] = round($row['total_price']/$row['score']*$tmp['ratio'],2);
                     }
                 }

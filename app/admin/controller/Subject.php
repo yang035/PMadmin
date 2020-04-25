@@ -19,6 +19,8 @@ use app\admin\model\Partnership as Partnership;
 use app\admin\model\FlowItem as FlowModel;
 use app\admin\model\SubjectFlow as SubjectFlowModel;
 use app\admin\model\ProfessionalItem as ProfessionalItem;
+use app\admin\model\Xieyi as Xieyi;
+use app\admin\model\ProcessItem as ProcessItem;
 use think\Db;
 use traits\think\Instance;
 
@@ -89,6 +91,218 @@ class Subject extends Admin
         $this->assign('cat_option', ItemModel::getOption());
         $this->assign('s_status', ItemModel::getSStatus());
         return $this->fetch('item');
+    }
+
+    public function liulan($q = '')
+    {
+        if ($this->request->isAjax()) {
+            $where = $data = [];
+            $page = input('param.page/d', 1);
+            $limit = input('param.limit/d', 20);
+
+            $cat_id = input('param.cat_id/d');
+            if ($cat_id) {
+                $where['cat_id'] = $cat_id;
+            }
+            $name = input('param.name');
+            if ($name) {
+                $where['name'] = ['like', "%{$name}%"];
+            }
+            $s_status = input('param.s_status/d');
+            if ($s_status) {
+                $where['s_status'] = $s_status;
+            }
+            $p_status = config('other.s_status');
+            $where['cid'] = session('admin_user.cid');
+            $order = 'status desc,id desc';
+            $data['data'] = ItemModel::with('cat')->where($where)->page($page)->order($order)->limit($limit)->select();
+//            $carType = config('other.car_color');
+            if ($data['data']){
+                foreach ($data['data'] as $k=>$v){
+                    $v['s_status'] = $p_status[$v['s_status']];
+                    $v['leader_user'] = $this->deal_data($v['leader_user']);
+                }
+            }
+            $data['count'] = ItemModel::where($where)->count('id');
+            $data['code'] = 0;
+            $data['msg'] = '';
+            return json($data);
+        }
+
+        // 分页
+        $tab_data = $this->tab_data;
+        $tab_data['current'] = url('');
+
+        $this->assign('tab_data', $tab_data);
+        $this->assign('tab_type', 1);
+        $this->assign('cat_option', ItemModel::getOption());
+        $this->assign('s_status', ItemModel::getSStatus());
+        return $this->fetch();
+    }
+
+    public function editX()
+    {
+        if ($this->request->isAjax()) {
+            $data = $this->request->param();
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
+            unset($data['id']);
+            // 验证
+            $result = $this->validate($data, 'Xieyi');
+            if ($result !== true) {
+                return $this->error($result);
+            }
+
+            $map = [
+                'cid'=>session('admin_user.cid'),
+                'subject_id'=>$data['subject_id'],
+//                'part'=>$data['part'],
+            ];
+            $flag = Xieyi::where($map)->find();
+            if (!$flag){
+                $f = Xieyi::create($data);
+                $xieyi_id = $f['id'];
+            }else{
+                if (0 == $flag['is_sign']){
+                    $f = Xieyi::where(['id'=>$flag['id']])->update($data);
+                    $xieyi_id = $flag['id'];
+                }else{
+//                    return $this->error("此项目,第{$flag['part']}阶段协议已经签署,不能修改");
+                    return $this->error("此项目协议已经签署,不能修改");
+                }
+            }
+            if ($xieyi_id){
+                Xieyi::where(['id'=>$xieyi_id])->update(['peibi_biao'=>$this->peibiBiao($xieyi_id)]);
+                return $this->success('预览中','',['xieyi_id'=>$xieyi_id]);
+            }else{
+                return $this->error('预览出错');
+            }
+        }
+        $this->assign('part_option', ItemModel::getPart());
+        return $this->fetch();
+    }
+
+    public function peibiBiao($xieyi_id)
+    {
+        $data = Xieyi::where(['id'=>$xieyi_id])->find();
+        if (!$data){
+            return $this->error('协议不存在');
+        }else{
+            $id = $data['subject_id'];
+        }
+        $row = ItemModel::where('id', $id)->find()->toArray();
+        if ($row) {
+            $row['small_major_deal_arr'] = json_decode($row['small_major_deal'],true);
+            $p_data = Partnership::getPartnerGrade1();
+            $p_data1 = [];
+            $partner_user = json_decode($row['partner_user'],true);
+            $subject_cat = ItemModel::getCat1();
+            if (empty($partner_user)){
+                return $this->error('请先配置合伙级别');
+            }
+            if ((float)$row['total_price'] <=0){
+                return $this->error('合同总价不能小于0');
+            }
+            if (!$p_data){
+                return $this->error('请联系管理员,合伙级别内容为空');
+            }else{
+                foreach ($p_data as $k=>$v) {
+                    $p_data1[$v['id']] = [
+                        'name'=>$v['name'],
+                        'ratio'=>$v['ratio'],
+                    ];
+                }
+            }
+
+            if ($row['small_major_deal_arr']) {
+                foreach ($row['small_major_deal_arr'] as $k => $v) {
+                    foreach ($v['child'] as $kk => $vv) {
+                        $tmp = [];
+                        $row['small_major_deal_arr'][$k]['child'][$kk]['dep_name'] = isset($vv['dep']) ? $this->deal_user($vv['dep']) : null;
+                        if (isset($vv['dep']) && !empty($partner_user) && isset($partner_user[$vv['dep']]) && isset($p_data1[$partner_user[$vv['dep']]])){
+                            $tmp = $p_data1[$partner_user[$vv['dep']]];
+                        }
+                        $row['small_major_deal_arr'][$k]['child'][$kk]['hehuo_name'] = $tmp;
+                        $row['small_major_deal_arr'][$k]['child'][$kk]['ml'] = round($row['score'] * $subject_cat[$row['cat_id']]['ratio'] * $v['value']/100 * $vv['value']/100 * 1.00 * $data['remain_work']/100,2);
+                        $row['small_major_deal_arr'][$k]['child'][$kk]['per_price'] = round($row['total_price']/$row['score']*$tmp['ratio'],2);
+                    }
+                }
+            }
+            return json_encode($row);
+        }else{
+            return $this->error('解析出错');
+        }
+    }
+
+    public function editXieyi($xieyi_id)
+    {
+        $data = Xieyi::where(['id'=>$xieyi_id])->find();
+        if (!$data){
+            return $this->error('协议不存在');
+        }else{
+            $subject_cat = ItemModel::getCat1();
+            $row = json_decode($data['peibi_biao'],true);
+        }
+
+        $data['att1'] = htmlspecialchars_decode($data['att1']);
+        $data['att2'] = htmlspecialchars_decode($data['att2']);
+
+        $fields = "u.realname,i.idcard";
+        $where = [
+            'u.id'=>session('admin_user.uid'),
+        ];
+        $user = \db('admin_user')->alias('u')->field($fields)
+            ->join("tb_user_info i", 'u.id = i.user_id', 'left')
+            ->where($where)
+            ->find();
+
+        $this->assign('data_info', $row);
+        $this->assign('subject_cat', $subject_cat);
+        $this->assign('user', $user);
+        $this->assign('xieyi', $data);
+        return $this->fetch();
+    }
+
+    public function signXieyi($id)
+    {
+        $data = Xieyi::where(['subject_id'=>$id])->order('id desc')->limit(1)->find();
+        if (!$data){
+            return $this->error('协议不存在');
+        }else{
+            $subject_cat = ItemModel::getCat1();
+            $row = json_decode($data['peibi_biao'],true);
+        }
+
+        if ($this->request->isAjax()) {
+            $p = $this->request->param();
+            $user = AdminUser::where(['id'=>session('admin_user.uid')])->find();
+            if (!password_verify($p['password'], $user->password)) {
+                return $this->error('密码错误');
+            }
+            $f = Xieyi::where(['id'=>$data['id']])->update(['is_sign'=>1]);
+            if (!$f){
+                return $this->error('签署失败');
+            }
+            return $this->success("签署成功");
+        }
+
+        $data['att1'] = htmlspecialchars_decode($data['att1']);
+        $data['att2'] = htmlspecialchars_decode($data['att2']);
+
+        $fields = "u.realname,i.idcard";
+        $where = [
+            'u.id'=>session('admin_user.uid'),
+        ];
+        $user = \db('admin_user')->alias('u')->field($fields)
+            ->join("tb_user_info i", 'u.id = i.user_id', 'left')
+            ->where($where)
+            ->find();
+
+        $this->assign('data_info', $row);
+        $this->assign('subject_cat', $subject_cat);
+        $this->assign('user', $user);
+        $this->assign('xieyi', $data);
+        return $this->fetch('edit_xieyi');
     }
 
     public function deal_major($cat_name,$item_name){

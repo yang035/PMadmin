@@ -59,8 +59,6 @@
     <a href="#" onclick="contract({{ d.id }},'{{ d.name }}')" class="layui-btn layui-btn-xs layui-btn-normal">拟定合同</a>
     <a href="#" onclick="zujian_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">组建项目组</a>
     <a href="#" onclick="partner_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">合伙配置</a>
-    <a href="#" onclick="edit_x({{ d.id }},'{{ d.name }}')" class="layui-btn layui-btn-xs layui-btn-normal">编辑协议</a>
-    <a href="#" onclick="sign_xieyi({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">签署协议</a>
 </script>
 <script type="text/javascript">
     layui.use(['jquery','table'], function() {
@@ -75,21 +73,20 @@
                 none : '暂无相关数据'
             }
             ,cols: [[ //表头
-                // {type:'checkbox',fixed: 'left'},
+                {type:'checkbox'},
                 {field: 'xuhao', title: '序号',type: 'numbers'},
                 {field: 'name', title: '名称',width:200, templet:function(d){
                         return "<a class='mcolor' onclick='read("+d.id+")'>"+d.name+"</a>";
                     }},
-                // {field: 'idcard', title: '项目编号',width:150},
+                {field: 'idcard', title: '项目编号',width:150},
                 {field: 'cat_id', title: '类别',width:80, templet:function(d){
                         return d.cat.name;
                     }},
                 // {field: 's_status', title: '项目状态', templet:function(d){
                 //         return d.s_status;
                 //     }},
-                // {field: 'leader_user', title: '总负责人',width:150},
-                // {field: 'status', title: '状态',width:100, templet: '#statusTpl'},
-                {title: '操作', templet: '#buttonTpl',minWidth:600}
+                {field: 'leader_user', title: '总负责人',width:150},
+                {field: 'status', title: '状态',width:100, templet: '#statusTpl'},
             ]]
         });
     });
@@ -220,27 +217,6 @@
             title :'详情',
             maxmin: true,
             area: ['800px', '600px'],
-            content: open_url,
-            success:function (layero, index) {
-            }
-        });
-    }
-    function edit_x(id,name){
-        var open_url = "{:url('editX')}?id="+id+"&name="+name;
-        window.location.href = open_url;
-    }
-    function sign_xieyi(id){
-        var open_url = "{:url('signXieyi')}?id="+id+"&p=s";
-        if (open_url.indexOf('?') >= 0) {
-            open_url += '&hisi_iframe=yes';
-        } else {
-            open_url += '?hisi_iframe=yes';
-        }
-        layer.open({
-            type:2,
-            title :'详情',
-            maxmin: true,
-            area: ['1000px', '600px'],
             content: open_url,
             success:function (layero, index) {
             }

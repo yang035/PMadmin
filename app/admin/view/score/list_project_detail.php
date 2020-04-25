@@ -10,7 +10,7 @@
                     <tr>
                         <th>专业类型</th>
                         <th>专业</th>
-                        <th>阶段系数</th>
+                        <th>进度系数</th>
                         <th>人员</th>
                         <th>ML(斗)</th>
                         <th>合伙系数</th>
@@ -24,7 +24,7 @@
                     <tr>
                         <td>{$f['name']}({$f['value']/100})</td>
                         <td>{$f1['name']}({$f1['value']/100})</td>
-                        <td>1.00</td>
+                        <td>{$f1['jindu']}</td>
                         <td>{$f1['dep_name']|default=''}</td>
                         <td>{$f1['ml']}</td>
                         <td>{$f1['hehuo_name']['name']|default=''}({$f1['hehuo_name']['ratio']|default=''})</td>
