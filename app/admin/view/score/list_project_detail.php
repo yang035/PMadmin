@@ -24,7 +24,7 @@
                     <tr>
                         <td>{$f['name']}({$f['value']/100})</td>
                         <td>{$f1['name']}({$f1['value']/100})</td>
-                        <td>{$f1['jindu']}</td>
+                        <td>{$f1['jindu']*100}</td>
                         <td>{$f1['dep_name']|default=''}</td>
                         <td>{$f1['ml']}</td>
                         <td>{$f1['hehuo_name']['name']|default=''}({$f1['hehuo_name']['ratio']|default=''})</td>

@@ -429,7 +429,7 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
             if (empty($r)){
                 return $this->error('请负责人先汇总项目进度');
             }else{
-                $jindu = array_sum(array_column($r,'ratio'));
+                $jindu = array_sum(array_column($r,'ratio'))/100;
             }
 
             $row['small_major_deal_arr'] = json_decode($row['small_major_deal'],true);
