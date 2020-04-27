@@ -429,7 +429,7 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
             if (empty($r)){
                 return $this->error('请负责人先汇总项目进度');
             }else{
-                $jindu = array_sum(array_column($r,'ratio'))/100;
+                $jindu = array_sum(array_column($r,'ratio'));
             }
 
             $row['small_major_deal_arr'] = json_decode($row['small_major_deal'],true);
@@ -457,7 +457,10 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
             if ($row['small_major_deal_arr']) {
                 foreach ($row['small_major_deal_arr'] as $k => $v) {
                     foreach ($v['child'] as $kk => $vv) {
-                        $tmp = [];
+                        $tmp = [
+                            'name'=>'无',
+                            'ratio'=>0,
+                        ];
                         $row['small_major_deal_arr'][$k]['child'][$kk]['dep_name'] = isset($vv['dep']) ? $this->deal_user($vv['dep']) : null;
                         if (isset($vv['dep']) && !empty($partner_user) && isset($partner_user[$vv['dep']]) && isset($p_data1[$partner_user[$vv['dep']]])){
                             $tmp = $p_data1[$partner_user[$vv['dep']]];
