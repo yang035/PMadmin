@@ -41,7 +41,8 @@
         <div class="layui-input-inline">
             <input type="radio" class="field-type" name="type" value="1" title="月度" checked>
             <input type="radio" class="field-type" name="type" value="2" title="季度">
-            <input type="radio" class="field-type" name="type" value="3" title="年度">
+            <input type="radio" class="field-type" name="type" value="3" title="半年度">
+            <input type="radio" class="field-type" name="type" value="4" title="年度">
         </div>
     </div>
     <div class="layui-form-item">
