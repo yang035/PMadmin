@@ -142,8 +142,8 @@ class Subject extends Admin
 
     public function editX()
     {
+        $data = $this->request->param();
         if ($this->request->isAjax()) {
-            $data = $this->request->param();
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
             unset($data['id']);
@@ -178,6 +178,12 @@ class Subject extends Admin
                 return $this->error('预览出错');
             }
         }
+        $row = ItemModel::where('id', $data['id'])->find()->toArray();
+        $time = [
+            'start_time'=>date('Y-m-d',strtotime($row['start_time'])),
+            'end_time'=>date('Y-m-d',strtotime($row['end_time'])),
+        ];
+        $this->assign('time', $time);
         $this->assign('part_option', ItemModel::getPart());
         return $this->fetch();
     }
@@ -251,8 +257,11 @@ class Subject extends Admin
         $data['att2'] = htmlspecialchars_decode($data['att2']);
 
         $fields = "u.realname,i.idcard";
+        if (!isset($row['fu'])){
+            return $this->error('负责人不存在');
+        }
         $where = [
-            'u.id'=>session('admin_user.uid'),
+            'u.id'=>$row['fu'],
         ];
         $user = \db('admin_user')->alias('u')->field($fields)
             ->join("tb_user_info i", 'u.id = i.user_id', 'left')
@@ -275,10 +284,13 @@ class Subject extends Admin
             $subject_cat = ItemModel::getCat1();
             $row = json_decode($data['peibi_biao'],true);
         }
+        if (!isset($row['fu'])){
+            return $this->error('负责人不存在');
+        }
 
         if ($this->request->isAjax()) {
             $p = $this->request->param();
-            $user = AdminUser::where(['id'=>session('admin_user.uid')])->find();
+            $user = AdminUser::where(['id'=>$row['fu']])->find();
             if (!password_verify($p['password'], $user->password)) {
                 return $this->error('密码错误');
             }
@@ -294,7 +306,7 @@ class Subject extends Admin
 
         $fields = "u.realname,i.idcard";
         $where = [
-            'u.id'=>session('admin_user.uid'),
+            'u.id'=>$row['fu'],
         ];
         $user = \db('admin_user')->alias('u')->field($fields)
             ->join("tb_user_info i", 'u.id = i.user_id', 'left')
@@ -1060,6 +1072,16 @@ class Subject extends Admin
             $data['manager_user'] = $data['leader_user'];
             $t = [];
             $deal_user = '';
+            $fu = explode(',',array_values($data)[0]);
+            if (count($fu) == 1){
+                $u = $fu[0];
+            }else{
+                if ($fu[1]){
+                    $u = $fu[1];
+                }else{
+                    $u = 1;
+                }
+            }
             foreach ($data as $k => $v) {
                 if ('id' == $k) {
                     continue;
@@ -1086,6 +1108,7 @@ class Subject extends Admin
             }else{
                 return $this->error('请填写专业配比！');
             }
+            $data['fu'] = $u;
             Db::startTrans();
             try{
                 ItemModel::update($data);
@@ -1101,6 +1124,7 @@ class Subject extends Admin
                     'partner_user'=>$data['deal_user'],
                     'copy_user'=>$data['copy_user'],
                     'small_major_deal'=>$data['small_major_deal'],
+                    'fu'=>$u,
                 ];
                 $res = ProjectModel::where($where)->update($tmp);
 //                // 提交事务

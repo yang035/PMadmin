@@ -82,20 +82,24 @@
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
             <legend>
                 <div class="layui-form-item">
-                    <label class="layui-form-label1">{$f['name']}</label>
+<!--                    <label class="layui-form-label1">{$f['name']}</label>-->
+                    <div class="layui-input-inline1">
+                        <input type="text" class="layui-input field-cat_name" name="cat_name[{$f['id']}][name]" value="{$f['name']}" lay-verify="required" >
+                    </div>
                     <div class="layui-input-inline1">
                         <input type="text" class="layui-input field-cat_ratio" name="cat_name[{$f['id']}][ratio]" value="{$f['value']/100}" lay-verify="required" >
-                        <input type="hidden" class="layui-input field-cat_name" name="cat_name[{$f['id']}][name]" value="{$f['name']}" lay-verify="required" >
                     </div>
                 </div>
             </legend>
         </fieldset>
         {volist name="f['child']" id="f1"}
         <div class="layui-form-item" style="margin-left: 100px">
-            <label class="layui-form-label1">{$f1['name']}</label>
+<!--            <label class="layui-form-label1">{$f1['name']}</label>-->
+            <div class="layui-input-inline1">
+                <input type="text" class="layui-input field-item_name" name="item_name[{$f['id']}][{$f1['id']}][name]" value="{$f1['name']}" lay-verify="required" >
+            </div>
             <div class="layui-input-inline1">
                 <input type="text" class="layui-input field-item_ratio" name="item_name[{$f['id']}][{$f1['id']}][ratio]" value="{$f1['value']/100}" lay-verify="required" >
-                <input type="hidden" class="layui-input field-item_name" name="item_name[{$f['id']}][{$f1['id']}][name]" value="{$f1['name']}" lay-verify="required" >
             </div>
         </div>
         {/volist}

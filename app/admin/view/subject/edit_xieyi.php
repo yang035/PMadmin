@@ -42,18 +42,20 @@
             </thead>
             <tbody>
             {volist name="data_info['small_major_deal_arr']" id="f"}
-            {volist name="f['child']" id="f1"}
-            <tr>
-                <td>{$f['name']}({$f['value']/100})</td>
-                <td>{$f1['name']}({$f1['value']/100})</td>
-                <td>1.00</td>
-                <td>{$f1['dep_name']|default=''}</td>
-                <td>{$f1['ml']}</td>
-                <td>{$f1['hehuo_name']['name']|default=''}({$f1['hehuo_name']['ratio']|default=''})</td>
-                <td>{$f1['per_price']|default=''}</td>
-                <td>{$f1['ml']*$f1['per_price']}</td>
-            </tr>
-            {/volist}
+            {if condition="$f['value'] > 0"}
+                {volist name="f['child']" id="f1"}
+                <tr {if condition="$f1['dep_name'] == $user['realname']"} style="font-weight: bold" {/if}>
+                    <td>{$f['name']}({$f['value']/100})</td>
+                    <td>{$f1['name']}({$f1['value']/100})</td>
+                    <td>1.00</td>
+                    <td>{$f1['dep_name']|default=''}</td>
+                    <td>{$f1['ml']}</td>
+                    <td>{$f1['hehuo_name']['name']|default=''}({$f1['hehuo_name']['ratio']|default=''})</td>
+                    <td>{$f1['per_price']|default=''}</td>
+                    <td>{$f1['ml']*$f1['per_price']}</td>
+                </tr>
+                {/volist}
+            {/if}
             {/volist}
             </tbody>
         </table>
@@ -176,7 +178,7 @@
     <input type="hidden" class="layui-input" name="id" autocomplete="off" value="{$Request.param.id}">
     <button type="button" class="layui-btn layui-btn-normal" onclick="agree()">同意协议</button>
     {else/}
-    <div class="layui-form-mid" style="color: red">已签署</div>
+    <div class="layui-form-mid" style="color: red">{$user['realname']}(已签署)</div>
     {/eq}
     {/eq}
 </form>

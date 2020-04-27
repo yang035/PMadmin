@@ -81,21 +81,25 @@
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
             <legend>
                 <div class="layui-form-item">
-                <label class="layui-form-label1">{$f['name']}</label>
-                <div class="layui-input-inline1">
-                    <input type="text" class="layui-input field-cat_ratio" name="cat_name[{$f['id']}][ratio]" value="{$f['ratio']}" lay-verify="required" >
-                    <input type="hidden" class="layui-input field-cat_name" name="cat_name[{$f['id']}][name]" value="{$f['name']}" lay-verify="required" >
-                </div>
+<!--                <label class="layui-form-label1">{$f['name']}</label>-->
+                    <div class="layui-input-inline1">
+                        <input type="text" class="layui-input field-cat_name" name="cat_name[{$f['id']}][name]" value="{$f['name']}" lay-verify="required" >
+                    </div>
+                    <div class="layui-input-inline1">
+                        <input type="text" class="layui-input field-cat_ratio" name="cat_name[{$f['id']}][ratio]" value="{$f['ratio']}" lay-verify="required" >
+                    </div>
                 </div>
             </legend>
         </fieldset>
         {volist name="professional_item" id="f1"}
         {eq name="f1['cat_id']" value="$f['id']"}
         <div class="layui-form-item" style="margin-left: 100px">
-            <label class="layui-form-label1">{$f1['name']}</label>
+<!--            <label class="layui-form-label1">{$f1['name']}</label>-->
+            <div class="layui-input-inline1">
+                <input type="text" class="layui-input field-item_name" name="item_name[{$f1['cat_id']}][{$f1['id']}][name]" value="{$f1['name']}" lay-verify="required" >
+            </div>
             <div class="layui-input-inline1">
                 <input type="text" class="layui-input field-item_ratio" name="item_name[{$f1['cat_id']}][{$f1['id']}][ratio]" value="{$f1['ratio']}" lay-verify="required" >
-                <input type="hidden" class="layui-input field-item_name" name="item_name[{$f1['cat_id']}][{$f1['id']}][name]" value="{$f1['name']}" lay-verify="required" >
             </div>
         </div>
         {/eq}

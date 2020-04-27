@@ -13,6 +13,7 @@ use app\admin\model\AdminUser;
 use app\admin\model\Score as ScoreModel;
 use app\admin\model\Partnership as Partnership;
 use app\admin\model\SubjectItem as ItemModel;
+use app\admin\model\Xieyi;
 use think\Db;
 
 class Score extends Admin
@@ -454,6 +455,8 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                 }
             }
 
+            $xieyi = Xieyi::field('remain_work')->where(['subject_id'=>$row['subject_id']])->order('id desc')->limit(1)->find();
+//            print_r($xieyi);
             if ($row['small_major_deal_arr']) {
                 foreach ($row['small_major_deal_arr'] as $k => $v) {
                     foreach ($v['child'] as $kk => $vv) {
@@ -467,7 +470,8 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                         }
                         $row['small_major_deal_arr'][$k]['child'][$kk]['hehuo_name'] = $tmp;
                         $row['small_major_deal_arr'][$k]['child'][$kk]['jindu'] = $jindu;
-                        $row['small_major_deal_arr'][$k]['child'][$kk]['ml'] = round(isset($ml[$vv['id']]) ? $ml[$vv['id']]*$jindu : 0,2);
+                        $row['small_major_deal_arr'][$k]['child'][$kk]['ml'] = round($row['score'] * $subject_cat[$row['cat_id']]['ratio'] * $v['value']/100 * $vv['value']/100 * $jindu * $xieyi['remain_work']/100 ,2);
+//                        $row['small_major_deal_arr'][$k]['child'][$kk]['ml'] = round(isset($ml[$vv['id']]) ? $ml[$vv['id']] : 0,2);
                         $row['small_major_deal_arr'][$k]['child'][$kk]['per_price'] = round($row['total_price']/$row['score']*$tmp['ratio'],2);
                     }
                 }

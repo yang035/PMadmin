@@ -94,13 +94,14 @@ layui.use(['jquery', 'laydate','upload','form','element'], function() {
         elem: '.field-begin_date',
         type: 'date',
         trigger: 'click',
-        value: new Date(),
+        value: "{$time['start_time']}",
     });
 
     laydate.render({
         elem: '.field-end_date',
         type: 'date',
         trigger: 'click',
+        value: "{$time['end_time']}",
     });
 
     element.render();
