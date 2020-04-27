@@ -59,13 +59,13 @@
             }
             ,cols: [[ //表头
                 {type:'checkbox'},
+                {field: 'name', title: '单项', templet:function(d){
+                        return "<a class='mcolor' onclick='read("+d.id+")'>"+d.name+"</a>";
+                    }},
+                {field: 'ratio', title: '进度(%)'},
                 {field: 'cat_id', title: '类别', templet:function(d){
                         return d.cat.name;
                     }},
-                {field: 'name', title: '标题', templet:function(d){
-                        return "<a class='mcolor' onclick='read("+d.id+")'>"+d.name+"</a>";
-                    }},
-                {field: 'ratio', title: '分值'},
                 // {field: 'status', title: '状态', templet: '#statusTpl'},
                 {title: '操作', templet: '#buttonTpl'}
             ]]
