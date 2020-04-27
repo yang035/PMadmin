@@ -38,7 +38,7 @@
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">绩效指标</label>
-        <div class="layui-input-inline">
+        <div class="layui-input-inline" style="width: 400px">
             <input type="radio" class="field-type" name="type" value="1" title="月度" checked>
             <input type="radio" class="field-type" name="type" value="2" title="季度">
             <input type="radio" class="field-type" name="type" value="3" title="半年度">
