@@ -13,6 +13,7 @@ use app\admin\model\AdminUser;
 use app\admin\model\Score as ScoreModel;
 use app\admin\model\Partnership as Partnership;
 use app\admin\model\SubjectItem as ItemModel;
+use app\admin\model\SubjectItem;
 use app\admin\model\Xieyi;
 use think\Db;
 
@@ -606,6 +607,161 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
         $this->assign('tab_type', 2);
         $this->assign('d', $d);
         return $this->fetch();
+    }
+
+    public function listPeople(){
+        $cid = session('admin_user.cid');
+        $w = [
+            'cid'=>$cid,
+        ];
+        $si = SubjectItem::where($w)->column('partner_user','id');
+        $si = array_filter($si,function ($v){
+            if ('null' != $v) return $v;
+        });
+        if ($si){
+            foreach ($si as $k=>$v){
+                $v = json_decode($v,true);
+                foreach ($v as $kk=>$vv) {
+                    $tmp[$kk][] = $k;
+                }
+            }
+            if ($tmp){
+                foreach ($tmp as $k=>$v) {
+                    $tmp[$k] = $this->listPeopleProject($v);
+                }
+            }
+
+            $tmp = array_filter($tmp);//一个人参加的多个项目
+            //累加
+            $tmp2 = [];
+
+            if ($tmp){
+                foreach ($tmp as $k=>$v) {
+                    foreach ($v as $kk=>$vv) {
+                        if (key_exists($k,$vv)){
+                            $tmp2[$k][$kk]['ml'] = $vv[$k]['ml'];
+                            $tmp2[$k][$kk]['finish_ml'] = $vv[$k]['finish_ml'];
+                        }
+                    }
+                }
+            }
+            if ($tmp2){
+                foreach ($tmp2 as $k=>$v) {
+                    $tmp2[$k] = [
+                        'uid'=>$k,
+                        'ml'=>array_sum(array_column($v,'ml')),
+                        'finish_ml'=>array_sum(array_column($v,'finish_ml')),
+                    ];
+                }
+            }
+        }
+        array_multisort(array_column($tmp2,'ml'),SORT_DESC,$tmp2);
+//print_r($tmp2);
+        $map = [
+            'company_id'=>$cid,
+        ];
+        $user = AdminUser::where($map)->column('realname','id');
+
+        $gl = ScoreModel::where($w)->group('user')->order('gl_add_sum desc')->column('sum(gl_add_score) as gl_add_sum','user');
+        $i = 0;
+        foreach ($gl as $k=>$v){
+            $i++;
+            $gl[$k] = [
+                'sort'=>$i,
+                'gl_add_sum'=>$v,
+            ];
+        }
+        $this->assign('tmp', $tmp2);
+        $this->assign('user', $user);
+        $this->assign('gl', $gl);
+        return $this->fetch();
+    }
+
+    public function listPeopleProject($p){
+        if (is_array($p)){
+            $p = implode(',',$p);
+        }
+        $sql = "SELECT si.id,si.cat_id,si.name,si.score,si.small_major_deal,si.partner_user,si.total_price,sc.name cat_name,sc.ratio,xy.remain_work
+FROM tb_subject_item si
+LEFT JOIN tb_subject_cat sc ON si.cat_id=sc.id
+LEFT JOIN tb_xieyi xy ON si.id=xy.subject_id
+WHERE si.id in ({$p})";
+        $data = Db::query($sql);
+        $tmp3 = $tmp4 = [];
+        if ($data){
+            foreach ($data as $k1=>$row){
+                $sql = "SELECT ratio FROM (SELECT * FROM tb_subject_flow WHERE subject_id = {$row['id']} ORDER BY id DESC LIMIT 10000) c GROUP BY c.flow_id";
+                $r = Db::query($sql);
+                if (empty($r)){
+                    continue;
+//                    return $this->error('请负责人先汇总项目进度');
+                }else{
+                    $jindu = array_sum(array_column($r,'ratio'))/100;
+                }
+                $row['small_major_deal_arr'] = json_decode($row['small_major_deal'],true);
+
+                $p_data = Partnership::getPartnerGrade1();
+                $p_data1 = [];
+                $partner_user = json_decode($row['partner_user'],true);
+                if (empty($partner_user)){
+                    return $this->error('请先配置合伙级别');
+                }
+                if ((float)$row['total_price'] <=0){
+                    continue;
+//                    return $this->error('合同总价不能小于0');
+                }
+                if (!$p_data){
+                    continue;
+//                    return $this->error('请联系管理员,合伙级别内容为空');
+                }else{
+                    foreach ($p_data as $k=>$v) {
+                        $p_data1[$v['id']] = [
+                            'name'=>$v['name'],
+                            'ratio'=>$v['ratio'],
+                        ];
+                    }
+                }
+
+                $xieyi = Xieyi::field('remain_work')->where(['subject_id'=>$row['id']])->order('id desc')->limit(1)->find();
+//            print_r($xieyi);
+                if ($row['small_major_deal_arr']) {
+                    foreach ($row['small_major_deal_arr'] as $k => $v) {
+                        foreach ($v['child'] as $kk => $vv) {
+                            $tmp = [
+                                'name' => '无',
+                                'ratio' => 0,
+                            ];
+                            $tmp1[$kk]['dep'] = $vv['dep'];
+                            $tmp1[$kk]['dep_name'] = isset($vv['dep']) ? $this->deal_user($vv['dep']) : null;
+                            if (isset($vv['dep']) && !empty($partner_user) && isset($partner_user[$vv['dep']]) && isset($p_data1[$partner_user[$vv['dep']]])) {
+                                $tmp = $p_data1[$partner_user[$vv['dep']]];
+                            }
+                            $tmp1[$kk]['hehuo_name'] = $tmp;
+                            $tmp1[$kk]['jindu'] = $jindu;
+                            $tmp1[$kk]['ml'] = round($row['score'] * $row['ratio'] * $v['value'] / 100 * $vv['value'] / 100 * $xieyi['remain_work'] / 100, 2);
+                            $tmp1[$kk]['finish_ml'] = round($tmp1[$kk]['ml'] * $jindu,2);
+//                        $row['small_major_deal_arr'][$k]['child'][$kk]['ml'] = round(isset($ml[$vv['id']]) ? $ml[$vv['id']] : 0,2);
+                            $tmp1[$kk]['per_price'] = round($row['total_price'] / $row['score'] * $tmp['ratio'], 2);
+                        }
+                    }
+                    if ($tmp1){
+                        foreach ($tmp1 as $k=>$v) {
+                            $tmp2[$v['dep']][$k] = [
+                                'ml'=>$v['ml'],
+                                'finish_ml'=>$v['finish_ml'],
+                            ];;
+                        }
+//                        print_r($tmp2);
+                        foreach ($tmp2 as $k=>$v){
+                            $tmp3[$k]['ml'] = array_sum(array_column($v,'ml'));
+                            $tmp3[$k]['finish_ml'] = array_sum(array_column($v,'finish_ml'));
+                        }
+                        $tmp4[$row['id']] = $tmp3;
+                    }
+                }
+            }
+        }
+        return $tmp4;
     }
 
     public function getOrderRatio(){
