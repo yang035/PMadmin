@@ -22,7 +22,19 @@
                 <li class="layui-timeline-item">
                     <i class="layui-icon layui-timeline-axis"></i>
                     <div class="layui-timeline-content layui-text">
-                        <div class="layui-timeline-title">{$f2['remark']}--<a href="{$f2['file']}" target="_blank">{$f2['name']}</a>--{$f2['create_time']} {notempty name="f2['ratio']"}--<span class="ratio red">{$f2['ratio']}</span>%{/notempty}</div>
+                        <div class="layui-timeline-title">
+                            {if condition="(1 == $f2['flag']) && (0 == $f2['agree'])"}
+                                {eq name="$f1['ratio']" value="0"}
+                                <button onclick="agree({$f2['id']},{$f1['ratio']})" type="button" class="layui-btn layui-btn-sm">确认</button>
+                                {else/ }
+                                <button onclick="agree1({$f2['id']},{$f1['ratio']})" type="button" class="layui-btn layui-btn-sm">确认</button>
+                                {/eq}
+                            {/if}
+                            {$f2['remark']}--
+                            {volist name="f2['attachment']" id='f3'}
+                            <a href="{$f3}" target="_blank">附件{$i}</a>
+                            {/volist}
+                            --{$f2['create_time']} {notempty name="f2['ratio']"}--<span class="ratio red">{$f2['ratio']}</span>%{/notempty}</div>
                     </div>
                 </li>
                 {/volist}
@@ -35,7 +47,7 @@
 </form>
 {include file="block/layui" /}
 <script>
-    var formData = {:json_encode($data_info)};
+    var formData = {:json_encode($row)};
 
     layui.use(['jquery', 'laydate','form'], function() {
         var $ = layui.jquery, laydate = layui.laydate, form = layui.form;
@@ -71,6 +83,36 @@
             maxmin: true,
             area: ['900px', '600px'],
             content: open_url,
+        });
+    }
+
+    function agree(flow_id,placeholder){
+        var open_url = "{:url('agree')}";
+        $.post(open_url,{'flow_id':flow_id,'placeholder':placeholder},function(res) {
+            if (res.code == 1) {
+                layer.msg(res.msg);
+                location.reload();
+            }else {
+                layer.msg(res.msg);
+            }
+        });
+    }
+
+    function agree1(flow_id,placeholder){
+        var open_url = "{:url('agree')}?flow_id="+flow_id+"&placeholder="+placeholder;
+        if (open_url.indexOf('?') >= 0) {
+            open_url += '&hisi_iframe=yes';
+        } else {
+            open_url += '?hisi_iframe=yes';
+        }
+        layer.open({
+            type:2,
+            title :'进度',
+            maxmin: true,
+            area: ['600px', '300px'],
+            content: open_url,
+            success:function (layero, index) {
+            }
         });
     }
 </script>

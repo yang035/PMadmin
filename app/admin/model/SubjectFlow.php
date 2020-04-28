@@ -17,6 +17,16 @@ class SubjectFlow extends Model
     public static function getOption($suject_id)
     {
         $map = [
+            'cid'=>session('admin_user.cid'),
+            'subject_id'=>$suject_id,
+        ];
+        $data = self::where($map)->order('id desc')->select();
+        return $data;
+    }
+
+    public static function getOption1($suject_id)
+    {
+        $map = [
             's.cid'=>session('admin_user.cid'),
             's.subject_id'=>$suject_id,
         ];

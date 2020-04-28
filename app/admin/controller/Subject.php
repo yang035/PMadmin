@@ -842,7 +842,8 @@ class Subject extends Admin
                     $s_flow = SubjectFlow::getOption($params['id']);
                     if ($s_flow){
                         foreach ($s_flow as $v) {
-                            $v['create_time'] = date('Y-m-d H:i:s',$v['create_time']);
+                            $v['attachment'] = !empty($v['attachment']) ? array_filter(explode(',',$v['attachment'])) : $v['attachment'];
+//                            $v['create_time'] = date('Y-m-d H:i:s',$v['create_time']);
                             $subject_flow[$v['flow_id']][] = $v;
                         }
                         foreach ($subject_flow as $k=>$v) {
@@ -873,6 +874,7 @@ class Subject extends Admin
                 7=>$row['remark'],
             ];
         }
+//        print_r($subject_flow);
         $this->assign('row', $row);
         $this->assign('flow_cat', $flow_cat);
         $this->assign('flow', $flow);
@@ -886,13 +888,13 @@ class Subject extends Admin
             $data = $this->request->post();
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
-            if (empty($data['remark']) && empty($data['upload_id'])){
+            if (empty($data['remark']) && empty($data['attachment'])){
                 return $this->error('描述和附件不能都为空');
             }
             $where = [
                 'cid'=>$data['cid'],
                 'remark'=>$data['remark'],
-                'upload_id'=>$data['upload_id'],
+                'attachment'=>$data['attachment'],
             ];
             $flag = SubjectFlowModel::where($where)->find();
             if ($flag){
@@ -903,6 +905,30 @@ class Subject extends Admin
                 return $this->error('提交失败');
             }
             return $this->success("操作成功{$this->score_value}");
+        }
+        return $this->fetch();
+    }
+
+    public function agree(){
+        if ($this->request->isAjax()){
+            $data = $this->request->post();
+            if (isset($data['placeholder']) && 0 == $data['placeholder']){
+                $flag = SubjectFlowModel::where(['id'=>$data['flow_id']])->update(['agree'=>1]);
+                if (!$flag){
+                    return $this->error('操作失败');
+                }
+                return $this->success("操作成功{$this->score_value}");
+            }else{
+                if (isset($data['placeholder']) && (int)$data['placeholder'] > 0  && (int)$data['ratio'] >= 0){
+                    $flag = SubjectFlowModel::where(['id'=>$data['flow_id']])->update(['agree'=>1,'ratio'=>(int)$data['ratio']]);
+                    if (!$flag){
+                        return $this->error('操作失败');
+                    }
+                    return $this->success("操作成功{$this->score_value}");
+                }else{
+                    return $this->error('进度不能小于0');
+                }
+            }
         }
         return $this->fetch();
     }

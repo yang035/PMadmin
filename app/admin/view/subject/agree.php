@@ -1,35 +1,18 @@
 <form class="layui-form" action="{:url()}" method="post">
     <div class="layui-tab-item layui-show layui-form-pane">
-        {notempty name="Request.param.placeholder"}
         <div class="layui-form-item">
             <label class="layui-form-label">完成比例</label>
             <div class="layui-input-inline">
-                <input type="number" class="layui-input field-ratio" name="ratio" value="0" min="0" max="{$Request.param.placeholder}" onblur="check_ratio(this)" autocomplete="off" placeholder="请输入完成比例">
+                <input type="number" class="layui-input field-ratio" name="ratio" value="0" min="1" max="{$Request.param.placeholder}" onblur="check_ratio(this)" autocomplete="off" placeholder="请输入完成比例">
             </div>
             <div class="layui-form-mid red">% 最大值  {$Request.param.placeholder}</div>
-        </div>
-        {/notempty}
-        <div class="layui-form-item">
-            <label class="layui-form-label">描述</label>
-            <div class="layui-input-inline">
-                <textarea  class="layui-textarea field-remark" name="remark" lay-verify="" autocomplete="off" placeholder="[选填]分类简介"></textarea>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">附件</label>
-            <div class="layui-input-inline">
-                <button type="button" class="layui-btn" id="test3"><i class="layui-icon"></i>上传文件</button>
-                <input class="layui-input attachment" type="hidden" name="attachment" value="">
-                <span class="att_name"></span>
-            </div>
         </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <input type="hidden" class="field-subject_id" name="subject_id" value="{$Request.param.subject_id}">
             <input type="hidden" class="field-flow_id" name="flow_id" value="{$Request.param.flow_id}">
-            <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
-            <a href="javascript:history.back()" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
+            <input type="hidden" class="field-placeholder" name="placeholder" value="{$Request.param.placeholder}">
+            <button type="button" onclick="agree()" class="layui-btn layui-btn-normal" >提交</button>
         </div>
     </div>
 </form>
@@ -69,7 +52,7 @@
     function check_ratio(e) {
         var num = parseInt($(e).val()),ma=e.getAttribute('max'),mi=e.getAttribute('min');
         if (isNaN(num)) {
-            num = 0;
+            num = 1;
         }
         if (num > ma) {
             layer.msg('比例只能在'+mi+'~'+ma+'之间');
@@ -80,6 +63,23 @@
             num = mi;
         }
         $('.field-ratio').val(num);
+    }
+
+    function agree(){
+        var open_url = "{:url('agree')}",data = $("form").serialize();
+        $.post(open_url,data,function(res) {
+            var index = parent.layer.getFrameIndex(window.name);
+            if (res.code == 1) {
+                layer.alert(res.msg,{
+                    yes:function(){
+                        parent.layer.close(index);
+                    }
+                    location.reload();
+                });
+            }else {
+                layer.msg(res.msg);
+            }
+        });
     }
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>

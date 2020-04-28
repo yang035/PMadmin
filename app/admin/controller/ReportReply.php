@@ -7,10 +7,15 @@
  */
 
 namespace app\admin\controller;
+use app\admin\model\FlowCat;
+use app\admin\model\FlowItem;
 use app\admin\model\ReportReply as ReplyModel;
 use app\admin\model\Project;
 use app\admin\model\ProjectReport;
 use app\admin\model\Score;
+use app\admin\model\SubjectCat;
+use app\admin\model\SubjectFlow;
+use think\Db;
 
 class ReportReply extends Admin
 {
@@ -52,6 +57,18 @@ class ReportReply extends Admin
             if($result !== true) {
                 return $this->error($result);
             }
+            $flow_data = [
+                'flow_sys'=>$data['flow_sys'],
+                'flow_cat'=>$data['flow_cat'],
+            ];
+            unset($data['flow_sys'],$data['flow_cat']);
+            if (isset($data['flow_item'])){
+                $flow_data['flow_item'] = $data['flow_item'];
+                unset($data['flow_item']);
+            }
+            if ($flow_data['flow_sys'] && !isset($flow_data['flow_item'])){
+                return $this->error('同步位置不能为空');
+            }
 
             if (!ReplyModel::create($data)) {
                 return $this->error('添加失败！');
@@ -60,6 +77,7 @@ class ReportReply extends Admin
                     $tmp = [
                         'realper'=>$data['realper'],
                         'status'=>0,
+                        'flow_sys'=>$flow_data['flow_sys'],
                     ];
                     ProjectReport::where('id',$data['report_id'])->update($tmp);
                     $per_score = $row['score'] * $row_report['per'] / 100 * $data['realper'] / 100;
@@ -85,12 +103,27 @@ class ReportReply extends Admin
                         'user_id' => $data['user_id'],
                     ];
                     Score::create($score);
+
+                    if ($flow_data['flow_sys']){
+                        $p_row = Project::getRowById($row['subject_id']);
+                        $s_flow = [
+                            'cid' => $data['cid'],
+                            'subject_id' => $p_row['subject_id'],
+                            'flow_id' => $flow_data['flow_item'],
+                            'remark' => $row_report['mark'],
+                            'attachment' => $row_report['attachment'],
+                            'user_id' => $data['user_id'],
+                            'flag' => 1,
+                        ];
+                        SubjectFlow::create($s_flow);
+                    }
                 }
             }
             return $this->success("操作成功{$this->score_value}");
         }
         $this->assign('row', $row);
         $this->assign('row_report', $row_report);
+        $this->assign('flow_cat', FlowCat::getOption1());
         return $this->fetch();
     }
 
@@ -161,6 +194,35 @@ class ReportReply extends Admin
 
     public function edit(){
 
+    }
+
+    public function flowCat(){
+        $params = $this->request->param();
+        $sql = "SELECT cat_id FROM tb_project WHERE id = (SELECT subject_id FROM tb_project WHERE id= {$params['project_id']} LIMIT 1) LIMIT 1";
+        $cat_id = Db::query($sql);
+        if (isset($cat_id[0]['cat_id']) && !empty($cat_id[0]['cat_id'])){
+            $flow = SubjectCat::field('flow')->where(['id'=>$cat_id[0]['cat_id']])->find();
+            $flow = json_decode($flow['flow'],true);
+            $w = [
+                'id'=>['in',$flow],
+            ];
+            $fl = FlowItem::where($w)->select();
+            $r = [];
+            if ($fl){
+                foreach ($fl as $k=>$v) {
+                    $r[$v['cat_id']][$v['id']] = $v['name'];
+                }
+            }
+            $str = '';
+            if (isset($r[$params['flow_cat']])){
+                foreach ($r[$params['flow_cat']] as $k=>$v) {
+                    $str .= "<option value='".$k."'>".$v."</option>";
+                }
+            }
+            return $this->success("操作成功",'',$str);
+        }else{
+            return $this->error('联系管理员，配置设计流程！');
+        }
     }
 
 }
