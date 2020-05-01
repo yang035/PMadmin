@@ -74,7 +74,7 @@
                     yes:function(){
                         parent.layer.close(index);
                     }
-                    location.reload();
+                    // location.reload();
                 });
             }else {
                 layer.msg(res.msg);
