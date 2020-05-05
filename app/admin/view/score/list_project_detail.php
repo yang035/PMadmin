@@ -21,6 +21,7 @@
                     <tbody>
                     {volist name="data_info['small_major_deal_arr']" id="f"}
                     {volist name="f['child']" id="f1"}
+                    {if condition = "$f1['show'] == 2 && $f1['dep'] = $Think.session.admin_user.uid"}
                     <tr>
                         <td>{$f['name']}({$f['value']/100})</td>
                         <td>{$f1['name']}({$f1['value']/100})</td>
@@ -31,6 +32,18 @@
                         <td>{$f1['per_price']|default=''}</td>
                         <td>{$f1['ml']*$f1['per_price']}</td>
                     </tr>
+                    {else/}
+                    <tr>
+                        <td>{$f['name']}({$f['value']/100})</td>
+                        <td>{$f1['name']}({$f1['value']/100})</td>
+                        <td>{$f1['jindu']*100}</td>
+                        <td>{$f1['dep_name']|default=''}</td>
+                        <td>{$f1['ml']}</td>
+                        <td>{$f1['hehuo_name']['name']|default=''}({$f1['hehuo_name']['ratio']|default=''})</td>
+                        <td>{$f1['per_price']|default=''}</td>
+                        <td>{$f1['ml']*$f1['per_price']}</td>
+                    </tr>
+                    {/if}
                     {/volist}
                     {/volist}
                     </tbody>

@@ -339,6 +339,10 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
         }
 
         $map['cid'] = session('admin_user.cid');
+        $role_id = session('admin_user.role_id');
+        if ($role_id > 3){
+            $map['user'] = session('admin_user.uid');
+        }
         $fields = "subject_id,sum(ml_add_score) as ml_add_sum,sum(ml_sub_score) as ml_sub_sum,sum(gl_add_score) as gl_add_sum,sum(gl_sub_score) as gl_sub_sum";
         if (isset($params['export']) && 1 == $params['export']) {
             set_time_limit(0);
@@ -412,6 +416,9 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
         $map['Score.cid'] = session('admin_user.cid');
         $fields = "`Score`.id,`Score`.subject_id,`Score`.user,sum(`Score`.ml_add_score) as ml_add_sum,sum(`Score`.ml_sub_score) as ml_sub_sum,sum(`Score`.gl_add_score) as gl_add_sum,sum(`Score`.gl_sub_score) as gl_sub_sum,Project.name,Project.major_cat,Project.major_cat_name,Project.major_item,Project.major_item_name";
 
+        $role_id = session('admin_user.role_id');
+        $uid = session('admin_user.uid');
+
         $data_list = model('Score')::hasWhere('scoreProject')->field($fields)->group('user,major_item')->where($map)->paginate(10000, false, ['query' => input('get.')])->toArray();
         $data_list = $data_list['data'];
         $ml = [];
@@ -421,7 +428,7 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
             }
         }
         if (empty($ml)){
-            return $this->error('这个项目ML不存在');
+//            return $this->error('这个项目ML不存在');
         }
 
         $row = ProjectModel::where('id', $id)->find()->toArray();
@@ -474,6 +481,14 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                         $row['small_major_deal_arr'][$k]['child'][$kk]['ml'] = round($row['score'] * $subject_cat[$row['cat_id']]['ratio'] * $v['value']/100 * $vv['value']/100 * $jindu * $xieyi['remain_work']/100 ,2);
 //                        $row['small_major_deal_arr'][$k]['child'][$kk]['ml'] = round(isset($ml[$vv['id']]) ? $ml[$vv['id']] : 0,2);
                         $row['small_major_deal_arr'][$k]['child'][$kk]['per_price'] = round($row['total_price']/$row['score']*$tmp['ratio'],2);
+
+                        if ($role_id <4){
+                            $row['small_major_deal_arr'][$k]['child'][$kk]['show'] = 0;
+                        }elseif ($row['fu'] == $uid){
+                            $row['small_major_deal_arr'][$k]['child'][$kk]['show'] = 1;
+                        }else{
+                            $row['small_major_deal_arr'][$k]['child'][$kk]['show'] = 2;
+                        }
                     }
                 }
             }
