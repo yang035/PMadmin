@@ -40,6 +40,7 @@
             <th>已完成ML</th>
             <th>未完成ML</th>
             <th>ML排名</th>
+            <th>当月完成</th>
             <th>累计GL</th>
             <th>GL排名</th>
 <!--            <th>操作</th>-->
@@ -57,6 +58,7 @@
             <td class="font12">{$vo['finish_ml']}</td>
             <td class="font12">{$vo['ml']-$vo['finish_ml']}</td>
             <td class="font12">{$i}</td>
+            <td class="font12">{$vo['finish_ml_month']}</td>
             <td class="font12">{$gl[$vo['uid']]['gl_add_sum']}</td>
             <td class="font12">{$gl[$vo['uid']]['sort']}</td>
 <!--            <td>-->

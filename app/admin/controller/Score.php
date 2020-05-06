@@ -627,6 +627,8 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
 
     public function listPeople(){
         $cid = session('admin_user.cid');
+        $role_id = session('admin_user.role_id');
+        $uid = session('admin_user.uid');
         $w = [
             'cid'=>$cid,
         ];
@@ -649,7 +651,7 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
 
             $tmp = array_filter($tmp);//一个人参加的多个项目
             //累加
-            $tmp2 = [];
+            $tmp2 = $tmp3 = [];
 
             if ($tmp){
                 foreach ($tmp as $k=>$v) {
@@ -667,11 +669,22 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                         'uid'=>$k,
                         'ml'=>array_sum(array_column($v,'ml')),
                         'finish_ml'=>array_sum(array_column($v,'finish_ml')),
+                        'finish_ml_month'=>array_sum(array_column($v,'finish_ml_month')),
                     ];
                 }
             }
         }
         array_multisort(array_column($tmp2,'ml'),SORT_DESC,$tmp2);
+
+        if ($role_id > 3){
+            foreach ($tmp2 as $k => $v) {
+                if ($uid == $v['uid']){
+                    $tmp3[$k] = $v;
+                    continue;
+                }
+            }
+            $tmp2 = $tmp3;
+        }
 //print_r($tmp2);
         $map = [
             'company_id'=>$cid,
@@ -714,6 +727,18 @@ WHERE si.id in ({$p})";
                 }else{
                     $jindu = array_sum(array_column($r,'ratio'))/100;
                 }
+
+                $month_start = date('Y-m-01', time());
+                $end = date('Y-m-d H:i:s', time());
+                $sql1 = "SELECT ratio FROM (SELECT * FROM tb_subject_flow WHERE subject_id = {$row['id']} and create_time >= UNIX_TIMESTAMP('{$month_start}') and create_time <= UNIX_TIMESTAMP('{$end}') ORDER BY id DESC LIMIT 10000) c GROUP BY c.flow_id";
+                $r1 = Db::query($sql1);
+                if (empty($r)){
+                    $jindu_month = 0;
+                }else{
+                    $jindu_month = array_sum(array_column($r1,'ratio'))/100;
+                }
+
+
                 $row['small_major_deal_arr'] = json_decode($row['small_major_deal'],true);
 
                 $p_data = Partnership::getPartnerGrade1();
@@ -756,6 +781,7 @@ WHERE si.id in ({$p})";
                             $tmp1[$kk]['jindu'] = $jindu;
                             $tmp1[$kk]['ml'] = round($row['score'] * $row['ratio'] * $v['value'] / 100 * $vv['value'] / 100 * $xieyi['remain_work'] / 100, 2);
                             $tmp1[$kk]['finish_ml'] = round($tmp1[$kk]['ml'] * $jindu,2);
+                            $tmp1[$kk]['finish_ml_month'] = round($tmp1[$kk]['ml'] * $jindu_month,2);
 //                        $row['small_major_deal_arr'][$k]['child'][$kk]['ml'] = round(isset($ml[$vv['id']]) ? $ml[$vv['id']] : 0,2);
                             $tmp1[$kk]['per_price'] = round($row['total_price'] / $row['score'] * $tmp['ratio'], 2);
                         }
