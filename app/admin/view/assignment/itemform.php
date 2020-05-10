@@ -180,7 +180,7 @@
 
         $('#send_user_id').on('click', function(){
             var send_user = $('#send_user').val();
-            var open_url = "{:url('Tool/getTreeUser')}?m=send&u="+send_user+'&path=1';
+            var open_url = "{:url('Tool/getTreeUser')}?m=send&u="+send_user;
             if (open_url.indexOf('?') >= 0) {
                 open_url += '&hisi_iframe=yes';
             } else {
