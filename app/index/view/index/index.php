@@ -10,10 +10,10 @@
 <div class="gtco-section-overflow">
     <div id="gtco-counter" class="gtco-section">
         <div class="gtco-container">
-            <div class="row">
+            <div class="row" style="margin-top: 100px">
                 <div class="col-md-8 col-md-offset-2 text-center gtco-heading">
-                    <h1>imlgl.com</h1>
-                    <p>DESIGN BY WORLD!</p>
+                    <span style="font-size: 50px">imlgl.com</span>
+<!--                    <p>DESIGN BY WORLD!</p>-->
                 </div>
             </div>
             <div class="row">
