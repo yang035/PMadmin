@@ -791,12 +791,14 @@ WHERE si.id in ({$p})";
                             $tmp2[$v['dep']][$k] = [
                                 'ml'=>$v['ml'],
                                 'finish_ml'=>$v['finish_ml'],
-                            ];;
+                                'finish_ml_month'=>$v['finish_ml_month'],
+                            ];
                         }
 //                        print_r($tmp2);
                         foreach ($tmp2 as $k=>$v){
                             $tmp3[$k]['ml'] = array_sum(array_column($v,'ml'));
                             $tmp3[$k]['finish_ml'] = array_sum(array_column($v,'finish_ml'));
+                            $tmp3[$k]['finish_ml_month'] = array_sum(array_column($v,'finish_ml_month'));
                         }
                         $tmp4[$row['id']] = $tmp3;
                     }

@@ -19,7 +19,14 @@ class Publics extends Common
             if (!$model->login($username, $password)) {
                 return $this->error($model->getError(), url('index'));
             }
-            if (session('admin_user.role_id') > 3) {
+
+            $role_id = session('admin_user.role_id');
+            $cid = session('admin_user.cid');
+            if ($role_id == 8 || $role_id == 9) {
+                $this->assign('_admin_menu_current', array('url'=>'company/edit'));
+                return $this->success('登陆成功，页面跳转中...', url('company/edit', ['id' => $cid]),'',1);
+            }
+            if ($role_id > 3) {
                 $this->assign('_admin_menu_current', array('url'=>'project/mytask'));
                 return $this->success('登陆成功，页面跳转中...', url('Project/mytask', ['type' => 1]),'',1);
             }
@@ -63,6 +70,27 @@ class Publics extends Common
     public function register(){
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            if (!isset($data['sys_type'])){
+                $data['r'] = 1;
+            }
+            switch ($data['sys_type']){
+                case 1:
+                    $data['sys_type'] = 1;
+                    break;
+                case 2:
+                    $data['sys_type'] = 2;
+                    $data['role_id'] = 8;
+                    break;
+                case 3:
+                    $data['sys_type'] = 3;
+                    $data['role_id'] = 9;
+                    break;
+                case 4:
+                    $data['sys_type'] = 1;
+                    break;
+                default:
+                    $data['sys_type'] = 1;
+            }
 
             $data['last_login_ip'] = '';
             $data['auth'] = '';
@@ -83,7 +111,11 @@ class Publics extends Common
                     ];
                     $f1 = AdminCompany::where($tmp)->find();
                     if (!$f1) {
-                        $result = AdminCompany::create($tmp);
+                        $tmp1 = [
+                            'name' => $data['name'],
+                            'sys_type' => $data['sys_type'],
+                        ];
+                        $result = AdminCompany::create($tmp1);
                         $dep_data = [
                             'code' => $result['id'] . 'd',
                             'cid' => $result['id'],
@@ -107,7 +139,7 @@ class Publics extends Common
                     }
                     unset($data['type'], $data['name']);
                     $data['company_id'] = $result['id'];
-                    $data['role_id'] = 3;
+                    $data['role_id'] = isset($data['role_id']) ? $data['role_id'] : 3;
                     $data['department_id'] = $d['id'];
                     $data['status'] = 1;
                     $u = UserModel::create($data);
@@ -137,7 +169,7 @@ class Publics extends Common
             } else {
                 unset($data['type'], $data['name']);
                 $data['company_id'] = 3;
-                $data['role_id'] = 3;
+                $data['role_id'] = isset($data['role_id']) ? $data['role_id'] : 3;
                 $data['department_id'] = 25;
                 $data['status'] = 1;
                 $u = UserModel::create($data);

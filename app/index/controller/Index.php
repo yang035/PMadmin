@@ -24,7 +24,11 @@ class Index extends Controller
         $this->view->engine->layout('layout');
     }
 
-    public function index()
+    public function index(){
+        return $this->fetch();
+    }
+
+    public function index1()
     {
 //        print_r($this->getVideo());
         $this->assign('index_tab', array_slice($this->index_tab,0,8));//只取前8个

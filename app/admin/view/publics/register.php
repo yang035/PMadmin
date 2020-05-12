@@ -6,7 +6,9 @@
     <link rel="stylesheet" href="__ADMIN_JS__/layui/css/layui.css">
     <style type="text/css">
         body {
-            background-color: #009688
+            color:#999;
+            background:url('http://img.infinitynewtab.com/wallpaper/{:date("Ymd")%4000}.jpg');
+            background-size:cover;
         }
 
         .login-head {
@@ -153,7 +155,8 @@
             {:token('__token__', 'sha1')}
             <div class="layui-form-item">
                 <div class="layui-input-block">
-                    <button type="submit" class="layui-btn" lay-submit="" lay-filter="formSubmit">注册</button>
+                    <input type="hidden" name="sys_type" value="{$Request.param.r}">
+                    <button type="submit" class="layui-btn layui-btn-warm" lay-submit="" lay-filter="formSubmit">注册</button>
                     <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回登录</a>
                 </div>
             </div>

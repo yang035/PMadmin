@@ -384,6 +384,7 @@ class User extends Admin
             ['title' => '设置权限'],
         ];
         $this->assign('menu_list', MenuModel::getAllChild());
+        $this->assign('sys_type', RoleModel::getSysType());
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 2);
         return $this->fetch('roleform');
@@ -422,10 +423,11 @@ class User extends Admin
             ['title' => '修改角色'],
             ['title' => '设置权限'],
         ];
-        $row = RoleModel::where('id', $id)->field('id,name,intro,auth,status')->find()->toArray();
+        $row = RoleModel::where('id', $id)->field('id,name,intro,auth,status,sys_type')->find()->toArray();
         $row['auth'] = json_decode($row['auth']);
         $this->assign('data_info', $row);
         $this->assign('menu_list', MenuModel::getAllChild());
+        $this->assign('sys_type', RoleModel::getSysType($row['sys_type']));
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 2);
         return $this->fetch('roleform');

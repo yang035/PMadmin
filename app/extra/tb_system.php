@@ -34,4 +34,9 @@ return [
     'modules' => ['admin', 'common', 'index', 'install', 'hisiphp', 'plugin'],
     // 系统标准配置文件
     'config' => ['app', 'cache', 'cookie', 'database', 'log', 'queue', 'session', 'template', 'trace', 'tb_auth', 'hs_cloud', 'hs_system', 'hisiphp'],
+    'sys_type' => [
+        1 => '设计单位/设计师',
+        2 => '供应商',
+        3 => '项目合作',
+    ],
 ];

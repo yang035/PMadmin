@@ -1,6 +1,14 @@
 <form class="layui-form" action="{:url()}" method="post">
 <div class="layui-tab-item layui-show layui-form-pane">
     <div class="layui-form-item">
+        <label class="layui-form-label">角色类型</label>
+        <div class="layui-input-inline">
+            <select name="sys_type" class="field-sys_type" type="select">
+                {$sys_type}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">角色名称</label>
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-name" name="name" lay-verify="required" autocomplete="off" placeholder="请输入角色名称">
