@@ -71,7 +71,7 @@ class Publics extends Common
         if ($this->request->isPost()) {
             $data = $this->request->post();
             if (!isset($data['sys_type'])){
-                $data['r'] = 1;
+                $data['sys_type'] = 1;
             }
             switch ($data['sys_type']){
                 case 1:
