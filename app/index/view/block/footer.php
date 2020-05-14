@@ -45,7 +45,6 @@
 <script src="__PUBLIC_JS__/index/js/magnific-popup-options.js"></script>
 <!-- Main -->
 <script src="__PUBLIC_JS__/index/js/main.js"></script>
-<a class="bshareDiv" href="http://www.bshare.cn/share">分享按钮</a><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#uuid=&amp;style=3&amp;fs=4&amp;textcolor=#fff&amp;bgcolor=#F90&amp;text=分享到"></script>
 <script>
     var _hmt = _hmt || [];
     (function() {
