@@ -91,6 +91,14 @@
 <!--                </div>-->
 <!--            </div>-->
             <div class="layui-form-item">
+                <label class="layui-form-label">账号属性</label>
+                <div class="layui-input-inline">
+                    <select name="sys_type" class="field-sys_type" type="select" lay-filter="sys_type">
+                        {$sys_type}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
                 <label class="layui-form-label">类型</label>
                 <div class="layui-input-inline">
                     <input type="radio" class="field-type" name="type" value="0" title="公司" checked lay-filter="type">
@@ -155,7 +163,7 @@
             {:token('__token__', 'sha1')}
             <div class="layui-form-item">
                 <div class="layui-input-block">
-                    <input type="hidden" name="sys_type" value="{$Request.param.r}">
+<!--                    <input type="hidden" name="sys_type" value="{$Request.param.r}">-->
                     <button type="submit" class="layui-btn layui-btn-warm" lay-submit="" lay-filter="formSubmit">注册</button>
                     <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回登录</a>
                 </div>

@@ -40,4 +40,18 @@ class AdminCompany extends Model
         return $str;
     }
 
+    public static function getSysType($type = 0)
+    {
+        $leaveType = config('tb_system.sys_type');
+        $str = '';
+        foreach ($leaveType as $k => $v) {
+            if ($type == $k) {
+                $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+            } else {
+                $str .= '<option value="'.$k.'">'.$v.'</option>';
+            }
+        }
+        return $str;
+    }
+
 }

@@ -194,6 +194,7 @@ class Publics extends Common
             return $this->success('注册成功',url('index'));
         }
         $this->assign('company_option', AdminCompany::getOption());
+        $this->assign('sys_type', AdminCompany::getSysType());
         return $this->fetch();
     }
 }

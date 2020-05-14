@@ -48,36 +48,31 @@
     <![endif]-->
 
 </head>
-<body style="background-color: black">
+<body>
 
 <div class="gtco-loader"></div>
 
 <div id="page">
-    <nav class="gtco-nav" role="navigation" style="background-color: black">
-        <div class="row">
-            <div class="col-sm-2 col-xs-6" style="float: right;">
-                <a href="{:url('admin.php/publics/register')}" class="btn-warning btn-md"><span style="color: grey">注册</span></a>
-                <a href="{:url('admin.php/publics/index')}" class="btn-warning btn-md"><span style="color: grey">登录</span></a>
-            </div>
-        </div>
+    <nav class="gtco-nav" role="navigation">
         <div class="gtco-container">
             <div class="row">
                 <div class="col-sm-2 col-xs-12">
                     <div id="gtco-logo"><a href="/admin.php" target="_blank"><img src="__PUBLIC_JS__/index/images/logo.png" title="进入工作"></a></div>
                 </div>
-<!--                <div class="col-sm-4 col-xs-12">-->
-<!--                    <div>{$signword}</div>-->
-<!--                </div>-->
-<!--                <div class="col-xs-6 text-right menu-1">-->
-<!--                    <ul>-->
-<!--                        <li class="active"><a href="/" data-nav-section="home">首页</a></li>-->
-<!--                        <li><a href="/" data-nav-section="services" target="_blank">生活区</a></li>-->
-<!--                        <li><a href="/" data-nav-section="portfolio" target="_blank">学习区</a></li>-->
-<!--                        <li><a href="/admin.php" target="_blank">工作区</a></li>-->
-<!--                        <li><a href="http://bbs.imlgl.com" target="_blank">社区</a></li>-->
-<!--                        <li><a href="/" class="external">联系我们</a></li>-->
-<!--                    </ul>-->
-<!--                </div>-->
+                <div class="col-sm-4 col-xs-12">
+                    <div>{$signword}</div>
+                </div>
+                <div class="col-xs-6 text-right menu-1">
+                    <ul>
+                        <li class="active"><a href="/" data-nav-section="home">首页</a></li>
+                        <li><a href="/" data-nav-section="services" target="_blank">生活区</a></li>
+                        <li><a href="/" data-nav-section="portfolio" target="_blank">学习区</a></li>
+                        <li><a href="/admin.php" target="_blank">工作区</a></li>
+                        <li><a href="http://bbs.imlgl.com" target="_blank">社区</a></li>
+                        <li><a href="/" class="external">联系我们</a></li>
+                    </ul>
+                </div>
             </div>
+
         </div>
     </nav>

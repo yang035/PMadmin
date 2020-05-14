@@ -11,40 +11,21 @@
     <div id="gtco-counter" class="gtco-section">
         <div class="gtco-container">
             <div class="row" style="margin-top: 100px">
-                <div class="col-md-8 col-md-offset-2 text-center gtco-heading">
-                    <span style="font-size: 50px">imlgl.com</span>
-<!--                    <p>DESIGN BY WORLD!</p>-->
+                <div class="col-md-12 col-xs-12 text-center gtco-heading">
+                    <span style="font-size: 70px;font-weight: bold;font-family:'Microsoft YaHei';color: #fe6908;">IMLGL</span>
+                    <span style="font-size: 30px;font-weight: bold;font-family:'Microsoft YaHei';color: #fe6908;">.com</span>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3 col-sm-6 animate-box" data-animate-effect="fadeInLeft">
-                    <div class="feature-center">
-                        <span class="counter" >设计公司</span>
-                        <span style="float: left"><a href="{:url('admin.php/publics/register',['r'=>1])}" class="btn-warning btn-sm">注册</a></span>
-                        <span style="float: right"><a href="{:url('admin.php/publics/index',['r'=>1])}" class="btn-warning btn-sm">登录</a></span>
+                {for start="0" end="6"}
+                <div class="col-md-2 col-xs-4" data-animate-effect="fadeInLeft">
+                    <div style="background: grey;">
+                        <span class="counter" style="color:#ccc;">待定</span>
+                        <!--                        <span style="float: left"><a href="{:url('admin.php/publics/register',['r'=>1])}" class="btn-warning btn-sm">注册</a></span>-->
+                        <!--                        <span style="float: right"><a href="{:url('admin.php/publics/index',['r'=>1])}" class="btn-warning btn-sm">登录</a></span>-->
                     </div>
                 </div>
-                <div class="col-md-3 col-sm-6 animate-box" data-animate-effect="fadeInLeft">
-                    <div class="feature-center">
-                        <span class="counter" >供应商</span>
-                        <span style="float: left"><a href="{:url('admin.php/publics/register',['r'=>2])}" class="btn-warning btn-sm">注册</a></span>
-                        <span style="float: right"><a href="{:url('admin.php/publics/index',['r'=>2])}" class="btn-warning btn-sm">登录</a></span>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6 animate-box" data-animate-effect="fadeInLeft">
-                    <div class="feature-center">
-                        <span class="counter" >项目合作</span>
-                        <span style="float: left"><a href="{:url('admin.php/publics/register',['r'=>3])}" class="btn-warning btn-sm">注册</a></span>
-                        <span style="float: right"><a href="{:url('admin.php/publics/index',['r'=>3])}" class="btn-warning btn-sm">登录</a></span>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6 animate-box" data-animate-effect="fadeInLeft">
-                    <div class="feature-center">
-                        <span class="counter" >设计师</span>
-                        <span style="float: left"><a href="{:url('admin.php/publics/register',['r'=>4])}" class="btn-warning btn-sm">注册</a></span>
-                        <span style="float: right"><a href="{:url('admin.php/publics/index',['r'=>4])}" class="btn-warning btn-sm">登录</a></span>
-                    </div>
-                </div>
+                {/for}
             </div>
         </div>
     </div>
