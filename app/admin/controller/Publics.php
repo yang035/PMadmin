@@ -114,6 +114,7 @@ class Publics extends Common
                         $tmp1 = [
                             'name' => $data['name'],
                             'sys_type' => $data['sys_type'],
+                            'gys_type' => (2 == $data['sys_type']) ? $data['gys_type'] : 1,
                         ];
                         $result = AdminCompany::create($tmp1);
                         $dep_data = [
@@ -195,6 +196,7 @@ class Publics extends Common
         }
         $this->assign('company_option', AdminCompany::getOption());
         $this->assign('sys_type', AdminCompany::getSysType());
+        $this->assign('gys_type', AdminCompany::getGysType());
         return $this->fetch();
     }
 }

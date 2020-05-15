@@ -98,6 +98,14 @@
                     </select>
                 </div>
             </div>
+            <div class="layui-form-item" style="display: none" id="gys_type">
+                <label class="layui-form-label">供应种类</label>
+                <div class="layui-input-inline">
+                    <select name="gys_type" class="field-gys_type" type="select" lay-filter="gys_type">
+                        {$gys_type}
+                    </select>
+                </div>
+            </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">类型</label>
                 <div class="layui-input-inline">
@@ -186,6 +194,14 @@
                 $('.field-name').attr('lay-verify','required');
                 $('.show').show();
             }
+        });
+        form.on('select(sys_type)', function(data){
+            if(2 == data.value){
+                $('#gys_type').show();
+            }else {
+                $('#gys_type').hide();
+            }
+            form.render('select');
         });
         form.on('submit(formSubmit)', function (data) {
             var _form = $(this).parents('form');
