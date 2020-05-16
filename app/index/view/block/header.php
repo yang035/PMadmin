@@ -55,16 +55,19 @@
 <div id="page">
     <nav class="gtco-nav" role="navigation" style="background-color: black">
         <div class="row">
-            <div class="col-sm-2 col-xs-6" style="float: right;">
-                <a href="{:url('admin.php/publics/register')}" class="btn-warning btn-md"><span style="color: grey">注册</span></a>
-                <a href="{:url('admin.php/publics/index')}" class="btn-warning btn-md"><span style="color: grey">登录</span></a>
+            <div class="col-sm-6 col-xs-12" style="float: right;">
+                <a href="{:url('show')}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">项目合作入口</span></a>
+                <a href="{:url('show')}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">设计企业入口</span></a>
+                <a href="{:url('show')}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">设计师入口</span></a>
+                <a href="{:url('show')}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">供应商入口</span></a>
+                <a href="{:url('admin.php/publics/index')}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">登录</span></a>
             </div>
         </div>
-        <div class="gtco-container">
-            <div class="row">
-                <div class="col-sm-2 col-xs-12">
-                    <div id="gtco-logo"><a href="/admin.php" target="_blank"><img src="__PUBLIC_JS__/index/images/logo.png" title="进入工作"></a></div>
-                </div>
+<!--        <div class="gtco-container">-->
+<!--            <div class="row">-->
+<!--                <div class="col-sm-2 col-xs-12">-->
+<!--                    <div id="gtco-logo"><a href="/admin.php" target="_blank"><img src="__PUBLIC_JS__/index/images/logo.png" title="进入工作"></a></div>-->
+<!--                </div>-->
 <!--                <div class="col-sm-4 col-xs-12">-->
 <!--                    <div>{$signword}</div>-->
 <!--                </div>-->
@@ -78,6 +81,6 @@
 <!--                        <li><a href="/" class="external">联系我们</a></li>-->
 <!--                    </ul>-->
 <!--                </div>-->
-            </div>
+<!--            </div>-->
         </div>
     </nav>

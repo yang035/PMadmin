@@ -28,6 +28,10 @@ class Index extends Controller
         return $this->fetch();
     }
 
+    public function show(){
+        return $this->fetch();
+    }
+
     public function index1()
     {
 //        print_r($this->getVideo());
