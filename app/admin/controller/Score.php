@@ -15,6 +15,7 @@ use app\admin\model\Partnership as Partnership;
 use app\admin\model\SubjectItem as ItemModel;
 use app\admin\model\SubjectItem;
 use app\admin\model\Xieyi;
+use app\admin\model\Sendml as SendmlModel;
 use think\Db;
 
 class Score extends Admin
@@ -625,7 +626,7 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
         return $this->fetch();
     }
 
-    public function listPeople(){
+    public function listPeople($p=0){
         $cid = session('admin_user.cid');
         $role_id = session('admin_user.role_id');
         $uid = session('admin_user.uid');
@@ -659,24 +660,38 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                         if (key_exists($k,$vv)){
                             $tmp2[$k][$kk]['ml'] = $vv[$k]['ml'];
                             $tmp2[$k][$kk]['finish_ml'] = $vv[$k]['finish_ml'];
+                            $tmp2[$k][$kk]['finish_ml_month'] = $vv[$k]['finish_ml_month'];
                         }
                     }
                 }
             }
+
+//            print_r($tmp2);
             if ($tmp2){
                 foreach ($tmp2 as $k=>$v) {
+                    $ml = SendmlModel::getSendmlSta($k);
+                    if ($ml){
+                        $benci_fafang = array_sum(array_column($ml,'benci_fafang'));
+                        $total_fafang = array_sum(array_column($ml,'total_fafang'));
+                    }else{
+                        $benci_fafang = 0;
+                        $total_fafang = 0;
+                    }
+
                     $tmp2[$k] = [
                         'uid'=>$k,
                         'ml'=>array_sum(array_column($v,'ml')),
                         'finish_ml'=>array_sum(array_column($v,'finish_ml')),
                         'finish_ml_month'=>array_sum(array_column($v,'finish_ml_month')),
+                        'benci_fafang'=>$benci_fafang,
+                        'total_fafang'=>$total_fafang,
                     ];
                 }
             }
         }
         array_multisort(array_column($tmp2,'ml'),SORT_DESC,$tmp2);
 
-        if ($role_id > 3){
+        if ($role_id > 3 || 1 == $p){
             foreach ($tmp2 as $k => $v) {
                 if ($uid == $v['uid']){
                     $tmp3[$k] = $v;
@@ -700,6 +715,79 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                 'gl_add_sum'=>$v,
             ];
         }
+        $this->assign('tmp', $tmp2);
+        $this->assign('user', $user);
+        $this->assign('gl', $gl);
+        if (1 == $p){
+            return $this->fetch('read');
+        }
+        return $this->fetch();
+    }
+
+    public function listPeopleP($user){
+        $cid = session('admin_user.cid');
+        $role_id = session('admin_user.role_id');
+        $uid = session('admin_user.uid');
+        $w = [
+            'cid'=>$cid,
+        ];
+        $s_b = SubjectItem::field('id,name,partner_user')->where($w)->select();
+        $si = $s_name = [];
+        if ($s_b){
+            foreach ($s_b as $k=>$v){
+                $si[$v['id']] = $v['partner_user'];
+                $s_name[$v['id']] = $v['name'];
+            }
+        }
+        $si = array_filter($si,function ($v){
+            if ('null' != $v) return $v;
+        });
+        if ($si) {
+            foreach ($si as $k => $v) {
+                $v = json_decode($v, true);
+                foreach ($v as $kk => $vv) {
+                    $tmp[$kk][] = $k;
+                }
+            }
+            $t = $tmp[$user];
+            $tmp = $this->listPeopleProject($t);
+//            print_r($t);
+//            print_r($s_name);exit();
+
+            $tmp = array_filter($tmp);//一个人参加的多个项目
+            //累加
+            $tmp2 = $tmp3 = [];
+
+            if ($tmp) {
+                $ml = SendmlModel::getSendmlSta($user);
+                foreach ($tmp as $k => $v) {
+                    foreach ($v as $kk => $vv) {
+                        if ($kk == $user) {
+                            $tmp2[$k] = $vv;
+                            $tmp2[$k]['name'] = $s_name[$k];
+                            $tmp2[$k]['benci_fafang'] = isset($ml[$k]['benci_fafang']) ? $ml[$k]['benci_fafang'] : 0;
+                            $tmp2[$k]['total_fafang'] = isset($ml[$k]['total_fafang']) ? $ml[$k]['total_fafang'] : 0;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        $map = [
+            'company_id'=>$cid,
+        ];
+        $user = AdminUser::where($map)->column('realname','id');
+
+        $gl = ScoreModel::where($w)->group('user')->order('gl_add_sum desc')->column('sum(gl_add_score) as gl_add_sum','user');
+        $i = 0;
+        foreach ($gl as $k=>$v){
+            $i++;
+            $gl[$k] = [
+                'sort'=>$i,
+                'gl_add_sum'=>$v,
+            ];
+        }
+
         $this->assign('tmp', $tmp2);
         $this->assign('user', $user);
         $this->assign('gl', $gl);

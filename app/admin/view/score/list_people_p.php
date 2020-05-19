@@ -35,45 +35,35 @@
         <tr>
             <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
             <th width="30">序号</th>
-            <th>姓名</th>
+            <th>项目名</th>
             <th>累计ML</th>
             <th>已完成ML</th>
             <th>已发放ML</th>
             <th>未发放ML</th>
             <th>未完成ML</th>
-            <th>ML排名</th>
             <th>当月完成</th>
             <th>当月发放</th>
-            <th>累计GL</th>
-            <th>GL排名</th>
-            <th>操作</th>
         </tr>
         </thead>
         <tbody>
         {volist name="tmp" id="vo"}
         <tr>
-            <td><input type="checkbox" name="uid[]" class="layui-checkbox checkbox-ids" value="{$vo['uid']}" lay-skin="primary"></td>
+            <td><input type="checkbox" name="pid[]" class="layui-checkbox checkbox-ids" value="{$key}" lay-skin="primary"></td>
             <td>{$i}</td>
             <td class="font12">
-                <strong class="mcolor">{$user[$vo['uid']]}</strong>
+                <strong class="mcolor">{$vo['name']}</strong>
             </td>
             <td class="font12">{$vo['ml']}</td>
             <td class="font12">{$vo['finish_ml']}</td>
-            <td class="font12">{$vo['total_fafang']}</td>
+            <td class="font12">{$vo['total_fafang']}
+                <a href="#" onclick="fafang({$Request.param.user},{$key})" class="layui-btn layui-btn-primary layui-btn-sm">发放</a>
+                <a href="#" onclick="edit({$Request.param.user},{$key})" class="layui-btn layui-btn-primary layui-btn-sm">编辑</a>
+                <a href="#" onclick="status({$Request.param.user},{$key})" class="layui-btn layui-btn-primary layui-btn-sm">确认</a>
+            </td>
             <td class="font12">{$vo['finish_ml']-$vo['total_fafang']}</td>
             <td class="font12">{$vo['ml']-$vo['finish_ml']}</td>
-            <td class="font12">{$i}</td>
             <td class="font12">{$vo['finish_ml_month']}</td>
             <td class="font12">{$vo['benci_fafang']}</td>
-            <td class="font12">{$gl[$vo['uid']]['gl_add_sum']}</td>
-            <td class="font12">{$gl[$vo['uid']]['sort']}</td>
-            <td>
-                <div class="layui-btn-group">
-                    <div class="layui-btn-group">
-                        <a href="{:url('listPeopleP',['user'=>$vo['uid']])}" class="layui-btn layui-btn-primary layui-btn-sm">项目明细</a>
-                    </div>
-                </div>
-            </td>
         </tr>
         {/volist}
         </tbody>
@@ -107,6 +97,55 @@
         });
 
     });
+
+    function fafang(user,subject_id){
+        var open_url = "{:url('Sendml/add')}?user="+user+'&subject_id='+subject_id;
+        if (open_url.indexOf('?') >= 0) {
+            open_url += '&hisi_iframe=yes';
+        } else {
+            open_url += '?hisi_iframe=yes';
+        }
+        layer.open({
+            type:2,
+            title :'详情',
+            maxmin: true,
+            area: ['500px', '400px'],
+            content: open_url,
+            success:function (layero, index) {
+            }
+        });
+    }
+
+    function edit(user,subject_id){
+        var open_url = "{:url('Sendml/edit')}?user="+user+'&subject_id='+subject_id;
+        if (open_url.indexOf('?') >= 0) {
+            open_url += '&hisi_iframe=yes';
+        } else {
+            open_url += '?hisi_iframe=yes';
+        }
+        layer.open({
+            type:2,
+            title :'详情',
+            maxmin: true,
+            area: ['700px', '500px'],
+            content: open_url,
+            success:function (layero, index) {
+            }
+        });
+    }
+
+    function status(user,subject_id){
+        var open_url = "{:url('Sendml/setStatus')}?user="+user+'&subject_id='+subject_id;
+        $.post(open_url, function(res) {
+            if (res.code == 1) {
+                layer.msg(res.msg);
+                location.reload();
+            }else {
+                layer.msg(res.msg);
+                location.reload();
+            }
+        });
+    }
 
     new SelectBox($('.box1'),{$project_select},function(result){
         if ('' != result.id){
