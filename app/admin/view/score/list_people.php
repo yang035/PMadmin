@@ -62,7 +62,7 @@
             <td class="font12">{$vo['total_fafang']}</td>
             <td class="font12">{$vo['finish_ml']-$vo['total_fafang']}</td>
             <td class="font12">{$vo['ml']-$vo['finish_ml']}</td>
-            <td class="font12">{$i}</td>
+            <td class="font12">{$key+1}</td>
             <td class="font12">{$vo['finish_ml_month']}</td>
             <td class="font12">{$vo['benci_fafang']}</td>
             <td class="font12">{$gl[$vo['uid']]['gl_add_sum']}</td>
