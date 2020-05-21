@@ -22,9 +22,15 @@
             <div class="layui-inline">
                 <label class="layui-form-label">姓名</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="name" value="{:input('get.name')}" placeholder="项目名称关键字" autocomplete="off" class="layui-input">
+                    <input type="text" name="name" value="{:input('get.name')}" placeholder="姓名关键字" autocomplete="off" class="layui-input">
                 </div>
             </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">公司</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="last_company" value="{:input('get.last_company')}" placeholder="公司名关键字" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
             <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
             </div>
         </form>
@@ -70,6 +76,10 @@
                 {field: 'attachment', title: '简历附件',width:90, templet:function(d){
                         return "<a target='_blank' class='mcolor' href='"+d.attachment+"' >附件</a>";
                     }},
+                {field: 'last_company', title: '所在公司',width:120,edit: 'text'},
+                {field: 'legalman', title: '法人/负责人',width:120,edit: 'text'},
+                {field: 'legalman_contact', title: '联系方式',width:120,edit: 'text'},
+                {field: 'com_address', title: '公司地址',width:120,edit: 'text'},
                 {field: 'source', title: '来源',width:80,edit: 'text'},
                 {field: 'resume_time', title: '面试时间',width:150,edit: 'text'},
                 {field: 'is_resume', title: '是否面试',width:100,edit: 'text'},

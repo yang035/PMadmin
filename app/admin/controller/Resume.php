@@ -47,6 +47,10 @@ class Resume extends Admin
             if ($name) {
                 $where['name'] = ['like', "%{$name}%"];
             }
+            $last_company = input('param.last_company');
+            if ($last_company) {
+                $where['last_company'] = ['like', "%{$last_company}%"];
+            }
             $where['cid'] = session('admin_user.cid');
             $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->order('id desc')->select();
             if ($data['data']){
