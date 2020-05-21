@@ -51,7 +51,9 @@ class UserInfo extends Admin
             $data['data'] = UserInfoModel::where($where)->page($page)->order($order)->limit($limit)->select();
             if ($data['data']) {
                 foreach ($data['data'] as $k => $v) {
-                    $v['real_name'] = AdminUser::getUserById($v['user_id'])['realname'];
+                    $v['real_name'] = !empty($v['user_id']) ? AdminUser::getUserById($v['user_id'])['realname'] : '无';
+                    $v['operator_name'] = !empty($v['operator_id']) ? AdminUser::getUserById($v['operator_id'])['realname'] : '无';
+                    $v['check_name'] = !empty($v['check_user']) ? AdminUser::getUserById($v['check_user'])['realname'] : '无';
 //                    $v['report'] = htmlspecialchars_decode($v['report']);
                 }
             }
@@ -236,7 +238,7 @@ class UserInfo extends Admin
             $data['jiaoyu'] = json_encode($jiaoyu);
             $data['peixun'] = json_encode($peixun);
             $data['gongzuo'] = json_encode($gongzuo);
-
+            $data['check_status'] = 0;//每次修改后，状态设置为0
             unset($data['real_name']);
             if (!UserInfoModel::update($data)) {
                 return $this->error('修改失败');
@@ -272,6 +274,25 @@ class UserInfo extends Admin
     public function read($id = 0)
     {
         $params= $this->request->param();
+        if ($this->request->post()){
+            $data = $this->request->post();
+            $uid = session('admin_user.uid');
+            $row = UserInfoModel::where('id', $data['id'])->find()->toArray();
+            if ($row['operator_id'] == $uid){
+                return $this->error('不能自己审核自己的');
+            }
+            $tmp = [
+                'id' => $data['id'],
+                'check_status' => $data['check_status'],
+                'remark' => $data['remark'],
+                'check_user' => $uid,
+            ];
+
+            if (!UserInfoModel::update($tmp)) {
+                return $this->error('操作失败');
+            }
+            return $this->success("操作成功{$this->score_value}");
+        }
         if ($id) {
             $row = UserInfoModel::where('id', $id)->find()->toArray();
             $row['real_name'] = AdminUser::getUserById($row['user_id'])['realname'];

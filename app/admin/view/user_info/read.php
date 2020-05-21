@@ -398,9 +398,28 @@
                 </div>
             </div>
         </div>
+        {if condition="1 == $Request.param.p"}
+        <hr>
+        <div class="layui-form-item">
+            <label class="layui-form-label">审核</label>
+            <div class="layui-input-inline">
+                <input type="radio" class="field-check_status" name="check_status" value="1" title="同意" checked lay-filter="check_status">
+                <input type="radio" class="field-check_status" name="check_status" value="2" title="驳回" lay-filter="check_status">
+            </div>
+        </div>
+        <div class="layui-form-item" style="display: none" id="remark">
+            <label class="layui-form-label">意见</label>
+            <div class="layui-input-inline">
+                <textarea  class="layui-textarea field-remark" name="remark" autocomplete="off" placeholder=""></textarea>
+            </div>
+        </div>
+        {/if}
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <input type="hidden" class="field-id" name="id">
+                {if condition="1 == $Request.param.p"}
+                <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
+                {/if}
                 <a href="javascript:history.back()" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
             </div>
         </div>
@@ -459,6 +478,14 @@
             }
         });
         $('#thumb').attr('src', $('.field-thumb').val()).show();
+
+        form.on('radio(check_status)', function(data){
+            if (2 == data.value){
+                $('#remark').show();
+            } else {
+                $('#remark').hide();
+            }
+        });
     });
 
     new SelectBox($('.box2'),{$user_select},function(result){

@@ -33,13 +33,23 @@
 {include file="block/layui" /}
 <script src="__PUBLIC_JS__/jquery.select.js?v="></script>
 <script src="__PUBLIC_JS__/SelectBox.min.js?v="></script>
-<script type="text/html" id="statusTpl">
+<script type="text/html" id="statusTpl1">
     <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=user_info&id={{ d.id }}">
 </script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
     <a onclick="read1({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">查看</a>
     <a href="#" onclick="add_user1('editItem',{{ d.user_id }},{{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
 <!--    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
+</script>
+<script type="text/html" title="操作按钮模板" id="buttonTpl2">
+    {{#  if(d.check_status == 1){ }}
+    <span style="color: green">已审核({{ d.check_name }})</span>
+    {{#  }else if(d.check_status == 2){ }}
+    <a onclick="read2({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">审核</a>
+    <span style="color: red">驳回({{ d.check_name }}_{{ d.remark }})</span>
+    {{#  }else{ }}
+    <a onclick="read2({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">审核</a>
+    {{#  } }}
 </script>
 <script type="text/javascript">
     layui.use(['jquery','table'], function() {
@@ -59,9 +69,10 @@
                 {field: 'real_name', title: '姓名',sort: true},
                 {field: 'birthday', title: '生日',sort: true},
                 {field: 'start_date', title: '入职时间',sort: true},
-                {field: 'update_time', title: '时间'},
-                {field: 'status', title: '状态', templet: '#statusTpl'},
-                {title: '操作', templet: '#buttonTpl'}
+                {field: 'operator_name', title: '录入员'},
+                {field: 'status', title: '状态', templet: '#statusTpl1'},
+                {title: '操作', templet: '#buttonTpl'},
+                {title: '审核信息', templet: '#buttonTpl2'},
             ]]
         });
     });
@@ -110,6 +121,11 @@
 
     function read1(id){
         var open_url = "{:url('read')}?id="+id;
+        window.location.href = open_url;
+    }
+
+    function read2(id){
+        var open_url = "{:url('read')}?id="+id+"&p=1";
         window.location.href = open_url;
     }
 
