@@ -139,7 +139,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">电子邮箱</label>
                             <div class="layui-input-inline">
-                                <input type="text" class="layui-input field-email" name="email" lay-verify=""
+                                <input type="text" class="layui-input field-email" name="email"
                                        autocomplete="off" placeholder="请输入电子邮箱">
                             </div>
                         </div>
@@ -314,7 +314,9 @@
                         </div>
                         <div class="layui-input-inline" style="width: 100px">
                             <select name="relation_type[]" class="field-relation_type[]" type="select">
-                                {$relation_type}
+                                <option value="1" {eq name="vo['relation_type']" value="1"} selected {/eq}>父母</option>
+                                <option value="2" {eq name="vo['relation_type']" value="2"} selected {/eq}>夫妻</option>
+                                <option value="3" {eq name="vo['relation_type']" value="3"} selected {/eq}>子女</option>
                             </select>
                         </div>
                         <div class="layui-input-inline" style="width: 100px">
