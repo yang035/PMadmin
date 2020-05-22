@@ -96,7 +96,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">户口所在地</label>
                             <div class="layui-input-inline">
-                                <input type="text" class="layui-input field-address1" name="address1"
+                                <input type="text" class="layui-input field-address1" lay-verify="required" name="address1"
                                        autocomplete="off" placeholder="请输入户口具体地址">
                             </div>
                             <div class="layui-form-mid red">*</div>
@@ -104,7 +104,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">现居住地址</label>
                             <div class="layui-input-inline">
-                                <input type="text" class="layui-input field-address2" name="address2"
+                                <input type="text" class="layui-input field-address2" lay-verify="required" name="address2"
                                        autocomplete="off" placeholder="请输入现居住地址">
                             </div>
                             <div class="layui-form-mid red">*</div>
@@ -123,7 +123,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">毕业院校</label>
                             <div class="layui-input-inline">
-                                <input type="text" class="layui-input field-school" name="school"
+                                <input type="text" class="layui-input field-school" lay-verify="required" name="school"
                                        autocomplete="off" placeholder="请输入毕业院校">
                             </div>
                             <div class="layui-form-mid red">*</div>
@@ -131,7 +131,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">学习专业</label>
                             <div class="layui-input-inline">
-                                <input type="text" class="layui-input field-major" name="major"
+                                <input type="text" class="layui-input field-major" lay-verify="required" name="major"
                                        autocomplete="off" placeholder="请输入所学专业">
                             </div>
                             <div class="layui-form-mid red">*</div>
@@ -194,7 +194,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">工资卡开户行</label>
                             <div class="layui-input-inline">
-                                <input type="text" class="layui-input field-open_bank" name="open_bank"
+                                <input type="text" class="layui-input field-open_bank" lay-verify="required" name="open_bank"
                                        autocomplete="off" placeholder="工资卡开户行">
                             </div>
                             <div class="layui-form-mid red">*</div>
@@ -202,7 +202,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">工资卡号</label>
                             <div class="layui-input-inline">
-                                <input type="text" class="layui-input field-bank_num" name="bank_num"
+                                <input type="text" class="layui-input field-bank_num" lay-verify="required" name="bank_num"
                                        autocomplete="off" placeholder="工资卡号">
                             </div>
                             <div class="layui-form-mid red">*</div>
@@ -210,7 +210,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">入职时间</label>
                             <div class="layui-input-inline" style="width: 250px">
-                                <input type="text" class="layui-input field-start_date" name="start_date" autocomplete="off" readonly placeholder="入职时间">
+                                <input type="text" class="layui-input field-start_date" lay-verify="required" name="start_date" autocomplete="off" readonly placeholder="入职时间">
                             </div>
                             <div class="layui-form-mid red">*</div>
                         </div>
