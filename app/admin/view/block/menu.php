@@ -32,7 +32,7 @@
             <a href="javascript:void(0);">{$admin_user['username']}&nbsp;&nbsp;</a>
             <dl class="layui-nav-child">
                 <dd><a data-id="00" class="admin-nav-item top-nav-item" href="{:url('admin/user/info')}">个人设置</a></dd>
-                <dd><a data-id="00" class="admin-nav-item top-nav-item" href="{:url('admin/Score/listPeople',['p'=>1])}">ML发放</a></dd>
+<!--                <dd><a data-id="00" class="admin-nav-item top-nav-item" href="{:url('admin/Score/listPeople',['p'=>1])}">ML发放</a></dd>-->
 <!--                <dd><a href="{:url('admin/user/iframe')}" class="j-ajax" refresh="yes">{:input('cookie.hisi_iframe') ? '单页布局' : '框架布局' }</a></dd>-->
                 {volist name="languages" id="vo"}
                     {if condition="$vo['pack']"}
