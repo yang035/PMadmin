@@ -38,7 +38,7 @@
     <div class="layui-tab-item layui-show layui-form-pane">
         <div class="layui-collapse" lay-accordion="" style="border-width: 0px;">
             <div class="layui-colla-item">
-                <h2 class="layui-colla-title">基本资料</h2>
+                <h2 class="layui-colla-title"><div class="layui-form-mid red">基本资料*</div></h2>
                 <div class="layui-colla-content layui-show">
                     <div class="layui-col-md6">
                         <div class="layui-form-item">
@@ -58,6 +58,7 @@
                                     {$sex_type}
                                 </select>
                             </div>
+                            <div class="layui-form-mid red">*</div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">婚姻状况</label>
@@ -66,6 +67,7 @@
                                     {$marital_type}
                                 </select>
                             </div>
+                            <div class="layui-form-mid red">*</div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">民族</label>
@@ -74,6 +76,7 @@
                                     {$nation_type}
                                 </select>
                             </div>
+                            <div class="layui-form-mid red">*</div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">身份证号</label>
@@ -96,6 +99,7 @@
                                 <input type="text" class="layui-input field-address1" name="address1"
                                        autocomplete="off" placeholder="请输入户口具体地址">
                             </div>
+                            <div class="layui-form-mid red">*</div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">现居住地址</label>
@@ -103,6 +107,7 @@
                                 <input type="text" class="layui-input field-address2" name="address2"
                                        autocomplete="off" placeholder="请输入现居住地址">
                             </div>
+                            <div class="layui-form-mid red">*</div>
                         </div>
                     </div>
                     <div class="layui-col-md6">
@@ -113,6 +118,7 @@
                                     {$education_type}
                                 </select>
                             </div>
+                            <div class="layui-form-mid red">*</div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">毕业院校</label>
@@ -120,6 +126,7 @@
                                 <input type="text" class="layui-input field-school" name="school"
                                        autocomplete="off" placeholder="请输入毕业院校">
                             </div>
+                            <div class="layui-form-mid red">*</div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">学习专业</label>
@@ -127,6 +134,7 @@
                                 <input type="text" class="layui-input field-major" name="major"
                                        autocomplete="off" placeholder="请输入所学专业">
                             </div>
+                            <div class="layui-form-mid red">*</div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">电子邮箱</label>
@@ -171,7 +179,7 @@
             </div>
             <hr>
             <div class="layui-colla-item">
-                <h2 class="layui-colla-title">补充资料</h2>
+                <h2 class="layui-colla-title"><div class="layui-form-mid red">补充资料*</div></h2>
                 <div class="layui-colla-content">
                     <div class="layui-col-md6">
                         <div class="layui-form-item">
@@ -181,6 +189,7 @@
                                     {$man_type}
                                 </select>
                             </div>
+                            <div class="layui-form-mid red">*</div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">工资卡开户行</label>
@@ -188,6 +197,7 @@
                                 <input type="text" class="layui-input field-open_bank" name="open_bank"
                                        autocomplete="off" placeholder="工资卡开户行">
                             </div>
+                            <div class="layui-form-mid red">*</div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">工资卡号</label>
@@ -195,12 +205,14 @@
                                 <input type="text" class="layui-input field-bank_num" name="bank_num"
                                        autocomplete="off" placeholder="工资卡号">
                             </div>
+                            <div class="layui-form-mid red">*</div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">入职时间</label>
                             <div class="layui-input-inline" style="width: 250px">
                                 <input type="text" class="layui-input field-start_date" name="start_date" autocomplete="off" readonly placeholder="入职时间">
                             </div>
+                            <div class="layui-form-mid red">*</div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">离职时间</label>
