@@ -52,6 +52,33 @@
         var s = document.getElementsByTagName("script")[0];
         s.parentNode.insertBefore(hm, s);
     })();
+
+    function loadMeinv(){
+        for(var i=0;i<6;i++){
+            var html = "";
+            html = '<li><img src = "__PUBLIC_JS__/index/images/chan.png"></li>';
+            $minUl = getMinUl();
+            $minUl.append(html);
+        }
+    }
+    loadMeinv();
+    $(window).on("scroll",function(){
+        $minUl = getMinUl();
+        if($minUl.height() <= $(window).scrollTop()+$(window).height()){
+            //当最短的ul的高度比窗口滚出去的高度+浏览器高度大时加载新图片
+            loadMeinv();
+        }
+    });
+    function getMinUl(){
+        var $arrUl = $("#container .col");
+        var $minUl =$arrUl.eq(0);
+        $arrUl.each(function(index,elem){
+            if($(elem).height()<$minUl.height()){
+                $minUl = $(elem);
+            }
+        });
+        return $minUl;
+    }
 </script>
 </body>
 </html>
