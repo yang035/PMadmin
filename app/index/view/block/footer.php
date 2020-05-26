@@ -54,30 +54,36 @@
     })();
 
     function loadMeinv(){
-        for(var i=0;i<6;i++){
+        for(var i=0;i<5;i++){
             var html = "";
-            html = '<li><img src = "__PUBLIC_JS__/index/images/chan.png"></li>';
+            html = '<div class="col-md-2 col-xs-4" style="margin-bottom:20px;"><img style="margin: 5px;width: 100%;height: 100%;" src = "__PUBLIC_JS__/index/images/chan.png"></div>';
             $minUl = getMinUl();
-            $minUl.append(html);
+            if ($minUl){
+                $minUl.append(html);
+            }
         }
     }
     loadMeinv();
     $(window).on("scroll",function(){
         $minUl = getMinUl();
-        if($minUl.height() <= $(window).scrollTop()+$(window).height()){
+        if($minUl && $minUl.height() <= $(window).scrollTop()+$(window).height()){
             //当最短的ul的高度比窗口滚出去的高度+浏览器高度大时加载新图片
             loadMeinv();
         }
     });
     function getMinUl(){
-        var $arrUl = $("#container .col");
+        var $arrUl = $("#container");
         var $minUl =$arrUl.eq(0);
-        $arrUl.each(function(index,elem){
-            if($(elem).height()<$minUl.height()){
-                $minUl = $(elem);
-            }
-        });
-        return $minUl;
+        var len = $arrUl.children("div").length;
+        // console.log($minUl);
+        if(len < 48) {
+            $arrUl.each(function (index, elem) {
+                if ($(elem).height() < $minUl.height()) {
+                    $minUl = $(elem);
+                }
+            });
+            return $minUl;
+        }
     }
 </script>
 </body>

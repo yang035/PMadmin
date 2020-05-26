@@ -19,25 +19,15 @@
 <!--                    <span style="font-size: 30px;font-weight: bold;font-family:'Microsoft YaHei';color: #fe6908;">.com</span>-->
                 </div>
             </div>
-            <div id="container">
-                <ul class="col col-md-2 col-xs-4">
-                    <li><img src="__PUBLIC_JS__/index/images/chan.png" alt="" /></li>
-                    <li><img src="__PUBLIC_JS__/index/images/chan.png" alt="" /></li>
-                    <li><img src="__PUBLIC_JS__/index/images/chan.png" alt="" /></li>
-                    <li><img src="__PUBLIC_JS__/index/images/chan.png" alt="" /></li>
-                    <li><img src="__PUBLIC_JS__/index/images/chan.png" alt="" /></li>
-                    <li><img src="__PUBLIC_JS__/index/images/chan.png" alt="" /></li>
-                </ul>
-                <ul class="col col-md-2 col-xs-4"></ul>
-                <ul class="col col-md-2 col-xs-4"></ul>
-                <ul class="col col-md-2 col-xs-4"></ul>
-                <ul class="col col-md-2 col-xs-4"></ul>
-                <ul class="col col-md-2 col-xs-4"></ul>
+            <div id="container" class="col">
+                <div class="col-md-2 col-xs-4" style="margin-bottom:20px;">
+                    <img style="margin: 5px;width: 100%;height: 100%;" src="__PUBLIC_JS__/index/images/chan.png" alt="" />
+                </div>
             </div>
-<!--            <div id="div1">-->
+<!--            <div class="row">-->
 <!--                {for start="0" end="6"}-->
-<!--                <div class="col-md-2 col-xs-4 flow">-->
-<!--                    <img src="__PUBLIC_JS__/index/images/chan.png">-->
+<!--                <div class="col-md-2 col-xs-4" data-animate-effect="fadeInLeft">-->
+<!--                    <img style="margin: 5px;width: 100%;height: 100%;" src="__PUBLIC_JS__/index/images/chan.png">-->
 <!--                </div>-->
 <!--                {/for}-->
 <!--            </div>-->
