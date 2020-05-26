@@ -704,7 +704,7 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
         $map = [
             'company_id'=>$cid,
         ];
-        $user = AdminUser::where($map)->column('realname','id');
+        $user = AdminUser::where($map)->column('id_card,realname','id');
 
         $gl = ScoreModel::where($w)->group('user')->order('gl_add_sum desc')->column('sum(gl_add_score) as gl_add_sum','user');
         $i = 0;

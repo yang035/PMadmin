@@ -55,7 +55,7 @@
             <td><input type="checkbox" name="uid[]" class="layui-checkbox checkbox-ids" value="{$vo['uid']}" lay-skin="primary"></td>
             <td>{$i}</td>
             <td class="font12">
-                <strong class="mcolor">{$user[$vo['uid']]}</strong>
+                <strong class="mcolor">{$user[$vo['uid']]['realname']}</strong>
             </td>
             <td class="font12">{$vo['ml']}</td>
             <td class="font12">{$vo['finish_ml']}</td>

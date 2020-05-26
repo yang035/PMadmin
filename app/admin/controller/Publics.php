@@ -145,6 +145,12 @@ class Publics extends Common
                     $data['status'] = 1;
                     $u = UserModel::create($data);
 
+                    $t = [
+                        'id' => $u['id'],
+                        'id_card' => date('Y').$u['id'],
+                    ];
+                    UserModel::update($t);
+
                     $score = [
                         'subject_id' => 0,
                         'project_id' => 0,
@@ -177,6 +183,13 @@ class Publics extends Common
                 if (!$u) {
                     return $this->error('注册失败');
                 }
+
+                $tmp = [
+                    'id' => $u['id'],
+                    'id_card' => date('Y').$u['id'],
+                ];
+                UserModel::update($tmp);
+
                 $score = [
                     'subject_id' => 0,
                     'project_id' => 0,

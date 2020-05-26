@@ -2,8 +2,7 @@
     <div class="layui-card">
         <div class="layui-card-body">
             {volist name="tmp" id="vo"}
-<!--            <b>姓名：</b>{$user[$vo['uid']]}<br>-->
-            <b>员工编号：</b>{$vo['uid']}<br>
+            <b>员工编号：</b>{$user[$vo['uid']]['id_card']}<br>
             <b>累计ML：</b>{$vo['ml']}<br>
             <b>已完成ML：</b>{$vo['finish_ml']}<br>
 <!--            <b>已发放ML：</b>{$vo['total_fafang']}<br>-->
