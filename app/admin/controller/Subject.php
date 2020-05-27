@@ -462,6 +462,7 @@ class Subject extends Admin
             $data = $this->request->post();
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
+            $data['t_type'] = 1;
             unset($data['id']);
             // 验证
             $result = $this->validate($data, 'SubjectItem');
@@ -524,6 +525,7 @@ class Subject extends Admin
             $data = $this->request->post();
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
+            $data['t_type'] = 1;
             // 验证
             $result = $this->validate($data, 'SubjectItem');
             if ($result !== true) {
