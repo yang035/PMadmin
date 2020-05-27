@@ -75,7 +75,7 @@
             elem: '#dataTable'
             ,url: '{:url()}' //数据接口
             ,page: true //开启分页
-            ,limit: 30
+            ,limit: 20
             ,text: {
                 none : '暂无相关数据'
             }
