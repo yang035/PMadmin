@@ -228,6 +228,7 @@ class Project extends Model
         $map['cid'] = $cid;
         $map['pid'] = 0;
         $map['status'] = 1;
+        $map['t_type'] = 1;
         $uid = session('admin_user.uid');
         $role_id = session('admin_user.role_id');
         $con = '';
@@ -258,6 +259,7 @@ class Project extends Model
         $cid = session('admin_user.cid');
         $map['cid'] = $cid;
         $map['pid'] = 0;
+        $map['t_type'] = 1;
         $list = self::where($map)->order('grade desc,create_time desc')->column('name','id');
         if ($list){
             if ($option){
@@ -281,6 +283,7 @@ class Project extends Model
         $map['cid'] = $cid;
         $map['pid'] = 0;
         $map['status'] = 1;
+        $map['t_type'] = 1;
         $list = self::where($map)->order('grade desc,create_time desc')->column('name','id');
         if ($list){
             if ($option){
@@ -304,6 +307,7 @@ class Project extends Model
         $map['cid'] = $cid;
         $map['pid'] = 0;
         $map['status'] = 1;
+        $map['t_type'] = 1;
         $uid = session('admin_user.uid');
         $role_id = session('admin_user.role_id');
         $con = '';
