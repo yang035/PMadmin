@@ -44,7 +44,6 @@
 <script src="__PUBLIC_JS__/index/js/magnific-popup-options.js"></script>
 <!-- Main -->
 <script src="__PUBLIC_JS__/index/js/main.js"></script>
-<script src="__PUBLIC_JS__/index/js/jquery.waterfall.js"></script>
 <script>
     var _hmt = _hmt || [];
     (function() {
@@ -54,27 +53,38 @@
         s.parentNode.insertBefore(hm, s);
     })();
 
-    $("#div1").waterfall({
-        itemClass: ".box",
-        minColCount: 2,
-        spacingHeight: 10,
-        resizeable: true,
-        ajaxCallback: function(success, end) {
-            var data = {"data": [
-                    { "src": "img_1.jpg" }, { "src": "img_2.jpg" }, { "src": "lower.jpg" }, { "src": "img_4.jpg" }, { "src": "img_5.jpg" }, { "src": "img_6.jpg" }
-                ]};
-            var str = "",len = $("#div1").children("div").length;
-            var templ = '<div class="box" style="opacity:0;filter:alpha(opacity=0);"><div class="pic"><img src="__PUBLIC_JS__/index/images/{{src}}" /></div></div>'
-            if (len < 20){
-                for(var i = 0; i < data.data.length; i++) {
-                    str += templ.replace("{{src}}", data.data[i].src);
-                }
-                $(str).appendTo($("#div1"));
+    function loadMeinv(){
+        for(var i=0;i<5;i++){
+            var html = "";
+            html = '<div class="col-md-2 col-xs-4" style="margin-bottom:20px;"><img style="margin: 5px;width: 100%;height: 100%;" src = "__PUBLIC_JS__/index/images/chan.png"></div>';
+            $minUl = getMinUl();
+            if ($minUl){
+                $minUl.append(html);
             }
-            success();
-            end();
+        }
+    }
+    loadMeinv();
+    $(window).on("scroll",function(){
+        $minUl = getMinUl();
+        if($minUl && $minUl.height() <= $(window).scrollTop()+$(window).height()){
+            //当最短的ul的高度比窗口滚出去的高度+浏览器高度大时加载新图片
+            loadMeinv();
         }
     });
+    function getMinUl(){
+        var $arrUl = $("#container");
+        var $minUl =$arrUl.eq(0);
+        var len = $arrUl.children("div").length;
+        // console.log($minUl);
+        if(len < 48) {
+            $arrUl.each(function (index, elem) {
+                if ($(elem).height() < $minUl.height()) {
+                    $minUl = $(elem);
+                }
+            });
+            return $minUl;
+        }
+    }
 </script>
 </body>
 </html>
