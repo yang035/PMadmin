@@ -22,7 +22,7 @@
 
     .box {
         float: left;
-        padding: 10px;
+        padding: 5px;
         border: 1px solid #ccc;
         background: #f7f7f7;
         box-shadow: 0 0 8px #ccc;
@@ -45,7 +45,7 @@
     <div class="jq22-container">
         <div class="jq22-content bgcolor-3">
             <div id="div1">
-                <div class="box"><img src="__PUBLIC_JS__/index/images/chan.png" alt=""></div>
+                <div class="box col-md-2 col-xs-3"><img style="width: 100%" src="__PUBLIC_JS__/index/images/chan.png" alt=""></div>
             </div>
         </div>
     </div>

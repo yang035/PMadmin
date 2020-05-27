@@ -61,11 +61,11 @@
         resizeable: true,
         ajaxCallback: function(success, end) {
             var data = {"data": [
-                    { "src": "img_1.jpg" }, { "src": "img_2.jpg" }, { "src": "lower.jpg" }, { "src": "img_4.jpg" }, { "src": "img_5.jpg" }, { "src": "img_6.jpg" }
+                    { "src": "img_1.jpg" }, { "src": "img_2.jpg" }, { "src": "lower.jpg" }, { "src": "img_4.jpg" }, { "src": "chan.png" }, { "src": "img_5.jpg" }
                 ]};
             var str = "",len = $("#div1").children("div").length;
-            var templ = '<div class="box" style="opacity:0;filter:alpha(opacity=0);"><div class="pic"><img src="__PUBLIC_JS__/index/images/{{src}}" /></div></div>'
-            if (len < 20){
+            var templ = '<div class="box col-md-2 col-xs-3" style="opacity:0;filter:alpha(opacity=0);"><div class="pic"><img style="width: 100%" src="__PUBLIC_JS__/index/images/{{src}}" /></div></div>'
+            if (len < 30){
                 for(var i = 0; i < data.data.length; i++) {
                     str += templ.replace("{{src}}", data.data[i].src);
                 }
