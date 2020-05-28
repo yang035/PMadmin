@@ -19,6 +19,7 @@ class SubjectItem extends Validate
         'idcard|项目编号' => 'require|unique:subject_item,cid^idcard',
         'status|状态设置'  => 'require|in:0,1',
         'score|预设值'  => 'require',
+        'cat_id|项目类型'  => 'require',
     ];
 
     //定义验证提示
@@ -29,6 +30,7 @@ class SubjectItem extends Validate
         'idcard.unique' => '项目编号重复',
         'status.require'    => '请设置状态',
         'score'  => '预设值必填',
+        'cat_id'  => '请先完善项目类型',
     ];
 
 }
