@@ -37,7 +37,7 @@
             <th width="30">序号</th>
             <th>姓名</th>
             <th>累计ML</th>
-            <th>已完成ML</th>
+            <th>可发放ML</th>
             <th>已发放ML</th>
             <th>未发放ML</th>
             <th>未完成ML</th>
