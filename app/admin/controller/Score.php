@@ -637,6 +637,7 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
         $si = array_filter($si,function ($v){
             if ('null' != $v) return $v;
         });
+        $tmp2 = $tmp3 = [];
         if ($si){
             foreach ($si as $k=>$v){
                 $v = json_decode($v,true);
@@ -652,7 +653,6 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
 
             $tmp = array_filter($tmp);//一个人参加的多个项目
             //累加
-            $tmp2 = $tmp3 = [];
 
             if ($tmp){
                 foreach ($tmp as $k=>$v) {
