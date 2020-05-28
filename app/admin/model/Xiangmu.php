@@ -17,7 +17,7 @@ class Xiangmu extends Model
     public static function getOption($type = 0)
     {
         $map = [
-            'cid'=>session('admin_user.cid'),
+            'cid'=>2,//项目合作类型，用原来我们公司定义的类型
             'status'=>1,
         ];
         $data = CatModel::where($map)->select();

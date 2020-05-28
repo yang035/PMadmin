@@ -31,10 +31,16 @@ class Publics extends Common
                 return $this->success('登陆成功，页面跳转中...', url('Project/mytask', ['type' => 1]),'',1);
             }
             $this->assign('_admin_menu_current', array('url'=>'Assignment/mytask'));
-            return $this->success('登陆成功，页面跳转中...', url('Assignment/index'),'',1);
+            if ($role_id <= 3) {
+                return $this->success('登陆成功，页面跳转中...', url('Assignment/index'), '', 1);
+            }
         }
 
         if ($model->isLogin()) {
+            $role_id = session('admin_user.role_id');
+            if ($role_id == 8 || $role_id == 9) {
+                $this->redirect(url('company/index', '', true, true));
+            }
             $this->redirect(url('Assignment/index', '', true, true));
         }
         return $this->fetch();
