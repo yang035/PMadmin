@@ -118,9 +118,12 @@ class Subject extends Admin
             $data['data'] = ItemModel::with('cat')->where($where)->page($page)->order($order)->limit($limit)->select();
 //            $carType = config('other.car_color');
             if ($data['data']){
+                $s = \app\admin\model\Project::getColumn1('subject_id');
+                $p = array_flip($s);
                 foreach ($data['data'] as $k=>$v){
                     $v['s_status'] = $p_status[$v['s_status']];
                     $v['leader_user'] = $this->deal_data($v['leader_user']);
+                    $v['project_id'] = $p[$v['id']];
                 }
             }
             $data['count'] = ItemModel::where($where)->count('id');

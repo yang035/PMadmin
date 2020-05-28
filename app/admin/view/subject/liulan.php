@@ -50,15 +50,10 @@
     <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=subject_item&id={{ d.id }}">
 </script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
-    <a href="{:url('flow')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-warm">设计流程</a>
-    <a href="{:url('editItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
-<!--    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
-    <a href="#" onclick="a_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">甲方人员</a>
-    <a href="#" onclick="b_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">乙方人员</a>
-    <a href="#" onclick="discuss_record({{ d.id }},'{{ d.name }}')" class="layui-btn layui-btn-xs layui-btn-warm">洽商记录</a>
-    <a href="#" onclick="contract({{ d.id }},'{{ d.name }}')" class="layui-btn layui-btn-xs layui-btn-normal">拟定合同</a>
-    <a href="#" onclick="zujian_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">组建项目组</a>
-    <a href="#" onclick="partner_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">合伙配置</a>
+    <a href="{:url('editItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">立项</a>
+    <a href="{:url('Project/index')}?project_id={{ d.project_id }}&atype=0" class="layui-btn layui-btn-xs layui-btn-warm">查看计划</a>
+    <a href="{:url('flow')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">查看进度</a>
+    <a href="{:url('Score/listprojectdetail')}?id={{ d.project_id }}" class="layui-btn layui-btn-xs layui-btn-warm">项目ML</a>
 </script>
 <script type="text/javascript">
     layui.use(['jquery','table'], function() {
@@ -87,6 +82,7 @@
                 //     }},
                 {field: 'leader_user', title: '总负责人',width:150},
                 {field: 'status', title: '状态',width:100, templet: '#statusTpl'},
+                {title: '操作', templet: '#buttonTpl',minWidth:600}
             ]]
         });
     });
