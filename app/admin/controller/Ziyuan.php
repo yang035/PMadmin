@@ -15,8 +15,11 @@ class Ziyuan extends Admin
     public function index($q = '')
     {
         $map = [];
-        if (1 != session('admin_user.role_id')) {
+        if (2 != session('admin_user.cid')) {
             $map['cid'] = session('admin_user.cid');
+        }
+        if (session('admin_user.role_id') > 3) {
+            $map['user_id'] = session('admin_user.uid');
         }
         if ($q) {
             $map['name'] = ['like', '%' . $q . '%'];
