@@ -7,7 +7,8 @@
     <style type="text/css">
         body {
             color:#999;
-            background:url('http://img.infinitynewtab.com/wallpaper/{:date("Ymd")%4000}.jpg');
+            /*background:url('http://img.infinitynewtab.com/wallpaper/{:date("Ymd")%4000}.jpg');*/
+            background:grey;
             background-size:cover;
         }
         .profile-img-card {
