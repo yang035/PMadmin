@@ -51,7 +51,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">今日事项</label>
         <div class="layui-input-inline" style="width: 450px">
-            <textarea type="text" class="layui-textarea field-content" name="content[]" autocomplete="off" placeholder="时间+工作内容+结果汇报"></textarea>
+            <textarea type="text" class="layui-textarea field-content" name="content[]" autocomplete="off" placeholder="时间+工作内容+结果汇报">{$p['task_name']}</textarea>
         </div>
         <div class="layui-input-inline" style="width: 100px">
             <input type="number" class="layui-input field-ml" style="width: 100px" onblur="check_ml(this)" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="ml[]" autocomplete="off" placeholder="GL值">
@@ -334,6 +334,11 @@
                 return xhr;
             }
         };
+
+        var id = "{$Request.param.id}";
+        if (id){
+            select_union(id);
+        }
 
         form.on('select(job_cat)', function(data){
             select_union(data.value);

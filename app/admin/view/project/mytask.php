@@ -87,6 +87,7 @@
     </div>
 </script>
 <script type="text/html" id="oper-col-2">
+    <a onclick="huibao({{ d.subject_id }},'{{ d.name.replace(/<[^>]+>/g,\'\') }}')" class='layui-btn layui-btn-normal layui-btn-xs'>日报</a>
         {{#  if(d.child == 1){ }}
         <a lay-event="read" class="layui-btn layui-btn-warm layui-btn-xs">
             {{#  if(d.status == 0 && type == 1){ }}
@@ -99,12 +100,12 @@
         </a>
         {{#  }else{ }}
         <a lay-event="read" class="layui-btn layui-btn-normal layui-btn-xs">
-            {{#  if(d.status == 0 && type == 1){ }}
+            {{#  if(d.status == 1 && type == 1){ }}
             汇报
-            {{#  }else if(d.status == 0 && type == 2){ }}
+            {{#  }else if(d.status == 1 && type == 2){ }}
             查看汇报
             {{#  }else{ }}
-            查看汇报
+            汇报
             {{#  } }}
         </a>
         {{#  } }}
@@ -170,7 +171,7 @@
                 elem: '#table1',
                 url: _url,
                 page: true,
-                limit: 30,
+                limit: 20,
                 text: {
                     none : '暂无相关数据'
                 },
@@ -178,6 +179,10 @@
                     {field: 'xuhao', title: '序号',type: 'numbers'},
                     {field: 'project_name',merge: true, title: '项目名',width: 100},
                     {field: 'name', title: '任务名',width: 250},
+                    // {field: 'name', title: '任务名',width: 250,templet:function (d) {
+                    //     var n = d.name.replace(/<[^>]+>/g,'');
+                    //         return d.name+"<a onclick='huibao("+d.subject_id+",\""+n+"\")' class='layui-btn layui-btn-normal layui-btn-xs'>日报</a>";
+                    //     }},
                     {field: 'start_time', title: '开始时间',width: 110},
                     {field: 'end_time', title: '结束时间',width: 110},
                     {field: 'score', title: '计划产量(斗)',width: 70},
@@ -226,7 +231,7 @@
                             return t;
                         }},
                     {field: 'realper', title: '完成情况',width: 70, templet:'#oper-col-1'},
-                    {templet: '#oper-col-2', title: '操作',width: 200,}
+                    {templet: '#oper-col-2', title: '操作',width: 250,}
                 ]],
                 done: function () {
                     element.render();
@@ -288,6 +293,11 @@
 
     function add_template(id,code,pname){
         var open_url = "{:url('addTemplate2')}?id="+id+"&code="+code+"&pname="+pname;
+        window.location.href = open_url;
+    }
+
+    function huibao(id,task_name){
+        var open_url = "{:url('DailyReport/administration')}?id="+id+"&task_name="+task_name;
         window.location.href = open_url;
     }
 

@@ -471,6 +471,14 @@ class DailyReport extends Admin
             }
         }
 
+        $p = $this->request->param();
+        if (!$p){
+            $p = [
+                'id' => 0,
+                'task_name' => '',
+            ];
+        }
+
         $cid = session('admin_user.cid');
         $redis = service('Redis');
         $default_user = $redis->get("pm:user:{$cid}");
@@ -490,10 +498,15 @@ class DailyReport extends Admin
             $row1 = [];
         }
         $this->assign('row', $row1);
-
+        $this->assign('p', $p);
         $this->assign('work_option', WorkModel::getOption3());
         $this->assign('leave_type', DailyReportModel::getOption());
-        $this->assign('mytask', ProjectModel::getMyTask(null));
+        if ($p['id']){
+            $this->assign('mytask', ProjectModel::getMyTask($p['id']));
+        }else{
+            $this->assign('mytask', ProjectModel::getMyTask(null));
+        }
+
         return $this->fetch();
     }
     public function annualPlan(){
