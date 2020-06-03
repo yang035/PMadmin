@@ -42,6 +42,13 @@ class Shop extends Admin
             $page = input('param.page/d', 1);
             $limit = input('param.limit/d', 20);
 
+            if (2 != session('admin_user.cid')) {
+                $where['cid'] = session('admin_user.cid');
+            }
+            if (session('admin_user.role_id') > 3) {
+                $where['user_id'] = session('admin_user.uid');
+            }
+
             $cat_id = input('param.cat_id/d');
             if ($cat_id){
                 $where['cat_id'] = $cat_id;
@@ -50,7 +57,11 @@ class Shop extends Admin
             if ($name) {
                 $where['name'] = ['like', "%{$name}%"];
             }
-            $where['cid'] = session('admin_user.cid');
+            $visible_range = input('param.visible_range/d');
+            if ($visible_range){
+                $where['visible_range'] = $visible_range;
+            }
+//            $where['cid'] = session('admin_user.cid');
             $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->select();
             $data['count'] = ItemModel::where($where)->count('id');
             $data['code'] = 0;
@@ -64,7 +75,8 @@ class Shop extends Admin
 
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 1);
-        $this->assign('cat_option',ItemModel::getOption());
+        $this->assign('cat_option',ItemModel::getOption1());
+        $this->assign('visible_range',ItemModel::getVisibleRange1());
         return $this->fetch('item');
     }
     public function addItem()
@@ -86,6 +98,7 @@ class Shop extends Admin
             return $this->success("操作成功{$this->score_value}");
         }
         $this->assign('cat_option',ItemModel::getOption());
+        $this->assign('visible_range',ItemModel::getVisibleRange());
         return $this->fetch('itemform');
     }
 
@@ -111,6 +124,7 @@ class Shop extends Admin
         $row['remark'] = htmlspecialchars_decode($row['remark']);
         $this->assign('data_info', $row);
         $this->assign('cat_option',ItemModel::getOption());
+        $this->assign('visible_range',ItemModel::getVisibleRange());
         return $this->fetch('itemform');
     }
 

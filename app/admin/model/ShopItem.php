@@ -34,6 +34,26 @@ class ShopItem extends Model
         return $str;
     }
 
+    public static function getOption1($type = 0)
+    {
+        $map = [
+            'cid'=>session('admin_user.cid'),
+            'status'=>1,
+        ];
+        $data = CatModel::where($map)->select();
+        $str = '<option value="0" selected>全部</option>';
+        if ($data){
+            foreach ($data as $k => $v) {
+                if ($type == $k) {
+                    $str .= '<option value="'.$v['id'].'">'.$v['name'].'</option>';
+                } else {
+                    $str .= '<option value="'.$v['id'].'">'.$v['name'].'</option>';
+                }
+            }
+        }
+        return $str;
+    }
+
     public function cat()
     {
         return $this->hasOne('ShopCat', 'id', 'cat_id');
@@ -90,4 +110,31 @@ class ShopItem extends Model
         return true;
     }
 
+    public static function getVisibleRange($type = 0)
+    {
+        $leaveType = config('other.visible_range');
+        $str = '';
+        foreach ($leaveType as $k => $v) {
+            if ($type == $k) {
+                $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+            } else {
+                $str .= '<option value="'.$k.'">'.$v.'</option>';
+            }
+        }
+        return $str;
+    }
+
+    public static function getVisibleRange1($type = 0)
+    {
+        $leaveType = config('other.visible_range');
+        $str = '<option value="0">全部</option>';
+        foreach ($leaveType as $k => $v) {
+            if ($type == $k) {
+                $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+            } else {
+                $str .= '<option value="'.$k.'">'.$v.'</option>';
+            }
+        }
+        return $str;
+    }
 }

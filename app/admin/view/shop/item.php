@@ -25,6 +25,14 @@
                     <input type="text" name="name" value="{:input('get.name')}" placeholder="名称关键字" autocomplete="off" class="layui-input">
                 </div>
             </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">可见范围</label>
+                    <div class="layui-input-inline">
+                        <select name="visible_range" class="field-visible_range" type="select">
+                            {$visible_range}
+                        </select>
+                    </div>
+                </div>
             <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
             </div>
         </form>
@@ -45,6 +53,7 @@
     <a onclick="read({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">查看</a>
     <a href="{:url('editItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
     <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>
+    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">审核</a>
 </script>
 <script type="text/javascript">
     layui.use(['table'], function() {
