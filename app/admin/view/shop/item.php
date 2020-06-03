@@ -53,7 +53,16 @@
     <a onclick="read({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">查看</a>
     <a href="{:url('editItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
     <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>
-    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">审核</a>
+</script>
+<script type="text/html" title="操作按钮模板" id="buttonTpl2">
+    {{#  if(d.check_status == 1){ }}
+    <span style="color: green">已审核({{ d.check_name }})</span>
+    {{#  }else if(d.check_status == 2){ }}
+    <a onclick="read2({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">审核</a>
+    <span style="color: red">驳回({{ d.check_name }}_{{ d.yijian }})</span>
+    {{#  }else{ }}
+    <a onclick="read2({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">审核</a>
+    {{#  } }}
 </script>
 <script type="text/javascript">
     layui.use(['table'], function() {
@@ -75,7 +84,8 @@
                         return d.cat.name;
                     }},
                 {field: 'status', title: '状态', templet: '#statusTpl'},
-                {title: '操作', templet: '#buttonTpl'}
+                {title: '操作', templet: '#buttonTpl'},
+                {title: '审核信息', templet: '#buttonTpl2'},
             ]]
         });
     });
@@ -95,5 +105,10 @@
             success:function (layero, index) {
             }
         });
+    }
+
+    function read2(id){
+        var open_url = "{:url('read')}?id="+id+"&p=1";
+        window.location.href = open_url;
     }
 </script>

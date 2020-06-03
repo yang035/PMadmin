@@ -11,6 +11,7 @@ use app\admin\model\ShopCat as CatModel;
 use app\admin\model\ShopItem as ItemModel;
 use app\admin\model\Score as ScoreModel;
 use app\admin\model\ShopOrder as OrderModel;
+use app\admin\model\AdminUser;
 use think\Db;
 use think\Url;
 
@@ -63,6 +64,11 @@ class Shop extends Admin
             }
 //            $where['cid'] = session('admin_user.cid');
             $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->select();
+            if ($data['data']) {
+                foreach ($data['data'] as $k => $v) {
+                    $v['check_name'] = !empty($v['check_user']) ? AdminUser::getUserById($v['check_user'])['id_card'] : '无';
+                }
+            }
             $data['count'] = ItemModel::where($where)->count('id');
             $data['code'] = 0;
             $data['msg'] = '';
@@ -130,6 +136,27 @@ class Shop extends Admin
 
     public function read($id = 0)
     {
+        $params= $this->request->param();
+        if ($this->request->post()){
+            $data = $this->request->post();
+            $uid = session('admin_user.uid');
+            $row = ItemModel::where('id', $data['id'])->find()->toArray();
+            if ($row['user_id'] == $uid){
+                return $this->error('不能自己审核自己的');
+            }
+            $tmp = [
+                'id' => $data['id'],
+                'check_status' => $data['check_status'],
+                'yijian' => $data['yijian'],
+                'check_user' => $uid,
+            ];
+
+            if (!ItemModel::update($tmp)) {
+                return $this->error('操作失败');
+            }
+            return $this->success("操作成功{$this->score_value}");
+        }
+
         $row = ItemModel::where('id', $id)->find()->toArray();
         $row['remark'] = htmlspecialchars_decode($row['remark']);
         $this->assign('data_list', $row);
