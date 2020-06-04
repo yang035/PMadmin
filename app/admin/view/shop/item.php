@@ -88,7 +88,7 @@
                     }},
                 {field: 'tuisong', title: '推送(类型_公司)'},
                 {field: 'status', title: '状态', templet: '#statusTpl'},
-                {title: '操作', templet: '#buttonTpl'},
+                {title: '操作',width:250, templet: '#buttonTpl'},
                 {title: '审核信息', templet: '#buttonTpl2'},
             ]]
         });
