@@ -53,6 +53,9 @@
     <a onclick="read({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">查看</a>
     <a href="{:url('editItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
     <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>
+    {eq name="$Think.session.admin_user.cid" value="2"}
+    <a onclick="tuisong({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">推送</a>
+    {/eq}
 </script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl2">
     {{#  if(d.check_status == 1){ }}
@@ -83,6 +86,7 @@
                 {field: 'cat_id', title: '类别', templet:function(d){
                         return d.cat.name;
                     }},
+                {field: 'tuisong', title: '推送(类型_公司)'},
                 {field: 'status', title: '状态', templet: '#statusTpl'},
                 {title: '操作', templet: '#buttonTpl'},
                 {title: '审核信息', templet: '#buttonTpl2'},
@@ -101,6 +105,24 @@
             title :'详情',
             maxmin: true,
             area: ['1000px', '800px'],
+            content: open_url,
+            success:function (layero, index) {
+            }
+        });
+    }
+
+    function tuisong(id){
+        var open_url = "{:url('tuisong')}?id="+id;
+        if (open_url.indexOf('?') >= 0) {
+            open_url += '&hisi_iframe=yes';
+        } else {
+            open_url += '?hisi_iframe=yes';
+        }
+        layer.open({
+            type:2,
+            title :'详情',
+            maxmin: true,
+            area: ['600px', '400px'],
             content: open_url,
             success:function (layero, index) {
             }

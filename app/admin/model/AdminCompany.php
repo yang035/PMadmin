@@ -40,10 +40,47 @@ class AdminCompany extends Model
         return $str;
     }
 
+    public static function getOption1($id = 0)
+    {
+        $rows = self::column('id,name');
+        $str = '<option value="">全部</option>';
+        foreach ($rows as $k => $v) {
+            if ($k == 1) {// 过滤超级管理员角色
+                continue;
+            }
+            if ($id == $k) {
+                $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+            } else {
+                $str .= '<option value="'.$k.'">'.$v.'</option>';
+            }
+        }
+        return $str;
+    }
+
+    public static function getOption2($id = 0)
+    {
+        $rows = self::column('id,name');
+        return $rows;
+    }
+
     public static function getSysType($type = 0)
     {
         $leaveType = config('tb_system.sys_type');
         $str = '';
+        foreach ($leaveType as $k => $v) {
+            if ($type == $k) {
+                $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+            } else {
+                $str .= '<option value="'.$k.'">'.$v.'</option>';
+            }
+        }
+        return $str;
+    }
+
+    public static function getSysType1($type = 0)
+    {
+        $leaveType = config('tb_system.sys_type');
+        $str = '<option value="">全部</option>';
         foreach ($leaveType as $k => $v) {
             if ($type == $k) {
                 $str .= '<option value="'.$k.'" selected>'.$v.'</option>';

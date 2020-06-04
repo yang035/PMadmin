@@ -12,6 +12,7 @@ use app\admin\model\ShopItem as ItemModel;
 use app\admin\model\Score as ScoreModel;
 use app\admin\model\ShopOrder as OrderModel;
 use app\admin\model\AdminUser;
+use app\admin\model\AdminCompany;
 use think\Db;
 use think\Url;
 
@@ -63,10 +64,13 @@ class Shop extends Admin
                 $where['visible_range'] = $visible_range;
             }
 //            $where['cid'] = session('admin_user.cid');
-            $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->select();
+            $company_option = AdminCompany::getOption2();
+            $sys_type = config('tb_system.sys_type');
+            $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->order('id desc')->select();
             if ($data['data']) {
                 foreach ($data['data'] as $k => $v) {
                     $v['check_name'] = !empty($v['check_user']) ? AdminUser::getUserById($v['check_user'])['id_card'] : '无';
+                    $v['tuisong'] = (empty($v['tj_company_type']) ? '全部' : $sys_type[$v['tj_company_type']]).'_'.(empty($v['tj_company']) ? '全部' : $company_option[$v['tj_company']]);
                 }
             }
             $data['count'] = ItemModel::where($where)->count('id');
@@ -272,7 +276,7 @@ class Shop extends Admin
             if ($name) {
                 $where['name'] = ['like', "%{$name}%"];
             }
-            $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->select();
+            $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->order('tj_company DESC,tj_company_type DESC,id DESC')->select();
             if ($data['data']){
                 foreach ($data['data'] as $k=>$v){
                     $startdate=strtotime($v['start_time']);
@@ -370,5 +374,24 @@ class Shop extends Admin
         }else{
             return 0;
         }
+    }
+
+    public function tuisong($id=0)
+    {
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            if ($data['id']){
+                $data['operator_id'] = session('admin_user.uid');
+                if (!ItemModel::update($data)) {
+                    return $this->error('操作失败');
+                }
+                return $this->success('操作成功');
+            }else{
+                return $this->error('商品不存在');
+            }
+        }
+        $this->assign('company_option', AdminCompany::getOption1());
+        $this->assign('sys_type', AdminCompany::getSysType1());
+        return $this->fetch();
     }
 }
