@@ -136,8 +136,58 @@ class Subject extends Admin
         $tab_data = $this->tab_data;
         $tab_data['current'] = url('');
 
-        $this->assign('tab_data', $tab_data);
-        $this->assign('tab_type', 1);
+//        $this->assign('tab_data', $tab_data);
+//        $this->assign('tab_type', 1);
+        $this->assign('cat_option', ItemModel::getOption());
+        $this->assign('s_status', ItemModel::getSStatus());
+        return $this->fetch();
+    }
+
+    public function chengguo($q = '')
+    {
+        if ($this->request->isAjax()) {
+            $where = $data = [];
+            $page = input('param.page/d', 1);
+            $limit = input('param.limit/d', 20);
+
+            $cat_id = input('param.cat_id/d');
+            if ($cat_id) {
+                $where['cat_id'] = $cat_id;
+            }
+            $name = input('param.name');
+            if ($name) {
+                $where['name'] = ['like', "%{$name}%"];
+            }
+            $s_status = input('param.s_status/d');
+            if ($s_status) {
+                $where['s_status'] = $s_status;
+            }
+            $p_status = config('other.s_status');
+            $where['cid'] = session('admin_user.cid');
+            $order = 'status desc,id desc';
+            $data['data'] = ItemModel::with('cat')->where($where)->page($page)->order($order)->limit($limit)->select();
+//            $carType = config('other.car_color');
+            if ($data['data']){
+                $s = \app\admin\model\Project::getColumn1('subject_id');
+                $p = array_flip($s);
+                foreach ($data['data'] as $k=>$v){
+                    $v['s_status'] = $p_status[$v['s_status']];
+                    $v['leader_user'] = $this->deal_data($v['leader_user']);
+                    $v['project_id'] = $p[$v['id']];
+                }
+            }
+            $data['count'] = ItemModel::where($where)->count('id');
+            $data['code'] = 0;
+            $data['msg'] = '';
+            return json($data);
+        }
+
+        // 分页
+        $tab_data = $this->tab_data;
+        $tab_data['current'] = url('');
+
+//        $this->assign('tab_data', $tab_data);
+//        $this->assign('tab_type', 1);
         $this->assign('cat_option', ItemModel::getOption());
         $this->assign('s_status', ItemModel::getSStatus());
         return $this->fetch();
@@ -595,6 +645,30 @@ class Subject extends Admin
         return $this->fetch('itemedit');
     }
 
+    public function chakan($id = 0)
+    {
+        $row = ItemModel::where('id', $id)->find()->toArray();
+        if ($row){
+//            $row['big_major'] = json_decode($row['big_major'],true);
+            $row['small_major_deal'] = json_decode($row['small_major_deal'],true);
+            if (!empty($row['attachment'])){
+                $attachment = explode(',',$row['attachment']);
+                $row['attachment_show'] = array_filter($attachment);
+            }
+        }
+//        print_r($row);
+        $this->assign('cur_time', empty($row['idcard']) ? date('YmdHis') : $row['idcard']);
+        $this->assign('data_info', $row);
+        $this->assign('subject_option', ItemModel::getOption($row['cat_id']));
+        $this->assign('p_source', ItemModel::getPsource());
+        $this->assign('three_level', ItemModel::getThreeLevel());
+        $this->assign('grade_type', ProjectModel::getGrade());
+        $this->assign('t_type', ProjectModel::getTType());
+        $this->assign('s_status', ItemModel::getSStatus($row['s_status']));
+        $this->assign('is_private', ProjectModel::getPrivate($row['is_private']));
+        return $this->fetch();
+    }
+
     public function read($id = 0)
     {
         $row = ItemModel::where('id', $id)->find()->toArray();
@@ -628,6 +702,13 @@ class Subject extends Admin
                         $row['small_major_deal_arr'][$k]['child'][$kk]['dep_name'] = isset($vv['dep']) ? $this->deal_user($vv['dep']) : null;
                         if (isset($vv['dep']) && !empty($partner_user) && isset($partner_user[$vv['dep']]) && isset($p_data1[$partner_user[$vv['dep']]])){
                             $tmp = $p_data1[$partner_user[$vv['dep']]];
+                        }
+                        if (empty($tmp)){
+                            return $this->error('请先在立项中配置合伙级别');
+//                            $tmp = [
+//                                'name' => '五级合伙人',
+//                                'ratio' =>0.4,
+//                            ];
                         }
                         $row['small_major_deal_arr'][$k]['child'][$kk]['hehuo_name'] = $tmp;
                         $row['small_major_deal_arr'][$k]['child'][$kk]['ml'] = round($row['score'] * $subject_cat[$row['cat_id']]['ratio'] * $v['value']/100 * $vv['value']/100 * 1.00,2);
@@ -879,7 +960,9 @@ class Subject extends Admin
                 7=>$row['remark'],
             ];
         }
-//        print_r($subject_flow);
+        if (empty($flow)){
+            return $this->error('请先在项目类型中配置流程');
+        }
         $this->assign('row', $row);
         $this->assign('flow_cat', $flow_cat);
         $this->assign('flow', $flow);

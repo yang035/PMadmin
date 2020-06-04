@@ -37,12 +37,6 @@
             </div>
         </form>
     </div>
-    <div class="layui-btn-group fl">
-        <a href="{:url('addItem')}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加</a>
-        <a data-href="{:url('status?table=subject_item&val=1')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-play" data-table="dataTable">&nbsp;启用</a>
-        <a data-href="{:url('status?table=subject_item&val=0')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-pause" data-table="dataTable">&nbsp;禁用</a>
-        <!--            <a data-href="{:url('delItem')}" class="layui-btn layui-btn-primary j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>-->
-    </div>
 </div>
 <table id="dataTable" class="layui-table" lay-filter="table1"></table>
 {include file="block/layui" /}
@@ -50,7 +44,8 @@
     <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=subject_item&id={{ d.id }}">
 </script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
-    <a href="{:url('editItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">立项</a>
+    <a href="{:url('chakan')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">查看配比</a>
+    <a href="{:url('read')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">查看协议</a>
     <a href="{:url('Project/index')}?project_id={{ d.project_id }}&atype=0" class="layui-btn layui-btn-xs layui-btn-warm">查看计划</a>
     <a href="{:url('flow')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">查看进度</a>
     <a href="{:url('Score/listprojectdetail')}?id={{ d.project_id }}" class="layui-btn layui-btn-xs layui-btn-warm">项目ML</a>
@@ -77,11 +72,7 @@
                 {field: 'cat_id', title: '类别',width:80, templet:function(d){
                         return d.cat.name;
                     }},
-                // {field: 's_status', title: '项目状态', templet:function(d){
-                //         return d.s_status;
-                //     }},
                 {field: 'leader_user', title: '总负责人',width:150},
-                {field: 'status', title: '状态',width:100, templet: '#statusTpl'},
                 {title: '操作', templet: '#buttonTpl',minWidth:600}
             ]]
         });
