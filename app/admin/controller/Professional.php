@@ -9,7 +9,7 @@
 namespace app\admin\controller;
 use app\admin\model\ProfessionalCat as CatModel;
 use app\admin\model\ProfessionalItem as ItemModel;
-
+use app\admin\model\Score as ScoreModel;
 
 class Professional extends Admin
 {
@@ -63,6 +63,161 @@ class Professional extends Admin
         $this->assign('cat_option',ItemModel::getOption());
         return $this->fetch('item');
     }
+
+    public function export()
+    {
+        $where = $data = [];
+        $cat_id = input('param.cat_id/d');
+        if ($cat_id){
+            $where['cat_id'] = $cat_id;
+        }
+        $name = input('param.name');
+        if ($name) {
+            $where['name'] = ['like', "%{$name}%"];
+        }
+        $where['cid'] = session('admin_user.cid');
+
+        set_time_limit(0);
+        $data_list = ItemModel::with('cat')->where($where)->select();
+        $cat_option = ItemModel::getCat();
+
+        foreach ($data_list as $k => $v) {
+            $data_list[$k]['pname'] = $cat_option[$v['cat_id']];
+        }
+        vendor('PHPExcel.PHPExcel');
+        $objPHPExcel = new \PHPExcel();
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(10);
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A1', '编号')
+            ->setCellValue('B1', '类型')
+            ->setCellValue('C1', '名称')
+            ->setCellValue('D1', '系数');
+//            print_r($data_list);exit();
+        foreach ($data_list as $k => $v) {
+            $num = $k + 2;
+            $objPHPExcel->setActiveSheetIndex(0)
+                //Excel的第A列，uid是你查出数组的键值，下面以此类推
+                ->setCellValue('A' . $num, $v['id'])
+                ->setCellValue('B' . $num, $v['pname'])
+                ->setCellValue('C' . $num, $v['name'])
+                ->setCellValue('D' . $num, $v['ratio']);
+        }
+        $name = '专业配置';
+        $objPHPExcel->getActiveSheet()->setTitle($name);
+        $objPHPExcel->setActiveSheetIndex(0);
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $name . '.xls"');
+        header('Cache-Control: max-age=0');
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+        exit;
+    }
+
+    public function import(){
+        if ($this->request->isAjax()) {
+            $file = request()->file('file');
+            // 上传附件路径
+            $_upload_path = ROOT_PATH . 'public/upload' . DS . 'excel' . DS . date('Ymd') . DS;
+            // 附件访问路径
+            $_file_path = ROOT_DIR . 'upload/excel/' . date('Ymd') . '/';
+
+            // 移动到upload 目录下
+            $upfile = $file->rule('md5')->move($_upload_path);//以md5方式命名
+            if (!is_file($_upload_path . $upfile->getSaveName())) {
+                return self::result('文件上传失败！');
+            }
+            $file_name = $_upload_path . $upfile->getSaveName();
+//            print_r($file_name);exit();
+            set_time_limit(0);
+            $excel = \service('Excel');
+            $format = array('A' => 'line', 'B' => 'cat_id', 'C' => 'name', 'D' => 'ratio',);
+            $checkformat = array('A' => '编号', 'B' => '类型', 'C' => '名称', 'D' => '系数');
+            $res = $excel->readUploadFile($file_name, $format, 8050, $checkformat);
+            $cid = session('admin_user.cid');
+            if ($res['status'] == 0) {
+                $this->error($res['data']);
+            } else {
+                $good_type = array_unique(array_column($res['data'], 'B'));
+                $m_t = ItemModel::getCat();
+                $t = [];
+                if (!$m_t){
+                    return $this->error('请先添加类型');
+                }else{
+                    foreach ($m_t as $k => $v) {
+                        $t[$v] = $k;
+                    }
+                }
+                if ($good_type){
+                    foreach ($good_type as $k=>$v){
+                        if (!in_array($v,$m_t)){
+                            return $this->error("类型[$v]不存在，请先添加类型");
+                        }
+                    }
+                }
+                $c0 = array_column($res['data'], 'C');
+                $c1 = array_unique(array_filter($c0));
+                if (count($c0) > count($c1)){
+                    return $this->error("名称不能有重复的或空值");
+                }
+                $i = 0;
+                foreach ($res['data'] as $k => $v) {
+                    $where = [
+                        'cid' => session('admin_user.cid'),
+                        'name' => $v['C'],
+                    ];
+                    $f = ItemModel::where($where)->find();
+                    if (!$f) {
+                        $tmp = [
+                            'cat_id' => $t[$v['B']],
+                            'name' => $v['C'],
+                            'ratio' => $v['D'],
+                            'remark' => $v['C'],
+                            'cid' => session('admin_user.cid'),
+                            'user_id' => session('admin_user.uid'),
+                        ];
+                        $f1 = ItemModel::create($tmp);
+                    }else{
+                        $tmp = [
+                            'id'=>$f['id'],
+                            'cat_id' => $t[$v['B']],
+                            'name' => $v['C'],
+                            'ratio' => $v['D'],
+                            'remark' => $v['C'],
+                            'cid' => session('admin_user.cid'),
+                            'user_id' => session('admin_user.uid'),
+                        ];
+                        $f1 = ItemModel::update($tmp);
+                    }
+                    if ($f1){
+                        $i++;
+                    }
+                }
+                if ($i){
+                    //计算得分
+                    $sc = [
+                        'project_id'=>0,
+                        'cid'=>session('admin_user.cid'),
+                        'user'=>session('admin_user.uid'),
+                        'ml_add_score'=>0,
+                        'ml_sub_score'=>0,
+                        'gl_add_score'=>$i,
+                        'gl_sub_score'=>0,
+                        'remark' => '数据导入Excel得分'
+                    ];
+                    if (ScoreModel::addScore($sc)){
+                        return $this->success("添加成功，奖励{$sc['gl_add_score']}GL分。",'index');
+                    }
+                }else{
+                    return $this->error("导入失败");
+                }
+            }
+        }
+        return $this->fetch();
+    }
+
     public function addItem()
     {
         if ($this->request->isPost()) {

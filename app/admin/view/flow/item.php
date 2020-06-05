@@ -26,6 +26,8 @@
                 </div>
             </div>
             <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
+            <a href="{:url('export')}" class="layui-btn layui-btn-primary layui-icon">导出</a>
+                <a href="javascript:import_excel();" class="layui-btn layui-btn-primary layui-icon">导入</a>
             </div>
         </form>
     </div>
@@ -66,7 +68,7 @@
                 {field: 'cat_id', title: '类别', templet:function(d){
                         return d.cat.name;
                     }},
-                // {field: 'status', title: '状态', templet: '#statusTpl'},
+                {field: 'status', title: '状态', templet: '#statusTpl'},
                 {title: '操作', templet: '#buttonTpl'}
             ]]
         });
@@ -83,6 +85,24 @@
             title :'详情',
             maxmin: true,
             area: ['800px', '600px'],
+            content: open_url,
+            success:function (layero, index) {
+            }
+        });
+    }
+
+    function import_excel() {
+        var open_url = "{:url('import')}";
+        if (open_url.indexOf('?') >= 0) {
+            open_url += '&hisi_iframe=yes';
+        } else {
+            open_url += '?hisi_iframe=yes';
+        }
+        layer.open({
+            type:2,
+            title :'导入',
+            maxmin: true,
+            area: ['800px', '500px'],
             content: open_url,
             success:function (layero, index) {
             }
