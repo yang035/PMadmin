@@ -830,6 +830,9 @@ class Approval extends Admin
             if ($result !== true) {
                 return $this->error($result);
             }
+            if (!isset($data['cat_id'])){
+                return $this->error('联系管理员配置资产类型');
+            }
             unset($data['id']);
 
             $send_user = html_entity_decode($data['send_user']);

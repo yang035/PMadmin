@@ -48,6 +48,7 @@ class Subject extends Admin
 
     public function index($q = '')
     {
+        $p = $this->request->param();
         if ($this->request->isAjax()) {
             $where = $data = [];
             $page = input('param.page/d', 1);
@@ -85,6 +86,9 @@ class Subject extends Admin
         // 分页
         $tab_data = $this->tab_data;
         $tab_data['current'] = url('');
+        if (isset($p['param']) && 1 == $p['param']){
+            unset($tab_data['menu'][0]);
+        }
 
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 1);
