@@ -54,10 +54,10 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">附件说明</label>
+        <label class="layui-form-label">附件</label>
         <div class="layui-input-inline" style="width: 500px">
             <div class="layui-upload">
-                <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
+                <button type="button" class="layui-btn layui-btn-normal" id="testList">选择</button>
                 <div class="other-div" style="display: none">
                     <div class="layui-upload-list">
                         <table class="layui-table">
@@ -80,9 +80,9 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">发送给</label>
+        <label class="layui-form-label">派发给</label>
         <div class="layui-input-inline">
-            <button type="button" class="layui-btn" id="send_user_id">选择发送人</button>
+            <button type="button" class="layui-btn" id="send_user_id">选择</button>
             <div id="send_select_id">{$data_info['assignment_user_id']|default=''}</div>
             <input type="hidden" name="send_user" id="send_user" value="{$data_info['assignment_user']|default=''}">
         </div>
@@ -90,7 +90,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">执行人</label>
         <div class="layui-input-inline">
-            <button type="button" class="layui-btn" id="deal_user_id">选择执行人</button>
+            <button type="button" class="layui-btn" id="deal_user_id">选择</button>
             <div id="deal_select_id">{$data_info['tmp_user_id']|default=''}</div>
             <input type="hidden" name="deal_user" id="deal_user" value="{$data_info['tmp_user']|default=''}">
         </div>

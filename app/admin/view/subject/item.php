@@ -50,18 +50,21 @@
     <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=subject_item&id={{ d.id }}">
 </script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
-    <a href="{:url('flow')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-warm">设计流程</a>
-    <a href="{:url('chakan')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-warm">查看</a>
-    <a href="{:url('editItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
-<!--    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
-    <a href="#" onclick="a_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">甲方人员</a>
-    <a href="#" onclick="b_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">乙方人员</a>
-    <a href="#" onclick="discuss_record({{ d.id }},'{{ d.name }}')" class="layui-btn layui-btn-xs layui-btn-warm">洽商记录</a>
-    <a href="#" onclick="contract({{ d.id }},'{{ d.name }}')" class="layui-btn layui-btn-xs layui-btn-normal">拟定合同</a>
+    {eq name="Request.param.param" value="1"}
     <a href="#" onclick="zujian_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">组建项目组</a>
     <a href="#" onclick="partner_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">合伙配置</a>
     <a href="#" onclick="edit_x({{ d.id }},'{{ d.name }}')" class="layui-btn layui-btn-xs layui-btn-normal">编辑协议</a>
     <a href="#" onclick="sign_xieyi({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">签署协议</a>
+    {else/}
+    <!--    <a href="{:url('flow')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-warm">设计流程</a>-->
+    <a href="{:url('chakan')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-warm">查看</a>
+    <a href="{:url('editItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
+    <!--    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
+    <a href="#" onclick="a_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">甲方人员</a>
+    <!--    <a href="#" onclick="b_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">乙方人员</a>-->
+    <a href="#" onclick="discuss_record({{ d.id }},'{{ d.name }}')" class="layui-btn layui-btn-xs layui-btn-warm">洽商记录</a>
+    <a href="#" onclick="contract({{ d.id }},'{{ d.name }}')" class="layui-btn layui-btn-xs layui-btn-normal">拟定合同</a>
+    {/eq}
 </script>
 <script type="text/javascript">
     layui.use(['jquery','table'], function() {
