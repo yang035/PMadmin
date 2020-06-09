@@ -105,6 +105,11 @@ class Shop extends Admin
             if($result !== true) {
                 return $this->error($result);
             }
+            if ($data['shop_type']){
+                $data['shop_type'] = 1;
+            }else{
+                $data['shop_type'] = 2;
+            }
             if (!ItemModel::create($data)) {
                 return $this->error('添加失败');
             }
