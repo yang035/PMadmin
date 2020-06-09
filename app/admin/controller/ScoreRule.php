@@ -163,6 +163,16 @@ class ScoreRule extends Admin
                 $this->error($res['data']);
             } else {
                 $rule_type = array_unique(array_column($res['data'], 'B'));
+
+                $w = [
+                    'cid' => session('admin_user.cid'),
+                    'code' => session('admin_user.cid') . 'r',
+                    'pid' => 0,
+                ];
+                $id = RuleModel::where($w)->column('id');
+                if (!$id){
+                    return $this->error("请联系管理员,先添加公司");
+                }
                 if ($rule_type) {
                     foreach ($rule_type as $k => $v) {
                         $where = [
@@ -173,7 +183,7 @@ class ScoreRule extends Admin
                         if (!$f) {
                             $tmp = [
                                 'code' => session('admin_user.cid') . 'r',
-                                'pid' => 1,
+                                'pid' => $id[0],
                                 'cid' => session('admin_user.cid'),
                                 'name' => $v,
                                 'ml' => 0,

@@ -172,6 +172,16 @@ class Publics extends Common
                     ];
                     db('score')->insert($score);
 
+                    $score_rule = [
+                        'code' => $result['id'].'r',
+                        'pid' => 0,
+                        'cid' => $result['id'],
+                        'name' => $result['name'],
+                        'create_time' => time(),
+                        'update_time' => time(),
+                    ];
+                    db('score_rule')->insert($score_rule);
+
                     //事务提交
                     Db::commit();
                 } catch (\Exception $e) {
