@@ -39,6 +39,7 @@ class Shop extends Admin
 
     public function index($q = '')
     {
+        $p = $this->request->param();
         if ($this->request->isAjax()) {
             $where = $data = [];
             $page = input('param.page/d', 1);
@@ -59,6 +60,8 @@ class Shop extends Admin
             if ($name) {
                 $where['name'] = ['like', "%{$name}%"];
             }
+            $where['shop_type'] = $p['shop_type'] ? 1 : 2;
+
             $visible_range = input('param.visible_range/d');
             if ($visible_range){
                 $where['visible_range'] = $visible_range;

@@ -73,6 +73,7 @@
         table.render({
             elem: '#dataTable'
             ,url: '{:url()}' //数据接口
+            ,where: {shop_type: '{$Request.param.p}'}
             ,page: true //开启分页
             ,limit: 20
             ,text: {

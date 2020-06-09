@@ -92,7 +92,7 @@
                 //         return d.s_status;
                 //     }},
                 // {field: 'leader_user', title: '总负责人',width:150},
-                // {field: 'status', title: '状态',width:100, templet: '#statusTpl'},
+                {field: 'status', title: '状态',width:100, templet: '#statusTpl'},
                 {title: '操作', templet: '#buttonTpl',minWidth:600}
             ]]
         });

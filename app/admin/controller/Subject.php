@@ -68,7 +68,7 @@ class Subject extends Admin
             }
             $p_status = config('other.s_status');
             $where['cid'] = session('admin_user.cid');
-            $order = 'status desc,id desc';
+            $order = 'status desc,cat_id asc';
             $data['data'] = ItemModel::with('cat')->where($where)->page($page)->order($order)->limit($limit)->select();
 //            $carType = config('other.car_color');
             if ($data['data']){
