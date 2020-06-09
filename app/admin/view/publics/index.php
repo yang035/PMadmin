@@ -41,6 +41,15 @@
         a {
             color:#FFB800;
         }
+        .layui-input{
+            height: 38px;
+            line-height: 1.3;
+            line-height: 38px \9;
+            border-width: 1px;
+            border-style: solid;
+            background-color: rgb(153, 153, 153);
+            border-radius: 2px;
+        }
     </style>
 </head>
 <body>
@@ -50,16 +59,10 @@
         <p id="profile-name" class="profile-name-card"></p>
         <form action="{:url()}" method="post" class="layui-form layui-form-pane">
             <div class="layui-form-item">
-                <label class="layui-form-label">账号</label>
-                <div class="layui-input-block">
                     <input type="text" name="username" class="layui-input" lay-verify="required" placeholder="手机号码或用户名" autofocus="autofocus" value="">
-                </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">密码</label>
-                <div class="layui-input-block">
                     <input type="password" name="password" class="layui-input" lay-verify="required" placeholder="******" value="">
-                </div>
             </div>
             {:token('__token__', 'sha1')}
             <input type="submit" value="登陆" lay-submit="" lay-filter="formLogin" class="layui-btn layui-btn-warm">
@@ -75,7 +78,7 @@
             </div>
         </form>
         <div class="copyright">
-            <a target="_blank" href="http://www.imlgl.com">Powered By IMLGL</a>
+            <a style="color:#FFB800" target="_blank" href="http://www.imlgl.com">Powered By IMLGL</a>
         </div>
     </div>
 </div>
