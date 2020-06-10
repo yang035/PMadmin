@@ -16,9 +16,9 @@ class Partnership extends Admin
     public function index($q = '')
     {
         $map = [];
-        if (1 != session('admin_user.role_id')) {
+//        if (1 != session('admin_user.role_id')) {
             $map['cid'] = session('admin_user.cid');
-        }
+//        }
         if ($q) {
             if (preg_match("/^1\d{10}$/", $q)) {// 手机号
                 $map['cellphone'] = $q;
