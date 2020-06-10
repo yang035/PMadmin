@@ -39,14 +39,44 @@
     <link rel="stylesheet" href="__PUBLIC_JS__/index/css/flexslider.css">
     <!-- Theme style  -->
     <link rel="stylesheet" href="__PUBLIC_JS__/index/css/style.css">
+    <style>
+        #gtco-counter .counter {
+            font-size: 40px;
+            margin-bottom: 10px;
+            color: #FF5126;
+            font-weight: 100;
+            display: block;
+        }
 
-    <!-- Modernizr JS -->
-    <script src="__PUBLIC_JS__/index/js/modernizr-2.6.2.min.js"></script>
-    <!-- FOR IE9 below -->
-    <!--[if lt IE 9]>
-    <script src="__PUBLIC_JS__/index/js/respond.min.js"></script>
-    <![endif]-->
+        * {
+            margin: 0;
+        }
 
+        .jq22-container {
+            margin-top: 50px;
+        }
+
+        #div1 {
+            margin: auto;
+            position: relative;
+        }
+
+        .box {
+            float: left;
+            padding: 5px;
+            border: 1px solid #ccc;
+            background: #f7f7f7;
+            box-shadow: 0 0 8px #ccc;
+        }
+
+        .box:hover {
+            box-shadow: 0 0 10px #999;
+        }
+
+        .box img {
+            width: 240px;
+        }
+    </style>
 </head>
 <body style="background-color: black">
 

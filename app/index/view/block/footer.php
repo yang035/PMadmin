@@ -45,15 +45,13 @@
 <!-- Main -->
 <script src="__PUBLIC_JS__/index/js/main.js"></script>
 <script src="__PUBLIC_JS__/index/js/jquery.waterfall.js"></script>
+<!-- Modernizr JS -->
+<script src="__PUBLIC_JS__/index/js/modernizr-2.6.2.min.js"></script>
+<!-- FOR IE9 below -->
+<!--[if lt IE 9]>
+<script src="__PUBLIC_JS__/index/js/respond.min.js"></script>
+<![endif]-->
 <script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?b1d7bd674571a9b3ef46862485845cc8";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
-
     $("#div1").waterfall({
         itemClass: ".box",
         minColCount: 2,
@@ -75,6 +73,14 @@
             end();
         }
     });
+
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b1d7bd674571a9b3ef46862485845cc8";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
 </script>
 </body>
 </html>
