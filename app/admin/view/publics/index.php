@@ -8,7 +8,7 @@
         body {
             color:#999;
             /*background:url('http://img.infinitynewtab.com/wallpaper/{:date("Ymd")%4000}.jpg');*/
-            background:grey;
+            background:rgb(153, 153, 153);
             background-size:cover;
         }
         .profile-img-card {
@@ -27,11 +27,11 @@
         .login-head h1{color:#fff;font-size:20px;font-weight:600}
         /*.login-box{margin:240px auto 0;width:400px;background-color:rgba(250, 250, 250, 0.7);padding:15px 30px;border-radius:10px;box-shadow: 5px 5px 15px #999;}*/
         .login-box{
-            margin:140px auto 0;width:400px;
+            margin:200px auto 0;width:400px;
             border-radius: 3px;
-            -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background: rgba(255,255,255, 0.2);
+            /*-webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+            /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+            /*background: rgba(255,255,255, 0.2);*/
         }
         .login-box .layui-input{font-size:15px;font-weight:400}
         .login-box input[name="password"]{letter-spacing:5px;font-weight:800}
@@ -77,9 +77,9 @@
                 <!--            <a href="{:url('Wxlogin/index')}" title="微信"><img src="__ADMIN_IMG__/wx.png"/></a>-->
             </div>
         </form>
-        <div class="copyright">
-            <a style="color:#FFB800" target="_blank" href="http://www.imlgl.com">Powered By IMLGL</a>
-        </div>
+<!--        <div class="copyright">-->
+<!--            <a style="color:#FFB800" target="_blank" href="http://www.imlgl.com">Powered By IMLGL</a>-->
+<!--        </div>-->
     </div>
 </div>
 <script src="__ADMIN_JS__/layui/layui.js"></script>

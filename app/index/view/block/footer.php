@@ -11,12 +11,11 @@
 <!--                </ul>-->
 <!--                </p>-->
                 <p class="pull-right">
-                    <small class="block">联系方式：027-87747658           邮箱：27665567@qq.com</small>
+                    <small class="block">联系方式：027-87747660           邮箱：27665567@qq.com</small>
                     <small class="block">Copyright &copy; 2018.版权所有者   <a href="http://beian.miit.gov.cn/" style="color: #778191">ICP证：鲁ICP备18050320号</a> | 网警</small>
                 </p>
             </div>
         </div>
-
     </div>
 </footer>
 </div>
