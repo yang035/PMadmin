@@ -3,7 +3,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">完成比例</label>
             <div class="layui-input-inline">
-                <input type="number" class="layui-input field-ratio" name="ratio" value="0" min="1" max="{$Request.param.placeholder}" onblur="check_ratio(this)" autocomplete="off" placeholder="请输入完成比例">
+                <input type="number" class="layui-input field-ratio" name="ratio" value="{$row['ratio_old']}" min="1" max="{$Request.param.placeholder}" onblur="check_ratio(this)" autocomplete="off" placeholder="请输入完成比例">
             </div>
             <div class="layui-form-mid red">% 最大值  {$Request.param.placeholder}</div>
         </div>

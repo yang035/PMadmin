@@ -520,7 +520,7 @@
             type:2,
             maxmin: true,
             title :'回复',
-            area: ['600px', '400px'],
+            area: ['700px', '500px'],
             content: open_url,
             success:function (layero, index) {
                 var body = layer.getChildFrame('body', index);  //巧妙的地方在这里哦

@@ -1002,6 +1002,7 @@ class Subject extends Admin
     }
 
     public function agree(){
+        $p = $this->request->param();
         if ($this->request->isAjax()){
             $data = $this->request->post();
             if (isset($data['placeholder']) && 0 == $data['placeholder']){
@@ -1022,6 +1023,8 @@ class Subject extends Admin
                 }
             }
         }
+        $row = SubjectFlowModel::where(['id'=>$p['flow_id']])->find();
+        $this->assign('row', $row);
         return $this->fetch();
     }
 

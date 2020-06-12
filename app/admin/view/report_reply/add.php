@@ -41,6 +41,11 @@
             <select name="flow_item" class="field-flow_item" type="select" lay-filter="flow_item" id="c_id">
             </select>
         </div>
+        <div class="layui-input-inline" style="width: 80px;">
+            <input type="number" class="layui-input field-ratio_old" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" onblur="check_realper(this.value)" name="ratio_old" autocomplete="off" placeholder="进度">
+        </div>
+        <div class="layui-form-mid red">%</div>
+        <div class="layui-form-mid">不超过 <span id="realper">20</span></div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">

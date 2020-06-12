@@ -57,11 +57,13 @@ class ReportReply extends Admin
             if($result !== true) {
                 return $this->error($result);
             }
+            $ratio_old = (int)$data['ratio_old'];
             $flow_data = [
                 'flow_sys'=>$data['flow_sys'],
                 'flow_cat'=>$data['flow_cat'],
+                'ratio_old' => empty($ratio_old) ? 0 : $ratio_old,
             ];
-            unset($data['flow_sys'],$data['flow_cat']);
+            unset($data['flow_sys'],$data['flow_cat'],$data['ratio']);
             if (isset($data['flow_item'])){
                 $flow_data['flow_item'] = $data['flow_item'];
                 unset($data['flow_item']);
@@ -106,6 +108,7 @@ class ReportReply extends Admin
 
                     if ($flow_data['flow_sys']){
                         $p_row = Project::getRowById($row['subject_id']);
+
                         $s_flow = [
                             'cid' => $data['cid'],
                             'subject_id' => $p_row['subject_id'],
@@ -114,6 +117,7 @@ class ReportReply extends Admin
                             'attachment' => $row_report['attachment'],
                             'user_id' => $data['user_id'],
                             'flag' => 1,
+                            'ratio_old' => $flow_data['ratio_old'],
                         ];
                         SubjectFlow::create($s_flow);
                     }
