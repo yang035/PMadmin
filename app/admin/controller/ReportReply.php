@@ -63,7 +63,7 @@ class ReportReply extends Admin
                 'flow_cat'=>$data['flow_cat'],
                 'ratio_old' => empty($ratio_old) ? 0 : $ratio_old,
             ];
-            unset($data['flow_sys'],$data['flow_cat'],$data['ratio']);
+            unset($data['flow_sys'],$data['flow_cat'],$data['ratio_old']);
             if (isset($data['flow_item'])){
                 $flow_data['flow_item'] = $data['flow_item'];
                 unset($data['flow_item']);
