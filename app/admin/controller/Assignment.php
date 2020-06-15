@@ -105,7 +105,8 @@ class Assignment extends Admin
                                 }
                                 $report_user = AdminUser::getUserById($v['user_id'])['realname'];
                                 $report[$k]['real_name'] = !empty($report_user) ? $report_user : '';
-                                $report[$k]['check_catname'] = CheckItem::getCat()[$v['check_cat']];
+                                $c_check = CheckItem::getCat();
+                                $report[$k]['check_catname'] = isset($c_check[$v['check_cat']]) ? $c_check[$v['check_cat']] :'';
                                 if (empty($row['child'])){
                                     $report[$k]['reply'] = ReportReply::getAll($v['id'], 5,2);
                                 }else{
