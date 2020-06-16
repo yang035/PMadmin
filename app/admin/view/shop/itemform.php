@@ -32,6 +32,12 @@
             <div class="layui-form-mid" style="color: red">*</div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label">促销描述</label>
+            <div class="layui-input-inline">
+                <textarea type="text" rows="8" maxlength="50" class="layui-textarea field-content" name="content" autocomplete="off" placeholder="请输入内容"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">缩略图</label>
             <div class="layui-input-inline upload">
                 <button type="button" name="upload" class="layui-btn layui-btn-primary layui-upload" lay-type="image" lay-data="{exts:'{:str_replace(',', '|', config('upload.upload_image_ext'))}', accept:'file'}" id="oneImage">请上传首页缩略图</button>

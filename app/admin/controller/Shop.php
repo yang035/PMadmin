@@ -265,6 +265,16 @@ class Shop extends Admin
     }
 
     public function shopList(){
+        $d = date('Y-m-d');
+        $w = [
+            'content' =>['<>',''],
+            'start_time' =>['<=',$d],
+            'end_time' =>['>=',$d],
+            'status' => 1,
+            'check_status' => 1,
+        ];
+        $list = ItemModel::where($w)->where('content IS NOT NULL')->select();
+        $this->assign('list',$list);
         if ($this->request->isAjax()) {
             $today = date('Y-m-d');
             $where = [

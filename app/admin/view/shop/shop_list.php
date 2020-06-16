@@ -28,6 +28,16 @@
         </form>
     </div>
 </div>
+{notempty name="list"}
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>优惠信息</legend>
+</fieldset>
+<ul class="layui-timeline">
+{volist name="list" id="vo"}
+    <li><a class='mcolor' href="{:url('shopDetail',['id'=>$vo['id']])}">{$vo['content']}</a></li>
+{/volist}
+</ul>
+{/notempty}
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
     <legend>商品展示区</legend>
 </fieldset>
