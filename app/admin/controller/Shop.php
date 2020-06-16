@@ -282,6 +282,7 @@ class Shop extends Admin
                 'status' => 1,
                 'start_time' => ['elt',"{$today}"],
                 'end_time' => ['egt',"{$today}"],
+                'check_status' => 1,
             ];
             $page = input('param.page/d', 1);
             $limit = input('param.limit/d', 20);

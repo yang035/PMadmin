@@ -40,6 +40,7 @@
     <div class="layui-card">
         <div class="layui-card-body">
             <b>名称：</b>{$data_list['name']}<br>
+            <b>促销信息：</b>{$data_list['content']}<br>
             <b>谷粒兑换：</b>{$data_list['score']}(斗)<br>
             <b>等价于：</b>{$data_list['marketprice']}(元)<br>
             <b>额外支付：</b>{$data_list['other_price']}(元)<br>
