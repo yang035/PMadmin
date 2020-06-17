@@ -588,6 +588,9 @@ class Subject extends Admin
             if ($result !== true) {
                 return $this->error($result);
             }
+            if (!isset($data['cat_name']) || !isset($data['item_name'])){
+                return $this->error('专业不能为空，请联系管理员');
+            }
             $partner_user = json_decode($row['partner_user'],true);
             if (empty($partner_user)){
                 $major = $this->deal_major($data['cat_name'],$data['item_name']);
