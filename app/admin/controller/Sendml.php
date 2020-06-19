@@ -38,6 +38,10 @@ class Sendml extends Admin{
                 $where['user'] = $params['user_id'];
                 $real_name = $params['real_name'];
             }
+            $role_id = session('admin_user.role_id');
+            if ($role_id > 3) {
+                $where['user'] = session('admin_user.uid');
+            }
             $where['cid'] = session('admin_user.cid');
             $order = 'status desc,id desc';
 //            print_r($where);
