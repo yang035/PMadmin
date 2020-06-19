@@ -1594,8 +1594,12 @@ class Approval extends Admin
 
     public function tixian()
     {
+        $pool = FondPoolModel::getSta();
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            if ($data['money'] > $pool['no_tixian']){
+                return $this->error('超出可提现范围');
+            }
 //            if ('' == $data['project_id']){
 //                return $this->error('请选择项目');
 //            }
@@ -1672,6 +1676,7 @@ class Approval extends Admin
         $this->assign('chain_user', $chain_user);
         $this->assign('send_user', htmlspecialchars($chain_user['manager_user']));
         $this->assign('leave_type', LeaveModel::getOption());
+        $this->assign('pool', $pool);
         return $this->fetch();
     }
 

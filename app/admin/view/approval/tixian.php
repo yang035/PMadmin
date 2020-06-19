@@ -68,10 +68,10 @@
     <div class="layui-form-item">
         <label class="layui-form-label">提现金额</label>
         <div class="layui-input-inline">
-            <input type="number" class="layui-input field-money" lay-verify="required" name="money" autocomplete="off" placeholder="请输入金额">
+            <input type="number" class="layui-input field-money" lay-verify="required" name="money" onblur="check_pool(this.value)" autocomplete="off" placeholder="请输入金额">
         </div>
         <div class="layui-form-mid">元</div>
-        <div class="layui-form-mid" style="color: red">*</div>
+        <div class="layui-form-mid" style="color: red">* 可提现 <span id="pool">{$pool['no_tixian']}</span> 元</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">附件说明</label>
@@ -421,6 +421,13 @@ function select_union(id){
             // $("#c_id").get(0).selectedIndex=0;
         }
     });
+}
+
+function check_pool(v) {
+    var p = $('#pool').text();
+    if (v > p){
+        layer.alert('超出提现范围');
+    }
 }
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>
