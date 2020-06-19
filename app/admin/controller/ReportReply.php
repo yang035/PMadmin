@@ -113,6 +113,7 @@ class ReportReply extends Admin
                             'cid' => $data['cid'],
                             'subject_id' => $p_row['subject_id'],
                             'flow_id' => $flow_data['flow_item'],
+                            'flow_cat_id' => $flow_data['flow_cat'],
                             'remark' => $row_report['mark'],
                             'attachment' => $row_report['attachment'],
                             'user_id' => $data['user_id'],

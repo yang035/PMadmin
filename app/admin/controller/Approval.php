@@ -29,6 +29,8 @@ use app\admin\model\ApprovalGoods;
 use app\admin\model\ApprovalPrint;
 use app\admin\model\Project as ProjectModel;
 use app\admin\model\ApprovalReport as ApprovalReportModel;
+use app\admin\model\ApprovalTixian as TixianModel;
+use app\admin\model\FondPool as FondPoolModel;
 use think\Db;
 
 
@@ -1590,6 +1592,89 @@ class Approval extends Admin
         return $this->fetch();
     }
 
+    public function tixian()
+    {
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+//            if ('' == $data['project_id']){
+//                return $this->error('请选择项目');
+//            }
+            // 验证
+            $result = $this->validate($data, 'ApprovalTixian');
+            if ($result !== true) {
+                return $this->error($result);
+            }
+            unset($data['id']);
+
+            $send_user = html_entity_decode($data['send_user']);
+            $send_user1 = json_decode($send_user,true);
+            $start_time = $data['start_time'] . ' ' . $data['start_time1'];
+            $end_time = $data['end_time'] . ' ' . $data['end_time1'];
+//            $send_user1 = array_values(array_unique($send_user1, SORT_REGULAR));
+            $send_user1 = array_values($send_user1);
+            if ((strtotime($end_time) - strtotime($start_time) <= 24*3600) && count($send_user1) > 2){
+                array_pop($send_user1);
+            }
+            $send_user2 = [];
+            foreach ($send_user1 as $k=>$v) {
+                $send_user2 += $v;
+            }
+
+            // 启动事务
+            Db::startTrans();
+            try {
+                $approve = [
+//                    'project_id' => $data['project_id'],
+                    'class_type' => $data['class_type'],
+                    'cid' => session('admin_user.cid'),
+                    'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
+                    'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
+                    'time_long' => $data['time_long'],
+                    'user_id' => session('admin_user.uid'),
+                    'send_user' => json_encode($send_user2),
+                    'copy_user' => user_array($data['copy_user']),
+                ];
+
+                $res = ApprovalModel::create($approve);
+
+                $su = [];
+                foreach ($send_user1 as $k=>$v) {
+                    $su[$k] = [
+                        'aid' => $res['id'],
+                        'flow_num' => $k,
+                        'send_user' => json_encode($v),
+                    ];
+                }
+                $send_user_model = new ApprovalSenduser();
+                $send_user_model->saveAll($su);
+
+                $leave = [
+                    'aid' => $res['id'],
+                    'money' => $data['money'],
+                    'reason' => $data['reason'],
+                    'attachment' => $data['attachment'],
+                ];
+                $flag = TixianModel::create($leave);
+                // 提交事务
+                Db::commit();
+            } catch (\Exception $e) {
+                // 回滚事务
+                Db::rollback();
+            }
+            if ($flag) {
+                return $this->success("操作成功{$this->score_value}", 'index');
+            } else {
+                return $this->error('添加失败！');
+            }
+        }
+
+        $chain_user = $this->getFlowUser1();
+        $this->assign('chain_user', $chain_user);
+        $this->assign('send_user', htmlspecialchars($chain_user['manager_user']));
+        $this->assign('leave_type', LeaveModel::getOption());
+        return $this->fetch();
+    }
+
     public function read()
     {
         $params = $this->request->param();
@@ -1654,6 +1739,10 @@ class Approval extends Admin
             case 16:
                 $table = 'tb_approval_bills';
                 $f = 'b.reason,b.date,b.detail,b.money,b.shigong_user,b.attachment';
+                break;
+            case 17:
+                $table = 'tb_approval_tixian';
+                $f = 'b.money,b.reason,b.attachment';
                 break;
             default:
                 $table = 'tb_approval_leave';
@@ -1892,6 +1981,17 @@ class Approval extends Admin
                                 ];
                                 db('score')->insert($score);
                             }
+
+                            if (17 == $data['class_type'] && 2 == $data['status']){
+                                $fond_data = [
+                                    'cid' => session('admin_user.cid'),
+                                    'user' => $list['user_id'],
+                                    'sub_fond' => $list['money'],
+                                    'remark' => $list['reason'],
+                                    'user_id' => session('admin_user.uid'),
+                                ];
+                                FondPoolModel::create($fond_data);
+                            }
                         }
                     }else{
                         ApprovalModel::update($ap);
@@ -1949,6 +2049,17 @@ class Approval extends Admin
                                 'update_time' => time(),
                             ];
                             db('score')->insert($score);
+                        }
+
+                        if (17 == $data['class_type'] && 2 == $data['status']){
+                            $fond_data = [
+                                'cid' => session('admin_user.cid'),
+                                'user' => $list['user_id'],
+                                'sub_fond' => $list['money'],
+                                'remark' => $list['reason'],
+                                'user_id' => session('admin_user.uid'),
+                            ];
+                            FondPoolModel::create($fond_data);
                         }
                     }
 
@@ -2189,6 +2300,8 @@ class Approval extends Admin
                 $list['shigong_user'] = AdminUser::getUserById($list['shigong_user'])['realname'];
                 $unit2_type = config('other.unit2');
                 $this->assign('unit_type', $unit2_type);
+                break;
+            case 17:
                 break;
             default:
                 break;

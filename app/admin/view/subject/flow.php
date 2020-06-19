@@ -1,6 +1,6 @@
 <form class="layui-form" action="{:url()}" method="post">
     <div class="layui-tab-item layui-show layui-form-pane">
-        {volist name="flow" id="f"}
+        {volist name="flow" id="f" key="k"}
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
             <legend>{$flow_cat[$key]} {notempty name="score_arr[$key]"}({$score_arr[$key]}%){/notempty}</legend>
         </fieldset>
@@ -14,7 +14,7 @@
         {else/}
             {volist name="f" id="f1"}
             <dt>
-                <input type="checkbox" name="flow[]" value="{$key}" {notempty name="subject_flow[$key]"}checked{/notempty} lay-skin="primary" placeholder="{$f1['ratio']}" title="{$f1['name']}" lay-filter="flow[]">
+                <input type="checkbox" name="flow[]" value="{$key}" min="{$k}" {notempty name="subject_flow[$key]"}checked{/notempty} lay-skin="primary" placeholder="{$f1['ratio']}" title="{$f1['name']}" lay-filter="flow[]">
             </dt>
             {notempty name="subject_flow[$key]"}
             <ul class="layui-timeline" style="padding-left:30px">
@@ -66,12 +66,12 @@
             // console.log(data.value); //复选框value值，也可以通过data.elem.value得到
             // console.log(data.othis); //得到美化后的DOM对象
             if (data.elem.checked){
-                add_content(data.value,data.elem.title,data.elem.placeholder);
+                add_content(data.value,data.elem.title,data.elem.placeholder,data.elem.min);
             }
         });
     });
-    function add_content(flow_id,title,placeholder) {
-        var open_url = "{:url('addContent')}?subject_id={$Request.param.id}"+"&flow_id="+flow_id+"&placeholder="+placeholder;
+    function add_content(flow_id,title,placeholder,flow_cat_id) {
+        var open_url = "{:url('addContent')}?subject_id={$Request.param.id}"+"&flow_id="+flow_id+"&placeholder="+placeholder+"&flow_cat_id="+flow_cat_id;
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {

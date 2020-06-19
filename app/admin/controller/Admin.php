@@ -304,6 +304,23 @@ class Admin extends Controller
         return $row;
     }
 
+    public function getFlowUser1(){
+        $chain_arr = AdminDepartment::getChainUser();
+        $chain_sub = array_slice($chain_arr,0,2);
+        $new_arr = array_filter($chain_sub);
+        $new_arr = array_reverse($new_arr);
+        $row['manager_user'] = user_array2($new_arr);
+        $s = '';
+        if ($new_arr){
+            foreach ($new_arr as $k=>$v) {
+                $k++;
+                $s .= "[{$k}]".implode(',',$v).' ';
+            }
+        }
+        $row['manager_user_id'] = $s;
+        return $row;
+    }
+
     public function deal_data($x_user)
     {
         $x_user_arr = json_decode($x_user, true);

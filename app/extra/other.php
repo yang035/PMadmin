@@ -213,6 +213,10 @@ return [
             'title'=>'工作清单',
             'href'=>'admin/Approval/signBills'
         ],
+        17=>[
+            'title'=>'提现',
+            'href'=>'admin/Approval/tixian'
+        ],
     ],
     'car_type' => [
         1 =>'车辆1',

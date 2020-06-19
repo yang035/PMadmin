@@ -27,6 +27,7 @@
     <div class="layui-form-item">
         <div class="layui-input-block">
             <input type="hidden" class="field-subject_id" name="subject_id" value="{$Request.param.subject_id}">
+            <input type="hidden" class="field-flow_cat_id" name="flow_cat_id" value="{$Request.param.flow_cat_id}">
             <input type="hidden" class="field-flow_id" name="flow_id" value="{$Request.param.flow_id}">
             <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
             <a href="javascript:history.back()" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
