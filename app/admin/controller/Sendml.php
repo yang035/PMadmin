@@ -10,6 +10,8 @@ namespace app\admin\controller;
 use app\admin\model\Sendml as SendmlModel;
 use app\admin\model\SubjectItem;
 use app\admin\model\AdminUser;
+use think\Db;
+use app\admin\model\FondPool as FondPoolModel;
 
 class Sendml extends Admin{
     public function _initialize()
@@ -154,7 +156,25 @@ class Sendml extends Admin{
                     'id' => $row['id'],
                     'status' => 1,
                 ];
-                if (!SendmlModel::update($d)) {
+                // 启动事务
+                Db::startTrans();
+                try {
+                    SendmlModel::update($d);
+                    $fond_data = [
+                        'cid' => session('admin_user.cid'),
+                        'user' => $row['user'],
+                        'add_fond' => $row['benci_fafang'],
+                        'subject_id' => $row['subject_id'],
+                        'user_id' => session('admin_user.uid'),
+                    ];
+                    $flag = FondPoolModel::create($fond_data);
+                    // 提交事务
+                    Db::commit();
+                } catch (\Exception $e) {
+                    // 回滚事务
+                    Db::rollback();
+                }
+                if (!$flag) {
                     return $this->error('确认失败');
                 }
                 return $this->success('确认成功');

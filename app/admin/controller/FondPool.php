@@ -8,6 +8,7 @@
 
 namespace app\admin\controller;
 use app\admin\model\FondPool as FondPoolModel;
+use app\admin\model\SubjectItem;
 use app\admin\model\AdminUser;
 
 class FondPool extends Admin{
@@ -42,6 +43,7 @@ class FondPool extends Admin{
                 foreach ($data['data'] as $k=>$v){
                     $data['data'][$k]['user_name'] = $user[$v['user']];
                     $data['data'][$k]['user_id'] = $user[$v['user_id']];
+                    $data['data'][$k]['remark'] = $v['subject_id'] ? SubjectItem::getItem()[$v['subject_id']] : $v['remark'];
                 }
             }
             $data['count'] = FondPoolModel::where($where)->count('id');
