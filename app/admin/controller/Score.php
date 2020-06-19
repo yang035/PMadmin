@@ -776,12 +776,26 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
             if ($tmp) {
                 $ml = SendmlModel::getSendmlSta($user);
                 foreach ($tmp as $k => $v) {
+                    $check_ml = SendmlModel::checkMl($k,$user);
+                    if (!$check_ml){
+                        $c = [
+                            'month_fafang' => 0,
+                            'month_queren' => 0,
+                        ];
+                    }else{
+                        $c = [
+                            'month_fafang' => 1,
+                            'month_queren' => $check_ml['status'],
+                        ];
+                    }
                     foreach ($v as $kk => $vv) {
                         if ($kk == $user) {
                             $tmp2[$k] = $vv;
                             $tmp2[$k]['name'] = $s_name[$k];
                             $tmp2[$k]['benci_fafang'] = isset($ml[$k]['benci_fafang']) ? $ml[$k]['benci_fafang'] : 0;
                             $tmp2[$k]['total_fafang'] = isset($ml[$k]['total_fafang']) ? $ml[$k]['total_fafang'] : 0;
+                            $tmp2[$k]['month_fafang'] = $c['month_fafang'];
+                            $tmp2[$k]['month_queren'] = $c['month_queren'];
                             break;
                         }
                     }

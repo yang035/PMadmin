@@ -56,9 +56,13 @@
             <td class="font12">{$vo['ml']}</td>
             <td class="font12">{$vo['finish_ml']}</td>
             <td class="font12">{$vo['total_fafang']}
+                {eq name="vo['month_fafang']" value="0"}
                 <a href="#" onclick="fafang({$Request.param.user},{$key})" class="layui-btn layui-btn-primary layui-btn-sm">发放</a>
+                {/eq}
+                {eq name="vo['month_queren']" value="0"}
                 <a href="#" onclick="edit({$Request.param.user},{$key})" class="layui-btn layui-btn-primary layui-btn-sm">编辑</a>
-                <a href="#" onclick="status({$Request.param.user},{$key})" class="layui-btn layui-btn-primary layui-btn-sm">确认</a>
+                <a href="#" onclick="status({$Request.param.user},{$key},{$vo['benci_fafang']})" class="layui-btn layui-btn-primary layui-btn-sm">确认</a>
+                {/eq}
             </td>
             <td class="font12">{$vo['finish_ml']-$vo['total_fafang']}</td>
             <td class="font12">{$vo['ml']-$vo['finish_ml']}</td>
@@ -134,16 +138,18 @@
         });
     }
 
-    function status(user,subject_id){
+    function status(user,subject_id,benci_fafang){
         var open_url = "{:url('Sendml/setStatus')}?user="+user+'&subject_id='+subject_id;
-        $.post(open_url, function(res) {
-            if (res.code == 1) {
-                layer.msg(res.msg);
-                location.reload();
-            }else {
-                layer.msg(res.msg);
-                location.reload();
-            }
+        layer.confirm('本次发放 '+benci_fafang+' M', {icon: 3, title:'提示'}, function(index){
+            $.post(open_url, function(res) {
+                if (res.code == 1) {
+                    layer.msg(res.msg);
+                    location.reload();
+                }else {
+                    layer.msg(res.msg);
+                    location.reload();
+                }
+            });
         });
     }
 

@@ -28,4 +28,18 @@ class Sendml extends Model
         }
         return $ml;
     }
+
+    public static function checkMl($subject_id,$user)
+    {
+        $begin_date = date('Y-m-01').' 00:00:00';
+        $end_date = date('Y-m-d', strtotime("{$begin_date} +1 month -1 day")).' 23:59:59';
+        $w = [
+            'cid' => session('admin_user.cid'),
+            'subject_id' => $subject_id,
+            'user' => $user,
+            'update_time' => ['between',[strtotime($begin_date),strtotime($end_date)]],
+        ];
+        $row = self::where($w)->order('id desc')->limit(1)->find();
+        return $row;
+    }
 }
