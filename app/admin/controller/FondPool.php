@@ -58,7 +58,7 @@ class FondPool extends Admin{
             $data['msg'] = '';
             return json($data);
         }
-        $this->assign('user_select', AdminUser::inputSearchUser1());
+        $this->assign('user_select', AdminUser::inputSearchUser());
         $this->assign('real_name', $real_name);
         return $this->fetch();
     }
