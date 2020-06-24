@@ -27,6 +27,52 @@ class FondPool extends Admin{
             $page = input('param.page/d', 1);
             $limit = input('param.limit/d', 20);
 
+            if (!empty($params['user_id'])) {
+                $where['user'] = $params['user_id'];
+                $real_name = $params['real_name'];
+            }
+            $role_id = session('admin_user.role_id');
+            if ($role_id > 3) {
+                $where['user'] = session('admin_user.uid');
+            }
+            $where['cid'] = session('admin_user.cid');
+            $order = 'status desc,id desc';
+            $field = 'user,sum(add_fond) as add_fond,sum(sub_fond) as sub_fond';
+            $group = 'user';
+//            print_r($where);exit();
+            $data['data'] = FondPoolModel::field($field)->where($where)->group($group)->page($page)->order($order)->limit($limit)->select();
+            $map = [
+                'company_id'=>$where['cid'],
+            ];
+            $user = AdminUser::where($map)->column('realname','id');
+            if ($data['data']){
+                foreach ($data['data'] as $k=>$v){
+                    $data['data'][$k]['user_name'] = $user[$v['user']];
+                    $v['add_fond'] = round($v['add_fond'],2);
+                    $v['sub_fond'] = round($v['sub_fond'],2);
+                    $data['data'][$k]['no_tixian'] = round($v['add_fond'] - $v['sub_fond'],2);
+                }
+            }
+            $data['count'] = FondPoolModel::where($where)->group($group)->count('id');
+            $data['code'] = 0;
+            $data['msg'] = '';
+            return json($data);
+        }
+        $this->assign('user_select', AdminUser::inputSearchUser1());
+        $this->assign('real_name', $real_name);
+        return $this->fetch();
+    }
+
+    public function detail($q = '')
+    {
+        $subject_name = '';
+        $real_name = '';
+        $params = $this->request->param();
+        if ($this->request->isAjax()) {
+            $where = $data = [];
+            $page = input('param.page/d', 1);
+            $limit = input('param.limit/d', 20);
+
             if ($params['user_id']) {
                 $where['user'] = $params['user_id'];
                 $real_name = $params['real_name'];

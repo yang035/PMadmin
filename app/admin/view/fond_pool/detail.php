@@ -23,9 +23,6 @@
 </div>
 <table id="dataTable" class="layui-table" lay-filter="table1"></table>
 {include file="block/layui" /}
-<script type="text/html" title="操作按钮模板" id="buttonTpl">
-    <a href="{:url('detail')}?user_id={{ d.user }}" class="layui-btn layui-btn-xs layui-btn-normal">明细</a>
-</script>
 <script src="__PUBLIC_JS__/jquery.select.js?v="></script>
 <script src="__PUBLIC_JS__/SelectBox.min.js?v="></script>
 <script>
@@ -46,10 +43,11 @@
                 {type:'checkbox'},
                 {field: 'xuhao', title: '序号',type: 'numbers'},
                 {field: 'user_name', title: '姓名'},
-                {field: 'add_fond', title: '已兑换ML'},
-                {field: 'sub_fond', title: '已提现ML'},
-                {field: 'no_tixian', title: '余额ML'},
-                {title: '操作', templet: '#buttonTpl'}
+                {field: 'add_fond', title: '增加'},
+                {field: 'sub_fond', title: '提现扣除'},
+                {field: 'remark', title: '备注'},
+                {field: 'user_id', title: '操作员'},
+                {field: 'update_time', title: '操作时间'},
             ]]
         });
     });
