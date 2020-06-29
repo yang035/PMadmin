@@ -47,7 +47,7 @@ class Professional extends Admin
                 $where['name'] = ['like', "%{$name}%"];
             }
             $where['cid'] = session('admin_user.cid');
-            $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->select();
+            $data['data'] = ItemModel::with('cat')->where($where)->page($page)->order('cat_id asc')->limit($limit)->select();
             $data['count'] = ItemModel::where($where)->count('id');
             $data['code'] = 0;
             $data['msg'] = '';
@@ -78,7 +78,7 @@ class Professional extends Admin
         $where['cid'] = session('admin_user.cid');
 
         set_time_limit(0);
-        $data_list = ItemModel::with('cat')->where($where)->select();
+        $data_list = ItemModel::with('cat')->where($where)->order('cat_id asc')->select();
         $cat_option = ItemModel::getCat();
 
         foreach ($data_list as $k => $v) {
