@@ -90,11 +90,13 @@ class Professional extends Admin
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(10);
         $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('A1', '编号')
             ->setCellValue('B1', '类型')
             ->setCellValue('C1', '名称')
-            ->setCellValue('D1', '系数');
+            ->setCellValue('D1', '系数')
+            ->setCellValue('E1', '进度占比');
 //            print_r($data_list);exit();
         foreach ($data_list as $k => $v) {
             $num = $k + 2;
@@ -103,7 +105,8 @@ class Professional extends Admin
                 ->setCellValue('A' . $num, $v['id'])
                 ->setCellValue('B' . $num, $v['pname'])
                 ->setCellValue('C' . $num, $v['name'])
-                ->setCellValue('D' . $num, $v['ratio']);
+                ->setCellValue('D' . $num, $v['ratio'])
+                ->setCellValue('E' . $num, $v['jindu_per']);
         }
         $name = '专业配置';
         $objPHPExcel->getActiveSheet()->setTitle($name);
@@ -133,8 +136,8 @@ class Professional extends Admin
 //            print_r($file_name);exit();
             set_time_limit(0);
             $excel = \service('Excel');
-            $format = array('A' => 'line', 'B' => 'cat_id', 'C' => 'name', 'D' => 'ratio',);
-            $checkformat = array('A' => '编号', 'B' => '类型', 'C' => '名称', 'D' => '系数');
+            $format = array('A' => 'line', 'B' => 'cat_id', 'C' => 'name', 'D' => 'ratio','E' => 'jindu_per');
+            $checkformat = array('A' => '编号', 'B' => '类型', 'C' => '名称', 'D' => '系数','E' => '进度占比');
             $res = $excel->readUploadFile($file_name, $format, 8050, $checkformat);
             $cid = session('admin_user.cid');
             if ($res['status'] == 0) {
@@ -174,6 +177,7 @@ class Professional extends Admin
                             'cat_id' => $t[$v['B']],
                             'name' => $v['C'],
                             'ratio' => $v['D'],
+                            'jindu_per' => $v['E'],
                             'remark' => $v['C'],
                             'cid' => session('admin_user.cid'),
                             'user_id' => session('admin_user.uid'),
@@ -185,6 +189,7 @@ class Professional extends Admin
                             'cat_id' => $t[$v['B']],
                             'name' => $v['C'],
                             'ratio' => $v['D'],
+                            'jindu_per' => $v['E'],
                             'remark' => $v['C'],
                             'cid' => session('admin_user.cid'),
                             'user_id' => session('admin_user.uid'),
