@@ -91,6 +91,11 @@
                 </div>
             </legend>
         </fieldset>
+        <div class="layui-form-item" style="margin-left: 100px">
+            <div class="layui-form-mid" style="margin-left: 30px">专业</div>
+            <div class="layui-form-mid" style="margin-left: 80px">配比</div>
+            <div class="layui-form-mid" style="margin-left: 50px">进度(不可编辑)</div>
+        </div>
         {volist name="professional_item" id="f1"}
         {eq name="f1['cat_id']" value="$f['id']"}
         <div class="layui-form-item" style="margin-left: 100px">
@@ -100,6 +105,9 @@
             </div>
             <div class="layui-input-inline1">
                 <input type="text" class="layui-input field-item_ratio" name="item_name[{$f1['cat_id']}][{$f1['id']}][ratio]" value="{$f1['ratio']}" lay-verify="required" >
+            </div>
+            <div class="layui-input-inline1">
+                <input type="text" class="layui-input field-jindu_per" readonly name="item_name[{$f1['cat_id']}][{$f1['id']}][jindu_per]" value="{$f1['jindu_per']}" lay-verify="required" >
             </div>
         </div>
         {/eq}

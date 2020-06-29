@@ -2,37 +2,46 @@
     <div class="layui-tab-item layui-show layui-form-pane">
         {volist name="flow" id="f" key="k"}
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
-            <legend>{$f['name']} {$f['jindu']}%</legend>
+            <legend>{$flow_cat[$key]} {notempty name="score_arr[$key]"}({$score_arr[$key]}%){/notempty}</legend>
         </fieldset>
-                {volist name="f['child']" id="f1"}
-                <dt>
-                    <input type="checkbox" name="flow[]" value="{$f1['id']}" min="{$k}" {notempty name="f1['flow']"}checked{/notempty} lay-skin="primary" placeholder="{$f1['jindu_per']}" title="{$f1['name']}" lay-filter="flow[]">
-                </dt>
-                {notempty name="f1['flow']"}
-                <ul class="layui-timeline" style="padding-left:30px">
-                    {volist name="f1['flow']" id="f2"}
-                    <li class="layui-timeline-item">
-                        <i class="layui-icon layui-timeline-axis"></i>
-                        <div class="layui-timeline-content layui-text">
-                            <div class="layui-timeline-title">
-                                {if condition="(1 == $f2['flag']) && (0 == $f2['agree'])"}
-                                    {eq name="$f1['jindu_per']" value="0"}
-                                    <button onclick="agree({$f2['id']},{$f1['jindu_per']})" type="button" class="layui-btn layui-btn-sm">确认</button>
-                                    {else/ }
-                                    <button onclick="agree1({$f2['id']},{$f1['jindu_per']})" type="button" class="layui-btn layui-btn-sm">确认</button>
-                                    {/eq}
-                                {/if}
-                                {$f2['remark']}--
-                                {volist name="f2['attachment']" id='f3'}
-                                <a href="{$f3}" target="_blank">附件{$i}</a>
-                                {/volist}
-                                --{$f2['create_time']} {notempty name="f2['ratio']"}--<span class="ratio red">{$f2['ratio']}</span>%{/notempty}</div>
-                        </div>
-                    </li>
-                    {/volist}
-                </ul>
-                {/notempty}
+        {eq name="key" value="1"}
+        {volist name="f" id="f1"}
+        <dt>
+            <input type="checkbox" name="flow[]" value="{$key}"  checked lay-skin="primary" title="{$f1['name']}" disabled>
+            ({$row[$key]})
+        </dt>
+        {/volist}
+        {else/}
+            {volist name="f" id="f1"}
+            <dt>
+                <input type="checkbox" name="flow[]" value="{$key}" min="{$k}" {notempty name="subject_flow[$key]"}checked{/notempty} lay-skin="primary" placeholder="{$f1['ratio']}" title="{$f1['name']}" lay-filter="flow[]">
+            </dt>
+            {notempty name="subject_flow[$key]"}
+            <ul class="layui-timeline" style="padding-left:30px">
+                {volist name="subject_flow[$key]" id="f2"}
+                <li class="layui-timeline-item">
+                    <i class="layui-icon layui-timeline-axis"></i>
+                    <div class="layui-timeline-content layui-text">
+                        <div class="layui-timeline-title">
+                            {if condition="(1 == $f2['flag']) && (0 == $f2['agree'])"}
+                                {eq name="$f1['ratio']" value="0"}
+                                <button onclick="agree({$f2['id']},{$f1['ratio']})" type="button" class="layui-btn layui-btn-sm">确认</button>
+                                {else/ }
+                                <button onclick="agree1({$f2['id']},{$f1['ratio']})" type="button" class="layui-btn layui-btn-sm">确认</button>
+                                {/eq}
+                            {/if}
+                            {$f2['remark']}--
+                            {volist name="f2['attachment']" id='f3'}
+                            <a href="{$f3}" target="_blank">附件{$i}</a>
+                            {/volist}
+                            --{$f2['create_time']} {notempty name="f2['ratio']"}--<span class="ratio red">{$f2['ratio']}</span>%{/notempty}</div>
+                    </div>
+                </li>
                 {/volist}
+            </ul>
+            {/notempty}
+            {/volist}
+        {/eq}
         {/volist}
     </div>
 </form>

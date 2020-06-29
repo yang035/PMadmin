@@ -396,7 +396,7 @@ class Project extends Model
         $fields = 'big_major_deal,major_cat';
         $data = self::field($fields)->where($map)->find();
 
-        $str = '';
+        $str = '<option value="0" selected>请选择</option>';
         if ($data){
             $big_major_deal = json_decode($data['big_major_deal'],true);
             if ($big_major_deal){

@@ -65,6 +65,7 @@
                         return "<a class='mcolor' onclick='read("+d.id+")'>"+d.name+"</a>";
                     }},
                 {field: 'ratio', title: '系数'},
+                {field: 'jindu_per', title: '进度占比(%)'},
                 {field: 'cat_id', title: '类别', templet:function(d){
                         return d.cat.name;
                     }},

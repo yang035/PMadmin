@@ -1,3 +1,12 @@
+<style>
+    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+</style>
 <form class="layui-form" action="{:url()}" method="post">
     <div class="layui-tab-item layui-show layui-form-pane">
         <div class="layui-form-item">
@@ -30,6 +39,13 @@
                 {/volist}
             </div>
             <div class="layui-form-mid" style="color: red">*</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">进度占比</label>
+            <div class="layui-input-inline">
+                <input type="number" class="layui-input field-jindu_per" name="jindu_per" value="0" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" autocomplete="off" placeholder="M">
+            </div>
+            <div class="layui-form-mid">%</div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">备注</label>

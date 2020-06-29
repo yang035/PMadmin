@@ -392,6 +392,7 @@ class Subject extends Admin
                     'id'=>$k,
                     'name'=>$v['name'],
                     'value'=>$v['ratio']*100,
+                    'jindu_per'=>0,
                 ];
             }
             if ($big_total > 100){
@@ -406,6 +407,7 @@ class Subject extends Admin
                         'id'=>$kk,
                         'name'=>$vv['name'],
                         'value'=>$vv['ratio']*100,
+                        'jindu_per'=>$vv['jindu_per'],
                     ];
                 }
                 if (array_sum(array_column($small_total[$k],'value')) > 100){
@@ -903,7 +905,40 @@ class Subject extends Admin
         return $this->fetch();
     }
 
-    public function flow()
+    public function flow($id)
+    {
+        $row = $flow_cat = $flow = $subject_flow = $score = $score_arr = [];
+        $row = ItemModel::where('id', $id)->find()->toArray();
+        $flow = json_decode($row['small_major_deal'],true);
+        if (!empty($flow)) {
+            $s_flow = SubjectFlow::getOption($id);
+            if ($s_flow) {
+                foreach ($flow as $k=>$v){
+                    $t_jindu = 0;
+                    foreach ($v['child'] as $k1=>$v1){
+                        foreach ($s_flow as $k2=>$v2) {
+                            if ($k1 == $v2['flow_id']){
+                                $v2['attachment'] = !empty($v2['attachment']) ? array_filter(explode(',', $v2['attachment'])) : $v2['attachment'];
+                                $flow[$k]['child'][$k1]['flow'][] = $v2;
+                            }
+                        }
+                        if (isset($flow[$k]['child'][$k1]['flow'])){
+                            $t_jindu += $flow[$k]['child'][$k1]['flow'][0]['ratio'];
+                        }
+                    }
+                    $flow[$k]['jindu'] = $t_jindu;
+                }
+            }
+        } else {
+            return $this->error('专业不存在');
+        }
+        $this->assign('row', $row);
+        $this->assign('flow', $flow);
+        $this->assign('score_arr', $score_arr);
+        return $this->fetch();
+    }
+
+    public function flowold()
     {
         $params = $this->request->param();
         $field = 'id,cat_id,idcard,name,area,remark';
