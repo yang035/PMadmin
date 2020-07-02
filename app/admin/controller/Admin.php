@@ -1,6 +1,7 @@
 <?php
 namespace app\admin\controller;
 
+use app\admin\model\Region;
 use app\common\controller\Common;
 use app\admin\model\AdminMenu as MenuModel;
 use app\admin\model\AdminRole as RoleModel;
@@ -345,5 +346,9 @@ class Admin extends Controller
             return implode(',', $tmp);
         }
         return '';
+    }
+
+    public function getCity($province,$type=0){
+        return Region::getCity($province,$type);
     }
 }

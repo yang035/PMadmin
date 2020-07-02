@@ -1,0 +1,14 @@
+@charset "utf-8";
+/* CSS Document */
+
+.detail { width:100%; margin:0 auto 50px auto;font-family: "微软雅黑";}
+.detail .h4_o { font-size:18px; margin:20px auto 0px auto; color:#333; text-align:center; line-height:35px;}
+.detail .p_o { font-size:14px; text-align:center;border-bottom:1px dashed #ccc;padding-bottom:20px;margin:10px 12px auto 12px;}
+.detail .p_o span { margin-left:20px; margin-right:20px;}
+.detail_content{margin:0 auto 0 auto;width:1000px;}
+.detail_url{color:#ccc;}
+.detail_url_no{color:#777;}
+
+.detail_Table{ margin:30px auto 0 auto;width:1000px;background:#ccc}
+.detail_Table th{ width:200px;font-size:14px;height:35px;line-height: 30px;background:#fff;white-space:nowrap;}
+.detail_Table td{ font-size:14px;height:35px;line-height: 30px;background:#fff;padding-left:10px;}
