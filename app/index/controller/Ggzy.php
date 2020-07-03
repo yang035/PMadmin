@@ -28,15 +28,34 @@ class Ggzy extends Controller
      */
     public function getList()
     {
+        $last_day = date("Y-m-d",strtotime("-1 day"));
         set_time_limit(0);
-        $opt = "http://deal.ggzy.gov.cn/ds/deal/dealList_find.jsp?HEADER_DEAL_TYPE=01";
-        $post = "TIMEBEGIN_SHOW=2020-06-21&TIMEEND_SHOW=2020-06-30&TIMEBEGIN=2020-06-21&TIMEEND=2020-06-30&SOURCE_TYPE=1&DEAL_TIME=02&DEAL_CLASSIFY=01&DEAL_STAGE=0100&DEAL_PROVINCE=0&DEAL_CITY=0&DEAL_PLATFORM=0&BID_PLATFORM=0&DEAL_TRADE=0&isShowAll=1&PAGENUMBER=1&FINDTXT=";
-        $data = curlInfo($opt, $post);
-        $rs = json_decode($data);
-        if (isset($rs->data)){
-            foreach ($rs->data as $v){
-                $flag = GgzyList::create($v);
-                $this->getListUrl($flag['id'],$flag['url']);
+        $source_type = [1,2];
+        foreach ($source_type as $vv) {
+            $opt = "http://deal.ggzy.gov.cn/ds/deal/dealList_find.jsp?HEADER_DEAL_TYPE=01";
+            $post = "TIMEBEGIN_SHOW={$last_day}&TIMEEND_SHOW={$last_day}&TIMEBEGIN={$last_day}&TIMEEND={$last_day}&SOURCE_TYPE={$vv}&DEAL_TIME=06&DEAL_CLASSIFY=01&DEAL_STAGE=0100&DEAL_PROVINCE=0&DEAL_CITY=0&DEAL_PLATFORM=0&BID_PLATFORM=0&DEAL_TRADE=0&isShowAll=1&PAGENUMBER=1&FINDTXT=";
+            $data = curlInfo($opt, $post);
+            $rs = json_decode($data);
+            $page = $rs->ttlpage;//获取页数
+            if (isset($rs->data)) {
+                foreach ($rs->data as $v) {
+                    $flag = GgzyList::create($v);
+                    $this->getListUrl($flag['id'], $flag['url']);
+                }
+            }
+            if ($page > 1) {
+                for ($i = 2; $i <= $page; $i++) {
+                    $opt = "http://deal.ggzy.gov.cn/ds/deal/dealList_find.jsp?HEADER_DEAL_TYPE=01";
+                    $post = "TIMEBEGIN_SHOW={$last_day}&TIMEEND_SHOW={$last_day}&TIMEBEGIN={$last_day}&TIMEEND={$last_day}&SOURCE_TYPE={$vv}&DEAL_TIME=06&DEAL_CLASSIFY=01&DEAL_STAGE=0100&DEAL_PROVINCE=0&DEAL_CITY=0&DEAL_PLATFORM=0&BID_PLATFORM=0&DEAL_TRADE=0&isShowAll=1&PAGENUMBER={$i}&FINDTXT=";
+                    $data = curlInfo($opt, $post);
+                    $rs = json_decode($data);
+                    if (isset($rs->data)) {
+                        foreach ($rs->data as $v) {
+                            $flag = GgzyList::create($v);
+                            $this->getListUrl($flag['id'], $flag['url']);
+                        }
+                    }
+                }
             }
         }
     }
