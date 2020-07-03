@@ -49,7 +49,7 @@ class Region extends Model
             'RegionCode' => ['like',"{$province}%"]
         ];
         $data = self::where($where)->where('LENGTH(RegionCode)=4')->select();
-        $str = '<option value="0" selected>选择</option>';
+        $str = '<option value="0">选择</option>';
         if ($data){
             foreach ($data as $k => $v) {
                 if ($type == $v['RegionCode']) {

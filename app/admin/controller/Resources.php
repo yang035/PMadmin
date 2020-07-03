@@ -10,6 +10,7 @@ namespace app\admin\controller;
 use app\index\model\GgzyList;
 use app\index\model\GgzyDetail;
 use app\admin\model\Region;
+use app\common\ip\Ip;
 
 class Resources extends Admin{
     public function _initialize()
@@ -19,14 +20,29 @@ class Resources extends Admin{
 
     public function index()
     {
+        $ip_arr = Ip::find(get_ip());
+        $ip_region = [
+            'p' => $ip_arr[4] ? substr($ip_arr[4],0,2) : 0,
+            'c' => $ip_arr[4] ? substr($ip_arr[4],0,4) : 0,
+        ];
+
         if ($this->request->isAjax()) {
             $where = $data = [];
             $page = input('param.page/d', 1);
             $limit = input('param.limit/d', 20);
+            $flag = input('param.flag');
 
-            $cat_id = input('param.cat_id/d');
-            if ($cat_id) {
-                $where['cat_id'] = $cat_id;
+            $p = input('param.p');
+            $p = substr($p,0,-3);
+            $p = $flag ? $p : $ip_arr[1];
+            if ($p && '选'!= $p) {
+                $where['districtShow'] = ['like',"{$p}%"];
+            }
+            $c = input('param.c');
+            $c = substr($c,0,-3);
+            $c = $flag ? $c : $ip_arr[2];
+            if ($c  && '选'!= $c) {
+                $where['platformName'] = ['like',"{$c}%"];
             }
             $title = input('param.title');
             if ($title) {
@@ -43,7 +59,9 @@ class Resources extends Admin{
             $data['msg'] = '';
             return json($data);
         }
-        $this->assign('province', Region::getProvince());
+
+        $this->assign('province', Region::getProvince($ip_region['p']));
+        $this->assign('ip_region', $ip_region);
         return $this->fetch();
     }
 

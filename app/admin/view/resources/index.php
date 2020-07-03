@@ -11,27 +11,30 @@
     <div>
         <form class="layui-form layui-form-pane" action="{:url()}" method="get" id="hisi-table-search">
             <div class="layui-form-item">
-                <label class="layui-form-label">省</label>
-                <div class="layui-input-inline">
-                    <select name="province" class="layui-input field-province" type="select" lay-filter="province" lay-search>
+                <div class="layui-inline">
+                <label class="layui-form-label" style="width: 20px">省</label>
+                <div class="layui-input-inline" style="width: 150px">
+                    <select name="province" class="layui-input field-province" type="select" lay-filter="province" id="province_id">
                         {$province}
                     </select>
                 </div>
-                <label class="layui-form-label">市</label>
-                <div class="layui-input-inline">
+                </div>
+                    <div class="layui-inline">
+                <label class="layui-form-label" style="width: 20px">市</label>
+                <div class="layui-input-inline" style="width: 150px">
                     <select name="city" class="field-city" type="select" lay-filter="city" lay-filter="city" id="city_id">
                     </select>
                 </div>
             </div>
-            <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">标题</label>
-                    <div class="layui-input-inline">
+                    <label class="layui-form-label" style="width: 20px">标题</label>
+                    <div class="layui-input-inline" style="width: 150px">
                         <input type="text" name="title" value="{:input('get.title')}" placeholder="关键字" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <input type="hidden" id="p" name="p" value="">
                 <input type="hidden" id="c" name="c" value="">
+                <input type="hidden" id="flag" name="flag" value="1">
                 <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
             </div>
         </form>
@@ -75,8 +78,12 @@
 
         form.on('select(province)', function(data){
             select_city(data.value);
-            console.log(data.othis);
+            $('#p').val(this.innerText);
         });
+
+        select_city({$ip_region['p']},{$ip_region['c']});
+        $('#p').val($('#province_id option:selected').text());
+        $('#c').val($('#city_id option:selected').text());
 
         function select_city(province,type){
             var open_url = "{:url('getCity')}?province="+province+"&type="+type;
@@ -92,7 +99,7 @@
         }
 
         form.on('select(city)', function(data){
-            $('#c').val(data.name);
+            $('#c').val(this.innerText);
         });
     });
 
