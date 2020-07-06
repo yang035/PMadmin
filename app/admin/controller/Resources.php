@@ -94,7 +94,7 @@ class Resources extends Admin{
         $tab_data['current'] = url('read', ['id'=>$id,'atype' => '0101']);
 
 //        $field = 'region_code,type,pub_time';
-        $data = GgzyDetail::where('list_id', 4)->order('pub_time desc')->select();
+        $data = GgzyDetail::where('list_id', $id)->order('pub_time desc')->select();
         $res = [];
         if ($data){
             foreach ($data as $k=>$v) {

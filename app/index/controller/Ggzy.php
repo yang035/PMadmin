@@ -28,6 +28,7 @@ class Ggzy extends Controller
      */
     public function getList()
     {
+//        $last_day = '2020-07-05';
         $last_day = date("Y-m-d",strtotime("-1 day"));
         set_time_limit(0);
         $source_type = [1,2];
@@ -93,14 +94,14 @@ class Ggzy extends Controller
                 $url = "http://www.ggzy.gov.cn/information".$v;
                 $p = '';
                 $r = curlInfo($url, $p);
-                $tmp[$k]['content'] = htmlspecialchars_decode($r);
+                $tmp[$k]['content'] = $r;
                 $i++;
             }
             $res = Db::table('tb_ggzy_detail')->insertAll($tmp);
             if ($res){
-                echo "新增 {$i} 条数据";
+                echo "新增 {$i} 条数据\r\n";
             }else{
-                echo "操作失败";
+                echo "操作失败\r\n";
             }
         }
     }

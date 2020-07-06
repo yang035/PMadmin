@@ -2,7 +2,7 @@
     <div class="layui-tab-item layui-show layui-form-pane">
         {volist name="flow" id="f" key="k"}
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
-            <legend>{$f['name']} {$f['jindu']}%</legend>
+            <legend>{$f['name']} {$f['jindu']|default=0}%</legend>
         </fieldset>
                 {volist name="f['child']" id="f1"}
                 <dt>

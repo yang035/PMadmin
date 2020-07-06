@@ -653,13 +653,15 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
 
             $tmp = array_filter($tmp);//一个人参加的多个项目
             //累加
-
             if ($tmp){
                 $tmp1 = [];
                 foreach ($tmp as $k => $v){
                     foreach ($v as $k1 => $v1){
                         foreach ($v1 as $k2 => $v2){
                             unset($v2['jindu']);
+                            if (!isset($v2['ml'])){
+                                continue;
+                            }
                             if (!isset($tmp1[$k][$k2])){
                                 $tmp1[$k][$k2] = $v2;
                             }else{
@@ -929,7 +931,7 @@ WHERE si.id in ({$p})";
                     }
                 }
 
-                $xieyi = Xieyi::field('remain_work')->where(['subject_id'=>$row['id']])->order('id desc')->limit(1)->find();
+//                $xieyi = Xieyi::field('remain_work')->where(['subject_id'=>$row['id']])->order('id desc')->limit(1)->find();
                 if ($row['small_major_deal_arr']) {
                     foreach ($row['small_major_deal_arr'] as $k => $v) {
 
