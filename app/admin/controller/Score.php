@@ -471,10 +471,16 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                 }
             }
 
-            $xieyi = Xieyi::field('remain_work')->where(['subject_id'=>$row['subject_id']])->order('id desc')->limit(1)->find();
+            $xieyi = Xieyi::where(['subject_id'=>$row['id']])->column('remain_work','part');
 //            print_r($xieyi);
             if ($row['small_major_deal_arr']) {
                 foreach ($row['small_major_deal_arr'] as $k => $v) {
+                    if (!isset($xieyi[$k])){
+                        $xieyi[$k] = 100;//临时使用
+                    }
+                    if (!isset($jindu[$k])){
+                        $jindu[$k] = 0;//临时使用
+                    }
                     foreach ($v['child'] as $kk => $vv) {
                         $tmp = [
                             'name'=>'无',
@@ -486,7 +492,7 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                         }
                         $row['small_major_deal_arr'][$k]['child'][$kk]['hehuo_name'] = $tmp;
                         $row['small_major_deal_arr'][$k]['child'][$kk]['jindu'] = $jindu[$k];
-                        $row['small_major_deal_arr'][$k]['child'][$kk]['ml'] = round($row['score'] * $subject_cat[$row['cat_id']]['ratio'] * $v['value']/100 * $vv['value']/100 * $jindu[$k] * $xieyi['remain_work']/100 ,2);
+                        $row['small_major_deal_arr'][$k]['child'][$kk]['ml'] = round($row['score'] * $subject_cat[$row['cat_id']]['ratio'] * $v['value']/100 * $vv['value']/100 * $jindu[$k] * $xieyi[$k]/100 ,2);
 //                        $row['small_major_deal_arr'][$k]['child'][$kk]['ml'] = round(isset($ml[$vv['id']]) ? $ml[$vv['id']] : 0,2);
                         $row['small_major_deal_arr'][$k]['child'][$kk]['per_price'] = round($row['total_price']/$row['score']*$tmp['ratio'],2);
 
