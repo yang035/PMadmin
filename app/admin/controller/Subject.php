@@ -213,7 +213,7 @@ class Subject extends Admin
             $map = [
                 'cid'=>session('admin_user.cid'),
                 'subject_id'=>$data['subject_id'],
-//                'part'=>$data['part'],
+                'part'=>$data['part'],
             ];
             $flag = Xieyi::where($map)->find();
             if (!$flag){
@@ -229,7 +229,7 @@ class Subject extends Admin
                 }
             }
             if ($xieyi_id){
-                Xieyi::where(['id'=>$xieyi_id])->update(['peibi_biao'=>$this->peibiBiao($xieyi_id)]);
+                Xieyi::where(['id'=>$xieyi_id])->update(['peibi_biao'=>$this->peibiBiao($xieyi_id,$data['part'])]);
                 return $this->success('预览中','',['xieyi_id'=>$xieyi_id]);
             }else{
                 return $this->error('预览出错');
@@ -245,9 +245,9 @@ class Subject extends Admin
         return $this->fetch();
     }
 
-    public function peibiBiao($xieyi_id)
+    public function peibiBiao($xieyi_id,$part)
     {
-        $data = Xieyi::where(['id'=>$xieyi_id])->find();
+        $data = Xieyi::where(['id'=>$xieyi_id,'part'=>$part])->find();
         if (!$data){
             return $this->error('协议不存在');
         }else{
@@ -324,7 +324,7 @@ class Subject extends Admin
             ->join("tb_user_info i", 'u.id = i.user_id', 'left')
             ->where($where)
             ->find();
-
+//        print_r($row);exit();
         $this->assign('data_info', $row);
         $this->assign('subject_cat', $subject_cat);
         $this->assign('user', $user);
@@ -332,9 +332,9 @@ class Subject extends Admin
         return $this->fetch();
     }
 
-    public function signXieyi($id)
+    public function signXieyi($id,$part)
     {
-        $data = Xieyi::where(['subject_id'=>$id])->order('id desc')->limit(1)->find();
+        $data = Xieyi::where(['subject_id'=>$id,'part'=>$part])->order('id desc')->limit(1)->find();
         if (!$data){
             return $this->error('协议不存在');
         }else{

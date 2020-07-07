@@ -42,7 +42,7 @@
             </thead>
             <tbody>
             {volist name="data_info['small_major_deal_arr']" id="f"}
-            {if condition="($f['value'] > 0) && $f['id'] == $xieyi['part']"}
+            {if condition="$f['value'] > 0"}
                 {volist name="f['child']" id="f1"}
                 <tr {if condition="$f1['dep_name'] == $user['realname']"} style="font-weight: bold" {/if}>
                     <td>{$f['name']}({$f['value']/100})</td>
@@ -176,7 +176,6 @@
         <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <input type="hidden" class="layui-input" name="id" autocomplete="off" value="{$Request.param.id}">
-    <input type="hidden" class="layui-input" name="part" autocomplete="off" value="{$xieyi['part']}">
     <button type="button" class="layui-btn layui-btn-normal" onclick="agree()">同意协议</button>
     {else/}
     <div class="layui-form-mid" style="color: red">{$user['realname']}(已签署)</div>

@@ -432,15 +432,21 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
         if (empty($ml)){
 //            return $this->error('这个项目ML不存在');
         }
-
+//echo 123;
         $row = ProjectModel::where('id', $id)->find()->toArray();
         if ($row) {
-            $sql = "SELECT ratio FROM (SELECT * FROM tb_subject_flow WHERE subject_id = {$row['subject_id']} ORDER BY id DESC LIMIT 10000) c GROUP BY c.flow_id";
+            $sql = "SELECT flow_cat_id,ratio FROM (SELECT * FROM tb_subject_flow WHERE subject_id = {$row['subject_id']} ORDER BY id DESC LIMIT 10000) c GROUP BY c.flow_cat_id,c.flow_id";
             $r = Db::query($sql);
+            $jindu = [];
             if (empty($r)){
                 return $this->error('请负责人先汇总项目进度');
             }else{
-                $jindu = array_sum(array_column($r,'ratio'))/100;
+                foreach ($r as $k=>$v){
+                    if (!isset($jindu[$v['flow_cat_id']])){
+                        $jindu[$v['flow_cat_id']] = 0;
+                    }
+                    $jindu[$v['flow_cat_id']] += $v['ratio']/100;
+                }
             }
 
             $row['small_major_deal_arr'] = json_decode($row['small_major_deal'],true);
@@ -479,8 +485,8 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                             $tmp = $p_data1[$partner_user[$vv['dep']]];
                         }
                         $row['small_major_deal_arr'][$k]['child'][$kk]['hehuo_name'] = $tmp;
-                        $row['small_major_deal_arr'][$k]['child'][$kk]['jindu'] = $jindu;
-                        $row['small_major_deal_arr'][$k]['child'][$kk]['ml'] = round($row['score'] * $subject_cat[$row['cat_id']]['ratio'] * $v['value']/100 * $vv['value']/100 * $jindu * $xieyi['remain_work']/100 ,2);
+                        $row['small_major_deal_arr'][$k]['child'][$kk]['jindu'] = $jindu[$k];
+                        $row['small_major_deal_arr'][$k]['child'][$kk]['ml'] = round($row['score'] * $subject_cat[$row['cat_id']]['ratio'] * $v['value']/100 * $vv['value']/100 * $jindu[$k] * $xieyi['remain_work']/100 ,2);
 //                        $row['small_major_deal_arr'][$k]['child'][$kk]['ml'] = round(isset($ml[$vv['id']]) ? $ml[$vv['id']] : 0,2);
                         $row['small_major_deal_arr'][$k]['child'][$kk]['per_price'] = round($row['total_price']/$row['score']*$tmp['ratio'],2);
 
@@ -657,33 +663,39 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                 $tmp1 = [];
                 foreach ($tmp as $k => $v){
                     foreach ($v as $k1 => $v1){
-                        foreach ($v1 as $k2 => $v2){
-                            unset($v2['jindu']);
-                            if (!isset($v2['ml'])){
-                                continue;
-                            }
-                            if (!isset($tmp1[$k][$k2])){
-                                $tmp1[$k][$k2] = $v2;
-                            }else{
-                                $tmp1[$k][$k2]['ml'] += $v2['ml'];
-                                $tmp1[$k][$k2]['finish_ml'] += $v2['finish_ml'];
-                                $tmp1[$k][$k2]['finish_ml_month'] += $v2['finish_ml_month'];
+                        foreach ($v1 as $kk => $vv){
+                            foreach ($vv as $k2 => $v2){
+                                unset($v2['jindu']);
+                                if (!isset($tmp1[$k][$k2])){
+                                    $tmp1[$k][$k2] = $v2;
+                                }else{
+                                    $tmp1[$k][$k2]['ml'] += $v2['ml'];
+                                    $tmp1[$k][$k2]['finish_ml'] += $v2['finish_ml'];
+                                    $tmp1[$k][$k2]['finish_ml_month'] += $v2['finish_ml_month'];
+                                }
                             }
                         }
+
                     }
                 }
+
                 foreach ($tmp1 as $k=>$v) {
-                    foreach ($v as $kk=>$vv) {
-                        if (key_exists($k,$vv)){
-                            $tmp2[$k][$kk]['ml'] = $vv[$k]['ml'];
-                            $tmp2[$k][$kk]['finish_ml'] = $vv[$k]['finish_ml'];
-                            $tmp2[$k][$kk]['finish_ml_month'] = $vv[$k]['finish_ml_month'];
-                        }
+//                    print_r($k);print_r($v);
+                    if (array_key_exists($k,$v)){
+                        $tmp2[$k]['ml'] = $v[$k]['ml'];
+                        $tmp2[$k]['finish_ml'] = $v[$k]['finish_ml'];
+                        $tmp2[$k]['finish_ml_month'] = $v[$k]['finish_ml_month'];
                     }
+//                    foreach ($v as $kk=>$vv) {
+//                        if (key_exists($k,$vv)){
+//                            $tmp2[$k][$kk]['ml'] = $vv[$k]['ml'];
+//                            $tmp2[$k][$kk]['finish_ml'] = $vv[$k]['finish_ml'];
+//                            $tmp2[$k][$kk]['finish_ml_month'] = $vv[$k]['finish_ml_month'];
+//                        }
+//                    }
                 }
             }
 
-//            print_r($tmp2);
             if ($tmp2){
                 foreach ($tmp2 as $k=>$v) {
                     $ml = SendmlModel::getSendmlSta($k);
@@ -697,9 +709,9 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
 
                     $tmp2[$k] = [
                         'uid'=>$k,
-                        'ml'=>array_sum(array_column($v,'ml')),
-                        'finish_ml'=>array_sum(array_column($v,'finish_ml')),
-                        'finish_ml_month'=>array_sum(array_column($v,'finish_ml_month')),
+                        'ml'=>$v['ml'],
+                        'finish_ml'=>$v['finish_ml'],
+                        'finish_ml_month'=>$v['finish_ml_month'],
                         'benci_fafang'=>$benci_fafang,
                         'total_fafang'=>$total_fafang,
                     ];
@@ -717,7 +729,7 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
             }
             $tmp2 = $tmp3;
         }
-//print_r($tmp2);
+
         $map = [
             'company_id'=>$cid,
         ];
@@ -867,7 +879,7 @@ WHERE si.id in ({$p})";
         $tmp3 = $tmp4 = [];
         if ($data){
             foreach ($data as $k1=>$row){
-                $sql = "SELECT flow_cat_id,flow_id,ratio FROM (SELECT * FROM tb_subject_flow WHERE subject_id = {$row['id']} ORDER BY id DESC LIMIT 10000) c GROUP BY c.flow_id";
+                $sql = "SELECT flow_cat_id,flow_id,ratio FROM (SELECT * FROM tb_subject_flow WHERE subject_id = {$row['id']} ORDER BY id DESC LIMIT 10000) c GROUP BY c.flow_cat_id,c.flow_id";
                 $r = Db::query($sql);
                 if (empty($r)){
                     continue;
@@ -876,16 +888,15 @@ WHERE si.id in ({$p})";
                     $jindu = [];
                     foreach ($r as $v){
                         if (!isset($jindu[$v['flow_cat_id']])){
-                            $jindu[$v['flow_cat_id']] = $v['ratio']/100;
-                        }else{
-                            $jindu[$v['flow_cat_id']] += $v['ratio']/100;
+                            $jindu[$v['flow_cat_id']] = 0;
                         }
+                        $jindu[$v['flow_cat_id']] += $v['ratio']/100;
                     }
                 }
 
                 $month_start = date('Y-m-01', time());
                 $end = date('Y-m-d H:i:s', time());
-                $sql1 = "SELECT flow_cat_id,flow_id,ratio FROM (SELECT * FROM tb_subject_flow WHERE subject_id = {$row['id']} and create_time >= UNIX_TIMESTAMP('{$month_start}') and create_time <= UNIX_TIMESTAMP('{$end}') ORDER BY id DESC LIMIT 10000) c GROUP BY c.flow_id";
+                $sql1 = "SELECT flow_cat_id,flow_id,ratio FROM (SELECT * FROM tb_subject_flow WHERE subject_id = {$row['id']} and create_time >= UNIX_TIMESTAMP('{$month_start}') and create_time <= UNIX_TIMESTAMP('{$end}') ORDER BY id DESC LIMIT 10000) c GROUP BY c.flow_cat_id,c.flow_id";
                 $r1 = Db::query($sql1);
                 if (empty($r1)){
                     $jindu_month = [
@@ -931,11 +942,12 @@ WHERE si.id in ({$p})";
                     }
                 }
 
-//                $xieyi = Xieyi::field('remain_work')->where(['subject_id'=>$row['id']])->order('id desc')->limit(1)->find();
+                $xieyi = Xieyi::where(['subject_id'=>$row['id']])->column('remain_work','part');
                 if ($row['small_major_deal_arr']) {
                     foreach ($row['small_major_deal_arr'] as $k => $v) {
-
-                        $xieyi[$k]['remain_work'] = 100;//临时使用
+                        if (!isset($xieyi[$k])){
+                            $xieyi[$k] = 100;//临时使用
+                        }
 
                         foreach ($v['child'] as $kk => $vv) {
                             $j_d = isset($jindu[$k]) ? $jindu[$k] : 0;
@@ -951,7 +963,7 @@ WHERE si.id in ({$p})";
                             }
                             $tmp1[$k][$kk]['hehuo_name'] = $tmp;
                             $tmp1[$k][$kk]['jindu'] = $j_d;
-                            $tmp1[$k][$kk]['ml'] = round($row['score'] * $row['ratio'] * $v['value'] / 100 * $vv['value'] / 100 * $xieyi[$k]['remain_work'] / 100, 2);
+                            $tmp1[$k][$kk]['ml'] = round($row['score'] * $row['ratio'] * $v['value'] / 100 * $vv['value'] / 100 * $xieyi[$k] / 100, 2);
 //                            echo $xieyi['remain_work'];
                             $tmp1[$k][$kk]['finish_ml'] = round($tmp1[$k][$kk]['ml'] * $j_d,2);
                             $tmp1[$k][$kk]['finish_ml_month'] = round($tmp1[$k][$kk]['ml'] * $j_d_m,2);

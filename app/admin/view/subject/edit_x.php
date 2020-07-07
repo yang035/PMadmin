@@ -18,6 +18,7 @@
         <label class="layui-form-label">项目名</label>
         <div class="layui-form-mid" style="color: red">{$Request.param.name}</div>
         <input type="hidden" name="subject_id" value="{$Request.param.id}">
+        <input type="hidden" name="part" value="{$Request.param.part}">
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">开始时间</label>
