@@ -58,8 +58,12 @@ class User extends Admin
             $where['id'] = ['neq', 1];
             $where['is_show'] = ['eq', 0];
 
-            if (1 != session('admin_user.role_id')){
+            $role_id = session('admin_user.role_id');
+            if (1 != $role_id){
                 $where['company_id'] = session('admin_user.cid');
+            }
+            if (8 == $role_id || 9 == $role_id){
+                $where['id'] = session('admin_user.uid');
             }
 
             $order = 'status desc,id desc';
