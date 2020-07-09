@@ -594,13 +594,13 @@ class Subject extends Admin
                 return $this->error('专业不能为空，请联系管理员');
             }
             $partner_user = json_decode($row['partner_user'],true);
-            if (empty($partner_user)){
+//            if (empty($partner_user)){
                 $major = $this->deal_major($data['cat_name'],$data['item_name']);
                 $data['big_major'] = $major['big_major'];
                 $data['small_major'] = $major['small_major'];
                 $data['big_major_deal'] = $major['big_major_deal'];
                 $data['small_major_deal'] = $major['small_major_deal'];
-            }
+//            }
             unset($data['cat_name'],$data['item_name']);
 
 //            $res = [];
