@@ -107,7 +107,7 @@
                 <input type="text" class="layui-input field-item_ratio" name="item_name[{$f1['cat_id']}][{$f1['id']}][ratio]" value="{$f1['ratio']}" lay-verify="required" >
             </div>
             <div class="layui-input-inline1">
-                <input type="text" class="layui-input field-jindu_per" readonly name="item_name[{$f1['cat_id']}][{$f1['id']}][jindu_per]" value="{$f1['jindu_per']}" lay-verify="required" >
+                <input type="text" class="layui-input field-jindu_per"  name="item_name[{$f1['cat_id']}][{$f1['id']}][jindu_per]" value="{$f1['jindu_per']}" lay-verify="required" >
             </div>
         </div>
         {/eq}
