@@ -37,14 +37,11 @@
             <th width="30">序号</th>
             <th>姓名</th>
             <th>累计ML</th>
-            <th>可发放ML</th>
-            <th>已发放ML</th>
-            <th>未发放ML</th>
+            <th>已完成ML</th>
             <th>未完成ML</th>
+            <th>可发放ML</th>
+            <th>未发放ML</th>
             <th>ML排名</th>
-            <th>当月完成</th>
-            <th>当月发放</th>
-            <th>累计GL</th>
             <th>GL排名</th>
             <th>操作</th>
         </tr>
@@ -59,18 +56,15 @@
             </td>
             <td class="font12">{$vo['ml']}</td>
             <td class="font12">{$vo['finish_ml']}</td>
-            <td class="font12">{$vo['total_fafang']}</td>
-            <td class="font12">{$vo['finish_ml']-$vo['total_fafang']}</td>
             <td class="font12">{$vo['ml']-$vo['finish_ml']}</td>
+            <td class="font12">{$vo['finish_ml_fafang']}</td>
+            <td class="font12">{$vo['finish_ml_nofafang']}</td>
             <td class="font12">{$key+1}</td>
-            <td class="font12">{$vo['finish_ml_month']}</td>
-            <td class="font12">{$vo['benci_fafang']}</td>
-            <td class="font12">{$gl[$vo['uid']]['gl_add_sum']}</td>
-            <td class="font12">{$gl[$vo['uid']]['sort']}</td>
+            <td class="font12">{$vo['rank']}</td>
             <td>
                 <div class="layui-btn-group">
                     <div class="layui-btn-group">
-                        <a href="{:url('listPeopleP',['user'=>$vo['uid']])}" class="layui-btn layui-btn-primary layui-btn-sm">项目明细</a>
+                        <a href="{:url('listPeoplePM',['user'=>$vo['uid']])}" class="layui-btn layui-btn-primary layui-btn-sm">项目明细</a>
                     </div>
                 </div>
             </td>

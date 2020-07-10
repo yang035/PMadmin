@@ -38,7 +38,6 @@
             <th>项目名</th>
             <th>累计ML</th>
             <th>已完成ML</th>
-            <th>未完成ML</th>
             <th>可发放ML</th>
             <th>未发放ML</th>
             <th>合伙</th>
@@ -54,10 +53,9 @@
                 <strong class="mcolor">{$vo['name']}</strong>
             </td>
             <td class="font12">{$vo['ml']}</td>
-            <td class="font12">{$vo['finish_ml']}</td>
-            <td class="font12">{$vo['ml']-$vo['finish_ml']}</td>
-            <td class="font12">{$vo['finish_ml_fafang']}</td>
-            <td class="font12">{$vo['finish_ml_nofafang']}</td>
+            <td class="font12">{$vo['finish_ml_month']}</td>
+            <td class="font12">{$vo['finish_ml_month_fafang']}</td>
+            <td class="font12">{$vo['finish_ml_month_nofafang']}</td>
             <td class="font12">{$vo['hehuo_name']}</td>
             <td class="font12">{$vo['rank']}</td>
         </tr>

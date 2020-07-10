@@ -639,7 +639,6 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
     }
 
     public function listPeople($p=0){
-        $rank = ScoreModel::dealRank();
         $cid = session('admin_user.cid');
         $role_id = session('admin_user.role_id');
         $uid = session('admin_user.uid');
@@ -678,24 +677,50 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                                 }else{
                                     $tmp1[$k][$k2]['ml'] += $v2['ml'];
                                     $tmp1[$k][$k2]['finish_ml'] += $v2['finish_ml'];
-                                    $tmp1[$k][$k2]['finish_ml_no'] += $v2['finish_ml_no'];
                                     $tmp1[$k][$k2]['finish_ml_month'] += $v2['finish_ml_month'];
-                                    $tmp1[$k][$k2]['finish_ml_fafang'] += $v2['finish_ml_fafang'];
-                                    $tmp1[$k][$k2]['finish_ml_nofafang'] += $v2['finish_ml_nofafang'];
                                 }
                             }
                         }
 
                     }
                 }
+
                 foreach ($tmp1 as $k=>$v) {
+//                    print_r($k);print_r($v);
                     if (array_key_exists($k,$v)){
-                        $tmp2[$k] = $v[$k];
-                        $tmp2[$k]['uid'] = $k;
-                        $tmp2[$k]['finish_ml_fafang'] = round($v[$k]['finish_ml_fafang']*$rank[$k]['rank_ratio'],2);
-                        $tmp2[$k]['finish_ml_nofafang'] = round($v[$k]['finish_ml_nofafang']*$rank[$k]['rank_ratio'],2);
-                        $tmp2[$k]['rank'] = $rank[$k]['rank'].'('.$rank[$k]['rank_ratio'].')';
+                        $tmp2[$k]['ml'] = $v[$k]['ml'];
+                        $tmp2[$k]['finish_ml'] = $v[$k]['finish_ml'];
+                        $tmp2[$k]['finish_ml_month'] = $v[$k]['finish_ml_month'];
                     }
+//                    foreach ($v as $kk=>$vv) {
+//                        if (key_exists($k,$vv)){
+//                            $tmp2[$k][$kk]['ml'] = $vv[$k]['ml'];
+//                            $tmp2[$k][$kk]['finish_ml'] = $vv[$k]['finish_ml'];
+//                            $tmp2[$k][$kk]['finish_ml_month'] = $vv[$k]['finish_ml_month'];
+//                        }
+//                    }
+                }
+            }
+
+            if ($tmp2){
+                foreach ($tmp2 as $k=>$v) {
+                    $ml = SendmlModel::getSendmlSta($k);
+                    if ($ml){
+                        $benci_fafang = array_sum(array_column($ml,'benci_fafang'));
+                        $total_fafang = array_sum(array_column($ml,'total_fafang'));
+                    }else{
+                        $benci_fafang = 0;
+                        $total_fafang = 0;
+                    }
+
+                    $tmp2[$k] = [
+                        'uid'=>$k,
+                        'ml'=>$v['ml'],
+                        'finish_ml'=>$v['finish_ml'],
+                        'finish_ml_month'=>$v['finish_ml_month'],
+                        'benci_fafang'=>$benci_fafang,
+                        'total_fafang'=>$total_fafang,
+                    ];
                 }
             }
         }
@@ -716,10 +741,33 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
         ];
         $user = AdminUser::where($map)->column('id_card,realname','id');
 
+        $gl = ScoreModel::where($w)->group('user')->order('gl_add_sum desc')->column('sum(gl_add_score) as gl_add_sum','user');
+        $i = 0;
+        foreach ($gl as $k=>$v){
+            $i++;
+            $gl[$k] = [
+                'sort'=>$i,
+                'gl_add_sum'=>$v,
+            ];
+        }
+
+        $begin_date = date('Y-m-01').' 00:00:00';
+        $end_date = date('Y-m-d', strtotime("{$begin_date} +1 month -1 day")).' 23:59:59';
+        $w['create_time'] = ['between',[strtotime($begin_date),strtotime($end_date)]];
+        $gl_month = ScoreModel::where($w)->group('user')->order('gl_add_sum desc')->column('sum(gl_add_score) as gl_add_sum','user');
+        $i = 0;
+        foreach ($gl_month as $k=>$v){
+            $i++;
+            $gl_month[$k] = [
+                'sort'=>$i,
+                'gl_add_sum'=>$v,
+            ];
+        }
+//        print_r($gl_month);
         $this->assign('tmp', $tmp2);
         $this->assign('user', $user);
-        $this->assign('gl', $rank);
-//        $this->assign('gl_month', $gl_month);
+        $this->assign('gl', $gl);
+        $this->assign('gl_month', $gl_month);
         if (1 == $p){
             return $this->fetch('read');
         }
@@ -727,7 +775,6 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
     }
 
     public function listPeopleP($user){
-        $rank = ScoreModel::dealRank();
         $cid = session('admin_user.cid');
         $role_id = session('admin_user.role_id');
         $uid = session('admin_user.uid');
@@ -771,22 +818,33 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                             }else{
                                 $tmp1[$k][$k2]['ml'] += $v2['ml'];
                                 $tmp1[$k][$k2]['finish_ml'] += $v2['finish_ml'];
-                                $tmp1[$k][$k2]['finish_ml_no'] += $v2['finish_ml_no'];
                                 $tmp1[$k][$k2]['finish_ml_month'] += $v2['finish_ml_month'];
-                                $tmp1[$k][$k2]['finish_ml_fafang'] += $v2['finish_ml_fafang'];
-                                $tmp1[$k][$k2]['finish_ml_nofafang'] += $v2['finish_ml_nofafang'];
                             }
                         }
                     }
                 }
+                $ml = SendmlModel::getSendmlSta($user);
                 foreach ($tmp1 as $k => $v) {
+                    $check_ml = SendmlModel::checkMl($k,$user);
+                    if (!$check_ml){
+                        $c = [
+                            'month_fafang' => 0,
+                            'month_queren' => 0,
+                        ];
+                    }else{
+                        $c = [
+                            'month_fafang' => 1,
+                            'month_queren' => $check_ml['status'],
+                        ];
+                    }
                     foreach ($v as $kk => $vv) {
                         if ($kk == $user) {
                             $tmp2[$k] = $vv;
                             $tmp2[$k]['name'] = $s_name[$k];
-                            $tmp2[$k]['finish_ml_fafang'] = round($vv['finish_ml_fafang']*$rank[$kk]['rank_ratio'],2);
-                            $tmp2[$k]['finish_ml_nofafang'] = round($vv['finish_ml_nofafang']*$rank[$kk]['rank_ratio'],2);
-                            $tmp2[$k]['rank'] = $rank[$kk]['rank'].'('.$rank[$kk]['rank_ratio'].')';
+                            $tmp2[$k]['benci_fafang'] = isset($ml[$k]['benci_fafang']) ? $ml[$k]['benci_fafang'] : 0;
+                            $tmp2[$k]['total_fafang'] = isset($ml[$k]['total_fafang']) ? $ml[$k]['total_fafang'] : 0;
+                            $tmp2[$k]['month_fafang'] = $c['month_fafang'];
+                            $tmp2[$k]['month_queren'] = $c['month_queren'];
                             break;
                         }
                     }
@@ -797,182 +855,20 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
             'company_id'=>$cid,
         ];
         $user = AdminUser::where($map)->column('realname','id');
-        $this->assign('tmp', $tmp2);
-        $this->assign('user', $user);
-        $this->assign('gl', $rank);
-        return $this->fetch();
-    }
 
-    public function listPeopleM($p=0){
-        $month = [
-            'start_time'=>strtotime(date('Y-m-01', strtotime('-1 month'))),
-            'end_time'=>strtotime(date('Y-m-01')),
-        ];
-        $rank = ScoreModel::dealRank($month['start_time'],$month['end_time']);
-        $cid = session('admin_user.cid');
-        $role_id = session('admin_user.role_id');
-        $uid = session('admin_user.uid');
-        $w = [
-            'cid'=>$cid,
-        ];
-        $si = SubjectItem::where($w)->column('partner_user','id');
-        $si = array_filter($si,function ($v){
-            if ('null' != $v) return $v;
-        });
-        $tmp2 = $tmp3 = [];
-        if ($si){
-            foreach ($si as $k=>$v){
-                $v = json_decode($v,true);
-                foreach ($v as $kk=>$vv) {
-                    $tmp[$kk][] = $k;
-                }
-            }
-            if ($tmp){
-                foreach ($tmp as $k=>$v) {
-                    $tmp[$k] = $this->listPeopleProject($v);
-                }
-            }
-
-            $tmp = array_filter($tmp);//一个人参加的多个项目
-            //累加
-            if ($tmp){
-                $tmp1 = [];
-                foreach ($tmp as $k => $v){
-                    foreach ($v as $k1 => $v1){
-                        foreach ($v1 as $kk => $vv){
-                            foreach ($vv as $k2 => $v2){
-                                unset($v2['jindu']);
-                                if (!isset($tmp1[$k][$k2])){
-                                    $tmp1[$k][$k2] = $v2;
-                                }else{
-                                    $tmp1[$k][$k2]['ml'] += $v2['ml'];
-                                    $tmp1[$k][$k2]['finish_ml'] += $v2['finish_ml'];
-                                    $tmp1[$k][$k2]['finish_ml_no'] += $v2['finish_ml_no'];
-                                    $tmp1[$k][$k2]['finish_ml_month'] += $v2['finish_ml_month'];
-                                    $tmp1[$k][$k2]['finish_ml_month_fafang'] += $v2['finish_ml_month_fafang'];
-                                    $tmp1[$k][$k2]['finish_ml_month_nofafang'] += $v2['finish_ml_month_nofafang'];
-                                }
-                            }
-                        }
-
-                    }
-                }
-                foreach ($tmp1 as $k=>$v) {
-                    if (array_key_exists($k,$v)){
-                        $tmp2[$k] = $v[$k];
-                        $tmp2[$k]['uid'] = $k;
-                        $tmp2[$k]['finish_ml_month_fafang'] = round($v[$k]['finish_ml_month_fafang']*$rank[$k]['rank_ratio'],2);
-                        $tmp2[$k]['finish_ml_month_nofafang'] = round($v[$k]['finish_ml_month_nofafang']*$rank[$k]['rank_ratio'],2);
-                        $tmp2[$k]['rank'] = $rank[$k]['rank'].'('.$rank[$k]['rank_ratio'].')';
-                    }
-                }
-            }
+        $gl = ScoreModel::where($w)->group('user')->order('gl_add_sum desc')->column('sum(gl_add_score) as gl_add_sum','user');
+        $i = 0;
+        foreach ($gl as $k=>$v){
+            $i++;
+            $gl[$k] = [
+                'sort'=>$i,
+                'gl_add_sum'=>$v,
+            ];
         }
-        array_multisort(array_column($tmp2,'ml'),SORT_DESC,$tmp2);
-
-        if ($role_id > 3 || 1 == $p){
-            foreach ($tmp2 as $k => $v) {
-                if ($uid == $v['uid']){
-                    $tmp3[$k] = $v;
-                    continue;
-                }
-            }
-            $tmp2 = $tmp3;
-        }
-
-        $map = [
-            'company_id'=>$cid,
-        ];
-        $user = AdminUser::where($map)->column('id_card,realname','id');
 
         $this->assign('tmp', $tmp2);
         $this->assign('user', $user);
-        $this->assign('gl', $rank);
-//        $this->assign('gl_month', $gl_month);
-        if (1 == $p){
-            return $this->fetch('read');
-        }
-        return $this->fetch();
-    }
-
-    public function listPeoplePM($user){
-        $month = [
-            'start_time'=>strtotime(date('Y-m-01', strtotime('-1 month'))),
-            'end_time'=>strtotime(date('Y-m-01')),
-        ];
-        $rank = ScoreModel::dealRank($month['start_time'],$month['end_time']);
-        $cid = session('admin_user.cid');
-        $role_id = session('admin_user.role_id');
-        $uid = session('admin_user.uid');
-        $w = [
-            'cid'=>$cid,
-        ];
-        $s_b = SubjectItem::field('id,name,partner_user')->where($w)->select();
-        $si = $s_name = [];
-        if ($s_b){
-            foreach ($s_b as $k=>$v){
-                $si[$v['id']] = $v['partner_user'];
-                $s_name[$v['id']] = $v['name'];
-            }
-        }
-        $si = array_filter($si,function ($v){
-            if ('null' != $v) return $v;
-        });
-        if ($si) {
-            foreach ($si as $k => $v) {
-                $v = json_decode($v, true);
-                foreach ($v as $kk => $vv) {
-                    $tmp[$kk][] = $k;
-                }
-            }
-            $t = $tmp[$user];
-            $tmp = $this->listPeopleProject($t);
-//            print_r($t);
-
-            $tmp = array_filter($tmp);//一个人参加的多个项目
-            //累加
-            $tmp2 = $tmp3 = [];
-
-            if ($tmp) {
-                $tmp1 = [];
-                foreach ($tmp as $k => $v){
-                    foreach ($v as $k1 => $v1){
-                        foreach ($v1 as $k2 => $v2){
-                            unset($v2['jindu']);
-                            if (!isset($tmp1[$k][$k2])){
-                                $tmp1[$k][$k2] = $v2;
-                            }else{
-                                $tmp1[$k][$k2]['ml'] += $v2['ml'];
-                                $tmp1[$k][$k2]['finish_ml'] += $v2['finish_ml'];
-                                $tmp1[$k][$k2]['finish_ml_no'] += $v2['finish_ml_no'];
-                                $tmp1[$k][$k2]['finish_ml_month'] += $v2['finish_ml_month'];
-                                $tmp1[$k][$k2]['finish_ml_month_fafang'] += $v2['finish_ml_month_fafang'];
-                                $tmp1[$k][$k2]['finish_ml_month_nofafang'] += $v2['finish_ml_month_nofafang'];
-                            }
-                        }
-                    }
-                }
-                foreach ($tmp1 as $k => $v) {
-                    foreach ($v as $kk => $vv) {
-                        if ($kk == $user) {
-                            $tmp2[$k] = $vv;
-                            $tmp2[$k]['name'] = $s_name[$k];
-                            $tmp2[$k]['finish_ml_month_fafang'] = round($vv['finish_ml_month_fafang']*$rank[$kk]['rank_ratio'],2);
-                            $tmp2[$k]['finish_ml_month_nofafang'] = round($vv['finish_ml_month_nofafang']*$rank[$kk]['rank_ratio'],2);
-                            $tmp2[$k]['rank'] = $rank[$kk]['rank'].'('.$rank[$kk]['rank_ratio'].')';
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        $map = [
-            'company_id'=>$cid,
-        ];
-        $user = AdminUser::where($map)->column('realname','id');
-        $this->assign('tmp', $tmp2);
-        $this->assign('user', $user);
-        $this->assign('gl', $rank);
+        $this->assign('gl', $gl);
         return $this->fetch();
     }
 
@@ -1005,13 +901,11 @@ WHERE si.id in ({$p})";
                 }
 
                 $month_start = date('Y-m-01', time());
-//                $end = date('Y-m-d H:i:s', time());
-//                $sql1 = "SELECT flow_cat_id,flow_id,ratio FROM (SELECT * FROM tb_subject_flow WHERE subject_id = {$row['id']} and create_time >= UNIX_TIMESTAMP('{$month_start}') and create_time <= UNIX_TIMESTAMP('{$end}') ORDER BY id DESC LIMIT 10000) c GROUP BY c.flow_cat_id,c.flow_id";
-                //本月之前累积的进度
-                $sql1 = "SELECT flow_cat_id,flow_id,ratio FROM (SELECT * FROM tb_subject_flow WHERE subject_id = {$row['id']} and create_time < UNIX_TIMESTAMP('{$month_start}') ORDER BY id DESC LIMIT 10000) c GROUP BY c.flow_cat_id,c.flow_id";
+                $end = date('Y-m-d H:i:s', time());
+                $sql1 = "SELECT flow_cat_id,flow_id,ratio FROM (SELECT * FROM tb_subject_flow WHERE subject_id = {$row['id']} and create_time >= UNIX_TIMESTAMP('{$month_start}') and create_time <= UNIX_TIMESTAMP('{$end}') ORDER BY id DESC LIMIT 10000) c GROUP BY c.flow_cat_id,c.flow_id";
                 $r1 = Db::query($sql1);
                 if (empty($r1)){
-                    $jindu1 = [
+                    $jindu_month = [
                         1 => 0,
                         2 => 0,
                         3 => 0,
@@ -1019,19 +913,14 @@ WHERE si.id in ({$p})";
                         5 => 0,
                         6 => 0,
                     ];
-                    $jindu_month = $jindu;
                 }else{
-                    $jindu1 = [];
+                    $jindu_month = [];
                     foreach ($r1 as $v){
-                        if (!isset($jindu1[$v['flow_cat_id']])){
-                            $jindu1[$v['flow_cat_id']] = $v['ratio']/100;
+                        if (!isset($jindu_month[$v['flow_cat_id']])){
+                            $jindu_month[$v['flow_cat_id']] = $v['ratio']/100;
                         }else{
-                            $jindu1[$v['flow_cat_id']] += $v['ratio']/100;
+                            $jindu_month[$v['flow_cat_id']] += $v['ratio']/100;
                         }
-                    }
-
-                    foreach ($jindu as $k=>$v){
-                        $jindu_month[$k] = $v - $jindu1[$k];
                     }
                 }
 
@@ -1048,11 +937,14 @@ WHERE si.id in ({$p})";
 //                    return $this->error('合同总价不能小于0');
                 }
                 if (!$p_data){
-//                    continue;
-                    return $this->error('请联系管理员,合伙级别内容为空');
+                    continue;
+//                    return $this->error('请联系管理员,合伙级别内容为空');
                 }else{
                     foreach ($p_data as $k=>$v) {
-                        $p_data1[$v['id']] = $v;
+                        $p_data1[$v['id']] = [
+                            'name'=>$v['name'],
+                            'ratio'=>$v['ratio'],
+                        ];
                     }
                 }
 
@@ -1066,55 +958,42 @@ WHERE si.id in ({$p})";
                         foreach ($v['child'] as $kk => $vv) {
                             $j_d = isset($jindu[$k]) ? $jindu[$k] : 0;
                             $j_d_m = isset($jindu_month[$k]) ? $jindu_month[$k] : 0;
+                            $tmp = [
+                                'name' => '无',
+                                'ratio' => 0,
+                            ];
                             $tmp1[$k][$kk]['dep'] = $vv['dep'];
                             $tmp1[$k][$kk]['dep_name'] = isset($vv['dep']) ? $this->deal_user($vv['dep']) : null;
                             if (isset($vv['dep']) && !empty($partner_user) && isset($partner_user[$vv['dep']]) && isset($p_data1[$partner_user[$vv['dep']]])) {
                                 $tmp = $p_data1[$partner_user[$vv['dep']]];
-                            }else{
-                                //默认设置2级合伙人
-                                $tmp = $p_data1[2];
                             }
                             $tmp1[$k][$kk]['hehuo_name'] = $tmp;
-                            //总进度
                             $tmp1[$k][$kk]['jindu'] = $j_d;
-                            //累积ML
                             $tmp1[$k][$kk]['ml'] = round($row['score'] * $row['ratio'] * $v['value'] / 100 * $vv['value'] / 100 * $xieyi[$k] / 100, 2);
-                            //已完成ML
+//                            echo $xieyi['remain_work'];
                             $tmp1[$k][$kk]['finish_ml'] = round($tmp1[$k][$kk]['ml'] * $j_d,2);
-                            //累积发放ML
-                            $tmp1[$k][$kk]['finish_ml_fafang'] = round($tmp1[$k][$kk]['ml'] * $j_d,2)*($tmp['quantity']/100);
-                            //累积未发放ML
-                            $tmp1[$k][$kk]['finish_ml_nofafang'] = round($tmp1[$k][$kk]['ml'] * $j_d,2)*(1-$tmp['quantity']/100);
-                            //未完成ML
-                            $tmp1[$k][$kk]['finish_ml_no'] = $tmp1[$k][$kk]['ml']-$tmp1[$k][$kk]['finish_ml'];
-                            //当月完成ML
                             $tmp1[$k][$kk]['finish_ml_month'] = round($tmp1[$k][$kk]['ml'] * $j_d_m,2);
-                            //月可发放ML
-                            $tmp1[$k][$kk]['finish_ml_month_fafang'] = round($tmp1[$k][$kk]['ml'] * $j_d_m,2)*($tmp['quantity']/100);
-                            //月未发放ML
-                            $tmp1[$k][$kk]['finish_ml_month_nofafang'] = round($tmp1[$k][$kk]['ml'] * $j_d_m,2)*(1-$tmp['quantity']/100);
 //                        $row['small_major_deal_arr'][$k]['child'][$kk]['ml'] = round(isset($ml[$vv['id']]) ? $ml[$vv['id']] : 0,2);
                             $tmp1[$k][$kk]['per_price'] = round($row['total_price'] / $row['score'] * $tmp['ratio'], 2);
                         }
                     }
                     if ($tmp1) {
+//                        print_r($tmp1);exit();
                         foreach ($tmp1 as $k => $v) {
                             $tmp2 = $tmp3 =[];
                             foreach ($v as $k1 => $v1) {
-                                $tmp2[$v1['dep']][$k1] = $v1;
+                                $tmp2[$v1['dep']][$k1] = [
+                                    'jindu' => $v1['jindu'],
+                                    'ml' => $v1['ml'],
+                                    'finish_ml' => $v1['finish_ml'],
+                                    'finish_ml_month' => $v1['finish_ml_month'],
+                                ];
                             }
                             foreach ($tmp2 as $k2 => $v2) {
-                                $tmp3[$k2]['hehuo_name'] = array_column($v2, 'hehuo_name')[0]['name'].'('.array_column($v2, 'hehuo_name')[0]['ratio'].')';
                                 $tmp3[$k2]['jindu'] = array_column($v2, 'jindu')[0];
                                 $tmp3[$k2]['ml'] = array_sum(array_column($v2, 'ml'));
                                 $tmp3[$k2]['finish_ml'] = array_sum(array_column($v2, 'finish_ml'));
-                                $tmp3[$k2]['finish_ml_fafang'] = array_sum(array_column($v2, 'finish_ml_fafang'));
-                                $tmp3[$k2]['finish_ml_nofafang'] = array_sum(array_column($v2, 'finish_ml_nofafang'));
-                                $tmp3[$k2]['finish_ml_no'] = array_sum(array_column($v2, 'finish_ml_no'));
                                 $tmp3[$k2]['finish_ml_month'] = array_sum(array_column($v2, 'finish_ml_month'));
-                                $tmp3[$k2]['finish_ml_month_fafang'] = array_sum(array_column($v2, 'finish_ml_month_fafang'));
-                                $tmp3[$k2]['finish_ml_month_nofafang'] = array_sum(array_column($v2, 'finish_ml_month_nofafang'));
-                                $tmp3[$k2]['per_price'] = array_column($v2, 'per_price')[0];
                             }
                             $tmp4[$row['id']][$k] = $tmp3;
                         }

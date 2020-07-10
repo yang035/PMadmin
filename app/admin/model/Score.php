@@ -48,4 +48,42 @@ class Score extends Model
         return $this->hasOne('Project', 'id', 'project_id')->field('*');
     }
 
+    /**
+     * @param int $start_time
+     * @param int $end_time
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * 计算排名系数
+     */
+    public static function dealRank($start_time=0,$end_time=0)
+    {
+        $map['cid'] = session('admin_user.cid');
+        if ($start_time && $end_time){
+            $map['Score.create_time'] = ['between',[$start_time,$end_time]];
+        }
+        $map1['id'] = ['neq', 1];
+        $map1['is_show'] = ['eq', 0];
+        $map1['status'] = 1;
+
+        $fields = "`Score`.id,`Score`.subject_id,`Score`.user,sum(`Score`.ml_add_score) as ml_add_sum,sum(`Score`.ml_sub_score) as ml_sub_sum,sum(`Score`.gl_add_score) as gl_add_sum,sum(`Score`.gl_sub_score) as gl_sub_sum,`AdminUser`.realname";
+        $data_list = self::hasWhere('adminUser',$map1)->field($fields)->where($map)->group('`Score`.user')->order('gl_add_sum desc')->select();
+
+        $tmp = [];
+        if ($data_list) {
+            $rankratio = AdminCompany::getCompanyById($map['cid']);
+            foreach ($data_list as $k => $v) {
+                $tmp[$v['user']]['rank'] = $k + 1;
+            }
+            $a = $rankratio['min_rankratio'];
+            $b = $rankratio['max_rankratio'];
+            $n = count($tmp);
+            foreach ($tmp as $k => $v) {
+                $tmp[$k]['rank_ratio'] = round($b - ($b - $a) / ($n -1) * ($v['rank']-1),4);
+            }
+        }
+        return $tmp;
+    }
+
 }

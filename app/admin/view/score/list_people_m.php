@@ -35,31 +35,37 @@
         <tr>
             <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
             <th width="30">序号</th>
-            <th>项目名</th>
+            <th>姓名</th>
             <th>累计ML</th>
             <th>已完成ML</th>
-            <th>未完成ML</th>
             <th>可发放ML</th>
             <th>未发放ML</th>
-            <th>合伙</th>
+            <th>ML排名</th>
             <th>GL排名</th>
+            <th>操作</th>
         </tr>
         </thead>
         <tbody>
         {volist name="tmp" id="vo"}
         <tr>
-            <td><input type="checkbox" name="pid[]" class="layui-checkbox checkbox-ids" value="{$key}" lay-skin="primary"></td>
+            <td><input type="checkbox" name="uid[]" class="layui-checkbox checkbox-ids" value="{$vo['uid']}" lay-skin="primary"></td>
             <td>{$i}</td>
             <td class="font12">
-                <strong class="mcolor">{$vo['name']}</strong>
+                <strong class="mcolor">{$user[$vo['uid']]['realname']}</strong>
             </td>
             <td class="font12">{$vo['ml']}</td>
-            <td class="font12">{$vo['finish_ml']}</td>
-            <td class="font12">{$vo['ml']-$vo['finish_ml']}</td>
-            <td class="font12">{$vo['finish_ml_fafang']}</td>
-            <td class="font12">{$vo['finish_ml_nofafang']}</td>
-            <td class="font12">{$vo['hehuo_name']}</td>
+            <td class="font12">{$vo['finish_ml_month']}</td>
+            <td class="font12">{$vo['finish_ml_month_fafang']}</td>
+            <td class="font12">{$vo['finish_ml_month_nofafang']}</td>
+            <td class="font12">{$key+1}</td>
             <td class="font12">{$vo['rank']}</td>
+            <td>
+                <div class="layui-btn-group">
+                    <div class="layui-btn-group">
+                        <a href="{:url('listPeoplePM',['user'=>$vo['uid']])}" class="layui-btn layui-btn-primary layui-btn-sm">项目明细</a>
+                    </div>
+                </div>
+            </td>
         </tr>
         {/volist}
         </tbody>
@@ -93,57 +99,6 @@
         });
 
     });
-
-    function fafang(user,subject_id){
-        var open_url = "{:url('Sendml/add')}?user="+user+'&subject_id='+subject_id;
-        if (open_url.indexOf('?') >= 0) {
-            open_url += '&hisi_iframe=yes';
-        } else {
-            open_url += '?hisi_iframe=yes';
-        }
-        layer.open({
-            type:2,
-            title :'详情',
-            maxmin: true,
-            area: ['500px', '400px'],
-            content: open_url,
-            success:function (layero, index) {
-            }
-        });
-    }
-
-    function edit(user,subject_id){
-        var open_url = "{:url('Sendml/edit')}?user="+user+'&subject_id='+subject_id;
-        if (open_url.indexOf('?') >= 0) {
-            open_url += '&hisi_iframe=yes';
-        } else {
-            open_url += '?hisi_iframe=yes';
-        }
-        layer.open({
-            type:2,
-            title :'详情',
-            maxmin: true,
-            area: ['700px', '500px'],
-            content: open_url,
-            success:function (layero, index) {
-            }
-        });
-    }
-
-    function status(user,subject_id,benci_fafang){
-        var open_url = "{:url('Sendml/setStatus')}?user="+user+'&subject_id='+subject_id;
-        layer.confirm('本次发放 '+benci_fafang+' M', {icon: 3, title:'提示'}, function(index){
-            $.post(open_url, function(res) {
-                if (res.code == 1) {
-                    layer.msg(res.msg);
-                    location.reload();
-                }else {
-                    layer.msg(res.msg);
-                    location.reload();
-                }
-            });
-        });
-    }
 
     new SelectBox($('.box1'),{$project_select},function(result){
         if ('' != result.id){

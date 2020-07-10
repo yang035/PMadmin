@@ -14,9 +14,22 @@
                 </div>
             </div>
             <div class="layui-inline">
+                <label class="layui-form-label">选择项目</label>
+                <div class="layui-input-inline box box1">
+                </div>
+                <input id="project_name" type="hidden" name="project_name" value="{$Request.param.project_name}">
+                <input id="project_id" type="hidden" name="project_id" value="{$Request.param.project_id}">
+            </div>
+<!--                <div class="layui-inline">-->
+<!--                    <label class="layui-form-label">任务代码</label>-->
+<!--                    <div class="layui-input-inline">-->
+<!--                        <input type="text" name="project_code" value="{:input('get.project_code')}" placeholder="任务代码" autocomplete="off" class="layui-input">-->
+<!--                    </div>-->
+<!--                </div>-->
+            <div class="layui-inline">
                 <label class="layui-form-label">日期范围</label>
                 <div class="layui-input-inline">
-                    <input type="text" class="layui-input" id="test2" name="search_date" placeholder="选择日期" readonly>
+                    <input type="text" class="layui-input" id="test2" name="search_date" placeholder="选择日期" readonly value="{$d|default=''}">
                 </div>
             </div>
             <input type="hidden" name="type" value="{$Request.param.type}">
@@ -35,31 +48,37 @@
         <tr>
             <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
             <th width="30">序号</th>
-            <th>项目名</th>
-            <th>累计ML</th>
-            <th>已完成ML</th>
-            <th>未完成ML</th>
-            <th>可发放ML</th>
-            <th>未发放ML</th>
-            <th>合伙</th>
-            <th>GL排名</th>
+            <th>员工</th>
+            {notempty name="Request.param.project_id"}
+            <th>项目名称</th>
+            {/notempty}
+            {volist name="major_item" id="vo"}
+            <th>{$small_major_deal[$vo]}</th>
+            {/volist}
+            <th>操作</th>
         </tr>
         </thead>
         <tbody>
-        {volist name="tmp" id="vo"}
+        {volist name="data_list" id="vo"}
         <tr>
-            <td><input type="checkbox" name="pid[]" class="layui-checkbox checkbox-ids" value="{$key}" lay-skin="primary"></td>
-            <td>{$i}</td>
+            <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['user']}" lay-skin="primary"></td>
+            <td>{$key}</td>
             <td class="font12">
-                <strong class="mcolor">{$vo['name']}</strong>
+                <strong class="mcolor">{$vo['realname']}</strong>[{$vo['partner_grade']}]
             </td>
-            <td class="font12">{$vo['ml']}</td>
-            <td class="font12">{$vo['finish_ml']}</td>
-            <td class="font12">{$vo['ml']-$vo['finish_ml']}</td>
-            <td class="font12">{$vo['finish_ml_fafang']}</td>
-            <td class="font12">{$vo['finish_ml_nofafang']}</td>
-            <td class="font12">{$vo['hehuo_name']}</td>
-            <td class="font12">{$vo['rank']}</td>
+            {notempty name="Request.param.project_id"}
+            <td class="font12">{$vo['subject_name']}</td>
+            {/notempty}
+            {volist name="major_item" id="v"}
+            <th>{$vo[$v]['old']}&nbsp;|&nbsp;{$vo[$v]['new']}&nbsp;|&nbsp;{$vo[$v]['ratio']}</th>
+            {/volist}
+            <td>
+                <div class="layui-btn-group">
+                    <div class="layui-btn-group">
+                        <a href="{:url('detailByMajor',['user'=>$vo['user'],'project_id'=>$Request.param.project_id])}" class="layui-btn layui-btn-primary layui-btn-sm">人员明细</a>
+                    </div>
+                </div>
+            </td>
         </tr>
         {/volist}
         </tbody>
@@ -93,57 +112,6 @@
         });
 
     });
-
-    function fafang(user,subject_id){
-        var open_url = "{:url('Sendml/add')}?user="+user+'&subject_id='+subject_id;
-        if (open_url.indexOf('?') >= 0) {
-            open_url += '&hisi_iframe=yes';
-        } else {
-            open_url += '?hisi_iframe=yes';
-        }
-        layer.open({
-            type:2,
-            title :'详情',
-            maxmin: true,
-            area: ['500px', '400px'],
-            content: open_url,
-            success:function (layero, index) {
-            }
-        });
-    }
-
-    function edit(user,subject_id){
-        var open_url = "{:url('Sendml/edit')}?user="+user+'&subject_id='+subject_id;
-        if (open_url.indexOf('?') >= 0) {
-            open_url += '&hisi_iframe=yes';
-        } else {
-            open_url += '?hisi_iframe=yes';
-        }
-        layer.open({
-            type:2,
-            title :'详情',
-            maxmin: true,
-            area: ['700px', '500px'],
-            content: open_url,
-            success:function (layero, index) {
-            }
-        });
-    }
-
-    function status(user,subject_id,benci_fafang){
-        var open_url = "{:url('Sendml/setStatus')}?user="+user+'&subject_id='+subject_id;
-        layer.confirm('本次发放 '+benci_fafang+' M', {icon: 3, title:'提示'}, function(index){
-            $.post(open_url, function(res) {
-                if (res.code == 1) {
-                    layer.msg(res.msg);
-                    location.reload();
-                }else {
-                    layer.msg(res.msg);
-                    location.reload();
-                }
-            });
-        });
-    }
 
     new SelectBox($('.box1'),{$project_select},function(result){
         if ('' != result.id){

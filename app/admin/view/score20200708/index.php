@@ -14,9 +14,31 @@
                 </div>
             </div>
             <div class="layui-inline">
+                <label class="layui-form-label">选择项目</label>
+                <div class="layui-input-inline box box1">
+                </div>
+                <input id="project_name" type="hidden" name="project_name" value="{$Request.param.project_name}">
+                <input id="project_id" type="hidden" name="project_id" value="{$Request.param.project_id}">
+            </div>
+<!--                <div class="layui-inline">-->
+<!--                    <label class="layui-form-label">任务代码</label>-->
+<!--                    <div class="layui-input-inline">-->
+<!--                        <input type="text" name="project_code" value="{:input('get.project_code')}" placeholder="任务代码" autocomplete="off" class="layui-input">-->
+<!--                    </div>-->
+<!--                </div>-->
+            <div class="layui-inline">
                 <label class="layui-form-label">日期范围</label>
                 <div class="layui-input-inline">
-                    <input type="text" class="layui-input" id="test2" name="search_date" placeholder="选择日期" readonly>
+                    <input type="text" class="layui-input" id="test2" name="search_date" placeholder="选择日期" readonly value="{$d|default=''}">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">排序</label>
+                <div class="layui-input-inline">
+                    <select name="sort_table">
+                        <option value="1" {if condition="$Request.param.sort_table eq '1' "}selected{/if} >ML+</option>
+                        <option value="2" {if condition="$Request.param.sort_table eq '2' "}selected{/if} >GL+</option>
+                    </select>
                 </div>
             </div>
             <input type="hidden" name="type" value="{$Request.param.type}">
@@ -35,37 +57,46 @@
         <tr>
             <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
             <th width="30">序号</th>
-            <th>项目名</th>
-            <th>累计ML</th>
-            <th>已完成ML</th>
-            <th>未完成ML</th>
-            <th>可发放ML</th>
-            <th>未发放ML</th>
-            <th>合伙</th>
-            <th>GL排名</th>
+            <th>员工</th>
+            <th>ML+</th>
+            <th>ML-</th>
+            <th>剩余ML</th>
+            <th>GL+</th>
+            <th>GL-</th>
+            <th>剩余GL</th>
+            <th>操作</th>
         </tr>
         </thead>
         <tbody>
-        {volist name="tmp" id="vo"}
+        {volist name="data_list" id="vo"}
         <tr>
-            <td><input type="checkbox" name="pid[]" class="layui-checkbox checkbox-ids" value="{$key}" lay-skin="primary"></td>
+            <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
             <td>{$i}</td>
             <td class="font12">
-                <strong class="mcolor">{$vo['name']}</strong>
+                <strong class="mcolor">{$vo['realname']}</strong>
             </td>
-            <td class="font12">{$vo['ml']}</td>
-            <td class="font12">{$vo['finish_ml']}</td>
-            <td class="font12">{$vo['ml']-$vo['finish_ml']}</td>
-            <td class="font12">{$vo['finish_ml_fafang']}</td>
-            <td class="font12">{$vo['finish_ml_nofafang']}</td>
-            <td class="font12">{$vo['hehuo_name']}</td>
-            <td class="font12">{$vo['rank']}</td>
+            <td class="font12">{$vo['ml_add_sum']}</td>
+            <td class="font12">{$vo['ml_sub_sum']}</td>
+            <td class="font12">{$vo['unused_ml']}</td>
+            <td class="font12">{$vo['gl_add_sum']}</td>
+            <td class="font12">{$vo['gl_sub_sum']}</td>
+            <td class="font12">{$vo['unused_gl']}</td>
+            <td>
+                <div class="layui-btn-group">
+                    <div class="layui-btn-group">
+                        <a href="{:url('detail',['user'=>$vo['user'],'project_id'=>$Request.param.project_id])}" class="layui-btn layui-btn-primary layui-btn-sm">明细</a>
+                        <!--                                <a href="{:url('edit?id='.$vo['id'])}" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe642;</i></a>-->
+                        <!--                                <a data-href="{:url('del?table=admin_company&ids='.$vo['id'])}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>-->
+                    </div>
+                </div>
+            </td>
         </tr>
         {/volist}
         </tbody>
     </table>
     {$pages}
 </div>
+
 {include file="block/layui" /}
 <script src="__PUBLIC_JS__/jquery.select.js?v="></script>
 <script src="__PUBLIC_JS__/SelectBox.min.js?v="></script>
@@ -93,57 +124,6 @@
         });
 
     });
-
-    function fafang(user,subject_id){
-        var open_url = "{:url('Sendml/add')}?user="+user+'&subject_id='+subject_id;
-        if (open_url.indexOf('?') >= 0) {
-            open_url += '&hisi_iframe=yes';
-        } else {
-            open_url += '?hisi_iframe=yes';
-        }
-        layer.open({
-            type:2,
-            title :'详情',
-            maxmin: true,
-            area: ['500px', '400px'],
-            content: open_url,
-            success:function (layero, index) {
-            }
-        });
-    }
-
-    function edit(user,subject_id){
-        var open_url = "{:url('Sendml/edit')}?user="+user+'&subject_id='+subject_id;
-        if (open_url.indexOf('?') >= 0) {
-            open_url += '&hisi_iframe=yes';
-        } else {
-            open_url += '?hisi_iframe=yes';
-        }
-        layer.open({
-            type:2,
-            title :'详情',
-            maxmin: true,
-            area: ['700px', '500px'],
-            content: open_url,
-            success:function (layero, index) {
-            }
-        });
-    }
-
-    function status(user,subject_id,benci_fafang){
-        var open_url = "{:url('Sendml/setStatus')}?user="+user+'&subject_id='+subject_id;
-        layer.confirm('本次发放 '+benci_fafang+' M', {icon: 3, title:'提示'}, function(index){
-            $.post(open_url, function(res) {
-                if (res.code == 1) {
-                    layer.msg(res.msg);
-                    location.reload();
-                }else {
-                    layer.msg(res.msg);
-                    location.reload();
-                }
-            });
-        });
-    }
 
     new SelectBox($('.box1'),{$project_select},function(result){
         if ('' != result.id){

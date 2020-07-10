@@ -37,12 +37,12 @@
             <th width="30">序号</th>
             <th>项目名</th>
             <th>累计ML</th>
-            <th>已完成ML</th>
-            <th>未完成ML</th>
             <th>可发放ML</th>
+            <th>已发放ML</th>
             <th>未发放ML</th>
-            <th>合伙</th>
-            <th>GL排名</th>
+            <th>未完成ML</th>
+            <th>当月完成</th>
+            <th>当月发放</th>
         </tr>
         </thead>
         <tbody>
@@ -55,11 +55,19 @@
             </td>
             <td class="font12">{$vo['ml']}</td>
             <td class="font12">{$vo['finish_ml']}</td>
+            <td class="font12">{$vo['total_fafang']}
+                {eq name="vo['month_fafang']" value="0"}
+                <a href="#" onclick="fafang({$Request.param.user},{$key})" class="layui-btn layui-btn-primary layui-btn-sm">发放</a>
+                {/eq}
+                {eq name="vo['month_queren']" value="0"}
+                <a href="#" onclick="edit({$Request.param.user},{$key})" class="layui-btn layui-btn-primary layui-btn-sm">编辑</a>
+                <a href="#" onclick="status({$Request.param.user},{$key},{$vo['benci_fafang']})" class="layui-btn layui-btn-primary layui-btn-sm">确认</a>
+                {/eq}
+            </td>
+            <td class="font12">{$vo['finish_ml']-$vo['total_fafang']}</td>
             <td class="font12">{$vo['ml']-$vo['finish_ml']}</td>
-            <td class="font12">{$vo['finish_ml_fafang']}</td>
-            <td class="font12">{$vo['finish_ml_nofafang']}</td>
-            <td class="font12">{$vo['hehuo_name']}</td>
-            <td class="font12">{$vo['rank']}</td>
+            <td class="font12">{$vo['finish_ml_month']}</td>
+            <td class="font12">{$vo['benci_fafang']}</td>
         </tr>
         {/volist}
         </tbody>
