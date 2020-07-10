@@ -690,11 +690,13 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                 }
                 foreach ($tmp1 as $k=>$v) {
                     if (array_key_exists($k,$v)){
+                        $rank_rank = isset($rank[$k]['rank']) ? $rank[$k]['rank'] : 0;
+                        $rank_ratio = isset($rank[$k]['rank_ratio']) ? $rank[$k]['rank_ratio'] : 1;
                         $tmp2[$k] = $v[$k];
                         $tmp2[$k]['uid'] = $k;
-                        $tmp2[$k]['finish_ml_fafang'] = round($v[$k]['finish_ml_fafang']*$rank[$k]['rank_ratio'],2);
-                        $tmp2[$k]['finish_ml_nofafang'] = round($v[$k]['finish_ml_nofafang']*$rank[$k]['rank_ratio'],2);
-                        $tmp2[$k]['rank'] = $rank[$k]['rank'].'('.$rank[$k]['rank_ratio'].')';
+                        $tmp2[$k]['finish_ml_fafang'] = round($v[$k]['finish_ml_fafang']*$rank_ratio,2);
+                        $tmp2[$k]['finish_ml_nofafang'] = round($v[$k]['finish_ml_nofafang']*$rank_ratio,2);
+                        $tmp2[$k]['rank'] = $rank_rank.'('.$rank[$k]['rank_ratio'].')';
                     }
                 }
             }
@@ -782,11 +784,13 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                 foreach ($tmp1 as $k => $v) {
                     foreach ($v as $kk => $vv) {
                         if ($kk == $user) {
+                            $rank_rank = isset($rank[$kk]['rank']) ? $rank[$kk]['rank'] : 0;
+                            $rank_ratio = isset($rank[$kk]['rank_ratio']) ? $rank[$kk]['rank_ratio'] : 1;
                             $tmp2[$k] = $vv;
                             $tmp2[$k]['name'] = $s_name[$k];
-                            $tmp2[$k]['finish_ml_fafang'] = round($vv['finish_ml_fafang']*$rank[$kk]['rank_ratio'],2);
-                            $tmp2[$k]['finish_ml_nofafang'] = round($vv['finish_ml_nofafang']*$rank[$kk]['rank_ratio'],2);
-                            $tmp2[$k]['rank'] = $rank[$kk]['rank'].'('.$rank[$kk]['rank_ratio'].')';
+                            $tmp2[$k]['finish_ml_fafang'] = round($vv['finish_ml_fafang']*$rank_ratio,2);
+                            $tmp2[$k]['finish_ml_nofafang'] = round($vv['finish_ml_nofafang']*$rank_ratio,2);
+                            $tmp2[$k]['rank'] = $rank_rank.'('.$rank[$kk]['rank_ratio'].')';
                             break;
                         }
                     }
@@ -859,11 +863,13 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                 }
                 foreach ($tmp1 as $k=>$v) {
                     if (array_key_exists($k,$v)){
+                        $rank_rank = isset($rank[$k]['rank']) ? $rank[$k]['rank'] : 0;
+                        $rank_ratio = isset($rank[$k]['rank_ratio']) ? $rank[$k]['rank_ratio'] : 1;
                         $tmp2[$k] = $v[$k];
                         $tmp2[$k]['uid'] = $k;
-                        $tmp2[$k]['finish_ml_month_fafang'] = round($v[$k]['finish_ml_month_fafang']*$rank[$k]['rank_ratio'],2);
-                        $tmp2[$k]['finish_ml_month_nofafang'] = round($v[$k]['finish_ml_month_nofafang']*$rank[$k]['rank_ratio'],2);
-                        $tmp2[$k]['rank'] = $rank[$k]['rank'].'('.$rank[$k]['rank_ratio'].')';
+                        $tmp2[$k]['finish_ml_month_fafang'] = round($v[$k]['finish_ml_month_fafang']*$rank_ratio,2);
+                        $tmp2[$k]['finish_ml_month_nofafang'] = round($v[$k]['finish_ml_month_nofafang']*$rank_ratio,2);
+                        $tmp2[$k]['rank'] = $rank_rank.'('.$rank_ratio.')';
                     }
                 }
             }
@@ -955,11 +961,13 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                 foreach ($tmp1 as $k => $v) {
                     foreach ($v as $kk => $vv) {
                         if ($kk == $user) {
+                            $rank_rank = isset($rank[$kk]['rank']) ? $rank[$kk]['rank'] : 0;
+                            $rank_ratio = isset($rank[$kk]['rank_ratio']) ? $rank[$kk]['rank_ratio'] : 1;
                             $tmp2[$k] = $vv;
                             $tmp2[$k]['name'] = $s_name[$k];
-                            $tmp2[$k]['finish_ml_month_fafang'] = round($vv['finish_ml_month_fafang']*$rank[$kk]['rank_ratio'],2);
-                            $tmp2[$k]['finish_ml_month_nofafang'] = round($vv['finish_ml_month_nofafang']*$rank[$kk]['rank_ratio'],2);
-                            $tmp2[$k]['rank'] = $rank[$kk]['rank'].'('.$rank[$kk]['rank_ratio'].')';
+                            $tmp2[$k]['finish_ml_month_fafang'] = round($vv['finish_ml_month_fafang']*$rank_ratio,2);
+                            $tmp2[$k]['finish_ml_month_nofafang'] = round($vv['finish_ml_month_nofafang']*$rank_ratio,2);
+                            $tmp2[$k]['rank'] = $rank_rank.'('.$rank_ratio.')';
                             break;
                         }
                     }
