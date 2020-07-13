@@ -9,8 +9,7 @@
             <b>未完成ML：</b>{$vo['finish_ml_no']}<br>
             <b>已发放ML：</b>{$vo['finish_ml_fafang']}<br>
             <b>累计GL：</b>{$gl[$vo['uid']]['gl_add_sum']}<br>
-            <b>当月GL：</b>{$gl_month[$vo['uid']]['gl_add_sum']|default=0}<br>
-            <b>当月GL排名：</b>{$gl_month[$vo['uid']]['sort']|default=0}<br>
+            <b>GL排名：</b>{$vo['rank']}<br>
             {/volist}
             {else/}
             暂无发放ML
