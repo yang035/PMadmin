@@ -6,8 +6,6 @@
             <b>员工编号：</b>{$user[$vo['uid']]['id_card']}<br>
             <b>累计ML：</b>{$vo['ml']}<br>
             <b>可发放ML：</b>{$vo['finish_ml']}<br>
-<!--            <b>已发放ML：</b>{$vo['total_fafang']}<br>-->
-<!--            <b>未发放ML：</b>{$vo['finish_ml']-$vo['total_fafang']}<br>-->
             <b>未完成ML：</b>{$vo['ml']-$vo['finish_ml']}<br>
             <b>当月完成：</b>{$vo['finish_ml_month']}<br>
             <b>当月发放：</b>{$vo['benci_fafang']}<br>
