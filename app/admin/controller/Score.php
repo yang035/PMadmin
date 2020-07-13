@@ -696,7 +696,7 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                         $tmp2[$k]['uid'] = $k;
                         $tmp2[$k]['finish_ml_fafang'] = round($v[$k]['finish_ml_fafang']*$rank_ratio,2);
                         $tmp2[$k]['finish_ml_nofafang'] = round($v[$k]['finish_ml_nofafang']*$rank_ratio,2);
-                        $tmp2[$k]['rank'] = $rank_rank.'('.$rank[$k]['rank_ratio'].')';
+                        $tmp2[$k]['rank'] = $rank_rank.'('.$rank_ratio.')';
                     }
                 }
             }
