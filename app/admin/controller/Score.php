@@ -718,10 +718,34 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
         ];
         $user = AdminUser::where($map)->column('id_card,realname','id');
 
+        $gl = ScoreModel::where($w)->group('user')->order('gl_add_sum desc')->column('sum(gl_add_score) as gl_add_sum','user');
+        $i = 0;
+        foreach ($gl as $k=>$v){
+            $i++;
+            $gl[$k] = [
+                'sort'=>$i,
+                'gl_add_sum'=>$v,
+            ];
+        }
+
+        $begin_date = date('Y-m-01').' 00:00:00';
+        $end_date = date('Y-m-d', strtotime("{$begin_date} +1 month -1 day")).' 23:59:59';
+        $w['create_time'] = ['between',[strtotime($begin_date),strtotime($end_date)]];
+        $gl_month = ScoreModel::where($w)->group('user')->order('gl_add_sum desc')->column('sum(gl_add_score) as gl_add_sum','user');
+        $i = 0;
+        foreach ($gl_month as $k=>$v){
+            $i++;
+            $gl_month[$k] = [
+                'sort'=>$i,
+                'gl_add_sum'=>$v,
+            ];
+        }
+
         $this->assign('tmp', $tmp2);
         $this->assign('user', $user);
-        $this->assign('gl', $rank);
-//        $this->assign('gl_month', $gl_month);
+        $this->assign('rank', $rank);
+        $this->assign('gl', $gl);
+        $this->assign('gl_month', $gl_month);
         if (1 == $p){
             return $this->fetch('read');
         }
