@@ -52,7 +52,7 @@
                     {elseif condition="$vo['type'] eq 2"}
                     季度
                     {elseif condition="$vo['type'] eq 3"}
-                    办年度
+                    半年度
                     {else/}
                     年度
                     {/if}
