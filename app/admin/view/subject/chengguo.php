@@ -45,6 +45,7 @@
 </script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
     <a href="{:url('flow')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-warm">提交进度</a>
+    <a href="{:url('progressReview')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-warm">进度审核</a>
 </script>
 <script type="text/javascript">
     layui.use(['jquery','table'], function() {

@@ -938,6 +938,61 @@ class Subject extends Admin
         return $this->fetch();
     }
 
+    public function progressReview($id)
+    {
+        $row = $flow_cat = $flow = $subject_flow = $score = $score_arr = [];
+        if ($this->request->isPost()){
+            $p = $this->request->post();
+            $pp = [];
+            foreach ($p as $k=>$v){
+                if (!is_int($k)){
+                    unset($p[$k]);
+                }else{
+                    $pp[] = [
+                        'id'=>$k,
+                        'ratio'=>$v,
+                        'agree'=>1,
+                    ];
+                }
+            }
+            $flow_model = new SubjectFlowModel();
+            $flag = $flow_model->saveAll($pp);
+            if (!$flag){
+                return $this->error('操作失败');
+            }
+            return $this->error('操作成功');
+        }
+        $row = ItemModel::where('id', $id)->find()->toArray();
+        $flow = json_decode($row['small_major_deal'],true);
+        if (!empty($flow)) {
+            $s_flow = SubjectFlow::getOption($id);
+            if ($s_flow) {
+                foreach ($flow as $k=>$v){
+                    $t_jindu = 0;
+                    foreach ($v['child'] as $k1=>$v1){
+                        foreach ($s_flow as $k2=>$v2) {
+                            if ($k1 == $v2['flow_id']){
+                                $v2['attachment'] = !empty($v2['attachment']) ? array_filter(explode(',', $v2['attachment'])) : $v2['attachment'];
+                                $flow[$k]['child'][$k1]['flow'][] = $v2;
+                            }
+                        }
+                        if (isset($flow[$k]['child'][$k1]['flow'])){
+                            $t_jindu += $flow[$k]['child'][$k1]['flow'][0]['ratio'];
+                        }
+                    }
+                    $flow[$k]['jindu'] = $t_jindu;
+                }
+            }
+        } else {
+            return $this->error('专业不存在');
+        }
+//        print_r($flow);
+        $this->assign('row', $row);
+        $this->assign('flow', $flow);
+        $this->assign('score_arr', $score_arr);
+        return $this->fetch();
+    }
+
     public function flowold()
     {
         $params = $this->request->param();
