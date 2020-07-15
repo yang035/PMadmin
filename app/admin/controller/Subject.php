@@ -21,6 +21,7 @@ use app\admin\model\SubjectFlow as SubjectFlowModel;
 use app\admin\model\ProfessionalItem as ProfessionalItem;
 use app\admin\model\Xieyi as Xieyi;
 use app\admin\model\ProcessItem as ProcessItem;
+use app\admin\model\Score as ScoreModel;
 use think\Db;
 use traits\think\Instance;
 
@@ -943,6 +944,7 @@ class Subject extends Admin
         $row = $flow_cat = $flow = $subject_flow = $score = $score_arr = [];
         if ($this->request->isPost()){
             $p = $this->request->post();
+            $s = $p;
             $pp = [];
             foreach ($p as $k=>$v){
                 if (!is_int($k)){
@@ -959,6 +961,53 @@ class Subject extends Admin
             $flag = $flow_model->saveAll($pp);
             if (!$flag){
                 return $this->error('操作失败');
+            }
+
+            $ScoreC = new Score();
+            $month_ml = $ScoreC->listPeopleProject($s['id']);
+            if ($month_ml){
+                $fafang = $nofafang = [];
+                $month = [
+                    'start_time'=>strtotime(date('Y-m-01', strtotime('-1 month'))),
+                    'end_time'=>strtotime(date('Y-m-01')),
+                ];
+                $rank = ScoreModel::dealRank($month['start_time'],$month['end_time']);
+
+                foreach ($month_ml as $k=>$v) {
+                    foreach ($v as $k1=>$v1){
+                        foreach ($v1 as $k2=>$v2){
+                            if (key_exists($k2,$rank)){
+                                $rank_ratio = isset($rank[$k2]['rank_ratio']) ? $rank[$k2]['rank_ratio'] : 1;
+                                $fafang[] = [
+                                    'cid'=>session('admin_user.cid'),
+                                    'subject_id'=>$k,
+                                    'user'=>$k2,
+                                    'add_fond'=>round($v2['finish_ml_month_fafang']*$rank_ratio,2),
+                                    'is_fafang'=>1,
+                                    'remark'=>'发放'.date('Y-m',$month['start_time']).'月',
+                                    'create_time'=>time(),
+                                    'update_time'=>time(),
+                                ];
+                                $nofafang[] = [
+                                    'cid'=>session('admin_user.cid'),
+                                    'subject_id'=>$k,
+                                    'user'=>$k2,
+                                    'add_fond'=>round($v2['finish_ml_month_nofafang']*$rank_ratio,2),
+                                    'is_fafang'=>0,
+                                    'remark'=>'发放'.date('Y-m',$month['start_time']).'月',
+                                    'create_time'=>time(),
+                                    'update_time'=>time(),
+                                ];
+                            }
+                        }
+                    }
+                }
+                $pool = new \app\admin\model\FondPool();
+                $f1 = $pool->insertAll($fafang);
+                $f2 = $pool->insertAll($nofafang);
+                if (!$f2){
+                    return $this->error('操作失败');
+                };
             }
             return $this->error('操作成功');
         }

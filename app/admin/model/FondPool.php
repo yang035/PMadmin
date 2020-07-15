@@ -19,6 +19,7 @@ class FondPool extends Model
         $where = [
             'cid' => session('admin_user.cid'),
             'user' => session('admin_user.uid'),
+            'is_fafang' => 1,
         ];
         $field = 'sum(add_fond) as total_fond,sum(sub_fond) as has_tixian';
         $row = self::field($field)->where($where)->find();

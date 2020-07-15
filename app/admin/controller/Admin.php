@@ -29,8 +29,10 @@ class Admin extends Controller
             return $this->error('请登陆之后在操作！', 'Publics/index');
         }
         $this->score_value = '';
-        define('ADMIN_ID', $login['uid']);
-        define('ADMIN_ROLE', $login['role_id']);
+        if (!defined('ADMIN_ID')){
+            define('ADMIN_ID', $login['uid']);
+            define('ADMIN_ROLE', $login['role_id']);
+        }
 
         $c_menu = MenuModel::getInfo();
 //        print_r($c_menu);exit();
