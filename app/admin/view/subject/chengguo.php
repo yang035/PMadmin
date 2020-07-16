@@ -45,7 +45,15 @@
 </script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
     <a href="{:url('flow')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-warm">提交进度</a>
-    <a href="{:url('progressReview')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-warm">进度审核</a>
+    {{# if(d.step==0){ }}
+    <a href="{:url('progressReview')}?id={{ d.id }}&step=1" class="layui-btn layui-btn-xs layui-btn-normal">一级审核</a>
+    {{# } }}
+    {{# if(d.step==1){ }}
+    <a href="{:url('progressReview')}?id={{ d.id }}&step=2" class="layui-btn layui-btn-xs layui-btn-warm">二级审核</a>
+    {{# } }}
+    {{# if(d.step==2){ }}
+    当月已审核
+    {{# } }}
 </script>
 <script type="text/javascript">
     layui.use(['jquery','table'], function() {

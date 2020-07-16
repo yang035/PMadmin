@@ -173,12 +173,28 @@ class Subject extends Admin
             $data['data'] = ItemModel::with('cat')->where($where)->page($page)->order($order)->limit($limit)->select();
 //            $carType = config('other.car_color');
             if ($data['data']){
+                $begin_date = date('Y-m-01').' 00:00:00';
+                $end_date = date('Y-m-d', strtotime("{$begin_date} +1 month -1 day")).' 23:59:59';
+                $w = [
+                    'cid'=>session('admin_user.cid'),
+                    'update_time'=>['between',[strtotime($begin_date),strtotime($end_date)]],
+                ];
+                $subject_id_arr = SubjectFlowModel::where($w)->column('step','subject_id');
+                if (!$subject_id_arr){
+                    $subject_id_arr = [];
+                }
+
                 $s = \app\admin\model\Project::getColumn1('subject_id');
                 $p = array_flip($s);
                 foreach ($data['data'] as $k=>$v){
                     $v['s_status'] = $p_status[$v['s_status']];
                     $v['leader_user'] = $this->deal_data($v['leader_user']);
                     $v['project_id'] = $p[$v['id']];
+                    if (key_exists($v['id'],$subject_id_arr)){
+                        $v['step'] = $subject_id_arr[$v['id']];
+                    }else{
+                        $v['step'] = 0;
+                    }
                 }
             }
             $data['count'] = ItemModel::where($where)->count('id');
@@ -954,6 +970,7 @@ class Subject extends Admin
                         'id'=>$k,
                         'ratio'=>$v,
                         'agree'=>1,
+                        'step'=>$s['step'],
                     ];
                 }
             }
@@ -963,52 +980,55 @@ class Subject extends Admin
                 return $this->error('操作失败');
             }
 
-            $ScoreC = new Score();
-            $month_ml = $ScoreC->listPeopleProject($s['id']);
-            if ($month_ml){
-                $fafang = $nofafang = [];
-                $month = [
-                    'start_time'=>strtotime(date('Y-m-01', strtotime('-1 month'))),
-                    'end_time'=>strtotime(date('Y-m-01')),
-                ];
-                $rank = ScoreModel::dealRank($month['start_time'],$month['end_time']);
+            if (2 == $s['step']){
+                $ScoreC = new Score();
+                $month_ml = $ScoreC->listPeopleProject($s['id']);
+                if ($month_ml){
+                    $fafang = $nofafang = [];
+                    $month = [
+                        'start_time'=>strtotime(date('Y-m-01', strtotime('-1 month'))),
+                        'end_time'=>strtotime(date('Y-m-01')),
+                    ];
+                    $rank = ScoreModel::dealRank($month['start_time'],$month['end_time']);
 
-                foreach ($month_ml as $k=>$v) {
-                    foreach ($v as $k1=>$v1){
-                        foreach ($v1 as $k2=>$v2){
-                            if (key_exists($k2,$rank)){
-                                $rank_ratio = isset($rank[$k2]['rank_ratio']) ? $rank[$k2]['rank_ratio'] : 1;
-                                $fafang[] = [
-                                    'cid'=>session('admin_user.cid'),
-                                    'subject_id'=>$k,
-                                    'user'=>$k2,
-                                    'add_fond'=>round($v2['finish_ml_month_fafang']*$rank_ratio,2),
-                                    'is_fafang'=>1,
-                                    'remark'=>'发放'.date('Y-m',$month['start_time']).'月',
-                                    'create_time'=>time(),
-                                    'update_time'=>time(),
-                                ];
-                                $nofafang[] = [
-                                    'cid'=>session('admin_user.cid'),
-                                    'subject_id'=>$k,
-                                    'user'=>$k2,
-                                    'add_fond'=>round($v2['finish_ml_month_nofafang']*$rank_ratio,2),
-                                    'is_fafang'=>0,
-                                    'remark'=>'发放'.date('Y-m',$month['start_time']).'月',
-                                    'create_time'=>time(),
-                                    'update_time'=>time(),
-                                ];
+                    foreach ($month_ml as $k=>$v) {
+                        foreach ($v as $k1=>$v1){
+                            foreach ($v1 as $k2=>$v2){
+                                if (key_exists($k2,$rank)){
+                                    $rank_ratio = isset($rank[$k2]['rank_ratio']) ? $rank[$k2]['rank_ratio'] : 1;
+                                    $fafang[] = [
+                                        'cid'=>session('admin_user.cid'),
+                                        'subject_id'=>$k,
+                                        'user'=>$k2,
+                                        'add_fond'=>round($v2['finish_ml_month_fafang']*$rank_ratio,2),
+                                        'is_fafang'=>1,
+                                        'remark'=>'发放'.date('Y-m',$month['start_time']).'月',
+                                        'create_time'=>time(),
+                                        'update_time'=>time(),
+                                    ];
+                                    $nofafang[] = [
+                                        'cid'=>session('admin_user.cid'),
+                                        'subject_id'=>$k,
+                                        'user'=>$k2,
+                                        'add_fond'=>round($v2['finish_ml_month_nofafang']*$rank_ratio,2),
+                                        'is_fafang'=>0,
+                                        'remark'=>'发放'.date('Y-m',$month['start_time']).'月',
+                                        'create_time'=>time(),
+                                        'update_time'=>time(),
+                                    ];
+                                }
                             }
                         }
                     }
+                    $pool = new \app\admin\model\FondPool();
+                    $f1 = $pool->insertAll($fafang);
+                    $f2 = $pool->insertAll($nofafang);
+                    if (!$f2){
+                        return $this->error('操作失败');
+                    };
                 }
-                $pool = new \app\admin\model\FondPool();
-                $f1 = $pool->insertAll($fafang);
-                $f2 = $pool->insertAll($nofafang);
-                if (!$f2){
-                    return $this->error('操作失败');
-                };
             }
+
             return $this->error('操作成功');
         }
         $row = ItemModel::where('id', $id)->find()->toArray();

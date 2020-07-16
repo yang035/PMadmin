@@ -45,6 +45,7 @@
     <div class="layui-form-item">
         <div class="layui-input-block">
             <input type="hidden" class="field-id" name="id" value="{$Request.param.subject_id}">
+            <input type="hidden" class="field-step" name="step" value="{$Request.param.step}">
 <!--            <input type="hidden" class="field-flow_cat_id" name="flow_cat_id" value="{$Request.param.flow_cat_id}">-->
 <!--            <input type="hidden" class="field-flow_id" name="flow_id" value="{$Request.param.flow_id}">-->
             <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
