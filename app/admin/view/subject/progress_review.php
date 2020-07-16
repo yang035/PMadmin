@@ -13,10 +13,10 @@
                     {$f1['name']}
                     {notempty name="f1['flow']"}
                     <div class="layui-input-inline" style="width: 80px;">
-                        {notempty name="f1['flow'][0]['ratio_old']"}
-                        <input type="text" class="layui-input field-{$f1['flow'][0]['id']}" name="{$f1['flow'][0]['id']}" value="{$f1['flow'][0]['ratio_old']}" >
-                        {else/}
+                        {notempty name="f1['flow'][0]['ratio']"}
                         <input type="text" class="layui-input field-{$f1['flow'][0]['id']}" name="{$f1['flow'][0]['id']}" value="{$f1['flow'][0]['ratio']}" >
+                        {else/}
+                        <input type="text" class="layui-input field-{$f1['flow'][0]['id']}" name="{$f1['flow'][0]['id']}" value="{$f1['flow'][0]['ratio_old']}" >
                         {/notempty}
                     </div>
                     <span class="red">%</span>
