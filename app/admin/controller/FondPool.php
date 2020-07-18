@@ -36,6 +36,7 @@ class FondPool extends Admin{
                 $where['user'] = session('admin_user.uid');
             }
             $where['cid'] = session('admin_user.cid');
+            $where['is_fafang'] = 1;
             $order = 'status desc,id desc';
             $field = 'user,sum(add_fond) as add_fond,sum(sub_fond) as sub_fond';
             $group = 'user';

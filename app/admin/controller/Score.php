@@ -1104,7 +1104,9 @@ WHERE si.id in ({$p})";
                                 $tmp = $p_data1[$partner_user[$vv['dep']]];
                             }else{
                                 //默认设置2级合伙人
-                                $tmp = $p_data1[2];
+                                if (2 == session('admin_user.cid')){
+                                    $tmp = $p_data1[2];
+                                }
                             }
                             $tmp1[$k][$kk]['hehuo_name'] = $tmp;
                             //总进度
