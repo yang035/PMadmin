@@ -51,7 +51,7 @@ class AdminDepartment extends Model
         foreach ($user as $k => $v) {
             $user[$k]['id'] = '10000' . $v->id;
             $user[$k]['pid'] = $v['department_id'];
-            $user[$k]['name'] = "{$v['realname']}[{$v['nick']}]";
+            $user[$k]['name'] = "{$v['realname']}[{$v['username']}]";
             $user[$k]['flag'] = 1;
         }
         $data = array_merge($user, $result);

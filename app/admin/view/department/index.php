@@ -21,13 +21,16 @@
 <table id="table1" class="layui-table" lay-filter="table1"></table>
 <!-- 操作列 -->
 <script type="text/html" id="oper-col">
-    {{#  if(d.flag == 0){ }}
-    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="add">添加</a>
-    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">修改</a>
-<!--    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
-    <a class="layui-btn layui-btn-xs" lay-event="dep_auth">设置权限</a>
+    {{#  if(d.cid != 3 && d.company_id != 3){ }}
+        {{#  if(d.flag == 0){ }}
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="add">添加</a>
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">修改</a>
+        <a class="layui-btn layui-btn-xs" lay-event="dep_auth">设置权限</a>
+        {{# }else{ }}
+        <a href="{:url('User/editUser')}?id={{ d.id.substring(5) }}&flag={{ d.flag }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
+        {{# } }}
     {{# }else{ }}
-    <a href="{:url('User/editUser')}?id={{ d.id.substring(5) }}&flag={{ d.flag }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
+    无
     {{# } }}
 </script>
 <script>
