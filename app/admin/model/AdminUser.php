@@ -1,6 +1,7 @@
 <?php
 namespace app\admin\model;
 
+use think\Db;
 use think\Model;
 use app\admin\model\AdminMenu as MenuModel;
 use app\admin\model\AdminRole as RoleModel;
@@ -211,7 +212,15 @@ class AdminUser extends Model
             ];
             $bbs_token = curlInfo($url,$d);
             setcookie("bbs_token", $bbs_token, time() + 8640000, "/", "imlgl.com");
+            $user->setInc('times');
 
+            $u_login = [
+                'user_id' => $user->id,
+                'cid' => $user->company_id,
+                'login_ip' => get_client_ip(),
+                'login_time' => date('Y-m-d H:i:s'),
+            ];
+            Db::table('tb_user_login')->insert($u_login);
 
             return $user->id;
         }
