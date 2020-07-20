@@ -165,10 +165,10 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">推荐人</label>
                 <div class="layui-input-inline">
-                    <input type="text" class="layui-input field-tuijianren" name="tuijianren"
-                           autocomplete="off" placeholder="推荐人编码">
+                    <input type="text" class="layui-input field-tuijianren" name="tuijianren" maxlength="11"
+                           onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" autocomplete="off" placeholder="推荐人手机号码">
                 </div>
-                <div class="layui-form-mid">202036</div>
+<!--                <div class="layui-form-mid">202036</div>-->
             </div>
 <!--            <div class="layui-form-item">-->
 <!--                <label class="layui-form-label">联系邮箱</label>-->
