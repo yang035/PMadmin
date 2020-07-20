@@ -76,7 +76,7 @@
             </div>
             <div class="row" style="margin-top: 100px;margin-bottom: 200px">
                 <div class="col-md-12 col-xs-12 text-left gtco-heading">
-                    <a href="{:url('admin.php/publics/register')}" target="_blank"><img style="width: 90%;height: 100%;margin-left: 30px" src="__PUBLIC_JS__/index/images/li3.png" title="注册"></a>
+                    <a href="{:url('admin.php/publics/register',['t'=>$Request.param.t])}" target="_blank"><img style="width: 90%;height: 100%;margin-left: 30px" src="__PUBLIC_JS__/index/images/li3.png" title="注册"></a>
 <!--                    <span style="font-size: 70px;font-weight: bolder;font-family:'Microsoft YaHei';color: #fe6908;">IMLGL</span>-->
 <!--                    <span style="font-size: 30px;font-weight: bold;font-family:'Microsoft YaHei';color: #fe6908;">.com</span>-->
                 </div>

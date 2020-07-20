@@ -74,6 +74,7 @@ class Publics extends Common
         return $this->success('解锁成功');
     }
     public function register(){
+        $p = $this->request->param();
         if ($this->request->isPost()) {
             $data = $this->request->post();
             if (!isset($data['sys_type'])){
@@ -223,8 +224,9 @@ class Publics extends Common
             }
             return $this->success('注册成功',url('index'));
         }
+        $type = isset($p['t']) ? $p['t'] : 1;
         $this->assign('company_option', AdminCompany::getOption());
-        $this->assign('sys_type', AdminCompany::getSysType());
+        $this->assign('sys_type', AdminCompany::getSysType($type));
         $this->assign('gys_type', AdminCompany::getGysType());
         return $this->fetch();
     }

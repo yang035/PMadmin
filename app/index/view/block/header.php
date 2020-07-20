@@ -86,10 +86,10 @@
     <nav class="gtco-nav" role="navigation" style="background-color: black">
         <div class="row">
             <div class="col-sm-6 col-xs-12" style="float: right;">
-                <a href="{:url('show')}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">项目合作入口</span></a>
-                <a href="{:url('show')}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">设计企业入口</span></a>
-                <a href="{:url('show')}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">设计师入口</span></a>
-                <a href="{:url('show')}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">供应商入口</span></a>
+                <a href="{:url('show',['t'=>3])}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">项目合作入口</span></a>
+                <a href="{:url('show',['t'=>1])}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">设计企业入口</span></a>
+                <a href="{:url('show',['t'=>1])}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">设计师入口</span></a>
+                <a href="{:url('show',['t'=>2])}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">供应商入口</span></a>
                 <a href="{:url('admin.php/publics/index')}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">登录</span></a>
             </div>
         </div>
