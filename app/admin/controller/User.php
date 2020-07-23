@@ -10,9 +10,11 @@ use app\admin\model\AdminUserDefault;
 use app\admin\model\WorkCat;
 use app\admin\model\WorkItem;
 use app\common\service\Service;
+use think\Db;
 use think\Validate;
 use app\admin\model\JobCat as JobCatModel;
 use app\admin\model\JobItem as JobItemModel;
+use app\admin\model\UserLogin as UserLoginModel;
 
 class User extends Admin
 {
@@ -318,7 +320,7 @@ class User extends Admin
             if ($data['password'] == '') {
                 unset($data['password']);
             }
-            
+
             // 验证
             $result = $this->validate($data, 'AdminUser.info');
             if($result !== true) {
@@ -531,4 +533,65 @@ class User extends Admin
 
     }
 
+    public function spreadStatistics()
+    {
+        $params = $this->request->param();
+        $cid = session('admin_user.cid');
+//        $d = date('Y-m-d',strtotime('-30 day')).' - '.date('Y-m-d');
+        $d = '';
+        $where = [];
+        if (isset($params['search_date']) && !empty($params['search_date'])) {
+            $d = $params['search_date'];
+            $d_arr = explode(' - ', $d);
+            $d0 = strtotime($d_arr[0] . ' 00:00:00');
+            $d1 = strtotime($d_arr[1] . ' 23:59:59');
+            $where = [
+                'create_time' => ['between', [$d0, $d1]]
+            ];
+        }
+        $p = isset($params['page']) ? $params['page'] : 1;
+        $data_list = UserModel::field('tuijianren,COUNT(id) as num')->where($where)->where('tuijianren IS NOT NULL OR tuijianren != NULL')->group('tuijianren')->paginate(30, false, ['query' => input('get.')]);
+        if ($data_list) {
+            $user_name = UserModel::column('realname', 'mobile');
+            foreach ($data_list as $k => $v) {
+                $v['xuhao'] = ($p - 1) * 30 + $k + 1;
+                $v['name'] = isset($user_name[$v['tuijianren']]) ? $user_name[$v['tuijianren']] : '无';
+            }
+        }
+        $pages = $data_list->render();
+        $this->assign('data_list', $data_list);
+        $this->assign('pages', $pages);
+        $this->assign('d', $d);
+        return $this->fetch();
+    }
+
+    public function spread()
+    {
+        $params = $this->request->param();
+        $where = [
+            'tuijianren' => $params['tuijianren'],
+        ];
+
+        if (isset($params['search_date']) && !empty($params['search_date'])) {
+            $search_date = explode(' - ', urldecode($params['search_date']));
+            $where['create_time'] = ['between', [strtotime($search_date[0] . ' 00:00:00'), strtotime($search_date[1] . ' 23:59:59')]];
+        }else{
+            $params['search_date'] = '';
+        }
+        $data_list = UserModel::where($where)->paginate(30, false, ['query' => input('get.')]);
+        $p = isset($params['page']) ? $params['page'] : 1;
+        if ($data_list) {
+            $login_count = UserLoginModel::group('user_id')->column('count(user_id)', 'user_id');
+            foreach ($data_list as $k => $v) {
+                $v['xuhao'] = ($p - 1) * 30 + $k + 1;
+                $v['num'] = isset($login_count[$v['mobile']]) ? $login_count[$v['mobile']] : '0';
+            }
+        }
+        // 分页
+        $pages = $data_list->render();
+        $this->assign('data_list', $data_list);
+        $this->assign('pages', $pages);
+        $this->assign('d', urldecode($params['search_date']));
+        return $this->fetch();
+    }
 }
