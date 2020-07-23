@@ -588,7 +588,7 @@ class User extends Admin
             $login_count = UserLoginModel::group('user_id')->column('count(user_id)', 'user_id');
             foreach ($data_list as $k => $v) {
                 $v['xuhao'] = ($p - 1) * 30 + $k + 1;
-                $v['num'] = isset($login_count[$v['mobile']]) ? $login_count[$v['mobile']] : '0';
+                $v['num'] = isset($login_count[$v['id']]) ? $login_count[$v['id']] : '0';
             }
         }
         // 分页
