@@ -549,7 +549,7 @@ class User extends Admin
                 'create_time' => ['between', [$d0, $d1]]
             ];
         }
-        if ($uid != 31 || $uid != 21){
+        if (!in_array($uid,[21,31])){
             $mobile = UserModel::field('mobile')->where(['id'=>$uid])->find();
             $where['tuijianren'] = $mobile['mobile'];
         }
