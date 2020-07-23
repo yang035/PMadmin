@@ -38,13 +38,18 @@
             <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['tuijianren']}" lay-skin="primary"></td>
             <td class="font12" style="width: 100px">{$vo['xuhao']}</td>
             <td class="font12">
+                {neq name="vo['name']" value="无"}
                 <a href="{:url('spread',['tuijianren'=>$vo['tuijianren'],'search_date'=>$d])}"><strong class="mcolor">{$vo['name']}</strong></a>
+                {else/}
+                {$vo['tuijianren']}
+                {/neq}
             </td>
             <td class="font12">
-                {empty name="vo['num']"}0
-                {else/}
+                {neq name="vo['name']" value="无"}
                 <a href="{:url('spread',['tuijianren'=>$vo['tuijianren'],'search_date'=>$d])}"><strong class="mcolor">{$vo['num']}</strong></a>
-                {/empty}
+                {else/}
+                {$vo['num']}
+                {/neq}
             </td>
         </tr>
         {/volist}

@@ -536,7 +536,7 @@ class User extends Admin
     public function spreadStatistics()
     {
         $params = $this->request->param();
-        $cid = session('admin_user.cid');
+        $uid = session('admin_user.uid');
 //        $d = date('Y-m-d',strtotime('-30 day')).' - '.date('Y-m-d');
         $d = '';
         $where = [];
@@ -548,6 +548,10 @@ class User extends Admin
             $where = [
                 'create_time' => ['between', [$d0, $d1]]
             ];
+        }
+        if ($uid != 31 || $uid != 21){
+            $mobile = UserModel::field('mobile')->where(['id'=>$uid])->find();
+            $where['tuijianren'] = $mobile['mobile'];
         }
         $p = isset($params['page']) ? $params['page'] : 1;
         $data_list = UserModel::field('tuijianren,COUNT(id) as num')->where($where)->where('tuijianren IS NOT NULL OR tuijianren != NULL')->group('tuijianren')->paginate(30, false, ['query' => input('get.')]);
