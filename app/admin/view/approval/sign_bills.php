@@ -125,29 +125,29 @@
             </div>
         </div>
     </div>
+<!--    <div class="layui-form-item">-->
+<!--        <label class="layui-form-label">施工员</label>-->
+<!--        <div class="layui-input-inline">-->
+<!--            <input type="text" class="layui-input field-shigong_select_id" name="shigong_select_id" onblur="check_name()" autocomplete="off" placeholder="姓名">-->
+<!--            <input type="hidden" name="shigong_user" id="shigong_user" value="" lay-verify="required">-->
+<!--        </div>-->
+<!--        <div class="layui-form-mid" style="color: red">*</div>-->
+<!--    </div>-->
     <div class="layui-form-item">
-        <label class="layui-form-label">施工员</label>
-        <div class="layui-input-inline">
-            <input type="text" class="layui-input field-shigong_select_id" name="shigong_select_id" onblur="check_name()" autocomplete="off" placeholder="姓名">
-            <input type="hidden" name="shigong_user" id="shigong_user" value="" lay-verify="required">
-        </div>
-        <div class="layui-form-mid" style="color: red">*</div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">项目经理</label>
+        <label class="layui-form-label">发送给</label>
         <div class="layui-input-inline">
             <!--            <button type="button" class="layui-btn" id="send_user_id">选择审批人</button>-->
-            <div style="margin-top: 10px" id="send_select_id">默认项目经理级</div>
+            <div style="margin-top: 10px" id="send_select_id">{$data_info['copy_user_id']|default=''}</div>
             <div id="send_select_id"></div>
-            <input type="hidden" name="send_user" id="send_user" value="" lay-verify="required">
+            <input type="hidden" name="send_user" id="send_user" value="{$data_info['copy_user']|default=''}" lay-verify="required">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">抄送人</label>
         <div class="layui-input-inline">
 <!--            <button type="button" class="layui-btn" id="copy_user_id">选择抄送人</button>-->
-            <div style="margin-top: 10px" id="copy_select_id">项目管理部</div>
-            <input type="hidden" name="copy_user" id="copy_user" value="{$data_info['hr_finance_user']|default=''}">
+            <div style="margin-top: 10px" id="copy_select_id">{$data_info['finance_user_id']|default=''}</div>
+            <input type="hidden" name="copy_user" id="copy_user" value="{$data_info['finance_user']|default=''}">
         </div>
     </div>
     <div class="layui-form-item">
@@ -263,9 +263,9 @@
             $('input[name="expire_time"]').val(0);
         });
 
-        form.on('select(project_type)', function(data){
-            select_union(data.value);
-        });
+        // form.on('select(project_type)', function(data){
+        //     select_union(data.value);
+        // });
 
         $('#send_user_id').on('click', function(){
             var send_user = $('#send_user').val();

@@ -1510,9 +1510,9 @@ class Approval extends Admin
             if ('' == $data['project_id']){
                 return $this->error('请选择项目');
             }
-            if (empty($data['shigong_user'])){
-                return $this->error('施工员不存在，请输入正确姓名');
-            }
+//            if (empty($data['shigong_user'])){
+//                return $this->error('施工员不存在，请输入正确姓名');
+//            }
             $data['content'] = array_unique(array_filter($data['content']));
             // 验证
             $result = $this->validate($data, 'ApprovalBills');
@@ -1523,13 +1523,12 @@ class Approval extends Admin
 
             $send_user = html_entity_decode($data['send_user']);
             $send_user1 = json_decode($send_user,true);
-            array_unshift($send_user1,[$data['shigong_user']=>'']);//在头部插入元素
-            array_pop($send_user1);//删除尾部的元素
-            $send_user2 = [];
-            foreach ($send_user1 as $k=>$v) {
-                $send_user2 += $v;
-            }
-
+//            array_unshift($send_user1,[$data['shigong_user']=>'']);//在头部插入元素
+//            array_pop($send_user1);//删除尾部的元素
+//            $send_user2 = [];
+//            foreach ($send_user1 as $k=>$v) {
+//                $send_user2 += $v;
+//            }
             Db::startTrans();
             try {
                 $approve = [
@@ -1540,18 +1539,19 @@ class Approval extends Admin
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
                     'user_id' => session('admin_user.uid'),
-//                    'send_user' => user_array($data['send_user']),
-                    'send_user' => json_encode($send_user2),
+                    'send_user' => user_array($data['send_user']),
+//                    'send_user' => json_encode($send_user2),
                     'copy_user' => user_array($data['copy_user']),
                 ];
                 $res = ApprovalModel::create($approve);
 
                 $su = [];
+            $send_user1 = [$send_user1];
                 foreach ($send_user1 as $k=>$v) {
                     $su[$k] = [
                         'aid' => $res['id'],
                         'flow_num' => $k,
-                        'send_user' => json_encode($v),
+                        'send_user' => user_array($data['send_user']),
                     ];
                 }
                 $send_user_model = new ApprovalSenduser();
@@ -1561,7 +1561,7 @@ class Approval extends Admin
                     'aid' => $res['id'],
                     'date' => $data['date'],
                     'money' => $data['money'],
-                    'shigong_user' => $data['shigong_user'],
+//                    'shigong_user' => $data['shigong_user'],
                     'reason' => $data['reason'],
                     'attachment' => $data['attachment'],
                 ];
@@ -2302,7 +2302,7 @@ class Approval extends Admin
                 break;
             case 16:
                 $list['detail'] = json_decode($list['detail'], true);
-                $list['shigong_user'] = AdminUser::getUserById($list['shigong_user'])['realname'];
+//                $list['shigong_user'] = AdminUser::getUserById($list['shigong_user'])['realname'];
                 $unit2_type = config('other.unit2');
                 $this->assign('unit_type', $unit2_type);
                 break;

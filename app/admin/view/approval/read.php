@@ -281,7 +281,6 @@
                 {/volist}
                 <br>
                 总计：{$data_list['money']}元<br>
-                施工员：{$data_list['shigong_user']}<br>
                 {/case}
             {case value="17"}
             请假类型：{$data_list['money']} 元<br>
