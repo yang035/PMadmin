@@ -309,6 +309,16 @@ class Goods extends Admin
 //                            return $this->success('物品发放成功', url('index'));
 //                        }
                     }
+                    $score = [
+                        'project_id' => 0,
+                        'cid' => session('admin_user.cid'),
+                        'user' => session('admin_user.uid'),
+                        'gl_add_score' => 5,
+                        'remark' => "发放办公用品",
+                        'create_time' => time(),
+                        'update_time' => time(),
+                    ];
+                \db('score')->insert($score);
                 }
             });
             return $this->success('物品发放成功', url('index'));
