@@ -20,14 +20,6 @@ class Resources extends Admin{
 
     public function index()
     {
-        $gd = new GgzyDetail();
-        $list = $gd->column('content','id');
-        foreach ($list as $k=>$v) {
-            $gd->where('id',$k)->setField('content',htmlspecialchars($v));
-        }
-        exit();
-
-
         $ip_arr = Ip::find(get_ip());
         $ip_region = [
             'p' => $ip_arr[4] ? substr($ip_arr[4],0,2) : 0,
