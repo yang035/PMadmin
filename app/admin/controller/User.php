@@ -537,6 +537,7 @@ class User extends Admin
     {
         $params = $this->request->param();
         $uid = session('admin_user.uid');
+        $role_id = session('admin_user.role_id');
 //        $d = date('Y-m-d',strtotime('-30 day')).' - '.date('Y-m-d');
         $d = '';
         $where = [];
@@ -553,6 +554,10 @@ class User extends Admin
 //            $mobile = UserModel::field('mobile')->where(['id'=>$uid])->find();
 //            $where['tuijianren'] = $mobile['mobile'];
 //        }
+        if ($role_id > 3){
+            $mobile = UserModel::field('mobile')->where(['id'=>$uid])->find();
+            $where['tuijianren'] = $mobile['mobile'];
+        }
         $p = isset($params['page']) ? $params['page'] : 1;
         $data_list = UserModel::field('tuijianren,COUNT(id) as num')->where($where)->where('tuijianren IS NOT NULL OR tuijianren != NULL')->group('tuijianren')->paginate(30, false, ['query' => input('get.')]);
         if ($data_list) {
