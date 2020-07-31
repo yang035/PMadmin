@@ -94,7 +94,7 @@ class Ggzy extends Controller
                 $url = "http://www.ggzy.gov.cn/information".$v;
                 $p = '';
                 $r = curlInfo($url, $p);
-                $tmp[$k]['content'] = $r;
+                $tmp[$k]['content'] = htmlspecialchars($r);
                 $i++;
             }
             $res = Db::table('tb_ggzy_detail')->insertAll($tmp);
