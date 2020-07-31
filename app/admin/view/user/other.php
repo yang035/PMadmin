@@ -66,6 +66,7 @@
                 ,{field: 'job_item', title: '岗位'}
                 ,{field: 'work_cat', title: '日常工作'}
                 ,{field: 'mobile', title: '手机号码',edit: 'text'}
+                ,{field: 'times', title: '登录次数'}
                 ,{field: 'last_login_time', width: 150, title: '最后登陆时间'}
                 ,{field: 'status', title: '状态', templet: '#statusTpl'}
             ]]

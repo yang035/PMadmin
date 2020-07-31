@@ -119,7 +119,7 @@ class User extends Admin
 //            $where['is_show'] = ['eq', 0];
             $where['company_id'] = ['neq', 2];
 
-            $order = 'status desc,id desc';
+            $order = 'times desc,status desc,id desc';
 
             $data['data'] = UserModel::with('role')->with('dep')->where($where)->order($order)->page($page)->limit($limit)->select();
             if ($data['data']){
