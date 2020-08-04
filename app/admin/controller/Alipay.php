@@ -57,4 +57,44 @@ class Alipay extends Controller
         }
         return header('Location:' . $res);
     }
+
+    /**
+     * @return array
+     */
+    public function test()
+    {
+        $p = $this->request->param();
+        $from = $p['from'];
+        if ($from === 'ali') {
+            $config = config('alipay');
+            $proxy = Client::ALIPAY;
+        } elseif ($from === 'wx') {
+            $config = config('wxpay');
+            $proxy  = Client::WECHAT;
+        } else {
+            $config = config('alipay');
+            $proxy = Client::ALIPAY;
+        }
+
+        $callback = new TestNotify();
+
+        try {
+            $client = new Client($proxy, $config);
+            $xml    = $client->notify($callback);
+        } catch (\InvalidArgumentException $e) {
+            echo $e->getMessage();
+            exit;
+        } catch (GatewayException $e) {
+            echo $e->getMessage();
+            exit;
+        } catch (ClassNotFoundException $e) {
+            echo $e->getMessage();
+            exit;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            exit;
+        }
+
+        var_dump($xml);
+    }
 }
