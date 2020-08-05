@@ -8,7 +8,7 @@
 return [
     'use_sandbox' => true, // 是否使用沙盒模式
 
-    'app_id'    => '2021001184670762',
+    'app_id'    => '2021000117689685',
     'sign_type' => 'RSA2', // RSA  RSA2
 
 
