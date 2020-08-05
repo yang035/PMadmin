@@ -29,8 +29,10 @@ return [
     ], // 用户不可用指定渠道支付当有多个渠道时用“,”分隔
 
     // 与业务相关参数
-    'notify_url' => 'http://www.imlgl.com/notify.php/from/ali',
-    'return_url' => 'http://www.imlgl.com/notify.php',
+    //商户指定的    异步通知   页面
+    'notify_url' => 'http://www.imlgl.com/notify.php',
+    //商户指定的    同步通知   页面
+    'return_url' => 'http://www.imlgl.com/notify.php/from/ali',
 
     'fee_type' => 'CNY', // 货币类型  当前仅支持该字段
 ];
