@@ -30,7 +30,7 @@ return [
 
     // 与业务相关参数
     'notify_url' => 'http://www.imlgl.com/notify.php/from/ali',
-    'return_url' => 'http://www.imlgl.com',
+    'return_url' => 'http://www.imlgl.com/notify.php',
 
     'fee_type' => 'CNY', // 货币类型  当前仅支持该字段
 ];

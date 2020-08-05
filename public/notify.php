@@ -14,7 +14,10 @@ date_default_timezone_set('Asia/Shanghai');
 
 $aliConfig = require_once __DIR__ . '/../app/extra/alipay.php';
 $wxConfig  = require_once __DIR__ . '/../app/extra/wxpay.php';
-
+print_r($_GET);
+echo 1;
+print_r($_POST);
+exit();
 $from = $_GET['from'] ? $_GET['from'] : 'ali';
 if ($from === 'ali') {
     $config = $aliConfig;
