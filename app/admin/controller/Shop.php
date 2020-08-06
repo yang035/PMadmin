@@ -324,6 +324,8 @@ class Shop extends Admin
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
             $data['total_score'] = $data['unit_score'] * $data['num'];
+            $tradeNo = time() . rand(1000, 9999);
+            $data['trade_no'] = $tradeNo;
             unset($data['id']);
             // 验证
 //            $result = $this->validate($data, 'ShopCat');
@@ -347,6 +349,21 @@ class Shop extends Admin
                 Db::rollback();
             }
             if ($flag) {
+                if ($data['other_price'] > 0){
+                    $payData = [
+                        'body'         => 'ali web pay',
+                        'subject'      => '测试支付宝电脑网站支付',
+                        'trade_no'     => $tradeNo,
+                        'time_expire'  => time() + 600, // 表示必须 600s 内付款
+                        'amount'       => $data['other_price'], // 单位为元 ,最小为0.01
+                        'return_param' => '123123',
+                         'client_ip' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',// 客户地址
+                        'goods_type' => '1', // 0—虚拟类商品，1—实物类商品
+                        'store_id'   => '',
+                    ];
+                    $alipay = new Alipay();
+                    $alipay->order($payData);
+                }
                 return $this->success("操作成功{$this->score_value}", url('ShopOrder/index'));
             } else {
                 return $this->error('添加失败！');

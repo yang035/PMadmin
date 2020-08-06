@@ -31,7 +31,7 @@
             <div class="layui-input-block">
                 <input type="hidden" class="field-unit_score" name="unit_score" value="{$data_list['score']}">
                 <input type="hidden" class="field-item_id" name="item_id" value="{$data_list['id']}">
-                <button type="submit" class="layui-btn layui-btn-normal btn_sub" lay-submit="" lay-filter="formSubmit">提交</button>
+                <button type="submit" class="layui-btn layui-btn-normal btn_sub" lay-submit="" lay-filter="formSubmit">购买</button>
                 <a href="javascript:history.back()" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
             </div>
         </div>
