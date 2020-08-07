@@ -251,15 +251,20 @@ layui.define(['element', 'form', 'table'], function(exports) {
                     layer.msg(res.msg, {}, function () {
                         if (res.code == 1) {
                             if (typeof(res.url) != 'undefined' && res.url != null && res.url != '') {
-                                var index = parent.layer.getFrameIndex(window.name);//获取窗口索引
-                                if (index > 1000) {
-                                    parent.layer.close(index);//关闭layer
-                                    if (res.url) {
-                                        window.parent.location.href = res.url;
+                                if (res.url.indexOf('paydetail') != -1){
+                                    // console.log(res.url+"?trade_no="+res.data.trade_no);
+                                    location.href = res.url+"?trade_no="+res.data.trade_no;
+                                }else {
+                                    var index = parent.layer.getFrameIndex(window.name);//获取窗口索引
+                                    if (index > 1000) {
+                                        parent.layer.close(index);//关闭layer
+                                        if (res.url) {
+                                            window.parent.location.href = res.url;
+                                        }
+                                        window.parent.location.reload();//刷新父页面
+                                    } else {
+                                        window.history.back(-1);
                                     }
-                                    window.parent.location.reload();//刷新父页面
-                                } else {
-                                    window.history.back(-1);
                                 }
                             } else {
                                 location.href = res.url;

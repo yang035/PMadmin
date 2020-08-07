@@ -7,12 +7,14 @@
  */
 
 namespace app\admin\controller;
+use app\admin\model\AdminMenu;
 use app\admin\model\ShopCat as CatModel;
 use app\admin\model\ShopItem as ItemModel;
 use app\admin\model\Score as ScoreModel;
 use app\admin\model\ShopOrder as OrderModel;
 use app\admin\model\AdminUser;
 use app\admin\model\AdminCompany;
+use Payment\Client;
 use think\Db;
 use think\Url;
 
@@ -350,21 +352,9 @@ class Shop extends Admin
             }
             if ($flag) {
                 if ($data['other_price'] > 0){
-                    $payData = [
-                        'body'         => 'ali web pay',
-                        'subject'      => '测试支付宝电脑网站支付',
-                        'trade_no'     => $tradeNo,
-                        'time_expire'  => time() + 600, // 表示必须 600s 内付款
-                        'amount'       => $data['other_price'], // 单位为元 ,最小为0.01
-                        'return_param' => '123123',
-                         'client_ip' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',// 客户地址
-                        'goods_type' => '1', // 0—虚拟类商品，1—实物类商品
-                        'store_id'   => '',
-                    ];
-                    $alipay = new Alipay();
-                    $alipay->order($payData);
+                    return $this->success('下单成功', 'shop/payDetail', ['trade_no'=>$tradeNo],1);
                 }
-                return $this->success("操作成功{$this->score_value}", url('ShopOrder/index'));
+                return $this->success("操作成功{$this->score_value}", 'ShopOrder/index');
             } else {
                 return $this->error('添加失败！');
             }
@@ -392,6 +382,27 @@ class Shop extends Admin
         $this->assign('data_list', $row);
         $this->assign('cat_option',ItemModel::getOption());
         $this->assign('score',$this->getUnuseScore());
+        return $this->fetch();
+    }
+
+    public function payDetail($trade_no=0){
+        $data = OrderModel::where(['trade_no'=>$trade_no])->find();
+        $payData = [
+            'body'         => 'ali web pay',
+            'subject'      => '测试支付宝电脑网站支付',
+            'trade_no'     => $trade_no,
+            'time_expire'  => time() + 600, // 表示必须 600s 内付款
+            'amount'       => $data['other_price'], // 单位为元 ,最小为0.01
+            'return_param' => '123123',
+            'client_ip' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',// 客户地址
+            'goods_type' => '1', // 0—虚拟类商品，1—实物类商品
+            'store_id'   => '',
+        ];
+        $peizhi = config('alipay');
+        $client = new Client(Client::ALIPAY, $peizhi);
+        $pay_url    = $client->pay(Client::ALI_CHANNEL_WEB, $payData);
+        $this->assign('payData', $payData);
+        $this->assign('pay_url',$pay_url);
         return $this->fetch();
     }
 

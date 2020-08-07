@@ -78,19 +78,20 @@
 
     function read(id){
         var open_url = "{:url('shopDetail')}?id="+id;
-        if (open_url.indexOf('?') >= 0) {
-            open_url += '&hisi_iframe=yes';
-        } else {
-            open_url += '?hisi_iframe=yes';
-        }
-        layer.open({
-            type:2,
-            title :'详情',
-            maxmin: true,
-            area: ['800px', '600px'],
-            content: open_url,
-            success:function (layero, index) {
-            }
-        });
+        window.location.href = open_url;
+        // if (open_url.indexOf('?') >= 0) {
+        //     open_url += '&hisi_iframe=yes';
+        // } else {
+        //     open_url += '?hisi_iframe=yes';
+        // }
+        // layer.open({
+        //     type:2,
+        //     title :'详情',
+        //     maxmin: true,
+        //     area: ['800px', '600px'],
+        //     content: open_url,
+        //     success:function (layero, index) {
+        //     }
+        // });
     }
 </script>
