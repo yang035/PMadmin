@@ -49,7 +49,7 @@
             var interval = setInterval(function(){
                 var time = --wait.innerHTML;
                 if(time <= 0) {
-                    if(window.name){
+                    if(window.name && window.name.indexOf('Storage') == -1){
                         var index = parent.layer.getFrameIndex(window.name);//获取窗口索引
                         parent.layer.close(index);//关闭layer
                     }

@@ -55,6 +55,20 @@ class Alipay extends Controller
         return header('Location:' . $res);
     }
 
+    public function notify(){
+        $params = $this->request->param();
+        if ($params['from'] === 'ali') {
+            $this->dealNotify($params);
+        } elseif ($params['from'] === 'wx') {
+//            $config = $wxConfig;
+//            $proxy  = \Payment\Client::WECHAT;
+        } else {
+            $this->dealNotify($_GET);
+//            $config = $cmbConfig;
+//            $proxy  = \Payment\Client::CMB;
+        }
+    }
+
     /**
      * @return array
      */
@@ -62,13 +76,13 @@ class Alipay extends Controller
     {
         $data = [
             'total_amount'=>$p['total_amount'],
-            'trade_no'=>$p['trade_no'],
             'timestamp'=>$p['timestamp'],
             'source'=>$p['from'],
         ];
-        $flag = OrderModel::where(['trade_no'=>$p['trade_no']])->update($data);
+
+        $flag = OrderModel::where(['trade_no'=>$p['out_trade_no']])->update($data);
         if ($flag){
-            return $this->success("操作成功", url('ShopOrder/index'));
+            return $this->success("操作成功", 'ShopOrder/index');
         }
         return $this->error('操作失败');
     }
