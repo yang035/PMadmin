@@ -49,11 +49,13 @@
             <td class="font12">{$vo['total_score']}</td>
             <td class="font12">{$vo['other_price']}</td>
             <td class="font12">
-                {eq name="vo['is_pay']" value="1"}
+                {if condition="$vo['is_pay'] == 1"}
                     <a href="{$vo['pay_url']}" class="layui-btn-sm layui-btn-warm">{$pay_status[$vo['is_pay']]}</a>
+                {elseif condition="$vo['is_pay'] == 0 || $vo['is_pay'] == 2" /}
+                    <span style="color: green">{$pay_status[$vo['is_pay']]}</span>
                 {else/}
-                    {$pay_status[$vo['is_pay']]}
-                {/eq}
+                    <span style="color: red">{$pay_status[$vo['is_pay']]}</span>
+                {/if}
             </td>
             <td class="font12">
                 <input type="checkbox" name="status" value="{$vo['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="已申请|已发放" {if condition="$vo['status'] eq 1"}checked {/if} data-href="{:url('status')}?table=shop_order&id={$vo['id']}">
