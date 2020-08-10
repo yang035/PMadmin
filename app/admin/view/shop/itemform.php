@@ -56,14 +56,14 @@
         <div class="layui-form-item">
             <label class="layui-form-label">等价于</label>
             <div class="layui-input-inline">
-                <input type="number" class="layui-input field-marketprice" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="marketprice" value="0" autocomplete="off" placeholder="请输入兑换价">
+                <input type="text" class="layui-input field-marketprice" oninput="value=moneyInput(value)" name="marketprice" value="0" autocomplete="off" placeholder="请输入兑换价">
             </div>
             <div class="layui-form-mid">元</div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">额外支付</label>
             <div class="layui-input-inline">
-                <input type="number" class="layui-input field-other_price" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="other_price" value="0" autocomplete="off" placeholder="请输入额外支付价格">
+                <input type="text" class="layui-input field-other_price" oninput="value=moneyInput(value)" name="other_price" value="0" autocomplete="off" placeholder="请输入额外支付价格">
             </div>
             <div class="layui-form-mid">元</div>
         </div>

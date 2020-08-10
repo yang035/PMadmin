@@ -88,7 +88,7 @@
                 </select>
             </div>
             <div class="layui-input-inline fl" style="width: 100px;">
-                <input type="number" class="layui-input field-amount" name="amount[]" onblur="amout_sum()" autocomplete="off" placeholder="金额">
+                <input type="text" class="layui-input field-amount" name="amount[]" oninput="value=moneyInput(value)" onblur="amout_sum()" autocomplete="off" placeholder="金额">
             </div>
             <div class="layui-form-mid">元</div>
             <div class="layui-input-inline" style="width: 300px;">
