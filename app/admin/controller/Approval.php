@@ -2257,6 +2257,9 @@ class Approval extends Admin
                 $size_type = config('other.size_type');
                 $quality_type = config('other.quality_type');
                 $store_type = config('other.store_type');
+                if (2 != session('admin_user.cid')){
+                    $store_type = config('other.store_type1');
+                }
                 $list['size_type'] = json_decode($list['size_type'],true);
                 $list['quality'] = json_decode($list['quality'],true);
                 $list['num'] = json_decode($list['num'],true);
