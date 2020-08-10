@@ -401,11 +401,10 @@ class Shop extends Admin
             'client_ip' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',// 客户地址
             'goods_type' => '1', // 0—虚拟类商品，1—实物类商品
             'store_id'   => '',
-            'user_id'   => $uid,
         ];
 
         $redis = service('Redis');
-        $redis->set("pm:admin_user:{$uid}",serialize(session('admin_user')),180);
+        $redis->set("pm:admin_user:{$trade_no}",serialize(session('admin_user')),180);
 
         $peizhi = config('alipay');
         $client = new Client(Client::ALIPAY, $peizhi);

@@ -77,7 +77,7 @@ class Alipay extends Controller
         $res = OrderModel::where(['trade_no'=>$p['out_trade_no']])->find();
 
         $redis = service('Redis');
-        $login_info = $redis->get("pm:admin_user:{$p['user_id']}");
+        $login_info = $redis->get("pm:admin_user:{$p['out_trade_no']}");
         $admin_user = session('admin_user');
         if (empty($admin_user)){
             session('admin_user',unserialize($login_info));
