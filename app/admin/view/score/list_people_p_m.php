@@ -7,12 +7,12 @@
 <div>
     <form class="layui-form layui-form-pane" action="{:url()}" method="get" id="search_form">
         <div class="layui-form-item">
-            <div class="layui-inline">
-                <label class="layui-form-label">真实姓名</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="realname" value="{:input('get.realname')}" placeholder="真实姓名" autocomplete="off" class="layui-input">
-                </div>
-            </div>
+<!--            <div class="layui-inline">-->
+<!--                <label class="layui-form-label">真实姓名</label>-->
+<!--                <div class="layui-input-inline">-->
+<!--                    <input type="text" name="realname" value="{:input('get.realname')}" placeholder="真实姓名" autocomplete="off" class="layui-input">-->
+<!--                </div>-->
+<!--            </div>-->
             <div class="layui-inline">
                 <label class="layui-form-label">日期范围</label>
                 <div class="layui-input-inline">
@@ -20,6 +20,7 @@
                 </div>
             </div>
             <input type="hidden" name="type" value="{$Request.param.type}">
+            <input type="hidden" name="user" value="{$Request.param.user}">
             <input type="hidden" name="export" value="">
             <button type="submit" class="layui-btn layui-btn-normal normal_btn">搜索</button>
             <input type="button" class="layui-btn layui-btn-primary layui-icon export_btn" value="导出">
