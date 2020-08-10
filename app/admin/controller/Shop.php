@@ -326,6 +326,9 @@ class Shop extends Admin
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
             $data['total_score'] = $data['unit_score'] * $data['num'];
+            if ($data['other_price'] > 0){
+                $data['is_pay'] = 1;
+            }
             $tradeNo = time() . rand(1000, 9999);
             $data['trade_no'] = $tradeNo;
             unset($data['id']);
@@ -387,6 +390,7 @@ class Shop extends Admin
 
     public function payDetail($trade_no=0){
         $data = OrderModel::where(['trade_no'=>$trade_no])->find();
+        $uid = session('admin_user.uid');
         $payData = [
             'body'         => 'ali web pay',
             'subject'      => '测试支付宝电脑网站支付',
@@ -397,10 +401,16 @@ class Shop extends Admin
             'client_ip' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',// 客户地址
             'goods_type' => '1', // 0—虚拟类商品，1—实物类商品
             'store_id'   => '',
+            'user_id'   => $uid,
         ];
+
+        $redis = service('Redis');
+        $redis->set("pm:admin_user:{$uid}",serialize(session('admin_user')),180);
+
         $peizhi = config('alipay');
         $client = new Client(Client::ALIPAY, $peizhi);
         $pay_url    = $client->pay(Client::ALI_CHANNEL_WEB, $payData);
+        OrderModel::where(['trade_no'=>$trade_no])->update(['channel'=>1,'pay_url'=>$pay_url]);
         $this->assign('payData', $payData);
         $this->assign('pay_url',$pay_url);
         return $this->fetch();

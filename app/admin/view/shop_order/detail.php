@@ -46,7 +46,12 @@
             <td class="font12">{$vo['name']}</td>
             <td class="font12">{$vo['num']}</td>
             <td class="font12">{$vo['total_score']}</td>
-            <td class="font12">{$vo['other_price']}</td>
+            <td class="font12">
+                {$vo['other_price']}
+                {eq name="vo['is_pay']" value="1"}
+                    <a href="{$vo['pay_url']}" class="layui-btn-sm layui-btn-warm">支付</a>
+                {/eq}
+            </td>
             <td class="font12">
                 <input type="checkbox" name="status" value="{$vo['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="已申请|已发放" {if condition="$vo['status'] eq 1"}checked {/if} data-href="{:url('status')}?table=shop_order&id={$vo['id']}">
             </td>

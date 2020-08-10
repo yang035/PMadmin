@@ -74,15 +74,28 @@ class Alipay extends Controller
      */
     public function dealNotify($p)
     {
-        $data = [
-            'total_amount'=>$p['total_amount'],
-            'timestamp'=>$p['timestamp'],
-            'source'=>$p['from'],
-        ];
+        $res = OrderModel::where(['trade_no'=>$p['out_trade_no']])->find();
 
-        $flag = OrderModel::where(['trade_no'=>$p['out_trade_no']])->update($data);
-        if ($flag){
-            return $this->success("操作成功", 'ShopOrder/index');
+        $redis = service('Redis');
+        $login_info = $redis->get("pm:admin_user:{$p['user_id']}");
+        $admin_user = session('admin_user');
+        if (empty($admin_user)){
+            session('admin_user',unserialize($login_info));
+        }
+
+        if ($res){
+            $data = [
+                'total_amount'=>$p['total_amount'],
+                'timestamp'=>$p['timestamp'],
+                'source'=>$p['from'],
+                'is_pay'=>2,
+            ];
+            if ($res['other_price'] == $p['total_amount']){
+                $flag = OrderModel::where(['trade_no'=>$p['out_trade_no']])->update($data);
+                if ($flag){
+                    return $this->success("操作成功", 'ShopOrder/index');
+                }
+            }
         }
         return $this->error('操作失败');
     }
