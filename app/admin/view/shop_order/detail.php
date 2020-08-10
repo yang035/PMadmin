@@ -34,6 +34,7 @@
             <th>数量(份)</th>
             <th>总消耗(斗)</th>
             <th>额外支付(元)</th>
+            <th>支付状态</th>
             <th>状态</th>
             <th>添加时间</th>
         </tr>
@@ -46,10 +47,12 @@
             <td class="font12">{$vo['name']}</td>
             <td class="font12">{$vo['num']}</td>
             <td class="font12">{$vo['total_score']}</td>
+            <td class="font12">{$vo['other_price']}</td>
             <td class="font12">
-                {$vo['other_price']}
                 {eq name="vo['is_pay']" value="1"}
-                    <a href="{$vo['pay_url']}" class="layui-btn-sm layui-btn-warm">支付</a>
+                    <a href="{$vo['pay_url']}" class="layui-btn-sm layui-btn-warm">{$pay_status['is_pay']}</a>
+                {else/}
+                    {$pay_status['is_pay']}
                 {/eq}
             </td>
             <td class="font12">

@@ -409,7 +409,14 @@ class Shop extends Admin
         $peizhi = config('alipay');
         $client = new Client(Client::ALIPAY, $peizhi);
         $pay_url    = $client->pay(Client::ALI_CHANNEL_WEB, $payData);
-        OrderModel::where(['trade_no'=>$trade_no])->update(['channel'=>1,'pay_url'=>$pay_url]);
+        $up = [
+            'channel'=>1,
+            'pay_url'=>$pay_url,
+            ];
+        if (empty($pay_url)){
+            $up['is_pay'] = 3;
+        }
+        OrderModel::where(['trade_no'=>$trade_no])->update($up);
         $this->assign('payData', $payData);
         $this->assign('pay_url',$pay_url);
         return $this->fetch();

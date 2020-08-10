@@ -125,6 +125,8 @@ class ShopOrder extends Admin
             $map['ShopOrder.cid'] = session('admin_user.cid');
         }
 
+        $pay_status = config('other.pay_status');
+
         if (isset($params['export']) && 1 == $params['export']){
             set_time_limit(0);
             $data_list = OrderModel::hasWhere('cat',$map1)->field("`ShopOrder`.*, `ShopItem`.name")->where($map)->order('id desc')->select();
@@ -177,6 +179,7 @@ class ShopOrder extends Admin
         }
         // 分页
         $pages = $data_list->render();
+        $this->assign('pay_status', $pay_status);
         $this->assign('data_list', $data_list);
         $this->assign('pages', $pages);
         return $this->fetch();
