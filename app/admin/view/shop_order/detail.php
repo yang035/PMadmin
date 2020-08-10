@@ -50,9 +50,9 @@
             <td class="font12">{$vo['other_price']}</td>
             <td class="font12">
                 {eq name="vo['is_pay']" value="1"}
-                    <a href="{$vo['pay_url']}" class="layui-btn-sm layui-btn-warm">{$pay_status['is_pay']}</a>
+                    <a href="{$vo['pay_url']}" class="layui-btn-sm layui-btn-warm">{$pay_status[$vo['is_pay']]}</a>
                 {else/}
-                    {$pay_status['is_pay']}
+                    {$pay_status[$vo['is_pay']]}
                 {/eq}
             </td>
             <td class="font12">
