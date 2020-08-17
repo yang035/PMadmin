@@ -29,5 +29,17 @@ class DailyReport extends Model
         return $str;
     }
 
-
+    public static function getReportType($type = 0)
+    {
+        $leaveType = config('other.report_type');
+        $str = '<option value="" selected>选择</option>';
+        foreach ($leaveType as $k => $v) {
+            if ($type == $k) {
+                $str .= '<option value="'.$k.'" selected>'.$v['title'].'</option>';
+            } else {
+                $str .= '<option value="'.$k.'">'.$v['title'].'</option>';
+            }
+        }
+        return $str;
+    }
 }

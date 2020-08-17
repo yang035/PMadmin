@@ -1063,7 +1063,7 @@ WHERE si.id in ({$p})";
                     }
 
                     foreach ($jindu as $k=>$v){
-                        $jindu_month[$k] = $v - $jindu1[$k];
+                        $jindu_month[$k] = $v - (isset($jindu1[$k]) ? $jindu1[$k] : 0);
                     }
                 }
 

@@ -100,6 +100,11 @@ class DailyReport extends Admin
             if (!empty($params['user_id'])){
                 $map['user_id'] = $params['user_id'];
             }
+            if (!empty($params['d_type'])){
+                $map['d_type'] = $params['d_type'];
+            }else{
+                $params['d_type'] = '';
+            }
         }
         $uid = session('admin_user.uid');
         $role_id = session('admin_user.role_id');
@@ -124,6 +129,7 @@ class DailyReport extends Admin
                 break;
         }
 
+        $report_type = config('other.report_type');
         $list = DailyReportModel::where($map)->where($con)->order('create_time desc')->paginate(30, false, ['query' => input('get.')]);
         foreach ($list as $k=>$v){
             $v['detail'] = json_decode($v['detail'],true);
@@ -136,6 +142,7 @@ class DailyReport extends Admin
             }else{
                 $v['project_name'] = '其他';
             }
+            $v['type_name'] = isset($report_type[$v['d_type']]['title']) ? $report_type[$v['d_type']]['title'] : '其他';
         }
         $this->assign('tab_data', $this->tab_data);
         $this->assign('tab_type', 1);
@@ -146,6 +153,7 @@ class DailyReport extends Admin
         $this->assign('data_list', $list);
         $this->assign('project_select', ProjectModel::inputSearchProject());
         $this->assign('user_select', AdminUser::inputSearchUser());
+        $this->assign('report_type', DailyReportModel::getReportType($params['d_type']));
         $this->assign('pages', $pages);
         return $this->fetch();
     }
@@ -323,6 +331,7 @@ class DailyReport extends Admin
             $ins_data['copy_user'] = user_array($data['copy_user']);
             $ins_data['cid'] = $data['cid']= session('admin_user.cid');
             $ins_data['user_id'] = session('admin_user.uid');
+            $ins_data['d_type'] = 1;
             // 验证
             $result = $this->validate($data, 'DailyReport');
             if($result !== true) {
@@ -463,6 +472,7 @@ class DailyReport extends Admin
             }
             $ins_data['detail'] = json_encode($ins_data['detail'],JSON_FORCE_OBJECT);
             $ins_data['p_detail'] = json_encode($ins_data['p_detail'],JSON_FORCE_OBJECT);
+            $ins_data['d_type'] = 2;
             $res = DailyReportModel::create($ins_data);
             if ($res) {
                 return $this->success("操作成功", 'index');
@@ -509,7 +519,116 @@ class DailyReport extends Admin
 
         return $this->fetch();
     }
-    public function annualPlan(){
+    public function week(){
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            if ('' == $data['project_id']){
+                return $this->error('请选择项目');
+            }
+            if ($data['total'] > 100){
+                return $this->error('合计GL不能超过100斗');
+            }
+            $data['content'] = array_unique(array_filter($data['content']));
+            $data['plan'] = array_unique(array_filter($data['plan']));
+            // 验证
+            $result = $this->validate($data, 'DailyReport');
+            if ($result !== true) {
+                return $this->error($result);
+            }
+            if (empty($data['content'])){
+                return $this->error('具体事项不能为空');
+            }
+            unset($data['id']);
+
+            $send_user = html_entity_decode($data['send_user']);
+            $send_user1 = json_decode($send_user,true);
+            $send_user1 = array_values(array_unique($send_user1, SORT_REGULAR));
+            $send_user2 = [];
+            foreach ($send_user1 as $k=>$v) {
+                $send_user2 += $v;
+            }
+
+            $ins_data['project_id'] = $data['project_id'];
+//            $ins_data['plan'] = json_encode(array_values(array_filter($data['plan'])));
+            $ins_data['attachment'] = explode(',',$data['attachment']);
+            $ins_data['attachment'] = json_encode(array_values(array_filter($ins_data['attachment'])));
+            $ins_data['send_user'] = json_encode($send_user2);
+            $ins_data['copy_user'] = user_array($data['copy_user']);
+            $ins_data['cid'] = $data['cid']= session('admin_user.cid');
+            $ins_data['user_id'] = session('admin_user.uid');
+            $ins_data['total'] = $data['total'];
+            $ins_data['detail'] = $ins_data['p_detail'] = [];
+            // 验证
+            $result = $this->validate($data, 'DailyReport');
+            if($result !== true) {
+                return $this->error($result);
+            }
+
+            if ($data['content']) {
+                foreach ($data['content'] as $k => $v) {
+                    $ins_data['detail'][$k]['content'] = $v;
+                    $ins_data['detail'][$k]['ml'] = !empty($data['ml'][$k]) ? $data['ml'][$k] : 0;
+                    if ($ins_data['detail'][$k]['ml'] > 10){
+                        return $this->error('每项GL不能超过10斗');
+                    }
+                }
+            }
+            if ($data['plan']) {
+                foreach ($data['plan'] as $k => $v) {
+                    $ins_data['p_detail'][$k]['plan'] = $v;
+                    $ins_data['p_detail'][$k]['ml'] = !empty($data['p_ml'][$k]) ? $data['p_ml'][$k] : 0;
+                    if ($ins_data['p_detail'][$k]['ml'] > 10){
+                        return $this->error('每项GL不能超过10斗');
+                    }
+                }
+            }
+            $ins_data['detail'] = json_encode($ins_data['detail'],JSON_FORCE_OBJECT);
+            $ins_data['p_detail'] = json_encode($ins_data['p_detail'],JSON_FORCE_OBJECT);
+            $ins_data['d_type'] = 3;
+            $res = DailyReportModel::create($ins_data);
+            if ($res) {
+                return $this->success("操作成功", 'index');
+            } else {
+                return $this->error('添加失败！');
+            }
+        }
+
+        $p = $this->request->param();
+        if (!$p){
+            $p = [
+                'id' => 0,
+                'task_name' => '',
+            ];
+        }
+
+        $cid = session('admin_user.cid');
+        $redis = service('Redis');
+        $default_user = $redis->get("pm:user:{$cid}");
+        if ($default_user){
+            $user = json_decode($default_user);
+            $this->assign('data_info', (array)$user);
+        }
+
+        $where = [
+            'user_id'=>session('admin_user.uid'),
+        ];
+        $row = DailyReportModel::where($where)->order('id desc')->limit(1)->select();
+        if ($row){
+            $row1['plan'] = json_decode($row[0]['plan'],true);
+            $row1['create_time'] = explode(' ',$row[0]['create_time'])[0];
+        }else{
+            $row1 = [];
+        }
+        $this->assign('row', $row1);
+        $this->assign('p', $p);
+        $this->assign('work_option', WorkModel::getOption3());
+        $this->assign('leave_type', DailyReportModel::getOption());
+        if ($p['id']){
+            $this->assign('mytask', ProjectModel::getMyTask($p['id']));
+        }else{
+            $this->assign('mytask', ProjectModel::getMyTask(null));
+        }
+
         return $this->fetch();
     }
 

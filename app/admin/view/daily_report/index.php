@@ -23,6 +23,14 @@
                     <input id="real_name" type="hidden" name="real_name" value="{$Request.param.real_name}">
                     <input id="user_id" type="hidden" name="user_id" value="{$Request.param.user_id}">
                 </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">类型</label>
+                    <div class="layui-input-inline">
+                        <select name="d_type" class="field-d_type" type="select">
+                            {$report_type}
+                        </select>
+                    </div>
+                </div>
                 <input type="hidden" name="type" value="{$Request.param.type}">
                 <input type="hidden" name="atype" value="{$Request.param.atype}">
                 <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
@@ -42,6 +50,7 @@
         <tr>
             <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
             <th>名称</th>
+            <th>类型</th>
             <th>内容</th>
             <th>姓名</th>
             <th>汇报人</th>
@@ -60,6 +69,7 @@
             <td class="font12">
                 <a href="{:url('read',['id'=>$vo['id'],'atype'=>$atype])}"><strong class="mcolor">{$vo['project_name']}</strong></a>
             </td>
+            <td class="font12">{$vo['type_name']}</td>
             <td class="font12">
                 内容:
                 {volist name="vo['detail']" id="v"}

@@ -234,8 +234,12 @@ return [
 //            'href'=>'admin/DailyReport/add'
 //        ],
         2=>[
-            'title'=>'项目管理日报',
+            'title'=>'日报',
             'href'=>'admin/DailyReport/administration'
+        ],
+        3=>[
+            'title'=>'周报',
+            'href'=>'admin/DailyReport/week'
         ],
     ],
     'index_tab' => [

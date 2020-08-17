@@ -15,6 +15,7 @@ use app\admin\model\ShopOrder as OrderModel;
 use app\admin\model\AdminUser;
 use app\admin\model\AdminCompany;
 use Payment\Client;
+use PhpMyAdmin\Config\Forms\Page\ImportForm;
 use think\Db;
 use think\Url;
 
@@ -408,7 +409,13 @@ class Shop extends Admin
 
         $peizhi = config('alipay');
         $client = new Client(Client::ALIPAY, $peizhi);
-        $pay_url    = $client->pay(Client::ALI_CHANNEL_WEB, $payData);
+        $server_agent = $_SERVER['HTTP_USER_AGENT'];
+        if (stristr($server_agent,'mobile')){//手机wap端
+            $pay_url    = $client->pay(Client::ALI_CHANNEL_WAP, $payData);
+        }else{//PC端
+            $pay_url    = $client->pay(Client::ALI_CHANNEL_WEB, $payData);
+        }
+
         $up = [
             'channel'=>1,
             'pay_url'=>$pay_url,
