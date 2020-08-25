@@ -346,7 +346,7 @@ return [
         16=>'袋',
         17=>'车',
     ],
-    'bbs_url' => 'http://bbs.imlgl.com/?user-login.htm',
+    'bbs_url' => 'http://bbs.imlgl.cn/?user-login.htm',
     'partnership_grade' => [
         1=>'一级合伙',
         2=>'二级合伙',

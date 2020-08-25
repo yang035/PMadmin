@@ -211,7 +211,7 @@ class AdminUser extends Model
                 'other'=>json_encode($user),
             ];
             $bbs_token = curlInfo($url,$d);
-            setcookie("bbs_token", $bbs_token, time() + 8640000, "/", "imlgl.com");
+            setcookie("bbs_token", $bbs_token, time() + 8640000, "/", "imlgl.cn");
             $user->setInc('times');
 
             $u_login = [
