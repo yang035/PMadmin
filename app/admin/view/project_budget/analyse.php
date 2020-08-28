@@ -32,18 +32,24 @@
             }
             ,cols: [[ //表头
                 {type:'checkbox'}
-                ,{field: 'project_name', title: '项目'}
+                // ,{field: 'project_name', title: '项目'}
                 ,{field: 'name', title: '名称及规格'}
                 ,{field: 'yusuan_danjia', title: '预算单价(元)'}
-                ,{field: 'yusuan_shuliang', title: '预算数量'}
-                ,{field: 'unit',  title: '单位',width:60}
+                ,{field: 'yusuan_shuliang', title: '预算数量',templet:function (d) {
+                        return d.yusuan_shuliang+"("+d.unit+")";
+                    }}
+                // ,{field: 'unit',  title: '单位',width:60}
                 ,{field: 'yusuan_zongjia',  title: '预算总价(元)'}
                 ,{field: 'yusuan_fudong', title: '预算浮动比例%',width:130}
                 ,{field: 'caigou_danjia', title: '采购单价(元)',edit: 'text',style:'background-color: #eef1f5;'}
-                ,{field: 'caigou_shuliang', title: '采购数量',edit: 'text',style:'background-color: #eef1f5;'}
+                ,{field: 'caigou_shuliang', title: '采购数量',edit: 'text',style:'background-color: #eef1f5;',templet:function (d) {
+                        return d.caigou_shuliang+"("+d.unit+")";
+                    }}
                 ,{field: 'caigou_zongjia', title: '采购总价(元)',edit: 'text',style:'background-color: #eef1f5;'}
                 ,{field: 'jiesuan_danjia', title: '结算单价(元)',style:'background-color: #e6e6e6;'}
-                ,{field: 'jiesuan_shuliang', title: '结算数量',style:'background-color: #e6e6e6;'}
+                ,{field: 'jiesuan_shuliang', title: '结算数量',style:'background-color: #e6e6e6;',templet:function (d) {
+                        return d.jiesuan_shuliang+"("+d.unit+")";
+                    }}
                 ,{field: 'jiesuan_zongjia',  title: '结算总价(元)',style:'background-color: #e6e6e6;'}
                 ,{field: 'jiesuan_fudong', title: '结算浮动比例%',width:130,style:'background-color: #e6e6e6;'}
             ]]
