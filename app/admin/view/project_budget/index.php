@@ -30,7 +30,8 @@
 <!--        <a data-href="{:url('status?table=shopping_record&val=1')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-play" data-table="dataTable">&nbsp;启用</a>-->
 <!--        <a data-href="{:url('status?table=shopping_record&val=0')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-pause" data-table="dataTable">&nbsp;禁用</a>-->
 <!--        <a data-href="{:url('del')}" class="layui-btn layui-btn-primary j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>-->
-        <a href="javascript:import_excel();" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;导入</a>
+        <a href="javascript:import_excel();" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;预算导入</a>
+        <a href="javascript:import_excel1();" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;结算导入</a>
     </div>
 </div>
 <table id="dataTable" class="layui-table" lay-filter="table1"></table>
@@ -57,19 +58,65 @@
                 {type:'checkbox'}
                 ,{field: 'project_name', title: '项目'}
                 ,{field: 'name', title: '名称及规格'}
-                ,{field: 'unit',  title: '单位'}
-                ,{field: 'amount', title: '数量'}
-                ,{field: 'market_price', title: '市场价(元)'}
-                ,{field: 'total_price',  title: '合计(元)'}
-                ,{field: 'user_id',  title: '操作员'}
-                ,{field: 'create_time', title: '入库时间',width: 170}
+                ,{field: 'yusuan_danjia', title: '预算单价(元)'}
+                ,{field: 'yusuan_shuliang', title: '预算数量'}
+                ,{field: 'unit',  title: '单位',width:60}
+                ,{field: 'yusuan_zongjia',  title: '预算总价(元)'}
+                ,{field: 'yusuan_fudong', title: '预算浮动比例%',width:130}
+                ,{field: 'caigou_danjia', title: '采购单价(元)',edit: 'text',style:'background-color: #eef1f5;'}
+                ,{field: 'jiesuan_danjia', title: '结算单价(元)',style:'background-color: #e6e6e6;'}
+                ,{field: 'jiesuan_shuliang', title: '结算数量',style:'background-color: #e6e6e6;'}
+                ,{field: 'jiesuan_zongjia',  title: '结算总价(元)',style:'background-color: #e6e6e6;'}
+                ,{field: 'jiesuan_fudong', title: '结算浮动比例%',width:130,style:'background-color: #e6e6e6;'}
+                // ,{field: 'user_id',  title: '操作员'}
+                // ,{field: 'create_time', title: '入库时间',width: 170}
                 // ,{title: '操作', templet: '#buttonTpl'}
             ]]
+        });
+        //监听单元格编辑
+        table.on('edit(table1)', function(obj){
+            var value = obj.value //得到修改后的值
+                ,data = obj.data //得到所在行所有键值
+                ,field = obj.field; //得到字段
+            // layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+            var open_url = "{:url('setKV')}";
+            $.post(open_url, {
+                t:'project_budget',
+                id:data.id,
+                k:field,
+                v:value,
+            },function(res) {
+                if (res.code == 1) {
+                    layer.msg(res.msg);
+                    // location.reload();
+                }else {
+                    layer.msg(res.msg);
+                    // location.reload();
+                }
+            });
         });
     });
 
     function import_excel() {
         var open_url = "{:url('doimport')}";
+        if (open_url.indexOf('?') >= 0) {
+            open_url += '&hisi_iframe=yes';
+        } else {
+            open_url += '?hisi_iframe=yes';
+        }
+        layer.open({
+            type:2,
+            title :'导入',
+            maxmin: true,
+            area: ['800px', '500px'],
+            content: open_url,
+            success:function (layero, index) {
+            }
+        });
+    }
+
+    function import_excel1() {
+        var open_url = "{:url('jiesuanimport')}";
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {

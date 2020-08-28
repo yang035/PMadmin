@@ -55,7 +55,9 @@
             ,cols: [[ //表头
                 {type:'checkbox'}
                 ,{field: 'project_name', title: '项目'}
-                ,{field: 'total_price',  title: '合计(元)'}
+                ,{field: 'total_yusuan',  title: '预算总价(元)'}
+                ,{field: 'caigou_zongjia',  title: '采购总价(元)'}
+                ,{field: 'total_jiesuan',  title: '结算总价(元)'}
                 ,{title: '操作', templet: '#buttonTpl'}
             ]]
         });

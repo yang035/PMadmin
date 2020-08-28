@@ -31,6 +31,8 @@ use app\admin\model\Project as ProjectModel;
 use app\admin\model\ApprovalReport as ApprovalReportModel;
 use app\admin\model\ApprovalTixian as TixianModel;
 use app\admin\model\FondPool as FondPoolModel;
+use app\admin\model\ProjectBudget as BudgetModel;
+use app\admin\model\ProjectBudgetcaigou as BudgetcaigouModel;
 use think\Db;
 
 
@@ -1503,6 +1505,15 @@ class Approval extends Admin
         return $this->fetch();
     }
 
+    public function getBudget($project_id){
+        if (isset($project_id)){
+            $data = BudgetModel::getName(0,$project_id,true);
+            echo json_encode($data);
+        }else{
+            echo '';
+        }
+    }
+
     public function signBills()
     {
         if ($this->request->isPost()) {
@@ -1997,6 +2008,28 @@ class Approval extends Admin
                                 ];
                                 FondPoolModel::create($fond_data);
                             }
+
+                            if (16 == $data['class_type'] && 2 == $data['status']){
+                                $detail = json_decode($list['detail'], true);
+                                if ($detail){
+                                    $budgetcaigou = [];
+                                    foreach ($detail as $k=>$v){
+                                        $budgetcaigou[$k] = [
+                                            'cid' => session('admin_user.cid'),
+                                            'project_id' => $list['project_id'],
+                                            'name' => $v['content'],
+                                            'caigou_danjia' => $v['per_price'],
+                                            'caigou_shuliang' => $v['num'],
+                                            'caigou_zongjia' => round($v['per_price']*$v['num'],2),
+                                            'user' => $list['user_id'],
+                                            'user_id' => session('admin_user.uid'),
+                                            'create_time' => time(),
+                                            'update_time' => time(),
+                                        ];
+                                    }
+                                    \db('project_budgetcaigou')->insertAll($budgetcaigou);
+                                }
+                            }
                         }
                     }else{
                         ApprovalModel::update($ap);
@@ -2065,6 +2098,28 @@ class Approval extends Admin
                                 'user_id' => session('admin_user.uid'),
                             ];
                             FondPoolModel::create($fond_data);
+                        }
+
+                        if (16 == $data['class_type'] && 2 == $data['status']){
+                            $detail = json_decode($list['detail'], true);
+                            if ($detail){
+                                $budgetcaigou = [];
+                                foreach ($detail as $k=>$v){
+                                    $budgetcaigou[$k] = [
+                                        'cid' => session('admin_user.cid'),
+                                        'project_id' => $list['project_id'],
+                                        'name' => $v['content'],
+                                        'caigou_danjia' => $v['per_price'],
+                                        'caigou_shuliang' => $v['num'],
+                                        'caigou_zongjia' => round($v['per_price']*$v['num'],2),
+                                        'user' => $list['user_id'],
+                                        'user_id' => session('admin_user.uid'),
+                                        'create_time' => time(),
+                                        'update_time' => time(),
+                                    ];
+                                }
+                                \db('project_budgetcaigou')->insertAll($budgetcaigou);
+                            }
                         }
                     }
 

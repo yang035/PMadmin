@@ -17,7 +17,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">选择项目</label>
             <div class="layui-input-inline">
-                <select name="project_id" class="field-project_id" type="select" lay-filter="project_type" lay-search="">
+                <select name="project_id" id='project_id' class="field-project_id" type="select" lay-filter="project_type" lay-search="">
                     {$mytask}
                 </select>
             </div>
@@ -74,7 +74,12 @@
     <div class="layui-form-item">
         <label class="layui-form-label">内容</label>
         <div class="layui-input-inline" style="width: 200px">
-            <input type="text" class="layui-input field-content" name="content[]" autocomplete="off" placeholder="描述">
+<!--            <input type="text" class="layui-input field-content" name="content[]" autocomplete="off" placeholder="描述">-->
+                <div class="layui-form-select layui-form-selected searchDiv1">
+                    <div class="layui-select-title"><input type="text" placeholder="选择或输入" name="content[]" class="layui-input search_input1" id="search_input1"></div>
+                    <dl class="layui-anim layui-anim-upbit" style="display: none;">
+                    </dl>
+                </div>
         </div>
         <div class="layui-input-inline" style="width: 100px">
             <input type="number" class="layui-input field-num" name="num[]" onblur="amout_sum()" autocomplete="off" placeholder="计量">
@@ -85,7 +90,7 @@
             </select>
         </div>
         <div class="layui-input-inline" style="width: 100px">
-            <input type="number" class="layui-input field-per_price" name="per_price[]" onblur="amout_sum()" autocomplete="off" placeholder="单价">
+            <input type="number" class="layui-input field-per_price" name="per_price[]" onblur="amout_sum()" id="per_price1" autocomplete="off" placeholder="单价">
         </div>
         <div class="layui-form-mid" style="color: red">元</div>
     </div>
@@ -263,6 +268,25 @@
             $('input[name="expire_time"]').val(0);
         });
 
+        $(".search_input1").keyup(function(event){
+            $(".searchDiv1").find("dl.layui-anim").show();
+            if(''!=$(this).val().trim()){ //如果输入框的值没有改变就没必要发送ajax请求
+                //根据用户输入的内容发送ajax请求查询以此内容开头的商品简码，从而查出符合要求的商品名字
+                $.post("{:url('getBudget')}",{"project_id":$("#project_id").val()},function(data){
+                    if(!!data){
+                        //清除掉以前的值
+                        $(".searchDiv1 dl.layui-anim").html("");
+                        $.each($.parseJSON(data),function(index,item){
+                            // console.log(index);
+                            $(".searchDiv1").find("dl.layui-anim").append("<dd lay-value=\""+item.id +"\" onclick=\"changeSearchText(this,1,"+item.caigou_danjia+")\">"+item.name+"</dd>");
+                            $(".searchDiv1").find("dl.layui-anim").children("dd:first").addClass("layui-this");
+                        });
+                        //重新渲染select
+                        form.render('select');
+                    }
+                },'json')
+            }
+        });
         // form.on('select(project_type)', function(data){
         //     select_union(data.value);
         // });
@@ -306,12 +330,17 @@
                 }
             });
         });
-
+        // var i=1;
         $(".field-guige-add").click(function(){
+            i++;
             $(".new_task").before("<div class=\"layui-form-item\">\n" +
                 "        <label class=\"layui-form-label\">内容</label>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 200px\">\n" +
-                "            <input type=\"text\" class=\"layui-input field-content\" name=\"content[]\" autocomplete=\"off\" placeholder=\"描述\">\n" +
+                "            <div class='layui-form-select layui-form-selected searchDiv"+i+"'>\n" +
+                "                    <div class=\"layui-select-title\"><input type=\"text\" placeholder=\"选择或输入\" name=\"content[]\" class='layui-input search_input"+i+"' id='search_input"+i+"'></div>\n" +
+                "                    <dl class=\"layui-anim layui-anim-upbit\" style=\"display: none;\">\n" +
+                "                    </dl>\n" +
+                "                </div>\n" +
                 "        </div>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
                 "            <input type=\"number\" class=\"layui-input field-num\" name=\"num[]\" onblur=\"amout_sum()\" autocomplete=\"off\" placeholder=\"计量\">\n" +
@@ -322,11 +351,31 @@
                 "            </select>\n" +
                 "        </div>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
-                "            <input type=\"number\" class=\"layui-input field-per_price\" name=\"per_price[]\" onblur=\"amout_sum()\" autocomplete=\"off\" placeholder=\"单价\">\n" +
+                "            <input type=\"number\" class=\"layui-input field-per_price\" name=\"per_price[]\" onblur=\"amout_sum()\" id='per_price"+i+"' autocomplete=\"off\" placeholder=\"单价\">\n" +
                 "        </div>\n" +
                 "        <div class=\"layui-form-mid\" style=\"color: red\">元</div>\n" +
                 "    </div>");
             form.render();
+
+            $(".search_input"+i).keyup(function(event){
+                $(".searchDiv"+i).find("dl.layui-anim").show();
+                if(''!=$(this).val().trim()){ //如果输入框的值没有改变就没必要发送ajax请求
+                    //根据用户输入的内容发送ajax请求查询以此内容开头的商品简码，从而查出符合要求的商品名字
+                    $.post("{:url('getBudget')}",{"project_id":$("#project_id").val()},function(data){
+                        if(!!data){
+                            //清除掉以前的值
+                            $(".searchDiv"+i+" dl.layui-anim").html("");
+                            $.each($.parseJSON(data),function(index,item){
+                                // console.log(index);
+                                $(".searchDiv"+i).find("dl.layui-anim").append("<dd lay-value=\""+item.id +"\" onclick=\"changeSearchText(this,i,"+item.caigou_danjia+")\">"+item.name+"</dd>");
+                                $(".searchDiv"+i).find("dl.layui-anim").children("dd:first").addClass("layui-this");
+                            });
+                            //重新渲染select
+                            form.render('select');
+                        }
+                    },'json');
+                }
+            });
         });
 
         //创建监听函数
@@ -423,6 +472,16 @@
         });
         form.render();
     });
+
+    function changeSearchText(obj,i,caigou_danjia){
+        $("#search_input"+i).val(obj.innerHTML);
+        $("#per_price"+i).val(caigou_danjia);
+        $(".searchDiv"+i).find("dl.layui-anim").hide();
+    }
+    
+    function dealHide(i) {
+        $(".searchDiv"+i).find("dl.layui-anim").hide();
+    }
 
     new SelectBox($('.box1'),{$project_select},function(result){
         if ('' != result.id){
