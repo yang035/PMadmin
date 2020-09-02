@@ -121,6 +121,11 @@
                     <a class="layui-btn layui-btn-normal layui-btn-xs">出差报告</a>
                 </div>
                 {/if}
+                {if condition="$vo['class_type'] eq 18 "}
+                <div class="layui-btn-group" onclick="certificate({$vo['id']})">
+                    <a class="layui-btn layui-btn-normal layui-btn-xs">离职证明</a>
+                </div>
+                {/if}
             </td>
         </tr>
         {/volist}
@@ -195,6 +200,11 @@
 
     function approval_report(id,atype,class_type,cls_name){
         var open_url = "{:url('Approval/read')}?id="+id+"&atype="+atype+"&class_type="+class_type;
+        window.location.href = open_url;
+    }
+
+    function certificate(id){
+        var open_url = "{:url('Approval/certificate')}?id="+id;
         window.location.href = open_url;
     }
 

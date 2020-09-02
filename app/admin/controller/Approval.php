@@ -27,12 +27,14 @@ use app\admin\model\AdminUser;
 use app\admin\model\AssetItem as ItemModel;
 use app\admin\model\ApprovalGoods;
 use app\admin\model\ApprovalPrint;
+use app\admin\model\JobItem;
 use app\admin\model\Project as ProjectModel;
 use app\admin\model\ApprovalReport as ApprovalReportModel;
 use app\admin\model\ApprovalTixian as TixianModel;
 use app\admin\model\FondPool as FondPoolModel;
 use app\admin\model\ProjectBudget as BudgetModel;
 use app\admin\model\ProjectBudgetcaigou as BudgetcaigouModel;
+use app\admin\model\ApprovalLeaveoffice as LeaveofficeModel;
 use think\Db;
 
 
@@ -88,7 +90,7 @@ class Approval extends Admin
         $redis = service('Redis');
         $default_user = $redis->get("pm:user:{$cid}");
         if ($default_user) {
-            $user = json_decode($default_user);
+            $user = json_decode($default_user,true);
             $this->assign('data_info', (array)$user);
         }
         $this->assign('project_select', ProjectModel::inputSearchProject());
@@ -1691,6 +1693,85 @@ class Approval extends Admin
         return $this->fetch();
     }
 
+    public function leaveOffice()
+    {
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            // 验证
+            $result = $this->validate($data, 'ApprovalLeaveoffice');
+            if ($result !== true) {
+                return $this->error($result);
+            }
+            unset($data['id']);
+
+            $send_user = html_entity_decode($data['send_user']);
+            $send_user1 = json_decode($send_user,true);
+            $start_time = $data['start_time'] . ' ' . $data['start_time1'];
+            $end_time = $data['end_time'] . ' ' . $data['end_time1'];
+//            $send_user1 = array_values(array_unique($send_user1, SORT_REGULAR));
+            $send_user1 = array_values($send_user1);
+//            if ((strtotime($end_time) - strtotime($start_time) <= 24*3600) && count($send_user1) > 2){
+//                array_pop($send_user1);
+//            }
+            $send_user2 = [];
+            foreach ($send_user1 as $k=>$v) {
+                $send_user2 += $v;
+            }
+
+            // 启动事务
+            Db::startTrans();
+            try {
+                $approve = [
+                    'project_id' => 0,
+                    'class_type' => $data['class_type'],
+                    'cid' => session('admin_user.cid'),
+                    'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
+                    'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
+                    'time_long' => $data['time_long'],
+                    'user_id' => session('admin_user.uid'),
+                    'send_user' => json_encode($send_user2),
+                    'copy_user' => user_array($data['copy_user']),
+                ];
+
+                $res = ApprovalModel::create($approve);
+
+                $su = [];
+                foreach ($send_user1 as $k=>$v) {
+                    $su[$k] = [
+                        'aid' => $res['id'],
+                        'flow_num' => $k,
+                        'send_user' => json_encode($v),
+                    ];
+                }
+                $send_user_model = new ApprovalSenduser();
+                $send_user_model->saveAll($su);
+
+                $leave = [
+                    'aid' => $res['id'],
+                    'reason' => $data['reason'],
+                    'attachment' => $data['attachment'],
+                ];
+                $flag = LeaveofficeModel::create($leave);
+                // 提交事务
+                Db::commit();
+            } catch (\Exception $e) {
+                // 回滚事务
+                Db::rollback();
+            }
+            if ($flag) {
+                return $this->success("操作成功{$this->score_value}", 'index');
+            } else {
+                return $this->error('添加失败！');
+            }
+        }
+
+        $chain_user = $this->getFlowUser2();
+        $this->assign('chain_user', $chain_user);
+        $this->assign('send_user', htmlspecialchars($chain_user['manager_user']));
+        $this->assign('leave_type', LeaveModel::getOption());
+        return $this->fetch();
+    }
+
     public function read()
     {
         $params = $this->request->param();
@@ -1759,6 +1840,10 @@ class Approval extends Admin
             case 17:
                 $table = 'tb_approval_tixian';
                 $f = 'b.money,b.reason,b.attachment';
+                break;
+            case 18:
+                $table = 'tb_approval_leaveoffice';
+                $f = 'b.reason,b.attachment';
                 break;
             default:
                 $table = 'tb_approval_leave';
@@ -2511,6 +2596,42 @@ class Approval extends Admin
         $this->assign('pages', $pages);
         $this->assign('d', $d);
         $this->assign('panel_type', $panel_type);
+        return $this->fetch();
+    }
+
+    public function certificate()
+    {
+        $params = $this->request->param();
+
+        $table = 'tb_approval_leaveoffice';
+        $f = 'b.reason,b.attachment';
+        $map = [
+            'a.id' => $params['id']
+        ];
+        $fields = 'a.*,' . $f;
+        $list = db('approval')->alias('a')->field($fields)
+            ->join("{$table} b", 'a.id = b.aid', 'left')
+            ->where($map)->find();
+        if (isset($params['end_date'])){
+            db('user_info')->where('user_id',$list['user_id'])->update(['end_date'=>$params['end_date']]);
+        }
+
+        $data = [];
+        if ($list){
+            $data = db('admin_user')->alias('a')->field('a.id,a.realname,a.job_item,b.idcard,b.start_date,b.end_date')
+                ->join("tb_user_info b", 'a.id = b.user_id', 'left')
+                ->where('a.id',$list['user_id'])->find();
+            if (strtotime($data['start_date']) > strtotime($data['end_date'])){
+                $this->assign('data_info',$data);
+                return $this->fetch('step1');
+            }
+            $job = JobItem::getItem();
+            $data['job_name'] = isset($job[$data['job_item']]) ? $job[$data['job_item']] : '无';
+        }
+
+        $qcode_url = $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+        $this->assign('qcode_png',scerweima1($qcode_url));
+        $this->assign('data_info',$data);
         return $this->fetch();
     }
 

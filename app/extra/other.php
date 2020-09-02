@@ -221,6 +221,10 @@ return [
             'title'=>'提现',
             'href'=>'admin/Approval/tixian'
         ],
+        18=>[
+            'title'=>'其他',
+            'href'=>'admin/Approval/leaveOffice'
+        ],
     ],
     'car_type' => [
         1 =>'车辆1',

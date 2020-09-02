@@ -32,10 +32,14 @@
         border-radius: 2px;
         cursor: pointer;
     }
+    img {
+        cursor: pointer;
+    }
 </style>
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-card">
-        <div class="layui-card-body">
+        <div style="text-align:right;"><img src="__ADMIN_IMG__/print1.jpg" style="width: 40px;height: 40px;" id="btnPrint" title="打印"></div>
+        <div class="layui-card-body" id="printArea">
             {if condition="$class_type eq 2 && $list1"}
             {eq name="ct" value='4'}
             <blockquote class="layui-elem-quote" style="color: grey">
@@ -575,6 +579,7 @@
 {include file="block/layui" /}
 <script src="__ADMIN_JS__/pictureViewer/js/pictureViewer.js"></script>
 <script src="__ADMIN_JS__/pictureViewer/js/jquery.mousewheel.min.js"></script>
+<script src="__PUBLIC_JS__/jquery.PrintArea.min.js"></script>
 <script>
     var formData = {:json_encode($data_info)};
 
@@ -858,6 +863,10 @@
             }
         });
     }
+
+    $("#btnPrint").click(function() {
+        $("#printArea").printArea();
+    });
 
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>

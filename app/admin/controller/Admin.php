@@ -324,6 +324,33 @@ class Admin extends Controller
         return $row;
     }
 
+    public function getFlowUser2(){
+        $chain_arr = AdminDepartment::getChainUser();
+        $chain_sub = array_slice($chain_arr,0,2);
+
+        $cid = session('admin_user.cid');
+        $redis = service('Redis');
+        $default_user = $redis->get("pm:user:{$cid}");
+        if ($default_user) {
+            $user = json_decode($default_user,true);
+            $user_insert = [0=>[$user['hr_user']=>$user['hr_user_id']]];
+        }
+        array_splice($chain_sub,1,0,$user_insert);
+
+        $new_arr = array_filter($chain_sub);
+        $new_arr = array_reverse($new_arr);
+        $row['manager_user'] = user_array2($new_arr);
+        $s = '';
+        if ($new_arr){
+            foreach ($new_arr as $k=>$v) {
+                $k++;
+                $s .= "[{$k}]".implode(',',$v).' ';
+            }
+        }
+        $row['manager_user_id'] = $s;
+        return $row;
+    }
+
     public function deal_data($x_user)
     {
         $x_user_arr = json_decode($x_user, true);
