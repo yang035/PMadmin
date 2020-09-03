@@ -79,6 +79,15 @@ class JobItem extends Model
         return $data;
     }
 
+    public static function getItem1()
+    {
+        $map = [
+            'status'=>1,
+        ];
+        $data = self::where($map)->column('name','id');
+        return $data;
+    }
+
     public function del($id){
         if (is_array($id)) {
             $error = '';

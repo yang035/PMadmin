@@ -2625,7 +2625,7 @@ class Approval extends Admin
                 $this->assign('data_info',$data);
                 return $this->fetch('step1');
             }
-            $job = JobItem::getItem();
+            $job = JobItem::getItem1();
             $data['job_name'] = isset($job[$data['job_item']]) ? $job[$data['job_item']] : '无';
         }
 

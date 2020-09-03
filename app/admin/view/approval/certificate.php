@@ -12,7 +12,7 @@
 
                                员工离职证明
 
-        {$data_info['realname']} 同志于 {$data_info['start_date']} 至 {$data_info['end_date']} 在我们公司从事 {$data_info['job_name']} 工作。因个人原因提出离职，现已完备离职手续，与我公司解除劳动关系。
+        {$data_info['realname']} 同志于 {$data_info['start_date']} 至 {$data_info['end_date']} 在我们公司从事 {$data_info['job_name']} 工作。因个人原因提出离职，现已完备离职手续，即日起与我公司解除劳动关系。
         特此证明。
 
 
