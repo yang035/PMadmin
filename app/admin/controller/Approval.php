@@ -2604,7 +2604,7 @@ class Approval extends Admin
         $params = $this->request->param();
 
         $table = 'tb_approval_leaveoffice';
-        $f = 'b.reason,b.attachment';
+        $f = 'b.reason,b.attachment,b.qrcode_url';
         $map = [
             'a.id' => $params['id']
         ];
@@ -2627,10 +2627,20 @@ class Approval extends Admin
             }
             $job = JobItem::getItem1();
             $data['job_name'] = isset($job[$data['job_item']]) ? $job[$data['job_item']] : '无';
-        }
 
-        $qcode_url = $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-        $this->assign('qcode_png',scerweima1($qcode_url));
+            $fields = "COUNT(DISTINCT subject_id) as num,SUM(ml_add_score) AS ml_add_sum,SUM(gl_add_score) AS gl_add_sum";
+            $score = \app\admin\model\Score::field($fields)->where('user',$list['user_id'])->find();
+            $this->assign('score',$score);
+
+            if ($list['qrcode_url']){
+                $qcode_url = $list['qrcode_url'];
+            }else{
+                $url = $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+                $qcode_url = scerweima1($url);
+                LeaveofficeModel::where('aid',$list['id'])->update(['qrcode_url'=>$qcode_url]);
+            }
+        }
+        $this->assign('qcode_png',$qcode_url);
         $this->assign('data_info',$data);
         return $this->fetch();
     }
