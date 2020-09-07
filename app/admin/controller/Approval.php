@@ -731,6 +731,9 @@ class Approval extends Admin
                     'reason' => $data['reason'],
                     'attachment' => $data['attachment'],
                     'money' => $data['money'],
+                    'payee' => $data['payee'],
+                    'bank' => $data['bank'],
+                    'card_num' => $data['card_num'],
                 ];
                 $flag = CostModel::create($leave);
                 // 提交事务
@@ -1787,7 +1790,7 @@ class Approval extends Admin
                 break;
             case 3:
                 $table = 'tb_approval_cost';
-                $f = 'b.type,b.reason,b.money,b.attachment';
+                $f = 'b.type,b.reason,b.money,b.attachment,b.payee,b.bank,b.card_num';
                 break;
             case 4:
                 $table = 'tb_approval_business';

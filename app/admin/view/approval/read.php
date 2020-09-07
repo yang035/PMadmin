@@ -192,6 +192,9 @@
                 {case value="3"}
                 费用类型：{$expense_type[$data_list['type']]}<br>
                 金额：{$data_list['money']}<br>
+                收款单位：{$data_list['payee']}<br>
+                开户银行：{$data_list['bank']}<br>
+                开户账号：{$data_list['card_num']}<br>
                 {/case}
                 {case value="4"}
                 地点：{$data_list['address']}<br>

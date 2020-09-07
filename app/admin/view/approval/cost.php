@@ -40,7 +40,7 @@
             </select>
         </div>
     </div>
-    <div class="layui-form-item">
+    <div class="layui-form-item hide">
         <label class="layui-form-label">开始时间</label>
         <div class="layui-input-inline" style="width: 250px">
             <input type="text" class="layui-input field-start_time" name="start_time" lay-verify="required" autocomplete="off" readonly placeholder="选择开始时间">
@@ -50,7 +50,7 @@
         </div>
         <div class="layui-form-mid" style="color: red">*</div>
     </div>
-    <div class="layui-form-item">
+    <div class="layui-form-item hide">
         <label class="layui-form-label">结束时间</label>
         <div class="layui-input-inline" style="width: 250px">
             <input type="text" class="layui-input field-end_time" name="end_time" lay-verify="required" autocomplete="off" readonly placeholder="选择结束时间">
@@ -60,7 +60,7 @@
         </div>
         <div class="layui-form-mid" style="color: red">*</div>
     </div>
-    <div class="layui-form-item">
+    <div class="layui-form-item hide">
         <label class="layui-form-label">历时</label>
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-time_long" readonly name="time_long" autocomplete="off">
@@ -81,7 +81,27 @@
         <div class="layui-form-mid">元</div>
         <div class="layui-form-mid" style="color: red">*</div>
     </div>
-
+    <div class="layui-form-item">
+        <label class="layui-form-label">收款单位</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-payee" lay-verify="required" name="payee" autocomplete="off" placeholder="请输入收款单位">
+        </div>
+        <div class="layui-form-mid" style="color: red">*</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">开户银行</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-bank" lay-verify="required" name="bank" autocomplete="off" placeholder="请输入开户银行">
+        </div>
+        <div class="layui-form-mid" style="color: red">*(精确到支行)</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">开户账号</label>
+        <div class="layui-input-inline">
+            <input type="number" class="layui-input field-card_num" lay-verify="required" name="card_num" autocomplete="off" placeholder="请输入开户账号">
+        </div>
+        <div class="layui-form-mid" style="color: red">*</div>
+    </div>
     <div class="layui-form-item">
         <label class="layui-form-label">附件说明</label>
         <div class="layui-input-inline" style="width: 500px">
