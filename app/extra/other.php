@@ -222,7 +222,7 @@ return [
             'href'=>'admin/Approval/tixian'
         ],
         18=>[
-            'title'=>'其他',
+            'title'=>'推荐信',
             'href'=>'admin/Approval/leaveOffice'
         ],
     ],

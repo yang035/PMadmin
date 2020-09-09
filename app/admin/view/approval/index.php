@@ -123,7 +123,7 @@
                 {/if}
                 {if condition="($vo['class_type'] eq 18) && ($vo['status'] eq 2)"}
                 <div class="layui-btn-group" onclick="certificate({$vo['id']})">
-                    <a class="layui-btn layui-btn-normal layui-btn-xs">离职证明</a>
+                    <a class="layui-btn layui-btn-normal layui-btn-xs">推荐信</a>
                 </div>
                 {/if}
             </td>

@@ -10,10 +10,13 @@
             <pre style="font-size:larger">
 
 
-                               员工离职推荐信
+                                           推  荐  信
 
-        {$data_info['realname']} 同志于 {$data_info['start_date']} 至 {$data_info['end_date']} 在我们公司从事 {$data_info['job_name']} 工作。因个人原因提出离职，现已完备离职手续，即日起与我公司解除劳动关系。
-        特此证明。
+
+                 诚以养德，信以立身；
+
+
+                          倾情力荐，详情扫现。
 
 
 
@@ -22,14 +25,17 @@
                                                              年    月    日
 
 
-        请扫描二维码查看具体内容（需要注册和登录系统）
-        <img src="/{$qcode_png}" style="height: 100px;width: 100px">
+<!--        请扫描二维码查看具体内容（需要注册和登录系统）-->
+        <img src="/{$qcode_png}" style="height: 200px;width: 200px">
             </pre>
 
         </div>
         <div><button id="btnPrint" type="button" class="layui-btn layui-btn-normal">打印</button></div>
         <div>
             <pre style="font-size:larger">
+                {$data_info['realname']} 同志于 {$data_info['start_date']} 至 {$data_info['end_date']} 在我们公司从事 {$data_info['job_name']} 工作。因个人原因提出离职，现已完备离职手续，
+            即日起与我公司解除劳动关系。特此证明。
+
             在职期间工作情况如下：
             参与项目： {$score['num']} 个
             获得ML： {$score['ml_add_sum']} 斗

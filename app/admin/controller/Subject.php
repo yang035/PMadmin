@@ -18,6 +18,7 @@ use app\admin\model\Partner as PartnerModel;
 use app\admin\model\Partnership as Partnership;
 use app\admin\model\FlowItem as FlowModel;
 use app\admin\model\SubjectFlow as SubjectFlowModel;
+use app\admin\model\SubjectMaterial as MaterialModel;
 use app\admin\model\ProfessionalItem as ProfessionalItem;
 use app\admin\model\Xieyi as Xieyi;
 use app\admin\model\ProcessItem as ProcessItem;
@@ -211,6 +212,110 @@ class Subject extends Admin
 //        $this->assign('tab_type', 1);
         $this->assign('cat_option', ItemModel::getOption());
         $this->assign('s_status', ItemModel::getSStatus());
+        return $this->fetch();
+    }
+
+    public function material($q = '')
+    {
+        if ($this->request->isAjax()) {
+            $where = $data = [];
+            $page = input('param.page/d', 1);
+            $limit = input('param.limit/d', 20);
+
+//            $cat_id = input('param.cat_id/d');
+//            if ($cat_id) {
+//                $where['cat_id'] = $cat_id;
+//            }
+            $where['cat_id'] = 19;
+            $name = input('param.name');
+            if ($name) {
+                $where['name'] = ['like', "%{$name}%"];
+            }
+            $s_status = input('param.s_status/d');
+            if ($s_status) {
+                $where['s_status'] = $s_status;
+            }
+            $p_status = config('other.s_status');
+            $where['cid'] = session('admin_user.cid');
+            $order = 'status desc,id desc';
+            $data['data'] = ItemModel::with('cat')->where($where)->page($page)->order($order)->limit($limit)->select();
+//            $carType = config('other.car_color');
+            if ($data['data']){
+                $begin_date = date('Y-m-01').' 00:00:00';
+                $end_date = date('Y-m-d', strtotime("{$begin_date} +1 month -1 day")).' 23:59:59';
+                $w = [
+                    'cid'=>session('admin_user.cid'),
+                    'update_time'=>['between',[strtotime($begin_date),strtotime($end_date)]],
+                ];
+                $subject_id_arr = SubjectFlowModel::where($w)->column('step','subject_id');
+                if (!$subject_id_arr){
+                    $subject_id_arr = [];
+                }
+
+                $s = \app\admin\model\Project::getColumn1('subject_id');
+                $p = array_flip($s);
+                foreach ($data['data'] as $k=>$v){
+                    $v['s_status'] = $p_status[$v['s_status']];
+                    $v['leader_user'] = $this->deal_data($v['leader_user']);
+                    $v['project_id'] = $p[$v['id']];
+                    if (key_exists($v['id'],$subject_id_arr)){
+                        $v['step'] = $subject_id_arr[$v['id']];
+                    }else{
+                        $v['step'] = 0;
+                    }
+                }
+            }
+            $data['count'] = ItemModel::where($where)->count('id');
+            $data['code'] = 0;
+            $data['msg'] = '';
+            return json($data);
+        }
+
+        // 分页
+        $tab_data = $this->tab_data;
+        $tab_data['current'] = url('');
+
+//        $this->assign('tab_data', $tab_data);
+//        $this->assign('tab_type', 1);
+        $this->assign('cat_option', ItemModel::getOption());
+        $this->assign('s_status', ItemModel::getSStatus());
+        return $this->fetch();
+    }
+
+    public function materialList(){
+        $param = $this->request->param();
+        $where = [
+            'cid'=>session('admin_user.cid'),
+            'subject_id'=>$param['id'],
+        ];
+        $data_info = MaterialModel::where($where)->select();
+        $this->assign('data_info',$data_info);
+        return $this->fetch();
+    }
+
+    public function addMaterial(){
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
+            if (empty($data['remark']) && empty($data['attachment'])){
+                return $this->error('描述和附件不能都为空');
+            }
+            $where = [
+                'cid'=>$data['cid'],
+                'remark'=>$data['remark'],
+                'attachment'=>$data['attachment'],
+            ];
+            $flag = MaterialModel::where($where)->find();
+            if ($flag){
+                return $this->error('不能重复提交');
+            }
+            // 验证
+            if (!MaterialModel::create($data)) {
+                return $this->error('提交失败');
+            }
+            return $this->success("操作成功{$this->score_value}");
+        }
         return $this->fetch();
     }
 
