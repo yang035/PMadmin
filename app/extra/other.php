@@ -349,6 +349,7 @@ return [
         15=>'公斤',
         16=>'袋',
         17=>'车',
+        18=>'块',
     ],
     'bbs_url' => 'http://bbs.imlgl.cn/?user-login.htm',
     'partnership_grade' => [
