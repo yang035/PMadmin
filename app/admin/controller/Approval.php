@@ -2634,7 +2634,7 @@ class Approval extends Admin
             $fields = "COUNT(DISTINCT subject_id) as num,SUM(ml_add_score) AS ml_add_sum,SUM(gl_add_score) AS gl_add_sum";
             $score = \app\admin\model\Score::field($fields)->where('user',$list['user_id'])->find();
             $this->assign('score',$score);
-
+print_r($list);
             if ($list['qrcode_url']){
                 $qcode_url = $list['qrcode_url'];
             }else{
