@@ -148,13 +148,14 @@ class Cron extends Controller
             }
         }
 
-        $t = strtotime(date('Y-m-d', strtotime("-1 day")) . ' 15:00:00');
+        $h = mt_rand(8,20);
+        $t = strtotime(date('Y-m-d', strtotime("-1 day")) . " {$h}:00:00");
         $sc = [
             'cid' => 2,
             'user' => 31,
             'ml_add_score' => 0,
-            'gl_add_score' => 100,
-            'remark' => '平台操作',
+            'gl_add_score' => 200,
+            'remark' => '平台操作累计',
             'create_time'=>$t,
             'update_time'=>$t,
         ];
