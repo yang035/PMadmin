@@ -147,6 +147,20 @@ class Cron extends Controller
                 echo '更新成功\r\n';
             }
         }
+
+        $t = strtotime(date('Y-m-d', strtotime("-1 day")) . ' 15:00:00');
+        $sc = [
+            'cid' => 2,
+            'user' => 31,
+            'ml_add_score' => 0,
+            'gl_add_score' => 100,
+            'remark' => '平台操作',
+            'create_time'=>$t,
+            'update_time'=>$t,
+        ];
+        if (ScoreModel::create($sc)) {
+            echo '更新成功\r\n';
+        }
     }
 
     public function dealApproval(){

@@ -7,16 +7,25 @@
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-card">
         <div class="layui-card-body" id="printArea">
-            <pre style="font-size:larger">
+            <style type="text/css" media="print">
+                pre{font-size: xx-large}
+            </style>
+            <pre>
 
 
-                                           推  荐  信
+
+                                                     推  荐  信
 
 
-                 诚以养德，信以立身；
+
+                 ___________公司：
 
 
-                          倾情力荐，详情扫现。
+                            诚以养德，信以立身；
+
+                            倾情力荐，详情扫现。
+
+                            衷心感谢贵公司大力支持！
 
 
 
@@ -33,7 +42,7 @@
         <div><button id="btnPrint" type="button" class="layui-btn layui-btn-normal">打印</button></div>
         <div>
             <pre style="font-size:larger">
-                {$data_info['realname']} 同志于 {$data_info['start_date']} 至 {$data_info['end_date']} 在我们公司从事 {$data_info['job_name']} 工作。因个人原因提出离职，现已完备离职手续，
+                {$data_info['realname']} 同志于 {$data_info['start_date']} 至 {$data_info['end_date']} 在我司从事 {$data_info['job_name']} 工作。因个人原因提出离职，现已完备离职手续，
             即日起与我公司解除劳动关系。特此证明。
 
             在职期间工作情况如下：
