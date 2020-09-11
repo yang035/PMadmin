@@ -89,7 +89,8 @@ class ReportReply extends Admin
                     }
                     $real_score = $row['real_score'] + $per_score;
                     $tmp = [
-                        'realper' => $row['realper'] + round($row_report['per']*$data['realper']/100,2),
+//                        'realper' => $row['realper'] + round($row_report['per']*$data['realper']/100,2),
+                        'realper'=>$data['realper'],
                         'real_score' => $real_score,
                     ];
                     Project::where('id',$data['project_id'])->update($tmp);

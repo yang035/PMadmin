@@ -21,7 +21,7 @@ class ProjectReport extends Admin
         return $list;
     }
 
-    public function add(){
+    public function add20200911(){
         if ($this->request->isPost()){
             $data = $this->request->post();
 
@@ -78,7 +78,7 @@ class ProjectReport extends Admin
         }
     }
 
-    public function add20191127(){
+    public function add(){
         if ($this->request->isPost()){
             $data = $this->request->post();
 

@@ -245,9 +245,9 @@ class Project extends Admin
                         $list[$kk]['project_name'] = $vv['name'];
                     }
 
-//                    $report = ProjectReport::getAll(5, $vv['id']);
-                    $subQuery = "SELECT * FROM (SELECT *,FROM_UNIXTIME(create_time,\"%Y-%m-%d\") AS t FROM tb_project_report WHERE  project_id={$vv['id']} AND cid={$cid} ORDER BY id DESC LIMIT 100) r GROUP BY r.t ORDER BY id DESC";
-                    $report = Db::query($subQuery);
+                    $report = ProjectReport::getAll(5, $vv['id']);
+//                    $subQuery = "SELECT * FROM (SELECT *,FROM_UNIXTIME(create_time,\"%Y-%m-%d\") AS t FROM tb_project_report WHERE  project_id={$vv['id']} AND cid={$cid} ORDER BY id DESC LIMIT 100) r GROUP BY r.t ORDER BY id DESC";
+//                    $report = Db::query($subQuery);
 
                     if ($report) {
                         foreach ($report as $k => $v) {
@@ -265,10 +265,9 @@ class Project extends Admin
                                 }
                                 $report[$k]['attachment'] = $tmp;
                             }
-                            $report[$k]['create_time'] = date('Y-m-d H:i:s',$v['create_time']);
                             $report_user = AdminUser::getUserById($v['user_id'])['realname'];
                             $report[$k]['real_name'] = !empty($report_user) ? $report_user : '';
-//                            $report[$k]['check_catname'] = ItemModel::getCat()[$v['check_cat']];
+                            $report[$k]['check_catname'] = ItemModel::getCat()[$v['check_cat']];
                             if (empty($row['child'])) {
                                 $report[$k]['reply'] = ReportReply::getAll($v['id'], 5, 2);
                             } else {
@@ -581,9 +580,9 @@ class Project extends Admin
                     $list[$kk]['project_name'] = $vv['name'];
                 }
 
-//                $report = ProjectReport::getAll(5,$vv['id']);
-                $subQuery = "SELECT * FROM (SELECT *,FROM_UNIXTIME(create_time,\"%Y-%m-%d\") AS t FROM tb_project_report WHERE  project_id={$vv['id']} AND cid={$cid} ORDER BY id DESC LIMIT 100) r GROUP BY r.t ORDER BY id DESC";
-                $report = Db::query($subQuery);
+                $report = ProjectReport::getAll(5,$vv['id']);
+//                $subQuery = "SELECT * FROM (SELECT *,FROM_UNIXTIME(create_time,\"%Y-%m-%d\") AS t FROM tb_project_report WHERE  project_id={$vv['id']} AND cid={$cid} ORDER BY id DESC LIMIT 100) r GROUP BY r.t ORDER BY id DESC";
+//                $report = Db::query($subQuery);
 
                 if ($report) {
                     foreach ($report as $k => $v) {
@@ -601,25 +600,24 @@ class Project extends Admin
                             }
                             $report[$k]['attachment'] = $tmp;
                         }
-                        $report[$k]['create_time'] = date('Y-m-d H:i:s',$v['create_time']);
                         $report_user = AdminUser::getUserById($v['user_id'])['realname'];
                         $report[$k]['real_name'] = !empty($report_user) ? $report_user : '';
-//                        $report[$k]['check_catname'] = ItemModel::getCat()[$v['check_cat']];
-                        if (empty($row['child'])){
-                            $report[$k]['reply'] = ReportReply::getAll($v['id'], 5,2);
-                        }else{
+                        $report[$k]['check_catname'] = ItemModel::getCat()[$v['check_cat']];
+                        if (empty($row['child'])) {
+                            $report[$k]['reply'] = ReportReply::getAll($v['id'], 5, 2);
+                        } else {
                             $reply = ReportCheck::getAll($v['id'], 1);
-                            if ($reply){
-                                foreach ($reply as $key=>$val){
+                            if ($reply) {
+                                foreach ($reply as $key => $val) {
                                     $content = json_decode($val['content'], true);
-                                    if ($content){
-                                        foreach ($content as $kk=>$vv){
+                                    if ($content) {
+                                        foreach ($content as $kk => $vv) {
                                             $content[$kk]['flag'] = $vv['flag'] ? '有' : '无';
                                             $content[$kk]['person_user'] = $this->deal_data(user_array($vv['person_user']));
-                                            if (!isset($vv['isfinish'])){
+                                            if (!isset($vv['isfinish'])) {
                                                 $content[$kk]['isfinish'] = 0;
                                             }
-                                            if (!isset($vv['remark'])){
+                                            if (!isset($vv['remark'])) {
                                                 $content[$kk]['remark'] = '';
                                             }
                                         }
@@ -2258,6 +2256,166 @@ class Project extends Admin
     }
 
     public function editTask()
+    {
+        $params = $this->request->param();
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+
+            if (!ProjectModel::update($data)) {
+                return $this->error('修改失败！');
+            }
+            return $this->success('修改成功。', url('index'));
+        }
+        $cid = session('admin_user.cid');
+        $uid = session('admin_user.uid');
+        $map['cid'] = $cid;
+        $map['id'] = $params['id'];
+        $field = "*,JSON_EXTRACT(manager_user,'$.\"{$uid}\"') m_res,JSON_EXTRACT(send_user,'$.\"{$uid}\"') s_res,JSON_EXTRACT(deal_user,'$.\"{$uid}\"') d_res,JSON_EXTRACT(copy_user,'$.\"{$uid}\"') c_res";
+        $row = ProjectModel::field($field)->where($map)->find()->toArray();
+
+//        $time = ' 00:00:00';
+//        $start_time = strtotime(explode(' ',$row['start_time'])[0].$time);
+//        $end_time = strtotime ("+1 day", strtotime(explode(' ',$row['end_time'])[0].$time));
+//        $now_time = strtotime(date('Y-m-d').$time);
+//        $start = explode(' ',$row['start_time'])[0];
+//        $end = explode(' ',$row['end_time'])[0];
+//        $fenzhi = 1;
+//        $fenmu = ($end_time-$start_time)/86400;
+        $is_period = config('other.is_period');
+//        $row['time_long'] = $fenmu;
+        $row['time_long'] = floor((strtotime($row['end_time']) - strtotime($row['start_time'])) / 86400);
+        $row['manager_user_id'] = $this->deal_data($row['manager_user']);
+        $row['deal_user_id'] = $this->deal_data($row['deal_user']);
+        $row['copy_user_id'] = $this->deal_data($row['copy_user']);
+        $row['send_user_id'] = $this->deal_data($row['send_user']);
+        $row['user_id'] = AdminUser::getUserById($row['user_id'])['nick'];
+        $row['is_period'] = $is_period[$row['is_period']];
+        if ($row){
+            if (!empty($row['attachment'])){
+                $attachment = explode(',',$row['attachment']);
+                $row['attachment_show'] = array_filter($attachment);
+            }
+        }
+//        print_r($row);
+        $child = ProjectModel::getChildCount($row['id']);
+//        print_r($child);
+        if ($child){
+            $row['child'] = 1;
+        }else{
+            $row['child'] = 0;
+        }
+
+        if (!($row['start_time'] == '0000-00-00 00:00:00' || $row['end_time'] == '0000-00-00 00:00:00' || $row['start_time'] >= $row['end_time'])){
+            $start = date('Y-m-d',strtotime($row['start_time']));
+            $end = date('Y-m-d',strtotime($row['end_time']));
+            $now = date('Y-m-d');
+            $fenzhi = (strtotime($now)-strtotime($start))/86400 +1;
+            $fenmu = (strtotime($end)-strtotime($start))/86400 +1;
+            $row['time_per'] = $fenzhi < 0 ? 0 : ceil($fenzhi/$fenmu*100);
+            $row['time_per'] = $row['time_per'] > 100 ? 100 : $row['time_per'];
+        }else{
+            $row['time_per'] = 0;
+        }
+        if (time() > $row['end_time']){
+            $row['span'] = "(限定完成时间{$row['end_time']})";
+        }else{
+            $row['span'] = '';
+        }
+
+        switch ($params['type']) {
+            case 1:
+                $u_res = $row['d_res'];
+                break;
+            case 2:
+                $u_res = $row['m_res'];
+                break;
+            case 3:
+                $u_res = $row['s_res'];
+                break;
+            case 4:
+                $u_res = $row['c_res'];
+                break;
+            default:
+                $u_res = $row['d_res'];
+                break;
+        }
+        $row['u_res'] = trim($u_res, '"');
+        $u_res_conf = config('other.res_type');
+        $row['u_res_str'] = $u_res_conf[$row['u_res']];
+//print_r($row);
+        $report = ProjectReport::getAll(5);
+        //按日期查看每天最新的一条记录
+//        $subQuery = "SELECT * FROM (SELECT *,FROM_UNIXTIME(create_time,\"%Y-%m-%d\") AS t FROM tb_project_report WHERE  project_id={$params['id']} AND cid={$cid} ORDER BY id DESC LIMIT 100) r GROUP BY r.t ORDER BY id DESC";
+//        $report = Db::query($subQuery);
+
+        if ($report) {
+            foreach ($report as $k => $v) {
+                if (!empty($v['attachment'])){
+                    $attachment = explode(',',$v['attachment']);
+                    $attachment = array_filter($attachment);
+                    $tmp = [];
+                    foreach ($attachment as $kk=>$vv) {
+                        $tmp[$kk]['path'] = $vv;
+                        $tmp[$kk]['suffix'] = explode('.', $vv)[1];
+                    }
+                    $report[$k]['attachment'] = $tmp;
+                }
+                if ($v['create_time'] > $row['end_time']){
+                    $report[$k]['span'] = "(限定完成时间{$row['end_time']})";
+                }else{
+                    $report[$k]['span'] = '';
+                }
+                $report_user = AdminUser::getUserById($v['user_id'])['nick'];
+                $report[$k]['real_name'] = !empty($report_user) ? $report_user : '';
+                $report[$k]['check_catname'] = ItemModel::getCat()[$v['check_cat']];
+                if (empty($row['child'])){
+                    $report[$k]['reply'] = ReportReply::getAll($v['id'], 5,2);
+                }else{
+                    $reply = ReportCheck::getAll($v['id'], 1);
+                    if ($reply){
+                        foreach ($reply as $key=>$val){
+                            $content = json_decode($val['content'], true);
+                            if ($content){
+                                foreach ($content as $kk=>$vv){
+                                    $content[$kk]['flag'] = $vv['flag'] ? '有' : '无';
+                                    $content[$kk]['person_user'] = $this->deal_data(user_array($vv['person_user']));
+                                    if (!isset($vv['isfinish'])){
+                                        $content[$kk]['isfinish'] = 0;
+                                    }
+                                    if (!isset($vv['remark'])){
+                                        $content[$kk]['remark'] = '';
+                                    }
+                                }
+                            }
+                            $reply[$key]['content'] = $content;
+                            $reply[$key]['user_name'] = AdminUser::getUserById($val['user_id'])['nick'];
+                        }
+                    }
+                    $report[$k]['reply'] = $reply;
+                }
+
+            }
+        }
+//        print_r($report);
+        if ($params['pid']) {
+            $map = [];
+            $map['cid'] = $cid;
+            $map['id'] = $params['pid'];
+            $res = ProjectModel::where($map)->find()->toArray();
+            $this->assign('pname', $res['name']);
+        } else {
+            $this->assign('pname', '顶级项目');
+        }
+
+        $this->assign('data_info', $row);
+        $this->assign('grade_type', ProjectModel::getGrade($row['grade']));
+        $this->assign('type', $params['type']);
+        $this->assign('cat_option',ItemModel::getOption());
+        $this->assign('report_info', $report);
+        return $this->fetch();
+    }
+
+    public function editTask1()
     {
         $params = $this->request->param();
         if ($this->request->isPost()) {
