@@ -8,7 +8,7 @@
     <div class="layui-card">
         <div class="layui-card-body" id="printArea">
             <style type="text/css" media="print">
-                pre{font-size: xx-large}
+                pre{font-size: 30px;font-weight: bolder}
             </style>
             <pre>
 
@@ -34,7 +34,7 @@
                                                              年    月    日
 
 
-<!--        请扫描二维码查看具体内容（需要注册和登录系统）-->
+        请扫描二维码查看具体内容（登录后需要再次扫码）
         <img src="/{$qcode_png}" style="height: 200px;width: 200px">
             </pre>
 
