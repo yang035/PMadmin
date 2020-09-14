@@ -925,7 +925,8 @@ class Approval extends Admin
             'b.overtime_type' => ['in',[2,3]],
         ];
         $table1 = 'tb_approval_overtime';
-        $list1 = db('approval')->alias('a')->field("TIMESTAMPDIFF(HOUR,a.start_time,a.end_time) long_time")
+        $fields = "SUM(TIMESTAMPDIFF(HOUR,a.start_time,a.end_time)) long_time";
+        $list1 = db('approval')->alias('a')->field($fields)
             ->join("{$table1} b", 'a.id = b.aid', 'left')
             ->where($map1)->find();
         if (!$list1){
@@ -942,9 +943,21 @@ class Approval extends Admin
             'b.type' => 4,
         ];
         $table2 = 'tb_approval_leave';
-        $list2 = db('approval')->alias('a')->field("TIMESTAMPDIFF(HOUR,a.start_time,a.end_time) long_time")
+        $fields = "TIMESTAMPDIFF(HOUR,a.start_time,a.end_time) long_time,a.start_time,a.end_time";
+        $list2 = db('approval')->alias('a')->field($fields)
             ->join("{$table2} b", 'a.id = b.aid', 'left')
-            ->where($map2)->find();
+            ->where($map2)->select();
+        if ($list2){
+            foreach ($list2 as $k=>$v) {
+                $start_time = explode(' ',$v['start_time'])[0];
+                $end_time = explode(' ',$v['end_time'])[0];
+                $sub = $end_time - $start_time;
+                if ($sub > 0){
+                    $v['time_long'] = 8*($sub+1);
+                }
+            }
+        }
+        $list2['long_time'] = array_sum(array_column($list2,'long_time'));
         if (!$list2){
             $list2['long_time'] = 0;
         }
