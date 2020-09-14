@@ -443,6 +443,7 @@ class Approval extends Admin
         $chain_user = $this->getFlowUser(0);
         $this->assign('send_user', htmlspecialchars($chain_user['manager_user']));
         $this->assign('leave_type', LeaveModel::getOption());
+        $this->assign('left_time',$this->dealOvertime());
         return $this->fetch();
     }
 
@@ -909,6 +910,69 @@ class Approval extends Admin
 
     }
 
+    public function dealOvertime($uid = null)
+    {
+        if (empty($uid)){
+            $uid = session('admin_user.uid');
+        }
+        //计算可调休总时长
+        $map1 = [
+            'a.cid' => session('admin_user.cid'),
+            'a.class_type' => 6,
+            'a.user_id' => $uid,
+            'a.status' => 2,
+            'a.create_time' => ['>=',strtotime('2020-09-01')],
+            'b.overtime_type' => ['in',[2,3]],
+        ];
+        $table1 = 'tb_approval_overtime';
+        $list1 = db('approval')->alias('a')->field("TIMESTAMPDIFF(HOUR,a.start_time,a.end_time) long_time")
+            ->join("{$table1} b", 'a.id = b.aid', 'left')
+            ->where($map1)->find();
+        if (!$list1){
+            $list1['long_time'] = 0;
+        }
+
+        //计算已用调休假
+        $map2 = [
+            'a.cid' => session('admin_user.cid'),
+            'a.class_type' => 1,
+            'a.user_id' => $uid,
+            'a.status' => 2,
+            'a.create_time' => ['>=',strtotime('2020-09-01')],
+            'b.type' => 4,
+        ];
+        $table2 = 'tb_approval_leave';
+        $list2 = db('approval')->alias('a')->field("TIMESTAMPDIFF(HOUR,a.start_time,a.end_time) long_time")
+            ->join("{$table2} b", 'a.id = b.aid', 'left')
+            ->where($map2)->find();
+        if (!$list2){
+            $list2['long_time'] = 0;
+        }
+        //计算剩余可用调休假
+        $left_hour = $list1['long_time'] - $list2['long_time'];
+        $other_hour = [
+            8 => 2,
+            52 => 57.5,
+            63 => 38,
+            86 => 44.5,
+            100 => 6,
+            13 => 14,
+            49 => 31,
+            113 => 0.5,
+            109 => 4,
+            95 => 28.5,
+            36 => 20.5,
+            142 => 12,
+            31 => 3,
+            54 => 12,
+            105 => 19,
+        ];
+        if (key_exists($uid,$other_hour)){
+            $left_hour += $other_hour[$uid];
+        }
+        return $left_hour;
+    }
+
     public function overtime()
     {
         if ($this->request->isPost()) {
@@ -969,7 +1033,7 @@ class Approval extends Admin
 
                 $leave = [
                     'aid' => $res['id'],
-                    'time_long1' => $data['time_long1'],
+                    'time_long1' => $c,
                     'reason' => $data['reason'],
                     'attachment' => $data['attachment'],
                     'overtime_type' => $data['overtime_type'],
@@ -2592,10 +2656,14 @@ class Approval extends Admin
 //        $data_list = Db::table('tb_admin_user u')->field($fields)
 //        ->join("(SELECT user_id,class_type{$t} FROM tb_approval WHERE cid={$cid} and status=2 and create_time between {$d0} and {$d1} GROUP BY user_id,class_type) tmp",'u.id=tmp.user_id','left')
 //            ->where($where)->buildSql();
-//        print_r($data_list);exit();
+        $items = $data_list->items();
+        foreach ($items as $k => $v){
+            $items[$k]['left_time'] = $this->dealOvertime($v['id']);
+        }
         // 分页
         $pages = $data_list->render();
         $this->assign('data_list', $data_list);
+        $this->assign('items',$items);
         $this->assign('pages', $pages);
         $this->assign('d', $d);
         $this->assign('panel_type', $panel_type);

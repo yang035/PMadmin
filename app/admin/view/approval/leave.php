@@ -24,6 +24,7 @@
                 {$leave_type}
             </select>
         </div>
+        <div id="alert" class="layui-form-mid" style="color: red">剩余 {$left_time} 小时</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">开始时间</label>
@@ -34,7 +35,6 @@
             <input type="text" class="layui-input field-start_time1" name="start_time1" autocomplete="off" readonly placeholder="选择开始时间">
         </div>
         <div class="layui-form-mid" style="color: red">*</div>
-        <div id="alert" class="layui-form-mid" style="color: red">年假需要提前一周申请</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">结束时间</label>
@@ -130,6 +130,8 @@ layui.use(['jquery', 'laydate','element','upload','form'], function() {
     form.on('select(leave_type)', function(data){
         if(1 == data.value){
             $('#alert').html('年假需要提前一周申请');
+        }else if(4 == data.value){
+            $('#alert').html("剩余 {$left_time} 小时");
         }else {
             $('#alert').html('正常都需要提前一天申请');
         };

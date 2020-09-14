@@ -37,17 +37,21 @@
         <tr>
             <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
             <th>姓名</th>
+            <th>剩余调休时长</th>
             {volist name="panel_type" id="vo"}
             <th>{$vo['title']}</th>
             {/volist}
         </tr>
         </thead>
         <tbody>
-        {volist name="data_list" id="vo"}
+        {volist name="items" id="vo"}
         <tr>
             <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
             <td class="font12">
                 {$vo['realname']}
+            </td>
+            <td class="font12">
+                {$vo['left_time']}h
             </td>
             {volist name="panel_type" id="v"}
             <td class="font12">
