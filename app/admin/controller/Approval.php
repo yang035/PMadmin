@@ -966,6 +966,9 @@ class Approval extends Admin
             31 => 3,
             54 => 12,
             105 => 19,
+            119 => 96,
+            440 => 16,
+            439 => 16,
         ];
         if (key_exists($uid,$other_hour)){
             $left_hour += $other_hour[$uid];
