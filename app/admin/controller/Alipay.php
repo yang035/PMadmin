@@ -93,7 +93,7 @@ class Alipay extends Controller
             if ($res['other_price'] == $p['total_amount']){
                 $flag = OrderModel::where(['trade_no'=>$p['out_trade_no']])->update($data);
                 if ($flag){
-                    return $this->success("操作成功", 'ShopOrder/index');
+                    return $this->success("支付成功", 'ShopOrder/index');
                 }
             }
         }

@@ -390,15 +390,17 @@ class Shop extends Admin
     }
 
     public function payDetail($trade_no=0){
-        $data = OrderModel::where(['trade_no'=>$trade_no])->find();
+        $data = db('shop_order')->alias('a')->field('a.*,b.name')
+            ->join("shop_item b", 'a.item_id = b.id', 'left')
+            ->where(['a.trade_no'=>$trade_no])->find();
         $uid = session('admin_user.uid');
         $payData = [
             'body'         => 'ali web pay',
-            'subject'      => '测试支付宝电脑网站支付',
+            'subject'      => $data['name'],
             'trade_no'     => $trade_no,
             'time_expire'  => time() + 600, // 表示必须 600s 内付款
             'amount'       => $data['other_price'], // 单位为元 ,最小为0.01
-            'return_param' => '123123',
+            'return_param' => 'imlgl',
             'client_ip' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',// 客户地址
             'goods_type' => '1', // 0—虚拟类商品，1—实物类商品
             'store_id'   => '',
