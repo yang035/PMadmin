@@ -46,7 +46,7 @@
         </div>
         <div class="layui-form-mid" style="color: red">*</div>
     </div>
-    <div class="layui-form-item">
+    <div class="layui-form-item hide">
         <label class="layui-form-label">请假时长</label>
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-time_long" readonly name="time_long" autocomplete="off">
