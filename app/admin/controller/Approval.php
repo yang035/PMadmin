@@ -366,10 +366,15 @@ class Approval extends Admin
 
     public function leave()
     {
+        $over_time = $this->dealOvertime();
         if ($this->request->isPost()) {
             $data = $this->request->post();
             if ('' == $data['project_id']){
                 return $this->error('请选择项目');
+            }
+            $role_id = session('admin_user.role_id');
+            if ($role_id > 3 && $over_time <= 0){
+                return $this->error('没有调休假可用');
             }
             // 验证
             $result = $this->validate($data, 'ApprovalLeave');
@@ -443,7 +448,7 @@ class Approval extends Admin
         $chain_user = $this->getFlowUser(0);
         $this->assign('send_user', htmlspecialchars($chain_user['manager_user']));
         $this->assign('leave_type', LeaveModel::getOption());
-        $this->assign('left_time',$this->dealOvertime());
+        $this->assign('left_time',$over_time);
         return $this->fetch();
     }
 
