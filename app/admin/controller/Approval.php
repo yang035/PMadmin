@@ -929,7 +929,7 @@ class Approval extends Admin
         $list1 = db('approval')->alias('a')->field($fields)
             ->join("{$table1} b", 'a.id = b.aid', 'left')
             ->where($map1)->find();
-        if (!$list1){
+        if (!$list1['long_time']){
             $list1['long_time'] = 0;
         }
 
@@ -951,18 +951,18 @@ class Approval extends Admin
             foreach ($list2 as $k=>$v) {
                 $start_time = explode(' ',$v['start_time'])[0];
                 $end_time = explode(' ',$v['end_time'])[0];
-                $sub = $end_time - $start_time;
+                $sub = (strtotime($end_time) - strtotime($start_time))/86400;
                 if ($sub > 0){
-                    $v['time_long'] = 8*($sub+1);
+                    $list2[$k]['time_long'] = 8*($sub+1);
                 }
             }
         }
-        $list2['long_time'] = array_sum(array_column($list2,'long_time'));
+        $list2['time_long'] = array_sum(array_column($list2,'time_long'));
         if (!$list2){
-            $list2['long_time'] = 0;
+            $list2['time_long'] = 0;
         }
         //计算剩余可用调休假
-        $left_hour = $list1['long_time'] - $list2['long_time'];
+        $left_hour = $list1['long_time'] - $list2['time_long'];
         $other_hour = [
             8 => 2,
             52 => 57.5,
@@ -980,7 +980,7 @@ class Approval extends Admin
             54 => 12,
             105 => 19,
             119 => 96,
-            440 => 16,
+            440 => 32,
             439 => 16,
         ];
         if (key_exists($uid,$other_hour)){
