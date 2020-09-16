@@ -185,4 +185,41 @@ class ShopOrder extends Admin
         return $this->fetch();
     }
 
+    /**
+     * @param int $trade_no
+     * @return mixed
+     * 退款
+     */
+    public function refund($trade_no=0){
+        $data = db('shop_order')->alias('a')->field('a.*,b.name')
+            ->join("shop_item b", 'a.item_id = b.id', 'left')
+            ->where(['a.trade_no'=>$trade_no])->find();
+        $refundNo = time() . rand(1000, 9999);
+        $refundData = [
+            'trade_no'       => $trade_no,
+            'transaction_id' => '', // 支付宝交易号， 与 trade_no 必须二选一
+            'refund_fee'     => $data['other_price'],
+            'reason'         => '我要退款',
+            'refund_no'      => $refundNo,
+        ];
+
+        $redis = service('Redis');
+        $redis->set("pm:admin_user:{$trade_no}",serialize(session('admin_user')),180);
+
+        $peizhi = config('alipay');
+        $client = new Client(Client::ALIPAY, $peizhi);
+        $pay_url    = $client->refund($refundData);
+var_dump($pay_url);exit();
+        $up = [
+            'channel'=>1,
+            'pay_url'=>$pay_url,
+        ];
+        if (empty($pay_url)){
+            $up['is_pay'] = 3;
+        }
+        OrderModel::where(['trade_no'=>$trade_no])->update($up);
+        $this->assign('payData', $payData);
+        $this->assign('pay_url',$pay_url);
+        return $this->fetch();
+    }
 }
