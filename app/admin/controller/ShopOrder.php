@@ -9,6 +9,9 @@
 namespace app\admin\controller;
 use app\admin\model\ShopOrder as OrderModel;
 use app\admin\model\AdminUser;
+use Payment\Client;
+use app\admin\model\OrderRefund as OrderRefundModel;
+use think\Db;
 
 
 class ShopOrder extends Admin
@@ -208,18 +211,36 @@ class ShopOrder extends Admin
 
         $peizhi = config('alipay');
         $client = new Client(Client::ALIPAY, $peizhi);
-        $pay_url    = $client->refund($refundData);
-var_dump($pay_url);exit();
-        $up = [
-            'channel'=>1,
-            'pay_url'=>$pay_url,
-        ];
-        if (empty($pay_url)){
-            $up['is_pay'] = 3;
+        Db::startTrans();
+        try {
+            $pay_url    = $client->refund($refundData);
+            $re_fund = [
+                'cid'=>session('admin_user.cid'),
+                'code'=>$pay_url['code'],
+                'msg'=>$pay_url['msg'],
+                'buyer_logon_id'=>$pay_url['buyer_logon_id'],
+                'buyer_user_id'=>$pay_url['buyer_user_id'],
+                'fund_change'=>$pay_url['fund_change'],
+                'gmt_refund_pay'=>$pay_url['gmt_refund_pay'],
+                'out_trade_no'=>$pay_url['out_trade_no'],
+                'refund_fee'=>$pay_url['refund_fee'],
+                'send_back_fee'=>$pay_url['send_back_fee'],
+                'trade_no'=>$pay_url['trade_no'],
+                'user_id'=>session('admin_user.user_id'),
+            ];
+            OrderRefundModel::create($re_fund);
+            if ($pay_url['code'] == 10000){
+                $up['is_pay'] = 5;
+            }else{
+                $up['is_pay'] = 6;
+            }
+            OrderModel::where(['trade_no'=>$pay_url['trade_no']])->update($up);
+            // 提交事务
+            Db::commit();
+        } catch (\Exception $e) {
+            // 回滚事务
+            Db::rollback();
         }
-        OrderModel::where(['trade_no'=>$trade_no])->update($up);
-        $this->assign('payData', $payData);
-        $this->assign('pay_url',$pay_url);
-        return $this->fetch();
+        return $this->success("操作成功{$this->score_value}", 'detail');
     }
 }

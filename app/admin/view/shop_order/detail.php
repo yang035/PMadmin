@@ -55,7 +55,7 @@
                     <span style="color: green">{$pay_status[$vo['is_pay']]}</span>
                 {elseif condition="$vo['is_pay'] == 2" /}
                     <span style="color: green">{$pay_status[$vo['is_pay']]}</span>
-                    <a href="{:url('refund')}?trade_no={{ d.trade_no }}" class="layui-btn layui-btn-xs layui-btn-normal">退款</a>
+                    <a href="{:url('refund')}?trade_no={$vo['trade_no']}" class="layui-btn layui-btn-xs layui-btn-normal">退款</a>
                 {else/}
                     <span style="color: red">{$pay_status[$vo['is_pay']]}</span>
                 {/if}
