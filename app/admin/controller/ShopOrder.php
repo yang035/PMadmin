@@ -213,34 +213,44 @@ class ShopOrder extends Admin
         $client = new Client(Client::ALIPAY, $peizhi);
         Db::startTrans();
         try {
-            $pay_url    = $client->refund($refundData);
+            $pay_url = $client->refund($refundData);
+
+            $login_info = $redis->get("pm:admin_user:{$pay_url['out_trade_no']}");
+            $admin_user = session('admin_user');
+            if (empty($admin_user)) {
+                session('admin_user', unserialize($login_info));
+            }
             $re_fund = [
-                'cid'=>session('admin_user.cid'),
-                'code'=>$pay_url['code'],
-                'msg'=>$pay_url['msg'],
-                'buyer_logon_id'=>$pay_url['buyer_logon_id'],
-                'buyer_user_id'=>$pay_url['buyer_user_id'],
-                'fund_change'=>$pay_url['fund_change'],
-                'gmt_refund_pay'=>$pay_url['gmt_refund_pay'],
-                'out_trade_no'=>$pay_url['out_trade_no'],
-                'refund_fee'=>$pay_url['refund_fee'],
-                'send_back_fee'=>$pay_url['send_back_fee'],
-                'trade_no'=>$pay_url['trade_no'],
-                'user_id'=>session('admin_user.user_id'),
+                'cid' => session('admin_user.cid'),
+                'code' => $pay_url['code'],
+                'msg' => $pay_url['msg'],
+                'buyer_logon_id' => $pay_url['buyer_logon_id'],
+                'buyer_user_id' => $pay_url['buyer_user_id'],
+                'fund_change' => $pay_url['fund_change'],
+                'gmt_refund_pay' => $pay_url['gmt_refund_pay'],
+                'out_trade_no' => $pay_url['out_trade_no'],
+                'refund_fee' => $pay_url['refund_fee'],
+                'send_back_fee' => $pay_url['send_back_fee'],
+                'trade_no' => $pay_url['trade_no'],
+                'user_id' => session('admin_user.uid'),
             ];
             OrderRefundModel::create($re_fund);
-            if ($pay_url['code'] == 10000){
+            if ($pay_url['code'] == 10000) {
                 $up['is_pay'] = 5;
-            }else{
+            } else {
                 $up['is_pay'] = 6;
             }
-            OrderModel::where(['trade_no'=>$pay_url['trade_no']])->update($up);
+            $flag = OrderModel::where(['trade_no' => $pay_url['out_trade_no']])->update($up);
             // 提交事务
             Db::commit();
         } catch (\Exception $e) {
             // 回滚事务
             Db::rollback();
         }
-        return $this->success("操作成功{$this->score_value}", 'detail');
+        if ($flag) {
+            return $this->success("退款成功{$this->score_value}", 'index');
+        } else {
+            return $this->error('退款失败！');
+        }
     }
 }
