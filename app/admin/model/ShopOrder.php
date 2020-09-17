@@ -18,6 +18,20 @@ class ShopOrder extends Model
         return $this->hasOne('ShopItem', 'id', 'item_id');
     }
 
+    public static function getRefundOption($type = 0)
+    {
+        $leaveType = config('other.refund_option');
+        $str = '<option value="0" selected></option>';
+        foreach ($leaveType as $k => $v) {
+            if ($type == $k) {
+                $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+            } else {
+                $str .= '<option value="'.$k.'">'.$v.'</option>';
+            }
+        }
+        return $str;
+    }
+
     public function del($id){
         if (is_array($id)) {
             $error = '';

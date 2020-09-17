@@ -188,10 +188,40 @@ class ShopOrder extends Admin
         return $this->fetch();
     }
 
-    public function refund($trade_no=0){
+    /**
+     * @param int $id
+     * @return mixed|void
+     * 提交退款申请
+     */
+    public function refund($id=0){
         $data_list = db('shop_order')->alias('a')->field('a.*,b.name')
             ->join("shop_item b", 'a.item_id = b.id', 'left')
-            ->where(['a.trade_no'=>$trade_no])->find();
+            ->where(['a.id'=>$id])->find();
+        if ($this->request->isPost()){
+            $data = $this->request->post();
+            $data['is_pay'] = 5;
+            $flag = OrderModel::where('id',$data['id'])->update($data);
+            if ($flag) {
+                return $this->success("提交成功{$this->score_value}",'detail', ['item_id'=>$data_list['item_id']],1);
+            } else {
+                return $this->error('提交失败！');
+            }
+        }
+        $this->assign('refund_option',OrderModel::getRefundOption());
+        $this->assign('data_info', $data_list);
+        return $this->fetch();
+    }
+
+    /**
+     * @param int $id
+     * @return mixed
+     * 客服处理退款
+     */
+    public function refundDeal($id=0){
+        $data_list = db('shop_order')->alias('a')->field('a.*,b.name')
+            ->join("shop_item b", 'a.item_id = b.id', 'left')
+            ->where(['a.id'=>$id])->find();
+        $this->assign('refund_option',OrderModel::getRefundOption());
         $this->assign('data_info', $data_list);
         return $this->fetch();
     }
@@ -244,9 +274,9 @@ class ShopOrder extends Admin
             ];
             OrderRefundModel::create($re_fund);
             if ($pay_url['code'] == 10000) {
-                $up['is_pay'] = 5;
-            } else {
                 $up['is_pay'] = 6;
+            } else {
+                $up['is_pay'] = 7;
             }
             $flag = OrderModel::where(['trade_no' => $pay_url['out_trade_no']])->update($up);
             // 提交事务
