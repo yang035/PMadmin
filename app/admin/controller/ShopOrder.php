@@ -188,12 +188,20 @@ class ShopOrder extends Admin
         return $this->fetch();
     }
 
+    public function refund($trade_no=0){
+        $data_list = db('shop_order')->alias('a')->field('a.*,b.name')
+            ->join("shop_item b", 'a.item_id = b.id', 'left')
+            ->where(['a.trade_no'=>$trade_no])->find();
+        $this->assign('data_info', $data_list);
+        return $this->fetch();
+    }
+
     /**
      * @param int $trade_no
      * @return mixed
      * 退款
      */
-    public function refund($trade_no=0){
+    public function refundConfirm($trade_no=0){
         $data = db('shop_order')->alias('a')->field('a.*,b.name')
             ->join("shop_item b", 'a.item_id = b.id', 'left')
             ->where(['a.trade_no'=>$trade_no])->find();
