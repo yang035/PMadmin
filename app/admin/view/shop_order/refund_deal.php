@@ -3,7 +3,7 @@
         <div class="layui-card-body">
             <b>名称：</b>{$data_info['name']}<br>
             <b>支付金额：</b>{$data_info['other_price']}<br>
-            <b>退款原因：</b>{$data_info['refund_option']}<br>
+            <b>退款原因：</b>{$refund_option[$data_info['refund_option']]}<br>
             <b>说明：</b>{$data_info['comment']}<br>
             <b>附件：</b><a href="{$data_info['attach']}" target="_blank">查看</a><br>
         </div>
