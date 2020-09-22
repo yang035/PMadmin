@@ -274,6 +274,7 @@ class Shop extends Admin
             'start_time' =>['<=',$d],
             'end_time' =>['>=',$d],
             'status' => 1,
+            'kucun' => ['>',0],
             'check_status' => 1,
         ];
         $list = ItemModel::where($w)->where('content IS NOT NULL')->select();
@@ -285,6 +286,7 @@ class Shop extends Admin
                 'status' => 1,
                 'start_time' => ['elt',"{$today}"],
                 'end_time' => ['egt',"{$today}"],
+                'kucun' => ['>',0],
                 'check_status' => 1,
             ];
             $page = input('param.page/d', 1);
@@ -340,6 +342,7 @@ class Shop extends Admin
                 'id' => $id,
 //            'cid' => session('admin_user.cid'),
                 'status' => 1,
+                'kucun' => ['>',0],
                 'start_time' => ['elt',"{$today}"],
                 'end_time' => ['egt',"{$today}"],
             ];
@@ -386,6 +389,7 @@ class Shop extends Admin
         $where = [
             'id' => $id,
 //            'cid' => session('admin_user.cid'),
+            'kucun' => ['>',0],
             'status' => 1,
             'start_time' => ['elt',"{$today}"],
             'end_time' => ['egt',"{$today}"],
