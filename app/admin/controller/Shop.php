@@ -268,11 +268,11 @@ class Shop extends Admin
     }
 
     public function shopList(){
-        $d = date('Y-m-d');
+        $today = date('Y-m-d H:i:s');
         $w = [
             'content' =>['<>',''],
-            'start_time' =>['<=',$d],
-            'end_time' =>['>=',$d],
+            'start_time' =>['<=',"{$today}"],
+            'end_time' =>['>=',"{$today}"],
             'status' => 1,
             'kucun' => ['>',0],
             'check_status' => 1,
@@ -280,7 +280,6 @@ class Shop extends Admin
         $list = ItemModel::where($w)->where('content IS NOT NULL')->select();
         $this->assign('list',$list);
         if ($this->request->isAjax()) {
-            $today = date('Y-m-d');
             $where = [
 //                'cid' => session('admin_user.cid'),
                 'status' => 1,
@@ -323,6 +322,7 @@ class Shop extends Admin
     }
 
     public function shopDetail($id = 0){
+        $today = date('Y-m-d H:i:s');
         if ($this->request->isPost()) {
             $data = $this->request->post();
 
@@ -337,7 +337,6 @@ class Shop extends Admin
             $id = $data['item_id'];
             unset($data['id']);
 
-            $today = date('Y-m-d');
             $where = [
                 'id' => $id,
 //            'cid' => session('admin_user.cid'),
@@ -385,7 +384,7 @@ class Shop extends Admin
                 return $this->error('添加失败！');
             }
         }
-        $today = date('Y-m-d');
+
         $where = [
             'id' => $id,
 //            'cid' => session('admin_user.cid'),

@@ -167,14 +167,16 @@
         var $ = layui.jquery, laydate = layui.laydate,upload = layui.upload,form = layui.form;
         laydate.render({
             elem: '.field-start_time',
-            type: 'date',
+            type: 'datetime',
+            min:0,
             trigger: 'click',
             // value: new Date(),
         });
 
         laydate.render({
             elem: '.field-end_time',
-            type: 'date',
+            type: 'datetime',
+            min:0,
             trigger: 'click',
             // value: new Date(),
         });
