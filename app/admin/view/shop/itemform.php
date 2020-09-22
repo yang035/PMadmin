@@ -46,6 +46,13 @@
             </div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label">库存数</label>
+            <div class="layui-input-inline">
+                <input type="number" name="kucun" lay-verify="required" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" value="0" autocomplete="off" class="layui-input field-kucun">
+            </div>
+            <div class="layui-form-mid" style="color: red">*</div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">谷粒兑换</label>
             <div class="layui-input-inline">
                 <input type="number" name="score" lay-verify="required" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" value="0" autocomplete="off" class="layui-input field-score">

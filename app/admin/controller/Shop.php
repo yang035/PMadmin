@@ -332,7 +332,25 @@ class Shop extends Admin
             }
             $tradeNo = time() . rand(1000, 9999);
             $data['trade_no'] = $tradeNo;
+            $id = $data['item_id'];
             unset($data['id']);
+
+            $today = date('Y-m-d');
+            $where = [
+                'id' => $id,
+//            'cid' => session('admin_user.cid'),
+                'status' => 1,
+                'start_time' => ['elt',"{$today}"],
+                'end_time' => ['egt',"{$today}"],
+            ];
+            $row = ItemModel::where($where)->find();
+            if (!$row){
+                return $this->error('商品不存在');
+            }elseif($row['kucun'] <= 0){
+                return $this->error('库存不足或商品已兑完');
+            }else{
+                $kucun = $row['kucun'] - $data['num'];
+            }
             // 验证
 //            $result = $this->validate($data, 'ShopCat');
 //            if($result !== true) {
@@ -340,6 +358,7 @@ class Shop extends Admin
 //            }
             Db::startTrans();
             try {
+                ItemModel::where(['id'=>$id])->setField('kucun',$kucun);
                 $res = OrderModel::create($data);
                 $sc = [
                     'cid' => session('admin_user.cid'),
@@ -358,7 +377,7 @@ class Shop extends Admin
                 if ($data['other_price'] > 0){
                     return $this->success('下单成功', 'shop/payDetail', ['trade_no'=>$tradeNo],1);
                 }
-                return $this->success("操作成功{$this->score_value}", 'ShopOrder/index');
+                return $this->success("下单成功{$this->score_value}", 'ShopOrder/index');
             } else {
                 return $this->error('添加失败！');
             }
