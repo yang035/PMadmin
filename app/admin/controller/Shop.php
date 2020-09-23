@@ -268,23 +268,26 @@ class Shop extends Admin
     }
 
     public function shopList(){
-        $today = date('Y-m-d H:i:s');
+        $today = date('Y-m-d');
         $w = [
             'content' =>['<>',''],
-            'start_time' =>['<=',"{$today}"],
-            'end_time' =>['>=',"{$today}"],
+//            'start_time' =>['<=',"{$today}"],
+//            'end_time' =>['>=',"{$today}"],
             'status' => 1,
             'kucun' => ['>',0],
             'check_status' => 1,
         ];
-        $list = ItemModel::where($w)->where('content IS NOT NULL')->select();
+        $list = ItemModel::where($w)
+            ->where("DATE_FORMAT(start_time,'%Y-%m-%d')",'<=',$today)
+            ->where("DATE_FORMAT(end_time,'%Y-%m-%d')",'>=',$today)
+            ->where('content IS NOT NULL')->select();
         $this->assign('list',$list);
         if ($this->request->isAjax()) {
             $where = [
 //                'cid' => session('admin_user.cid'),
                 'status' => 1,
-                'start_time' => ['elt',"{$today}"],
-                'end_time' => ['egt',"{$today}"],
+//                'start_time' => ['elt',"{$today}"],
+//                'end_time' => ['egt',"{$today}"],
                 'kucun' => ['>',0],
                 'check_status' => 1,
             ];
@@ -299,7 +302,10 @@ class Shop extends Admin
             if ($name) {
                 $where['name'] = ['like', "%{$name}%"];
             }
-            $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->order('tj_company DESC,tj_company_type DESC,id DESC')->select();
+            $data['data'] = ItemModel::with('cat')
+                ->where("DATE_FORMAT(start_time,'%Y-%m-%d')",'<=',$today)
+                ->where("DATE_FORMAT(end_time,'%Y-%m-%d')",'>=',$today)
+                ->where($where)->page($page)->limit($limit)->order('tj_company DESC,tj_company_type DESC,id DESC')->select();
             if ($data['data']){
                 foreach ($data['data'] as $k=>$v){
                     $startdate=strtotime($v['start_time']);
@@ -322,7 +328,6 @@ class Shop extends Admin
     }
 
     public function shopDetail($id = 0){
-        $today = date('Y-m-d H:i:s');
         if ($this->request->isPost()) {
             $data = $this->request->post();
 
@@ -336,7 +341,7 @@ class Shop extends Admin
             $data['trade_no'] = $tradeNo;
             $id = $data['item_id'];
             unset($data['id']);
-
+            $today = date('Y-m-d H:i:s');
             $where = [
                 'id' => $id,
 //            'cid' => session('admin_user.cid'),
@@ -347,7 +352,7 @@ class Shop extends Admin
             ];
             $row = ItemModel::where($where)->find();
             if (!$row){
-                return $this->error('商品不存在');
+                return $this->error('等待中，商品不存在');
             }elseif($row['kucun'] <= 0){
                 return $this->error('库存不足或商品已兑完');
             }else{
@@ -384,16 +389,19 @@ class Shop extends Admin
                 return $this->error('添加失败！');
             }
         }
-
+        $today = date('Y-m-d');
         $where = [
             'id' => $id,
 //            'cid' => session('admin_user.cid'),
             'kucun' => ['>',0],
             'status' => 1,
-            'start_time' => ['elt',"{$today}"],
-            'end_time' => ['egt',"{$today}"],
+//            'start_time' => ['elt',"{$today}"],
+//            'end_time' => ['egt',"{$today}"],
         ];
-        $row = ItemModel::where($where)->find();
+        $row = ItemModel::where($where)
+            ->where("DATE_FORMAT(start_time,'%Y-%m-%d')",'<=',$today)
+            ->where("DATE_FORMAT(end_time,'%Y-%m-%d')",'>=',$today)
+            ->find();
         if (!$row){
             return $this->error('商品不存在');
         }else{
