@@ -139,13 +139,13 @@
 <!--        <div class="layui-form-mid" style="color: red">*</div>-->
 <!--    </div>-->
     <div class="layui-form-item">
-        <label class="layui-form-label">发送给</label>
+        <label class="layui-form-label">审批人</label>
         <div class="layui-input-inline">
             <!--            <button type="button" class="layui-btn" id="send_user_id">选择审批人</button>-->
-            <div style="margin-top: 10px" id="send_select_id">{$data_info['copy_user_id']|default=''}</div>
-            <div id="send_select_id"></div>
-            <input type="hidden" name="send_user" id="send_user" value="{$data_info['copy_user']|default=''}" lay-verify="required">
+            <div style="margin-top: 10px" id="send_select_id">默认流程(负责人级、部门级、总经理级)</div>
+            <input type="hidden" name="send_user" id="send_user" value="" lay-verify="required">
         </div>
+        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">抄送人</label>
@@ -287,9 +287,9 @@
                 },'json')
             }
         });
-        // form.on('select(project_type)', function(data){
-        //     select_union(data.value);
-        // });
+        form.on('select(project_type)', function(data){
+            select_union(data.value);
+        });
 
         $('#send_user_id').on('click', function(){
             var send_user = $('#send_user').val();
@@ -562,6 +562,23 @@
         $('.field-money').val(total);
     }
 
-
+    function select_union(id){
+        $.ajax({
+            type: 'POST',
+            url: "{:url('getFlowUser')}",
+            data: {id:id},
+            dataType:  'json',
+            success: function(data){
+                // $("#c_id").html("");
+                // $.each(data, function(key, val) {
+                //     var option1 = $("<option>").val(val.areaId).text(val.fullname);
+                $('#send_select_id').html(data.manager_user_id);
+                $('#send_user').val(data.manager_user);
+                // form.render('select');
+                // });
+                // $("#c_id").get(0).selectedIndex=0;
+            }
+        });
+    }
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>

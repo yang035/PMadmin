@@ -1631,6 +1631,12 @@ class Approval extends Admin
 //            foreach ($send_user1 as $k=>$v) {
 //                $send_user2 += $v;
 //            }
+            $send_user1 = array_values(array_unique($send_user1, SORT_REGULAR));
+            $send_user2 = [];
+            foreach ($send_user1 as $k=>$v) {
+                $send_user2 += $v;
+            }
+
             Db::startTrans();
             try {
                 $approve = [
@@ -1641,19 +1647,19 @@ class Approval extends Admin
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
                     'user_id' => session('admin_user.uid'),
-                    'send_user' => user_array($data['send_user']),
-//                    'send_user' => json_encode($send_user2),
+//                    'send_user' => user_array($data['send_user']),
+                    'send_user' => json_encode($send_user2),
                     'copy_user' => user_array($data['copy_user']),
                 ];
                 $res = ApprovalModel::create($approve);
 
                 $su = [];
-            $send_user1 = [$send_user1];
+//            $send_user1 = [$send_user1];
                 foreach ($send_user1 as $k=>$v) {
                     $su[$k] = [
                         'aid' => $res['id'],
                         'flow_num' => $k,
-                        'send_user' => user_array($data['send_user']),
+                        'send_user' => json_encode($v),
                     ];
                 }
                 $send_user_model = new ApprovalSenduser();
