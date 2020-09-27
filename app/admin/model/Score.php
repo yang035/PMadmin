@@ -86,4 +86,18 @@ class Score extends Model
         return $tmp;
     }
 
+    public static function getTimePeriod($type = 0)
+    {
+        $leaveType = config('other.time_period');
+        $str = '';
+        foreach ($leaveType as $k => $v) {
+            if ($type == $k) {
+                $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+            } else {
+                $str .= '<option value="'.$k.'">'.$v.'</option>';
+            }
+        }
+        return $str;
+    }
+
 }

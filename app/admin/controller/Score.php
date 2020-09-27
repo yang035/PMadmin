@@ -172,6 +172,59 @@ class Score extends Admin
         return $this->fetch();
     }
 
+    public function tubiao(){
+        $params = $this->request->param();
+        if ($params){
+            if (!empty($params['project_id'])){
+                $where['subject_id'] = $params['project_id'];
+            }
+            $where['user'] = $params['user'];
+            if (!isset($params['time_period'])){
+                $params['time_period'] = 1;
+            }
+        }
+        switch ($params['time_period']){
+            case 1:
+                $d0 = strtotime('-30 day');
+                $d1 = time();
+                $where['create_time'] = ['between', ["$d0", "$d1"]];
+                $f = "FROM_UNIXTIME(create_time,'%Y-%m-%d') AS period";
+                break;
+            case 2:
+                $d0 = strtotime('-12 month');
+                $d1 = time();
+                $where['create_time'] = ['between', ["$d0", "$d1"]];
+                $f = "FROM_UNIXTIME(create_time,'%Y-%m') AS period";
+                break;
+            case 3:
+                $d0 = strtotime('-5 year');
+                $d1 = time();
+                $where['create_time'] = ['between', ["$d0", "$d1"]];
+                $f = "FROM_UNIXTIME(create_time,'%Y') AS period";
+                break;
+            default:
+                $d0 = strtotime('-30 day');
+                $d1 = time();
+                $where['create_time'] = ['between', ["$d0", "$d1"]];
+                $f = "FROM_UNIXTIME(create_time,'%Y-%m-%d') AS period";
+                break;
+        }
+
+        $fields = "(SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl_sub_score)) AS gl_sum,{$f}";
+        $list = ScoreModel::field($fields)->where($where)->group('period')->select();
+        $data = [];
+        if ($list){
+            $data = [
+                'y_name' => array_column($list,'period'),
+                'ml' => array_column($list,'ml_sum'),
+                'gl' => array_column($list,'gl_sum'),
+            ];
+        }
+        $this->assign('time_period',ScoreModel::getTimePeriod($params['time_period']));
+        $this->assign('data_info',$data);
+        return $this->fetch();
+    }
+
     public function getStaData(){
         $where = [
             'user' =>session('admin_user.uid'),
