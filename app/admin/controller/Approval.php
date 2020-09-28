@@ -1615,7 +1615,8 @@ class Approval extends Admin
 //            if (empty($data['shigong_user'])){
 //                return $this->error('施工员不存在，请输入正确姓名');
 //            }
-            $data['content'] = array_unique(array_filter($data['content']));
+//            $data['content'] = array_unique(array_filter($data['content']));
+            $data['content'] = array_filter($data['content']);
             // 验证
             $result = $this->validate($data, 'ApprovalBills');
             if ($result !== true) {
@@ -1673,12 +1674,14 @@ class Approval extends Admin
                     'reason' => $data['reason'],
                     'attachment' => $data['attachment'],
                 ];
+//                $leave['money'] = 0;
                 if ($data['content']) {
                     foreach ($data['content'] as $k => $v) {
                         $leave['detail'][$k]['content'] = $v;
                         $leave['detail'][$k]['num'] = !empty($data['num'][$k]) ? $data['num'][$k] : 0;
                         $leave['detail'][$k]['unit'] = !empty($data['unit'][$k]) ? $data['unit'][$k] : 1;
                         $leave['detail'][$k]['per_price'] = !empty($data['per_price'][$k]) ? $data['per_price'][$k] : 0;
+//                        $leave['money'] += $leave['detail'][$k]['num']*$leave['detail'][$k]['per_price'];
                     }
                 }
                 $leave['detail'] = json_encode($leave['detail']);
