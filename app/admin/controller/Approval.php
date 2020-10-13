@@ -2747,4 +2747,101 @@ class Approval extends Admin
         return $this->fetch();
     }
 
+    public function ExpenseReport()
+    {
+        $params = $this->request->param();
+        if ($this->request->isAjax()) {
+            $where = $data = [];
+            $page = input('param.page/d', 1);
+            $limit = input('param.limit/d', 30);
+
+            $where['a.cid'] = session('admin_user.cid');
+            if (isset($params['project_id']) && !empty($params['project_id'])) {
+                $where['a.project_id'] = $params['project_id'];
+            }
+            $where['a.status'] = 2;
+            $myPro = ProjectModel::getProTask(0, 0);
+            $fields = 'a.project_id,SUM(c.money) total';
+            $data['data'] = \db('approval')->alias('a')->field($fields)
+                ->join("tb_approval_cost c", 'a.id = c.aid', 'right')
+                ->where($where)->group('a.project_id')->order('total desc')
+                ->page($page)->limit($limit)->select();
+
+            foreach ($data['data'] as $k => $v) {
+                $data['data'][$k]['project_name'] = isset($myPro[$v['project_id']]) ? $myPro[$v['project_id']] : '其他';
+            }
+            $data['count'] = \db('approval')->alias('a')->field($fields)
+                ->join("tb_approval_cost c", 'a.id = c.aid', 'right')
+                ->where($where)->group('a.project_id')->order('total desc')->count();
+            $data['code'] = 0;
+            $data['msg'] = '';
+            return json($data);
+        }
+        $this->assign('project_select', ProjectModel::getMyTask());
+        return $this->fetch();
+    }
+
+    public function reportDetail()
+    {
+        $params = $this->request->param();
+        $where = $data = [];
+
+        $where['cid'] = session('admin_user.cid');
+        if (isset($params['project_id']) && !empty($params['project_id'])) {
+            $where['project_id'] = $params['project_id'];
+        }
+        $where['status'] = 2;
+        $where['class_type'] = 3;
+        $myPro = ProjectModel::getProTask(0, 0);
+        $list = ApprovalModel::where($where)->order('create_time desc')->paginate(30, false, ['query' => input('get.')]);
+
+        foreach ($list as $k => $v) {
+            $list[$k]['send_user'] = $this->deal_data($v['send_user']);
+            $list[$k]['fellow_user'] = strip_tags($this->deal_data($v['fellow_user']));
+            $list[$k]['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
+            $list[$k]['money'] = '#';
+            $list[$k]['leave_type'] = '#';
+            switch ($v['class_type']) {
+                case 1://报销
+                    break;
+                case 2://报销
+                    $child = ExpenseModel::where('aid', $v['id'])->find();
+                    if ($child) {
+                        $list[$k]['money'] = $child['total'];
+                    }
+                    break;
+                case 3://费用
+                    $child = CostModel::where('aid', $v['id'])->find();
+                    if ($child) {
+                        $list[$k]['money'] = $child['money'];
+                    }
+                    break;
+            }
+            if ($v['project_id']) {
+                $project_data = ProjectModel::getRowById($v['project_id']);
+            } else {
+                $project_data = [
+                    'name' => '其他',
+                ];
+            }
+            $list[$k]['project_name'] = $project_data['name'];
+            if (1 == $v['is_deal']) {
+                $list[$k]['deal_mark'] = '未支付';
+            } elseif (2 == $v['is_deal']) {
+                $list[$k]['deal_mark'] = '支付-' . $v['deal_mark'] . '-' . $v['deal_time'];
+            }
+        }
+        $panel_type = config('other.panel_type');
+        $approval_status = config('other.approval_status');
+        $pages = $list->render();
+
+        $this->assign('project_select', ProjectModel::getMyTask($params['project_id']));
+        $this->assign('data_list', $list);
+        $this->assign('panel_type', $panel_type);
+        $this->assign('approval_status', $approval_status);
+        $this->assign('pages', $pages);
+        $this->assign('atype', 1);
+        return $this->fetch();
+    }
+
 }
