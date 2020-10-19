@@ -460,7 +460,7 @@
             }
             total += amout;
         });
-        $('.field-total').val(total);
+        $('.field-total').val(total.toFixed(2));
     }
 
     select_union({$list1['project_id']});

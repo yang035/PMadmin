@@ -419,7 +419,7 @@
             }
             total += amout;
         });
-        $('.field-total').val(total);
+        $('.field-total').val(total.toFixed(2));
     }
     new SelectBox($('.box1'),{$project_select},function(result){
         if ('' != result.id){
