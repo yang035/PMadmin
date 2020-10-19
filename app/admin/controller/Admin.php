@@ -154,6 +154,11 @@ class Admin extends Controller
             $this->assign('admin_user', $login);
             $this->assign('languages', model('AdminLanguage')->lists());
 
+            $free_space = byte_format(disk_free_space($_SERVER['DOCUMENT_ROOT']));
+            $total_space = byte_format(disk_total_space ($_SERVER['DOCUMENT_ROOT']));
+            $per_space = ($total_space-$free_space).'/'.$total_space;
+            $this->assign('per_space', $per_space);
+
             $notice = NoticeModel::getItem1();
             $this->assign('notice', $notice);
         }

@@ -6,10 +6,20 @@
         color: #c2c2c2;
         font-size: 20px;
     }
+    .layui-elem-field1{
+        margin-bottom: 2px;
+        padding: 0;
+        border-width: 1px 0px 0px 0px;
+        border-style: solid;
+    }
 </style>
 <div class="layui-header" style="z-index:999!important;">
-    <div style="height:30px;text-align: center;"><a href="{:url('Assignment/addItem')}"><span style="color: rgba(255,255,255,.7);font-size: large">{$admin_user['company']}</span></div>
-    <div class="fl header-logo1"><span id="date_clock" style="font-size: 15px;color: rgba(255,255,255,.7);"></span></a></div>
+    <div style="height:30px;">
+        <div style="text-align: center;">
+            <span style="color: rgba(255,255,255,.7);font-size: large">{$admin_user['company']}</span>
+        </div>
+    </div>
+    <div class="fl header-logo1"><a href="{:url('Assignment/addItem')}"><span id="date_clock" style="font-size: 15px;color: rgba(255,255,255,.7);"></span></a></div>
     <div class="fl header-fold"><a href="javascript:;" title="打开/关闭左侧导航" class="aicon ai-caidan" id="foldSwitch"></a></div>
     <ul class="layui-nav fl nobg main-nav">
         {volist name="_admin_menu" id="vo"}
@@ -73,6 +83,12 @@
             {/volist}
         </ul>
         {/volist}
+    </div>
+    <fieldset class="layui-elem-field1">
+        <legend style="color: #48576a;font-size: 10px;">空间使用情况(G)</legend>
+    </fieldset>
+    <div class="layui-progress layui-progress-big" lay-showPercent="true" style="text-align: right;">
+        <div class="layui-progress-bar layui-bg-orange" lay-percent="{$per_space}"></div>
     </div>
 </div>
 <script type="text/html" id="hisi-theme-tpl">
