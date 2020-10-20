@@ -409,4 +409,28 @@ class AdminUser extends Model
         }
         return $str;
     }
+
+    public static function checkUser($username,$type=0){
+        if (preg_match("/^1\d{10}$/", $username)) {
+            $map['u.mobile'] = $username;
+        }else{
+            $map['u.username'] = $username;
+        }
+        $map['u.status'] = 1;
+        $fields = 'c.id,c.name';
+        $data = \db('admin_user')->alias('u')->field($fields)
+            ->where($map)->join('tb_admin_company c','u.company_id = c.id','left')
+            ->select();
+        $str = '';
+        if ($data){
+            foreach ($data as $k => $v) {
+                if ($type == $k) {
+                    $str .= "<option value='".$v['id']."' selected>".$v['name']."</option>";
+                } else {
+                    $str .= "<option value='".$v['id']."'>".$v['name']."</option>";
+                }
+            }
+        }
+        return $str;
+    }
 }

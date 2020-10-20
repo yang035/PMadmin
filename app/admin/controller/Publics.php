@@ -230,4 +230,9 @@ class Publics extends Common
         $this->assign('gys_type', AdminCompany::getGysType());
         return $this->fetch();
     }
+
+    public function checkUser($username){
+        $str = UserModel::checkUser($username);
+        return json($str);
+    }
 }

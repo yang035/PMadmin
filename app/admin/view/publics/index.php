@@ -59,10 +59,14 @@
         <p id="profile-name" class="profile-name-card"></p>
         <form action="{:url()}" method="post" class="layui-form layui-form-pane">
             <div class="layui-form-item">
-                    <input type="text" name="username" class="layui-input" lay-verify="required" placeholder="手机号码或用户名" autofocus="autofocus" value="">
+                    <input type="text" name="username" class="layui-input" lay-verify="required" placeholder="手机号码或用户名" autofocus="autofocus" value="" onblur="checkuser(this.value)">
             </div>
             <div class="layui-form-item">
                     <input type="password" name="password" class="layui-input" lay-verify="required" placeholder="******" value="">
+            </div>
+            <div class="layui-form-item">
+                <select type="select" name="company_id" class="layui-input" id="company_id">
+                </select>
             </div>
             {:token('__token__', 'sha1')}
             <input type="submit" value="登陆" lay-submit="" lay-filter="formLogin" class="layui-btn layui-btn-warm">
@@ -83,14 +87,14 @@
     </div>
 </div>
 <script src="__ADMIN_JS__/layui/layui.js"></script>
-
+<script src="__PUBLIC_JS__/jquery.2.1.4.min.js?v="></script>
 <script>
     layui.config({
         base: '__ADMIN_JS__/'
     }).use('global');
 </script>
 <script type="text/javascript">
-    layui.define('form', function(exports) {
+    layui.define('form','jquery', function(exports) {
         var $ = layui.jquery, layer = layui.layer, form = layui.form;
         form.on('submit(formLogin)', function(data) {
             var _form = $(this).parents('form');
@@ -116,6 +120,23 @@
             return false;
         });
     });
+
+    function checkuser(username) {
+        $.ajax({
+            type: 'POST',
+            url: "{:url('checkUser')}",
+            data: {username: username},
+            dataType: 'json',
+            success: function (data) {
+                $("#company_id").html(data);
+                layui.use('form', function () {
+                    var form = layui.form;
+                    form.render();
+                });
+            }
+        });
+    }
+
     // window.onload = function() {
     //     //配置
     //     var config = {
