@@ -14,9 +14,9 @@
 </div>
 <!-- 内容主体区域 -->
 <div class="layui-btn-group">
-    <button class="layui-btn" id="btn-expand">全部展开</button>
-    <button class="layui-btn" id="btn-fold">全部折叠</button>
-    <button class="layui-btn" id="btn-refresh">刷新表格</button>
+    <button class="layui-btn layui-btn-normal" id="btn-expand">全部展开</button>
+    <button class="layui-btn layui-btn-normal" id="btn-fold">全部折叠</button>
+    <button class="layui-btn layui-btn-normal" id="btn-refresh">刷新表格</button>
 </div>
 <table id="table1" class="layui-table" lay-filter="table1"></table>
 <!-- 操作列 -->
@@ -25,7 +25,7 @@
         {{#  if(d.flag == 0){ }}
         <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="add">添加</a>
         <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">修改</a>
-        <a class="layui-btn layui-btn-xs" lay-event="dep_auth">设置权限</a>
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="dep_auth">设置权限</a>
         {{# }else{ }}
         <a href="{:url('User/editUser')}?id={{ d.id.substring(5) }}&flag={{ d.flag }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
         {{# } }}

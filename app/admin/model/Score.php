@@ -80,7 +80,7 @@ class Score extends Model
             $b = $rankratio['max_rankratio'];
             $n = count($tmp);
             foreach ($tmp as $k => $v) {
-                $tmp[$k]['rank_ratio'] = round($b - ($b - $a) / ($n -1) * ($v['rank']-1),4);
+                $tmp[$k]['rank_ratio'] = (($n -1) * ($v['rank']-1) != 0) ? round($b - ($b - $a) / ($n -1) * ($v['rank']-1),4) : 1;
             }
         }
         return $tmp;

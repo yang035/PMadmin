@@ -33,7 +33,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">{$v['name']}</label>
                 <div class="layui-input-inline">
-                    <button type="button" class="layui-btn" id="{$v['id']}_user_id" onclick="open_div1({$v['id']})">选择人员</button>[{$v['value']}%]
+                    <button type="button" class="layui-btn layui-btn-normal" id="{$v['id']}_user_id" onclick="open_div1({$v['id']})">选择人员</button>[{$v['value']}%]
                     <div id="{$v['id']}_select_id">{$v['dep_name']|default=''}</div>
                     <input type="hidden" name="{$v['id']}_user" id="{$v['id']}_user" value="{$v['dep']|default=''}">
                 </div>
@@ -47,7 +47,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">总负责人</label>
             <div class="layui-input-inline">
-                <button type="button" class="layui-btn" id="leader_user_id" onclick="open_div1('leader')">选择总负责人</button>
+                <button type="button" class="layui-btn layui-btn-normal" id="leader_user_id" onclick="open_div1('leader')">选择总负责人</button>
                 <div id="leader_select_id">{$data_info['leader_user_id']|default=''}</div>
                 <input type="hidden" name="leader_user" id="leader_user" value="{$data_info['leader_user']|default=''}">
             </div>
@@ -55,7 +55,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">审批人</label>
             <div class="layui-input-inline">
-                <button type="button" class="layui-btn" id="send_user_id" onclick="open_div1('send')">选择审批人</button>
+                <button type="button" class="layui-btn layui-btn-normal" id="send_user_id" onclick="open_div1('send')">选择审批人</button>
                 <div id="send_select_id">{$data_info['send_user_id']|default=''}</div>
                 <input type="hidden" name="send_user" id="send_user" value="{$data_info['send_user']|default=''}">
             </div>
@@ -63,7 +63,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">抄送人</label>
             <div class="layui-input-inline">
-                <button type="button" class="layui-btn" id="copy_user_id" onclick="open_div1('copy')">选择抄送人</button>
+                <button type="button" class="layui-btn layui-btn-normal" id="copy_user_id" onclick="open_div1('copy')">选择抄送人</button>
                 <div id="copy_select_id">{$data_info['copy_user_id']|default=''}</div>
                 <input type="hidden" name="copy_user" id="copy_user" value="{$data_info['copy_user']|default=''}">
             </div>

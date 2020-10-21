@@ -118,7 +118,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">审批人</label>
         <div class="layui-input-inline">
-            <button type="button" class="layui-btn" id="send_user_id">选择审批人</button>
+            <button type="button" class="layui-btn layui-btn-normal" id="send_user_id">选择审批人</button>
             <div id="send_select_id"></div>
             <input type="hidden" name="send_user" id="send_user" value="">
         </div>
@@ -127,7 +127,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">专家团队</label>
         <div class="layui-input-inline">
-            <button type="button" class="layui-btn" id="expert_user_id">选择专家</button>
+            <button type="button" class="layui-btn layui-btn-normal" id="expert_user_id">选择专家</button>
             <div id="expert_select_id"></div>
             <input type="hidden" name="expert_user" id="expert_user" value="">
         </div>

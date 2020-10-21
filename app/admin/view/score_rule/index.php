@@ -15,9 +15,9 @@
 <!-- 内容主体区域 -->
 <div class="layui-btn-group">
     <a href="javascript:add();" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加</a>
-    <button class="layui-btn" id="btn-expand">全部展开</button>
-    <button class="layui-btn" id="btn-fold">全部折叠</button>
-    <button class="layui-btn" id="btn-refresh">刷新表格</button>
+    <button class="layui-btn layui-btn-normal" id="btn-expand">全部展开</button>
+    <button class="layui-btn layui-btn-normal" id="btn-fold">全部折叠</button>
+    <button class="layui-btn layui-btn-normal" id="btn-refresh">刷新表格</button>
     <a href="javascript:import_excel();" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;导入</a>
 </div>
 <table id="table1" class="layui-table" lay-filter="table1"></table>

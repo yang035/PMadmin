@@ -186,7 +186,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">负责人</label>
         <div class="layui-input-inline">
-            <button type="button" class="layui-btn" id="manager_user_id">选择负责人</button>(此任务由谁负责)
+            <button type="button" class="layui-btn layui-btn-normal" id="manager_user_id">选择负责人</button>(此任务由谁负责)
             <div id="manager_select_id">{$data_info['manager_user_id']|default=''}</div>
             <input type="hidden" name="manager_user" id="manager_user" value="{$data_info['manager_user']|default=''}">
         </div>
@@ -194,7 +194,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">参与人</label>
         <div class="layui-input-inline">
-            <button type="button" class="layui-btn" id="deal_user_id">选择参与人</button>(此任务具体哪些人做)
+            <button type="button" class="layui-btn layui-btn-normal" id="deal_user_id">选择参与人</button>(此任务具体哪些人做)
             <div id="deal_select_id"></div>
             <input type="hidden" name="deal_user" id="deal_user" value="">
         </div>
@@ -202,7 +202,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">审批人</label>
         <div class="layui-input-inline">
-            <button type="button" class="layui-btn" id="send_user_id">选择审批人</button>(此任务需要谁来审批)
+            <button type="button" class="layui-btn layui-btn-normal" id="send_user_id">选择审批人</button>(此任务需要谁来审批)
             <div id="send_select_id">{$data_info['send_user_id']|default=''}</div>
             <input type="hidden" name="send_user" id="send_user" value="{$data_info['send_user']|default=''}">
         </div>
@@ -211,7 +211,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">抄送人</label>
         <div class="layui-input-inline">
-            <button type="button" class="layui-btn" id="copy_user_id">选择抄送人</button>(此任务需要抄送给谁)
+            <button type="button" class="layui-btn layui-btn-normal" id="copy_user_id">选择抄送人</button>(此任务需要抄送给谁)
             <div id="copy_select_id">{$data_info['copy_user_id']|default=''}</div>
             <input type="hidden" name="copy_user" id="copy_user" value="{$data_info['copy_user']|default=''}">
         </div>

@@ -50,7 +50,7 @@ $ca = strtolower(request()->controller().'/'.request()->action());
                 <span class="layui-badge layui-bg-orange yd"></span>
                 <span class="layui-badge td"></span>
                 <span class="layui-badge layui-bg-orange ym"></span>
-                <span class="layui-badge layui-bg-green tm"></span>
+                <span class="layui-badge tm"></span>
                 {$admin_user['signature']}
             </li>
         </ul>

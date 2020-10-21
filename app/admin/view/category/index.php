@@ -14,9 +14,9 @@
 </div>
 <!-- 内容主体区域 -->
 <div class="layui-btn-group">
-    <button class="layui-btn" id="btn-expand">全部展开</button>
-    <button class="layui-btn" id="btn-fold">全部折叠</button>
-    <button class="layui-btn" id="btn-refresh">刷新表格</button>
+    <button class="layui-btn layui-btn-normal" id="btn-expand">全部展开</button>
+    <button class="layui-btn layui-btn-normal" id="btn-fold">全部折叠</button>
+    <button class="layui-btn layui-btn-normal" id="btn-refresh">刷新表格</button>
 </div>
 <table id="table1" class="layui-table" lay-filter="table1"></table>
 <!-- 操作列 -->

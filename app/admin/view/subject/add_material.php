@@ -15,7 +15,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">附件</label>
             <div class="layui-input-inline">
-                <button type="button" class="layui-btn" id="test3"><i class="layui-icon"></i>上传文件</button>
+                <button type="button" class="layui-btn layui-btn-normal" id="test3"><i class="layui-icon"></i>上传文件</button>
                 <input class="layui-input attachment" type="hidden" name="attachment" value="">
                 <span class="att_name"></span>
             </div>

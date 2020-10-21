@@ -31,7 +31,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">存储人</label>
             <div class="layui-input-inline">
-                <button type="button" class="layui-btn" id="manager_user_id">选择存储人</button>(办公器材由谁管理)
+                <button type="button" class="layui-btn layui-btn-normal" id="manager_user_id">选择存储人</button>(办公器材由谁管理)
                 <div id="manager_select_id">{$data_info['manager_user_id']|default=''}</div>
                 <input type="hidden" name="manager_user" id="manager_user" value="{$data_info['manager_user']|default=''}">
             </div>
@@ -39,7 +39,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">使用人</label>
             <div class="layui-input-inline">
-                <button type="button" class="layui-btn" id="deal_user_id">选择使用人</button>(办公器材由谁使用)
+                <button type="button" class="layui-btn layui-btn-normal" id="deal_user_id">选择使用人</button>(办公器材由谁使用)
                 <div id="deal_select_id">{$data_info['deal_user_id']|default=''}</div>
                 <input type="hidden" name="deal_user" id="deal_user" value="{$data_info['deal_user']|default=''}">
             </div>
