@@ -41,15 +41,16 @@ class Meal extends Admin
             $limit = input('param.limit/d', 20);
 
             $cat_id = input('param.cat_id/d');
+            $w = '';
             if ($cat_id){
-                $where['cat_id'] = $cat_id;
+                $w = "FIND_IN_SET({$cat_id},cat_id)";
             }
             $name = input('param.name');
             if ($name) {
                 $where['name'] = ['like', "%{$name}%"];
             }
             $where['cid'] = session('admin_user.cid');
-            $data['data'] = ItemModel::where($where)->page($page)->limit($limit)->select();
+            $data['data'] = ItemModel::where($where)->where($w)->page($page)->limit($limit)->select();
             if ($data['data']){
                 foreach ($data['data'] as $k=>$v) {
                     $data['data'][$k]['cat_name'] = MealItem::getOpt($v['cat_id']);
