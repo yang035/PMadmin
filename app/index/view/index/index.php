@@ -1,7 +1,7 @@
 <div class="gtco-section-overflow">
     <div class="row" style="margin-top: 300px;margin-bottom: 250px">
         <div class="col-md-12 col-xs-12 text-center gtco-heading">
-            <a href="{$Think.server.HTTP_HOST}" target="_blank"><img style="width: 60%;height: 60%" src="__PUBLIC_JS__/index/images/lo.png" title="进入工作"></a>
+            <a href="{$Think.server.HTTP_HOST}" target="_blank"><img style="width: 60%;height: 60%" src="__PUBLIC_JS__/index/images/logo1.png" title="进入工作"></a>
         </div>
     </div>
 <!--    <div class="jq22-container">-->
