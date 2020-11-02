@@ -12,8 +12,8 @@
             background-size:cover;
         }
         .profile-img-card {
-            width: 100px;
-            height: 100px;
+            width: 200px;
+            height: 120px;
             margin: 10px auto;
             display: block;
             -moz-border-radius: 50%;
@@ -55,7 +55,7 @@
 <body>
 <div id="mydiv">
     <div class="login-box">
-        <img id="profile-img" class="profile-img-card" src="__ADMIN_IMG__/avatar.png" />
+        <img id="profile-img" class="profile-img-card" src="__ADMIN_IMG__/avatar1.png" />
         <p id="profile-name" class="profile-name-card"></p>
         <form action="{:url()}" method="post" class="layui-form layui-form-pane">
             <div class="layui-form-item">
