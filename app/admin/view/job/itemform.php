@@ -1,3 +1,10 @@
+<style>
+    .layui-input-inline1 {
+        display: inline-block;
+        vertical-align: middle;
+        width: 120px;
+    }
+</style>
 <form class="layui-form" action="{:url()}" method="post">
     <div class="layui-tab-item layui-show layui-form-pane">
         <div class="layui-form-item">
@@ -74,6 +81,28 @@
                 </div>
             </div>
         </div>
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+            <legend>
+                <div class="layui-form-item">
+                      <label class="layui-form-label1">其他工作</label>
+                </div>
+            </legend>
+        </fieldset>
+        <div class="layui-form-item" style="margin-left: 100px">
+            <div class="layui-form-mid" style="margin-left: 30px">职责(不可编辑)</div>
+            <div class="layui-form-mid" style="margin-left: 80px">工作量</div>
+        </div>
+        {volist name="duty" id="vo"}
+        <div class="layui-form-item" style="margin-left: 100px">
+            {$i}.
+            <div class="layui-input-inline1">
+                <input type="text" class="layui-input field-duty_id" name="duty[{$vo['id']}]" readonly value="{$vo['name']}" >
+            </div>
+            <div class="layui-input-inline1">
+                <input type="text" class="layui-input field-num" name="duty[{$vo['id']}]" value="{$vo['num']}" >
+            </div>
+        </div>
+        {/volist}
         <div class="layui-form-item">
             <label class="layui-form-label">状态</label>
             <div class="layui-input-inline">

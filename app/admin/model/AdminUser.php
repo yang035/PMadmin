@@ -190,6 +190,7 @@ class AdminUser extends Model
             $login['work_cat'] = $user->work_cat;
             $login['role_name'] = $role['name'];
             $login['nick'] = $user->nick;
+            $login['job_item'] = $user->job_item;
             $login['username'] = $user->username;
             $login['realname'] = $user->realname;
             $login['signature'] = $user->signature;

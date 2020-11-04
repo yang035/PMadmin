@@ -27,6 +27,8 @@ use app\admin\model\AdminUser;
 use app\admin\model\AssetItem as ItemModel;
 use app\admin\model\ApprovalGoods;
 use app\admin\model\ApprovalPrint;
+use app\admin\model\DutyJob;
+use app\admin\model\DutyUser;
 use app\admin\model\JobItem;
 use app\admin\model\Project as ProjectModel;
 use app\admin\model\ApprovalReport as ApprovalReportModel;
@@ -2339,6 +2341,30 @@ class Approval extends Admin
 //                print_r($data);exit();
                 $res = ApprovalReportModel::create($data);
             }
+
+            $w = [
+                'job_id'=>session('admin_user.job_item'),
+                'duty_id'=>2,
+            ];
+            $num_arr = DutyJob::field('num')->where($w)->find();
+            if ($num_arr){
+                $num = $num_arr['num'];
+            }else{
+                $num = 0;
+            }
+            $duty_user = [
+                'cid'=>session('admin_user.cid'),
+                'job_id'=>session('admin_user.job_item'),
+                'duty_id'=>2,
+                'num'=>$num,
+                'times'=>1,
+                'url'=>$_SERVER['HTTP_REFERER'],
+                'remark'=>'审批次数记录',
+                'user_id'=>session('admin_user.uid'),
+            ];
+
+            DutyUser::create($duty_user);
+
             if (!$res) {
                 return $this->error('处理失败！');
             }

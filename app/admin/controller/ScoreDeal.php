@@ -7,6 +7,8 @@
  */
 
 namespace app\admin\controller;
+use app\admin\model\DutyJob;
+use app\admin\model\DutyUser;
 use app\admin\model\Rule;
 use app\admin\model\ScoreRule as RuleModel;
 use app\admin\model\ScoreDeal as DealModel;
@@ -312,6 +314,29 @@ class ScoreDeal extends Admin
                 //事务回滚
                 Db::rollback();
             }
+
+            $w = [
+                'job_id'=>session('admin_user.job_item'),
+                'duty_id'=>1,
+            ];
+            $num_arr = DutyJob::field('num')->where($w)->find();
+            if ($num_arr){
+                $num = $num_arr['num'];
+            }else{
+                $num = 0;
+            }
+            $duty_user = [
+                'cid'=>session('admin_user.cid'),
+                'job_id'=>session('admin_user.job_item'),
+                'duty_id'=>1,
+                'num'=>$num,
+                'times'=>1,
+                'url'=>$_SERVER['HTTP_REFERER'],
+                'remark'=>'审批次数记录',
+                'user_id'=>session('admin_user.uid'),
+            ];
+            DutyUser::create($duty_user);
+
             if ($res){
                 return $this->success("操作成功{$this->score_value}");
             }else{

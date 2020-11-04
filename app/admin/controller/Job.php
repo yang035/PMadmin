@@ -9,6 +9,7 @@
 namespace app\admin\controller;
 use app\admin\model\JobCat as CatModel;
 use app\admin\model\JobItem as ItemModel;
+use think\Db;
 
 
 class Job extends Admin
@@ -70,18 +71,46 @@ class Job extends Admin
 
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
-            unset($data['id']);
+            $duty = $data['duty'];
+            unset($data['id'],$data['duty']);
             // 验证
             $result = $this->validate($data, 'JobItem');
             if($result !== true) {
                 return $this->error($result);
             }
-            if (!ItemModel::create($data)) {
+            // 启动事务
+            Db::startTrans();
+            try {
+                $f = ItemModel::create($data);
+                if ($duty) {
+                    $duty_job = [];
+                    foreach ($duty as $k => $v) {
+                        $duty_job[$k] = [
+                            'cid' => $data['cid'],
+                            'job_id' => $f['id'],
+                            'duty_id' => $k,
+                            'num' => $v,
+                            'user_id' => $data['user_id'],
+                            'create_time' => time(),
+                            'update_time' => time(),
+                        ];
+                    }
+                    Db::table('tb_duty_job')->insertAll($duty_job);
+                }
+                // 提交事务
+                Db::commit();
+            } catch (\Exception $e) {
+                // 回滚事务
+                Db::rollback();
+            }
+            if (!$f) {
                 return $this->error('添加失败');
             }
             return $this->success("操作成功{$this->score_value}");
         }
+        $duty = config('config_score.duty');
         $this->assign('cat_option',ItemModel::getOption());
+        $this->assign('duty',$duty);
         return $this->fetch('itemform');
     }
 
@@ -92,12 +121,39 @@ class Job extends Admin
 
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
+            $duty = $data['duty'];
+            unset($data['duty']);
             // 验证
             $result = $this->validate($data, 'JobItem');
             if($result !== true) {
                 return $this->error($result);
             }
-            if (!ItemModel::update($data)) {
+            // 启动事务
+            Db::startTrans();
+            try {
+                $f = ItemModel::update($data);
+                if ($duty) {
+                    $duty_job = [];
+                    foreach ($duty as $k => $v) {
+                        $duty_job[$k] = [
+                            'cid' => $data['cid'],
+                            'job_id' => $f['id'],
+                            'duty_id' => $k,
+                            'num' => $v,
+                            'user_id' => $data['user_id'],
+                            'create_time' => time(),
+                            'update_time' => time(),
+                        ];
+                    }
+                    Db::table('tb_duty_job')->insertAll($duty_job);
+                }
+                // 提交事务
+                Db::commit();
+            } catch (\Exception $e) {
+                // 回滚事务
+                Db::rollback();
+            }
+            if (!$f) {
                 return $this->error('修改失败');
             }
             return $this->success('修改成功');
@@ -108,6 +164,8 @@ class Job extends Admin
         $row['requirements'] = htmlspecialchars_decode($row['requirements']);
         $this->assign('data_info', $row);
         $this->assign('cat_option',ItemModel::getOption());
+        $duty = config('config_score.duty');
+        $this->assign('duty',$duty);
         return $this->fetch('itemform');
     }
 
