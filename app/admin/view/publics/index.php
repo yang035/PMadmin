@@ -12,13 +12,13 @@
             background-size:cover;
         }
         .profile-img-card {
-            width: 200px;
-            height: 120px;
-            margin: 10px auto;
+            width: 220px;
+            height: 150px;
+            margin: 20px auto;
             display: block;
-            -moz-border-radius: 50%;
-            -webkit-border-radius: 50%;
-            border-radius: 50%;
+            /*-moz-border-radius: 50%;*/
+            /*-webkit-border-radius: 50%;*/
+            /*border-radius: 50%;*/
         }
         .profile-name-card {
             text-align: center;
