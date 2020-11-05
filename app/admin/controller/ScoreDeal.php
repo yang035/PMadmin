@@ -334,6 +334,8 @@ class ScoreDeal extends Admin
                 'url'=>$_SERVER['HTTP_REFERER'],
                 'remark'=>'审批次数记录',
                 'user_id'=>session('admin_user.uid'),
+                'create_time'=> date('Y-m-d H:i:s'),
+                'update_time'=> date('Y-m-d H:i:s'),
             ];
             DutyUser::create($duty_user);
 
