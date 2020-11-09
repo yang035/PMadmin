@@ -39,7 +39,7 @@
         .login-box .copyright{text-align:center;height:50px;line-height:50px;font-size:12px;color:#fbfbfb}
         .login-box .copyright a{color:#fbfbfb;}
         a {
-            color:#FFB800;
+            color:#fe9900;
         }
         .layui-input{
             height: 38px;
@@ -69,7 +69,7 @@
                 </select>
             </div>
             {:token('__token__', 'sha1')}
-            <input type="submit" value="登陆" lay-submit="" lay-filter="formLogin" class="layui-btn layui-btn-warm">
+            <input type="submit" value="登陆" lay-submit="" lay-filter="formLogin" class="layui-btn layui-btn-warm" style="background-color: #fe9900">
             <div class="layui-form-item">
                 <div style="margin:10px 20px 10px 20px;font-size: 20px">
                     <a href="{:url('register')}" class="login-qq-a" style="float: left">注册</a>

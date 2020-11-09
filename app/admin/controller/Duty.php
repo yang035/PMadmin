@@ -137,6 +137,43 @@ class Duty extends Admin
 //            print_r($file_name);exit();
             set_time_limit(0);
             $excel = \service('Excel');
+            $format = array('A' => 'line', 'B' => 'ZTMC', 'C' => 'ZTBM');
+            $checkformat = array('A' => '序号', 'B' => '主体名称', 'C' => '统一社会信用代码');
+            $res = $excel->readUploadFile($file_name, $format, 10000, $checkformat);
+            $cid = session('admin_user.cid');
+            if ($res['status'] == 0) {
+                $this->error($res['data']);
+            } else {
+                $i = 0;
+                foreach ($res['data'] as $k => $v) {
+                        $tmp = [
+                            'ZTMC' => $v['B'],
+                            'ZTBM' => $v['C'],
+                        ];
+                        Db::table('tb_ztbm')->insert($tmp);
+                }
+            }
+        }
+        return $this->fetch();
+    }
+
+    public function import1(){
+        if ($this->request->isAjax()) {
+            $file = request()->file('file');
+            // 上传附件路径
+            $_upload_path = ROOT_PATH . 'public/upload' . DS . 'excel' . DS . date('Ymd') . DS;
+            // 附件访问路径
+            $_file_path = ROOT_DIR . 'upload/excel/' . date('Ymd') . '/';
+
+            // 移动到upload 目录下
+            $upfile = $file->rule('md5')->move($_upload_path);//以md5方式命名
+            if (!is_file($_upload_path . $upfile->getSaveName())) {
+                return self::result('文件上传失败！');
+            }
+            $file_name = $_upload_path . $upfile->getSaveName();
+//            print_r($file_name);exit();
+            set_time_limit(0);
+            $excel = \service('Excel');
             $format = array('A' => 'line', 'B' => 'cat_id', 'C' => 'name', 'D' => 'ml','E' => 'gl');
             $checkformat = array('A' => '序号', 'B' => '类别', 'C' => '项目', 'D' => 'ML','E' => 'GL');
             $res = $excel->readUploadFile($file_name, $format, 8050, $checkformat);

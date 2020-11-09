@@ -38,7 +38,7 @@
             <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
             <th>姓名</th>
             {volist name="duty" id="vo"}
-            <th>{$vo['name']}</th>
+            <th>{$vo['name']}(计划 | 实际)</th>
             {/volist}
         </tr>
         </thead>
