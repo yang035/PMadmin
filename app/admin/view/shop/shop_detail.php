@@ -23,14 +23,17 @@
         <div class="layui-form-item">
             <label class="layui-form-label">额外支付</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input field-other_price" name="other_price" value="{$data_list['other_price']}" readonly lay-verify="required" autocomplete="off" placeholder="">
+                <input type="text" class="layui-input field-other_price" name="other_price" value="{$data_list['other_price_new']}" readonly lay-verify="required" autocomplete="off" placeholder="">
             </div>
             <div class="layui-form-mid">元</div>
+            <div class="layui-form-mid" style="color: red">原价 {$data_list['other_price']} 元，享受 {$data_list['discount']} 折</div>
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <input type="hidden" class="field-unit_score" name="unit_score" value="{$data_list['score']}">
                 <input type="hidden" class="field-item_id" name="item_id" value="{$data_list['id']}">
+                <input type="hidden" class="field-old_price" name="old_price" value="{$data_list['other_price']}">
+                <input type="hidden" class="field-discount" name="discount" value="{$data_list['discount']*10}">
                 <button type="submit" class="layui-btn layui-btn-normal btn_sub" lay-submit="" lay-filter="formSubmit">兑换</button>
                 <a href="javascript:history.back()" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
             </div>

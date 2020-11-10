@@ -8,6 +8,7 @@
 
 namespace app\admin\controller;
 use app\admin\model\AdminMenu;
+use app\admin\model\AdminRole;
 use app\admin\model\ShopCat as CatModel;
 use app\admin\model\ShopItem as ItemModel;
 use app\admin\model\Score as ScoreModel;
@@ -119,8 +120,22 @@ class Shop extends Admin
             return $this->success("操作成功{$this->score_value}");
         }
         $this->assign('cat_option',ItemModel::getOption());
+        $this->assign('role',$this->getRole());
         $this->assign('visible_range',ItemModel::getVisibleRange());
         return $this->fetch('itemform');
+    }
+
+    public function getRole(){
+        $role = AdminRole::getRole();
+        $str = '';
+        if ($role){
+            $str = '[';
+            foreach ($role as $k=>$v){
+                $str.= $v['name'].':'.$v['discount'].'%;';
+            }
+            $str .= ']';
+        }
+        return $str;
     }
 
     public function editItem($id = 0)
@@ -145,6 +160,7 @@ class Shop extends Admin
         $row['remark'] = htmlspecialchars_decode($row['remark']);
         $this->assign('data_info', $row);
         $this->assign('cat_option',ItemModel::getOption());
+        $this->assign('role',$this->getRole());
         $this->assign('visible_range',ItemModel::getVisibleRange());
         return $this->fetch('itemform');
     }
@@ -328,6 +344,9 @@ class Shop extends Admin
     }
 
     public function shopDetail($id = 0){
+        $role_id = session('admin_user.role_id');
+        $discount = AdminRole::getRole1($role_id);
+
         if ($this->request->isPost()) {
             $data = $this->request->post();
 
@@ -413,6 +432,10 @@ class Shop extends Admin
             }
         }
         $row['remark'] = htmlspecialchars_decode($row['remark']);
+        if ($row['is_discount']){
+            $row['discount'] = $discount[0]/10;
+            $row['other_price_new'] = round($row['other_price']*($discount[0]/100),2);
+        }
         $this->assign('data_list', $row);
         $this->assign('cat_option',ItemModel::getOption());
         $this->assign('score',$this->getUnuseScore());

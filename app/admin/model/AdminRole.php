@@ -89,6 +89,22 @@ class AdminRole extends Model
         return self::column('id,name');
     }
 
+    public static function getRole()
+    {
+        $where = [
+            'id' => ['>=',3],
+        ];
+        return self::field('id,name,discount')->where($where)->select();
+    }
+
+    public static function getRole1($role_id)
+    {
+        $where = [
+            'id' => $role_id,
+        ];
+        return self::where($where)->limit(1)->column('discount');
+    }
+
     public static function checkAuth($id = 0)
     {
         $login = session('admin_user');

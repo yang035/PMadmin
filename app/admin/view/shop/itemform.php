@@ -104,6 +104,13 @@
             </div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label">按平台折扣</label>
+            <div class="layui-input-block">
+                <input type="radio" class="field-is_discount" name="is_discount" value="0" title="无" checked>
+                <input type="radio" class="field-is_discount" name="is_discount" value="1" title="有{$role}">
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">描述</label>
             <div class="layui-input-block">
                 <textarea id="ckeditor" name="remark" class="field-remark"></textarea>

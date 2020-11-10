@@ -49,6 +49,9 @@
 <script type="text/html" id="statusTpl">
     <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=shop_item&id={{ d.id }}">
 </script>
+<script type="text/html" id="statusTpl_1">
+    <input type="checkbox" name="is_discount" value="{{ d.is_discount }}" lay-skin="switch" lay-filter="switchStatus" lay-text="有|无" {{ d.is_discount == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=shop_item&f=is_discount&id={{ d.id }}">
+</script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
     <a onclick="read({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">查看</a>
     <a href="{:url('editItem')}?id={{ d.id }}&shop_type={$Request.param.p}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
@@ -88,6 +91,7 @@
                         return d.cat.name;
                     }},
                 {field: 'tuisong', title: '推送(类型_公司)'},
+                {field: 'is_discount', title: '是否按平台优惠', templet: '#statusTpl_1'},
                 {field: 'status', title: '状态', templet: '#statusTpl'},
                 {title: '操作',width:250, templet: '#buttonTpl'},
                 {title: '审核信息', templet: '#buttonTpl2'},
