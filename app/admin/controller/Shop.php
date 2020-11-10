@@ -435,6 +435,9 @@ class Shop extends Admin
         if ($row['is_discount']){
             $row['discount'] = $discount[0]/10;
             $row['other_price_new'] = round($row['other_price']*($discount[0]/100),2);
+        }else{
+            $row['other_price_new'] = $row['other_price'];
+            $row['discount'] = 10;
         }
         $this->assign('data_list', $row);
         $this->assign('cat_option',ItemModel::getOption());
