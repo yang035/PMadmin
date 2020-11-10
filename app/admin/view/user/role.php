@@ -28,6 +28,7 @@
             ,cols: [[ //表头
                 {type:'checkbox'}
                 ,{field: 'name', title: '角色名称'}
+                ,{field: 'discount', title: '商品折扣(%)'}
                 ,{field: 'intro', title: '角色简介'}
                 ,{field: 'create_time', title: '创建时间'}
                 ,{field: 'status', title: '状态', templet: '#statusTpl'}

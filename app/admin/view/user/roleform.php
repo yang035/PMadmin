@@ -1,3 +1,18 @@
+<style>
+    .layui-upload-img {
+        width: 92px;
+        height: 92px;
+        margin: 0 10px 10px 0;
+        display: none;
+    }
+    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+</style>
 <form class="layui-form" action="{:url()}" method="post">
 <div class="layui-tab-item layui-show layui-form-pane">
     <div class="layui-form-item">
@@ -20,6 +35,13 @@
         <div class="layui-input-inline">
             <textarea  class="layui-textarea field-intro" name="intro" lay-verify="" autocomplete="off" placeholder="[选填]角色简介"></textarea>
         </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">商品折扣</label>
+        <div class="layui-input-inline">
+            <input type="number" class="layui-input field-discount" name="discount" value="100" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" autocomplete="off" placeholder="请输入金额">
+        </div>
+        <div class="layui-form-mid">%(享受平台上符合条件的商品折扣)</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">角色状态</label>
