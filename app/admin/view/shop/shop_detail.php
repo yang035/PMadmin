@@ -26,7 +26,7 @@
                 <input type="text" class="layui-input field-other_price" name="other_price" value="{$data_list['other_price_new']}" readonly lay-verify="required" autocomplete="off" placeholder="">
             </div>
             <div class="layui-form-mid">元</div>
-            <div class="layui-form-mid" style="color: red">原价 {$data_list['other_price']} 元，享受 {$data_list['discount']} 折</div>
+            <div class="layui-form-mid" style="color: red">{neq name="data_list['discount']" value="10"}原价 {$data_list['other_price']} 元，享受 {$data_list['discount']} 折{/neq}</div>
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
