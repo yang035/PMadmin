@@ -128,7 +128,7 @@
             type:2,
             title :'详情',
             maxmin: true,
-            area: ['1200px', '800px'],
+            area: ['600px', '500px'],
             content: open_url,
             success:function (layero, index) {
             }
