@@ -133,6 +133,10 @@ return [
         3=>'法定节假日',
         4=>'其他',
     ],
+    'invoice_type' =>[
+        1=>'专票',
+        2=>'普票',
+    ],
     'res_type' => [
         ''=>'待确认',
         'a'=>'已确认',
@@ -224,6 +228,10 @@ return [
         18=>[
             'title'=>'推荐信',
             'href'=>'admin/Approval/leaveOffice'
+        ],
+        19=>[
+            'title'=>'申请发票',
+            'href'=>'admin/Approval/Invoice'
         ],
     ],
     'car_type' => [

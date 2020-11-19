@@ -120,6 +120,9 @@
                 项目名称：{$list1['project_name']}<br>
                 费用类型：{$expense_type[$list1['type']]}<br>
                 金额：{$list1['money']}<br>
+                收款单位：{$data_list['payee']}<br>
+                开户银行：{$data_list['bank']}<br>
+                开户账号：{$data_list['card_num']}<br>
                 事由：{$list1['reason']}<br>
                 附件说明：
                 {notempty name="list1['attachment'][0]"}
@@ -292,9 +295,25 @@
                 <br>
                 总计：{$data_list['money']}元<br>
                 {/case}
-            {case value="17"}
-            请假类型：{$data_list['money']} 元<br>
-            {/case}
+                {case value="17"}
+                体现金额：{$data_list['money']} 元<br>
+                {/case}
+                {case value="18"}
+
+                {/case}
+                {case value="19"}
+                开票名称：{$data_list['name']}<br>
+                纳税人识别号：{$data_list['identity_number']}<br>
+                地址和电话：{$data_list['address']}<br>
+                开户银行：{$data_list['bank']}<br>
+                开户账号：{$data_list['card_num']}<br>
+                发票类型：{$invoice_type[$data_list['type']]}<br>
+                支付金额：{$data_list['money']}<br>
+                合同编号：{$data_list['contract_number']}<br>
+                总金额：{$data_list['total_money']}<br>
+                已支付金额：{$data_list['has_money']}<br>
+                发票备注栏信息：{$data_list['infomation']}<br>
+                {/case}
             {/switch}
             事由：{$data_list['reason']}<br>
             附件说明：

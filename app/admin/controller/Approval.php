@@ -37,6 +37,7 @@ use app\admin\model\FondPool as FondPoolModel;
 use app\admin\model\ProjectBudget as BudgetModel;
 use app\admin\model\ProjectBudgetcaigou as BudgetcaigouModel;
 use app\admin\model\ApprovalLeaveoffice as LeaveofficeModel;
+use app\admin\model\ApprovalInvoice as InvoiceModel;
 use think\Db;
 
 
@@ -1872,6 +1873,88 @@ class Approval extends Admin
         return $this->fetch();
     }
 
+    public function Invoice()
+    {
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            if ('' == $data['project_id']){
+                return $this->error('请选择项目');
+            }
+            // 验证
+            $result = $this->validate($data, 'ApprovalInvoice');
+            if ($result !== true) {
+                return $this->error($result);
+            }
+            unset($data['id']);
+
+            $send_user = html_entity_decode($data['send_user']);
+            $send_user1 = json_decode($send_user,true);
+            $send_user1 = array_values(array_unique($send_user1, SORT_REGULAR));
+            $send_user2 = [];
+            foreach ($send_user1 as $k=>$v) {
+                $send_user2 += $v;
+            }
+
+            Db::startTrans();
+            try {
+                $approve = [
+                    'project_id' => $data['project_id'],
+                    'class_type' => $data['class_type'],
+                    'cid' => session('admin_user.cid'),
+                    'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
+                    'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
+                    'time_long' => $data['time_long'],
+                    'user_id' => session('admin_user.uid'),
+                    'send_user' => json_encode($send_user2),
+                    'copy_user' => user_array($data['copy_user']),
+                ];
+                $res = ApprovalModel::create($approve);
+
+                $su = [];
+                foreach ($send_user1 as $k=>$v) {
+                    $su[$k] = [
+                        'aid' => $res['id'],
+                        'flow_num' => $k,
+                        'send_user' => json_encode($v),
+                    ];
+                }
+                $send_user_model = new ApprovalSenduser();
+                $send_user_model->saveAll($su);
+
+                $invoice = [
+                    'aid' => $res['id'],
+                    'reason' => $data['reason'],
+                    'name' => $data['name'],
+                    'identity_number' => $data['identity_number'],
+                    'address' => $data['address'],
+                    'bank' => $data['bank'],
+                    'card_num' => $data['card_num'],
+                    'type' => $data['type'],
+                    'money' => $data['money'],
+                    'contract_number' => $data['contract_number'],
+                    'total_money' => $data['total_money'],
+                    'has_money' => $data['has_money'],
+                    'infomation' => $data['infomation'],
+                    'attachment' => $data['attachment'],
+                ];
+                $flag = InvoiceModel::create($invoice);
+                // 提交事务
+                Db::commit();
+            } catch (\Exception $e) {
+                // 回滚事务
+                Db::rollback();
+            }
+            if ($flag) {
+                return $this->success("操作成功{$this->score_value}", 'index');
+            } else {
+                return $this->error('添加失败！');
+            }
+        }
+        $this->assign('cost_option', InvoiceModel::getOption());
+        $this->assign('mytask', ProjectModel::getMyTask(0));
+        return $this->fetch();
+    }
+
     public function read()
     {
         $params = $this->request->param();
@@ -1944,6 +2027,10 @@ class Approval extends Admin
             case 18:
                 $table = 'tb_approval_leaveoffice';
                 $f = 'b.reason,b.attachment';
+                break;
+            case 19:
+                $table = 'tb_approval_invoice';
+                $f = 'b.reason,b.name,b.identity_number,b.address,b.bank,b.card_num,b.type,b.money,b.contract_number,b.total_money,b.has_money,b.infomation,b.attachment';
                 break;
             default:
                 $table = 'tb_approval_leave';
@@ -2576,6 +2663,12 @@ class Approval extends Admin
                 $this->assign('unit_type', $unit2_type);
                 break;
             case 17:
+                break;
+            case 18:
+                break;
+            case 19:
+                $cost_type = config('other.invoice_type');
+                $this->assign('invoice_type', $cost_type);
                 break;
             default:
                 break;

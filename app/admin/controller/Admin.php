@@ -356,6 +356,46 @@ class Admin extends Controller
         return $row;
     }
 
+    public function getFlowUser3($id){
+        $res = ProjectModel::getRowJoinSubject($id);
+        $uid_arr = json_decode($res['leader_user'],true);
+        $tmp = [];
+        $uid = session('admin_user.uid');
+        if ($uid_arr){
+            foreach ($uid_arr as $k=>$v){
+                $u_row = UserModel::getUserById1($k);
+                if ($u_row){
+                    $tmp[$k] = $u_row['realname'];
+                }
+            }
+            if (array_key_exists($uid,$tmp)){
+                $tmp = [];
+            }
+        }
+
+        $cid = session('admin_user.cid');
+        $redis = service('Redis');
+        $default_user = $redis->get("pm:user:{$cid}");
+        if ($default_user) {
+            $user = json_decode($default_user,true);
+            $user_insert = [0=>[$user['accountant_user']=>$user['accountant_user_id']]];
+        }
+
+        array_push($user_insert,$tmp);
+        $new_arr = array_filter($user_insert);
+        $new_arr = array_reverse($new_arr);
+        $row['manager_user'] = user_array2($new_arr);
+        $s = '';
+        if ($new_arr){
+            foreach ($new_arr as $k=>$v) {
+                $k++;
+                $s .= "[{$k}]".implode(',',$v).' ';
+            }
+        }
+        $row['manager_user_id'] = $s;
+        return $row;
+    }
+
     public function deal_data($x_user)
     {
         $x_user_arr = json_decode($x_user, true);

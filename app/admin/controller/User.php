@@ -470,6 +470,7 @@ class User extends Admin
             $data['deal_user'] = trim($data['deal_user'],',');
             $data['copy_user'] = trim($data['copy_user'],',');
             $data['finance_user'] = trim($data['finance_user'],',');
+            $data['accountant_user'] = trim($data['accountant_user'],',');
             $data['hr_user'] = trim($data['hr_user'],',');
             $data['hr_finance_user'] = trim($data['hr_finance_user'],',');
             $data['own_user'] = trim($data['own_user'],',');
@@ -488,7 +489,7 @@ class User extends Admin
             return $this->success('操作成功');
         }
 
-        $fields = 'cid,manager_user,send_user,deal_user,copy_user,finance_user,hr_user,hr_finance_user,own_user,assignment_user';
+        $fields = 'cid,manager_user,send_user,deal_user,copy_user,finance_user,hr_user,hr_finance_user,own_user,assignment_user,accountant_user';
         $row = AdminUserDefault::field($fields)->where('cid',$cid)->find();
         if ($row){
             $row['manager_user_id'] = $this->deal_user($row['manager_user']);
@@ -496,6 +497,7 @@ class User extends Admin
             $row['deal_user_id'] = $this->deal_user($row['deal_user']);
             $row['copy_user_id'] = $this->deal_user($row['copy_user']);
             $row['finance_user_id'] = $this->deal_user($row['finance_user']);
+            $row['accountant_user_id'] = $this->deal_user($row['accountant_user']);
             $row['hr_user_id'] = $this->deal_user($row['hr_user']);
             $row['hr_finance_user_id'] = $this->deal_user($row['hr_finance_user']);
             $row['own_user_id'] = $this->deal_user($row['own_user']);
