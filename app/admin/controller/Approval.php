@@ -504,7 +504,7 @@ class Approval extends Admin
                 $this->assign('list1', $list1);
             }elseif (3 == $params['ct']){
                 $table = 'tb_approval_cost';
-                $f = 'b.type,b.reason,b.money,b.attachment';
+                $f = 'b.type,b.reason,b.money,b.attachment,b.payee,b.bank,b.card_num';
                 $map = [
                     'a.id' => $params['id']
                 ];
@@ -2515,7 +2515,7 @@ class Approval extends Admin
 
                     }elseif (!empty($list['a_aid']) && $ct[0] == 3){
                         $table = 'tb_approval_cost';
-                        $f = 'b.type,b.reason,b.money,b.attachment';
+                        $f = 'b.type,b.reason,b.money,b.attachment,b.payee,b.bank,b.card_num';
                         $map = [
                             'a.id' => $list['a_aid']
                         ];

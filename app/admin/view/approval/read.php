@@ -120,6 +120,9 @@
                 项目名称：{$list1['project_name']}<br>
                 费用类型：{$expense_type[$list1['type']]}<br>
                 金额：{$list1['money']}<br>
+                收款单位：{$list1['payee']}<br>
+                开户银行：{$list1['bank']}<br>
+                开户账号：{$list1['card_num']}<br>
                 事由：{$list1['reason']}<br>
                 附件说明：
                 {notempty name="list1['attachment'][0]"}
