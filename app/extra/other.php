@@ -230,7 +230,7 @@ return [
             'href'=>'admin/Approval/leaveOffice'
         ],
         19=>[
-            'title'=>'申请发票',
+            'title'=>'申请开票',
             'href'=>'admin/Approval/Invoice'
         ],
     ],
