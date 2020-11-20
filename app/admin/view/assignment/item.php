@@ -132,15 +132,15 @@
                         }
                     }},
                 {title: '操作', templet: '#buttonTpl',width:160},
+                {field: 'user_name', title: '添加人',width:80},
+                {field: 'send_user', title: '发送给',width:110},
+                {field: 'deal_user', title: '执行人',width:110},
                 {field: 'create_time', title: '添加时间',width:110},
                 {field: 'ml', title: 'ML',width:80},
                 // {field: 'gl', title: 'GL',width:80},
                 {field: 'time_type', title: '日期类型',width:100},
                 {field: 'start_time', title: '开始日期',width:110},
                 {field: 'end_time', title: '结束日期',width:110},
-                {field: 'send_user', title: '发送给',width:110},
-                {field: 'deal_user', title: '执行人',width:110},
-                {field: 'user_name', title: '添加人',width:80},
             ]],
             done: function () {
                 // $('.liulan').viewer({
