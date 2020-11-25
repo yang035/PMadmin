@@ -29,6 +29,7 @@
         <a data-href="{:url('status?table=contacts_item&val=1')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-play" data-table="dataTable">&nbsp;启用</a>
         <a data-href="{:url('status?table=contacts_item&val=0')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-pause" data-table="dataTable">&nbsp;禁用</a>
         <!--            <a data-href="{:url('delItem')}" class="layui-btn layui-btn-primary j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>-->
+        <a href="javascript:import_excel();" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;合同导入</a>
     </div>
 </div>
 <table id="dataTable" class="layui-table" lay-filter="table1"></table>
@@ -154,4 +155,22 @@
         height:37,//高
         optionMaxHeight:300//下拉框最大高度
     });
+
+    function import_excel() {
+        var open_url = "{:url('doimport')}";
+        if (open_url.indexOf('?') >= 0) {
+            open_url += '&hisi_iframe=yes';
+        } else {
+            open_url += '?hisi_iframe=yes';
+        }
+        layer.open({
+            type:2,
+            title :'导入',
+            maxmin: true,
+            area: ['800px', '500px'],
+            content: open_url,
+            success:function (layero, index) {
+            }
+        });
+    }
 </script>

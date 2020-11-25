@@ -100,6 +100,33 @@ class SubjectContract extends Admin
         return $this->fetch('itemform');
     }
 
+    public function doimport()
+    {
+        if ($this->request->isAjax()) {
+            $params = $this->request->param();
+            $data = [
+                'cid'=>session('admin_user.cid'),
+                'subject_id'=>$params['subject_id'],
+                'name'=>$params['name'],
+                'attachment'=>$params['attachment'],
+                'tpl_id'=>1,
+                'content'=>'详见附件',
+                'status'=>0,
+                'user_id'=>session('admin_user.uid'),
+            ];
+            $result = $this->validate($data, 'SubjectContract');
+            if ($result !== true) {
+                return $this->error($result);
+            }
+            if (!ContractModel::create($data)) {
+                return $this->error('提交失败');
+            }
+            return $this->success('提交成功');
+        }
+        $this->assign('project_select', SubjectItem::getItemOption());
+        return $this->fetch();
+    }
+
     public function getContractItem($cat_id = 0, $id = 0)
     {
         $data = ContractItem::getItemByCat($cat_id, $id);
