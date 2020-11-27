@@ -3,7 +3,7 @@
         <div class="layui-card-body">
             <b>名称：</b>{$data_list['name']}<br>
             <b>缩略图：</b><img src="{$data_list['thumb']}" width="50" height="50" alt="{$data_list['name']}"><br>
-            <b>麦粒兑换：</b>{$data_list['score']}(斗)<br>
+            <b>谷粒兑换：</b>{$data_list['score']}(斗)<br>
             <b>等价于：</b>{$data_list['marketprice']}(元)<br>
             <b>额外支付：</b>{$data_list['other_price']}(元)<br>
             <b>描述：</b>{$data_list['remark']}<br>
