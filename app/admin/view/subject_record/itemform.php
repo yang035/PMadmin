@@ -31,6 +31,15 @@
 <!--        </div>-->
         {:editor(['ckeditor', 'ckeditor2'],'kindeditor')}
         <div class="layui-form-item">
+            <label class="layui-form-label">附件</label>
+            <div class="layui-input-inline">
+                <button type="button" class="layui-btn layui-btn-normal" id="test3"><i class="layui-icon"></i>上传文件</button>
+                <input class="layui-input attachment" type="hidden" name="attachment" value="">
+                <input class="layui-input name" type="hidden" name="name" value="">
+                <span class="att_name"></span>
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">状态</label>
             <div class="layui-input-inline">
                 <input type="radio" class="field-status" name="status" value="1" title="启用" checked>
@@ -52,8 +61,26 @@
 <script>
     var formData = {:json_encode($data_info)};
 
-    layui.use(['jquery', 'laydate'], function() {
-        var $ = layui.jquery, laydate = layui.laydate;
+    layui.use(['jquery', 'laydate', 'upload'], function() {
+        var $ = layui.jquery, laydate = layui.laydate, upload = layui.upload;
+        upload.render({
+            elem: '#test3',
+            url: '{:url("admin/UploadFile/upload?thumb=no&water=no")}',
+            accept: 'file', //普通文件
+            size:"{:config('upload.upload_file_size')}",
+            done: function(res){
+                if(res.code == 1) { //上传成功
+                    $('.attachment').val(res.data.file);
+                    var att_name = $('.att_name').val();
+                    att_name += "<a target='_blank' href='"+res.data.file +"'>"+ res.data.name+"</a>";
+                    $('.att_name').html(att_name);
+                    $('.name').val(res.data.name);
+                    layer.msg(res.msg);
+                }else {
+                    layer.msg(res.msg);
+                }
+            }
+        });
     });
 
     new SelectBox($('.box1'),{$project_select},function(result){

@@ -4,7 +4,13 @@
             <b>项目：</b>{$cat_option[$data_list['subject_id']]}<br>
             <b>主题：</b>{$data_list['name']}<br>
             <b>内容：</b>{$data_list['content']}<br>
-            <b>附件：</b><a href="{$data_list['attachment']}">{$data_list['name']}</a> <br>
+            <b>附件：</b>
+            {notempty name="data_list['attachment']"}
+            <a class='mcolor' href="{$data_list['attachment']}">{$data_list['name']}</a>
+            {else/}
+            无
+            {/notempty}
+            <br>
             <b>更新时间：</b>{$data_list['update_time']}<br>
         </div>
     </div>
