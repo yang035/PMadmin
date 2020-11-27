@@ -68,7 +68,7 @@
                         <li><a href="/" data-nav-section="services" target="_blank">生活区</a></li>
                         <li><a href="/" data-nav-section="portfolio" target="_blank">学习区</a></li>
                         <li><a href="/admin.php" target="_blank">工作区</a></li>
-                        <li><a href="http://bbs.imlgl.com" target="_blank">社区</a></li>
+                        <li><a href="http://study.imlgl.com" target="_blank">社区</a></li>
                         <li><a href="/" class="external">联系我们</a></li>
                     </ul>
                 </div>
