@@ -26,7 +26,9 @@
                                 {volist name="f2['attachment']" id='f3'}
                                 <a href="{$f3}" target="_blank">附件{$i}</a>
                                 {/volist}
-                                --{$f2['create_time']} {notempty name="f2['ratio']"}--<span class="ratio red">{$f2['ratio']}</span>%{/notempty}</div>
+                                --{$f2['create_time']} {notempty name="f2['ratio']"}--<span class="ratio red">{$f2['ratio']}</span>%{/notempty}
+                                ----<input type="checkbox" name="share_flag" {notempty name="f2['share_flag']"}checked{/notempty} lay-skin="primary" title="分享第三方">
+                            </div>
                         </div>
                     </li>
                     {/volist}

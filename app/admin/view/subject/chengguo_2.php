@@ -43,6 +43,7 @@
 <script type="text/html" id="statusTpl">
     <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=subject_item&id={{ d.id }}">
 </script>
+{empty name="pr"}
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
     <a href="{:url('flow')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-warm">提交进度</a>
     {{# if(d.step==0){ }}
@@ -54,8 +55,12 @@
     {{# if(d.step==2){ }}
     当月已审核
     {{# } }}
-    <a href="#" onclick="third_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">设置第三方可见</a>
 </script>
+{else/}
+<script type="text/html" title="操作按钮模板" id="buttonTpl">
+    <a href="{:url('flow')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-warm">查看</a>
+</script>
+{/empty}
 <script type="text/javascript">
     layui.use(['jquery','table'], function() {
         var $ = layui.jquery,table = layui.table;
@@ -122,8 +127,8 @@
         });
     }
 
-    function third_user(id) {
-        var open_url = "{:url('addThird')}?id="+id;
+    function zujian_user(id) {
+        var open_url = "{:url('addBaseUser')}?id="+id;
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {

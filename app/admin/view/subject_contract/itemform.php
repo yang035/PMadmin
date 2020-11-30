@@ -10,6 +10,12 @@
             </div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label">项目编号</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input field-idcard" name="idcard" autocomplete="off" placeholder="请输入合同编号" value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">合同名称</label>
             <div class="layui-input-inline">
                 <input class="layui-input field-name" name="name" lay-verify="required" autocomplete="off">
@@ -38,7 +44,6 @@
             <div class="layui-input-inline">
                 <button type="button" class="layui-btn layui-btn-normal" id="test3"><i class="layui-icon"></i>上传文件</button>
                 <input class="layui-input attachment" type="hidden" name="attachment" value="">
-                <input class="layui-input name" type="hidden" name="name" value="">
                 <span class="att_name"></span>
             </div>
         </div>

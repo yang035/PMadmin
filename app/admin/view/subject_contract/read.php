@@ -2,7 +2,8 @@
     <div class="layui-card">
         <div class="layui-card-body">
             <b>项目：</b>{$cat_option[$data_list['subject_id']]}<br>
-            <b>主题：</b>{$data_list['name']}<br>
+            <b>项目编号：</b>{$data_list['idcard']}<br>
+            <b>合同名称：</b>{$data_list['name']}<br>
             <b>内容：</b>{$data_list['content']}<br>
             <b>附件：</b>
             {notempty name="data_list['attachment']"}

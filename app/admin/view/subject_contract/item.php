@@ -62,6 +62,7 @@
                 {field: 'subject_id', title: '项目名称', templet:function(d){
                         return d.cat.name;
                     }},
+                {field: 'idcard', title: '项目编号'},
                 {field: 'name', title: '合同名称', templet:function(d){
                         return "<a class='mcolor' onclick='read("+d.id+")'>"+d.name+"</a>";
                     }},

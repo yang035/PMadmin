@@ -151,6 +151,10 @@ class Subject extends Admin
 
     public function chengguo($q = '')
     {
+        $param = $this->request->param();
+        if (!isset($param['pram'])){
+            $param['pram'] = 0;
+        }
         if ($this->request->isAjax()) {
             $where = $data = [];
             $page = input('param.page/d', 1);
@@ -212,6 +216,10 @@ class Subject extends Admin
 //        $this->assign('tab_type', 1);
         $this->assign('cat_option', ItemModel::getOption());
         $this->assign('s_status', ItemModel::getSStatus());
+        $this->assign('pr', $param['pram']);
+        if ($param['pram']){
+            return $this->fetch('chengguo_2');
+        }
         return $this->fetch();
     }
 
@@ -690,7 +698,7 @@ class Subject extends Admin
         $this->assign('p_source', ItemModel::getPsource());
         $this->assign('three_level', ItemModel::getThreeLevel());
         $this->assign('grade_type', ProjectModel::getGrade());
-        $this->assign('cur_time', date('YmdHis'));
+        $this->assign('cur_time', date('YmdH'));
         $this->assign('t_type', ProjectModel::getTType());
         $this->assign('s_status', ItemModel::getSStatus(1));
         $this->assign('is_private', ProjectModel::getPrivate());
@@ -1402,6 +1410,25 @@ class Subject extends Admin
         $row['contract_b_user'] = $this->deal_data_id($row['contract_b_user']);
         $row['finance_b_user'] = $this->deal_data_id($row['finance_b_user']);
         $row['subject_b_user'] = $this->deal_data_id($row['subject_b_user']);
+        $this->assign('data_info', $row);
+        return $this->fetch();
+
+    }
+
+    public function addThird($id = 0)
+    {
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            $data['third_user'] = user_array($data['third_user']);
+
+            if (!ItemModel::update($data)) {
+                return $this->error('操作失败');
+            }
+            return $this->success('操作成功');
+        }
+        $row = ItemModel::where('id', $id)->find()->toArray();
+        $row['third_user_id'] = $this->deal_data($row['third_user']);
+        $row['third_user'] = $this->deal_data_id($row['third_user']);
         $this->assign('data_info', $row);
         return $this->fetch();
 

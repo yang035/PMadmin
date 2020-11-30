@@ -109,6 +109,7 @@ class SubjectContract extends Admin
                 'subject_id'=>$params['subject_id'],
                 'name'=>$params['name'],
                 'attachment'=>$params['attachment'],
+                'idcard'=>$params['idcard'],
                 'tpl_id'=>1,
                 'content'=>'详见附件',
                 'status'=>0,
