@@ -156,13 +156,16 @@ class SubjectItem extends Model
         return $tmp;
     }
 
-    public static function getItem()
+    public static function getItem($field = 'name',$id = '')
     {
         $map = [
             'cid'=>session('admin_user.cid'),
 //            'status'=>1,
         ];
-        $data = self::where($map)->column('name','id');
+        if ($id){
+            $map['id'] = $id;
+        }
+        $data = self::where($map)->column($field,'id');
         return $data;
     }
 

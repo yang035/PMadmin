@@ -1037,6 +1037,7 @@ class Subject extends Admin
 
     public function flow($id)
     {
+        $p = $this->request->param();
         $row = $flow_cat = $flow = $subject_flow = $score = $score_arr = [];
         $row = ItemModel::where('id', $id)->find()->toArray();
         $flow = json_decode($row['small_major_deal'],true);
@@ -1065,6 +1066,9 @@ class Subject extends Admin
         $this->assign('row', $row);
         $this->assign('flow', $flow);
         $this->assign('score_arr', $score_arr);
+        if (isset($p['pp']) && $p['pp']){
+            return $this->fetch('flow1');
+        }
         return $this->fetch();
     }
 

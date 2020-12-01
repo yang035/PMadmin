@@ -25,12 +25,14 @@
         <label class="layui-form-label">附件</label>
         <div class="layui-input-inline">
             <button type="button" class="layui-btn layui-btn-normal" id="test3"><i class="layui-icon"></i>上传文件</button>
-            <input class="layui-input attachment" type="hidden" name="attachment" value="">
-            <span class="att_name"></span>
+            <input class="layui-input attachment" type="hidden" name="attachment" value="{$data_info['attachment']|default=''}">
+            <input class="layui-input att_name" type="hidden" name="att_name" id="attachment_name" value="{$data_info['att_name']|default=''}">
+            <span class="att_name"><a target='_blank' class="mcolor" href="{$data_info['attachment']|default=''}">{$data_info['att_name']|default=''}</a></span>
         </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
+            <input type="hidden" class="field-id" name="id">
             <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
             <a href="javascript:history.back()" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
         </div>
@@ -46,7 +48,10 @@
         var $ = layui.jquery, form = layui.form, upload = layui.upload,project_id='';
 
         form.on('select(project)', function(data){
-            project_id = data.value;
+            var open_url = "{:url('getIdcard')}?subject_id="+data.value;
+            $.post(open_url, function(data){
+                $(".field-idcard").val(data);
+            });
         });
 
         upload.render({
@@ -58,9 +63,9 @@
                 if(res.code == 1) { //上传成功
                     $('.attachment').val(res.data.file);
                     var att_name = $('.att_name').val();
-                    att_name += "<a target='_blank' href='"+res.data.file +"'>"+ res.data.name+"</a>";
+                    att_name += "<a target='_blank' class='mcolor' href='"+res.data.file +"'>"+ res.data.name+"</a>";
                     $('.att_name').html(att_name);
-                    $('.name').val(res.data.name);
+                    $('#attachment_name').val(res.data.name);
                     layer.msg(res.msg);
                 }else {
                     layer.msg(res.msg);

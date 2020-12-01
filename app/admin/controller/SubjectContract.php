@@ -108,6 +108,7 @@ class SubjectContract extends Admin
                 'cid'=>session('admin_user.cid'),
                 'subject_id'=>$params['subject_id'],
                 'name'=>$params['name'],
+                'att_name'=>$params['att_name'],
                 'attachment'=>$params['attachment'],
                 'idcard'=>$params['idcard'],
                 'tpl_id'=>1,
@@ -148,10 +149,13 @@ class SubjectContract extends Admin
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
             // 验证
-            $result = $this->validate($data, 'SubjectContract');
-            if ($result !== true) {
-                return $this->error($result);
+            if (isset($data['tpl_id'])){
+                $result = $this->validate($data, 'SubjectContract');
+                if ($result !== true) {
+                    return $this->error($result);
+                }
             }
+
             if (empty($data['subject_id'])){
                 return $this->error('请选择项目');
             }
@@ -167,8 +171,15 @@ class SubjectContract extends Admin
             $row['content'] = htmlspecialchars_decode($row['content']);
             if ($row) {
                 $row1 = ContractItem::getItemById($row['tpl_id']);
-                $row['cat_id'] = $row1['cat_id'];
-                $this->assign('contract_cat', ContractItem::getOption($row1['cat_id']));
+                if ($row1){
+                    $row['cat_id'] = $row1['cat_id'];
+                    $contract_cat = ContractItem::getOption($row1['cat_id']);
+                }else{
+                    $this->assign('project_select', SubjectItem::getItemOption($row['subject_id']));
+                    $this->assign('data_info', $row);
+                    return $this->fetch('doimport');
+                }
+                $this->assign('contract_cat', $contract_cat);
                 $subject_name = empty($params['subject_name']) ? SubjectItem::getItem()[$row['subject_id']] : $params['subject_name'];
                 $this->assign('subject_name', $subject_name);
                 $this->assign('subject_id', $params['subject_id']);
@@ -186,6 +197,15 @@ class SubjectContract extends Admin
         $this->assign('data_list', $row);
         $this->assign('cat_option',SubjectItem::getItem());
         return $this->fetch();
+    }
+
+    function getIdcard($subject_id){
+        $data = SubjectItem::getItem('idcard',$subject_id);
+        if ($data){
+            echo $data[$subject_id];
+        }else{
+            echo '';
+        }
     }
 
     public function delItem()

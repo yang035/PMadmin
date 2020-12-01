@@ -61,7 +61,10 @@ class ContractItem extends Model
 
     public static function getItemById($id=0)
     {
-        $data = self::where('id',$id)->find()->toArray();
+        $data = self::where('id',$id)->find();
+        if (!$data){
+            return [];
+        }
         return $data;
     }
 

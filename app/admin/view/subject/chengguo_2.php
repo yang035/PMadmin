@@ -58,7 +58,7 @@
 </script>
 {else/}
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
-    <a href="{:url('flow')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-warm">查看</a>
+    <a href="{:url('flow')}?id={{ d.id }}&pp=1" class="layui-btn layui-btn-xs layui-btn-warm">查看</a>
 </script>
 {/empty}
 <script type="text/javascript">
@@ -204,7 +204,7 @@
     }
 
     function read(id){
-        var open_url = "{:url('read')}?id="+id;
+        var open_url = "{:url('flow')}?id="+id+"&pp=1";
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {
