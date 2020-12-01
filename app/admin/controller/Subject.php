@@ -698,7 +698,7 @@ class Subject extends Admin
         $this->assign('p_source', ItemModel::getPsource());
         $this->assign('three_level', ItemModel::getThreeLevel());
         $this->assign('grade_type', ProjectModel::getGrade());
-        $this->assign('cur_time', date('YmdH'));
+        $this->assign('cur_time', date('YmdHis'));
         $this->assign('t_type', ProjectModel::getTType());
         $this->assign('s_status', ItemModel::getSStatus(1));
         $this->assign('is_private', ProjectModel::getPrivate());
