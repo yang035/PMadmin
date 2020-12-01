@@ -22,12 +22,13 @@
                                     <button onclick="agree1({$f2['id']},{$f1['jindu_per']})" type="button" class="layui-btn layui-btn-sm">确认</button>
                                     {/eq}
                                 {/if}
+                                {$f2['create_time']}--
                                 {$f2['remark']}--
                                 {volist name="f2['attachment']" id='f3'}
                                 <a href="{$f3}" target="_blank">附件{$i}</a>
                                 {/volist}
-                                --{$f2['create_time']} {notempty name="f2['ratio']"}--<span class="ratio red">{$f2['ratio']}</span>%{/notempty}
-                                ----<input type="checkbox" name="share_flag" {notempty name="f2['share_flag']"}checked{/notempty} lay-skin="primary" title="分享第三方">
+                                 {notempty name="f2['ratio']"}--<span class="ratio red">{$f2['ratio']}</span>%{/notempty}
+                                ----<input type="checkbox" name="share_flag" value="{$f2['id']}" lay-skin="switch" lay-text="分享甲方|关闭" lay-filter="share_flag" {notempty name="f2['share_flag']"}checked{/notempty}>
                             </div>
                         </div>
                     </li>
@@ -61,6 +62,21 @@
             if (data.elem.checked){
                 add_content(data.value,data.elem.title,data.elem.placeholder,data.elem.min);
             }
+        });
+
+        form.on('switch(share_flag)', function(data){
+            // console.log(data.elem); //得到checkbox原始DOM对象
+            // console.log(data.elem.checked); //是否被选中，true或者false
+            // console.log(data.value); //复选框value值，也可以通过data.elem.value得到
+            // console.log(data.othis); //得到美化后的DOM对象
+            var val=0;
+            if (data.elem.checked){
+                val = 1;
+            }
+            var open_url = "{:url('status')}?table=subject_flow&f=share_flag&val="+val+"&id="+data.value;
+            $.post(open_url, function(data){
+                form.render('checkbox');
+            });
         });
     });
     function add_content(flow_id,title,placeholder,flow_cat_id) {

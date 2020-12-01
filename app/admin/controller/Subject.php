@@ -174,8 +174,13 @@ class Subject extends Admin
             }
             $p_status = config('other.s_status');
             $where['cid'] = session('admin_user.cid');
+            $uid = session('admin_user.uid');
             $order = 'status desc,id desc';
-            $data['data'] = ItemModel::with('cat')->where($where)->page($page)->order($order)->limit($limit)->select();
+            $con = '';
+            if ($param['pram']){
+                $con = "JSON_CONTAINS_PATH(third_user,'one', '$.\"$uid\"')";
+            }
+            $data['data'] = ItemModel::with('cat')->where($where)->where($con)->page($page)->order($order)->limit($limit)->select();
 //            $carType = config('other.car_color');
             if ($data['data']){
                 $begin_date = date('Y-m-01').' 00:00:00';
@@ -1042,7 +1047,14 @@ class Subject extends Admin
         $row = ItemModel::where('id', $id)->find()->toArray();
         $flow = json_decode($row['small_major_deal'],true);
         if (!empty($flow)) {
-            $s_flow = SubjectFlow::getOption($id);
+            $map = [
+                'cid'=>session('admin_user.cid'),
+                'subject_id'=>$id,
+            ];
+            if (isset($p['pp']) && $p['pp']){
+                $map['share_flag'] = 1;
+            }
+            $s_flow = SubjectFlow::getOption2($map);
             if ($s_flow) {
                 foreach ($flow as $k=>$v){
                     $t_jindu = 0;

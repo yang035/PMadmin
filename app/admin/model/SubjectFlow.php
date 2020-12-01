@@ -24,6 +24,12 @@ class SubjectFlow extends Model
         return $data;
     }
 
+    public static function getOption2($w)
+    {
+        $data = self::where($w)->order('id desc')->select();
+        return $data;
+    }
+
     public static function getOption1($suject_id)
     {
         $map = [

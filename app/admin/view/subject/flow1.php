@@ -2,7 +2,7 @@
     <div class="layui-tab-item layui-show layui-form-pane">
         {volist name="flow" id="f" key="k"}
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
-            <legend>{$f['name']} {$f['jindu']|default=0}%</legend>
+            <legend>{$f['name']}</legend>
         </fieldset>
                 {volist name="f['child']" id="f1"}
 <!--                <dt>-->
@@ -15,11 +15,11 @@
                         <i class="layui-icon layui-timeline-axis"></i>
                         <div class="layui-timeline-content layui-text">
                             <div class="layui-timeline-title">
+                                {$f2['create_time']}--
                                 {$f2['remark']}--
                                 {volist name="f2['attachment']" id='f3'}
                                 <a href="{$f3}" target="_blank">附件{$i}</a>
                                 {/volist}
-                                --{$f2['create_time']} {notempty name="f2['ratio']"}--<span class="ratio red">{$f2['ratio']}</span>%{/notempty}
                             </div>
                         </div>
                     </li>

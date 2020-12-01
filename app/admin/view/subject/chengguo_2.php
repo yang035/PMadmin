@@ -68,6 +68,7 @@
             elem: '#dataTable'
             ,height: 'full-200'
             ,url: '{:url()}' //数据接口
+            ,where:{'pram':2}
             ,page: true //开启分页
             ,limit: 30
             ,text: {
