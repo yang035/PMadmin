@@ -59,10 +59,10 @@
             }
             ,cols: [[ //表头
                 {type:'checkbox'},
-                {field: 'subject_id', title: '项目名称', templet:function(d){
+                {field: 'subject_id', title: '项目名称',width: 200, templet:function(d){
                         return d.cat.name;
                     }},
-                {field: 'idcard', title: '项目编号'},
+                {field: 'idcard', title: '项目编号',width: 120},
                 {field: 'name', title: '合同名称', templet:function(d){
                         return "<a class='mcolor' onclick='read("+d.id+")'>"+d.name+"</a>";
                     }},
