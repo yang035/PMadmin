@@ -104,6 +104,9 @@ class SubjectContract extends Admin
     {
         if ($this->request->isAjax()) {
             $params = $this->request->param();
+            if (empty($params['subject_id'])){
+                return $this->error('请选择项目');
+            }
             $data = [
                 'cid'=>session('admin_user.cid'),
                 'subject_id'=>$params['subject_id'],
