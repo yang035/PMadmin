@@ -23,7 +23,7 @@
         height: 38px;
         line-height: 38px;
         padding: 0 18px;
-        background-color: #009688;
+        background-color: #f78400;
         color: #fff;
         white-space: nowrap;
         text-align: center;
