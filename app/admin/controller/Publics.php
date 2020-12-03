@@ -192,9 +192,9 @@ class Publics extends Common
                 }
             } else {
                 unset($data['type'], $data['name']);
-                $data['company_id'] = 3;
+                $data['company_id'] = 4;
                 $data['role_id'] = isset($data['role_id']) ? $data['role_id'] : 3;
-                $data['department_id'] = 25;
+                $data['department_id'] = 27;
                 $data['status'] = 1;
                 $u = UserModel::create($data);
                 if (!$u) {

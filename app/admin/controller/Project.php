@@ -267,7 +267,8 @@ class Project extends Admin
                             }
                             $report_user = AdminUser::getUserById($v['user_id'])['realname'];
                             $report[$k]['real_name'] = !empty($report_user) ? $report_user : '';
-                            $report[$k]['check_catname'] = ItemModel::getCat()[$v['check_cat']];
+                            //因为演示账号问题，暂时屏蔽
+//                            $report[$k]['check_catname'] = ItemModel::getCat()[$v['check_cat']];
                             if (empty($row['child'])) {
                                 $report[$k]['reply'] = ReportReply::getAll($v['id'], 5, 2);
                             } else {
