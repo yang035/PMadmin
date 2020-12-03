@@ -36,7 +36,7 @@ class ScoreDay extends Admin
         $map = [];
         $map1 = [];
         $params = $this->request->param();
-        $d = '';
+        $d = date('Y-m-d');
         $order = 'ml_add_sum desc';
         if ($params) {
             if (!empty($params['realname'])) {
@@ -49,11 +49,7 @@ class ScoreDay extends Admin
                 $map['project_code'] = ['like', '%' . $params['project_code'] . '%'];
             }
             if (isset($params['search_date']) && !empty($params['search_date'])) {
-                $d = urldecode($params['search_date']);
-                $d_arr = explode(' - ', $d);
-                $d0 = strtotime($d_arr[0] . ' 00:00:00');
-                $d1 = strtotime($d_arr[1] . ' 23:59:59');
-                $map['Score.create_time'] = ['between', ["$d0", "$d1"]];
+                $d = $params['search_date'];
             }
             if (!empty($params['sort_table'])) {
                 switch ($params['sort_table']) {
@@ -69,7 +65,9 @@ class ScoreDay extends Admin
                 }
             }
         }
-
+        $d0 = strtotime($d . ' 00:00:00');
+        $d1 = strtotime($d . ' 23:59:59');
+        $map['Score.create_time'] = ['between', ["$d0", "$d1"]];
         $map['cid'] = session('admin_user.cid');
         $map1['id'] = ['neq', 1];
         $map1['is_show'] = ['eq', 0];
@@ -80,14 +78,15 @@ class ScoreDay extends Admin
         }
 //        $map['Score.create_time'] = ['<',1556726399];
 //print_r($map);
-        $fields = "`ScoreDay`.id,`ScoreDay`.subject_id,`ScoreDay`.user,sum(`ScoreDay`.ml_add_score) as ml_add_sum,sum(`ScoreDay`.ml_sub_score) as ml_sub_sum,sum(`ScoreDay`.gl_add_score) as gl_add_sum,sum(`ScoreDay`.gl_sub_score) as gl_sub_sum,`AdminUser`.realname";
+        $fields = "`Score`.id,`Score`.subject_id,`Score`.user,sum(`Score`.ml_add_score) as ml_add_sum,sum(`Score`.ml_sub_score) as ml_sub_sum,sum(`Score`.gl_add_score) as gl_add_sum,sum(`Score`.gl_sub_score) as gl_sub_sum,`AdminUser`.realname";
 
         if (isset($params['export']) && 1 == $params['export']) {
             set_time_limit(0);
-            $data_list = ScoreDayModel::hasWhere('adminUser', $map1)->field($fields)->where($map)->group('`ScoreDay`.user')->order($order)->select();
+            $data_list = ScoreModel::hasWhere('adminUser', $map1)->field($fields)->where($map)->group('`Score`.user')->order($order)->select();
 //        print_r($data_list);
             $name_arr = ProjectModel::getColumn('name');
             foreach ($data_list as $k => $v) {
+                $data_list[$k]['pname'] = $v['project_id'] ? $name_arr[$v['project_id']] : '系统';
                 $data_list[$k]['unused_ml'] = $v['ml_add_sum'] - $v['ml_sub_sum'];
                 $data_list[$k]['unused_gl'] = $v['gl_add_sum'] - $v['gl_sub_sum'];
             }
@@ -133,21 +132,29 @@ class ScoreDay extends Admin
             $objWriter->save('php://output');
             exit;
         }
-
-        $data_list = ScoreDayModel::hasWhere('adminUser', $map1)->field($fields)->where($map)->group('`ScoreDay`.user')->order($order)->paginate(30, false, ['query' => input('get.')]);
+//print_r($map);exit();
+        $data_list = ScoreModel::hasWhere('adminUser', $map1)->field($fields)->where($map)->group('`Score`.user')->order($order)->paginate(30, false, ['query' => input('get.')]);
 //        print_r($data_list);
         $name_arr = ProjectModel::getColumn('name');
         $myPro = ProjectModel::getProTask(0, 0);
         $w = [
             'cid' => session('admin_user.cid'),
             'user' => session('admin_user.uid'),
+            'is_lock' => 1
         ];
-        $u = ScoreDayModel::where($w)->field('id,user')->find();
+        $u = ScoreModel::where($w)->field('id,user')->find();
 //    print_r($data_list);
         foreach ($data_list as $k => $v) {
+            $data_list[$k]['pname'] = $v['project_id'] ? $name_arr[$v['project_id']] : '系统';
             $data_list[$k]['unused_ml'] = $v['ml_add_sum'] - $v['ml_sub_sum'];
             $data_list[$k]['unused_gl'] = $v['gl_add_sum'] - $v['gl_sub_sum'];
             $data_list[$k]['subject_name'] = $v['subject_id'] ? $myPro[$v['subject_id']] : '其他';
+            if ($u) {
+                //当GL超过10000时，送的GL才可用
+                if ($u['user'] == $v['user'] && $v['gl_add_sum'] > 10000 + config('other.gl_give')) {
+                    ScoreModel::where($w)->setField('is_lock', 0);
+                }
+            }
         }
         // 分页
         $pages = $data_list->render();

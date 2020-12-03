@@ -27,7 +27,7 @@
 <!--                    </div>-->
 <!--                </div>-->
             <div class="layui-inline">
-                <label class="layui-form-label">日期范围</label>
+                <label class="layui-form-label">日期</label>
                 <div class="layui-input-inline">
                     <input type="text" class="layui-input" id="test2" name="search_date" placeholder="选择日期" readonly value="{$d|default=''}">
                 </div>
@@ -84,7 +84,8 @@
             <td>
                 <div class="layui-btn-group">
                     <div class="layui-btn-group">
-                        <a href="{:url('Score/detail',['user'=>$vo['user'],'project_id'=>$Request.param.project_id])}" class="layui-btn layui-btn-primary layui-btn-sm">明细</a>
+                        <a href="{:url('score/detail',['user'=>$vo['user'],'project_id'=>$Request.param.project_id])}" class="layui-btn layui-btn-primary layui-btn-sm">明细</a>
+                        <a href="{:url('score/tubiao',['user'=>$vo['user'],'project_id'=>$Request.param.project_id])}" class="layui-btn layui-btn-primary layui-btn-sm">图表</a>
                         <!--                                <a href="{:url('edit?id='.$vo['id'])}" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe642;</i></a>-->
                         <!--                                <a data-href="{:url('del?table=admin_company&ids='.$vo['id'])}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>-->
                     </div>
@@ -106,7 +107,6 @@
         //年选择器
         laydate.render({
             elem: '#test2',
-            range: true
         });
 
         $('.export_btn').click(function () {
