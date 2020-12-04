@@ -36,7 +36,7 @@ class FondPool extends Admin{
                 $where['user'] = session('admin_user.uid');
             }
             $where['cid'] = session('admin_user.cid');
-            $where['is_fafang'] = 1;
+//            $where['is_fafang'] = 1;
             $order = 'status desc,id desc';
             $field = 'user,sum(add_fond) as add_fond,sum(sub_fond) as sub_fond';
             $group = 'user';
@@ -93,7 +93,7 @@ class FondPool extends Admin{
             if ($data['data']){
                 foreach ($data['data'] as $k=>$v){
                     $data['data'][$k]['user_name'] = $user[$v['user']];
-                    $data['data'][$k]['user_id'] = $user[$v['user_id']];
+                    $data['data'][$k]['user_id'] = (1!=$v['user_id']) ? $user[$v['user_id']] : '系统';
                     $data['data'][$k]['remark'] = $v['subject_id'] ? SubjectItem::getItem()[$v['subject_id']] : $v['remark'];
                 }
             }
