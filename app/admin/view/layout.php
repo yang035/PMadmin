@@ -110,7 +110,8 @@
     };
 
     function startRequest() {
-        $("#date_clock").text(new Date().Format("yyyy-MM-dd HH:mm:ss"));
+        $("#date_clock").text(new Date().Format("HH:mm:ss"));
+        $("#date_clock_date").text(new Date().Format("yyyy-MM-dd"));
     }
 
     $(document).ready(function () {
