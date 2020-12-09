@@ -20,7 +20,7 @@ class ScoreRule extends Admin
 
         $tab_data['menu'] = [
             [
-                'title' => '积分规则',
+                'title' => 'MLGL规则',
                 'url' => 'admin/ScoreRule/index',
             ],
         ];
@@ -250,7 +250,7 @@ class ScoreRule extends Admin
                         'ml_sub_score'=>0,
                         'gl_add_score'=>$i,
                         'gl_sub_score'=>0,
-                        'remark' => 'MLGL，积分规则导入Excel得分'
+                        'remark' => 'MLGL，MLGL规则导入Excel得分'
                     ];
                     if (ScoreModel::addScore($sc)){
                         return $this->success("添加成功，奖励{$sc['gl_add_score']}GL分。",'index');

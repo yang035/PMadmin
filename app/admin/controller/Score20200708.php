@@ -27,7 +27,7 @@ class Score extends Admin
 
         $tab_data['menu'] = [
             [
-                'title' => '积分明细',
+                'title' => 'MLGL明细',
                 'url' => 'admin/Score/index',
             ],
         ];

@@ -26,7 +26,7 @@ class ScoreDeal extends Admin
         $sta_count = $this->getDealCount();
         $tab_data['menu'] = [
             [
-                'title' => "积分奖扣<span class='layui-badge layui-bg-orange'>{$sta_count['user_num']}</span>",
+                'title' => "MLGL奖扣<span class='layui-badge layui-bg-orange'>{$sta_count['user_num']}</span>",
                 'url' => 'admin/ScoreDeal/index',
                 'params' =>['atype'=>1],
             ],
@@ -188,7 +188,7 @@ class ScoreDeal extends Admin
                     $score[$k]['cid'] = session('admin_user.cid');
                     $score[$k]['user'] = $k;
                     $score[$k]['url'] = $this->request->url();
-                    $score[$k]['remark'] = "事件积分({$realname})审批,{$rule_row['name']}";
+                    $score[$k]['remark'] = "事件MLGL({$realname})审批,{$rule_row['name']}";
                     $score[$k]['user_id'] = session('admin_user.uid');
                     if ($rule_row['ml'] > 0) {
                         $score[$k]['ml_add_score'] = $rule_row['ml'];
@@ -285,7 +285,7 @@ class ScoreDeal extends Admin
                 $score[$k]['cid'] = session('admin_user.cid');
                 $score[$k]['user'] = $k;
                 $score[$k]['url'] = $this->request->url();
-                $score[$k]['remark'] = "事件积分({$realname})审批,{$rule_row['name']}";
+                $score[$k]['remark'] = "事件MLGL({$realname})审批,{$rule_row['name']}";
                 $score[$k]['user_id'] = session('admin_user.uid');
                 if ($rule_row['ml'] > 0){
                     $score[$k]['ml_add_score'] = $rule_row['ml'];

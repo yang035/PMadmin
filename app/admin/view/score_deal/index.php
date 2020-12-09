@@ -140,7 +140,7 @@
         }
         layer.open({
             type:2,
-            title :'积分审批',
+            title :'MLGL审批',
             maxmin: true,
             area: ['800px', '500px'],
             content: open_url,

@@ -28,7 +28,7 @@
                 <th>会员</th>
                 <th>等级&经验</th>
                 <th>资金</th>
-                <th>积分</th>
+                <th>MLGL</th>
                 <th>注册&登陆</th>
                 <th>状态</th>
                 <th>操作</th>
@@ -47,7 +47,7 @@
                 </td>
                 <td class="font12">{$level[$vo['level_id']]['name']}<br>经验值：{$vo['exper']}</td>
                 <td class="font12">余额：{$vo['money']}<br>冻结：{$vo['frozen_money']}</td>
-                <td class="font12">积分：{$vo['integral']}<br>冻结：{$vo['frozen_integral']}</td>
+                <td class="font12">MLGL：{$vo['integral']}<br>冻结：{$vo['frozen_integral']}</td>
                 <td class="font12">注册：{$vo['ctime']}<br>登陆：{:date('Y-m-d H:i:s', $vo['last_login_time'])}</td>
                 <td><input type="checkbox" name="status" {if condition="$vo['status'] eq 1"}checked=""{/if} value="{$vo['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="{:url('status?table=admin_member&ids='.$vo['id'])}"></td>
                 <td>

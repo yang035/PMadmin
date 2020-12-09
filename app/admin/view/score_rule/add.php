@@ -8,7 +8,7 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">积分事件</label>
+        <label class="layui-form-label">MLGL事件</label>
         <div class="layui-input-inline">
             <textarea class="layui-textarea field-name" name="name" lay-verify="required" autocomplete="off"></textarea>
         </div>

@@ -60,7 +60,7 @@
                         <a data-toggle="dropdown">用户名：{$Think.session.admin_user.username}<span class="caret"></span></a>
                         <ul class="dropdown-menu" style="min-width: 110px;" role="menu">
                             <li role="presentation">
-                                <a role="menuitem" tabindex="-1" href="#">总积分</a>
+                                <a role="menuitem" tabindex="-1" href="#">总MLGL</a>
                             </li>
                             <li role="presentation">
                                 <a role="menuitem" tabindex="-1" href="#">我的信息</a>
