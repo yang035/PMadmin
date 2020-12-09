@@ -25,6 +25,36 @@ class MealItem extends Model
         $str = implode(',',$data);
         return $str;
     }
+    public static function getMealType($type = 0)
+    {
+        $data = config('other.meal_type');
+        $str = '';
+        if ($data){
+            foreach ($data as $k => $v) {
+                if ($type == $k) {
+                    $str .= "<option value='".$k."' selected>".$v."</option>";
+                } else {
+                    $str .= "<option value='".$k."'>".$v."</option>";
+                }
+            }
+        }
+        return $str;
+    }
+    public static function getQuType($type = 0)
+    {
+        $data = config('other.qu_type');
+        $str = '';
+        if ($data){
+            foreach ($data as $k => $v) {
+                if ($type == $k) {
+                    $str .= "<option value='".$k."' selected>".$v."</option>";
+                } else {
+                    $str .= "<option value='".$k."'>".$v."</option>";
+                }
+            }
+        }
+        return $str;
+    }
     public static function getOption($type = 0)
     {
         $map = [

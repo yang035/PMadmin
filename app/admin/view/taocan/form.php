@@ -16,14 +16,30 @@
 <form class="layui-form" action="{:url()}" method="post">
     <div class="layui-tab-item layui-show layui-form-pane">
         <div class="layui-form-item">
-            <label class="layui-form-label">分类名称</label>
+            <label class="layui-form-label">套餐名称</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-name" name="name" lay-verify="required" autocomplete="off" placeholder="请输入套餐名称">
             </div>
             <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">备注</label>
+            <label class="layui-form-label">尊享价格</label>
+            <div class="layui-input-inline">
+                <input type="number" class="layui-input field-money" lay-verify="required" name="money" autocomplete="off" placeholder="请输入金额">
+            </div>
+            <div class="layui-form-mid">元</div>
+            <div class="layui-form-mid" style="color: red">*</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">享受服务</label>
+            <div class="layui-input-inline">
+                <select name="ser_level" class="field-ser_level" type="select">
+                    {$ser_level}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">简介</label>
             <div class="layui-input-inline">
                 <textarea  class="layui-textarea field-remark" name="remark" lay-verify="" autocomplete="off" placeholder="[选填]分类简介"></textarea>
             </div>

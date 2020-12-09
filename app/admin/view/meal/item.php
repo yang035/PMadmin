@@ -30,7 +30,7 @@
         <a href="{:url('addItem')}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加</a>
         <a data-href="{:url('status?table=meal_item&val=1')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-play" data-table="dataTable">&nbsp;启用</a>
         <a data-href="{:url('status?table=meal_item&val=0')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-pause" data-table="dataTable">&nbsp;禁用</a>
-        <a data-href="{:url('delItem')}" class="layui-btn layui-btn-primary j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>
+<!--        <a data-href="{:url('delItem')}" class="layui-btn layui-btn-primary j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>-->
     </div>
 </div>
 <table id="dataTable" class="layui-table" lay-filter="table1"></table>
@@ -41,7 +41,7 @@
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
     <a onclick="read({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">查看</a>
     <a href="{:url('editItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
-    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>
+<!--    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
 </script>
 <script type="text/javascript">
     layui.use(['table'], function() {
@@ -49,6 +49,7 @@
         table.render({
             elem: '#dataTable'
             ,url: '{:url()}' //数据接口
+            ,where: {qu_type: '{$Request.param.qu_type}', }
             ,page: true //开启分页
             ,limit: 20
             ,text: {
@@ -57,7 +58,44 @@
             ,cols: [[ //表头
                 {type:'checkbox'},
                 {field: 'name', title: '项目名称'},
-                {field: 'cat_name', title: '类别'},
+                {field: 'cat_id', title: '类别', templet:function(d){
+                        return d.cat.name;
+                    }},
+                {field: 'taocan_1', title: '套餐A', templet:function(d){
+                    if (d.meal_type == 1){
+                        return d.taocan_1 == 1 ? '有' : '无';
+                    }else {
+                        return d.taocan_1;
+                    }
+                }},
+                {field: 'taocan_2', title: '套餐B', templet:function(d){
+                        if (d.meal_type == 1){
+                            return d.taocan_2 == 1 ? '有' : '无';
+                        }else {
+                            return d.taocan_2;
+                        }
+                    }},
+                {field: 'taocan_3', title: '套餐C', templet:function(d){
+                        if (d.meal_type == 1){
+                            return d.taocan_3 == 1 ? '有' : '无';
+                        }else {
+                            return d.taocan_3;
+                        }
+                    }},
+                {field: 'taocan_4', title: '套餐D', templet:function(d){
+                        if (d.meal_type == 1){
+                            return d.taocan_4 == 1 ? '有' : '无';
+                        }else {
+                            return d.taocan_4;
+                        }
+                    }},
+                {field: 'taocan_5', title: '套餐E', templet:function(d){
+                        if (d.meal_type == 1){
+                            return d.taocan_5 == 1 ? '有' : '无';
+                        }else {
+                            return d.taocan_5;
+                        }
+                    }},
                 {field: 'status', title: '状态', templet: '#statusTpl'},
                 {title: '操作', templet: '#buttonTpl'}
             ]]

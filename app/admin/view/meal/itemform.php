@@ -1,16 +1,124 @@
+<style>
+    .layui-upload-img {
+        width: 92px;
+        height: 92px;
+        margin: 0 10px 10px 0;
+        display: none;
+    }
+    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+</style>
 <form class="layui-form" action="{:url()}" method="post">
     <div class="layui-tab-item layui-show layui-form-pane">
         <div class="layui-form-item">
-            <label class="layui-form-label">项目名称</label>
+            <label class="layui-form-label">名称</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input field-name" name="name" lay-verify="required" autocomplete="off" placeholder="请输入套餐名称">
+                <input type="text" class="layui-input field-name" name="name" lay-verify="required" autocomplete="off" placeholder="请输入名称">
             </div>
             <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">所属套餐</label>
-            <div class="layui-input-block">
-                {$cat_option}
+            <label class="layui-form-label">上级分类</label>
+            <div class="layui-input-inline">
+                <select name="cat_id" class="field-cat_id" type="select">
+                    {$cat_option}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属区域</label>
+            <div class="layui-input-inline">
+                <select name="qu_type" class="field-qu_type" type="select">
+                    {$qu_type}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属类型</label>
+            <div class="layui-input-inline">
+                <select name="meal_type" class="field-meal_type" type="select" lay-filter="meal_type">
+                    {$meal_type}
+                </select>
+            </div>
+            <div class="layui-form-mid">默认按钮，如果输入数字请选择"输入框"</div>
+        </div>
+        <div id="anniu">
+            <div class="layui-form-item">
+                <label class="layui-form-label">套餐A</label>
+                <div class="layui-input-inline">
+                    <input type="radio" class="field-taocan_1" name="taocan_1" value="1" title="有" checked>
+                    <input type="radio" class="field-taocan_1" name="taocan_1" value="0" title="无">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">套餐B</label>
+                <div class="layui-input-inline">
+                    <input type="radio" class="field-taocan_2" name="taocan_2" value="1" title="有" checked>
+                    <input type="radio" class="field-taocan_2" name="taocan_2" value="0" title="无">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">套餐C</label>
+                <div class="layui-input-inline">
+                    <input type="radio" class="field-taocan_3" name="taocan_3" value="1" title="有" checked>
+                    <input type="radio" class="field-taocan_3" name="taocan_3" value="0" title="无">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">套餐D</label>
+                <div class="layui-input-inline">
+                    <input type="radio" class="field-taocan_4" name="taocan_4" value="1" title="有" checked>
+                    <input type="radio" class="field-taocan_4" name="taocan_4" value="0" title="无">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">套餐E</label>
+                <div class="layui-input-inline">
+                    <input type="radio" class="field-taocan_5" name="taocan_5" value="1" title="有" checked>
+                    <input type="radio" class="field-taocan_5" name="taocan_5" value="0" title="无">
+                </div>
+            </div>
+        </div>
+        <div id="shuru" class="hide">
+            <div class="layui-form-item">
+                <label class="layui-form-label">套餐A</label>
+                <div class="layui-input-inline">
+                    <input type="number" class="layui-input field-taocan_1" name="taocan_1" autocomplete="off" placeholder="优惠百分比" value="100">
+                </div>
+                <div class="layui-form-mid">%</div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">套餐B</label>
+                <div class="layui-input-inline">
+                    <input type="number" class="layui-input field-taocan_2" name="taocan_2" autocomplete="off" placeholder="优惠百分比" value="100">
+                </div>
+                <div class="layui-form-mid">%</div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">套餐C</label>
+                <div class="layui-input-inline">
+                    <input type="number" class="layui-input field-taocan_3" name="taocan_3" autocomplete="off" placeholder="优惠百分比" value="100">
+                </div>
+                <div class="layui-form-mid">%</div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">套餐D</label>
+                <div class="layui-input-inline">
+                    <input type="number" class="layui-input field-taocan_4" name="taocan_4" autocomplete="off" placeholder="优惠百分比" value="100">
+                </div>
+                <div class="layui-form-mid">%</div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">套餐E</label>
+                <div class="layui-input-inline">
+                    <input type="number" class="layui-input field-taocan_5" name="taocan_5" autocomplete="off" placeholder="优惠百分比" value="100">
+                </div>
+                <div class="layui-form-mid">%</div>
             </div>
         </div>
         <div class="layui-form-item">
@@ -41,91 +149,25 @@
 
     layui.use(['jquery', 'laydate','upload','form'], function() {
         var $ = layui.jquery, laydate = layui.laydate,upload = layui.upload,form = layui.form;
-        //多文件列表示例
-        var demoListView = $('#demoList'),uploadListIns = upload.render({
-            elem: '#testList',
-            url: '{:url("admin/UploadFile/upload?thumb=no&water=no")}',
-            accept: 'file',
-            size:"{:config('upload.upload_file_size')}",
-            multiple: true,
-            auto: false,
-            bindAction: '#testListAction',
-            choose: function(obj){
-                var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
-                //读取本地文件
-                obj.preview(function(index, file, result){
-                    var tr = $(['<tr id="upload-'+ index +'">'
-                        ,'<td>'+ file.name +'</td>'
-                        ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
-                        ,'<td>等待上传</td>'
-                        ,'<td>'
-                        ,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
-                        ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
-                        ,'</td>'
-                        ,'</tr>'].join(''));
-
-                    //单个重传
-                    tr.find('.demo-reload').on('click', function(){
-                        obj.upload(index, file);
-                    });
-
-                    //删除
-                    tr.find('.demo-delete').on('click', function(){
-                        delete files[index]; //删除对应的文件
-                        tr.remove();
-                        uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
-                    });
-
-                    demoListView.append(tr);
-                });
-                $('.other-div').show();
-            }
-            ,done: function(res, index, upload){
-                if(res.code == 1){ //上传成功
-                    var tr = demoListView.find('tr#upload-'+ index)
-                        ,tds = tr.children();
-                    tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
-                    tds.eq(3).html(''); //清空操作
-                    var new_value = $('.field-attachment').val();
-                    new_value += res.data.file+',';
-                    $('.field-attachment').val(new_value);
-                    return delete this.files[index]; //删除文件队列已经上传成功的文件
-                }
-                this.error(index, upload);
-            }
-            ,error: function(index, upload){
-                var tr = demoListView.find('tr#upload-'+ index)
-                    ,tds = tr.children();
-                tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
-                tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
-            }
-        });
-
-        form.on('select(job_cat)', function(data){
-            select_union(data.value);
-        });
-        if (formData.cat_id){
-            select_union(formData.cat_id,formData.group_id);
+        if (2 != formData.meal_type){
+            $("#shuru").find(":input").attr("disabled", true);
+        } else {
+            $('#anniu').hide();
+            $('#shuru').show();
+            $("#shuru").find(":input").attr("disabled", false);
         }
 
-        function select_union(id,gid){
-            var id=id,gid=gid||0;
-            $.ajax({
-                type: 'POST',
-                url: "{:url('getGroupItem')}",
-                data: {id:id,gid:gid},
-                dataType:  'json',
-                success: function(data){
-                    // $("#c_id").html("");
-                    // $.each(data, function(key, val) {
-                    //     var option1 = $("<option>").val(val.areaId).text(val.fullname);
-                    $('#c_id').html(data);
-                    form.render('select');
-                    // });
-                    // $("#c_id").get(0).selectedIndex=0;
-                }
-            });
-        }
+        form.on('select(meal_type)', function(data){
+            if(1 == data.value){
+                $('#anniu').show();
+                $('#shuru').hide();
+                $("#shuru").find(":input").attr("disabled", true);
+            }else {
+                $('#anniu').hide();
+                $('#shuru').show();
+                $("#shuru").find(":input").attr("disabled", false);
+            }
+        });
     });
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>

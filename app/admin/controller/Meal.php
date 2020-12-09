@@ -22,40 +22,62 @@ class Meal extends Admin
 
         $tab_data['menu'] = [
             [
-                'title' => '套餐分类',
+                'title' => '分类',
                 'url' => 'admin/Meal/cat',
+                'params' => ['qu_type' => 0],
             ],
             [
-                'title' => '套餐项目',
+                'title' => '功能区',
                 'url' => 'admin/Meal/index',
+                'params' => ['qu_type' => 1],
+            ],
+            [
+                'title' => '收费区',
+                'url' => 'admin/Meal/index',
+                'params' => ['qu_type' => 2],
+            ],
+            [
+                'title' => '福利区',
+                'url' => 'admin/Meal/index',
+                'params' => ['qu_type' => 3],
             ],
         ];
+        $tab_data['current'] = url('index', ['qu_type' => 1]);
         $this->tab_data = $tab_data;
     }
 
     public function index($q = '')
     {
+        $params = $this->request->param();
+        $params['qu_type'] = isset($params['qu_type']) ? $params['qu_type'] : 1;
         if ($this->request->isAjax()) {
             $where = $data = [];
             $page = input('param.page/d', 1);
             $limit = input('param.limit/d', 20);
-
+            switch ($params['qu_type']) {
+                case 1:
+                    $where['qu_type'] = 1;
+                    break;
+                case 2:
+                    $where['qu_type'] = 2;
+                    break;
+                case 3:
+                    $where['qu_type'] = 3;
+                    break;
+                default:
+                    $where['qu_type'] = 1;
+                    break;
+            }
             $cat_id = input('param.cat_id/d');
-            $w = '';
             if ($cat_id){
-                $w = "FIND_IN_SET({$cat_id},cat_id)";
+                $where['cat_id'] = $cat_id;
             }
             $name = input('param.name');
             if ($name) {
                 $where['name'] = ['like', "%{$name}%"];
             }
             $where['cid'] = session('admin_user.cid');
-            $data['data'] = ItemModel::where($where)->where($w)->page($page)->limit($limit)->select();
-            if ($data['data']){
-                foreach ($data['data'] as $k=>$v) {
-                    $data['data'][$k]['cat_name'] = MealItem::getOpt($v['cat_id']);
-                }
-            }
+            $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->select();
             $data['count'] = ItemModel::where($where)->count('id');
             $data['code'] = 0;
             $data['msg'] = '';
@@ -64,21 +86,26 @@ class Meal extends Admin
 
         // 分页
         $tab_data = $this->tab_data;
-        $tab_data['current'] = url('');
+        $taocan_config = config('other.taocan_config');
 
-        $this->assign('tab_data', $tab_data);
+        $this->assign('tab_data', $this->tab_data);
         $this->assign('tab_type', 1);
+        $this->assign('isparams', 1);
+        $this->assign('qu_type', $params['qu_type']);
+        $this->assign('tab_url', url('index', ['qu_type' => $params['qu_type']]));
         $this->assign('cat_option',ItemModel::getOption());
+        $this->assign('taocan_config',$taocan_config);
         return $this->fetch('item');
     }
     public function addItem()
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
-
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
-            $data['cat_id'] = implode(',',$data['cat_id']);
+            if (empty($data['cat_id'])) {
+                return $this->error('请选择分类');
+            }
             unset($data['id']);
             // 验证
             $result = $this->validate($data, 'MealItem');
@@ -90,7 +117,9 @@ class Meal extends Admin
             }
             return $this->success("操作成功{$this->score_value}");
         }
-        $this->assign('cat_option',ItemModel::getOption1());
+        $this->assign('cat_option',ItemModel::getOption());
+        $this->assign('meal_type',ItemModel::getMealType());
+        $this->assign('qu_type',ItemModel::getQuType());
         return $this->fetch('itemform');
     }
 
@@ -101,7 +130,9 @@ class Meal extends Admin
 
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
-            $data['cat_id'] = implode(',',$data['cat_id']);
+            if (empty($data['cat_id'])) {
+                return $this->error('请选择分类');
+            }
             // 验证
             $result = $this->validate($data, 'MealItem');
             if($result !== true) {
@@ -116,7 +147,9 @@ class Meal extends Admin
         $row = ItemModel::where('id', $id)->find()->toArray();
 
         $this->assign('data_info', $row);
-        $this->assign('cat_option',ItemModel::getOption2($row['cat_id']));
+        $this->assign('cat_option',ItemModel::getOption($row['cat_id']));
+        $this->assign('meal_type',ItemModel::getMealType($row['meal_type']));
+        $this->assign('qu_type',ItemModel::getQuType());
         return $this->fetch('itemform');
     }
 
@@ -124,7 +157,7 @@ class Meal extends Admin
     {
         $row = ItemModel::where('id', $id)->find()->toArray();
         $this->assign('data_list', $row);
-        $this->assign('cat_option',ItemModel::getOption2($row['cat_id']));
+        $this->assign('cat_option',ItemModel::getCat());
         return $this->fetch();
     }
 
@@ -148,14 +181,8 @@ class Meal extends Admin
             if ($keyword) {
                 $where['name'] = ['like', "%{$keyword}%"];
             }
-            $ser_level = config('other.ser_level');
             $where['cid'] = session('admin_user.cid');
             $data['data'] = CatModel::where($where)->page($page)->limit($limit)->select();
-            if ($data['data']){
-                foreach ($data['data'] as $k=>$v){
-                    $data['data'][$k]['level_name'] = $ser_level[$v['ser_level']];
-                }
-            }
             $data['count'] = CatModel::where($where)->count('id');
             $data['code'] = 0;
             $data['msg'] = '';
@@ -210,10 +237,10 @@ class Meal extends Admin
         }
 
         $row = CatModel::where('id', $id)->find()->toArray();
-        $this->assign('ser_level',MealCat::getLevel($row['ser_level']));
         $this->assign('data_info', $row);
         return $this->fetch('catform');
     }
+
     public function delCat()
     {
         $id = input('param.id/a');

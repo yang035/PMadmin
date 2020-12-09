@@ -10,20 +10,20 @@
         </form>
     </div>
     <div class="layui-btn-group fl">
-        <a href="{:url('addCat')}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加</a>
-        <a data-href="{:url('status?table=meal_cat&val=1')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-play" data-table="dataTable">&nbsp;启用</a>
-        <a data-href="{:url('status?table=meal_cat&val=0')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-pause" data-table="dataTable">&nbsp;禁用</a>
-<!--        <a data-href="{:url('delCat')}" class="layui-btn layui-btn-primary j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>-->
+        <a href="{:url('add')}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加</a>
+        <a data-href="{:url('status?table=taocan&val=1')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-play" data-table="dataTable">&nbsp;启用</a>
+        <a data-href="{:url('status?table=taocan&val=0')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-pause" data-table="dataTable">&nbsp;禁用</a>
+<!--        <a data-href="{:url('del')}" class="layui-btn layui-btn-primary j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>-->
     </div>
 </div>
 <table id="dataTable" class="layui-table" lay-filter="table1"></table>
 {include file="block/layui" /}
 <script type="text/html" id="statusTpl">
-    <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=meal_cat&id={{ d.id }}">
+    <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=taocan&id={{ d.id }}">
 </script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
-    <a href="{:url('editCat')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
-<!--    <a href="{:url('delCat')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
+    <a href="{:url('edit')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
+<!--    <a href="{:url('del')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
 </script>
 <script type="text/javascript">
     layui.use(['table'], function() {
@@ -38,7 +38,9 @@
             }
             ,cols: [[ //表头
                 {type:'checkbox'}
-                ,{field: 'name', title: '分类名称'}
+                ,{field: 'name', title: '套餐名称'}
+                ,{field: 'money', title: '尊享价格'}
+                ,{field: 'level_name', title: '享受服务'}
                 ,{field: 'remark', title: '备注'}
                 ,{title: '状态', templet: '#statusTpl'}
                 ,{title: '操作', templet: '#buttonTpl'}
