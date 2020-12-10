@@ -63,35 +63,35 @@
                     }},
                 {field: 'taocan_1', title: '套餐A', templet:function(d){
                     if (d.meal_type == 1){
-                        return d.taocan_1 == 1 ? '有' : '无';
+                        return d.taocan_1 == 1 ? '&#10003' : '&#10005';
                     }else {
                         return d.taocan_1;
                     }
                 }},
                 {field: 'taocan_2', title: '套餐B', templet:function(d){
                         if (d.meal_type == 1){
-                            return d.taocan_2 == 1 ? '有' : '无';
+                            return d.taocan_2 == 1 ? '&#10003' : '&#10005';
                         }else {
                             return d.taocan_2;
                         }
                     }},
                 {field: 'taocan_3', title: '套餐C', templet:function(d){
                         if (d.meal_type == 1){
-                            return d.taocan_3 == 1 ? '有' : '无';
+                            return d.taocan_3 == 1 ? '&#10003' : '&#10005';
                         }else {
                             return d.taocan_3;
                         }
                     }},
                 {field: 'taocan_4', title: '套餐D', templet:function(d){
                         if (d.meal_type == 1){
-                            return d.taocan_4 == 1 ? '有' : '无';
+                            return d.taocan_4 == 1 ? '&#10003' : '&#10005';
                         }else {
                             return d.taocan_4;
                         }
                     }},
                 {field: 'taocan_5', title: '套餐E', templet:function(d){
                         if (d.meal_type == 1){
-                            return d.taocan_5 == 1 ? '有' : '无';
+                            return d.taocan_5 == 1 ? '&#10003' : '&#10005';
                         }else {
                             return d.taocan_5;
                         }

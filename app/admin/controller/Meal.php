@@ -85,7 +85,6 @@ class Meal extends Admin
         }
 
         // 分页
-        $tab_data = $this->tab_data;
         $taocan_config = config('other.taocan_config');
 
         $this->assign('tab_data', $this->tab_data);
@@ -254,6 +253,194 @@ class Meal extends Admin
     public function getGroupItem($id=0,$gid=0){
         $group_option = CatModel::getGroup($id,$gid);
         echo json_encode($group_option);
+    }
+
+    public function mealList(){
+        $tab_data['menu'] = [
+            [
+                'title' => '功能区',
+                'url' => 'admin/Meal/mealList',
+                'params' => ['qu_type' => 1],
+            ],
+            [
+                'title' => '收费区',
+                'url' => 'admin/Meal/mealList',
+                'params' => ['qu_type' => 2],
+            ],
+            [
+                'title' => '福利区',
+                'url' => 'admin/Meal/mealList',
+                'params' => ['qu_type' => 3],
+            ],
+        ];
+        $tab_data['current'] = url('mealList', ['qu_type' => 1]);
+
+        $params = $this->request->param();
+        $params['qu_type'] = isset($params['qu_type']) ? $params['qu_type'] : 1;
+        if ($this->request->isAjax()) {
+            $where = $data = [];
+            $page = input('param.page/d', 1);
+            $limit = input('param.limit/d', 20);
+            switch ($params['qu_type']) {
+                case 1:
+                    $where['qu_type'] = 1;
+                    break;
+                case 2:
+                    $where['qu_type'] = 2;
+                    break;
+                case 3:
+                    $where['qu_type'] = 3;
+                    break;
+                default:
+                    $where['qu_type'] = 1;
+                    break;
+            }
+            $cat_id = input('param.cat_id/d');
+            if ($cat_id){
+                $where['cat_id'] = $cat_id;
+            }
+            $name = input('param.name');
+            if ($name) {
+                $where['name'] = ['like', "%{$name}%"];
+            }
+            $where['cid'] = session('admin_user.cid');
+            $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->select();
+            $data['count'] = ItemModel::where($where)->count('id');
+            $data['code'] = 0;
+            $data['msg'] = '';
+            return json($data);
+        }
+
+        // 分页
+        $taocan_config = config('other.taocan_config');
+
+        $this->assign('tab_data', $tab_data);
+        $this->assign('tab_type', 1);
+        $this->assign('isparams', 1);
+        $this->assign('qu_type', $params['qu_type']);
+        $this->assign('tab_url', url('mealList', ['qu_type' => $params['qu_type']]));
+        $this->assign('cat_option',ItemModel::getOption());
+        $this->assign('taocan_config',$taocan_config);
+        return $this->fetch();
+    }
+
+    public function mealDetail($id = 0){
+//        $role_id = session('admin_user.role_id');
+//        $discount = AdminRole::getRole1($role_id);
+        $param = $this->request->param();
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
+            $data['total_score'] = $data['unit_score'] * $data['num'];
+            if ($data['other_price'] > 0){
+                $data['is_pay'] = 1;
+            }
+            $tradeNo = time() . rand(1000, 9999);
+            $data['trade_no'] = $tradeNo;
+            $id = $data['item_id'];
+            unset($data['id']);
+            $today = date('Y-m-d H:i:s');
+            $where = [
+                'id' => $id,
+//            'cid' => session('admin_user.cid'),
+                'status' => 1,
+                'kucun' => ['>',0],
+                'start_time' => ['elt',"{$today}"],
+                'end_time' => ['egt',"{$today}"],
+            ];
+            $row = ItemModel::where($where)->find();
+            if (!$row){
+                return $this->error('等待中，商品不存在');
+            }elseif($row['kucun'] <= 0){
+                return $this->error('库存不足或商品已兑完');
+            }else{
+                $kucun = $row['kucun'] - $data['num'];
+            }
+            // 验证
+//            $result = $this->validate($data, 'ShopCat');
+//            if($result !== true) {
+//                return $this->error($result);
+//            }
+            Db::startTrans();
+            try {
+                ItemModel::where(['id'=>$id])->setField('kucun',$kucun);
+                $res = OrderModel::create($data);
+                $sc = [
+                    'cid' => session('admin_user.cid'),
+                    'user' => session('admin_user.uid'),
+                    'gl_sub_score' => $data['total_score'],
+                    'remark' => date('Y-m-d H:i:s').'兑换消耗,订单编号为:'.$res['id'],
+                ];
+                $flag = ScoreModel::addScore($sc);
+                // 提交事务
+                Db::commit();
+            } catch (\Exception $e) {
+                // 回滚事务
+                Db::rollback();
+            }
+            if ($flag) {
+                if ($data['other_price'] > 0){
+                    return $this->success('下单成功', 'shop/payDetail', ['trade_no'=>$tradeNo],1);
+                }
+                return $this->success("下单成功{$this->score_value}", 'ShopOrder/index');
+            } else {
+                return $this->error('添加失败！');
+            }
+        }
+        $w = [
+            'qu_type' => $param['qu_type'],
+        ];
+        $fields = "id,cat_id,qu_type,meal_type,name,{$param['p']}";
+
+        $row = ItemModel::field($fields)->where($w)->select();
+        $this->assign('data_list', $row);
+        $this->assign('p', $param['p']);
+        $this->assign('cat_option',ItemModel::getOption());
+        return $this->fetch();
+    }
+
+    public function payDetail($trade_no=0){
+        $data = db('shop_order')->alias('a')->field('a.*,b.name')
+            ->join("shop_item b", 'a.item_id = b.id', 'left')
+            ->where(['a.trade_no'=>$trade_no])->find();
+        $uid = session('admin_user.uid');
+        $payData = [
+            'body'         => 'ali web pay',
+            'subject'      => $data['name'],
+            'trade_no'     => $trade_no,
+            'time_expire'  => time() + 600, // 表示必须 600s 内付款
+            'amount'       => $data['other_price'], // 单位为元 ,最小为0.01
+            'return_param' => 'imlgl',
+            'client_ip' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',// 客户地址
+            'goods_type' => '1', // 0—虚拟类商品，1—实物类商品
+            'store_id'   => '',
+        ];
+
+        $redis = service('Redis');
+        $redis->set("pm:admin_user:{$trade_no}",serialize(session('admin_user')),180);
+
+        $peizhi = config('alipay');
+        $client = new Client(Client::ALIPAY, $peizhi);
+        $server_agent = $_SERVER['HTTP_USER_AGENT'];
+        if (stristr($server_agent,'mobile')){//手机wap端
+            $pay_url    = $client->pay(Client::ALI_CHANNEL_WAP, $payData);
+        }else{//PC端
+            $pay_url    = $client->pay(Client::ALI_CHANNEL_WEB, $payData);
+        }
+
+        $up = [
+            'channel'=>1,
+            'pay_url'=>$pay_url,
+        ];
+        if (empty($pay_url)){
+            $up['is_pay'] = 3;
+        }
+        OrderModel::where(['trade_no'=>$trade_no])->update($up);
+        $this->assign('payData', $payData);
+        $this->assign('pay_url',$pay_url);
+        return $this->fetch();
     }
 
 }

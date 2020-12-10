@@ -88,37 +88,32 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">套餐A</label>
                 <div class="layui-input-inline">
-                    <input type="number" class="layui-input field-taocan_1" name="taocan_1" autocomplete="off" placeholder="优惠百分比" value="100">
+                    <input type="text" class="layui-input field-taocan_1" name="taocan_1" autocomplete="off" placeholder="优惠百分比" value="1">
                 </div>
-                <div class="layui-form-mid">%</div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">套餐B</label>
                 <div class="layui-input-inline">
-                    <input type="number" class="layui-input field-taocan_2" name="taocan_2" autocomplete="off" placeholder="优惠百分比" value="100">
+                    <input type="text" class="layui-input field-taocan_2" name="taocan_2" autocomplete="off" placeholder="优惠百分比" value="1">
                 </div>
-                <div class="layui-form-mid">%</div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">套餐C</label>
                 <div class="layui-input-inline">
-                    <input type="number" class="layui-input field-taocan_3" name="taocan_3" autocomplete="off" placeholder="优惠百分比" value="100">
+                    <input type="text" class="layui-input field-taocan_3" name="taocan_3" autocomplete="off" placeholder="优惠百分比" value="1">
                 </div>
-                <div class="layui-form-mid">%</div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">套餐D</label>
                 <div class="layui-input-inline">
-                    <input type="number" class="layui-input field-taocan_4" name="taocan_4" autocomplete="off" placeholder="优惠百分比" value="100">
+                    <input type="text" class="layui-input field-taocan_4" name="taocan_4" autocomplete="off" placeholder="优惠百分比" value="1">
                 </div>
-                <div class="layui-form-mid">%</div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">套餐E</label>
                 <div class="layui-input-inline">
-                    <input type="number" class="layui-input field-taocan_5" name="taocan_5" autocomplete="off" placeholder="优惠百分比" value="100">
+                    <input type="text" class="layui-input field-taocan_5" name="taocan_5" autocomplete="off" placeholder="优惠百分比" value="1">
                 </div>
-                <div class="layui-form-mid">%</div>
             </div>
         </div>
         <div class="layui-form-item">
