@@ -9,12 +9,6 @@
         <form class="layui-form layui-form-pane" action="{:url()}" method="get" id="search_form">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">商品名称</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="name" value="{:input('get.name')}" placeholder="商品名称" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
                     <label class="layui-form-label">日期范围</label>
                     <div class="layui-input-inline">
                         <input type="text" class="layui-input" id="test2" name="search_date" placeholder="选择日期" readonly value="{$d|default=''}">
@@ -36,31 +30,23 @@
         <thead>
         <tr>
             <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
-            <th>商品名称</th>
-            <th>总数量(份)</th>
-            <th>总消耗(斗)</th>
-            <th>总额外支付(元)</th>
-            <th>添加时间</th>
+            <th>所属区域</th>
+            <th>总金额</th>
             <th>操作</th>
         </tr>
         </thead>
         <tbody>
         {volist name="data_list" id="vo"}
         <tr>
-            <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
+            <td><input type="checkbox" name="qu_type[]" class="layui-checkbox checkbox-qu_type" value="{$vo['qu_type']}" lay-skin="primary"></td>
             <td class="font12">
-                <a href="{:url('detail?item_id='.$vo['item_id'])}"><strong class="mcolor">{$vo['name']}</strong></a>
+                <a href="{:url('detail?qu_type='.$vo['qu_type'])}"><strong class="mcolor">{$qu[$vo['qu_type']]}</strong></a>
             </td>
-            <td class="font12">{$vo['num']}</td>
-            <td class="font12">{$vo['total_score']}</td>
             <td class="font12">{$vo['other_price']}</td>
-            <td class="font12">{$vo['create_time']}</td>
             <td>
                 <div class="layui-btn-group">
                     <div class="layui-btn-group">
-                        <a href="{:url('detail?item_id='.$vo['item_id'])}" class="layui-btn layui-btn-primary layui-btn-sm">明细</a>
-                        <!--                                <a href="{:url('edit?id='.$vo['id'])}" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe642;</i></a>-->
-                        <!--                                <a data-href="{:url('del?table=admin_company&ids='.$vo['id'])}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>-->
+                        <a href="{:url('detail?qu_type='.$vo['qu_type'])}" class="layui-btn layui-btn-primary layui-btn-sm">明细</a>
                     </div>
                 </div>
             </td>

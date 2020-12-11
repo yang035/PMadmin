@@ -17,6 +17,8 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
+                <input type="hidden" class="field-qu_type" name="qu_type" value="{$Request.param.qu_type}">
+                <input type="hidden" class="field-p" name="p" value="{$Request.param.p}">
                 <button type="submit" class="layui-btn layui-btn-normal btn_sub" lay-submit="" lay-filter="formSubmit">确认</button>
                 <a href="javascript:history.back()" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
             </div>
@@ -25,7 +27,7 @@
     <hr>
     <div class="layui-card">
         <div class="layui-card-body">
-            您购买的套餐为：功能区【套餐A】<br><br>
+            您购买的套餐为：{$qu}【{$taocan}】<br><br>
             包含以下内容项：<br>
             {volist name="data_list" id="vo"}
             {$vo['name']}[

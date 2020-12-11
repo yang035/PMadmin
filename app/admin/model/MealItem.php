@@ -43,7 +43,22 @@ class MealItem extends Model
     public static function getQuType($type = 0)
     {
         $data = config('other.qu_type');
-        $str = '';
+        $str = '<option value=""></option>';
+        if ($data){
+            foreach ($data as $k => $v) {
+                if ($type == $k) {
+                    $str .= "<option value='".$k."' selected>".$v."</option>";
+                } else {
+                    $str .= "<option value='".$k."'>".$v."</option>";
+                }
+            }
+        }
+        return $str;
+    }
+    public static function getTaocan($type = 0)
+    {
+        $data = config('other.taocan_config');
+        $str = '<option value=""></option>';
         if ($data){
             foreach ($data as $k => $v) {
                 if ($type == $k) {

@@ -10,7 +10,10 @@ namespace app\admin\controller;
 use app\admin\model\MealCat as CatModel;
 use app\admin\model\MealCat;
 use app\admin\model\MealItem as ItemModel;
+use app\admin\model\MealOrder as OrderModel;
 use app\admin\model\MealItem;
+use Payment\Client;
+use think\Db;
 
 
 class Meal extends Admin
@@ -325,66 +328,27 @@ class Meal extends Admin
     }
 
     public function mealDetail($id = 0){
-//        $role_id = session('admin_user.role_id');
-//        $discount = AdminRole::getRole1($role_id);
         $param = $this->request->param();
         if ($this->request->isPost()) {
             $data = $this->request->post();
 
+            $w = [
+                'qu_type' => $data['qu_type'],
+            ];
+            $fields = "id,cat_id,qu_type,meal_type,name,{$data['p']}";
+            $row = Db::table('tb_meal_item')->field($fields)->where($w)->select();
+            if ($row){
+                $data['remark'] = serialize($row);
+            }
+
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
-            $data['total_score'] = $data['unit_score'] * $data['num'];
-            if ($data['other_price'] > 0){
-                $data['is_pay'] = 1;
-            }
+            $data['is_pay'] = 1;
             $tradeNo = time() . rand(1000, 9999);
             $data['trade_no'] = $tradeNo;
-            $id = $data['item_id'];
             unset($data['id']);
-            $today = date('Y-m-d H:i:s');
-            $where = [
-                'id' => $id,
-//            'cid' => session('admin_user.cid'),
-                'status' => 1,
-                'kucun' => ['>',0],
-                'start_time' => ['elt',"{$today}"],
-                'end_time' => ['egt',"{$today}"],
-            ];
-            $row = ItemModel::where($where)->find();
-            if (!$row){
-                return $this->error('等待中，商品不存在');
-            }elseif($row['kucun'] <= 0){
-                return $this->error('库存不足或商品已兑完');
-            }else{
-                $kucun = $row['kucun'] - $data['num'];
-            }
-            // 验证
-//            $result = $this->validate($data, 'ShopCat');
-//            if($result !== true) {
-//                return $this->error($result);
-//            }
-            Db::startTrans();
-            try {
-                ItemModel::where(['id'=>$id])->setField('kucun',$kucun);
-                $res = OrderModel::create($data);
-                $sc = [
-                    'cid' => session('admin_user.cid'),
-                    'user' => session('admin_user.uid'),
-                    'gl_sub_score' => $data['total_score'],
-                    'remark' => date('Y-m-d H:i:s').'兑换消耗,订单编号为:'.$res['id'],
-                ];
-                $flag = ScoreModel::addScore($sc);
-                // 提交事务
-                Db::commit();
-            } catch (\Exception $e) {
-                // 回滚事务
-                Db::rollback();
-            }
-            if ($flag) {
-                if ($data['other_price'] > 0){
-                    return $this->success('下单成功', 'shop/payDetail', ['trade_no'=>$tradeNo],1);
-                }
-                return $this->success("下单成功{$this->score_value}", 'ShopOrder/index');
+            if (OrderModel::create($data)) {
+                return $this->success('下单成功', 'meal/payDetail', ['trade_no'=>$tradeNo],1);
             } else {
                 return $this->error('添加失败！');
             }
@@ -393,22 +357,26 @@ class Meal extends Admin
             'qu_type' => $param['qu_type'],
         ];
         $fields = "id,cat_id,qu_type,meal_type,name,{$param['p']}";
-
         $row = ItemModel::field($fields)->where($w)->select();
+
+        $taocan_config = config('other.taocan_config');
+        $qu_type = config('other.qu_type');
         $this->assign('data_list', $row);
         $this->assign('p', $param['p']);
         $this->assign('cat_option',ItemModel::getOption());
+        $this->assign('taocan',$taocan_config[$param['p']]);
+        $this->assign('qu',$qu_type[$param['qu_type']]);
         return $this->fetch();
     }
 
     public function payDetail($trade_no=0){
-        $data = db('shop_order')->alias('a')->field('a.*,b.name')
-            ->join("shop_item b", 'a.item_id = b.id', 'left')
-            ->where(['a.trade_no'=>$trade_no])->find();
+        $data = OrderModel::where(['trade_no'=>$trade_no])->find();
         $uid = session('admin_user.uid');
+        $taocan_config = config('other.taocan_config');
+        $qu_type = config('other.qu_type');
         $payData = [
             'body'         => 'ali web pay',
-            'subject'      => $data['name'],
+            'subject'      => $qu_type[$data['qu_type']].'['.$taocan_config[$data['p']].']',
             'trade_no'     => $trade_no,
             'time_expire'  => time() + 600, // 表示必须 600s 内付款
             'amount'       => $data['other_price'], // 单位为元 ,最小为0.01

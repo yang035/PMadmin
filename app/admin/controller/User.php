@@ -66,7 +66,7 @@ class User extends Admin
             if (1 != $role_id){
                 $where['company_id'] = $cid;
             }
-            if (3 == $cid && 89 != $uid){
+            if (4 == $cid && 89 != $uid){
                 $where['id'] = session('admin_user.uid');
             }
             if (8 == $role_id || 9 == $role_id){

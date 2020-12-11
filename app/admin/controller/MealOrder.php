@@ -7,6 +7,7 @@
  */
 
 namespace app\admin\controller;
+use app\admin\model\MealItem;
 use app\admin\model\MealOrder as OrderModel;
 use app\admin\model\AdminUser;
 use Payment\Client;
@@ -20,50 +21,34 @@ class MealOrder extends Admin
     protected function _initialize()
     {
         parent::_initialize();
-
-        $tab_data['menu'] = [
-            [
-                'title' => '商品分类',
-                'url' => 'admin/MealOrder/cat',
-            ],
-            [
-                'title' => '商品上线',
-                'url' => 'admin/MealOrder/index',
-            ],
-        ];
-        $this->tab_data = $tab_data;
     }
 
     public function index($q = '')
     {
         $map = [];
-        $map1 = [];
         $params = $this->request->param();
         $d = '';
         if ($params){
-            if (!empty($params['name'])){
-                $map1['name'] = ['like', '%'.$params['name'].'%'];
-            }
             if (isset($params['search_date']) && !empty($params['search_date'])){
                 $d = urldecode($params['search_date']);
                 $d_arr = explode(' - ',$d);
                 $d0 = strtotime($d_arr[0].' 00:00:00');
                 $d1 = strtotime($d_arr[1].' 23:59:59');
-                $map['MealOrder.create_time'] = ['between',["$d0","$d1"]];
+                $map['create_time'] = ['between',["$d0","$d1"]];
             }
         }
 
-        $map['MealOrder.cid'] = session('admin_user.cid');
+        $map['cid'] = session('admin_user.cid');
         $role_id = session('admin_user.role_id');
         if ($role_id > 3){
-            $map['MealOrder.user_id'] = session('admin_user.uid');
+            $map['user_id'] = session('admin_user.uid');
         }
 //print_r($map);
-        $fields = "`MealOrder`.item_id,sum(`MealOrder`.num) as num,sum(`MealOrder`.total_score) as total_score,sum(`MealOrder`.other_price) as other_price,`MealItem`.name";
+        $fields = "qu_type,sum(other_price) as other_price";
 
         if (isset($params['export']) && 1 == $params['export']){
             set_time_limit(0);
-            $data_list = OrderModel::hasWhere('cat',$map1)->field($fields)->where($map)->group('`MealOrder`.item_id')->select();
+            $data_list = OrderModel::field($fields)->where($map)->group('qu_type')->select();
 //        print_r($data_list);
             vendor('PHPExcel.PHPExcel');
             $objPHPExcel = new \PHPExcel();
@@ -95,12 +80,14 @@ class MealOrder extends Admin
             exit;
         }
 
-        $data_list = OrderModel::hasWhere('cat',$map1)->field($fields)->where($map)->group('`MealOrder`.item_id')->paginate(30, false, ['query' => input('get.')]);
+        $data_list = OrderModel::field($fields)->where($map)->group('qu_type')->paginate(30, false, ['query' => input('get.')]);
 //        $aa = new OrderModel();
 //        print_r($aa->getLastSql());
         // 分页
         $pages = $data_list->render();
         $this->assign('data_list', $data_list);
+        $qu_type = config('other.qu_type');
+        $this->assign('qu',$qu_type);
         $this->assign('pages', $pages);
         $this->assign('d', $d);
         return $this->fetch();
@@ -111,28 +98,31 @@ class MealOrder extends Admin
         $map = [];
         $map1 = [];
         $params = $this->request->param();
-        $map['item_id'] = $params['item_id'];
+
         if ($params){
+            if ($params['qu_type']){
+                $map['qu_type'] = $params['qu_type'];
+            }
             if (!empty($params['person_user'])) {
                 $person_user = trim($params['person_user'],',');
-                $map['MealOrder.user_id'] = ['in',"{$person_user}"];
+                $map['user_id'] = ['in',"{$person_user}"];
             }
         }
         $role_id = session('admin_user.role_id');
         if ($role_id > 3){
-            $map['MealOrder.user_id'] = session('admin_user.uid');
+            $map['user_id'] = session('admin_user.uid');
         }
 
         $cid = session('admin_user.cid');
         if ($cid != 2){
-            $map['MealOrder.cid'] = session('admin_user.cid');
+            $map['cid'] = session('admin_user.cid');
         }
 
         $pay_status = config('other.pay_status');
 
         if (isset($params['export']) && 1 == $params['export']){
             set_time_limit(0);
-            $data_list = OrderModel::hasWhere('cat',$map1)->field("`MealOrder`.*, `MealItem`.name")->where($map)->order('id desc')->select();
+            $data_list = OrderModel::where($map)->order('id desc')->select();
             if ($data_list){
                 foreach ($data_list as $k=>$v){
                     $data_list[$k]['realname'] = AdminUser::getUserById($v['user_id'])['realname'];
@@ -174,17 +164,23 @@ class MealOrder extends Admin
             exit;
         }
 
-        $data_list = OrderModel::hasWhere('cat',$map1)->field("`MealOrder`.*, `MealItem`.name")->where($map)->order('id desc')->paginate(30, false, ['query' => input('get.')]);
+        $data_list = OrderModel::where($map)->order('id desc')->paginate(30, false, ['query' => input('get.')]);
         if ($data_list){
             foreach ($data_list as $k=>$v){
                 $data_list[$k]['realname'] = AdminUser::getUserById($v['user_id'])['realname'];
             }
         }
+        $taocan_config = config('other.taocan_config');
+        $qu_type = config('other.qu_type');
         // 分页
         $pages = $data_list->render();
         $this->assign('pay_status', $pay_status);
         $this->assign('data_list', $data_list);
         $this->assign('pages', $pages);
+        $this->assign('taocan',$taocan_config);
+        $this->assign('qu',$qu_type);
+        $this->assign('taocan_option',MealItem::getTaocan());
+        $this->assign('qutype_option',MealItem::getQuType());
         return $this->fetch();
     }
 
@@ -194,15 +190,13 @@ class MealOrder extends Admin
      * 提交退款申请
      */
     public function refund($id=0){
-        $data_list = db('Meal_order')->alias('a')->field('a.*,b.name')
-            ->join("Meal_item b", 'a.item_id = b.id', 'left')
-            ->where(['a.id'=>$id])->find();
+        $data_list = OrderModel::where(['id'=>$id])->find();
         if ($this->request->isPost()){
             $data = $this->request->post();
             $data['is_pay'] = 5;
             $flag = OrderModel::where('id',$data['id'])->update($data);
             if ($flag) {
-                return $this->success("提交成功{$this->score_value}",'detail', ['item_id'=>$data_list['item_id']],1);
+                return $this->success("提交成功{$this->score_value}",'detail', ['id'=>$id],1);
             } else {
                 return $this->error('提交失败！');
             }
@@ -218,9 +212,11 @@ class MealOrder extends Admin
      * 客服处理退款
      */
     public function refundDeal($id=0){
-        $data_list = db('Meal_order')->alias('a')->field('a.*,b.name')
-            ->join("Meal_item b", 'a.item_id = b.id', 'left')
-            ->where(['a.id'=>$id])->find();
+        $data_list = OrderModel::where(['id'=>$id])->find();
+        $taocan_config = config('other.taocan_config');
+        $qu_type = config('other.qu_type');
+        $this->assign('taocan',$taocan_config);
+        $this->assign('qu',$qu_type);
         $this->assign('refund_option',OrderModel::getRefundOption());
         $this->assign('data_info', $data_list);
         return $this->fetch();
@@ -232,9 +228,7 @@ class MealOrder extends Admin
      * 退款
      */
     public function refundConfirm($trade_no=0){
-        $data = db('Meal_order')->alias('a')->field('a.*,b.name')
-            ->join("Meal_item b", 'a.item_id = b.id', 'left')
-            ->where(['a.trade_no'=>$trade_no])->find();
+        $data = OrderModel::where(['trade_no'=>$trade_no])->find();
         $refundNo = time() . rand(1000, 9999);
         $refundData = [
             'trade_no'       => $trade_no,

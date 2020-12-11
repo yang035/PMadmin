@@ -27,7 +27,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">真实姓名</label>
         <div class="layui-input-inline">
-            <input type="text" class="layui-input field-realname" name="realname" lay-verify="required" autocomplete="off" placeholder="请输入用户名" readonly="">
+            <input type="text" class="layui-input field-realname" name="realname" lay-verify="required" autocomplete="off" placeholder="请输入真实姓名">
         </div>
     </div>
     <div class="layui-form-item">

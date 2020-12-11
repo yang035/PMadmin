@@ -8,13 +8,21 @@
     <div class="page-filter">
         <form class="layui-form layui-form-pane" action="{:url()}" method="get" id="search_form">
             <div class="layui-inline">
+                <label class="layui-form-label">区域</label>
                 <div class="layui-input-inline">
-                    <button type="button" class="layui-btn layui-btn-primary" id="person_user_id">选择人员</button>
-                    <div id="person_select_id"></div>
-                    <input type="hidden" name="person_user" id="person_user" value="">
+                    <select name="qu_type" class="field-qu_type" type="select">
+                        {$qutype_option}
+                    </select>
                 </div>
             </div>
-            <input type="hidden" name="item_id" value="{$Request.param.item_id}">
+            <div class="layui-inline">
+                <label class="layui-form-label">套餐</label>
+                <div class="layui-input-inline">
+                    <select name="p" class="field-p" type="select">
+                        {$taocan_option}
+                    </select>
+                </div>
+            </div>
             <input type="hidden" name="export" value="">
             <button type="submit" class="layui-btn layui-btn-normal normal_btn">搜索</button>
             <input type="button" class="layui-btn layui-btn-primary layui-icon export_btn" value="导出">
@@ -30,10 +38,9 @@
         <tr>
             <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
             <th>姓名</th>
-            <th>商品名称</th>
-            <th>数量(份)</th>
-            <th>总消耗(斗)</th>
-            <th>额外支付(元)</th>
+            <th>所属区域</th>
+            <th>套餐</th>
+            <th>支付金额(元)</th>
             <th>支付状态</th>
             <th>状态</th>
             <th>添加时间</th>
@@ -44,9 +51,8 @@
         <tr>
             <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
             <td class="font12">{$vo['realname']}</td>
-            <td class="font12">{$vo['name']}</td>
-            <td class="font12">{$vo['num']}</td>
-            <td class="font12">{$vo['total_score']}</td>
+            <td class="font12">{$qu[$vo['qu_type']]}</td>
+            <td class="font12">{$taocan[$vo['p']]}</td>
             <td class="font12">{$vo['other_price']}</td>
             <td class="font12">
                 {if condition="$vo['is_pay'] == 1"}

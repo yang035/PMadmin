@@ -1,7 +1,7 @@
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-card">
         <div class="layui-card-body">
-            <b>名称：</b>{$data_info['name']}<br>
+            <b>名称：</b>{$qu[$data_info['qu_type']]}[{$taocan[$data_info['p']]}]<br>
             <b>支付金额：</b>{$data_info['other_price']}<br>
             <b>退款原因：</b>{$refund_option[$data_info['refund_option']]}<br>
             <b>说明：</b>{$data_info['comment']}<br>
