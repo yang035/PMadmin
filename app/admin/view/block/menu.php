@@ -36,7 +36,7 @@
     </ul>
     <ul class="layui-nav fr nobg head-info">
         <li class="layui-nav-item"><a href="/" target="_blank" class="aicon ai-ai-home" title="前台"></a></li>
-        <li class="layui-nav-item"><a href="http://study.imlgl.com" target="_blank" class="aicon ai-huiyuandengji" title="社区"></a></li>
+        <li class="layui-nav-item"><a href="http://study.imlgl.com?lg=user-login&&email={$Think.session.admin_user.username}" target="_blank" class="aicon ai-huiyuandengji" title="社区"></a></li>
         <li class="layui-nav-item"><a href="{:url('admin/index/clear')}" class="j-ajax aicon ai-qingchu" refresh="yes" title="清缓存"></a></li>
         <li class="layui-nav-item"><a href="javascript:void(0);" class="aicon ai-suo" id="lockScreen" title="锁屏"></a></li>
         <li class="layui-nav-item">

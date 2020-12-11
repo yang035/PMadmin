@@ -283,6 +283,66 @@ class Shop extends Admin
         return $this->success('删除成功');
     }
 
+    public function enter(){
+        $today = date('Y-m-d');
+        $w = [
+            'content' =>['<>',''],
+//            'start_time' =>['<=',"{$today}"],
+//            'end_time' =>['>=',"{$today}"],
+            'status' => 1,
+            'kucun' => ['>',0],
+            'check_status' => 1,
+        ];
+        $list = ItemModel::where($w)
+            ->where("DATE_FORMAT(start_time,'%Y-%m-%d')",'<=',$today)
+            ->where("DATE_FORMAT(end_time,'%Y-%m-%d')",'>=',$today)
+            ->where('content IS NOT NULL')->select();
+        $this->assign('list',$list);
+        if ($this->request->isAjax()) {
+            $where = [
+//                'cid' => session('admin_user.cid'),
+                'status' => 1,
+//                'start_time' => ['elt',"{$today}"],
+//                'end_time' => ['egt',"{$today}"],
+                'kucun' => ['>',0],
+                'check_status' => 1,
+            ];
+            $page = input('param.page/d', 1);
+            $limit = input('param.limit/d', 20);
+
+            $cat_id = input('param.cat_id/d');
+            if ($cat_id){
+                $where['cat_id'] = $cat_id;
+            }
+            $name = input('param.name');
+            if ($name) {
+                $where['name'] = ['like', "%{$name}%"];
+            }
+            $data['data'] = ItemModel::with('cat')
+                ->where("DATE_FORMAT(start_time,'%Y-%m-%d')",'<=',$today)
+                ->where("DATE_FORMAT(end_time,'%Y-%m-%d')",'>=',$today)
+                ->where($where)->page($page)->limit($limit)->order('tj_company DESC,tj_company_type DESC,id DESC')->select();
+            if ($data['data']){
+                foreach ($data['data'] as $k=>$v){
+                    $startdate=strtotime($v['start_time']);
+                    $enddate=strtotime($today);
+                    $days=round(($enddate-$startdate)/3600/24);
+                    if ($v['time_interval'] != 0){
+                        $data['data'][$k]['score'] += floor($days/$v['time_interval'])*$v['add_score'];
+                    }
+                }
+            }
+            $data['count'] = ItemModel::where($where)->count('id');
+            $data['code'] = 0;
+            $data['msg'] = '';
+            return json($data);
+        }
+
+        $this->assign('score',$this->getUnuseScore());
+        $this->assign('cat_option',ItemModel::getOption());
+        return $this->fetch();
+    }
+
     public function shopList(){
         $today = date('Y-m-d');
         $w = [
