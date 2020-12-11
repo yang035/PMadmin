@@ -12,7 +12,7 @@ class AdminUser extends Validate
         'role_id|角色'    => 'requireWith:role_id|notIn:0,1',
         'email|邮箱'     => 'requireWith:email|email|unique:admin_user',
         'password|密码'  => 'require|length:6,20|confirm',
-        'mobile|手机号'   => 'require|unique:admin_user|requireWith:mobile|regex:^1\d{10}',
+        'mobile|手机号'   => 'require|unique:admin_user,company_id^mobile|requireWith:mobile|regex:^1\d{10}',
     ];
 
     //定义验证提示
