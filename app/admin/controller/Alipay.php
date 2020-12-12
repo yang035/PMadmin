@@ -73,8 +73,9 @@ class Alipay extends Controller
     /**
      * @return array
      */
-    public function dealNotify($p,$t_flag)
+    public function dealNotify($p)
     {
+        $t_flag = strlen($p['out_trade_no']);
         switch ($t_flag){
             case 18:
                 $this->shopNotify($p);

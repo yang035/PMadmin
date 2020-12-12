@@ -15,10 +15,9 @@ date_default_timezone_set('Asia/Shanghai');
 $aliConfig = require_once __DIR__ . '/../app/extra/alipay.php';
 $wxConfig  = require_once __DIR__ . '/../app/extra/wxpay.php';
 $from = $_GET['from'] ? $_GET['from'] : 'ali';
-$t_flag = strlen($_GET['out_trade_no']);
 if ($from === 'ali') {
     $alipay = new \app\admin\controller\Alipay();
-    $alipay->dealNotify($_GET,$t_flag);
+    $alipay->dealNotify($_GET);
 } elseif ($from === 'wx') {
     $config = $wxConfig;
     $proxy  = \Payment\Client::WECHAT;
