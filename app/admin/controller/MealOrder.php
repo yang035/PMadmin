@@ -247,6 +247,7 @@ class MealOrder extends Admin
 
         $peizhi = config('alipay');
         $client = new Client(Client::ALIPAY, $peizhi);
+        $flag = 0;
         Db::startTrans();
         try {
             $pay_url = $client->refund($refundData);
