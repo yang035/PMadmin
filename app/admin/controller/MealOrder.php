@@ -201,8 +201,12 @@ class MealOrder extends Admin
                 return $this->error('提交失败！');
             }
         }
+        $taocan_config = config('other.taocan_config');
+        $qu_type = config('other.qu_type');
         $this->assign('refund_option',OrderModel::getRefundOption());
         $this->assign('data_info', $data_list);
+        $this->assign('taocan',$taocan_config[$data_list['p']]);
+        $this->assign('qu',$qu_type[$data_list['qu_type']]);
         return $this->fetch();
     }
 
