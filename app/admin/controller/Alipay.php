@@ -14,7 +14,8 @@ use Payment\Exceptions\ClassNotFoundException;
 use Payment\Exceptions\GatewayException;
 use think\Controller;
 use think\Exception;
-use app\admin\model\ShopOrder as OrderModel;
+use app\admin\model\ShopOrder as ShopOrderModel;
+use app\admin\model\MealOrder as MealOrderModel;
 
 class Alipay extends Controller
 {
@@ -72,9 +73,24 @@ class Alipay extends Controller
     /**
      * @return array
      */
-    public function dealNotify($p)
+    public function dealNotify($p,$t_flag)
     {
-        $res = OrderModel::where(['trade_no'=>$p['out_trade_no']])->find();
+        switch ($t_flag){
+            case 18:
+                $this->shopNotify($p);
+                break;
+            case 19:
+                $this->mealNotify($p);
+                break;
+            default:
+                $this->shopNotify($p);
+                break;
+        }
+    }
+
+    public function shopNotify($p)
+    {
+        $res = ShopOrderModel::where(['trade_no'=>$p['out_trade_no']])->find();
 
         $redis = service('Redis');
         $login_info = $redis->get("pm:admin_user:{$p['out_trade_no']}");
@@ -91,9 +107,37 @@ class Alipay extends Controller
                 'is_pay'=>2,
             ];
             if ($res['other_price'] == $p['total_amount']){
-                $flag = OrderModel::where(['trade_no'=>$p['out_trade_no']])->update($data);
+                $flag = ShopOrderModel::where(['trade_no'=>$p['out_trade_no']])->update($data);
                 if ($flag){
                     return $this->success("支付成功", 'ShopOrder/index');
+                }
+            }
+        }
+        return $this->error('操作失败');
+    }
+
+    public function mealNotify($p)
+    {
+        $res = MealOrderModel::where(['trade_no'=>$p['out_trade_no']])->find();
+
+        $redis = service('Redis');
+        $login_info = $redis->get("pm:admin_user:{$p['out_trade_no']}");
+        $admin_user = session('admin_user');
+        if (empty($admin_user)){
+            session('admin_user',unserialize($login_info));
+        }
+
+        if ($res){
+            $data = [
+                'total_amount'=>$p['total_amount'],
+                'timestamp'=>$p['timestamp'],
+                'source'=>$p['from'],
+                'is_pay'=>2,
+            ];
+            if ($res['other_price'] == $p['total_amount']){
+                $flag = MealOrderModel::where(['trade_no'=>$p['out_trade_no']])->update($data);
+                if ($flag){
+                    return $this->success("支付成功", 'MealOrder/index');
                 }
             }
         }

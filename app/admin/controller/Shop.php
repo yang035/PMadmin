@@ -416,7 +416,7 @@ class Shop extends Admin
             if ($data['other_price'] > 0){
                 $data['is_pay'] = 1;
             }
-            $tradeNo = time() . rand(1000, 9999);
+            $tradeNo = $tradeNo = date('YmdHis') . rand(1000, 9999);
             $data['trade_no'] = $tradeNo;
             $id = $data['item_id'];
             unset($data['id']);

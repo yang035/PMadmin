@@ -344,7 +344,7 @@ class Meal extends Admin
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
             $data['is_pay'] = 1;
-            $tradeNo = time() . rand(1000, 9999);
+            $tradeNo = date('YmdHis') . rand(10000, 99999);
             $data['trade_no'] = $tradeNo;
             unset($data['id']);
             if (OrderModel::create($data)) {
@@ -375,7 +375,7 @@ class Meal extends Admin
         $taocan_config = config('other.taocan_config');
         $qu_type = config('other.qu_type');
         $payData = [
-            'body'         => 'ali web pay',
+            'body'         => 'meal',
             'subject'      => $qu_type[$data['qu_type']].'['.$taocan_config[$data['p']].']',
             'trade_no'     => $trade_no,
             'time_expire'  => time() + 600, // 表示必须 600s 内付款

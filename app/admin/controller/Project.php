@@ -2368,7 +2368,9 @@ class Project extends Admin
                 }
                 $report_user = AdminUser::getUserById($v['user_id'])['nick'];
                 $report[$k]['real_name'] = !empty($report_user) ? $report_user : '';
-                $report[$k]['check_catname'] = ItemModel::getCat()[$v['check_cat']];
+//                $check_cat = ItemModel::getCat();
+//                print_r($check_cat);exit();
+//                $report[$k]['check_catname'] = $check_cat[$v['check_cat']] ? $check_cat[$v['check_cat']] : '';
                 if (empty($row['child'])){
                     $report[$k]['reply'] = ReportReply::getAll($v['id'], 5,2);
                 }else{
