@@ -183,6 +183,31 @@ class SubjectItem extends Model
         return json_encode($data);
     }
 
+    public static function getOption1($id = 0,$type = 0)
+    {
+        $map = [
+            'cid'=>session('admin_user.cid'),
+            'id'=>$id,
+        ];
+        $fields = 'big_major_deal';
+        $data = self::field($fields)->where($map)->find();
+
+        $str = '<option value="0" selected>请选择</option>';
+        if ($data){
+            $big_major_deal = json_decode($data['big_major_deal'],true);
+            if ($big_major_deal){
+                foreach ($big_major_deal as $k => $v) {
+                    if ($type == $v['id']) {
+                        $str .= '<option value="'.$v['id'].'" selected>'.$v['name'].'</option>';
+                    } else {
+                        $str .= '<option value="'.$v['id'].'">'.$v['name'].'</option>';
+                    }
+                }
+            }
+        }
+        return $str;
+    }
+
     public function del($id){
         if (is_array($id)) {
             $error = '';

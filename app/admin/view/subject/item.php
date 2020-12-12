@@ -55,10 +55,10 @@
     {eq name="Request.param.param" value="1"}
     <a href="#" onclick="zujian_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">组建项目组</a>
     <a href="#" onclick="partner_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">合伙配置</a>
-    <a href="#" onclick="edit_x({{ d.id }},'{{ d.name }}',1)" class="layui-btn layui-btn-xs layui-btn-normal">方案协议</a>
-    <a href="#" onclick="sign_xieyi({{ d.id }},1)" class="layui-btn layui-btn-xs layui-btn-normal">签署协议</a>
-    <a href="#" onclick="edit_x({{ d.id }},'{{ d.name }}',2)" class="layui-btn layui-btn-xs layui-btn-warm">施工图协议</a>
-    <a href="#" onclick="sign_xieyi({{ d.id }},2)" class="layui-btn layui-btn-xs layui-btn-warm">签署协议</a>
+    <a href="#" onclick="edit_x({{ d.id }},'{{ d.name }}')" class="layui-btn layui-btn-xs layui-btn-normal">方案协议</a>
+<!--    <a href="#" onclick="sign_xieyi({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">签署协议</a>-->
+    <a href="#" onclick="edit_x({{ d.id }},'{{ d.name }}')" class="layui-btn layui-btn-xs layui-btn-warm">施工图协议</a>
+<!--    <a href="#" onclick="sign_xieyi({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">签署协议</a>-->
     {else/}
     <!--    <a href="{:url('flow')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-warm">设计流程</a>-->
     <a href="{:url('chakan')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-warm">查看</a>
@@ -233,12 +233,12 @@
             }
         });
     }
-    function edit_x(id,name,part){
-        var open_url = "{:url('editX')}?id="+id+"&name="+name+"&part="+part;
+    function edit_x(id,name){
+        var open_url = "{:url('editX')}?id="+id+"&name="+name;
         window.location.href = open_url;
     }
-    function sign_xieyi(id,part){
-        var open_url = "{:url('signXieyi')}?id="+id+"&p=s"+"&part="+part;
+    function sign_xieyi(id){
+        var open_url = "{:url('signXieyi')}?id="+id+"&p=s";
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {

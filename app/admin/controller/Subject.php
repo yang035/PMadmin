@@ -375,8 +375,10 @@ class Subject extends Admin
             'start_time'=>date('Y-m-d',strtotime($row['start_time'])),
             'end_time'=>date('Y-m-d',strtotime($row['end_time'])),
         ];
+        $big_major_arr = ItemModel::getOption1($data['id']);
         $this->assign('time', $time);
         $this->assign('part_option', ItemModel::getPart());
+        $this->assign('big_major_arr', $big_major_arr);
         return $this->fetch();
     }
 

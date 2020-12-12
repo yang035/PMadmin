@@ -21,6 +21,14 @@
         <input type="hidden" name="part" value="{$Request.param.part}">
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">专业类型</label>
+        <div class="layui-input-inline">
+            <select name="part" class="field-part" type="select">
+                {$big_major_arr}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">开始时间</label>
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-begin_date" name="begin_date" lay-verify="required" readonly autocomplete="off" placeholder="选择开始时间">

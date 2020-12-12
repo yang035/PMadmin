@@ -6,7 +6,7 @@
         </fieldset>
                 {volist name="f['child']" id="f1"}
                 <dt>
-                    <input type="checkbox" name="flow[]" value="{$f1['id']}" min="{$k}" {notempty name="f1['flow']"}checked{/notempty} lay-skin="primary" placeholder="{$f1['jindu_per']}" title="{$f1['name']}" lay-filter="flow[]">
+                    <input type="checkbox" name="flow[]" value="{$f1['id']}" min="{$f['id']}" {notempty name="f1['flow']"}checked{/notempty} lay-skin="primary" placeholder="{$f1['jindu_per']}" title="{$f1['name']}" lay-filter="flow[]">
                 </dt>
                 {notempty name="f1['flow']"}
                 <ul class="layui-timeline" style="padding-left:30px">

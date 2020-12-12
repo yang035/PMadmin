@@ -1155,12 +1155,21 @@ WHERE si.id in ({$p})";
                             $tmp1[$k][$kk]['dep_name'] = isset($vv['dep']) ? $this->deal_user($vv['dep']) : null;
                             if (isset($vv['dep']) && !empty($partner_user) && isset($partner_user[$vv['dep']]) && isset($p_data1[$partner_user[$vv['dep']]])) {
                                 $tmp = $p_data1[$partner_user[$vv['dep']]];
+//                                echo 111;
                             }else{
+//                                echo 222;
                                 //默认设置2级合伙人
                                 if (2 == session('admin_user.cid')){
                                     $tmp = $p_data1[2];
+                                }else{
+                                    return $this->error('信息不全');
                                 }
                             }
+//                            print_r($vv['dep']);
+//                            print_r($partner_user[$vv['dep']]);
+//                            print_r($p_data1);
+//
+//                            exit();
                             $tmp1[$k][$kk]['hehuo_name'] = $tmp;
                             //总进度
                             $tmp1[$k][$kk]['jindu'] = $j_d;
