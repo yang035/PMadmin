@@ -133,7 +133,7 @@ class Xiangmu extends Model
     public static function getCat()
     {
         $map = [
-            'cid'=>session('admin_user.cid'),
+            'cid'=>2,
             'status'=>1,
         ];
         $data = CatModel::where($map)->column('name','id');

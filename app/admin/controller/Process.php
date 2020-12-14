@@ -20,11 +20,11 @@ class Process extends Admin
 
         $tab_data['menu'] = [
             [
-                'title' => '流程类型',
+                'title' => '模板类型',
                 'url' => 'admin/Process/cat',
             ],
             [
-                'title' => '流程模板',
+                'title' => '模板内容',
                 'url' => 'admin/Process/index',
             ],
         ];

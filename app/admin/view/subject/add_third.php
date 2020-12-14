@@ -16,6 +16,8 @@
 </style>
 <form class="layui-form" action="{:url()}" method="post">
     <div class="layui-tab-item layui-show layui-form-pane">
+        <h3>项目名：{$data_info['name']}</h3>
+        <br>
         <div class="layui-form-item">
             <label class="layui-form-label">第三方人员</label>
             <div class="layui-input-inline">
