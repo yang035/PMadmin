@@ -178,17 +178,17 @@
                 window.parent.document.getElementById(m+'_select_id').innerText=name;
                 window.parent.document.getElementById(m+'_cat').value = ','+ids;
 
-                var d_h='',id_arr = ids.split(',').filter(d=>d),name_arr = name.split(',').filter(d=>d);;
+                var d_h='',id_arr = ids.split(',').filter(d=>d),name_arr = name.split(',').filter(d=>d);
                 // console.log(id_arr);
                 // console.log(name_arr);
                 if (id_arr) {
                     $.each(id_arr, function(i){
                         d_h += "<div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
-                            "                <input type=\"text\" class=\"layui-input field-name fl\" value=\""+name_arr[i]+"\" lay-verify=\"required\" name=\"name[]\" autocomplete=\"off\" readonly>\n" +
+                            "                <input type=\"text\" class=\"layui-input field-name fl\" value=\""+name_arr[i]+"\" lay-verify=\"required\" name=\"name["+id_arr[i]+"]\" autocomplete=\"off\" readonly>\n" +
                             "            </div>\n" +
                             "            <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
-                            "                <input type=\"hidden\" name=\"good_id[]\" value=\""+id_arr[i]+"\" lay-verify=\"required\">\n" +
-                            "                <input type=\"number\" class=\"layui-input field-number fl\" onkeypress=\"return (/[\\d]/.test(String.fromCharCode(event.keyCode)))\" lay-verify=\"required\" name=\"number[]\" autocomplete=\"off\" value='1' placeholder=\"请输入数量\">\n" +
+                            "                <input type=\"hidden\" name=\"good_id["+id_arr[i]+"]\" value=\""+id_arr[i]+"\" lay-verify=\"required\">\n" +
+                            "                <input type=\"number\" class=\"layui-input field-number fl\" onkeypress=\"return (/[\\d]/.test(String.fromCharCode(event.keyCode)))\" lay-verify=\"required\" name=\"number["+id_arr[i]+"]\" onblur=\"check_v("+id_arr[i]+",this.value)\" autocomplete=\"off\" value='1' placeholder=\"请输入数量\">\n" +
                             "            </div>";
                     });
                 }

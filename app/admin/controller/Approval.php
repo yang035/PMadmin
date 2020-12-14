@@ -1257,6 +1257,12 @@ class Approval extends Admin
         return $this->fetch();
     }
 
+    public function getOfficeGoodKuCun($id){
+        $row = \app\admin\model\Goods::getRowById($id,'total,sales');
+        $kucun = (int)($row['total']-$row['sales']);
+        return json($kucun > 0 ? $kucun : 0);
+    }
+
     public function borrow()
     {
         if ($this->request->isPost()) {

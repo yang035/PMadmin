@@ -296,7 +296,7 @@
                 总计：{$data_list['money']}元<br>
                 {/case}
                 {case value="17"}
-                体现金额：{$data_list['money']} 元<br>
+                提现金额：{$data_list['money']} 元<br>
                 {/case}
                 {case value="18"}
 

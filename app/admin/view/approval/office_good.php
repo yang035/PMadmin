@@ -413,5 +413,20 @@
         height:37,//高
         optionMaxHeight:300//下拉框最大高度
     });
+
+    function check_v(id,v) {
+        $.ajax({
+            type: 'POST',
+            url: "{:url('getOfficeGoodKuCun')}",
+            data: {id:id},
+            dataType:  'json',
+            success: function(data){
+                if (data < v) {
+                    layer.msg('剩余库存：'+data);
+                    $("input[name=\"number["+id+"]\"]").val(data);
+                }
+            }
+        });
+    }
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>

@@ -45,11 +45,11 @@ class Goods extends Model
         }
     }
 
-    public static function getRowById($id = 1)
+    public static function getRowById($id = 1,$field='*')
     {
         $map['cid'] = session('admin_user.cid');
         $map['id'] = $id;
-        $data = self::where($map)->find()->toArray();
+        $data = self::field($field)->where($map)->find()->toArray();
         return $data;
     }
 
