@@ -86,7 +86,8 @@
                 // {type:'checkbox',fixed: 'left'},
                 {field: 'xuhao', title: '序号',type: 'numbers'},
                 {field: 'name', title: '名称',width:200, templet:function(d){
-                        return "<a class='mcolor' onclick='read("+d.id+")'>"+d.name+"</a>";
+                        // return "<a class='mcolor' onclick='read("+d.id+")'>"+d.name+"</a>";
+                        return "<a class='mcolor' href=\"{:url('chakan')}?id="+d.id+"\">"+d.name+"</a>";
                     }},
                 // {field: 'idcard', title: '项目编号',width:150},
                 {field: 'cat_id', title: '类别',width:80, templet:function(d){
