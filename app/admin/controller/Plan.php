@@ -9,6 +9,7 @@
 namespace app\admin\controller;
 use app\admin\model\PlanCat as CatModel;
 use app\admin\model\PlanItem as ItemModel;
+use app\admin\model\ProfessionalItem as ProfessionalModel;
 use app\admin\model\Score as ScoreModel;
 
 
@@ -20,10 +21,10 @@ class Plan extends Admin
         parent::_initialize();
 
         $tab_data['menu'] = [
-            [
-                'title' => '专业大类',
-                'url' => 'admin/plan/cat',
-            ],
+//            [
+//                'title' => '专业大类',
+//                'url' => 'admin/plan/cat',
+//            ],
             [
                 'title' => '常规事项',
                 'url' => 'admin/plan/index',
@@ -64,7 +65,7 @@ class Plan extends Admin
 
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 1);
-        $this->assign('cat_option',ItemModel::getOption());
+        $this->assign('cat_option',ProfessionalModel::getOption());
         return $this->fetch('item');
     }
     public function addItem()
@@ -85,7 +86,7 @@ class Plan extends Admin
             }
             return $this->success("操作成功{$this->score_value}");
         }
-        $this->assign('cat_option',ItemModel::getOption());
+        $this->assign('cat_option',ProfessionalModel::getOption());
         return $this->fetch('itemform');
     }
 
@@ -109,7 +110,7 @@ class Plan extends Admin
 
         $row = ItemModel::where('id', $id)->find()->toArray();
         $this->assign('data_info', $row);
-        $this->assign('cat_option',ItemModel::getOption());
+        $this->assign('cat_option',ProfessionalModel::getOption());
         return $this->fetch('itemform');
     }
 
