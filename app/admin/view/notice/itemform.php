@@ -7,6 +7,7 @@
                     {$cat_option}
                 </select>
             </div>
+            <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">标题</label>

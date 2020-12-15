@@ -113,13 +113,6 @@
         {/volist}
         {/volist}
         <div class="layui-form-item">
-            <label class="layui-form-label">项目面积</label>
-            <div class="layui-input-inline">
-                <input type="number" class="layui-input field-area" name="area" autocomplete="off" placeholder="请输入项目面积">
-            </div>
-            <div class="layui-form-mid">㎡</div>
-        </div>
-        <div class="layui-form-item">
             <label class="layui-form-label">建设单位</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-development" name="development" autocomplete="off" placeholder="请输入建设单位">
@@ -145,6 +138,13 @@
                 <input type="number" class="layui-input field-total_price" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="total_price" lay-verify="required" autocomplete="off" >
             </div>
             <div class="layui-form-mid red">元*</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">项目面积</label>
+            <div class="layui-input-inline">
+                <input type="number" class="layui-input field-area" name="area" lay-verify="required" autocomplete="off" placeholder="请输入项目面积">
+            </div>
+            <div class="layui-form-mid red">㎡*</div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">产量系数</label>
@@ -453,15 +453,15 @@
     });
 
     $(".field-score_ratio").blur(function () {
-        var total_price = parseInt($('.field-total_price').val()), score_ratio= parseFloat($(this).val()),score=0;
-        score = parseFloat(total_price*score_ratio);
+        var area = parseInt($('.field-area').val()), score_ratio= parseFloat($(this).val()),score=0;
+        score = parseFloat(area*score_ratio);
         $('.field-score').val(score.toFixed(0));
     });
 
     $(".field-score").blur(function () {
-        var total_price = parseInt($('.field-total_price').val()), score= parseInt($(this).val()),score_ratio=0;
-        if (total_price > 0){
-            score_ratio = score/total_price;
+        var area = parseInt($('.field-area').val()), score= parseInt($(this).val()),score_ratio=0;
+        if (area > 0){
+            score_ratio = score/area;
             $('.field-score_ratio').val(score_ratio.toFixed(2));
         }
     });
