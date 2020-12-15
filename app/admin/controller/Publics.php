@@ -48,7 +48,7 @@ class Publics extends Common
 
     public function logout(){
         model('AdminUser')->logout();
-        $this->redirect(ROOT_DIR.'admin.php');
+        return $this->success('退出成功', url('publics/index', '', true, true),'',1);
     }
 
 
@@ -102,12 +102,6 @@ class Publics extends Common
             $data['last_login_ip'] = '';
             $data['auth'] = '';
             $data['status'] = 0;
-            // 验证
-            $result = $this->validate($data, 'AdminUser.register');
-            if($result !== true) {
-                return $this->error($result);
-            }
-            unset($data['password_confirm'],$data['__token__']);
 
             if (0 == $data['type']) {
                 //事务开始
@@ -141,54 +135,65 @@ class Publics extends Common
                             'remark' => $result['name']
                         ];
                         Category::create($categoty_data);
+
+                        $score_rule = [
+                            'code' => $result['id'].'r',
+                            'pid' => 0,
+                            'cid' => $result['id'],
+                            'name' => $result['name'],
+                            'create_time' => time(),
+                            'update_time' => time(),
+                        ];
+                        db('score_rule')->insert($score_rule);
                     } else {
                         $result = $f1;
                         $d = AdminDepartment::where($tmp)->find();
                     }
-                    unset($data['type'], $data['name']);
+
                     $data['company_id'] = $result['id'];
                     $data['role_id'] = isset($data['role_id']) ? $data['role_id'] : 3;
                     $data['department_id'] = $d['id'];
                     $data['status'] = 1;
-                    $u = UserModel::create($data);
+                    // 验证
+                    $r = $this->validate($data, 'AdminUser.register');
+                    if ($r !== true){
+                        $u = false;
+                    }else{
+                        unset($data['password_confirm'],$data['__token__'],$data['type'], $data['name']);
+                        $u = UserModel::create($data);
 
-                    $t = [
-                        'id' => $u['id'],
-                        'id_card' => date('Y').$u['id'],
-                    ];
-                    UserModel::update($t);
+                        $t = [
+                            'id' => $u['id'],
+                            'id_card' => date('Y').$u['id'],
+                        ];
+                        UserModel::update($t);
 
-                    $score = [
-                        'subject_id' => 0,
-                        'project_id' => 0,
-                        'cid' => $data['company_id'],
-                        'project_code' => '',
-                        'user' => $u['id'],
-                        'gl_add_score' => config('other.gl_give'),
-                        'remark' => "新用户注册所得GL，总计超过10000斗可用",
-                        'user_id' => 0,
-                        'is_lock' => 1,
-                        'create_time' => time(),
-                        'update_time' => time(),
-                    ];
-                    db('score')->insert($score);
-
-                    $score_rule = [
-                        'code' => $result['id'].'r',
-                        'pid' => 0,
-                        'cid' => $result['id'],
-                        'name' => $result['name'],
-                        'create_time' => time(),
-                        'update_time' => time(),
-                    ];
-                    db('score_rule')->insert($score_rule);
+                        $score = [
+                            'subject_id' => 0,
+                            'project_id' => 0,
+                            'cid' => $data['company_id'],
+                            'project_code' => '',
+                            'user' => $u['id'],
+                            'gl_add_score' => config('other.gl_give'),
+                            'remark' => "新用户注册所得GL，总计超过10000斗可用",
+                            'user_id' => 0,
+                            'is_lock' => 1,
+                            'create_time' => time(),
+                            'update_time' => time(),
+                        ];
+                        db('score')->insert($score);
+                    }
 
                     //事务提交
                     Db::commit();
                 } catch (\Exception $e) {
-                    //事务回滚
+//                  事务回滚
                     Db::rollback();
-                    return $this->error('注册失败');
+                }
+                if ($u){
+                    return $this->success('注册成功',url('index'));
+                }else{
+                    return $this->error($r);
                 }
             } else {
                 unset($data['type'], $data['name']);
@@ -196,6 +201,14 @@ class Publics extends Common
                 $data['role_id'] = isset($data['role_id']) ? $data['role_id'] : 3;
                 $data['department_id'] = 27;
                 $data['status'] = 1;
+
+                // 验证
+                $r = $this->validate($data, 'AdminUser.register');
+                if($r !== true) {
+                    return $this->error($r);
+                }
+                unset($data['password_confirm'],$data['__token__']);
+
                 $u = UserModel::create($data);
                 if (!$u) {
                     return $this->error('注册失败');
