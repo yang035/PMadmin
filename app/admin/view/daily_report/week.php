@@ -272,7 +272,7 @@
 
         $(".field-task-add").click(function(){
             $(".new_task").before("<div class=\"layui-form-item\">\n" +
-                "        <label class=\"layui-form-label\">今日事项</label>\n" +
+                "        <label class=\"layui-form-label\">本周总结</label>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 450px\">\n" +
                 "            <textarea type=\"text\" class=\"layui-textarea field-content\" name=\"content[]\" autocomplete=\"off\" placeholder=\"时间+工作内容+结果汇报\"></textarea>\n" +
                 "        </div>\n" +
@@ -285,7 +285,7 @@
         });
         $(".field-task1-add").click(function(){
             $(".new_task1").before("<div class=\"layui-form-item\">\n" +
-                "        <label class=\"layui-form-label\">明日计划</label>\n" +
+                "        <label class=\"layui-form-label\">下周计划</label>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 450px\">\n" +
                 "            <textarea type=\"text\" class=\"layui-textarea field-plan\" name=\"plan[]\" autocomplete=\"off\" placeholder=\"\"></textarea>\n" +
                 "        </div>\n" +

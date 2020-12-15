@@ -448,7 +448,7 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
 //        print_r($data_list);
         $myPro = ProjectModel::getProTask(0,0);
         foreach ($data_list as $k=>$v){
-            $data_list[$k]['subject_name'] = isset($v['subject_id']) && isset($myPro[$v['subject_id']]) ? $myPro[$v['subject_id']] : '其他';
+            $data_list[$k]['subject_name'] = isset($v['subject_id']) && isset($myPro[$v['subject_id']]) ? $myPro[$v['subject_id']] : '';
         }
 
         // 分页

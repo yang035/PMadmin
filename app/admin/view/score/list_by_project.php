@@ -58,6 +58,7 @@
         </thead>
         <tbody>
         {volist name="data_list" id="vo"}
+        {notempty name="vo['subject_name']"}
         <tr>
             <td><input type="checkbox" name="subject_id[]" class="layui-checkbox checkbox-ids" value="{$vo['subject_id']}" lay-skin="primary"></td>
             <td>{$i}</td>
@@ -76,6 +77,7 @@
                 </div>
             </td>
         </tr>
+        {/notempty}
         {/volist}
         </tbody>
     </table>

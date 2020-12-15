@@ -48,12 +48,12 @@ class Shop extends Admin
             $where = $data = [];
             $page = input('param.page/d', 1);
             $limit = input('param.limit/d', 20);
-
+            $uid = session('admin_user.uid');
             if (2 != session('admin_user.cid')) {
                 $where['cid'] = session('admin_user.cid');
             }
             if (session('admin_user.role_id') > 3) {
-                $where['user_id'] = session('admin_user.uid');
+                $where['user_id'] = $uid;
             }
 
             $cat_id = input('param.cat_id/d');
@@ -78,6 +78,7 @@ class Shop extends Admin
                 foreach ($data['data'] as $k => $v) {
                     $v['check_name'] = !empty($v['check_user']) ? AdminUser::getUserById($v['check_user'])['id_card'] : '无';
                     $v['tuisong'] = (empty($v['tj_company_type']) ? '全部' : $sys_type[$v['tj_company_type']]).'_'.(empty($v['tj_company']) ? '全部' : $company_option[$v['tj_company']]);
+                    $v['is_me'] = ($uid == $v['user_id']) ? 1 : 0;
                 }
             }
             $data['count'] = ItemModel::where($where)->count('id');

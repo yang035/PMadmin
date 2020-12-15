@@ -17,7 +17,7 @@
             <input type="hidden" name="item_id" value="{$Request.param.item_id}">
             <input type="hidden" name="export" value="">
             <button type="submit" class="layui-btn layui-btn-normal normal_btn">搜索</button>
-            <input type="button" class="layui-btn layui-btn-primary layui-icon export_btn" value="导出">
+<!--            <input type="button" class="layui-btn layui-btn-primary layui-icon export_btn" value="导出">-->
         </form>
     </div>
 </div>

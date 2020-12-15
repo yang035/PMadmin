@@ -249,7 +249,7 @@ layui.use(['jquery', 'laydate','upload','form'], function() {
     });
 
     form.on('select(major_cat)', function(data){
-        select_union($("select[name='project_id']").val(),data.value);
+        select_union('{$Request.param.project_id}',data.value);
     });
 
     select_union('',1,1,'{$Request.param.project_id}');
