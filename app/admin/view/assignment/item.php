@@ -59,11 +59,13 @@
 </script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
     <a onclick="read({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">查看</a>
+    {{#  if(d.is_me == 1){ }}
     <a href="{:url('editItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
+    {{#  } }}
     {{#  if(d.p_id){ }}
     <a href="{:url('Project/edittask')}?id={{ d.p_id }}&pid={{ d.p_id }}&type=2&project_name={{ d.project_name }}" class="layui-btn layui-btn-xs layui-btn-danger">结果</a>
     {{#  }else{ }}
-    <a href="{:url('Project/addAssignment')}?assignment_id={{ d.id }}&project_id={{ d.project_id }}&name={{ d.content }}" class="layui-btn layui-btn-xs layui-btn-normal">发布</a>
+    <a href="{:url('Project/addAssignment')}?assignment_id={{ d.id }}&project_id={{ d.project_id }}&name={{ d.content }}" class="layui-btn layui-btn-xs layui-btn-normal">下发</a>
     {{#  } }}
 
 <!--    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->

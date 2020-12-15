@@ -59,6 +59,7 @@ class Assignment extends Admin
             if ($name) {
                 $where['content'] = ['like', "%{$name}%"];
             }
+            $uid = session('admin_user.uid');
             $time_type = config('other.time_type');
             $where['cid'] = session('admin_user.cid');
             $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->order('id desc')->select();
@@ -81,6 +82,7 @@ class Assignment extends Admin
                             'name'=>'其他',
                         ];
                     }
+                    $data['data'][$kk]['is_me'] = ($vv['user_id'] == $uid) ? 1 : 0;
                     $data['data'][$kk]['project_name'] = $project_data['name'];
                     $data['data'][$kk]['user_name'] = AdminUser::getUserById($vv['user_id'])['realname'];
 

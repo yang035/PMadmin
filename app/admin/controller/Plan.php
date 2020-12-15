@@ -29,9 +29,9 @@ class Plan extends Admin
                 'url' => 'admin/plan/index',
             ],
         ];
-        if (2 != session('admin_user.cid')){
-            array_shift($tab_data['menu']);
-        }
+//        if (2 != session('admin_user.cid')){
+//            array_shift($tab_data['menu']);
+//        }
         $this->tab_data = $tab_data;
     }
 
