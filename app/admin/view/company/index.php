@@ -45,14 +45,12 @@
                 <td><input type="checkbox" name="status" {if condition="$vo['status'] eq 1"}checked=""{/if} value="{$vo['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="{:url('status?table=admin_company&ids='.$vo['id'])}"></td>
                 <td class="font12">{$vo['create_time']}</td>
                 <td>
-                    <div class="layui-btn-group">
-                        <div class="layui-btn-group">
-                            {if condition="($vo['user_id'] == 1) || ($vo['user_id'] == $Think.session.admin_user.uid)"}
-                        <a href="{:url('edit?id='.$vo['id'])}" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe642;</i></a>
-<!--                        <a data-href="{:url('del?table=admin_company&ids='.$vo['id'])}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>-->
-                        {/if}
-                        </div>
-                    </div>
+                    {if condition="($Think.session.admin_user.role_id == 1) || ($vo['user_id'] == $Think.session.admin_user.uid)"}
+                    <a href="{:url('edit?id='.$vo['id'])}" class="layui-btn layui-btn-normal layui-btn-xs">编辑</a>
+                    {/if}
+                    {if condition="$Think.session.admin_user.role_id == 1"}
+                    <a class="layui-btn layui-btn-normal layui-btn-xs" onclick="com_auth({$vo['id']})">设置权限</a>
+                    {/if}
                 </td>
             </tr>
             {/volist}
@@ -62,3 +60,14 @@
 </div>
 </form>
 {include file="block/layui" /}
+<script>
+    var formData = {:json_encode($data_info)};
+
+    layui.use(['jquery', 'laydate'], function() {
+        var $ = layui.jquery, laydate = layui.laydate;
+    });
+    function com_auth(id) {
+        var open_url = "{:url('comAuth')}?id=" + id;
+        window.location.href = open_url;
+    }
+</script>

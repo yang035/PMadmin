@@ -11,6 +11,7 @@ namespace app\admin\controller;
 
 use app\admin\model\AdminCompany;
 use app\admin\model\AdminDepartment;
+use app\admin\model\AdminMenu as MenuModel;
 use app\admin\model\Category;
 
 class Company extends Admin
@@ -107,5 +108,43 @@ class Company extends Admin
         $row = AdminCompany::where('id', $id)->find()->toArray();
         $this->assign('data_info', $row);
         return $this->fetch('form');
+    }
+
+    public function comAuth($id = 0)
+    {
+        $params = $this->request->param();
+        if ($id <= 1) {
+            return $this->error('禁止编辑');
+        }
+
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+
+            // 当前登陆用户不可更改自己的分组角色
+            if (ADMIN_ROLE > 3) {
+                return $this->error('禁止修改当前角色(原因：您不是超级管理员或公司管理员)');
+            }
+            $data['user_id'] = session('admin_user.uid');
+            $data['auth'] = json_encode($data['auth']);
+            if (!AdminCompany::update($data)) {
+                return $this->error('修改失败');
+            }
+
+            // 更新权限缓存
+            cache('role_auth_'.ADMIN_ROLE, $data['auth']);
+
+            return $this->success('修改成功');
+        }
+        $tab_data = [];
+        $tab_data['menu'] = [
+            ['title' => '设置权限'],
+        ];
+        $row = AdminCompany::where('id', $params['id'])->field('id,auth')->find()->toArray();
+        $row['auth'] = json_decode($row['auth']);
+        $this->assign('data_info', $row);
+        $this->assign('menu_list', MenuModel::getAllChild());
+        $this->assign('tab_data', $tab_data);
+        $this->assign('tab_type', 2);
+        return $this->fetch();
     }
 }

@@ -200,7 +200,9 @@ class AdminUser extends Model
             self::setTheme(isset($user->theme) ? $user->theme : 0);
             self::getThemes(true);
             // 缓存角色权限
-            session('role_auth_'.$user->role_id, $user->auth ? json_decode($user->auth, true) : ($dep_role['auth'] ? json_decode($dep_role['auth'], true) : json_decode($role['auth'], true)));
+            //权限优先级    用户>部门>公司>角色
+            $role_auth = $user->auth ? json_decode($user->auth, true) : ($dep_role['auth'] ? json_decode($dep_role['auth'], true) : ($company['auth'] ? json_decode($company['auth'], true) : json_decode($role['auth'], true)));
+            session('role_auth_'.$user->role_id, $role_auth);
             // 缓存登录信息
             session('admin_user', $login);
             session('admin_user_sign', $this->dataSign($login));
