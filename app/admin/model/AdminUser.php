@@ -127,12 +127,13 @@ class AdminUser extends Model
         return true;
     }
 
-    public function login($username = '', $password = '', $remember = false)
+    public function login($username = '', $password = '',$company_id = 3, $remember = false)
     {
         $username = trim($username);
         $password = trim($password);
         $map = [];
         $map['status'] = 1;
+        $map['company_id'] = $company_id;
 
         if ($this->validateData(input('post.'), 'AdminUser.login') != true) {
             $this->error = $this->getError();

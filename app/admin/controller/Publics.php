@@ -16,7 +16,8 @@ class Publics extends Common
         if ($this->request->isPost()) {
             $username = input('post.username/s');
             $password = input('post.password/s');
-            if (!$model->login($username, $password)) {
+            $company_id = input('post.company_id');
+            if (!$model->login($username, $password,$company_id)) {
                 return $this->error($model->getError(), url('index'));
             }
 
