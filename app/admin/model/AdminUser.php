@@ -421,6 +421,7 @@ class AdminUser extends Model
             $map['u.username'] = $username;
         }
         $map['u.status'] = 1;
+        $map['c.status'] = 1;
         $fields = 'c.id,c.name';
         $data = \db('admin_user')->alias('u')->field($fields)
             ->where($map)->join('tb_admin_company c','u.company_id = c.id','left')
