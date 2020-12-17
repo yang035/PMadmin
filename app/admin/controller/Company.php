@@ -129,6 +129,14 @@ class Company extends Admin
             if (!AdminCompany::update($data)) {
                 return $this->error('修改失败');
             }
+            $dep_w = [
+                'pid' => 0,
+                'cid' => $id,
+            ];
+            $dep_auth['auth']= $data['auth'];
+            if (!AdminDepartment::where($dep_w)->update($dep_auth)) {
+                return $this->error('修改失败');
+            }
 
             // 更新权限缓存
             cache('role_auth_'.ADMIN_ROLE, $data['auth']);
