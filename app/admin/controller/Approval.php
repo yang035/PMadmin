@@ -376,7 +376,7 @@ class Approval extends Admin
                 return $this->error('请选择项目');
             }
             $role_id = session('admin_user.role_id');
-            if ($role_id > 3 && $over_time <= 0){
+            if ($role_id > 3 && $data['type'] == 4 && $over_time <= 0){
                 return $this->error('没有调休假可用');
             }
             // 验证

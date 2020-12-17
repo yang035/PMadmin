@@ -56,9 +56,11 @@
     <a onclick="read({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">查看</a>
     <a href="{:url('editItem')}?id={{ d.id }}&shop_type={$Request.param.p}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
     <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>
-    {eq name="$Think.session.admin_user.cid" value="2"}
+    {if condition="$Think.session.admin_user.cid == 6"}
+    {{#  if(d.visible_range == 2){ }}
     <a onclick="tuisong({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">推送</a>
-    {/eq}
+    {{#  } }}
+    {/if}
 </script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl2">
     {{#  if(d.check_status == 1){ }}

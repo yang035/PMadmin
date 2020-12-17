@@ -37,12 +37,15 @@ class MealOrder extends Admin
                 $map['create_time'] = ['between',["$d0","$d1"]];
             }
         }
-
-        $map['cid'] = session('admin_user.cid');
+        $cid = session('admin_user.cid');
         $role_id = session('admin_user.role_id');
-        if ($role_id > 3){
-            $map['user_id'] = session('admin_user.uid');
+        if ($cid != 6){
+            $map['cid'] = $cid;
+            if ($role_id > 3){
+                $map['user_id'] = session('admin_user.uid');
+            }
         }
+
 //print_r($map);
         $fields = "qu_type,sum(other_price) as other_price";
 
@@ -114,7 +117,7 @@ class MealOrder extends Admin
         }
 
         $cid = session('admin_user.cid');
-        if ($cid != 2){
+        if ($cid != 6){
             $map['cid'] = session('admin_user.cid');
         }
 
