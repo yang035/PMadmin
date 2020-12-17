@@ -961,16 +961,16 @@ class Approval extends Admin
                 $end_time = explode(' ',$v['end_time'])[0];
                 $sub = (strtotime($end_time) - strtotime($start_time))/86400;
                 if ($sub > 0){
-                    $list2[$k]['time_long'] = 8*($sub+1);
+                    $list2[$k]['long_time'] = 8*($sub+1);
                 }
             }
         }
-        $list2['time_long'] = array_sum(array_column($list2,'time_long'));
+        $list2['long_time'] = array_sum(array_column($list2,'long_time'));
         if (!$list2){
-            $list2['time_long'] = 0;
+            $list2['long_time'] = 0;
         }
         //计算剩余可用调休假
-        $left_hour = $list1['long_time'] - $list2['time_long'];
+        $left_hour = $list1['long_time'] - $list2['long_time'];
         $other_hour = [
             8 => 2,
             52 => 57.5,
