@@ -32,6 +32,7 @@
                 {$overtime_option}
             </select>
         </div>
+        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">开始时间</label>

@@ -16,7 +16,7 @@ class ApprovalOvertime extends Model
     public static function getOption($type = 0)
     {
         $leaveType = config('other.overtime_type');
-        $str = '';
+        $str = '<option value="">选择</option>';
         foreach ($leaveType as $k => $v) {
             if ($type == $k) {
                 $str .= '<option value="'.$k.'" selected>'.$v.'</option>';

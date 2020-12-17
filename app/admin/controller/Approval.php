@@ -1005,6 +1005,9 @@ class Approval extends Admin
             if ('' == $data['project_id']){
                 return $this->error('请选择项目');
             }
+            if (empty($data['overtime_type'])){
+                return $this->error('请选择加班类型');
+            }
             // 验证
             $result = $this->validate($data, 'ApprovalOvertime');
             if ($result !== true) {
