@@ -25,7 +25,9 @@
         {{#  if(d.flag == 0){ }}
         <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="add">添加</a>
         <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">修改</a>
+    {{#  if(d.pid != 0){ }}
         <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="dep_auth">设置权限</a>
+    {{# } }}
         {{# }else{ }}
         <a href="{:url('User/editUser')}?id={{ d.id.substring(5) }}&flag={{ d.flag }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
         {{# } }}

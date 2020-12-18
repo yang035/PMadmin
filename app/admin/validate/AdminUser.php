@@ -38,7 +38,7 @@ class AdminUser extends Validate
         //更新
         'update'  =>  ['username', 'email', 'password' => 'length:6,20|confirm', 'mobile', 'role_id'],
         //更新个人信息
-        'info'  =>  ['username', 'email', 'password' => 'length:6,20|confirm', 'mobile'],
+        'info'  =>  ['username', 'email', 'password' => 'length:6,20|confirm'],
         //登录
         'login'  =>  ['username|mobile' => 'require|token', 'password' => 'length:6,20'],
         //更新
