@@ -1,5 +1,6 @@
 <form class="layui-form" action="{:url()}" method="post">
     <div class="layui-tab-item layui-show layui-form-pane">
+        <h3>项目名：{$row['name']}</h3>
         {volist name="flow" id="f" key="k"}
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
             <legend>{$f['name']}</legend>

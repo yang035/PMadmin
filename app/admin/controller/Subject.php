@@ -11,6 +11,7 @@ namespace app\admin\controller;
 use app\admin\model\AdminDepartment;
 use app\admin\model\SubjectCat as CatModel;
 use app\admin\model\SubjectFlow;
+use app\admin\model\SubjectUpqu;
 use app\admin\model\SubjectItem as ItemModel;
 use app\admin\model\AdminUser;
 use app\admin\model\Project as ProjectModel;
@@ -1287,6 +1288,45 @@ class Subject extends Admin
             }
             // 验证
             if (!SubjectFlowModel::create($data)) {
+                return $this->error('提交失败');
+            }
+            return $this->success("操作成功{$this->score_value}");
+        }
+        return $this->fetch();
+    }
+
+    public function upqu($id)
+    {
+        $row = ItemModel::where('id', $id)->find()->toArray();
+        $map = [
+            'cid' => session('admin_user.cid'),
+            'subject_id' => $id,
+        ];
+        $upqu = SubjectUpqu::getOption2($map);
+        $this->assign('row', $row);
+        $this->assign('upqu', $upqu);
+        return $this->fetch();
+    }
+
+    public function addContent1(){
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            $data['cid'] = session('admin_user.cid');
+            $data['user_id'] = session('admin_user.uid');
+            if (empty($data['remark']) && empty($data['attachment'])){
+                return $this->error('描述和附件不能都为空');
+            }
+            $where = [
+                'cid'=>$data['cid'],
+                'remark'=>$data['remark'],
+                'attachment'=>$data['attachment'],
+            ];
+            $flag = SubjectUpqu::where($where)->find();
+            if ($flag){
+                return $this->error('不能重复提交');
+            }
+            // 验证
+            if (!SubjectUpqu::create($data)) {
                 return $this->error('提交失败');
             }
             return $this->success("操作成功{$this->score_value}");

@@ -58,7 +58,8 @@
 </script>
 {else/}
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
-    <a href="{:url('flow')}?id={{ d.id }}&pp=1" class="layui-btn layui-btn-xs layui-btn-warm">查看</a>
+    <a href="{:url('flow')}?id={{ d.id }}&pp=1" class="layui-btn layui-btn-xs layui-btn-warm">下载区</a>
+    <a href="{:url('upqu')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-warm">上传区</a>
 </script>
 {/empty}
 <script type="text/javascript">
