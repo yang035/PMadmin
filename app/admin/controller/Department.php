@@ -154,7 +154,13 @@ class Department extends Admin
             ['title' => '设置权限'],
         ];
         $row = AdminDepartment::where('id', $params['id'])->field('id,auth')->find()->toArray();
-        $row['auth'] = json_decode($row['auth']);
+        if ($row['auth']){
+            $auth = $row['auth'];
+        }else{
+            $auth = AdminUser::getdepAuth($id);
+        }
+        $row['auth'] = json_decode($auth);
+
         $this->assign('data_info', $row);
         $this->assign('menu_list', MenuModel::getAllChild());
         $this->assign('tab_data', $tab_data);

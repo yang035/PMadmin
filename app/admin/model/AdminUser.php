@@ -202,7 +202,12 @@ class AdminUser extends Model
             self::getThemes(true);
             // 缓存角色权限
             //权限优先级    用户>部门>公司>角色
-            $role_auth = $user->auth ? json_decode($user->auth, true) : ($dep_role['auth'] ? json_decode($dep_role['auth'], true) : ($company['auth'] ? json_decode($company['auth'], true) : json_decode($role['auth'], true)));
+            if ($dep_role['auth']){
+                $auth = $dep_role['auth'];
+            }else{
+                $auth = AdminUser::getdepAuth($user->department_id);
+            }
+            $role_auth = $user->auth ? json_decode($user->auth, true) : ($auth ? json_decode($auth, true) : ($company['auth'] ? json_decode($company['auth'], true) : json_decode($role['auth'], true)));
             session('role_auth_'.$user->role_id, $role_auth);
             // 缓存登录信息
             session('admin_user', $login);
@@ -231,6 +236,28 @@ class AdminUser extends Model
         return false;
     }
 
+    public static function getdepAuth($dep_id){
+        $dep_row = AdminDepartment::where('id', $dep_id)->find()->toArray();
+        if ($dep_row['auth']){
+            return $dep_row['auth'];
+        }else{
+            $ids_arr = explode('d',$dep_row['code']);
+            unset($ids_arr[0]);
+            $ids_arr = array_reverse(array_filter($ids_arr));
+            $ids = implode(',',$ids_arr);
+            $w = [
+                'id'=>['in',"{$ids}"]
+            ];
+            $dep = AdminDepartment::where($w)->column('auth','id');
+            foreach ($ids_arr as $k=>$v){
+                if ($dep[$v]){
+                    $auth = $dep[$v];
+                    break;
+                }
+            }
+            return $auth;
+        }
+    }
     public static function getThemes($cache = false)
     {
         $themeFile = '.'.config('view_replace_str.__ADMIN_CSS__').'/theme.css';
