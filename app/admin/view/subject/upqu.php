@@ -13,7 +13,7 @@
                             <div class="layui-timeline-title">
                                 {$f2['create_time']}--
                                 {$f2['remark']}--
-                                <a href="f2['attachment']" target="_blank">附件</a>
+                                <a href="{$f2['attachment']}" target="_blank">{$f2['att_name']}</a>
                             </div>
                         </div>
                     </li>
