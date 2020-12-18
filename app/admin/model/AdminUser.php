@@ -249,6 +249,7 @@ class AdminUser extends Model
                 'id'=>['in',"{$ids}"]
             ];
             $dep = AdminDepartment::where($w)->column('auth','id');
+            $auth = [];
             foreach ($ids_arr as $k=>$v){
                 if ($dep[$v]){
                     $auth = $dep[$v];
