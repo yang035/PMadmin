@@ -58,7 +58,7 @@
                     <a href="{:url('refund')}?id={$vo['id']}" class="layui-btn layui-btn-xs layui-btn-normal">退款</a>
                 {elseif condition="$vo['is_pay'] == 5" /}
                     <span style="color: red">{$pay_status[$vo['is_pay']]}</span>
-                    {if condition="$Think.session.admin_user.cid == 2 && $Think.session.admin_user.role_id <= 3"}
+                    {if condition="$Think.session.admin_user.cid == 6"}
                     <a href="{:url('refundDeal')}?id={$vo['id']}" class="layui-btn layui-btn-xs layui-btn-normal">售后处理</a>
                     {/if}
                 {else/}

@@ -20,18 +20,6 @@ class ShopOrder extends Admin
     protected function _initialize()
     {
         parent::_initialize();
-
-        $tab_data['menu'] = [
-            [
-                'title' => '商品分类',
-                'url' => 'admin/ShopOrder/cat',
-            ],
-            [
-                'title' => '商品上线',
-                'url' => 'admin/ShopOrder/index',
-            ],
-        ];
-        $this->tab_data = $tab_data;
     }
 
     public function index($q = '')
@@ -53,10 +41,16 @@ class ShopOrder extends Admin
             }
         }
 
-        $map['ShopOrder.cid'] = session('admin_user.cid');
+        $cid = session('admin_user.cid');
         $role_id = session('admin_user.role_id');
-        if ($role_id > 3){
-            $map['ShopOrder.user_id'] = session('admin_user.uid');
+        $map['ShopOrder.user_id'] = session('admin_user.uid');
+        $map['ShopOrder.cid'] = session('admin_user.cid');
+        if (isset($params['flag']) && $params['flag'] == 'company'){
+            unset($map['ShopOrder.user_id']);
+        }
+        if (6 ==$cid && isset($params['flag']) && $params['flag'] == 'plat'){
+            unset($map['ShopOrder.user_id']);
+            unset($map['ShopOrder.cid']);
         }
 //print_r($map);
         $fields = "`ShopOrder`.item_id,sum(`ShopOrder`.num) as num,sum(`ShopOrder`.total_score) as total_score,sum(`ShopOrder`.other_price) as other_price,`ShopItem`.name";
@@ -118,14 +112,16 @@ class ShopOrder extends Admin
                 $map['ShopOrder.user_id'] = ['in',"{$person_user}"];
             }
         }
-        $role_id = session('admin_user.role_id');
-        if ($role_id > 3){
-            $map['ShopOrder.user_id'] = session('admin_user.uid');
-        }
-
         $cid = session('admin_user.cid');
-        if ($cid != 2){
-            $map['ShopOrder.cid'] = session('admin_user.cid');
+        $role_id = session('admin_user.role_id');
+        $map['ShopOrder.user_id'] = session('admin_user.uid');
+        $map['ShopOrder.cid'] = session('admin_user.cid');
+        if (isset($params['flag']) && $params['flag'] == 'company'){
+            unset($map['ShopOrder.user_id']);
+        }
+        if (6 ==$cid && isset($params['flag']) && $params['flag'] == 'plat'){
+            unset($map['ShopOrder.user_id']);
+            unset($map['ShopOrder.cid']);
         }
 
         $pay_status = config('other.pay_status');
@@ -221,7 +217,7 @@ class ShopOrder extends Admin
         $data_list = db('shop_order')->alias('a')->field('a.*,b.name')
             ->join("shop_item b", 'a.item_id = b.id', 'left')
             ->where(['a.id'=>$id])->find();
-        $this->assign('refund_option',OrderModel::getRefundOption());
+        $this->assign('refund_option',config('other.refund_option'));
         $this->assign('data_info', $data_list);
         return $this->fetch();
     }

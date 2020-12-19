@@ -58,7 +58,7 @@
             <td>
                 <div class="layui-btn-group">
                     <div class="layui-btn-group">
-                        <a href="{:url('detail?item_id='.$vo['item_id'])}" class="layui-btn layui-btn-primary layui-btn-sm">明细</a>
+                        <a href="{:url('detail?item_id='.$vo['item_id'].'&flag='.$Request.param.flag)}" class="layui-btn layui-btn-primary layui-btn-sm">明细</a>
                         <!--                                <a href="{:url('edit?id='.$vo['id'])}" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe642;</i></a>-->
                         <!--                                <a data-href="{:url('del?table=admin_company&ids='.$vo['id'])}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>-->
                     </div>

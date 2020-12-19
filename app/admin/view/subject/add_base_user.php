@@ -107,7 +107,7 @@
 
     function open_div1(flag) {
         var flag_user = $('#'+flag+'_user').val();
-        var open_url = "{:url('Tool/getTreeUser')}?m="+flag+"&u="+flag_user;
+        var open_url = "{:url('Tool/getTreeUser')}?m="+flag+"&u="+flag_user+'&f=1';
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {
