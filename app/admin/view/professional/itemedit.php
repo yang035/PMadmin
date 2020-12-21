@@ -27,7 +27,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">专业系数</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input field-ratio" name="ratio" value="1.0" lay-verify="required" autocomplete="off" placeholder="请输入系数">
+                <input type="text" class="layui-input field-ratio" name="ratio" value="1.0" maxlength="6" max="100" oninput="value=moneyInput(value)" onkeyup="if(value>1){value=1.00}" lay-verify="required" autocomplete="off" placeholder="请输入系数">
             </div>
             <div class="layui-form-mid" style="color: red">*</div>
         </div>
@@ -47,14 +47,14 @@
         <div class="layui-form-item">
             <label class="layui-form-label">进度占比</label>
             <div class="layui-input-inline">
-                <input type="number" class="layui-input field-jindu_per" name="jindu_per" value="0" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" autocomplete="off" placeholder="M">
+                <input type="text" class="layui-input field-jindu_per" name="jindu_per" value="0" maxlength="3" max="100" onkeyup="value=value.replace(/[^\d]/g,''); if(value>100){value=100}" autocomplete="off" placeholder="M">
             </div>
             <div class="layui-form-mid">%</div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">备注</label>
             <div class="layui-input-inline">
-                <textarea  class="layui-textarea field-remark" name="remark" lay-verify="" autocomplete="off" placeholder="[选填]备注"></textarea>
+                <textarea class="layui-textarea field-remark" name="remark" lay-verify="" autocomplete="off" placeholder="[选填]备注"></textarea>
             </div>
         </div>
         <div class="layui-form-item">

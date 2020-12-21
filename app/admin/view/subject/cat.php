@@ -23,7 +23,7 @@
 </script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
     <a href="{:url('editCat')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
-    <a href="#" onclick="set_flow({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">流程选项</a>
+<!--    <a href="#" onclick="set_flow({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">流程选项</a>-->
 <!--    <a href="{:url('delCat')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
 </script>
 <script type="text/javascript">

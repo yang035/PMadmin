@@ -843,6 +843,9 @@ class Approval extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            if ('' == $data['project_id']){
+                return $this->error('请选择项目');
+            }
             // 验证
             $result = $this->validate($data, 'ApprovalProcurement');
             if ($result !== true) {
@@ -864,6 +867,7 @@ class Approval extends Admin
             Db::startTrans();
             try {
                 $approve = [
+                    'project_id' => $data['project_id'],
                     'class_type' => $data['class_type'],
                     'cid' => session('admin_user.cid'),
                     'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
