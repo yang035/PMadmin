@@ -82,7 +82,7 @@
             </td>
             <td class="font12">{$panel_type[$vo['class_type']]['title']}</td>
             <td class="font12">{$vo['leave_type']}</td>
-            <td class="font12">{$vo['start_time']} ~ {$vo['end_time']}</td>
+            <td class="font12">始:{$vo['start_time']}<br>止:{$vo['end_time']}</td>
             <td class="font12">{$vo['project_name']}</td>
             <td class="font12">{$vo['money']}</td>
             <td class="font12">{$vo['send_user']}</td>

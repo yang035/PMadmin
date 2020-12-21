@@ -183,8 +183,9 @@
                     //     var n = d.name.replace(/<[^>]+>/g,'');
                     //         return d.name+"<a onclick='huibao("+d.subject_id+",\""+n+"\")' class='layui-btn layui-btn-normal layui-btn-xs'>日报</a>";
                     //     }},
-                    {field: 'start_time', title: '开始时间',width: 110},
-                    {field: 'end_time', title: '结束时间',width: 110},
+                    {title: '时间段',width: 180,templet:function (d) {
+                            return "始:"+d.start_time+"<br>止:"+d.end_time;
+                        }},
                     {field: 'score', title: '计划产量(斗)',width: 70},
                     {field: 'real_score', title: '实际产量(斗)',width: 70,templet:function (d) {
                             return "<span class='red'>"+d.real_score+"</span>";
