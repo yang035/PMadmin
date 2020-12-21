@@ -186,8 +186,8 @@
                     {title: '时间段',width: 180,templet:function (d) {
                             return "始:"+d.start_time+"<br>止:"+d.end_time;
                         }},
-                    {field: 'score', title: '计划产量(斗)',width: 70},
-                    {field: 'real_score', title: '实际产量(斗)',width: 70,templet:function (d) {
+                    {field: 'score', title: '计划(斗)',width: 90},
+                    {field: 'real_score', title: '实际(斗)',width: 90,templet:function (d) {
                             return "<span class='red'>"+d.real_score+"</span>";
                         }},
                     // {field: 'grade', title: '紧急度',width: 70},
@@ -231,7 +231,7 @@
                             }
                             return t;
                         }},
-                    {field: 'realper', title: '完成情况',width: 70, templet:'#oper-col-1'},
+                    {field: 'realper', title: '完成情况',width: 90, templet:'#oper-col-1'},
                     {templet: '#oper-col-2', title: '操作',width: 250,}
                 ]],
                 done: function () {

@@ -141,7 +141,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">联系手机</label>
                 <div class="layui-input-inline">
-                    <input type="text" class="layui-input field-mobile" name="mobile" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" lay-verify="required" maxlength="11"
+                    <input type="text" class="layui-input field-mobile" name="mobile" onkeyup="value=value.replace(/[^\d]/g,'')" lay-verify="required" maxlength="11"
                            autocomplete="off" placeholder="请输入手机号码">
                 </div>
                 <div class="layui-form-mid" style="color: red">*</div>

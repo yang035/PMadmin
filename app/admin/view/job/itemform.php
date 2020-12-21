@@ -99,7 +99,7 @@
                 <input type="text" class="layui-input field-duty_id" name="duty[{$vo['id']}]" readonly value="{$vo['name']}" >
             </div>
             <div class="layui-input-inline1">
-                <input type="text" class="layui-input field-num" name="duty[{$vo['id']}]" value="{$vo['num']}" >
+                <input type="text" class="layui-input field-num" name="duty[{$vo['id']}]" onkeyup="value=value.replace(/[^\d]/g,'')" maxlength="6" min="0" value="{$vo['num']}" >
             </div>
         </div>
         {/volist}

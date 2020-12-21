@@ -7,6 +7,7 @@
  */
 
 namespace app\admin\controller;
+use app\admin\model\DutyJob;
 use app\admin\model\JobCat as CatModel;
 use app\admin\model\JobItem as ItemModel;
 use think\Db;
@@ -72,7 +73,8 @@ class Job extends Admin
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
             $duty = $data['duty'];
-            unset($data['id'],$data['duty']);
+            $data['duty'] = json_encode($duty);
+            unset($data['id']);
             // 验证
             $result = $this->validate($data, 'JobItem');
             if($result !== true) {
@@ -83,19 +85,25 @@ class Job extends Admin
             try {
                 $f = ItemModel::create($data);
                 if ($duty) {
-                    $duty_job = [];
                     foreach ($duty as $k => $v) {
-                        $duty_job[$k] = [
+                        $duty_job = [
                             'cid' => $data['cid'],
                             'job_id' => $f['id'],
                             'duty_id' => $k,
                             'num' => $v,
                             'user_id' => $data['user_id'],
-                            'create_time' => time(),
-                            'update_time' => time(),
                         ];
+                        $w = [
+                            'job_id' => $f['id'],
+                            'duty_id' => $k,
+                        ];
+                        $d_j = DutyJob::where($w)->find();
+                        if (!$d_j){
+                            DutyJob::create($duty_job);
+                        }else{
+                            DutyJob::where($w)->update($duty_job);
+                        }
                     }
-                    Db::table('tb_duty_job')->insertAll($duty_job);
                 }
                 // 提交事务
                 Db::commit();
@@ -122,7 +130,7 @@ class Job extends Admin
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
             $duty = $data['duty'];
-            unset($data['duty']);
+            $data['duty'] = json_encode($duty);
             // 验证
             $result = $this->validate($data, 'JobItem');
             if($result !== true) {
@@ -133,19 +141,25 @@ class Job extends Admin
             try {
                 $f = ItemModel::update($data);
                 if ($duty) {
-                    $duty_job = [];
                     foreach ($duty as $k => $v) {
-                        $duty_job[$k] = [
+                        $duty_job = [
                             'cid' => $data['cid'],
                             'job_id' => $f['id'],
                             'duty_id' => $k,
                             'num' => $v,
                             'user_id' => $data['user_id'],
-                            'create_time' => time(),
-                            'update_time' => time(),
                         ];
+                        $w = [
+                            'job_id' => $f['id'],
+                            'duty_id' => $k,
+                        ];
+                        $d_j = DutyJob::where($w)->find();
+                        if (!$d_j){
+                            DutyJob::create($duty_job);
+                        }else{
+                            DutyJob::where($w)->update($duty_job);
+                        }
                     }
-                    Db::table('tb_duty_job')->insertAll($duty_job);
                 }
                 // 提交事务
                 Db::commit();
@@ -162,9 +176,17 @@ class Job extends Admin
         $row = ItemModel::where('id', $id)->find()->toArray();
         $row['remark'] = htmlspecialchars_decode($row['remark']);
         $row['requirements'] = htmlspecialchars_decode($row['requirements']);
+        $duty = config('config_score.duty');
+        if ($row['duty']){
+            $r_d = json_decode($row['duty'],true);
+            foreach ($duty as $k=>$v){
+                if (key_exists($v['id'],$r_d)){
+                    $duty[$k]['num'] = $r_d[$v['id']];
+                }
+            }
+        }
         $this->assign('data_info', $row);
         $this->assign('cat_option',ItemModel::getOption());
-        $duty = config('config_score.duty');
         $this->assign('duty',$duty);
         return $this->fetch('itemform');
     }
@@ -174,6 +196,16 @@ class Job extends Admin
         $row = ItemModel::where('id', $id)->find()->toArray();
         $row['remark'] = htmlspecialchars_decode($row['remark']);
         $row['requirements'] = htmlspecialchars_decode($row['requirements']);
+        $duty = config('config_score.duty');
+        if ($row['duty']){
+            $r_d = json_decode($row['duty'],true);
+            foreach ($duty as $k=>$v){
+                if (key_exists($v['id'],$r_d)){
+                    $duty[$k]['num'] = $r_d[$v['id']];
+                }
+            }
+        }
+        $this->assign('duty',$duty);
         $this->assign('data_list', $row);
         $this->assign('cat_option',ItemModel::getCat());
         return $this->fetch();

@@ -83,7 +83,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">用户名</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input field-username" name="username" lay-verify="required"
+                <input type="text" class="layui-input field-username" name="username" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" lay-verify="required"
                        autocomplete="off" placeholder="请输入用户名">
             </div>
             <div class="layui-form-mid" style="color: red">*</div>
@@ -114,7 +114,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">联系手机</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input field-mobile" name="mobile" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" lay-verify="phone" maxlength="11"
+                <input type="text" class="layui-input field-mobile" name="mobile" onkeyup="value=value.replace(/[^\d]/g,'')" lay-verify="phone" maxlength="11"
                        autocomplete="off" placeholder="请输入手机号码">
             </div>
             <div class="layui-form-mid" style="color: red">*</div>

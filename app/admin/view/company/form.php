@@ -45,27 +45,27 @@
     <div class="layui-form-item">
         <label class="layui-form-label">手机号码</label>
         <div class="layui-input-inline">
-            <input type="text" class="layui-input field-cellphone" name="cellphone" autocomplete="off" placeholder="请输入手机号码">
+            <input type="text" class="layui-input field-cellphone" name="cellphone" onkeyup="value=value.replace(/[^\d]/g,'')" maxlength="11" autocomplete="off" placeholder="请输入手机号码">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">工商营业执照</label>
+        <label class="layui-form-label">纳税人识别号</label>
         <div class="layui-input-inline">
-            <input type="text" class="layui-input field-business_license" name="business_license" autocomplete="off" placeholder="请输入工商营业执照">
+            <input type="text" class="layui-input field-business_license" name="business_license" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" maxlength="18" autocomplete="off" placeholder="请输入纳税人识别号">
         </div>
     </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">营业许可证</label>
-        <div class="layui-input-inline">
-            <input type="text" class="layui-input field-license" name="license" autocomplete="off" placeholder="请输入营业许可证">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">社会信用代码</label>
-        <div class="layui-input-inline">
-            <input type="text" class="layui-input field-credit_code" name="credit_code" autocomplete="off" placeholder="请输入社会信用代码">
-        </div>
-    </div>
+<!--    <div class="layui-form-item">-->
+<!--        <label class="layui-form-label">营业许可证</label>-->
+<!--        <div class="layui-input-inline">-->
+<!--            <input type="text" class="layui-input field-license" name="license" autocomplete="off" placeholder="请输入营业许可证">-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="layui-form-item">-->
+<!--        <label class="layui-form-label">社会信用代码</label>-->
+<!--        <div class="layui-input-inline">-->
+<!--            <input type="text" class="layui-input field-credit_code" name="credit_code" autocomplete="off" placeholder="请输入社会信用代码">-->
+<!--        </div>-->
+<!--    </div>-->
     <div class="layui-form-item">
         <label class="layui-form-label">网站域名</label>
         <div class="layui-input-inline">
@@ -81,13 +81,13 @@
     <div class="layui-form-item">
         <label class="layui-form-label">GL排名系数最大值</label>
         <div class="layui-input-inline">
-            <input type="number" class="layui-input field-max_rankratio" name="max_rankratio" autocomplete="off" placeholder="GL排名系数最大值" value="1.00">
+            <input type="text" class="layui-input field-max_rankratio" name="max_rankratio" oninput="value=moneyInput(value)" autocomplete="off" placeholder="GL排名系数最大值" maxlength="6" value="1.00">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">GL排名系数最小值</label>
         <div class="layui-input-inline">
-            <input type="number" class="layui-input field-min_rankratio" name="min_rankratio" autocomplete="off" placeholder="GL排名系数最小值" value="1.00">
+            <input type="text" class="layui-input field-min_rankratio" name="min_rankratio" oninput="value=moneyInput(value)" autocomplete="off" placeholder="GL排名系数最小值" maxlength="6" value="1.00">
         </div>
     </div>
     <div class="layui-form-item">
@@ -123,5 +123,25 @@ layui.use(['jquery', 'laydate'], function() {
     // var device = layui.device();
     // alert(JSON.stringify(device));
 });
+
+function moneyInput(value) {
+    //修复第一个字符是小数点 的情况.
+    let fa = '';
+    if (value !== '' && value.substr(0, 1) === '.') {
+        value = "";
+    }
+    value = value.replace(/^0*(0\.|[1-9])/, '$1');//解决 粘贴不生效
+    value = value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符
+    value = value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
+    value = value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+    value = value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'); //只能输入两个小数
+    if (value.indexOf(".") < 0 && value !== "") { //以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+        if (value.substr(0, 1) === '0' && value.length === 2) {
+            value = value.substr(1, value.length);
+        }
+    }
+    value = fa + value;
+    return value;
+}
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>
