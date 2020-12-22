@@ -49,9 +49,9 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">纳税人识别号</label>
+        <label class="layui-form-label">统一社会信用代码</label>
         <div class="layui-input-inline">
-            <input type="text" class="layui-input field-business_license" name="business_license" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" maxlength="18" autocomplete="off" placeholder="请输入纳税人识别号">
+            <input type="text" class="layui-input field-business_license" name="business_license" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" maxlength="18" autocomplete="off" placeholder="请输入统一社会信用代码">
         </div>
     </div>
 <!--    <div class="layui-form-item">-->

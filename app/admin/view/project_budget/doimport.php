@@ -1,7 +1,7 @@
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="form1">
     <div class="layui-form-item">
         <label class="layui-form-label">模板文件</label>
-        <div class="layui-form-mid"><a href="/template/tpl5.xlsx"><font style="color: red">点击下载模板</font></a></div>
+        <div class="layui-form-mid"><a href="/template/mlgl0005.xlsx"><font style="color: red">点击下载模板</font></a></div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">项目名</label>
