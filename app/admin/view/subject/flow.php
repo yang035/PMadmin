@@ -18,9 +18,9 @@
                             <div class="layui-timeline-title">
                                 {if condition="(1 == $f2['flag']) && (0 == $f2['agree'])"}
                                     {eq name="$f1['jindu_per']" value="0"}
-                                    <button onclick="agree({$f2['id']},{$f1['jindu_per']})" type="button" class="layui-btn layui-btn-sm">确认</button>
+                                    <button onclick="agree({$f2['id']},{$f1['jindu_per']})" type="button" class="layui-btn layui-btn-warm layui-btn-sm">确认</button>
                                     {else/ }
-                                    <button onclick="agree1({$f2['id']},{$f1['jindu_per']})" type="button" class="layui-btn layui-btn-sm">确认</button>
+                                    <button onclick="agree1({$f2['id']},{$f1['jindu_per']})" type="button" class="layui-btn layui-btn-warm layui-btn-sm">确认</button>
                                     {/eq}
                                 {/if}
                                 {$f2['create_time']}--

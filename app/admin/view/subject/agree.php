@@ -71,7 +71,7 @@
             var index = parent.layer.getFrameIndex(window.name);
             if (res.code == 1) {
                 layer.msg(res.msg);
-                parent.layer.close(index);
+                parent.location.reload();
             }
         });
     }

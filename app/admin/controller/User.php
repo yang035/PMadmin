@@ -69,7 +69,7 @@ class User extends Admin
             if (4 == $cid && 89 != $uid){
                 $where['id'] = session('admin_user.uid');
             }
-            if (8 == $role_id || 9 == $role_id){
+            if ($role_id > 3){
                 $where['id'] = session('admin_user.uid');
             }
 
@@ -280,12 +280,14 @@ class User extends Admin
         }
 
         $row = UserModel::where('id', $id)->find()->toArray();
-        if (!$row['auth']) {
-            $auth = RoleModel::where('id', $row['role_id'])->value('auth');
-            $row['auth'] = json_decode($auth);
-        } else {
-            $row['auth'] = json_decode($row['auth']);
-        }
+//        if (!$row['auth']) {
+//            $auth = RoleModel::where('id', $row['role_id'])->value('auth');
+//            $row['auth'] = json_decode($auth);
+//        } else {
+//            $row['auth'] = json_decode($row['auth']);
+//        }
+        $row['auth'] = json_decode($row['auth']);
+
         $tab_data = [];
         $tab_data['menu'] = [
             ['title' => '修改用户'],
