@@ -70,14 +70,8 @@
         $.post(open_url,data,function(res) {
             var index = parent.layer.getFrameIndex(window.name);
             if (res.code == 1) {
-                layer.alert(res.msg,{
-                    yes:function(){
-                        parent.layer.close(index);
-                    }
-                    // location.reload();
-                });
-            }else {
                 layer.msg(res.msg);
+                parent.layer.close(index);
             }
         });
     }
