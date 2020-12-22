@@ -9,6 +9,7 @@
         <a href="javascript:void(0)" class="layui-btn layui-btn-danger" id="test9">导入</a>
     </div>
     <div id="res"></div>
+    <div><span style="color: red">备注：Excel模板中“专业大类”要与系统中填写的对应</span></div>
 </form>
 {include file="block/layui" /}
 <script>
