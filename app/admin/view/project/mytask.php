@@ -87,7 +87,6 @@
     </div>
 </script>
 <script type="text/html" id="oper-col-2">
-    <a onclick="huibao({{ d.subject_id }},'{{ d.name.replace(/<[^>]+>/g,\'\') }}')" class='layui-btn layui-btn-normal layui-btn-xs'>日报</a>
         {{#  if(d.child == 1){ }}
         <a lay-event="read" class="layui-btn layui-btn-warm layui-btn-xs">
             {{#  if(d.status == 0 && type == 1){ }}
@@ -101,11 +100,11 @@
         {{#  }else{ }}
         <a lay-event="read" class="layui-btn layui-btn-normal layui-btn-xs">
             {{#  if(d.status == 1 && type == 1){ }}
-            汇报
+            阶段汇报
             {{#  }else if(d.status == 1 && type == 2){ }}
             查看汇报
             {{#  }else{ }}
-            汇报
+            阶段汇报
             {{#  } }}
         </a>
         {{#  } }}

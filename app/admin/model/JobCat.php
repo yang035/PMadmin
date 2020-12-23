@@ -21,7 +21,7 @@ class JobCat extends Model
             'status'=>1,
         ];
         $data = self::where($map)->select();
-        $str = '';
+        $str = '<option value="">选择</option>';
         if ($data){
             foreach ($data as $k => $v) {
                 if ($type == $v['id']) {
