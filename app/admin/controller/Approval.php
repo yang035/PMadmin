@@ -199,7 +199,7 @@ class Approval extends Admin
 
         if (isset($params['export']) && 1 == $params['export']){
             set_time_limit(0);
-            $list = ApprovalModel::where($map)->where($con)->order('create_time desc')->select();
+            $list = ApprovalModel::where($map)->where($con)->order('update_time desc')->select();
 //        print_r($list);exit();
             foreach ($list as $k => $v) {
                 $list[$k]['send_user'] = strip_tags($this->deal_data($v['send_user']));
@@ -311,7 +311,7 @@ class Approval extends Admin
             exit;
         }
 
-        $list = ApprovalModel::where($map)->where($con)->order('create_time desc')->paginate(30, false, ['query' => input('get.')]);
+        $list = ApprovalModel::where($map)->where($con)->order('update_time desc')->paginate(30, false, ['query' => input('get.')]);
 
         foreach ($list as $k => $v) {
             $list[$k]['send_user'] = $this->deal_data($v['send_user']);
@@ -1411,7 +1411,7 @@ class Approval extends Admin
         $this->assign('print_option', ApprovalPrint::getPrintOption());
         $this->assign('size_option', ApprovalPrint::getSizeOption());
         $this->assign('quality_option', ApprovalPrint::getQualityOption());
-        $this->assign('store_option', ApprovalPrint::getStoreOption());
+        $this->assign('store_option', \app\admin\model\GraphicCompany::getOption());
         $this->assign('mytask', ProjectModel::getMyTask(0));
         return $this->fetch();
     }
@@ -2622,10 +2622,7 @@ class Approval extends Admin
                 $print_type = config('other.print_type');
                 $size_type = config('other.size_type');
                 $quality_type = config('other.quality_type');
-                $store_type = config('other.store_type');
-                if (2 != session('admin_user.cid')){
-                    $store_type = config('other.store_type1');
-                }
+                $store_type = \app\admin\model\GraphicCompany::getOption1();
                 $list['size_type'] = json_decode($list['size_type'],true);
                 $list['quality'] = json_decode($list['quality'],true);
                 $list['num'] = json_decode($list['num'],true);

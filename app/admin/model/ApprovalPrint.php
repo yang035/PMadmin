@@ -54,23 +54,4 @@ class ApprovalPrint extends Model
         }
         return $str;
     }
-
-    public static function getStoreOption($type = 0)
-    {
-        $cid = session('admin_user.cid');
-        $leaveType = config('other.store_type');
-        if (2 != $cid){
-            $leaveType = config('other.store_type1');
-        }
-        $str = '';
-        foreach ($leaveType as $k => $v) {
-            if ($type == $k) {
-                $str .= "<option value='".$k."' selected>".$v."</option>";
-            } else {
-                $str .= "<option value='".$k."'>".$v."</option>";
-            }
-        }
-        return $str;
-    }
-
 }
