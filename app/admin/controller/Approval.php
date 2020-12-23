@@ -1332,6 +1332,9 @@ class Approval extends Admin
             if ('' == $data['project_id']){
                 return $this->error('请选择项目');
             }
+            if (!isset($data['store_id'])){
+                return $this->error('请选择或先配置图文公司');
+            }
             // 验证
             $result = $this->validate($data, 'ApprovalPrint');
             if ($result !== true) {
