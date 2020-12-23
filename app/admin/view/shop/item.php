@@ -33,6 +33,7 @@
                         </select>
                     </div>
                 </div>
+                <input type="hidden" name="shop_type" value="{$Request.param.p}">
             <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
             </div>
         </form>

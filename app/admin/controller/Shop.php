@@ -32,10 +32,17 @@ class Shop extends Admin
             [
                 'title' => '商品分类',
                 'url' => 'admin/Shop/cat',
+                'params' => ['p' => 0],
             ],
             [
                 'title' => '商品上线',
                 'url' => 'admin/Shop/index',
+                'params' => ['p' => 1],
+            ],
+            [
+                'title' => '商品上线',
+                'url' => 'admin/Shop/index',
+                'params' => ['p' => 2],
             ],
         ];
         $this->tab_data = $tab_data;
@@ -44,6 +51,9 @@ class Shop extends Admin
     public function index($q = '')
     {
         $p = $this->request->param();
+        if (!isset($p['p'])){
+            $p['p'] = 2;
+        }
         if ($this->request->isAjax()) {
             $where = $data = [];
             $page = input('param.page/d', 1);
@@ -64,7 +74,7 @@ class Shop extends Admin
             if ($name) {
                 $where['name'] = ['like', "%{$name}%"];
             }
-            $where['shop_type'] = $p['shop_type'] ? 1 : 2;
+            $where['shop_type'] = $p['shop_type'] ? $p['shop_type'] : 2;
 
             $visible_range = input('param.visible_range/d');
             if ($visible_range){
@@ -89,10 +99,18 @@ class Shop extends Admin
 
         // 分页
         $tab_data = $this->tab_data;
-        $tab_data['current'] = url('');
+        if (isset($p['p']) && 1 == $p['p']){
+            unset($tab_data['menu'][2]);
+        }else{
+            unset($tab_data['menu'][0],$tab_data['menu'][1]);
+        }
+        $tab_data['current'] = url('index', ['p' => 1]);
 
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 1);
+        $this->assign('isparams', 1);
+        $this->assign('p', $p['p']);
+        $this->assign('tab_url', url('index', ['p' => $p['p']]));
         $this->assign('cat_option',ItemModel::getOption1());
         $this->assign('visible_range',ItemModel::getVisibleRange1());
         return $this->fetch('item');
@@ -101,6 +119,9 @@ class Shop extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            if (!isset($data['cat_id'])){
+                return $this->error('请选择或联系所在公司配置类型');
+            }
 
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
@@ -208,6 +229,7 @@ class Shop extends Admin
 
     public function cat()
     {
+        $p = $this->request->param();
         if ($this->request->isAjax()) {
             $where = $data = [];
             $page = input('param.page/d', 1);
@@ -225,9 +247,15 @@ class Shop extends Admin
         }
 
         $tab_data = $this->tab_data;
+        if (isset($p['p']) && (1 == $p['p'] || 0 == $p['p'])){
+            unset($tab_data['menu'][2]);
+        }
         $tab_data['current'] = url('');
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 1);
+        $this->assign('isparams', 1);
+        $this->assign('p', $p['p']);
+        $this->assign('tab_url', url('cat', ['p' => $p['p']]));
         return $this->fetch();
     }
 
