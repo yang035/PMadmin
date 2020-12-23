@@ -174,6 +174,7 @@
                 </div>
             </div>
         </div>
+        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">审批人</label>

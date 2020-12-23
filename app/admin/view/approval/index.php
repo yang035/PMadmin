@@ -69,7 +69,7 @@
             <th>状态</th>
             <th>审批意见</th>
             <th>审批时间</th>
-            <th>支付结果</th>
+            <th style="width: 100px">支付结果</th>
             <th>操作</th>
         </tr>
         </thead>

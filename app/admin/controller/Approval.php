@@ -533,6 +533,9 @@ class Approval extends Admin
 
             if ($this->request->isPost()) {
                 $data = $this->request->post();
+                if (empty($data['attachment'])){
+                    return $this->error('请上传附件');
+                }
                 $data['amount'] = array_filter($data['amount']);
 
                 $send_user = html_entity_decode($data['send_user']);
@@ -607,6 +610,9 @@ class Approval extends Admin
                 $data = $this->request->post();
                 if ('' == $data['project_id']){
                     return $this->error('请选择项目');
+                }
+                if (empty($data['attachment'])){
+                    return $this->error('请上传附件');
                 }
                 $data['amount'] = array_filter($data['amount']);
                 // 验证
