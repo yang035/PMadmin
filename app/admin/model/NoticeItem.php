@@ -72,10 +72,16 @@ class NoticeItem extends Model
     }
     public static function getItem1()
     {
+        $cid = session('admin_user.cid');
+        $role_id = session('admin_user.role_id');
         $map = [
-            'cid'=>session('admin_user.cid'),
+            'cid'=>$cid,
             'status'=>1,
         ];
+        $data = [];
+        if (10 == $role_id){
+            return $data;
+        }
         $data = self::where($map)->limit(5)->order('id desc')->column('title','id');
         return $data;
     }

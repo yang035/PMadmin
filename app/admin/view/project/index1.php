@@ -140,7 +140,7 @@
                                         t += '<br>';
                                     }
                                     t += value.real_name+'('+ value.create_time +')  '+value.realper+'%<br>'+value.mark;
-                                    if(1 == value.status) {
+                                    if(1 == value.status && value.user_id != '{$Think.session.admin_user.uid}') {
                                         t += '  <a onclick="open_reply(' + value.id + ',' + value.project_id + ')" class="layui-btn layui-btn-normal layui-btn-xs">评定</a>';
                                     }
                                     if (value.attachment.length > 0){
