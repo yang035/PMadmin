@@ -1,5 +1,4 @@
 <form class="layui-form" action="{:url()}" method="post">
-    <a href="{:url('addMaterial',['subject_id'=>$Request.param.id])}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加</a>
     <div class="layui-tab-item layui-show layui-form-pane">
         {notempty name="data_info"}
         <ul class="layui-timeline" style="padding-left:30px">

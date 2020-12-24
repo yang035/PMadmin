@@ -37,6 +37,9 @@
             </div>
         </form>
     </div>
+<div class="layui-btn-group fl">
+    <a href="{:url('addMaterial')}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加</a>
+</div>
 </div>
 <table id="dataTable" class="layui-table" lay-filter="table1"></table>
 {include file="block/layui" /}

@@ -240,7 +240,8 @@ class Subject extends Admin
 //            if ($cat_id) {
 //                $where['cat_id'] = $cat_id;
 //            }
-            $where['cat_id'] = 19;
+//            $where['cat_id'] = 19;
+            $cid = session('admin_user.cid');
             $name = input('param.name');
             if ($name) {
                 $where['name'] = ['like', "%{$name}%"];
@@ -250,36 +251,45 @@ class Subject extends Admin
                 $where['s_status'] = $s_status;
             }
             $p_status = config('other.s_status');
-            $where['cid'] = session('admin_user.cid');
-            $order = 'status desc,id desc';
-            $data['data'] = ItemModel::with('cat')->where($where)->page($page)->order($order)->limit($limit)->select();
-//            $carType = config('other.car_color');
-            if ($data['data']){
-                $begin_date = date('Y-m-01').' 00:00:00';
-                $end_date = date('Y-m-d', strtotime("{$begin_date} +1 month -1 day")).' 23:59:59';
-                $w = [
-                    'cid'=>session('admin_user.cid'),
-                    'update_time'=>['between',[strtotime($begin_date),strtotime($end_date)]],
-                ];
-                $subject_id_arr = SubjectFlowModel::where($w)->column('step','subject_id');
-                if (!$subject_id_arr){
-                    $subject_id_arr = [];
-                }
 
-                $s = \app\admin\model\Project::getColumn1('subject_id');
-                $p = array_flip($s);
-                foreach ($data['data'] as $k=>$v){
-                    $v['s_status'] = $p_status[$v['s_status']];
-                    $v['leader_user'] = $this->deal_data($v['leader_user']);
-                    $v['project_id'] = $p[$v['id']];
-                    if (key_exists($v['id'],$subject_id_arr)){
-                        $v['step'] = $subject_id_arr[$v['id']];
-                    }else{
-                        $v['step'] = 0;
+            $where['cid'] = $cid;
+            $m_ids = MaterialModel::where('cid',$cid)->column('subject_id','id');
+            if ($m_ids){
+                $m_ids = implode(',',array_unique($m_ids));
+                $where['id'] = ['in',$m_ids];
+                $order = 'status desc,id desc';
+                $data['data'] = ItemModel::with('cat')->where($where)->page($page)->order($order)->limit($limit)->select();
+                if ($data['data']){
+                    $begin_date = date('Y-m-01').' 00:00:00';
+                    $end_date = date('Y-m-d', strtotime("{$begin_date} +1 month -1 day")).' 23:59:59';
+                    $w = [
+                        'cid'=>session('admin_user.cid'),
+                        'update_time'=>['between',[strtotime($begin_date),strtotime($end_date)]],
+                    ];
+                    $subject_id_arr = SubjectFlowModel::where($w)->column('step','subject_id');
+                    if (!$subject_id_arr){
+                        $subject_id_arr = [];
+                    }
+
+                    $s = \app\admin\model\Project::getColumn1('subject_id');
+                    $p = array_flip($s);
+                    foreach ($data['data'] as $k=>$v){
+                        $v['s_status'] = $p_status[$v['s_status']];
+                        $v['leader_user'] = $this->deal_data($v['leader_user']);
+                        $v['project_id'] = $p[$v['id']];
+                        if (key_exists($v['id'],$subject_id_arr)){
+                            $v['step'] = $subject_id_arr[$v['id']];
+                        }else{
+                            $v['step'] = 0;
+                        }
                     }
                 }
+                $data['count'] = ItemModel::where($where)->count('id');
+            }else{
+                $data['data'] = [];
+                $data['count'] = 0;
             }
-            $data['count'] = ItemModel::where($where)->count('id');
+
             $data['code'] = 0;
             $data['msg'] = '';
             return json($data);
@@ -316,7 +326,8 @@ class Subject extends Admin
                 return $this->error('描述和附件不能都为空');
             }
             $where = [
-                'cid'=>$data['cid'],
+                'subject_id'=>$data['subject_id'],
+                'title'=>$data['title'],
                 'remark'=>$data['remark'],
                 'attachment'=>$data['attachment'],
             ];
@@ -324,12 +335,14 @@ class Subject extends Admin
             if ($flag){
                 return $this->error('不能重复提交');
             }
+            unset($data['subject_name']);
             // 验证
             if (!MaterialModel::create($data)) {
                 return $this->error('提交失败');
             }
             return $this->success("操作成功{$this->score_value}");
         }
+        $this->assign('project_select', ItemModel::inputSearchSubject());
         return $this->fetch();
     }
 
