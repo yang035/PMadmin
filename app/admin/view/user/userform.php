@@ -35,7 +35,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">部门</label>
             <div class="layui-input-inline">
-                <button type="button" class="layui-btn layui-btn-warm" id="department_user_id" onclick="open_div('department')">选择部门</button>
+                <button type="button" class="layui-btn layui-btn-normal" id="department_user_id" onclick="open_div('department')">选择部门</button>
                 <div id="department_select_id">{$data_info['department_select_id']|default=''}</div>
                 <input type="hidden" name="department_id" id="department_id" value="{$data_info['department_id']|default=''}">
             </div>

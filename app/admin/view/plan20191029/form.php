@@ -38,7 +38,7 @@
         </div>
         <div class="layui-form-mid">斗</div>
     </div>
-    <div class="layui-form-item">
+    <div class="layui-form-item hide">
         <label class="layui-form-label">历时</label>
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-time_long" disabled name="time_long" autocomplete="off">

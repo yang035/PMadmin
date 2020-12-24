@@ -67,10 +67,10 @@
     {{#  if(d.check_status == 1){ }}
     <span style="color: green">已审核({{ d.check_name }})</span>
     {{#  }else if(d.check_status == 2 && d.is_me==0){ }}
-    <a onclick="read2({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">审核</a>
+    <a onclick="read2({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">审核</a>
     <span style="color: red">驳回({{ d.check_name }}_{{ d.yijian }})</span>
     {{#  }else if(d.is_me==0){ }}
-    <a onclick="read2({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">审核</a>
+    <a onclick="read2({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">审核</a>
     {{#  }else{ }}
     待审核
     {{#  } }}

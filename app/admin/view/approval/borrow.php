@@ -58,7 +58,7 @@
         </div>
         <div class="layui-form-mid" style="color: red">*</div>
     </div>
-    <div class="layui-form-item">
+    <div class="layui-form-item hide">
         <label class="layui-form-label">历时</label>
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-time_long" readonly name="time_long" autocomplete="off">
@@ -107,7 +107,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">审批人</label>
         <div class="layui-input-inline">
-            <button type="button" class="layui-btn" id="send_user_id">选择审批人</button>
+            <button type="button" class="layui-btn layui-btn-normal" id="send_user_id">选择审批人</button>
             <div id="send_select_id">{$data_info['finance_user_id']|default=''}</div>
             <input type="hidden" name="send_user" id="send_user" value="{$data_info['finance_user']|default=''}" lay-verify="required">
         </div>
@@ -116,7 +116,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">抄送人</label>
         <div class="layui-input-inline">
-            <button type="button" class="layui-btn" id="copy_user_id">选择抄送人</button>
+            <button type="button" class="layui-btn layui-btn-normal" id="copy_user_id">选择抄送人</button>
             <div id="copy_select_id">{$data_info['hr_finance_user_id']|default=''}</div>
             <input type="hidden" name="copy_user" id="copy_user" value="{$data_info['hr_finance_user']|default=''}">
         </div>
