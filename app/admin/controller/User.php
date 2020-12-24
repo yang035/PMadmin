@@ -177,13 +177,23 @@ class User extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
 
+            if (empty($data['department_id'])){
+                return $this->error('请选择部门');
+            }else{
+                $dep_id = implode(',',array_filter(explode(',',$data['department_id'])));
+            }
+            if (!is_numeric($dep_id)){
+                return $this->error('请重新选择部门');
+            }
+
             $data['last_login_ip'] = '';
             $data['auth'] = '';
             $data['company_id'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
+            $data['department_id'] = $dep_id;
             // 验证
             $result = $this->validate($data, 'AdminUser');
-            unset($data['id'], $data['password_confirm'],$data['dep_name'],$data['is_auth']);
+            unset($data['id'], $data['password_confirm']);
             if($result !== true) {
                 return $this->error($result);
             }
@@ -241,7 +251,15 @@ class User extends Admin
 
         if ($this->request->isPost()) {
             $data = $this->request->post();
-
+            if (empty($data['department_id'])){
+                return $this->error('请选择部门');
+            }else{
+                $dep_id = implode(',',array_filter(explode(',',$data['department_id'])));
+            }
+            if (!is_numeric($dep_id)){
+                return $this->error('请重新选择部门');
+            }
+            $data['department_id'] = $dep_id;
             if (!isset($data['auth'])) {
                 $data['auth'] = '';
             }
@@ -294,7 +312,7 @@ class User extends Admin
             ['title' => '设置权限'],
         ];
         if ($row['department_id']){
-            $row['dep_name'] = AdminDepartment::getRowById($row['department_id'])['name'];
+            $row['department_select_id'] = AdminDepartment::getRowById($row['department_id'])['name'];
         }
 //        $row['job_item'] = !empty($row['job_item']) ? JobItemModel::getItem()[$row['job_item']] : '无';
 
@@ -308,7 +326,7 @@ class User extends Admin
         $this->assign('rule_option',JobCatModel::getOption1());
         $this->assign('data_info', $row);
         $this->assign('sex_type', UserModel::getSexOption());
-        return $this->fetch('userform');
+        return $this->fetch('editform');
     }
 
     public function info()

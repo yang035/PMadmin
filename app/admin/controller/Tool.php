@@ -62,6 +62,24 @@ class Tool extends Admin
         return $this->fetch();
     }
 
+    public function getTreeDep(){
+        if ($this->request->isPost()){
+            $data = $this->request->post();
+            if (1 != session('admin_user.role_id')){
+                $cid = session('admin_user.cid');
+            }else{
+                $cid = session('admin_user.cid');
+            }
+            if ($data['path']){
+                $result = AdminDepartment::getDepUser($cid,1);
+            }else{
+                $result = AdminDepartment::getDepUser($cid);
+            }
+            return $result;
+        }
+        return $this->fetch();
+    }
+
     public function getTreeGood(){
         if ($this->request->isPost()){
             if (1 != session('admin_user.role_id')){
@@ -79,7 +97,7 @@ class Tool extends Admin
         return $this->fetch();
     }
 
-    public function getTreeDep(){
+    public function getTreeDep1(){
         if (1 != session('admin_user.role_id')){
             $cid = session('admin_user.cid');
         }else{

@@ -146,6 +146,13 @@
             </div>
         </div>
         {/eq}
+        <div class="layui-form-item">
+            <label class="layui-form-label">变更权限</label>
+            <div class="layui-input-inline">
+                <input type="radio" class="field-is_auth" name="is_auth" value="1" title="是(需要另一页设置权限)" lay-filter="is_auth">
+                <input type="radio" class="field-is_auth" name="is_auth" value="0" title="否" checked lay-filter="is_auth">
+            </div>
+        </div>
     </div>
     <div class="layui-tab-item layui-form">
         <div class="layui-collapse page-tips">
@@ -199,15 +206,13 @@
             </div>
         </div>
     </div>
-    {empty name="$Request.param.id"}
-    <div class="layui-form-item">
+    <div class="layui-form-item" id="sub_id">
         <div class="layui-input-block">
             <input type="hidden" class="field-id" name="id">
             <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
             <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
         </div>
     </div>
-    {/empty}
 </form>
 
 <script>
@@ -233,6 +238,14 @@
             });
             check_parent($(data.elem).attr('data-pid'));
             form.render('checkbox');
+        });
+
+        form.on('radio(is_auth)', function(data){
+            if(1 == data.value){
+                $('#sub_id').hide();
+            }else {
+                $('#sub_id').show();
+            }
         });
 
         /* 权限赋值 */
