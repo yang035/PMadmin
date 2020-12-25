@@ -125,7 +125,11 @@ class Company extends Admin
                 return $this->error('禁止修改当前角色(原因：您不是超级管理员或公司管理员)');
             }
             $data['user_id'] = session('admin_user.uid');
-            $data['auth'] = json_encode($data['auth']);
+            if (isset($data['auth'])){
+                $data['auth'] = json_encode($data['auth']);
+            }else{
+                $data['auth'] = null;
+            }
             if (!AdminCompany::update($data)) {
                 return $this->error('修改失败');
             }
