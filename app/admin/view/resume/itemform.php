@@ -24,8 +24,20 @@
         <div class="layui-form-item">
             <label class="layui-form-label">手机号码</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input field-mobile" name="mobile" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" lay-verify="phone" maxlength="11"
+                <input type="text" class="layui-input field-mobile" name="mobile" onkeyup="value=value.replace(/[^\d]/g,'')" lay-verify="phone" maxlength="11"
                        autocomplete="off" placeholder="请输入手机号码">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">QQ</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input field-qq" name="qq" autocomplete="off" placeholder="请输入QQ">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">微信</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input field-wechat" name="wechat" autocomplete="off" placeholder="请输入微信">
             </div>
         </div>
         <div class="layui-form-item">

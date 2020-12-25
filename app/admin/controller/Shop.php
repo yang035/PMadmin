@@ -59,7 +59,7 @@ class Shop extends Admin
             $page = input('param.page/d', 1);
             $limit = input('param.limit/d', 20);
             $uid = session('admin_user.uid');
-            if (2 != session('admin_user.cid')) {
+            if (6 != session('admin_user.cid')) {
                 $where['cid'] = session('admin_user.cid');
             }
             if (session('admin_user.role_id') > 3) {
