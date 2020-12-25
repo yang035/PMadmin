@@ -36,9 +36,6 @@
     .layui-input-block{
         width: 519px;
     }
-    .new_task{
-        margin-left: 630px;
-    }
 </style>
 <form class="layui-form" action="{:url()}" method="post">
     <div class="layui-tab-item layui-show layui-form-pane">
@@ -99,7 +96,6 @@
         {volist name="professional_item" id="f1"}
         {eq name="f1['cat_id']" value="$f['id']"}
         <div class="layui-form-item" style="margin-left: 100px">
-<!--            <label class="layui-form-label1">{$f1['name']}</label>-->
             <div class="layui-input-inline1">
                 <input type="text" class="layui-input field-item_name" name="item_name[{$f1['cat_id']}][{$f1['id']}][name]" value="{$f1['name']}" lay-verify="required" >
             </div>
@@ -112,6 +108,9 @@
         </div>
         {/eq}
         {/volist}
+        <div class="layui-form-item new_major{$f['id']}">
+            <a href="javascript:void(0);" class="aicon ai-tianjia" onclick="major_add({$f['id']})" style="margin-left:500px;font-size: 30px;"></a>
+        </div>
         {/volist}
         <div class="layui-form-item">
             <label class="layui-form-label">建设单位</label>
@@ -386,22 +385,6 @@
             }
         });
 
-        $(".field-task-add").click(function(){
-            $(".new_task").before("<div class=\"layui-form-item\">\n" +
-                "            <label class=\"layui-form-label\">专业配比</label>\n" +
-                "            <div class=\"layui-input-inline\">\n" +
-                "                <input type=\"text\" class=\"layui-input field-big_major1\" name=\"big_major[]\" onblur='big_major_match()' autocomplete=\"off\" placeholder=\"大专业配比\">\n" +
-                "            </div>\n" +
-                "            <div class=\"layui-form-mid red\"></div>\n"+
-                "        </div>\n" +
-                "        <div class=\"layui-form-item\">\n" +
-                "            <div class=\"layui-input-block\">\n" +
-                "                <textarea type=\"text\" class=\"layui-textarea field-small_major1\" name=\"small_major[]\" onblur='small_major_match()' autocomplete=\"off\" placeholder=\"小专业配比\"></textarea>\n" +
-                "            </div>\n" +
-                "            <div class=\"layui-form-mid red\"></div>\n"+
-                "        </div>");
-            form.render();
-        });
         $('.field-real_per').keyup(function () {
             var num = $('.field-real_per').val();
             if (num > 100){
@@ -409,6 +392,26 @@
             }
         });
     });
+
+    function major_add(v){
+        var name = $(".new_major"+v).prev().find('div input').attr('name');
+        var last_num = name.lastIndexOf("][");
+        var name1 = name.substring(10,last_num);
+        var name_arr = name1.split('][');
+        var a1 = name_arr[0],a2 = name_arr[1]*1 + 1*1;
+        // console.log(name_arr);
+        $(".new_major"+v).before("<div class=\"layui-form-item\" style=\"margin-left: 100px\">\n" +
+            "            <div class=\"layui-input-inline1\">\n" +
+            "                <input type=\"text\" class=\"layui-input field-item_name\" name=\"item_name["+a1+"]["+a2+"][name]\" value=\"\" lay-verify=\"required\" >\n" +
+            "            </div>\n" +
+            "            <div class=\"layui-input-inline1\">\n" +
+            "                <input type=\"text\" class=\"layui-input field-item_ratio\" name=\"item_name["+a1+"]["+a2+"][ratio]\" value=\"0\" lay-verify=\"required\" >\n" +
+            "            </div>\n" +
+            "            <div class=\"layui-input-inline1\">\n" +
+            "                <input type=\"text\" class=\"layui-input field-jindu_per\"  name=\"item_name["+a1+"]["+a2+"][jindu_per]\" value=\"0\" lay-verify=\"required\" >\n" +
+            "            </div>\n" +
+            "        </div>");
+    }
 
     $(".field-big_major1").blur(function () {
         var a = $(this).val(),
