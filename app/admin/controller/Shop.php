@@ -552,7 +552,7 @@ class Shop extends Admin
         ];
 
         $redis = service('Redis');
-        $redis->set("pm:admin_user:{$trade_no}",serialize(session('admin_user')),180);
+        $redis->set("pm:admin_user:{$trade_no}",serialize(session('admin_user')));
 
         $peizhi = config('alipay');
         $client = new Client(Client::ALIPAY, $peizhi);

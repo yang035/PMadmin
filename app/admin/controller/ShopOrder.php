@@ -198,7 +198,7 @@ class ShopOrder extends Admin
             $data['is_pay'] = 5;
             $flag = OrderModel::where('id',$data['id'])->update($data);
             if ($flag) {
-                return $this->success("提交成功{$this->score_value}",'detail', ['item_id'=>$data_list['item_id']],1);
+                return $this->success("提交成功{$this->score_value}",url('ShopOrder/index', ['flag' => 'my']));
             } else {
                 return $this->error('提交失败！');
             }

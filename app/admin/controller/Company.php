@@ -13,6 +13,7 @@ use app\admin\model\AdminCompany;
 use app\admin\model\AdminDepartment;
 use app\admin\model\AdminMenu as MenuModel;
 use app\admin\model\Category;
+use think\Db;
 
 class Company extends Admin
 {
@@ -99,10 +100,27 @@ class Company extends Admin
             if($result !== true) {
                 return $this->error($result);
             }
-            if (!AdminCompany::update($data)) {
-                return $this->error('修改失败！');
+            $flag = false;
+            Db::startTrans();
+            try{
+                AdminCompany::update($data);
+                $w = [
+                    'pid' => 0,
+                    'cid' => $data['id'],
+                ];
+                AdminDepartment::where($w)->update(['name'=>$data['name']]);
+                $flag = \app\admin\model\ScoreRule::where($w)->update(['name'=>$data['name']]);
+                //事务提交
+                Db::commit();
+            } catch (\Exception $e) {
+//                  事务回滚
+                Db::rollback();
             }
-            return $this->success('修改成功。',url('index'));
+            if ($flag){
+                return $this->success('修改成功',url('index'));
+            }else{
+                return $this->error('修改失败');
+            }
         }
 
         $row = AdminCompany::where('id', $id)->find()->toArray();
