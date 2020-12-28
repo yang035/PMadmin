@@ -242,6 +242,7 @@ class Publics extends Common
         $this->assign('company_option', AdminCompany::getOption());
         $this->assign('sys_type', AdminCompany::getSysType($type));
         $this->assign('gys_type', AdminCompany::getGysType());
+        $this->assign('c_p', '麦粒谷粒公司'.mt_rand(10000,1000000));
         return $this->fetch();
     }
 

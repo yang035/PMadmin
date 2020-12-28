@@ -118,7 +118,7 @@
                 <label class="layui-form-label">公司名称</label>
                 <div class="layui-input-inline">
                     <input type="text" class="layui-input field-name" name="name" lay-verify="required"
-                           autocomplete="off" placeholder="请输入公司名称">
+                           autocomplete="off" placeholder="请输入公司名称" value="{$c_p}">
                 </div>
                 <div class="layui-form-mid" style="color: red">*</div>
             </div>
