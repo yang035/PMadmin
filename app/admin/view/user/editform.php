@@ -198,7 +198,7 @@
             </dl>
             {/volist}
         </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item hide" id="sub_id_1">
             <div class="layui-input-block">
                 <input type="hidden" class="field-id" name="id">
                 <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
@@ -243,6 +243,7 @@
         form.on('radio(is_auth)', function(data){
             if(1 == data.value){
                 $('#sub_id').hide();
+                $('#sub_id_1').show();
             }else {
                 $('#sub_id').show();
             }

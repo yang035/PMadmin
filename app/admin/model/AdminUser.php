@@ -175,10 +175,14 @@ class AdminUser extends Model
         }
 
         if (!in_array($user->company_id,[1,6])){
-            $role_other = RoleModel::where('id', 6)->find()->toArray();
-            if (!$role_other || $role_other['status'] == 0) {
-                $this->error = '禁止访问(原因：角色分组可能被禁用)！';
-                return false;
+            if ($user->role_id >= 6){
+                $role_other = $role;
+            }else{
+                $role_other = RoleModel::where('id', 6)->find()->toArray();
+                if (!$role_other || $role_other['status'] == 0) {
+                    $this->error = '禁止访问(原因：角色分组可能被禁用)！';
+                    return false;
+                }
             }
         }
 

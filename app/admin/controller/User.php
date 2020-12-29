@@ -248,7 +248,7 @@ class User extends Admin
         if ($id == 1 && ADMIN_ID != $id) {
             return $this->error('禁止修改超级管理员');
         }
-
+        $cid = session('admin_user.cid');
         if ($this->request->isPost()) {
             $data = $this->request->post();
             if (empty($data['department_id'])){
@@ -284,7 +284,7 @@ class User extends Admin
             if ($data['password'] == '') {
                 unset($data['password']);
             }
-            $data['company_id'] = session('admin_user.cid');
+            $data['company_id'] = $cid;
             // 验证
             $result = $this->validate($data, 'AdminUser.update');
             if($result !== true) {
@@ -298,13 +298,25 @@ class User extends Admin
         }
 
         $row = UserModel::where('id', $id)->find()->toArray();
+        $dep_role = AdminDepartment::where('id', $row['department_id'])->find()->toArray();
+        $auth = RoleModel::where('id', $row['role_id'])->find()->toArray();
+        if (!in_array($cid,[1,6])){
+            if ($row['role_id'] >= 6){
+                $role_other = $auth;
+            }else{
+                $role_other = RoleModel::where('id', 6)->find()->toArray();
+            }
+            $row['auth'] = $row['auth'] ? json_decode($row['auth']) : ($dep_role['auth'] ? json_decode($dep_role['auth']) : json_decode($role_other['auth']));
+        }else{
+            $row['auth'] = $row['auth'] ? json_decode($row['auth']) : ($dep_role['auth'] ? json_decode($dep_role['auth']) : json_decode($auth['auth']));
+        }
 //        if (!$row['auth']) {
 //            $auth = RoleModel::where('id', $row['role_id'])->value('auth');
 //            $row['auth'] = json_decode($auth);
 //        } else {
 //            $row['auth'] = json_decode($row['auth']);
 //        }
-        $row['auth'] = json_decode($row['auth']);
+//        $row['auth'] = json_decode($row['auth']);
 
         $tab_data = [];
         $tab_data['menu'] = [
