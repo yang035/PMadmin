@@ -174,6 +174,14 @@ class AdminUser extends Model
             return false;
         }
 
+        if (!in_array($user->company_id,[1,6])){
+            $role_other = RoleModel::where('id', 6)->find()->toArray();
+            if (!$role_other || $role_other['status'] == 0) {
+                $this->error = '禁止访问(原因：角色分组可能被禁用)！';
+                return false;
+            }
+        }
+
         $dep_role = AdminDepartment::where('id', $user->department_id)->find()->toArray();
         $company = AdminCompany::where('id', $user->company_id)->find()->toArray();
 
@@ -202,12 +210,17 @@ class AdminUser extends Model
             self::getThemes(true);
             // 缓存角色权限
             //权限优先级    用户>部门>公司>角色
-            if ($dep_role['auth']){
+//            if ($dep_role['auth']){
                 $auth = $dep_role['auth'];
+//            }else{
+//                $auth = AdminUser::getdepAuth($user->department_id);
+//            }
+            if (!in_array($user->company_id,[1,6])){
+                $role_auth = $user->auth ? json_decode($user->auth, true) : ($auth ? json_decode($auth, true) : json_decode($role_other['auth'], true));
             }else{
-                $auth = AdminUser::getdepAuth($user->department_id);
+                $role_auth = $user->auth ? json_decode($user->auth, true) : ($auth ? json_decode($auth, true) : ($company['auth'] ? json_decode($company['auth'], true) : json_decode($role['auth'], true)));
             }
-            $role_auth = $user->auth ? json_decode($user->auth, true) : ($auth ? json_decode($auth, true) : ($company['auth'] ? json_decode($company['auth'], true) : json_decode($role['auth'], true)));
+
             session('role_auth_'.$user->role_id, $role_auth);
             // 缓存登录信息
             session('admin_user', $login);
