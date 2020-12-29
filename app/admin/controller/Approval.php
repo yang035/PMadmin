@@ -38,6 +38,7 @@ use app\admin\model\ProjectBudget as BudgetModel;
 use app\admin\model\ProjectBudgetcaigou as BudgetcaigouModel;
 use app\admin\model\ApprovalLeaveoffice as LeaveofficeModel;
 use app\admin\model\ApprovalInvoice as InvoiceModel;
+use app\admin\model\UserInfo;
 use think\Db;
 
 
@@ -763,6 +764,10 @@ class Approval extends Admin
                 return $this->error('添加失败！');
             }
         }
+        $uid = session('admin_user.uid');
+        $bank_info = UserInfo::getRowByUid($uid);
+        $bank_info['real_name'] = AdminUser::getUserById($uid)['realname'];
+        $this->assign('bank_info', $bank_info);
         $this->assign('cost_option', CostModel::getOption());
         $this->assign('mytask', ProjectModel::getMyTask(0));
         return $this->fetch();

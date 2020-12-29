@@ -83,6 +83,14 @@ class UserInfo extends Model
         return $str;
     }
 
+    public static function getRowByUid($uid){
+        $where = [
+            'user_id'=>$uid,
+        ];
+        $row = self::field('user_id,open_bank,bank_num')->where($where)->find();
+        return $row ? $row : [];
+    }
+
     public function del($id){
         if (is_array($id)) {
             $error = '';

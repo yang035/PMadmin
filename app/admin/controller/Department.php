@@ -4,6 +4,7 @@ namespace app\admin\controller;
 use app\admin\model\AdminDepartment;
 use app\admin\model\AdminMenu as MenuModel;
 use app\admin\model\AdminUser;
+use app\admin\model\AdminRole as RoleModel;
 
 class Department extends Admin
 {
@@ -131,6 +132,7 @@ class Department extends Admin
             return $this->error('禁止编辑');
         }
 
+        $cid = session('admin_user.uid');
         if ($this->request->isPost()) {
             $data = $this->request->post();
 
@@ -138,7 +140,7 @@ class Department extends Admin
             if (ADMIN_ROLE > 3) {
                 return $this->error('禁止修改当前角色(原因：您不是超级管理员或公司管理员)');
             }
-            $data['user_id'] = session('admin_user.uid');
+            $data['user_id'] = $cid;
             if (isset($data['auth'])){
                 $data['auth'] = json_encode($data['auth']);
             }else{
@@ -158,9 +160,10 @@ class Department extends Admin
             ['title' => '设置权限'],
         ];
         $row = AdminDepartment::where('id', $params['id'])->field('id,auth')->find()->toArray();
-        $row['auth'] = json_decode($row['auth']);
+        $auth = RoleModel::where('id', 6)->find()->toArray();
+        $row['auth'] = $row['auth'] ? json_decode($row['auth']) : json_decode($auth['auth']);
 //        if ($row['auth']){
-//            $auth = $row['auth'];
+//            $auth = json_decode($row['auth']);
 //        }else{
 //            $auth = AdminUser::getdepAuth($id);
 //        }
