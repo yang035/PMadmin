@@ -40,7 +40,7 @@
             </select>
         </div>
         <div class="layui-input-inline" style="width: 100px">
-            <input type="number" class="layui-input field-score" name="score[0]" autocomplete="off" placeholder="预设值" onblur="checkScore(0,this.value)">
+            <input type="number" class="layui-input field-score" name="score[0]" autocomplete="off" placeholder="ML" onblur="checkScore(0,this.value)">
         </div>
         <div class="layui-input-inline" style="width: 100px">
             <input type="text" class="layui-input field-start_time" name="start_time[]" autocomplete="off" readonly placeholder="开始时间">
@@ -153,7 +153,7 @@ layui.use(['jquery', 'laydate','upload','form','element'], function() {
             "            </select>\n" +
             "        </div>\n" +
             "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
-            "            <input type=\"number\" class=\"layui-input field-score\" name=\"score["+len+"]\" autocomplete=\"off\" placeholder=\"预设值\" onblur=\"checkScore("+len+",this.value)\">\n" +
+            "            <input type=\"number\" class=\"layui-input field-score\" name=\"score["+len+"]\" autocomplete=\"off\" placeholder=\"ML\" onblur=\"checkScore("+len+",this.value)\">\n" +
             "        </div>\n" +
             "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
             "            <input type=\"text\" class=\"layui-input field-start_time\" name=\"start_time["+len+"]\" id=\"start_"+len+"\" autocomplete=\"off\" readonly placeholder=\"开始时间\">\n" +

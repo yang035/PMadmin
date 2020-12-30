@@ -52,7 +52,14 @@ class Project extends Admin
                 ],
             ];
         }else{
-            $tab_data['menu'] = $this->getMenu();
+            $tab_data['menu'] = [
+                [
+                    'title' => "项目计划",
+                    'url' => 'admin/Project/index',
+                    'params' => ['atype' => 0],
+                ],
+            ];
+//            $tab_data['menu'] = $this->getMenu();
         }
         $tab_data['current'] = url('index', ['atype' => 0]);
         $this->tab_data = $tab_data;

@@ -108,7 +108,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">预设产量</label>
         <div class="layui-input-inline">
-            <input type="number" class="layui-input field-score" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="score" lay-verify="required" autocomplete="off" placeholder="请输入预设值">
+            <input type="number" class="layui-input field-score" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="score" lay-verify="required" autocomplete="off" placeholder="请输入ML">
         </div>
         {notempty name="Request.param.id"}
         <div class="layui-form-mid">不能超过<span id="max_score" style="color: red;">{$p_res.max_score}</span>斗</div>
