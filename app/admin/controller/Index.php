@@ -17,7 +17,7 @@ class Index extends Admin
         } else {
             $p = explode('/',$_SERVER['REQUEST_URI']);
             if (count($p) <= 4){
-                if (session('admin_user.role_id') > 3) {
+                if (session('admin_user.role_id') > 4) {
                     $this->redirect(url('Project/mytask', ['type' => 1]));
                 }
             }
@@ -160,7 +160,7 @@ class Index extends Admin
             $this->view->engine->layout(false);
             return $this->fetch('iframe');
         } else {
-            if (session('admin_user.role_id') > 3){
+            if (session('admin_user.role_id') > 4){
                 $this->redirect(url('Project/mytask',['type'=>1]));
             }
             $map = [

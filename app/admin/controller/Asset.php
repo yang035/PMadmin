@@ -50,7 +50,7 @@ class Asset extends Admin
         if (1 != session('admin_user.role_id')) {
             $where['a.cid'] = session('admin_user.cid');
         }
-        if (session('admin_user.role_id') > 3) {
+        if (session('admin_user.role_id') > 4) {
             $where['a.user_id'] = session('admin_user.uid');
         }
         

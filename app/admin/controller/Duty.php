@@ -435,7 +435,7 @@ class Duty extends Admin
                 $where['a.realname'] = ['like', '%'.$params['realname'].'%'];
             }
         }
-        if ($role_id > 3){
+        if ($role_id > 4){
             $where['u.user_id'] = session('admin_user.uid');
         }
         $duty = config('config_score.duty');

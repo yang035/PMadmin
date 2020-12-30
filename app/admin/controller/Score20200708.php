@@ -79,7 +79,7 @@ class Score extends Admin
         $map1['is_show'] = ['eq', 0];
         $map1['status'] = 1;
         $role_id = session('admin_user.role_id');
-        if ($role_id > 3) {
+        if ($role_id > 4) {
             $map1['id'] = session('admin_user.uid');
         }
 //        $map['Score.create_time'] = ['<',1556726399];
@@ -342,7 +342,7 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
 
         $map['cid'] = session('admin_user.cid');
         $role_id = session('admin_user.role_id');
-        if ($role_id > 3){
+        if ($role_id > 4){
             $map['user'] = session('admin_user.uid');
         }
         $fields = "subject_id,sum(ml_add_score) as ml_add_sum,sum(ml_sub_score) as ml_sub_sum,sum(gl_add_score) as gl_add_sum,sum(gl_sub_score) as gl_sub_sum";
@@ -726,7 +726,7 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
         }
         array_multisort(array_column($tmp2,'ml'),SORT_DESC,$tmp2);
 
-        if ($role_id > 3 || 1 == $p){
+        if ($role_id > 4 || 1 == $p){
             foreach ($tmp2 as $k => $v) {
                 if ($uid == $v['uid']){
                     $tmp3[$k] = $v;
@@ -1068,7 +1068,7 @@ WHERE si.id in ({$p})";
         }
         array_multisort(array_column($tmp2,'ml'),SORT_DESC,$tmp2);
 
-        if ($role_id > 3 || 1 == $p){
+        if ($role_id > 4 || 1 == $p){
             foreach ($tmp2 as $k => $v) {
                 if ($uid == $v['uid']){
                     $tmp3[$k] = $v;

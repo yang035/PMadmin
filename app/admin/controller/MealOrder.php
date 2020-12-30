@@ -41,7 +41,7 @@ class MealOrder extends Admin
         $role_id = session('admin_user.role_id');
         if ($cid != 6){
             $map['cid'] = $cid;
-            if ($role_id > 3){
+            if ($role_id > 4){
                 $map['user_id'] = session('admin_user.uid');
             }
         }
@@ -112,7 +112,7 @@ class MealOrder extends Admin
             }
         }
         $role_id = session('admin_user.role_id');
-        if ($role_id > 3){
+        if ($role_id > 4){
             $map['user_id'] = session('admin_user.uid');
         }
 

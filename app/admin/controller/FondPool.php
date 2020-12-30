@@ -32,7 +32,7 @@ class FondPool extends Admin{
                 $real_name = $params['real_name'];
             }
             $role_id = session('admin_user.role_id');
-            if ($role_id > 3) {
+            if ($role_id > 4) {
                 $where['user'] = session('admin_user.uid');
             }
             $where['cid'] = session('admin_user.cid');
@@ -79,7 +79,7 @@ class FondPool extends Admin{
                 $real_name = $params['real_name'];
             }
             $role_id = session('admin_user.role_id');
-            if ($role_id > 3) {
+            if ($role_id > 4) {
                 $where['user'] = session('admin_user.uid');
             }
             $where['cid'] = session('admin_user.cid');

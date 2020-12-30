@@ -137,7 +137,7 @@ class Department extends Admin
             $data = $this->request->post();
 
             // 当前登陆用户不可更改自己的分组角色
-            if (ADMIN_ROLE > 3) {
+            if (ADMIN_ROLE > 4) {
                 return $this->error('禁止修改当前角色(原因：您不是超级管理员或公司管理员)');
             }
             $data['user_id'] = $cid;

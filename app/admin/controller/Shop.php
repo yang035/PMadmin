@@ -62,7 +62,7 @@ class Shop extends Admin
             if (6 != session('admin_user.cid')) {
                 $where['cid'] = session('admin_user.cid');
             }
-            if (session('admin_user.role_id') > 3) {
+            if (session('admin_user.role_id') > 4) {
                 $where['user_id'] = $uid;
             }
 

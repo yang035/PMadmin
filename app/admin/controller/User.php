@@ -69,7 +69,7 @@ class User extends Admin
             if (4 == $cid && 89 != $uid){
                 $where['id'] = session('admin_user.uid');
             }
-            if ($role_id > 3){
+            if ($role_id > 4){
                 $where['id'] = session('admin_user.uid');
             }
 
@@ -589,7 +589,7 @@ class User extends Admin
 //            $mobile = UserModel::field('mobile')->where(['id'=>$uid])->find();
 //            $where['tuijianren'] = $mobile['mobile'];
 //        }
-        if ($role_id > 3 || $cid != 2){
+        if ($role_id > 4 || $cid != 2){
             $mobile = UserModel::field('mobile')->where(['id'=>$uid])->find();
             $where['tuijianren'] = $mobile['mobile'];
         }

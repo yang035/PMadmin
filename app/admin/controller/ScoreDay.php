@@ -73,7 +73,7 @@ class ScoreDay extends Admin
         $map1['is_show'] = ['eq', 0];
         $map1['status'] = 1;
         $role_id = session('admin_user.role_id');
-        if ($role_id > 3) {
+        if ($role_id > 4) {
             $map1['id'] = session('admin_user.uid');
         }
 //        $map['Score.create_time'] = ['<',1556726399];

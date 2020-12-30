@@ -18,7 +18,7 @@ class Ziyuan extends Admin
         if (2 != session('admin_user.cid')) {
             $map['cid'] = session('admin_user.cid');
         }
-        if (session('admin_user.role_id') > 3) {
+        if (session('admin_user.role_id') > 4) {
             $map['user_id'] = session('admin_user.uid');
         }
         if ($q) {
