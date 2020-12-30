@@ -42,8 +42,7 @@
         <div class="layui-input-inline">
             <input type="number" class="layui-input field-score" name="score" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" lay-verify="required" readonly autocomplete="off" placeholder="请输入预设值">
         </div>
-        <div class="layui-form-mid">斗</div>
-        <div class="layui-form-mid red">*</div>
+        <div class="layui-form-mid red">斗*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">开始时间</label>

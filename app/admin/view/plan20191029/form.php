@@ -24,6 +24,7 @@
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-score" name="score" lay-verify="required" autocomplete="off" placeholder="请输入产量">
         </div>
+        <div class="layui-form-mid red">斗*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">开始时间</label>

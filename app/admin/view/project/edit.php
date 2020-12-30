@@ -117,7 +117,7 @@
         {notempty name="Request.param.pid"}
         <div class="layui-form-mid">不能超过<span id="max_score" style="color: red;">{$max_score}</span>斗</div>
         {/notempty}
-        <div class="layui-form-mid red">*</div>
+        <div class="layui-form-mid red">斗*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">开始时间</label>

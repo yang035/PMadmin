@@ -51,7 +51,7 @@
                             <br>
                             任务类型：{$data_info['is_period']}
                             <br>
-                            预设产量：{$data_info['score']}
+                            预设产量：{$data_info['score']} 斗
                             <br>
                             开始时间：{$data_info['start_time']}
                             <br>

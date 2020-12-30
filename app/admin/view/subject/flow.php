@@ -1,6 +1,7 @@
 <form class="layui-form" action="{:url()}" method="post">
     <div class="layui-tab-item layui-show layui-form-pane">
         <h3>项目名：{$row['name']}</h3>
+        <div class="layui-form-mid"><span class="text-grey">备注:进度以最后一次提交为准</span></div><br>
         {volist name="flow" id="f" key="k"}
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
             <legend>{$f['name']} {$f['jindu']|default=0}%</legend>
@@ -28,7 +29,7 @@
                                 {volist name="f2['attachment']" id='f3'}
                                 <a href="{$f3}" target="_blank">附件{$i}</a>
                                 {/volist}
-                                 {notempty name="f2['ratio']"}--<span class="ratio red">{$f2['ratio']}</span>%{/notempty}
+                                --<span class="ratio red">{$f2['ratio']|default=0}</span>%
                                 ----<input type="checkbox" name="share_flag" value="{$f2['id']}" lay-skin="switch" lay-text="分享甲方|关闭" lay-filter="share_flag" {notempty name="f2['share_flag']"}checked{/notempty}>
                             </div>
                         </div>
