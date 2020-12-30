@@ -165,12 +165,10 @@
             var u = "{$Request.param.u}";
             if (u != 'undefined' || !isNaN(u)) {
                 var arr = u.split(",");
-                arr = $.grep(arr, function (n) {
-                    return $.trim(n).length > 0;
+                var r = arr.filter(function (s) {
+                    return s && s.trim(); // 注：IE9(不包含IE9)以下的版本没有trim()方法
                 });
-                $.each(arr, function (key, val) {
-                    $('#authority_10000' + val).click();
-                });
+                $('#authority_10000' + r[0]).click().click();
             }
 
             $('.user_confirm').click(function () {
