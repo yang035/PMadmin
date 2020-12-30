@@ -496,6 +496,18 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
         }
 //echo 123;
         $row = ProjectModel::where('id', $id)->find()->toArray();
+
+        $partner_user_arr = json_decode($row['partner_user'],true);
+        if (!$partner_user_arr){
+            return $this->error("{$row['name']},人员不存在，请先配置项目人员");
+        }else{
+            foreach ($partner_user_arr as $k=>$v) {
+                if (!$v){
+                    return $this->error("{$row['name']},请在产前分配中进行合伙配置");
+                }
+            }
+        }
+
         if ($row) {
             $sql = "SELECT flow_cat_id,ratio FROM (SELECT * FROM tb_subject_flow WHERE subject_id = {$row['subject_id']} ORDER BY id DESC LIMIT 10000) c GROUP BY c.flow_cat_id,c.flow_id";
             $r = Db::query($sql);
@@ -1112,6 +1124,12 @@ WHERE si.id in ({$p})";
                         4 => 0,
                         5 => 0,
                         6 => 0,
+                        7 => 0,
+                        8 => 0,
+                        9 => 0,
+                        10 => 0,
+                        11 => 0,
+                        12 => 0,
                     ];
                     $jindu_month = $jindu;
                 }else{
@@ -1134,9 +1152,16 @@ WHERE si.id in ({$p})";
                 $p_data = Partnership::getPartnerGrade1();
                 $p_data1 = [];
                 $partner_user = json_decode($row['partner_user'],true);
-                if (empty($partner_user)){
-                    return $this->error('请先配置合伙级别');
+                if (!$partner_user){
+                    return $this->error("{$row['name']},人员不存在，请先配置项目人员");
+                }else{
+                    foreach ($partner_user as $k=>$v) {
+                        if (!$v){
+                            return $this->error("{$row['name']},请在产前分配中进行合伙配置");
+                        }
+                    }
                 }
+
                 if ((float)$row['total_price'] <=0){
                     continue;
 //                    return $this->error('合同总价不能小于0');

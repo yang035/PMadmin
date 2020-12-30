@@ -1061,6 +1061,16 @@ class Subject extends Admin
         $p = $this->request->param();
         $row = $flow_cat = $flow = $subject_flow = $score = $score_arr = [];
         $row = ItemModel::where('id', $id)->find()->toArray();
+        $partner_user_arr = json_decode($row['partner_user'],true);
+        if (!$partner_user_arr){
+            return $this->error("{$row['name']},人员不存在，请先配置项目人员");
+        }else{
+            foreach ($partner_user_arr as $k=>$v) {
+                if (!$v){
+                    return $this->error("{$row['name']},请在产前分配中进行合伙配置");
+                }
+            }
+        }
         $flow = json_decode($row['small_major_deal'],true);
         if (!empty($flow)) {
             $map = [
@@ -1103,6 +1113,18 @@ class Subject extends Admin
     public function progressReview($id)
     {
         $row = $flow_cat = $flow = $subject_flow = $score = $score_arr = [];
+        $row = ItemModel::where('id', $id)->find()->toArray();
+        $partner_user_arr = json_decode($row['partner_user'],true);
+        if (!$partner_user_arr){
+            return $this->error("{$row['name']},人员不存在，请先配置项目人员");
+        }else{
+            foreach ($partner_user_arr as $k=>$v) {
+                if (!$v){
+                    return $this->error("{$row['name']},请在产前分配中进行合伙配置");
+                }
+            }
+        }
+
         if ($this->request->isPost()){
             $p = $this->request->post();
             $s = $p;
@@ -1176,7 +1198,7 @@ class Subject extends Admin
 
             return $this->error('操作成功');
         }
-        $row = ItemModel::where('id', $id)->find()->toArray();
+
         $flow = json_decode($row['small_major_deal'],true);
         if (!empty($flow)) {
             $s_flow = SubjectFlow::getOption($id);
