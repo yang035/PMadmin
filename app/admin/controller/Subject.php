@@ -1604,7 +1604,8 @@ class Subject extends Admin
                     unset($data[$k]);
                 }
             }
-            $data['partner_user'] = $data['deal_user'] = user_array(implode(',',array_unique(explode(',',$deal_user))));
+            $data['partner_user'] = user_array(implode(',',array_unique(explode(',',$deal_user))),$row['partner_user']);
+            $data['deal_user'] = user_array(implode(',',array_unique(explode(',',$deal_user))));
             if ($row['small_major_deal']){
                 $a = json_decode($row['small_major_deal'],true);
                 foreach ($a as $k=>$v) {
@@ -1629,7 +1630,7 @@ class Subject extends Admin
                     'send_user'=>$data['send_user'],
                     'leader_user'=>$data['leader_user'],
                     'deal_user'=>$data['deal_user'],
-                    'partner_user'=>$data['deal_user'],
+                    'partner_user'=>$data['partner_user'],
                     'copy_user'=>$data['copy_user'],
                     'small_major_deal'=>$data['small_major_deal'],
                     'fu'=>$u,
