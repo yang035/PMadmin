@@ -44,8 +44,8 @@
                             项目名称：{$Request.param.project_name}
                             <br>
                             任务主题：{$data_info['name']}
-                            <br>
-                            描述：{$data_info['remark']}
+                            <br><br>
+                            具体描述：{$data_info['remark']}
                             <br>
                             专业类型：{$data_info['major_cat_name']}--{$data_info['major_item_name']}
                             <br>

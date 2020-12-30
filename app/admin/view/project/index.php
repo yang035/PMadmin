@@ -161,7 +161,10 @@
                 cols: [[
                     {field: 'xuhao', title: '序号',type: 'numbers'},
                     {field: 'project_name',merge: true, title: '项目名',width: 100},
-                    {field: 'name', title: '任务名',width: 250},
+                    {field: 'name', title: '任务主题',width: 250,templet:function (d) {
+                            var open_url = "{:url('editTask')}?id="+d.id+"&pid="+d.pid+"&type=2"+"&child="+d.child+"&project_name="+d.project_name;
+                            return "<a class='mcolor' href='"+open_url+"'>"+d.name+"</a>";
+                        }},
                     // {field: 'deal_user', title: '参与人',width: 80},
                     {title: '成果展示',width: 400,templet:function (d) {
                             var t = '';
