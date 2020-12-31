@@ -225,8 +225,9 @@ class Cron extends Controller
 
     /**
      * 任务单延迟提交扣罚
+     * 每天0:40分执行
      */
-    public function assignmentDeal()
+    public function Dealassignment()
     {
         $where = [
             'a.cid'=>2,
