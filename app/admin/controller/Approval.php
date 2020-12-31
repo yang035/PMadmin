@@ -382,6 +382,7 @@ class Approval extends Admin
                 if ($over_time <= 0){
                     return $this->error('没有调休假可用');
                 }
+                //限制节假日前后不能用调休假
                 $day_off = [0,6,7];
                 $s = $data['start_time'];
                 $before_s = date('Y-m-d', strtotime("{$s} -1 day"));
