@@ -190,6 +190,7 @@
             <div id="manager_select_id">{$data_info['manager_user_id']|default=''}</div>
             <input type="hidden" name="manager_user" id="manager_user" value="{$data_info['manager_user']|default=''}">
         </div>
+        <div class="layui-form-mid red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">参与人</label>
@@ -198,6 +199,7 @@
             <div id="deal_select_id"></div>
             <input type="hidden" name="deal_user" id="deal_user" value="">
         </div>
+        <div class="layui-form-mid red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">审批人</label>

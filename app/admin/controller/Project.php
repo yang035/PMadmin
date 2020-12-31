@@ -806,6 +806,12 @@ class Project extends Admin
             } else {
                 $data['code'] = $this->getCode($data['code'], $data['pid']);
             }
+            if (empty($data['manager_user'])){
+                return $this->error('负责人必填');
+            }
+            if (empty($data['deal_user'])){
+                return $this->error('参与人必填');
+            }
             $parent_u = [
                 'manager_user'=> array_filter(explode(',',$data['manager_user'])),
                 'deal_user'=> array_filter(explode(',',$data['deal_user'])),
@@ -937,6 +943,12 @@ class Project extends Admin
             } else {
                 $data['code'] = $this->getCode($data['code'], $data['pid']);
             }
+            if (empty($data['manager_user'])){
+                return $this->error('负责人必填');
+            }
+            if (empty($data['deal_user'])){
+                return $this->error('参与人必填');
+            }
             $parent_u = [
                 'manager_user'=> array_filter(explode(',',$data['manager_user'])),
                 'deal_user'=> array_filter(explode(',',$data['deal_user'])),
@@ -1042,7 +1054,12 @@ class Project extends Admin
             } else {
                 $data['code'] = $this->getCode($data['code'], $data['pid']);
             }
-
+            if (empty($data['manager_user'])){
+                return $this->error('负责人必填');
+            }
+            if (empty($data['deal_user'])){
+                return $this->error('参与人必填');
+            }
             $parent_u = [
                 'manager_user'=> array_filter(explode(',',$data['manager_user'])),
                 'deal_user'=> array_filter(explode(',',$data['deal_user'])),
@@ -3369,6 +3386,7 @@ class Project extends Admin
 
             $data['code'] = $p_res['code'];
 //            print_r($params);
+            $score_len = count(array_filter($params['score']));
             foreach ($params as $k=>$v) {
                 if (is_array($v)){
                     $params[$k] = array_filter($v);
@@ -3376,8 +3394,8 @@ class Project extends Admin
                     if ($k == 'deal_user' && empty($params[$k])){
                         $params['deal_user'] = $params['manager_user'];
                     }
-                    if (empty($params[$k])){
-                        return $this->error('请补充完整信息');
+                    if (empty($params[$k]) || (count($params[$k]) < $score_len)){
+                        return $this->error('请补充 满足ML>0 的各行信息');
                     }
                 }
             }
@@ -3475,6 +3493,7 @@ class Project extends Admin
                 }
 
                 $data['code'] = $p_res['code'];
+                $score_len = count(array_filter($params['score']));
                 foreach ($params as $k=>$v) {
                     if (is_array($v)){
                         $params[$k] = array_filter($v);
@@ -3482,8 +3501,8 @@ class Project extends Admin
                         if ($k == 'deal_user' && empty($params[$k])){
                             $params['deal_user'] = $params['manager_user'];
                         }
-                        if (empty($params[$k])){
-                            return $this->error('请补充完整信息');
+                        if (empty($params[$k]) || (count($params[$k]) < $score_len)){
+                            return $this->error('请补充 满足ML>0 的各行信息');
                         }
                     }
                 }

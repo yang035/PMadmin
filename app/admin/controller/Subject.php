@@ -78,6 +78,20 @@ class Subject extends Admin
                 foreach ($data['data'] as $k=>$v){
                     $v['s_status'] = $p_status[$v['s_status']];
                     $v['leader_user'] = $this->deal_data($v['leader_user']);
+//批量改变合伙配置
+//                    $partner_user_arr = json_decode($v['partner_user'],true);
+//                    if ($partner_user_arr){
+//                        foreach ($partner_user_arr as $kk=>$vv) {
+//                            $partner_user_arr[$kk] = '2';
+//                        }
+//                    }
+//                    $partner_user = json_encode($partner_user_arr);
+//                    ItemModel::where(['id'=>$v['id']])->update(['partner_user'=>$partner_user]);
+//                    $w = [
+//                        'subject_id' => $v['id'],
+//                        'pid' => 0,
+//                    ];
+//                    ProjectModel::where($w)->update(['partner_user'=>$partner_user]);
                 }
             }
             $data['count'] = ItemModel::where($where)->count('id');

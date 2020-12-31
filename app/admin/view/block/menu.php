@@ -14,13 +14,13 @@
     }
 </style>
 <div class="layui-header" style="z-index:999!important;">
-    <div style="height:30px;">
-        <div style="text-align: center;">
-            <span style="color: rgba(255,255,255,.7);font-size: large">{$admin_user['company']}</span>
+    <div style="height:38px;">
+        <div style="text-align: left;margin-left: 265px">
+            <span style="color: rgba(255,255,255,.7);font-size: 25px">{$admin_user['company']}</span>
         </div>
     </div>
     <div class="fl header-logo1"><a href="{:url('Assignment/addItem')}">
-            <div id="date_clock" style="font-size: 25px;color: rgba(255,255,255,.7);"></div>
+            <div id="date_clock" style="font-size: 21px;color: rgba(255,255,255,.7);"></div>
             <div id="date_clock_date" style="font-size: 15px;color: rgba(255,255,255,.7);"></div>
         </a></div>
     <div class="fl header-fold"><a href="javascript:;" title="打开/关闭左侧导航" class="aicon ai-caidan" id="foldSwitch"></a></div>

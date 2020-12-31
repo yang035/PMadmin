@@ -14,6 +14,7 @@ use think\Controller;
 use think\Db;
 use app\admin\model\Score as ScoreModel;
 use app\admin\model\Approval as ApprovalModel;
+use app\admin\model\AssignmentItem as AssignmentItemModel;
 
 class Cron extends Controller
 {
@@ -218,6 +219,49 @@ class Cron extends Controller
                 ];
                 ScoreModel::where($where)->update($data);
                 $i++;
+            }
+        }
+    }
+
+    /**
+     * 任务单延迟提交扣罚
+     */
+    public function assignmentDeal()
+    {
+        $where = [
+            'a.cid'=>2,
+            'a.p_id'=>['>',0],
+            'p.end_time'=>['between',['2021-01-01 00:00:00',date("Y-m-d H:i:s")]],
+        ];
+        $fields = "a.id,a.project_id,a.p_id,a.content,p.deal_user,r.id report_id";
+        $data = Db::table('tb_assignment_item a')->field($fields)
+            ->join('tb_project p','a.p_id=p.id','left')
+            ->join('tb_project_report r','a.p_id=r.project_id','left')
+            ->where($where)
+            ->where('r.id is null')
+            ->select();
+        if ($data){
+            foreach ($data as $k=>$v) {
+                $deal_user = json_decode($v['deal_user'],true);
+                if ($deal_user){
+                    $sc = [];
+                    foreach ($deal_user as $kk=>$vv){
+                        $sc[$kk] = [
+                            'cid' => 2,
+                            'subject_id'=>$v['project_id'],
+                            'project_id'=>$v['p_id'],
+                            'user' => $kk,
+                            'gl_sub_score' => 100,
+                            'remark' => "任务未提交：{$v['content']},编号[{$v['id']}]",
+                            'create_time'=>time(),
+                            'update_time'=>time(),
+                        ];
+                    }
+                    $flag = Db::table('tb_score')->insertAll($sc);
+                    if ($flag) {
+                        echo '更新成功\r\n';
+                    }
+                }
             }
         }
     }
