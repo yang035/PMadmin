@@ -377,9 +377,20 @@ class Approval extends Admin
                 return $this->error('请选择项目');
             }
             $role_id = session('admin_user.role_id');
-            if ($role_id > 4 && $data['type'] == 4 && $over_time <= 0){
-                return $this->error('没有调休假可用');
+
+            if ($data['type'] == 4){
+                if ($over_time <= 0){
+                    return $this->error('没有调休假可用');
+                }
+                $day_off = [0,6,7];
+                $s = $data['start_time'];
+                $before_s = date('Y-m-d', strtotime("{$s} -1 day"));
+                $after_s = date('Y-m-d', strtotime("{$s} +1 day"));
+                if (in_array(dealDay($before_s),$day_off) || in_array(dealDay($after_s),$day_off)){
+                    return $this->error("根据公司制度 {$s} 不在调休假使用范围");
+                }
             }
+            
             // 验证
             $result = $this->validate($data, 'ApprovalLeave');
             if ($result !== true) {

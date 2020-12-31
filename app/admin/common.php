@@ -88,4 +88,43 @@ function get_random($len = 32)
     return $key;
 }
 
+/**
+ * @param $day
+ * @return false|int|string
+ * 上班  节假日计算
+ * //工作日
+$working_day = [1,2,3,4,5,8];
+//休息日
+$day_off = [0,6,7];
+//周末
+$weekend = [0,6];
+//法定节假日
+$legal_holiday = [7];
+ */
+function dealDay($day){
+    $legal_holiday = config('config_score.legal_holiday');
+    $weekend_work = config('config_score.weekend_work');
+    $year = substr($day,0,4);
+    $year_legal_holiday = $legal_holiday[$year];
+    $year_weekend_work = $weekend_work[$year];
+    /**
+     * 星期一 1
+     * 星期二 2
+     * 星期三 3
+     * 星期四 4
+     * 星期五 5
+     * 星期六 6
+     * 星期日 0
+     * 法定节假日 7
+     * 周末调整工作日 8
+     */
+    if (in_array($day,$year_legal_holiday)){
+        return 7;
+    }elseif (in_array($day,$year_weekend_work)){
+        return 8;
+    }else{
+        return date('w',strtotime($day));
+    }
+}
+
 

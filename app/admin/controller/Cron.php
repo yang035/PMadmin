@@ -14,7 +14,6 @@ use think\Controller;
 use think\Db;
 use app\admin\model\Score as ScoreModel;
 use app\admin\model\Approval as ApprovalModel;
-use app\admin\model\AssignmentItem as AssignmentItemModel;
 
 class Cron extends Controller
 {
