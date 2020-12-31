@@ -25,7 +25,7 @@
 <script type="text/html" id="oper-col">
 <!--    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="add">添加</a>-->
     <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">修改</a>
-    {{#  if(d.num < 1){ }}
+    {{#  if(d.num < 1 && d.pid != 0){ }}
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
     {{#  } }}
 <!--    <a class="layui-btn layui-btn-xs" lay-event="dep_auth">设置权限</a>-->
