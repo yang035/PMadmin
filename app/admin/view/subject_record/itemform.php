@@ -35,7 +35,7 @@
             <div class="layui-input-inline">
                 <button type="button" class="layui-btn layui-btn-normal" id="test3"><i class="layui-icon"></i>上传文件</button>
                 <input class="layui-input attachment" type="hidden" name="attachment" value="">
-                <input class="layui-input name" type="hidden" name="name" value="">
+                <input class="layui-input att_name_input" type="hidden" name="att_name" value="">
                 <span class="att_name"></span>
             </div>
         </div>
@@ -74,7 +74,7 @@
                     var att_name = $('.att_name').val();
                     att_name += "<a target='_blank' href='"+res.data.file +"'>"+ res.data.name+"</a>";
                     $('.att_name').html(att_name);
-                    $('.name').val(res.data.name);
+                    $('.att_name_input').val(res.data.name);
                     layer.msg(res.msg);
                 }else {
                     layer.msg(res.msg);
