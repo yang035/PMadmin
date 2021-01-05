@@ -999,7 +999,7 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
         return $this->fetch();
     }
 
-    public function listPeoplePM($user){
+    public function listPeoplePM($user,$p=0){
         $month = [
             'start_time'=>strtotime(date('Y-m-01', strtotime('-1 month'))),
             'end_time'=>strtotime(date('Y-m-01')),
@@ -1076,6 +1076,9 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
             'company_id'=>$cid,
         ];
         $user = AdminUser::where($map)->column('realname','id');
+        if ($p){
+            return $tmp2;
+        }
         $this->assign('tmp', $tmp2);
         $this->assign('user', $user);
         $this->assign('gl', $rank);

@@ -874,7 +874,7 @@ function user_array($val, $old_val = '', $s1 = ',', $s2 = ',')
         //新值与数据库中值合并
         if (!empty($old_val)) {
             $old_val = json_decode($old_val, true);
-            $new = $old_val + $data;//数字索引相加合并数组，注意顺序，保证老值不被替换
+            $new = $old_val ? ($old_val + $data) : $data;//数字索引相加合并数组，注意顺序，保证老值不被替换
             return json_encode($new,JSON_FORCE_OBJECT);
         }
         return json_encode($data,JSON_FORCE_OBJECT);

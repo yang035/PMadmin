@@ -39,6 +39,9 @@ use app\admin\model\ProjectBudgetcaigou as BudgetcaigouModel;
 use app\admin\model\ApprovalLeaveoffice as LeaveofficeModel;
 use app\admin\model\ApprovalInvoice as InvoiceModel;
 use app\admin\model\UserInfo;
+use app\admin\model\LeaveFile as LeaveFileModel;
+use app\admin\model\LeaveList as LeaveListModel;
+use app\admin\model\SubjectItem as SubjectItemModel;
 use think\Db;
 
 
@@ -205,7 +208,7 @@ class Approval extends Admin
             foreach ($list as $k => $v) {
                 $list[$k]['send_user'] = strip_tags($this->deal_data($v['send_user']));
                 $list[$k]['fellow_user'] = strip_tags($this->deal_data($v['fellow_user']));
-                $list[$k]['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
+                $list[$k]['realname'] = AdminUser::getUserById($v['user_id'])['realname'];
 
                 $list[$k]['money'] = '#';
                 $list[$k]['leave_type'] = '#';
@@ -285,7 +288,7 @@ class Approval extends Admin
                 $num = $k + 2;
                 $objPHPExcel->setActiveSheetIndex(0)
                     //Excel的第A列，uid是你查出数组的键值，下面以此类推
-                    ->setCellValue('A' . $num, $v['user_id'])
+                    ->setCellValue('A' . $num, $v['realname'])
                     ->setCellValue('B' . $num, $panel_type[$v['class_type']]['title'])
                     ->setCellValue('C' . $num, $v['leave_type'])
                     ->setCellValue('D' . $num, $v['start_time'])
@@ -317,7 +320,7 @@ class Approval extends Admin
         foreach ($list as $k => $v) {
             $list[$k]['send_user'] = $this->deal_data($v['send_user']);
             $list[$k]['fellow_user'] = strip_tags($this->deal_data($v['fellow_user']));
-            $list[$k]['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
+            $list[$k]['realname'] = AdminUser::getUserById($v['user_id'])['realname'];
             $list[$k]['money'] = '#';
             $list[$k]['leave_type'] = '#';
             switch ($v['class_type']){
@@ -2998,6 +3001,103 @@ class Approval extends Admin
         $this->assign('approval_status', $approval_status);
         $this->assign('pages', $pages);
         $this->assign('atype', 1);
+        return $this->fetch();
+    }
+
+    public function leaveFile()
+    {
+        $params = $this->request->param();
+        $user = $params['user'];
+        $approval_id = $params['approval_id'];
+        $cid = session('admin_user.cid');
+        $where = [
+            'cid'=>$cid,
+            'user'=>$user,
+        ];
+        $flag = LeaveFileModel::where($where)->find();
+        if ($flag){
+            return $this->redirect(url('Approval/leaveList',['user'=>$user,'approval_id'=>$approval_id,'read'=>1]));
+        }
+        $s_c = new Score();
+        $tmp2 = $s_c->listPeoplePM($user,1);
+        if ($this->request->isPost()){
+            $data = $this->request->post();
+
+            $subject_data = SubjectItemModel::getOwner($user);
+            $data['subject_data'] = json_encode($subject_data);
+            $data['ml_data'] = json_encode($tmp2);
+            $data['cid'] = $cid;
+            $data['approval_id'] = $params['approval_id'];
+            $flag = LeaveFileModel::where($where)->find();
+            if (!$flag){
+                LeaveFileModel::create($data);
+            }else{
+                LeaveFileModel::where($where)->update($data);
+            }
+            UserInfo::where(['user_id'=>$user,'cid'=>$cid])->setField('approval_id',$approval_id);
+            return $this->success('离职前数据归档成功',url('Approval/leaveList',['user'=>$user,'approval_id'=>$approval_id]));
+        }
+        $realname = AdminUser::getUserById($user)['realname'];
+        $this->assign('tmp', $tmp2);
+        $this->assign('realname', $realname);
+        return $this->fetch();
+    }
+
+    public function leaveList()
+    {
+        $params = $this->request->param();
+        $user = $params['user'];
+        $approval_id = $params['approval_id'];
+        $where = [
+            'cid'=>session('admin_user.cid'),
+            'user'=>$user,
+        ];
+        $row = LeaveFileModel::where($where)->find();
+        $s_data = [];
+        if ($row){
+            $subject_data = json_decode($row['subject_data'],true);
+            if ($subject_data){
+                foreach ($subject_data as $k=>$v) {
+                    $s_data[$k]['name'] = $v;
+                    $s_data[$k]['flag'] = 1;
+                }
+            }
+            $p_data = SubjectItemModel::getOwner($user);
+            if ($p_data){
+                foreach ($p_data as $k=>$v) {
+                    if (key_exists($k,$s_data)){
+                        $s_data[$k]['flag'] = 0;
+                    }
+                }
+            }
+        }
+        if ($this->request->isPost()){
+            $data = $this->request->post();
+            foreach ($s_data as $k=>$v) {
+                if (!$v['flag']){
+                    return $this->error('项目所属内容还未处理完');
+                }
+            }
+            $cid = session('admin_user.cid');
+            $data['subject_data'] = json_encode($s_data);
+            $data['cid'] = $cid;
+            $data['approval_id'] = $params['approval_id'];
+            $where = [
+                'cid'=>$cid,
+                'user'=>$data['user'],
+            ];
+
+            $flag = LeaveListModel::where($where)->find();
+            if (!$flag){
+                LeaveListModel::create($data);
+            }else{
+                LeaveListModel::where($where)->update($data);
+            }
+            return $this->success('提交成功',url('Approval/certificate',['id'=>$approval_id]));
+        }
+        $realname = AdminUser::getUserById($user)['realname'];
+        $this->assign('realname', $realname);
+        $this->assign('s_data', $s_data);
         return $this->fetch();
     }
 

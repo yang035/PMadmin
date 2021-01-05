@@ -113,7 +113,8 @@ class AdminRole extends Model
             return true;
         }
         // 获取当前角色的权限明细
-        $role_auth = (array)session('role_auth_'.$login['role_id']);
+//        $role_auth = (array)session('role_auth_'.$login['role_id']);//暂时屏蔽
+        $role_auth =  false;
 //        print_r($role_auth);exit();
         if (!$role_auth) {
             $map = [];

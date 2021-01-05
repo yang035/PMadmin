@@ -50,6 +50,10 @@
     {{#  }else{ }}
     <a onclick="read2({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">审核</a>
     {{#  } }}
+    {{#  if(d.approval_id){ }}
+    <a href="{:url('approval/leavefile')}?user={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">数据档案</a>
+    <a href="{:url('approval/leavelist')}?user={{ d.id }}&read=1" class="layui-btn layui-btn-xs layui-btn-normal">离职清单</a>
+    {{#  } }}
 </script>
 <script type="text/javascript">
     layui.use(['jquery','table'], function() {

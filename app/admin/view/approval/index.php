@@ -78,7 +78,7 @@
         <tr>
             <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
             <td class="font12">
-                <strong class="mcolor">{$vo['user_id']}</strong>
+                <strong class="mcolor">{$vo['realname']}</strong>
             </td>
             <td class="font12">{$panel_type[$vo['class_type']]['title']}</td>
             <td class="font12">{$vo['leave_type']}</td>
@@ -124,6 +124,9 @@
                 {if condition="($vo['class_type'] eq 18) && ($vo['status'] eq 2)"}
                 <div class="layui-btn-group" onclick="certificate({$vo['id']})">
                     <a class="layui-btn layui-btn-normal layui-btn-xs">推荐信</a>
+                </div>
+                <div class="layui-btn-group" onclick="leave_file({$vo['user_id']},{$vo['id']})">
+                    <a class="layui-btn layui-btn-normal layui-btn-xs">离职归档</a>
                 </div>
                 {/if}
             </td>
@@ -205,6 +208,11 @@
 
     function certificate(id){
         var open_url = "{:url('Approval/certificate')}?id="+id;
+        window.location.href = open_url;
+    }
+
+    function leave_file(user_id,id){
+        var open_url = "{:url('Approval/leaveFile')}?user="+user_id+"&approval_id="+id;
         window.location.href = open_url;
     }
 

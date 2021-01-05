@@ -183,6 +183,29 @@ class SubjectItem extends Model
         return json_encode($data);
     }
 
+    public static function getOwner($uid){
+        $cid = session('admin_user.cid');
+        $map['cid'] = $cid;
+        $map['status'] = 1;
+        $map['t_type'] = 1;
+        $con = '';
+        $con .= "JSON_CONTAINS_PATH(manager_user,'one', '$.\"$uid\"') or JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') or JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"') or JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"')";
+        $data = self::field('id,name')->where($map)->where($con)->column('name','id');
+        return $data;
+
+        $where = [
+            'cid'=>session('admin_user.cid'),
+            'status'=>1,
+        ];
+        $data = self::field('id,name')->where($where)->select();
+        $tmp = [
+            'id'=>0,
+            'name'=>'其他'
+        ];
+        $data[] = $tmp;
+        return json_encode($data);
+    }
+
     public static function getOption1($id = 0,$type = 0)
     {
         $map = [

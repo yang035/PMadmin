@@ -138,15 +138,21 @@ class Computer extends Admin
         return $this->fetch('itemform');
     }
 
-    public function read($id = 0)
+    public function read()
     {
         $params= $this->request->param();
-        if ($id) {
-            $row = ComputerModel::where('id', $id)->find()->toArray();
+        if (isset($params['id'])) {
+            $row = ComputerModel::where('id', $params['id'])->find();
+        }else{
+            $row = ComputerModel::where('user_id', $params['user'])->find();
+        }
+        if ($row){
             $row['real_name'] = AdminUser::getUserById($row['user_id'])['realname'];
             $this->assign('data_info', $row);
+            $this->assign('real_name', $row['real_name']);
+        }else{
+            return $this->error('不存在电脑资产或者没有登记');
         }
-        $this->assign('real_name', $row['real_name']);
         return $this->fetch();
     }
 
