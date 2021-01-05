@@ -39,6 +39,10 @@
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
     <a onclick="read1({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">查看</a>
     <a href="#" onclick="add_user1('editItem',{{ d.user_id }},{{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
+    {{#  if(d.approval_id){ }}
+    <a href="{:url('approval/leavefile')}?user={{ d.user_id }}&approval_id={{ d.approval_id }}&read=1" class="layui-btn layui-btn-xs layui-btn-normal">数据档案</a>
+    <a href="{:url('approval/leavelist')}?user={{ d.user_id }}&approval_id={{ d.approval_id }}&read=1" class="layui-btn layui-btn-xs layui-btn-normal">离职清单</a>
+    {{#  } }}
 <!--    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
 </script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl2">
@@ -49,10 +53,6 @@
     <span style="color: red">驳回({{ d.check_name }}_{{ d.remark }})</span>
     {{#  }else{ }}
     <a onclick="read2({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">审核</a>
-    {{#  } }}
-    {{#  if(d.approval_id){ }}
-    <a href="{:url('approval/leavefile')}?user={{ d.user_id }}&approval_id={{ d.approval_id }}&read=1" class="layui-btn layui-btn-xs layui-btn-normal">数据档案</a>
-    <a href="{:url('approval/leavelist')}?user={{ d.user_id }}&approval_id={{ d.approval_id }}&read=1" class="layui-btn layui-btn-xs layui-btn-normal">离职清单</a>
     {{#  } }}
 </script>
 <script type="text/javascript">
