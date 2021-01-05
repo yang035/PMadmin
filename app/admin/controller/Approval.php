@@ -2880,6 +2880,15 @@ class Approval extends Admin
 
         $data = [];
         if ($list){
+            $where = [
+                'cid'=>session('admin_user.cid'),
+                'user'=>$list['user_id'],
+            ];
+            $flag = LeaveFileModel::where($where)->find();
+            if (!$flag){
+                return $this->error('请人事先进行离职数据归档');
+            }
+
             $data = db('admin_user')->alias('a')->field('a.id,a.realname,a.job_item,b.idcard,b.start_date,b.end_date')
                 ->join("tb_user_info b", 'a.id = b.user_id', 'left')
                 ->where('a.id',$list['user_id'])->find();

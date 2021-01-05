@@ -1029,7 +1029,12 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
                     $tmp[$kk][] = $k;
                 }
             }
-            $t = $tmp[$user];
+            if (isset($tmp[$user])){
+                $t = $tmp[$user];
+            }else{
+                return $this->error('用户不存在或者已禁用');
+            }
+
             $tmp = $this->listPeopleProject($t);
 //            print_r($t);
 
