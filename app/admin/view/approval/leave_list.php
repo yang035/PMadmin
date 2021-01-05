@@ -151,7 +151,7 @@
     }
 
     function computer_read(user) {
-        var open_url = "{:url('Computer/read')}?user=22";
+        var open_url = "{:url('Computer/read')}?user="+user;
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {

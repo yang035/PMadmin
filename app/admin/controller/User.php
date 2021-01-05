@@ -11,6 +11,7 @@ use app\admin\model\WorkCat;
 use app\admin\model\WorkItem;
 use app\common\service\Service;
 use think\Db;
+use think\Exception;
 use think\Validate;
 use app\admin\model\JobCat as JobCatModel;
 use app\admin\model\JobItem as JobItemModel;
@@ -637,5 +638,50 @@ class User extends Admin
         $this->assign('pages', $pages);
         $this->assign('d', urldecode($params['search_date']));
         return $this->fetch();
+    }
+
+    public function status() {
+        $val   = input('param.val');
+        $ids   = input('param.ids/a') ? input('param.ids/a') : input('param.id/a');
+        $table = input('param.table');
+        $f = input('param.f');
+        $f = empty($f) ? 'status' : $f;
+        $field = input('param.field', $f);
+
+        if (empty($ids)) {
+            return $this->error('参数传递错误[1]！');
+        }
+        if (empty($table)) {
+            return $this->error('参数传递错误[2]！');
+        }
+        // 以下表操作需排除值为1的数据
+        if ($table == 'admin_menu' || $table == 'admin_user' || $table == 'admin_role' || $table == 'admin_module') {
+            if (in_array('1', $ids) || ($table == 'admin_menu' && in_array('2', $ids))) {
+                return $this->error('系统限制操作');
+            }
+        }
+        // 获取主键
+        $pk = Db::name($table)->getPk();
+        $map = [];
+        $map[$pk] = ['in', $ids];
+        $map1['user_id'] = ['in', $ids];
+
+        //事务开始
+        Db::startTrans();
+        try{
+            $res = Db::name($table)->where($map)->setField($field, $val);
+            Db::name('user_info')->where($map1)->setField($field, $val);
+            Db::name('computer')->where($map1)->setField($field, $val);
+            //提交事务
+            Db::commit();
+        }catch (Exception $e){
+            //回滚事务
+            Db::rollback();
+        }
+
+        if ($res === false) {
+            return $this->error('状态设置失败');
+        }
+        return $this->success('状态设置成功');
     }
 }

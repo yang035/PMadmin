@@ -3016,7 +3016,15 @@ class Approval extends Admin
         ];
         $flag = LeaveFileModel::where($where)->find();
         if ($flag){
-            return $this->redirect(url('Approval/leaveList',['user'=>$user,'approval_id'=>$approval_id,'read'=>1]));
+            if (isset($params['read'])){
+                $realname = AdminUser::getUserById($user)['realname'];
+                $flag['ml_data'] = json_decode($flag['ml_data'],true);
+                $this->assign('tmp', $flag);
+                $this->assign('realname', $realname);
+                return $this->fetch();
+            }else{
+                return $this->redirect(url('Approval/leaveList',['user'=>$user,'approval_id'=>$approval_id,'read'=>1]));
+            }
         }
         $s_c = new Score();
         $tmp2 = $s_c->listPeoplePM($user,1);

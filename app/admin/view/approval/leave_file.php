@@ -54,24 +54,26 @@
     </div>
 </div>
 <hr>
+{neq name="$Request.param.read" value="1"}
 <div class="layui-form">
-<form class="layui-form" action="{:url()}" method="post">
-    <div class="layui-form-item">
-        <label class="layui-form-label">备注</label>
-        <div class="layui-input-block">
-            <textarea  class="layui-textarea field-remark" name="remark" lay-verify="" autocomplete="off" placeholder="[选填]备注说明"></textarea>
+    <form class="layui-form" action="{:url()}" method="post">
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <textarea  class="layui-textarea field-remark" name="remark" lay-verify="" autocomplete="off" placeholder="[选填]备注说明"></textarea>
+            </div>
         </div>
-    </div>
-    <div class="layui-form-item">
-        <div class="layui-input-block">
-            <input type="hidden" name="user" value="{$Request.param.user}">
-            <input type="hidden" name="approval_id" value="{$Request.param.approval_id}">
-            <button type="submit" class="layui-btn layui-btn-normal normal_btn">归档提交(下一步)</button>
-            <a href="javascript:history.back()" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <input type="hidden" name="user" value="{$Request.param.user}">
+                <input type="hidden" name="approval_id" value="{$Request.param.approval_id}">
+                <button type="submit" class="layui-btn layui-btn-normal normal_btn">归档提交(下一步)</button>
+                <a href="javascript:history.back()" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
+            </div>
         </div>
-    </div>
-</form>
+    </form>
 </div>
+{/neq}
 {include file="block/layui" /}
 <script src="__PUBLIC_JS__/jquery.select.js?v="></script>
 <script src="__PUBLIC_JS__/SelectBox.min.js?v="></script>
