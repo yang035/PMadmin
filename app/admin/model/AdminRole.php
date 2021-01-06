@@ -114,7 +114,11 @@ class AdminRole extends Model
         }
         // 获取当前角色的权限明细
 //        $role_auth = (array)session('role_auth_'.$login['role_id']);//暂时屏蔽
-        $role_auth =  false;
+//        $role_auth =  false;
+        $cid = session('admin_user.cid');
+        $map['id'] = $cid;
+        $com = AdminCompany::where($map)->value('auth');
+        $role_auth = json_decode($com, true);
 //        print_r($role_auth);exit();
         if (!$role_auth) {
             $map = [];
