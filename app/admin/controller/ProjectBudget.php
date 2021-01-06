@@ -85,7 +85,7 @@ class ProjectBudget extends Admin
             set_time_limit(0);
             $excel = \service('Excel');
             $format = array('A' => 'line', 'B' => 'name', 'C' => 'unit', 'D' => 'yusuan_shuliang', 'E' => 'yusuan_danjia', 'F' => 'yusuan_zongjia', 'G' => 'yusuan_fudong');
-            $checkformat = array('A' => '序号', 'B' => '名称及规格', 'C' => '单位', 'D' => '数量', 'E' => '市场价', 'F' => '合计', 'G' => '浮动比例%');
+            $checkformat = array('A' => '序号', 'B' => '名称及规格', 'C' => '单位', 'D' => '预算数量', 'E' => '预算单价(元)', 'F' => '预算总价(元)', 'G' => '预算浮动比例%');
             $res = $excel->readUploadFile($file_name, $format, 8050, $checkformat);
             $cid = session('admin_user.cid');
             if ($res['status'] == 0) {
