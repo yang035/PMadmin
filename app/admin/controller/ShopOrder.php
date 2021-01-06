@@ -245,6 +245,7 @@ class ShopOrder extends Admin
 
         $peizhi = config('alipay');
         $client = new Client(Client::ALIPAY, $peizhi);
+        $flag = false;
         Db::startTrans();
         try {
             $pay_url = $client->refund($refundData);
@@ -278,13 +279,14 @@ class ShopOrder extends Admin
             // 提交事务
             Db::commit();
         } catch (\Exception $e) {
+            $msg = $e->getMessage();
             // 回滚事务
             Db::rollback();
         }
         if ($flag) {
             return $this->success("退款成功{$this->score_value}", 'index');
         } else {
-            return $this->error('退款失败！');
+            return $this->error($msg);
         }
     }
 }

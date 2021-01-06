@@ -1126,8 +1126,9 @@ class Subject extends Admin
 
     public function progressReview($id)
     {
+        $params = $this->request->param();
         $row = $flow_cat = $flow = $subject_flow = $score = $score_arr = [];
-        $row = ItemModel::where('id', $id)->find()->toArray();
+        $row = ItemModel::where('id', $params['id'])->find();
         $partner_user_arr = json_decode($row['partner_user'],true);
         if (!$partner_user_arr){
             return $this->error("{$row['name']},人员不存在，请先配置项目人员");
@@ -1143,6 +1144,7 @@ class Subject extends Admin
             $p = $this->request->post();
             $s = $p;
             $pp = [];
+            $uid = session('admin_user.uid');
             foreach ($p as $k=>$v){
                 if (!is_int($k)){
                     unset($p[$k]);
@@ -1152,7 +1154,18 @@ class Subject extends Admin
                         'ratio'=>$v,
                         'agree'=>1,
                         'step'=>$s['step'],
+                        "step_{$s['step']}"=>$uid,
                     ];
+                }
+            }
+            if (2 == $s['step']){
+                $w = [
+                    'cid'=>session('admin_user.cid'),
+                    'subject_id'=>$s['id'],
+                ];
+                $row = SubjectFlowModel::where($w)->order('update_time desc')->find();
+                if ($row['step_1'] == $uid){
+                    return $this->error('二级审核与一级审核不能是同一人');
                 }
             }
             $flow_model = new SubjectFlowModel();
@@ -1210,7 +1223,7 @@ class Subject extends Admin
                 }
             }
 
-            return $this->error('操作成功');
+            return $this->success('操作成功','chengguo');
         }
 
         $flow = json_decode($row['small_major_deal'],true);
