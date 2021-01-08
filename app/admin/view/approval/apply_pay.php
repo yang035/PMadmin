@@ -23,81 +23,20 @@
     <div class="layui-card">
         <div class="layui-card-body">
             <blockquote class="layui-elem-quote" style="color: grey">
-                {if condition="($Request.param.ct eq 4) && $list1"}
+                {if condition="($Request.param.ct eq 20) && $list1" /}
                     申请时间：{$list1['create_time']|date='Y-m-d H:i:s',###}<br>
                     姓名：{$list1['real_name']}<br>
                     开始时间：{$list1['start_time']}<br>
                     结束时间：{$list1['end_time']}<br>
                     项目名称：{$list1['project_name']}<br>
-                    地点：{$list1['address']}<br>
-                    同行人：{$list1['fellow_user']}<br>
-                    事由：{$list1['reason']}<br>
-                    附件说明：
-                    {notempty name="list1['attachment'][0]"}
-                    <!--            <div class="image-list">-->
-                    <ul>
-                        {volist name="list1['attachment']" id="vo"}
-                        <!--                <div class="cover"><img src="{$vo}" style="height: 30px;width: 30px;"></div>-->
-                        <li>&nbsp;&nbsp;&nbsp;&nbsp;<a target="_blank" href="{$vo}" style="color: #5c90d2">附件{$i}</a></li>
-                        {/volist}
-                    </ul>
-                    <!--            </div>-->
-                    {else/}
-                    <span>无</span>
-                    {/notempty}
+                    送货日期：{$list1['date']}<br>
+                    清单明细：<br>
+                    {volist name="$list1['detail']" id="vo"}
+                    说明：{$vo['content']}&nbsp;&nbsp;|&nbsp;&nbsp;计量：{$vo['num']}{$unit_type[$vo['unit']]}&nbsp;&nbsp;|&nbsp;&nbsp;单价：{$vo['per_price']}元（合计：{$vo['num']*$vo['per_price']}元）<br>
+                    {/volist}
                     <br>
-                    审批人：{$list1['send_user']}<br>
-                    抄送人：{$list1['copy_user']}<br>
-                    结果：{$approval_status[$list1['status']]}<br>
-                    备注：{$list1['mark']}<br>
-                    批示时间：{$list1['update_time']|date='Y-m-d H:i:s',###}<br>
-
-                    <div class="layui-card-header">报告记录</div>
-                    <ul class="layui-timeline">
-                        {volist name="report_info" id="vo"}
-                        <li class="layui-timeline-item">
-                            <i class="layui-icon layui-timeline-axis"></i>
-                            <div class="layui-timeline-content layui-text">
-                                <div class="layui-timeline-title">
-                                    <span style="color: red">[{$vo['create_time']}]</span>
-                                    <br>
-                                    {$vo['mark']}
-                                    <br>
-                                    {notempty name="vo['attachment']"}
-                                    <ul>
-                                        {volist name="vo['attachment']" id="v"}
-                                        <li>
-                                            <a target="_blank" href="{$v}">附件{$i}</a>
-                                        </li>
-                                        {/volist}
-                                    </ul>
-                                    <br>
-                                    {/notempty}
-                                    <ul>
-                                        {volist name="vo['reply']" id="v"}
-                                        <li>
-                                            <span style="color: grey">[{$v['create_time']}回复]</span><br>
-                                            {$v['content']}
-                                        </li>
-                                        {/volist}
-                                    </ul>
-                                </div>
-                            </div>
-                        </li>
-                        {/volist}
-                    </ul>
-
-                {elseif condition="($Request.param.ct eq 3) && $list1" /}
-                    申请时间：{$list1['create_time']|date='Y-m-d H:i:s',###}<br>
-                    姓名：{$list1['real_name']}<br>
-                    开始时间：{$list1['start_time']}<br>
-                    结束时间：{$list1['end_time']}<br>
-                    项目名称：{$list1['project_name']}<br>
-                    费用类型：{$cost_type[$list1['type']]}<br>
-                    金额：{$list1['money']}<br>
-                    收款单位：{$list1['payee']}<br>
-                    开户银行：{$list1['bank']}<br>
-                    开户账号：{$list1['card_num']}<br>
+                    总计：{$list1['money']}元<br>
+                    施工员：{$list1['shigong_user']}<br>
                     事由：{$list1['reason']}<br>
                     附件说明：
                     {notempty name="list1['attachment'][0]"}
@@ -123,31 +62,18 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">报销明细</label>
-        <div class="layui-input-block fl" style="margin-left: 0px">
-            <div class="layui-input-inline" style="width: 120px;">
-                <select name="type[]" class="field-type" type="select">
-                    {$expense_type}
-                </select>
-            </div>
-            <div class="layui-input-inline fl" style="width: 100px;">
-                <input type="number" class="layui-input field-amount" name="amount[]" onblur="amout_sum()" autocomplete="off" placeholder="金额">
-            </div>
-            <div class="layui-form-mid">元</div>
-            <div class="layui-input-inline" style="width: 300px;">
-                <input type="text" class="layui-input field-mark" name="mark[]" autocomplete="off" placeholder="说明">
-            </div>
-        </div>
-    </div>
-    <div class="new_task">
-        <a href="javascript:void(0);" class="aicon ai-tianjia field-guige-add" style="float: left;margin-left:650px;font-size: 30px;"></a>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">合计</label>
+        <label class="layui-form-label">支付金额</label>
         <div class="layui-input-inline" style="width: 200px;">
-            <input type="text" class="layui-input field-total" name="total" value="0" readonly>
+            <input type="text" class="layui-input field-total" name="total" value="{$list1['money']}" readonly>
         </div>
         <div class="layui-form-mid">元</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-inline">
+            <textarea type="text" class="layui-textarea field-reason" name="reason" autocomplete="off" placeholder="请输入备注"></textarea>
+        </div>
+        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">附件说明</label>
@@ -174,7 +100,6 @@
                 </div>
             </div>
         </div>
-        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">审批人</label>
@@ -337,27 +262,6 @@
                     var body = layer.getChildFrame('body', index);  //巧妙的地方在这里哦
                 }
             });
-        });
-
-        $(".field-guige-add").click(function(){
-            $(".new_task").before("<div class=\"layui-form-item\">\n" +
-                "        <label class=\"layui-form-label\">报销明细</label>\n" +
-                "        <div class=\"layui-input-block fl\" style=\"margin-left: 0px\">\n" +
-                "            <div class=\"layui-input-inline\" style=\"width: 120px;\">\n" +
-                "                <select name=\"type[]\" class=\"field-type\" type=\"select\">\n" +
-                "                    {$expense_type}\n" +
-                "                </select>\n" +
-                "            </div>\n" +
-                "            <div class=\"layui-input-inline fl\" style=\"width: 100px;\">\n" +
-                "                <input type=\"number\" class=\"layui-input field-amount\" name=\"amount[]\" onblur=\"amout_sum()\" autocomplete=\"off\" placeholder=\"金额\">\n" +
-                "            </div>\n" +
-                "            <div class=\"layui-form-mid\">元</div>\n" +
-                "            <div class=\"layui-input-inline\" style=\"width: 300px;\">\n" +
-                "                <input type=\"text\" class=\"layui-input field-mark\" name=\"mark[]\" autocomplete=\"off\" placeholder=\"说明\">\n" +
-                "            </div>\n" +
-                "        </div>\n" +
-                "    </div>");
-            form.render();
         });
 
         //创建监听函数

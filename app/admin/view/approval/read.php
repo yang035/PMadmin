@@ -176,6 +176,43 @@
                 批示时间：{$list1['update_time']|date='Y-m-d H:i:s',###}<br>
             </blockquote>
             {/if}
+            {if condition="$class_type eq 21"}
+            <blockquote class="layui-elem-quote" style="color: grey">
+                申请时间：{$list1['create_time']|date='Y-m-d H:i:s',###}<br>
+                姓名：{$list1['real_name']}<br>
+                开始时间：{$list1['start_time']}<br>
+                结束时间：{$list1['end_time']}<br>
+                项目名称：{$list1['project_name']}<br>
+                送货日期：{$list1['date']}<br>
+                清单明细：<br>
+                {volist name="$list1['detail']" id="vo"}
+                说明：{$vo['content']}&nbsp;&nbsp;|&nbsp;&nbsp;计量：{$vo['num']}{$unit_type[$vo['unit']]}&nbsp;&nbsp;|&nbsp;&nbsp;单价：{$vo['per_price']}元（合计：{$vo['num']*$vo['per_price']}元）<br>
+                {/volist}
+                <br>
+                总计：{$list1['money']}元<br>
+                施工员：{$list1['shigong_user']}<br>
+                事由：{$list1['reason']}<br>
+                附件说明：
+                {notempty name="list1['attachment'][0]"}
+                <!--            <div class="image-list">-->
+                <ul>
+                    {volist name="list1['attachment']" id="vo"}
+                    <!--                <div class="cover"><img src="{$vo}" style="height: 30px;width: 30px;"></div>-->
+                    <li>&nbsp;&nbsp;&nbsp;&nbsp;<a target="_blank" href="{$vo}" style="color: #5c90d2">附件{$i}</a></li>
+                    {/volist}
+                </ul>
+                <!--            </div>-->
+                {else/}
+                <span>无</span>
+                {/notempty}
+                <br>
+                审批人：{$list1['send_user']}<br>
+                抄送人：{$list1['copy_user']}<br>
+                结果：{$approval_status[$list1['status']]}<br>
+                备注：{$list1['mark']}<br>
+                批示时间：{$list1['update_time']|date='Y-m-d H:i:s',###}<br>
+            </blockquote>
+            {/if}
             申请时间：{$data_list['create_time']|date='Y-m-d H:i:s',###}<br>
             姓名：{$data_list['real_name']}<br>
             开始时间：{$data_list['start_time']}<br>
@@ -313,6 +350,19 @@
                 总金额：{$data_list['total_money']}<br>
                 已支付金额：{$data_list['has_money']}<br>
                 发票备注栏信息：{$data_list['infomation']}<br>
+                {/case}
+                {case value="20"}
+                送货日期：{$data_list['date']}<br>
+                清单明细：<br>
+                {volist name="$data_list['detail']" id="vo"}
+                说明：{$vo['content']}&nbsp;&nbsp;|&nbsp;&nbsp;计量：{$vo['num']}{$unit_type[$vo['unit']]}&nbsp;&nbsp;|&nbsp;&nbsp;单价：{$vo['per_price']}元（合计：{$vo['num']*$vo['per_price']}元）<br>
+                {/volist}
+                <br>
+                总计：{$data_list['money']}元<br>
+                施工员：{$data_list['shigong_user']}<br>
+                {/case}
+                {case value="21"}
+                支付金额：{$data_list['total']} 元<br>
                 {/case}
             {/switch}
             事由：{$data_list['reason']}<br>

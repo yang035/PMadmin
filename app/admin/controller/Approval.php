@@ -11,6 +11,7 @@ namespace app\admin\controller;
 use app\admin\model\AdminDepartment;
 use app\admin\model\Approval as ApprovalModel;
 use app\admin\model\ApprovalBills;
+use app\admin\model\ApprovalWaybill;
 use app\admin\model\ApprovalLeave as LeaveModel;
 use app\admin\model\ApprovalBackleave as BackleaveModel;
 use app\admin\model\ApprovalExpense as ExpenseModel;
@@ -42,6 +43,8 @@ use app\admin\model\UserInfo;
 use app\admin\model\LeaveFile as LeaveFileModel;
 use app\admin\model\LeaveList as LeaveListModel;
 use app\admin\model\SubjectItem as SubjectItemModel;
+use app\admin\model\MaterialPrice;
+use app\admin\model\ApprovalApplypay;
 use think\Db;
 
 
@@ -138,7 +141,7 @@ class Approval extends Admin
         $cid = session('admin_user.cid');
         $map['cid'] = $cid;
         $panel_type1 = $panel_type = config('other.panel_type');
-        unset($panel_type1[2]);
+        unset($panel_type1[2],$panel_type1[21]);
         $approval_status = config('other.approval_status');
         $params['atype'] = isset($params['atype']) ? $params['atype'] : 1;
         if (1 == $params['atype']) {
@@ -1748,6 +1751,281 @@ class Approval extends Admin
         return $this->fetch();
     }
 
+    public function waybill()
+    {
+        $uid = session('admin_user.uid');
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            if ('' == $data['project_id']){
+                return $this->error('请选择项目');
+            }
+            if (empty($data['shigong_user'])){
+                return $this->error('施工员不存在，请输入正确姓名');
+            }
+//            $data['content'] = array_unique(array_filter($data['content']));
+            $data['content'] = array_filter($data['content']);
+            // 验证
+            $result = $this->validate($data, 'ApprovalWaybill');
+            if ($result !== true) {
+                return $this->error($result);
+            }
+            unset($data['id']);
+
+            $send_user = html_entity_decode($data['send_user']);
+            $send_user1 = json_decode($send_user,true);
+            array_unshift($send_user1,[$data['shigong_user']=>'']);//在头部插入元素
+//            array_pop($send_user1);//删除尾部的元素
+            $send_user2 = [];
+            foreach ($send_user1 as $k=>$v) {
+                $send_user2 += $v;
+            }
+//            $send_user1 = array_values(array_unique($send_user1, SORT_REGULAR));
+//            $send_user2 = [];
+//            foreach ($send_user1 as $k=>$v) {
+//                $send_user2 += $v;
+//            }
+
+            Db::startTrans();
+            try {
+                $approve = [
+                    'project_id' => $data['project_id'],
+                    'class_type' => $data['class_type'],
+                    'cid' => session('admin_user.cid'),
+                    'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
+                    'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
+                    'time_long' => $data['time_long'],
+                    'user_id' => $uid,
+//                    'send_user' => user_array($data['send_user']),
+                    'send_user' => json_encode($send_user2),
+                    'copy_user' => user_array($data['copy_user']),
+                ];
+                $res = ApprovalModel::create($approve);
+
+                $su = [];
+//            $send_user1 = [$send_user1];
+                foreach ($send_user1 as $k=>$v) {
+                    $su[$k] = [
+                        'aid' => $res['id'],
+                        'flow_num' => $k,
+                        'send_user' => json_encode($v),
+                    ];
+                }
+                $send_user_model = new ApprovalSenduser();
+                $send_user_model->saveAll($su);
+
+                $leave = [
+                    'aid' => $res['id'],
+                    'date' => $data['date'],
+                    'money' => $data['money'],
+                    'shigong_user' => $data['shigong_user'],
+                    'reason' => $data['reason'],
+                    'attachment' => $data['attachment'],
+                ];
+//                $leave['money'] = 0;
+                if ($data['content']) {
+                    foreach ($data['content'] as $k => $v) {
+                        $leave['detail'][$k]['content'] = $v;
+                        $leave['detail'][$k]['num'] = !empty($data['num'][$k]) ? $data['num'][$k] : 0;
+                        $leave['detail'][$k]['unit'] = !empty($data['unit'][$k]) ? $data['unit'][$k] : 1;
+                        $leave['detail'][$k]['per_price'] = !empty($data['per_price'][$k]) ? $data['per_price'][$k] : 0;
+//                        $leave['money'] += $leave['detail'][$k]['num']*$leave['detail'][$k]['per_price'];
+                    }
+                }
+                $leave['detail'] = json_encode($leave['detail']);
+                $flag = ApprovalWaybill::create($leave);
+                // 提交事务
+                Db::commit();
+            } catch (\Exception $e) {
+                // 回滚事务
+                Db::rollback();
+            }
+            if ($flag) {
+                return $this->success("操作成功{$this->score_value}", 'index');
+            } else {
+                return $this->error('添加失败！');
+            }
+        }
+        $this->assign('mytask', MaterialPrice::getP($uid));
+        $this->assign('unit_option', ApprovalWaybill::getUnitOption());
+        $this->assign('material_p', MaterialPrice::getMaterialList($uid,776));
+        return $this->fetch();
+    }
+
+    public function applyPay()
+    {
+        $params = $this->request->param();
+        if (isset($params['id']) && !empty($params['id'])) {
+            $list1 = [];
+            if (20 == $params['ct']) {
+                $table = 'tb_approval_waybill';
+                $f = 'b.reason,b.date,b.detail,b.money,b.shigong_user,b.attachment';
+                $map = [
+                    'a.id' => $params['id']
+                ];
+                $fields = 'a.*,' . $f;
+                $list1 = db('approval')->alias('a')->field($fields)
+                    ->join("{$table} b", 'a.id = b.aid', 'left')
+                    ->where($map)->find();
+                $list1['attachment'] = explode(',', substr($list1['attachment'], 0, -1));
+                $list1['real_name'] = AdminUser::getUserById($list1['user_id'])['realname'];
+                $list1['shigong_user'] = AdminUser::getUserById($list1['shigong_user'])['realname'];
+                $list1['send_user'] = $this->deal_data($list1['send_user']);
+                $list1['copy_user'] = $this->deal_data($list1['copy_user']);
+                $list1['detail'] = json_decode($list1['detail'], true);
+                if ($list1['project_id']) {
+                    $project_data = ProjectModel::getRowById($list1['project_id']);
+                } else {
+                    $project_data = [
+                        'name' => '其他',
+                    ];
+                }
+//print_r($list1);exit();
+                $unit2_type = config('other.unit2');
+                $this->assign('unit_type', $unit2_type);
+                $list1['project_name'] = $project_data['name'];
+                $approval_status = config('other.approval_status');
+                $unit2_type = config('other.unit2');
+                $this->assign('unit_type', $unit2_type);
+                $this->assign('approval_status', $approval_status);
+                $this->assign('list1', $list1);
+            }
+
+            if ($this->request->isPost()) {
+                $data = $this->request->post();
+
+                $send_user = html_entity_decode($data['send_user']);
+                $send_user1 = json_decode($send_user, true);
+                $send_user1 = array_values(array_unique($send_user1, SORT_REGULAR));
+                $send_user2 = [];
+                foreach ($send_user1 as $k => $v) {
+                    $send_user2 += $v;
+                }
+                // 启动事务
+                Db::startTrans();
+                try {
+                    $approve = [
+                        'project_id' => $list1['project_id'],
+                        'class_type' => $data['class_type'],
+                        'cid' => session('admin_user.cid'),
+                        'start_time' => $list1['start_time'],
+                        'end_time' => date('Y-m-d H:i:s'),
+                        'time_long' => $list1['time_long'],
+                        'user_id' => session('admin_user.uid'),
+                        'send_user' => json_encode($send_user2),
+                        'copy_user' => user_array($data['copy_user']),
+                    ];
+//                print_r($approve);exit();
+                    $res = ApprovalModel::create($approve);
+
+                    $su = [];
+                    foreach ($send_user1 as $k => $v) {
+                        $su[$k] = [
+                            'aid' => $res['id'],
+                            'flow_num' => $k,
+                            'send_user' => json_encode($v),
+                        ];
+                    }
+                    $send_user_model = new ApprovalSenduser();
+                    $send_user_model->saveAll($su);
+
+                    $leave = [
+                        'aid' => $res['id'],
+                        'a_aid' => $list1['id'],
+                        'reason' => $list1['reason'],
+                        'attachment' => $data['attachment'],
+                        'total' => $data['total'],
+                    ];
+                    $flag = ApprovalApplypay::create($leave);
+                    // 提交事务
+                    Db::commit();
+                } catch (\Exception $e) {
+                    // 回滚事务
+                    Db::rollback();
+                }
+                if ($flag) {
+                    return $this->success("操作成功{$this->score_value}", 'index');
+                } else {
+                    return $this->error('添加失败！');
+                }
+            }
+            return $this->fetch('apply_pay');
+        } else {
+            if ($this->request->isPost()) {
+                $data = $this->request->post();
+                if ('' == $data['project_id']) {
+                    return $this->error('请选择项目');
+                }
+                if (empty($data['attachment'])) {
+                    return $this->error('请上传附件');
+                }
+                $data['amount'] = array_filter($data['amount']);
+                // 验证
+                $result = $this->validate($data, 'ApprovalExpense');
+                if ($result !== true) {
+                    return $this->error($result);
+                }
+                unset($data['id']);
+
+                $send_user = html_entity_decode($data['send_user']);
+                $send_user1 = json_decode($send_user, true);
+                $send_user1 = array_values(array_unique($send_user1, SORT_REGULAR));
+                $send_user2 = [];
+                foreach ($send_user1 as $k => $v) {
+                    $send_user2 += $v;
+                }
+
+                // 启动事务
+                Db::startTrans();
+                try {
+                    $approve = [
+                        'project_id' => $data['project_id'],
+                        'class_type' => $data['class_type'],
+                        'cid' => session('admin_user.cid'),
+                        'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
+                        'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
+                        'time_long' => $data['time_long'],
+                        'user_id' => session('admin_user.uid'),
+                        'send_user' => json_encode($send_user2),
+                        'copy_user' => user_array($data['copy_user']),
+                    ];
+                    $res = ApprovalModel::create($approve);
+
+
+                    $su = [];
+                    foreach ($send_user1 as $k => $v) {
+                        $su[$k] = [
+                            'aid' => $res['id'],
+                            'flow_num' => $k,
+                            'send_user' => json_encode($v),
+                        ];
+                    }
+                    $send_user_model = new ApprovalSenduser();
+                    $send_user_model->saveAll($su);
+
+                    $leave = [
+                        'aid' => $res['id'],
+//                        'type' => $data['type'],
+                        'reason' => $data['reason'],
+                        'attachment' => $data['attachment'],
+                        'total' => $data['total'],
+                    ];
+                    $flag = ApprovalApplypay::create($leave);
+                    // 提交事务
+                    Db::commit();
+                } catch (\Exception $e) {
+                    // 回滚事务
+                    Db::rollback();
+                }
+                if ($flag) {
+                    return $this->success("操作成功{$this->score_value}", 'index');
+                } else {
+                    return $this->error('添加失败！');
+                }
+            }
+            return $this->fetch();
+        }
+    }
+
     public function tixian()
     {
         $pool = FondPoolModel::getSta();
@@ -2073,6 +2351,14 @@ class Approval extends Admin
             case 19:
                 $table = 'tb_approval_invoice';
                 $f = 'b.reason,b.name,b.identity_number,b.address,b.bank,b.card_num,b.type,b.money,b.contract_number,b.total_money,b.has_money,b.infomation,b.attachment';
+                break;
+            case 20:
+                $table = 'tb_approval_waybill';
+                $f = 'b.reason,b.date,b.detail,b.money,b.shigong_user,b.attachment';
+                break;
+            case 21:
+                $table = 'tb_approval_applypay';
+                $f = 'b.a_aid,b.type,b.reason,b.detail,b.total,b.attachment';
                 break;
             default:
                 $table = 'tb_approval_leave';
@@ -2708,6 +2994,50 @@ class Approval extends Admin
             case 19:
                 $cost_type = config('other.invoice_type');
                 $this->assign('invoice_type', $cost_type);
+                break;
+            case 20:
+                $list['detail'] = json_decode($list['detail'], true);
+                $list['shigong_user'] = AdminUser::getUserById($list['shigong_user'])['realname'];
+                $unit2_type = config('other.unit2');
+                $this->assign('unit_type', $unit2_type);
+                break;
+            case 21:
+                $ct = ApprovalModel::where('id',$list['a_aid'])->column('class_type');
+                if ($ct){
+                    if (!empty($list['a_aid']) && $ct[0] == 20){
+                        $table = 'tb_approval_waybill';
+                        $f = 'b.reason,b.date,b.detail,b.money,b.shigong_user,b.attachment';
+                        $map = [
+                            'a.id' => $list['a_aid']
+                        ];
+                        $fields = 'a.*,' . $f;
+                        $list1 = db('approval')->alias('a')->field($fields)
+                            ->join("{$table} b", 'a.id = b.aid', 'left')
+                            ->where($map)->find();
+                        $list1['attachment'] = explode(',', substr($list1['attachment'], 0, -1));
+                        $list1['real_name'] = AdminUser::getUserById($list1['user_id'])['realname'];
+                        $list1['shigong_user'] = AdminUser::getUserById($list1['shigong_user'])['realname'];
+                        $list1['deal_user'] = $this->deal_data($list1['deal_user']);
+                        $list1['send_user'] = $this->deal_data($list1['send_user']);
+                        $list1['copy_user'] = $this->deal_data($list1['copy_user']);
+                        if ($list1['project_id']){
+                            $project_data = ProjectModel::getRowById($list1['project_id']);
+                        }else{
+                            $project_data = [
+                                'name'=>'其他',
+                            ];
+                        }
+                        $list1['project_name'] = $project_data['name'];
+                    }else{
+                        $list1 = [];
+                    }
+                }else{
+                    $ct[0] = 0;
+                    $list1 = [];
+                }
+
+                $this->assign('ct', $ct[0]);
+                $this->assign('list1', $list1);
                 break;
             default:
                 break;

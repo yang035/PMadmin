@@ -228,6 +228,14 @@ return [
             'title'=>'申请开票',
             'href'=>'admin/Approval/Invoice'
         ],
+        20=>[
+            'title'=>'送货单',
+            'href'=>'admin/Approval/waybill'
+        ],
+        21=>[
+            'title'=>'支付申请',
+            'href'=>'admin/Approval/applyPay'
+        ],
     ],
     'car_type' => [
         1 =>'车辆1',
