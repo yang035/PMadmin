@@ -300,12 +300,26 @@ class UserInfo extends Admin
             $row['jiaoyu'] = json_decode($row['jiaoyu'],true);
             $row['peixun'] = json_decode($row['peixun'],true);
             $row['gongzuo'] = json_decode($row['gongzuo'],true);
+
+            $suffix = config('upload.upload_image_ext');
+            $suffix = explode(',',$suffix);
+
             if (!empty($row['attachment'])){
                 $attachment = explode(',',$row['attachment']);
                 $row['attachment_show'] = array_filter($attachment);
+                $tmp = [];
+                foreach ($row['attachment_show'] as $kkk=>$vvv) {
+                    $tmp[$kkk]['path'] = $vvv;
+                    $tmp[$kkk]['suffix'] = explode('.', $vvv)[1];
+                    $tmp[$kkk]['is_img'] = true;
+                    if (!in_array($tmp[$kkk]['suffix'],$suffix)){
+                        $tmp[$kkk]['is_img'] = false;
+                    }
+                }
+                $row['attachment_show'] = $tmp;
             }
 
-//            print_r($row);
+//            print_r($row['attachment_show']);
             $this->assign('data_info', $row);
         }
         $this->assign('sex_type', UserInfoModel::getSexOption());

@@ -371,7 +371,11 @@
                     {notempty name="data_info['attachment_show']"}
                     <div class="image-list">
                         {volist name="data_info['attachment_show']" id="vo"}
-                        <div class="cover"><img src="{$vo}" style="height: 30px;width: 30px;"></div>
+                        {eq name="$vo['is_img']" value="1"}
+                        <div class="cover"><img src="{$vo['path']}" style="height: 30px;width: 30px;"></div>
+                        {else/}
+                        <a class="mcolor" href="{$vo['path']}">附件.{$vo['suffix']}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                        {/eq}
                         {/volist}
                     </div>
                     {/notempty}

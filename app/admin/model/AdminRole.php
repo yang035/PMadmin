@@ -113,8 +113,36 @@ class AdminRole extends Model
             return true;
         }
         // 获取当前角色的权限明细
+        $role_auth = (array)session('role_auth_'.$login['role_id']);//暂时屏蔽
+        if (!$role_auth) {
+            $map = [];
+            $map['id'] = $login['role_id'];
+            $auth = self::where($map)->value('auth');
+            if (!$auth) {
+                return false;
+            }
+            $role_auth = json_decode($auth, true);
+            // 非开发模式，缓存数据
+            if (config('develop.app_debug') == 0) {
+                session('role_auth_'.$login['role_id'], $role_auth);
+            }
+        }
+        if (!$role_auth) return false;
+        return in_array($id, $role_auth);
+    }
+
+    public static function checkAuth1($id = 0)
+    {
+        $login = session('admin_user');
+        // 超级管理员直接返回true
+        if ($login['uid'] == '1' || $login['role_id'] == '1') {
+            return true;
+        }
+        // 获取当前角色的权限明细
 //        $role_auth = (array)session('role_auth_'.$login['role_id']);//暂时屏蔽
-//        $role_auth =  false;
+//        print_r($login['role_id']);
+//        print_r($role_auth);
+        $role_auth =  false;
         $cid = session('admin_user.cid');
         $map['id'] = $cid;
         $com = AdminCompany::where($map)->value('auth');

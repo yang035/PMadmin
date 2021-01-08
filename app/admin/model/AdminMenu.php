@@ -101,7 +101,7 @@ class AdminMenu extends Model
             foreach ($data as $k => $v) {
                 if ($v['pid'] == $pid) {
                     // 过滤没访问权限的节点
-                    if (!RoleModel::checkAuth($v['id'])) {
+                    if (!RoleModel::checkAuth1($v['id'])) {
                         unset($data[$k]);
                         continue;
                     }
