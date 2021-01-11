@@ -157,6 +157,9 @@ class Approval extends Admin
             if (!empty($params['class_type'])) {
                 $map['class_type'] = $params['class_type'];
             }
+            if (!empty($params['id'])) {
+                $map['id'] = $params['id'];
+            }
             if (isset($params['search_date']) && !empty($params['search_date'])){
                 $d = urldecode($params['search_date']);
                 $d_arr = explode(' - ',$d);

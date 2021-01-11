@@ -213,6 +213,7 @@
                 批示时间：{$list1['update_time']|date='Y-m-d H:i:s',###}<br>
             </blockquote>
             {/if}
+            审批编号：{$data_list['id']}<br>
             申请时间：{$data_list['create_time']|date='Y-m-d H:i:s',###}<br>
             姓名：{$data_list['real_name']}<br>
             开始时间：{$data_list['start_time']}<br>

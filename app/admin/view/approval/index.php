@@ -25,6 +25,12 @@
                 </div>
             </div>
             <div class="layui-inline">
+                <label class="layui-form-label">审批编号</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" name="id" placeholder="输入审批编号">
+                </div>
+            </div>
+            <div class="layui-inline">
                 <div class="layui-input-inline">
                     <button type="button" class="layui-btn layui-btn-primary" id="person_user_id">选择人员</button>
                     <div id="person_select_id"></div>
@@ -67,6 +73,7 @@
             <th>同行人</th>
             <th>添加时间</th>
             <th>状态</th>
+            <th>审批编号</th>
             <th>审批意见</th>
             <th>审批时间</th>
             <th style="width: 100px">支付结果</th>
@@ -89,6 +96,7 @@
             <td class="font12">{$vo['fellow_user']}</td>
             <td class="font12">{$vo['create_time']}</td>
             <td class="font12">{$approval_status[$vo['status']]}</td>
+            <td class="font12">{$vo['id']}</td>
             <td class="font12">{$vo['mark']}</td>
             {if condition="$vo['create_time'] neq $vo['update_time']"}
             <td class="font12">{$vo['update_time']}</td>
