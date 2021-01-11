@@ -63,6 +63,7 @@
         <thead>
         <tr>
             <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
+            <th>编号</th>
             <th>姓名</th>
             <th>类型</th>
             <th>归属于</th>
@@ -73,7 +74,6 @@
             <th>同行人</th>
             <th>添加时间</th>
             <th>状态</th>
-            <th>审批编号</th>
             <th>审批意见</th>
             <th>审批时间</th>
             <th style="width: 100px">支付结果</th>
@@ -84,6 +84,7 @@
         {volist name="data_list" id="vo"}
         <tr>
             <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
+            <td class="font12">{$vo['id']}</td>
             <td class="font12">
                 <strong class="mcolor">{$vo['realname']}</strong>
             </td>
@@ -96,7 +97,6 @@
             <td class="font12">{$vo['fellow_user']}</td>
             <td class="font12">{$vo['create_time']}</td>
             <td class="font12">{$approval_status[$vo['status']]}</td>
-            <td class="font12">{$vo['id']}</td>
             <td class="font12">{$vo['mark']}</td>
             {if condition="$vo['create_time'] neq $vo['update_time']"}
             <td class="font12">{$vo['update_time']}</td>

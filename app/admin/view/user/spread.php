@@ -30,6 +30,7 @@
             <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
             <th>序号</th>
             <th>用户名</th>
+            <th>公司</th>
             <th>电话号码</th>
             <th>登录次数</th>
         </tr>
@@ -42,6 +43,7 @@
             <td class="font12">
                 <strong class="mcolor">{$vo['username']}</strong>
             </td>
+            <td class="font12">{$vo['com_name']}</td>
             <td class="font12">{$vo['mobile']}</td>
             <td class="font12">{$vo['num']}</td>
         </tr>

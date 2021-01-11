@@ -630,6 +630,7 @@ class User extends Admin
             foreach ($data_list as $k => $v) {
                 $v['xuhao'] = ($p - 1) * 30 + $k + 1;
                 $v['num'] = isset($login_count[$v['id']]) ? $login_count[$v['id']] : '0';
+                $v['com_name'] = AdminCompany::getCompanyById($v['company_id'])['name'];
             }
         }
         // 分页
