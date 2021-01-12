@@ -96,6 +96,30 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">财务初审</label>
+        <div class="layui-input-inline">
+            <button type="button" class="layui-btn layui-btn-normal" id="finance1_user_id">选择</button>
+            <div id="finance1_select_id">{$data_info['finance1_user_id']|default=''}</div>
+            <input type="hidden" name="finance1_user" id="finance1_user" value="{$data_info['finance1_user']|default=''}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">财务复审</label>
+        <div class="layui-input-inline">
+            <button type="button" class="layui-btn layui-btn-normal" id="finance2_user_id">选择</button>
+            <div id="finance2_select_id">{$data_info['finance2_user_id']|default=''}</div>
+            <input type="hidden" name="finance2_user" id="finance2_user" value="{$data_info['finance2_user']|default=''}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">财务终审</label>
+        <div class="layui-input-inline">
+            <button type="button" class="layui-btn layui-btn-normal" id="finance3_user_id">选择</button>
+            <div id="finance3_select_id">{$data_info['finance3_user_id']|default=''}</div>
+            <input type="hidden" name="finance3_user" id="finance3_user" value="{$data_info['finance3_user']|default=''}">
+        </div>
+    </div>
+    <div class="layui-form-item">
         <div class="layui-input-block">
             <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
             <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
@@ -292,6 +316,65 @@
         $('#assignment_user_id').on('click', function(){
             var assignment_user = $('#assignment_user').val();
             var open_url = "{:url('Tool/getTreeUser')}?m=assignment&u="+assignment_user;
+            if (open_url.indexOf('?') >= 0) {
+                open_url += '&hisi_iframe=yes';
+            } else {
+                open_url += '?hisi_iframe=yes';
+            }
+            layer.open({
+                type:2,
+                title :'员工列表',
+                maxmin: true,
+                area: ['800px', '500px'],
+                content: open_url,
+                success:function (layero, index) {
+                    var body = layer.getChildFrame('body', index);  //巧妙的地方在这里哦
+                }
+            });
+        });
+
+        $('#finance1_user_id').on('click', function(){
+            var finance1_user = $('#finance1_user').val();
+            var open_url = "{:url('Tool/getTreeUser')}?m=finance1&u="+finance1_user;
+            if (open_url.indexOf('?') >= 0) {
+                open_url += '&hisi_iframe=yes';
+            } else {
+                open_url += '?hisi_iframe=yes';
+            }
+            layer.open({
+                type:2,
+                title :'员工列表',
+                maxmin: true,
+                area: ['800px', '500px'],
+                content: open_url,
+                success:function (layero, index) {
+                    var body = layer.getChildFrame('body', index);  //巧妙的地方在这里哦
+                }
+            });
+        });
+
+        $('#finance2_user_id').on('click', function(){
+            var finance2_user = $('#finance2_user').val();
+            var open_url = "{:url('Tool/getTreeUser')}?m=finance2&u="+finance2_user;
+            if (open_url.indexOf('?') >= 0) {
+                open_url += '&hisi_iframe=yes';
+            } else {
+                open_url += '?hisi_iframe=yes';
+            }
+            layer.open({
+                type:2,
+                title :'员工列表',
+                maxmin: true,
+                area: ['800px', '500px'],
+                content: open_url,
+                success:function (layero, index) {
+                    var body = layer.getChildFrame('body', index);  //巧妙的地方在这里哦
+                }
+            });
+        });
+        $('#finance3_user_id').on('click', function(){
+            var finance3_user = $('#finance3_user').val();
+            var open_url = "{:url('Tool/getTreeUser')}?m=finance3&u="+finance3_user;
             if (open_url.indexOf('?') >= 0) {
                 open_url += '&hisi_iframe=yes';
             } else {

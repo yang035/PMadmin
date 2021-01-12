@@ -396,6 +396,29 @@ class Admin extends Controller
         return $row;
     }
 
+    public function getFlowUser4()
+    {
+        $cid = session('admin_user.cid');
+        $redis = service('Redis');
+        $default_user = $redis->get("pm:user:{$cid}");
+        if ($default_user) {
+            $default_user = json_decode($default_user, true);
+            $tmp1 = [
+                0 => [$default_user['finance1_user'] => ''],
+                1 => [$default_user['finance2_user'] => ''],
+                2 => [$default_user['finance3_user'] => ''],
+            ];
+            $tmp2 = [
+                $default_user['finance1_user'] => '',
+                $default_user['finance2_user'] => '',
+                $default_user['finance3_user'] => '',
+            ];
+            return [$tmp1, $tmp2];
+        } else {
+            return [];
+        }
+    }
+
     public function deal_data($x_user)
     {
         $x_user_arr = json_decode($x_user, true);

@@ -430,6 +430,54 @@
                     </li>
                 {/volist}
             </ul>
+
+            {notempty name="fin_list"}
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>财务审核</legend>
+            </fieldset>
+            <ul class="layui-timeline">
+                {volist name="fin_list" id="vo"}
+                <li class="layui-timeline-item">
+                    <i class="layui-icon layui-timeline-axis"></i>
+                    <div class="layui-timeline-content layui-text">
+                        <div class="layui-timeline-title">
+                            {$vo['flow_num']+1}级审核(任一人审核)：{$vo['finance_user']}<br>
+                            {if condition="($vo['finance_status'] eq 1) && ($finance_status[$vo['flow_num']-1] eq 2) && $vo['cunzai'] && ($Request.param.atype eq 8)"}
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <input type="radio" name="finance_status" value="2" title="通过" checked>
+                                    <input type="radio" name="finance_status" value="4" title="驳回">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">备注</label>
+                                <div class="layui-input-inline">
+                                    <textarea type="text" class="layui-textarea field-finance_mark" name="finance_mark" autocomplete="off" placeholder=""></textarea>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <input type="hidden" class="field-id" name="id" value="{$Request.param.id}">
+                                    <input type="hidden" class="field-atype" name="atype" value="{$Request.param.atype}">
+                                    <input type="hidden" class="field-class_type" name="class_type" value="{$Request.param.class_type}">
+                                    <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
+                                    <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
+                                </div>
+                            </div>
+                            {else/}
+                            结果：{$finance_status1[$vo['finance_status']]}{eq name="vo['finance_status']" value="4"}<font style="color: red">（流程终止）</font>{/eq}<br>
+                            {if condition="$vo['finance_status'] neq 1"}
+                            备注：{$vo['finance_mark']}<br>
+                            批示时间：{$vo['update_time']}<br>
+                            {/if}
+                            {/if}
+                        </div>
+                    </div>
+                </li>
+                {/volist}
+            </ul>
+            {/notempty}
             {else/}
                 {if condition="($data_list['status'] eq 1) && ($Request.param.atype eq 3) "}
                 <div class="layui-form-item">

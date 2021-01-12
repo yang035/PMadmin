@@ -20,6 +20,7 @@ use app\admin\model\ApprovalProcurement as ProcurementModel;
 use app\admin\model\ApprovalOvertime as OvertimeModel;
 use app\admin\model\ApprovalGoout as GooutModel;
 use app\admin\model\ApprovalSenduser;
+use app\admin\model\ApprovalFinanceuser;
 use app\admin\model\ApprovalUsecar as CarModel;
 use app\admin\model\ApprovalCost as CostModel;
 use app\admin\model\ApprovalDispatch as DispatchModel;
@@ -92,6 +93,11 @@ class Approval extends Admin
                 'url' => 'admin/approval/index',
                 'params' => ['atype' => 7],
             ],
+            [
+                'title' => "财务审核<span class='layui-badge layui-bg-orange'>{$sta_count['finance_num']}</span>",
+                'url' => 'admin/approval/index',
+                'params' => ['atype' => 8],
+            ],
         ];
         $tab_data['current'] = url('index', ['atype' => 1]);
         $this->tab_data = $tab_data;
@@ -128,7 +134,8 @@ class Approval extends Admin
         SUM(IF(JSON_CONTAINS_PATH(copy_user,'one', '$.\"$uid\"') and status <> 3,1,0)) copy_num,
         SUM(IF(JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"') and status <> 3,1,0)) deal_num,
         SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status not in (1,3),1,0)) has_num,
-        SUM(IF(JSON_CONTAINS_PATH(fellow_user,'one', '$.\"$uid\"') and status <> 3,1,0)) follow_num";
+        SUM(IF(JSON_CONTAINS_PATH(fellow_user,'one', '$.\"$uid\"') and status <> 3,1,0)) follow_num,
+        SUM(IF(JSON_CONTAINS_PATH(finance_user,'one', '$.\"$uid\"') and status=2 and finance_status=1,1,0)) finance_num";
         $count = ApprovalModel::field($fields)->where($map)->find()->toArray();
         return $count;
     }
@@ -143,6 +150,7 @@ class Approval extends Admin
         $panel_type1 = $panel_type = config('other.panel_type');
         unset($panel_type1[2],$panel_type1[21]);
         $approval_status = config('other.approval_status');
+        $finance_status1 = config('other.finance_status');
         $params['atype'] = isset($params['atype']) ? $params['atype'] : 1;
         if (1 == $params['atype']) {
             $this->assign('tab_data', $this->tab_data);
@@ -200,6 +208,10 @@ class Approval extends Admin
             case 7:
                 $con = "JSON_CONTAINS_PATH(fellow_user,'one', '$.\"$uid\"')";
                 $map['status'] = ['neq',3];
+                break;
+            case 8:
+                $con = "JSON_CONTAINS_PATH(finance_user,'one', '$.\"$uid\"')";
+                $map['status'] = 2;
                 break;
             default:
                 $con = "";
@@ -372,6 +384,7 @@ class Approval extends Admin
         $this->assign('tab_url', url('index', ['atype' => $params['atype']]));
         $this->assign('data_list', $list);
         $this->assign('panel_type', $panel_type);
+        $this->assign('finance_status1', $finance_status1);
         $this->assign('approval_status', $approval_status);
         $this->assign('pages', $pages);
         return $this->fetch();
@@ -568,6 +581,9 @@ class Approval extends Admin
                     $send_user2 += $v;
                 }
 
+                $money_relation = config('other.money_relation');
+                $f_user = $this->getFlowUser4();
+
                 // 启动事务
                 Db::startTrans();
                 try {
@@ -582,6 +598,11 @@ class Approval extends Admin
                         'send_user' => json_encode($send_user2),
                         'copy_user' => user_array($data['copy_user']),
                     ];
+
+                    if (in_array($data['class_type'],$money_relation) && $f_user){
+                        $approve['finance_user'] = json_encode($f_user[1]);
+                    }
+
 //                print_r($approve);exit();
                     $res = ApprovalModel::create($approve);
 
@@ -595,6 +616,19 @@ class Approval extends Admin
                     }
                     $send_user_model = new ApprovalSenduser();
                     $send_user_model->saveAll($su);
+
+                    if (in_array($data['class_type'],$money_relation) && $f_user){
+                        $fin = [];
+                        foreach ($f_user[0] as $k=>$v) {
+                            $fin[$k] = [
+                                'aid' => $res['id'],
+                                'flow_num' => $k,
+                                'finance_user' => json_encode($v),
+                            ];
+                        }
+                        $finance_user_model = new ApprovalFinanceuser();
+                        $finance_user_model->saveAll($fin);
+                    }
 
                     $leave = [
                         'aid' => $res['id'],
@@ -652,6 +686,9 @@ class Approval extends Admin
                     $send_user2 += $v;
                 }
 
+                $money_relation = config('other.money_relation');
+                $f_user = $this->getFlowUser4();
+
                 // 启动事务
                 Db::startTrans();
                 try {
@@ -666,6 +703,11 @@ class Approval extends Admin
                         'send_user' => json_encode($send_user2),
                         'copy_user' => user_array($data['copy_user']),
                     ];
+
+                    if (in_array($data['class_type'],$money_relation) && $f_user){
+                        $approve['finance_user'] = json_encode($f_user[1]);
+                    }
+
                     $res = ApprovalModel::create($approve);
 
 
@@ -679,6 +721,19 @@ class Approval extends Admin
                     }
                     $send_user_model = new ApprovalSenduser();
                     $send_user_model->saveAll($su);
+
+                    if (in_array($data['class_type'],$money_relation) && $f_user){
+                        $fin = [];
+                        foreach ($f_user[0] as $k=>$v) {
+                            $fin[$k] = [
+                                'aid' => $res['id'],
+                                'flow_num' => $k,
+                                'finance_user' => json_encode($v),
+                            ];
+                        }
+                        $finance_user_model = new ApprovalFinanceuser();
+                        $finance_user_model->saveAll($fin);
+                    }
 
                     $leave = [
                         'aid' => $res['id'],
@@ -736,6 +791,9 @@ class Approval extends Admin
                 $send_user2 += $v;
             }
 
+            $money_relation = config('other.money_relation');
+            $f_user = $this->getFlowUser4();
+
             Db::startTrans();
             try {
                 $approve = [
@@ -749,6 +807,11 @@ class Approval extends Admin
                     'send_user' => json_encode($send_user2),
                     'copy_user' => user_array($data['copy_user']),
                 ];
+
+                if (in_array($data['class_type'],$money_relation) && $f_user){
+                    $approve['finance_user'] = json_encode($f_user[1]);
+                }
+
                 $res = ApprovalModel::create($approve);
 
                 $su = [];
@@ -761,6 +824,19 @@ class Approval extends Admin
                 }
                 $send_user_model = new ApprovalSenduser();
                 $send_user_model->saveAll($su);
+
+                if (in_array($data['class_type'],$money_relation) && $f_user){
+                    $fin = [];
+                    foreach ($f_user[0] as $k=>$v) {
+                        $fin[$k] = [
+                            'aid' => $res['id'],
+                            'flow_num' => $k,
+                            'finance_user' => json_encode($v),
+                        ];
+                    }
+                    $finance_user_model = new ApprovalFinanceuser();
+                    $finance_user_model->saveAll($fin);
+                }
 
                 $leave = [
                     'aid' => $res['id'],
@@ -1903,6 +1979,10 @@ class Approval extends Admin
                 foreach ($send_user1 as $k => $v) {
                     $send_user2 += $v;
                 }
+
+                $money_relation = config('other.money_relation');
+                $f_user = $this->getFlowUser4();
+
                 // 启动事务
                 Db::startTrans();
                 try {
@@ -1917,6 +1997,11 @@ class Approval extends Admin
                         'send_user' => json_encode($send_user2),
                         'copy_user' => user_array($data['copy_user']),
                     ];
+
+                    if (in_array($data['class_type'],$money_relation) && $f_user){
+                        $approve['finance_user'] = json_encode($f_user[1]);
+                    }
+
 //                print_r($approve);exit();
                     $res = ApprovalModel::create($approve);
 
@@ -1930,6 +2015,19 @@ class Approval extends Admin
                     }
                     $send_user_model = new ApprovalSenduser();
                     $send_user_model->saveAll($su);
+
+                    if (in_array($data['class_type'],$money_relation) && $f_user){
+                        $fin = [];
+                        foreach ($f_user[0] as $k=>$v) {
+                            $fin[$k] = [
+                                'aid' => $res['id'],
+                                'flow_num' => $k,
+                                'finance_user' => json_encode($v),
+                            ];
+                        }
+                        $finance_user_model = new ApprovalFinanceuser();
+                        $finance_user_model->saveAll($fin);
+                    }
 
                     $leave = [
                         'aid' => $res['id'],
@@ -1977,6 +2075,9 @@ class Approval extends Admin
                     $send_user2 += $v;
                 }
 
+                $money_relation = config('other.money_relation');
+                $f_user = $this->getFlowUser4();
+
                 // 启动事务
                 Db::startTrans();
                 try {
@@ -1991,6 +2092,11 @@ class Approval extends Admin
                         'send_user' => json_encode($send_user2),
                         'copy_user' => user_array($data['copy_user']),
                     ];
+
+                    if (in_array($data['class_type'],$money_relation) && $f_user){
+                        $approve['finance_user'] = json_encode($f_user[1]);
+                    }
+
                     $res = ApprovalModel::create($approve);
 
 
@@ -2004,6 +2110,19 @@ class Approval extends Admin
                     }
                     $send_user_model = new ApprovalSenduser();
                     $send_user_model->saveAll($su);
+
+                    if (in_array($data['class_type'],$money_relation) && $f_user){
+                        $fin = [];
+                        foreach ($f_user[0] as $k=>$v) {
+                            $fin[$k] = [
+                                'aid' => $res['id'],
+                                'flow_num' => $k,
+                                'finance_user' => json_encode($v),
+                            ];
+                        }
+                        $finance_user_model = new ApprovalFinanceuser();
+                        $finance_user_model->saveAll($fin);
+                    }
 
                     $leave = [
                         'aid' => $res['id'],
@@ -2061,6 +2180,9 @@ class Approval extends Admin
                 $send_user2 += $v;
             }
 
+            $money_relation = config('other.money_relation');
+            $f_user = $this->getFlowUser4();
+
             // 启动事务
             Db::startTrans();
             try {
@@ -2076,6 +2198,10 @@ class Approval extends Admin
                     'copy_user' => user_array($data['copy_user']),
                 ];
 
+                if (in_array($data['class_type'],$money_relation) && $f_user){
+                    $approve['finance_user'] = json_encode($f_user[1]);
+                }
+
                 $res = ApprovalModel::create($approve);
 
                 $su = [];
@@ -2088,6 +2214,19 @@ class Approval extends Admin
                 }
                 $send_user_model = new ApprovalSenduser();
                 $send_user_model->saveAll($su);
+
+                if (in_array($data['class_type'],$money_relation) && $f_user){
+                    $fin = [];
+                    foreach ($f_user[0] as $k=>$v) {
+                        $fin[$k] = [
+                            'aid' => $res['id'],
+                            'flow_num' => $k,
+                            'finance_user' => json_encode($v),
+                        ];
+                    }
+                    $finance_user_model = new ApprovalFinanceuser();
+                    $finance_user_model->saveAll($fin);
+                }
 
                 $leave = [
                     'aid' => $res['id'],
@@ -2398,9 +2537,32 @@ class Approval extends Admin
         }else{
             $su_list = [];
         }
-//        print_r($su_list);
         $this->assign('su_list', $su_list);
         $this->assign('status', $status);
+
+        $fin_list = ApprovalFinanceuser::where($map1)->select();
+        $fin_list_count = count($fin_list);
+        $finance_status = [];
+        if ($fin_list){
+            foreach ($fin_list as $k=>$v) {
+                $fin_list[$k]['finance_user_id'] = array_keys(json_decode($v['finance_user'],true));
+                $fin_list[$k]['finance_user'] = $this->deal_data($v['finance_user']);
+                $fin_list[$k]['cunzai'] = false;
+                if (in_array(session('admin_user.uid'),$fin_list[$k]['finance_user_id'])){
+                    $fin_list[$k]['cunzai'] = true;
+                }
+                $finance_status[$v['flow_num']] = $v['finance_status'];
+                if ($v['flow_num'] == 0){
+                    $finance_status[-1] = 2;
+                }
+            }
+        }else{
+            $fin_list = [];
+        }
+
+//        print_r($su_list);
+        $this->assign('fin_list', $fin_list);
+        $this->assign('finance_status', $finance_status);
 //print_r($list);
         $res = false;
         if ($this->request->isPost()) {
@@ -2732,6 +2894,52 @@ class Approval extends Admin
                         // 回滚事务
                         Db::rollback();
                     }
+                }elseif (8 == $data['atype']) {
+//                    print_r($data);exit();
+                    //事务提交，保证数据一致性
+                    Db::startTrans();
+                    try {
+                        $uid = session('admin_user.uid');
+                        $ap = [
+                            'id'=>$data['id'],
+                            'finance_status'=>$data['finance_status'],
+                            'finance_mark'=>$data['finance_mark'],
+                            'finance_time'=>time(),
+                        ];
+                        if (!empty($fin_list)) {
+                            $w = [
+                                'aid' => $data['id'],
+                                'finance_status' => 1,
+                            ];
+                            $w1 = "JSON_CONTAINS_PATH(finance_user,'one', '$.\"$uid\"')";
+
+                            $u = [
+                                'finance_status' => $data['finance_status'],
+                                'finance_mark' => $data['finance_mark'],
+                                'update_time' => time(),
+                            ];
+
+                            $s = new ApprovalFinanceuser();
+                            $s->where($w)->where($w1)->update($u);
+
+                            $sql = "UPDATE tb_approval_financeuser SET finance_user = JSON_REPLACE(finance_user, '$.\"{$uid}\"', 'a') WHERE aid ={$data['id']} and finance_status={$data['finance_status']}";
+                            $res = ApprovalFinanceuser::execute($sql);
+
+                            $sql = "UPDATE tb_approval SET finance_user = JSON_SET(finance_user, '$.\"{$uid}\"', 'a'),finance_time=UNIX_TIMESTAMP() WHERE id ={$data['id']}";
+                            $res = ApprovalModel::execute($sql);
+
+                            $last = ApprovalFinanceuser::where($map1)->order('id desc')->limit(1)->find();
+//                    print_r($last);exit();
+                            if (2 == $last['finance_status'] || 2 != $data['finance_status']) {
+                                $res = ApprovalModel::update($ap);
+                            }
+                        }
+                            // 提交事务
+                            Db::commit();
+                        } catch (\Exception $e) {
+                            // 回滚事务
+                            Db::rollback();
+                        }
                 }elseif (4 == $data['atype']) {
                     if (empty($data['is_deal'])){
                         return $this->error('请选择支付结果');
@@ -3054,8 +3262,10 @@ class Approval extends Admin
 
 //        print_r($list);
         $approval_status = config('other.approval_status');
+        $finance_status1 = config('other.finance_status');
         $this->assign('data_list', $list);
         $this->assign('approval_status', $approval_status);
+        $this->assign('finance_status1', $finance_status1);
         $this->assign('class_type', $params['class_type']);
         $this->assign('project_name', $project_data);
         return $this->fetch();

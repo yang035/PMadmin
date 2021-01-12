@@ -76,6 +76,7 @@
             <th>状态</th>
             <th>审批意见</th>
             <th>审批时间</th>
+            <th>财务审核</th>
             <th style="width: 100px">支付结果</th>
             <th>操作</th>
         </tr>
@@ -103,6 +104,7 @@
             {else/}
             <td class="font12">-</td>
             {/if}
+            <td class="font12">{$finance_status1[$vo['finance_status']]}</td>
             <td class="font12">{$vo['deal_mark']}</td>
             <td>
                 <div class="layui-btn-group" onclick="approval_read({$vo['id']},{$atype},{$vo['class_type']},'{$panel_type[$vo['class_type']]['title']}')">
