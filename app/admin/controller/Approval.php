@@ -219,6 +219,11 @@ class Approval extends Admin
                 $con = "JSON_CONTAINS_PATH(finance_user,'one', '$.\"$uid\"')";
                 $map['status'] = 2;
                 break;
+            case 9:
+                $con = "JSON_CONTAINS_PATH(finance_user,'one', '$.\"$uid\"')";
+                $map['status'] = 2;
+                $map['finance_status'] = 2;
+                break;
             default:
                 $con = "";
                 break;
