@@ -70,6 +70,7 @@
             <th>时间段</th>
             <th>项目名称</th>
             <th>金额(元)</th>
+            {notin name="$Request.param.atype" value="8,9"}
             <th>审批人</th>
             <th>同行人</th>
             <th>添加时间</th>
@@ -77,6 +78,12 @@
             <th>审批意见</th>
             <th>审批时间</th>
             <th>财务审核</th>
+            {else/}
+            <th>财务审核</th>
+            <th>审核状态</th>
+            <th>审核意见</th>
+            <th>审核时间</th>
+            {/notin}
             <th style="width: 100px">支付结果</th>
             <th>操作</th>
         </tr>
@@ -94,6 +101,7 @@
             <td class="font12">始:{$vo['start_time']}<br>止:{$vo['end_time']}</td>
             <td class="font12">{$vo['project_name']}</td>
             <td class="font12">{$vo['money']}</td>
+            {notin name="$Request.param.atype" value="8,9"}
             <td class="font12">{$vo['send_user']}</td>
             <td class="font12">{$vo['fellow_user']}</td>
             <td class="font12">{$vo['create_time']}</td>
@@ -105,6 +113,17 @@
             <td class="font12">-</td>
             {/if}
             <td class="font12">{$finance_status1[$vo['finance_status']]}</td>
+            {else/}
+            <td class="font12">{$vo['finance_user']}</td>
+            <td class="font12">{$finance_status1[$vo['finance_status']]}</td>
+            <td class="font12">{$vo['finance_mark']}</td>
+            {if condition="$vo['finance_time'] neq $vo['finance_time']"}
+            <td class="font12">{$vo['finance_time']}</td>
+            {else/}
+            <td class="font12">-</td>
+            {/if}
+            {/notin}
+
             <td class="font12">{$vo['deal_mark']}</td>
             <td>
                 <div class="layui-btn-group" onclick="approval_read({$vo['id']},{$atype},{$vo['class_type']},'{$panel_type[$vo['class_type']]['title']}')">

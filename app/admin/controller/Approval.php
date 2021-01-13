@@ -94,9 +94,14 @@ class Approval extends Admin
                 'params' => ['atype' => 7],
             ],
             [
-                'title' => "财务审核<span class='layui-badge layui-bg-orange'>{$sta_count['finance_num']}</span>",
+                'title' => "财务待审<span class='layui-badge layui-bg-orange'>{$sta_count['finance_num']}</span>",
                 'url' => 'admin/approval/index',
                 'params' => ['atype' => 8],
+            ],
+            [
+                'title' => "财务已审<span class='layui-badge layui-bg-orange'>{$sta_count['finance_has_num']}</span>",
+                'url' => 'admin/approval/index',
+                'params' => ['atype' => 9],
             ],
         ];
         $tab_data['current'] = url('index', ['atype' => 1]);
@@ -135,7 +140,8 @@ class Approval extends Admin
         SUM(IF(JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"') and status <> 3,1,0)) deal_num,
         SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status not in (1,3),1,0)) has_num,
         SUM(IF(JSON_CONTAINS_PATH(fellow_user,'one', '$.\"$uid\"') and status <> 3,1,0)) follow_num,
-        SUM(IF(JSON_CONTAINS_PATH(finance_user,'one', '$.\"$uid\"') and status=2 and finance_status=1,1,0)) finance_num";
+        SUM(IF(JSON_CONTAINS_PATH(finance_user,'one', '$.\"$uid\"') and status=2 and finance_status=1,1,0)) finance_num,
+        SUM(IF(JSON_CONTAINS_PATH(finance_user,'one', '$.\"$uid\"') and status=2 and finance_status=2,1,0)) finance_has_num";
         $count = ApprovalModel::field($fields)->where($map)->find()->toArray();
         return $count;
     }
@@ -221,7 +227,7 @@ class Approval extends Admin
 
         if (isset($params['export']) && 1 == $params['export']){
             set_time_limit(0);
-            $list = ApprovalModel::where($map)->where($con)->order('update_time desc')->select();
+            $list = ApprovalModel::where($map)->where($con)->order('id desc')->select();
 //        print_r($list);exit();
             foreach ($list as $k => $v) {
                 $list[$k]['send_user'] = strip_tags($this->deal_data($v['send_user']));
@@ -333,7 +339,7 @@ class Approval extends Admin
             exit;
         }
 
-        $list = ApprovalModel::where($map)->where($con)->order('update_time desc')->paginate(30, false, ['query' => input('get.')]);
+        $list = ApprovalModel::where($map)->where($con)->order('id desc')->paginate(30, false, ['query' => input('get.')]);
 
         foreach ($list as $k => $v) {
             $list[$k]['send_user'] = $this->deal_data($v['send_user']);
@@ -373,6 +379,10 @@ class Approval extends Admin
                 $list[$k]['deal_mark'] = '未支付';
             }elseif (2 == $v['is_deal']){
                 $list[$k]['deal_mark'] = '支付-'.$v['deal_mark'].'-'.$v['deal_time'];
+            }
+            if (in_array($params['atype'], [8, 9])) {
+                $list[$k]['finance_user'] = $this->deal_data($v['finance_user']);
+                $list[$k]['finance_time'] = date('Y-m-d', $v['finance_time']);
             }
         }
 

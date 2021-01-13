@@ -427,7 +427,7 @@ class Admin extends Controller
             foreach ($x_user_arr as $key => $val) {
                 $real_name = UserModel::getUserById($key)['realname'];
                 if ('a' == $val) {
-                    $real_name = "<font style='color: blue'>" . $real_name . "</font>";
+                    $real_name = "<font style='color: orangered'>" . $real_name . "</font>";
                 }
                 $x_user[] = $real_name;
             }
