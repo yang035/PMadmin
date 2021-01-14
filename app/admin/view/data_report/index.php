@@ -2,13 +2,13 @@
 <div id="company_count" style="height: 300px;width: 33%;float: left"></div>
 <div id="person_count" style="height: 300px;width: 33%;float: left"></div>
 <div id="login_count" style="height: 300px;width: 33%;float: left"></div>
+<div id="shoporder_count" style="height: 300px;width: 33%;float: left"></div>
+<div id="mealorder_count" style="height: 300px;width: 33%;float: left"></div>
 <div id="menu_count" style="height: 300px;width: 33%;float: left"></div>
 <div id="pv_count" style="height: 300px;width: 33%;float: left"></div>
 <div id="uv_count" style="height: 300px;width: 33%;float: left"></div>
 <div id="vv_count" style="height: 300px;width: 33%;float: left"></div>
 <div id="ip_count" style="height: 300px;width: 33%;float: left"></div>
-<div id="shoporder_count" style="height: 300px;width: 33%;float: left"></div>
-<div id="mealorder_count" style="height: 300px;width: 33%;float: left"></div>
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@4/dist/echarts.min.js"></script>
 <!--<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-gl@1/dist/echarts-gl.min.js"></script>-->
@@ -30,13 +30,14 @@
     waterfall('company_count','每月新增公司',"{:url('admin/DataReport/getCompanyCount')}");
     waterfall('person_count','每月新增人员',"{:url('admin/DataReport/getPersonCount')}");
     waterfall('login_count','每月登录次数',"{:url('admin/DataReport/getLoginCount')}");
-    waterfall('menu_count','每月菜单访问量',"{:url('admin/DataReport/getMenuCount')}");
+    waterfall('shoporder_count','每天商品订单量',"{:url('admin/DataReport/getShopOrderCount')}");
+    waterfall('mealorder_count','每天套餐订单量',"{:url('admin/DataReport/getMealOrderCount')}");
+    waterfall('menu_count','每月菜单访问前10',"{:url('admin/DataReport/getMenuCount')}");
     waterfall('pv_count','PV',"{:url('admin/DataReport/getPvCount')}");
     waterfall('uv_count','UV',"{:url('admin/DataReport/getUvCount')}");
     waterfall('vv_count','VV',"{:url('admin/DataReport/getVvCount')}");
     waterfall('ip_count','IP',"{:url('admin/DataReport/getIpCount')}");
-    waterfall('shoporder_count','商品订单量',"{:url('admin/DataReport/getShopOrderCount')}");
-    waterfall('mealorder_count','套餐订单量',"{:url('admin/DataReport/getMealOrderCount')}");
+
 
 
     function pie_chart(id,title,_url) {

@@ -183,7 +183,7 @@ class DataReport extends Admin
      * VV
      */
     public function getVvCount(){
-        $fields = "COUNT(user_id) c,DATE_FORMAT(login_time,'%Y%m') m";
+        $fields = "COUNT(user_id) c,DATE_FORMAT(login_time,'%Y%m%d') m";
         $data = UserLogin::field($fields)->group('m')->select();
         $tmp = [];
         if ($data){
