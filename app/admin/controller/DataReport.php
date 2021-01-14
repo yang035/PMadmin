@@ -179,7 +179,8 @@ class DataReport extends Admin
         $params = $this->request->post();
         if (isset($params['p']) && 1 == $params['p']){
             $fields = "COUNT(id) c,title,url";
-            $data = AdminLog::field($fields)->group('title')->order('c desc')->limit(10)->select();
+            $w = "title <> '查看' and title not like '异步%'";
+            $data = AdminLog::field($fields)->where($w)->group('title')->order('c desc')->limit(10)->select();
             $tmp = [];
             if ($data){
                 foreach ($data as $v) {
@@ -192,7 +193,8 @@ class DataReport extends Admin
             ];
         }
         $fields = "COUNT(DISTINCT title) c,title,url,FROM_UNIXTIME(ctime,'%Y%m') m";
-        $data = AdminLog::field($fields)->group('m')->order('c desc')->limit(10)->select();
+        $w = "title <> '查看' and title not like '异步%'";
+        $data = AdminLog::field($fields)->where($w)->group('m')->order('c desc')->limit(10)->select();
         $tmp = [];
         if ($data){
             foreach ($data as $v) {
@@ -213,7 +215,7 @@ class DataReport extends Admin
     public function getPvCount(){
         $params = $this->request->post();
         if (isset($params['p']) && 1 == $params['p']){
-            $fields = "COUNT(id) c,FROM_UNIXTIME(ctime,'%Y%m') m";
+            $fields = "COUNT(id) c,FROM_UNIXTIME(ctime,'%Y') m";
             $data = AdminLog::field($fields)->group('m')->select();
             $tmp = [];
             if ($data){
@@ -251,7 +253,7 @@ class DataReport extends Admin
     public function getUvCount(){
         $params = $this->request->post();
         if (isset($params['p']) && 1 == $params['p']){
-            $fields = "COUNT(DISTINCT ip) c,FROM_UNIXTIME(ctime,'%Y%m') m";
+            $fields = "COUNT(DISTINCT ip) c,FROM_UNIXTIME(ctime,'%Y') m";
             $data = AdminLog::field($fields)->group('m')->select();
             $tmp = [];
             if ($data){
@@ -289,7 +291,7 @@ class DataReport extends Admin
     public function getVvCount(){
         $params = $this->request->post();
         if (isset($params['p']) && 1 == $params['p']){
-            $fields = "COUNT(user_id) c,DATE_FORMAT(login_time,'%Y%m') m";
+            $fields = "COUNT(user_id) c,DATE_FORMAT(login_time,'%Y') m";
             $data = UserLogin::field($fields)->group('m')->select();
             $tmp = [];
             if ($data){
@@ -327,7 +329,7 @@ class DataReport extends Admin
     public function getIpCount(){
         $params = $this->request->post();
         if (isset($params['p']) && 1 == $params['p']){
-            $fields = "COUNT(DISTINCT ip) c,FROM_UNIXTIME(ctime,'%Y%m') m";
+            $fields = "COUNT(DISTINCT ip) c,FROM_UNIXTIME(ctime,'%Y') m";
             $data = AdminLog::field($fields)->group('m')->select();
             $tmp = [];
             if ($data){
