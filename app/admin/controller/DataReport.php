@@ -192,9 +192,12 @@ class DataReport extends Admin
                 'ser'=>array_values($tmp),
             ];
         }
-        $fields = "COUNT(DISTINCT title) c,title,url,FROM_UNIXTIME(ctime,'%Y%m') m";
+        $fields = "COUNT(id) c,title,url";
         $w = "title <> '查看' and title not like '异步%'";
-        $data = AdminLog::field($fields)->where($w)->group('m')->order('c desc')->limit(10)->select();
+        $w1 = [
+            'ctime'=>['>=',strtotime("-1 month")],
+        ];
+        $data = AdminLog::field($fields)->where($w)->where($w1)->group('title')->order('c desc')->limit(10)->select();
         $tmp = [];
         if ($data){
             foreach ($data as $v) {

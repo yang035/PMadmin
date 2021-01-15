@@ -56,15 +56,15 @@
     bar_waterfall('total_mealorder_count','累计套餐订单量',"{:url('admin/DataReport/getMealOrderCount')}",'line',1);
     waterfall('mealorder_count','每天套餐订单',"{:url('admin/DataReport/getMealOrderCount')}",'bar');
     bar_waterfall('total_menu_count','累计菜单访问前10',"{:url('admin/DataReport/getMenuCount')}",'line',1);
-    waterfall('menu_count','每月菜单访问前10',"{:url('admin/DataReport/getMenuCount')}",'bar');
+    setTimeout("waterfall('menu_count','每月菜单访问前10',\"{:url('admin/DataReport/getMenuCount')}\",'bar')",1000);
     bar_waterfall('total_pv_count','累计PV',"{:url('admin/DataReport/getPvCount')}",'line',1);
-    waterfall('pv_count','PV',"{:url('admin/DataReport/getPvCount')}",'line');
+    setTimeout("waterfall('pv_count','PV',\"{:url('admin/DataReport/getPvCount')}\",'line')",1000);
     bar_waterfall('total_uv_count','累计UV',"{:url('admin/DataReport/getUvCount')}",'line',1);
-    waterfall('uv_count','UV',"{:url('admin/DataReport/getUvCount')}",'line');
+    setTimeout("waterfall('uv_count','UV',\"{:url('admin/DataReport/getUvCount')}\",'line')",1000);
     bar_waterfall('total_vv_count','累计VV',"{:url('admin/DataReport/getVvCount')}",'line',1);
-    waterfall('vv_count','VV',"{:url('admin/DataReport/getVvCount')}",'line');
+    setTimeout("waterfall('vv_count','VV',\"{:url('admin/DataReport/getVvCount')}\",'line')",1000);
     bar_waterfall('total_ip_count','累计IP',"{:url('admin/DataReport/getIpCount')}",'line',1);
-    waterfall('ip_count','IP',"{:url('admin/DataReport/getIpCount')}",'line');
+    setTimeout("waterfall('ip_count','IP',\"{:url('admin/DataReport/getIpCount')}\",'line')",1000);
 
 
 
