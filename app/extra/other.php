@@ -238,7 +238,7 @@ return [
         ],
     ],
     //根据上面panel_type 与财务支付相关的
-    'money_relation' => [2,3,17,21],
+    'money_relation' => [2,17,21],
     'finance_status' =>[
         1=>'待审核',
         2=>'通过',
