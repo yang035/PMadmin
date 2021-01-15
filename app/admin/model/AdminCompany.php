@@ -43,7 +43,7 @@ class AdminCompany extends Model
     public static function getOption1($id = 0)
     {
         $rows = self::column('id,name');
-        $str = '<option value="">全部</option>';
+        $str = '<option value="">选择</option>';
         foreach ($rows as $k => $v) {
             if ($k == 1) {// 过滤超级管理员角色
                 continue;
