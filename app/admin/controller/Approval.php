@@ -579,6 +579,59 @@ class Approval extends Admin
                 $this->assign('cost_type', $cost_type);
                 $this->assign('approval_status', $approval_status);
                 $this->assign('list1', $list1);
+            }elseif (6 == $params['ct']){
+                $table = 'tb_approval_overtime';
+                $f = 'b.reason,b.time_long1,b.attachment,b.overtime_type';
+                $map = [
+                    'a.id' => $params['id']
+                ];
+                $fields = 'a.*,' . $f;
+                $list1 = db('approval')->alias('a')->field($fields)
+                    ->join("{$table} b", 'a.id = b.aid', 'left')
+                    ->where($map)->find();
+                $list1['attachment'] = explode(',', substr($list1['attachment'], 0, -1));
+                $list1['real_name'] = AdminUser::getUserById($list1['user_id'])['realname'];
+                $list1['send_user'] = $this->deal_data($list1['send_user']);
+                $list1['copy_user'] = $this->deal_data($list1['copy_user']);
+                if ($list1['project_id']){
+                    $project_data = ProjectModel::getRowById($list1['project_id']);
+                }else{
+                    $project_data = [
+                        'name'=>'其他',
+                    ];
+                }
+                $list1['project_name'] = $project_data['name'];
+                $approval_status = config('other.approval_status');
+                $overtime_type = config('other.overtime_type');
+                $this->assign('overtime_type', $overtime_type);
+                $this->assign('approval_status', $approval_status);
+                $this->assign('list1', $list1);
+            }elseif (7 == $params['ct']){
+                $table = 'tb_approval_goout';
+                $f = 'b.reason,b.address,b.time_long1,b.attachment';
+                $map = [
+                    'a.id' => $params['id']
+                ];
+                $fields = 'a.*,' . $f;
+                $list1 = db('approval')->alias('a')->field($fields)
+                    ->join("{$table} b", 'a.id = b.aid', 'left')
+                    ->where($map)->find();
+                $list1['attachment'] = explode(',', substr($list1['attachment'], 0, -1));
+                $list1['real_name'] = AdminUser::getUserById($list1['user_id'])['realname'];
+                $list1['fellow_user'] = $this->deal_data($list1['fellow_user']);
+                $list1['send_user'] = $this->deal_data($list1['send_user']);
+                $list1['copy_user'] = $this->deal_data($list1['copy_user']);
+                if ($list1['project_id']){
+                    $project_data = ProjectModel::getRowById($list1['project_id']);
+                }else{
+                    $project_data = [
+                        'name'=>'其他',
+                    ];
+                }
+                $list1['project_name'] = $project_data['name'];
+                $approval_status = config('other.approval_status');
+                $this->assign('approval_status', $approval_status);
+                $this->assign('list1', $list1);
             }
 
             if ($this->request->isPost()) {
@@ -3070,6 +3123,55 @@ class Approval extends Admin
                     }elseif (!empty($list['a_aid']) && $ct[0] == 3){
                         $table = 'tb_approval_cost';
                         $f = 'b.type,b.reason,b.money,b.attachment,b.payee,b.bank,b.card_num';
+                        $map = [
+                            'a.id' => $list['a_aid']
+                        ];
+                        $fields = 'a.*,' . $f;
+                        $list1 = db('approval')->alias('a')->field($fields)
+                            ->join("{$table} b", 'a.id = b.aid', 'left')
+                            ->where($map)->find();
+                        $list1['attachment'] = explode(',', substr($list1['attachment'], 0, -1));
+                        $list1['real_name'] = AdminUser::getUserById($list1['user_id'])['realname'];
+                        $list1['deal_user'] = $this->deal_data($list1['deal_user']);
+                        $list1['fellow_user'] = $this->deal_data($list1['fellow_user']);
+                        $list1['send_user'] = $this->deal_data($list1['send_user']);
+                        $list1['copy_user'] = $this->deal_data($list1['copy_user']);
+                        if ($list1['project_id']){
+                            $project_data = ProjectModel::getRowById($list1['project_id']);
+                        }else{
+                            $project_data = [
+                                'name'=>'其他',
+                            ];
+                        }
+                        $list1['project_name'] = $project_data['name'];
+                    }elseif (!empty($list['a_aid']) && $ct[0] == 6){
+                        $table = 'tb_approval_overtime';
+                        $f = 'b.reason,b.time_long1,b.attachment,b.overtime_type';
+                        $map = [
+                            'a.id' => $list['a_aid']
+                        ];
+                        $fields = 'a.*,' . $f;
+                        $list1 = db('approval')->alias('a')->field($fields)
+                            ->join("{$table} b", 'a.id = b.aid', 'left')
+                            ->where($map)->find();
+                        $list1['attachment'] = explode(',', substr($list1['attachment'], 0, -1));
+                        $list1['real_name'] = AdminUser::getUserById($list1['user_id'])['realname'];
+                        $list1['deal_user'] = $this->deal_data($list1['deal_user']);
+                        $list1['send_user'] = $this->deal_data($list1['send_user']);
+                        $list1['copy_user'] = $this->deal_data($list1['copy_user']);
+                        if ($list1['project_id']){
+                            $project_data = ProjectModel::getRowById($list1['project_id']);
+                        }else{
+                            $project_data = [
+                                'name'=>'其他',
+                            ];
+                        }
+                        $list1['project_name'] = $project_data['name'];
+                        $overtime_type = config('other.overtime_type');
+                        $this->assign('overtime_type', $overtime_type);
+                    }elseif (!empty($list['a_aid']) && $ct[0] == 7){
+                        $table = 'tb_approval_goout';
+                        $f = 'b.reason,b.address,b.time_long1,b.attachment';
                         $map = [
                             'a.id' => $list['a_aid']
                         ];

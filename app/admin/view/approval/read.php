@@ -145,6 +145,67 @@
                 批示时间：{$list1['update_time']|date='Y-m-d H:i:s',###}<br>
             </blockquote>
             {/eq}
+            {eq name="ct" value='6'}
+            <blockquote class="layui-elem-quote" style="color: grey">
+                申请时间：{$list1['create_time']|date='Y-m-d H:i:s',###}<br>
+                姓名：{$list1['real_name']}<br>
+                开始时间：{$list1['start_time']}<br>
+                结束时间：{$list1['end_time']}<br>
+                项目名称：{$list1['project_name']}<br>
+                加班类型：{$overtime_type[$list1['overtime_type']]}<br>
+                事由：{$list1['reason']}<br>
+                附件说明：
+                {notempty name="list1['attachment'][0]"}
+                <!--            <div class="image-list">-->
+                <ul>
+                    {volist name="list1['attachment']" id="vo"}
+                    <!--                <div class="cover"><img src="{$vo}" style="height: 30px;width: 30px;"></div>-->
+                    <li>&nbsp;&nbsp;&nbsp;&nbsp;<a target="_blank" href="{$vo}" style="color: #5c90d2">附件{$i}</a></li>
+                    {/volist}
+                </ul>
+                <!--            </div>-->
+                {else/}
+                <span>无</span>
+                {/notempty}
+                <br>
+                审批人：{$list1['send_user']}<br>
+                抄送人：{$list1['copy_user']}<br>
+                结果：{$approval_status[$list1['status']]}<br>
+                备注：{$list1['mark']}<br>
+                批示时间：{$list1['update_time']|date='Y-m-d H:i:s',###}<br>
+            </blockquote>
+            {/eq}
+            {eq name="ct" value='7'}
+            <blockquote class="layui-elem-quote" style="color: grey">
+                申请时间：{$list1['create_time']|date='Y-m-d H:i:s',###}<br>
+                姓名：{$list1['real_name']}<br>
+                开始时间：{$list1['start_time']}<br>
+                结束时间：{$list1['end_time']}<br>
+                项目名称：{$list1['project_name']}<br>
+                外出地点：{$list1['address']}<br>
+                同行人：{$list1['fellow_user']}<br>
+                事由：{$list1['reason']}<br>
+                附件说明：
+                {notempty name="list1['attachment'][0]"}
+                <!--            <div class="image-list">-->
+                <ul>
+                    {volist name="list1['attachment']" id="vo"}
+                    <!--                <div class="cover"><img src="{$vo}" style="height: 30px;width: 30px;"></div>-->
+                    <li>&nbsp;&nbsp;&nbsp;&nbsp;<a target="_blank" href="{$vo}" style="color: #5c90d2">附件{$i}</a></li>
+                    {/volist}
+                </ul>
+                <!--            </div>-->
+                {else/}
+                <span>无</span>
+                {/notempty}
+                <br>
+                审批人：{$list1['send_user']}<br>
+                抄送人：{$list1['copy_user']}<br>
+                结果：{$approval_status[$list1['status']]}<br>
+                备注：{$list1['mark']}<br>
+                批示时间：{$list1['update_time']|date='Y-m-d H:i:s',###}<br>
+            </blockquote>
+            {/eq}
             {/if}
             {if condition="$class_type eq 15"}
             <blockquote class="layui-elem-quote" style="color: grey">
@@ -433,7 +494,7 @@
 
             {notempty name="fin_list"}
             <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-                <legend>财务审核</legend>
+                <legend>财务支付审核</legend>
             </fieldset>
             <ul class="layui-timeline">
                 {volist name="fin_list" id="vo"}

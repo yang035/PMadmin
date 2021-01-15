@@ -148,7 +148,7 @@
             trigger: 'click',
             value: new Date(),
             showBottom: false,
-            min: 0,
+            min: -1,
             done: function (value, date, endDate) {
                 $("input[name='end_time']").val(value);
             }
@@ -158,8 +158,8 @@
             type: 'time',
             // format: 'HH',
             trigger: 'click',
-            min: '08:00:00',
-            max: '18:00:00',
+            // min: '08:00:00',
+            // max: '18:00:00',
             value: getStartTime(),
         });
         laydate.render({
@@ -167,7 +167,7 @@
             type: 'date',
             calendar: true,
             trigger: 'click',
-            min: 0,
+            min: -1,
             value: new Date(),
         });
         laydate.render({
@@ -175,8 +175,8 @@
             type: 'time',
             // format: 'HH',
             trigger: 'click',
-            min: '08:00:00',
-            max: '18:00:00',
+            // min: '08:00:00',
+            // max: '18:00:00',
             value: '18:00:00',
         });
         $('.field-reason').focus(function () {
