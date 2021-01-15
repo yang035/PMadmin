@@ -140,7 +140,7 @@
                     <a class="layui-btn layui-btn-normal layui-btn-xs">撤销</a>
                 </div>
                 {/if}
-                {if condition="($vo['status'] eq 2) && ($Request.param.atype == 2 or $Request.param.atype == 7)"}
+                {if condition="($vo['status'] eq 2) && ($Request.param.atype == 2 or $Request.param.atype == 7) && ($vo['h'] eq 1)"}
                 {in name="vo['class_type']" value="3,4,6,7"}
                 <div class="layui-btn-group" onclick="expense({$vo['id']},'{$vo['class_type']}')">
                     <a class="layui-btn layui-btn-danger layui-btn-xs">报销</a>

@@ -389,6 +389,11 @@ class Approval extends Admin
                 $list[$k]['finance_user'] = $this->deal_data($v['finance_user']);
                 $list[$k]['finance_time'] = date('Y-m-d', $v['finance_time']);
             }
+            $list[$k]['h'] = 1;
+            $h = date('H',strtotime($v['end_time']));
+            if (!in_array($h,['22','23','00','01','02','03','04','05','06']) && 6 == $v['class_type']){
+                $list[$k]['h'] = 0;
+            }
         }
 
         $this->assign('tab_data', $this->tab_data);
