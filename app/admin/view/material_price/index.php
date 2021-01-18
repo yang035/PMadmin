@@ -56,6 +56,7 @@
             ,cols: [[ //表头
                 {type:'checkbox'}
                 ,{field: 'project_name', title: '项目'}
+                ,{field: 'company_name', title: '合作公司'}
                 ,{field: 'name', title: '名称及规格'}
                 ,{field: 'unit',  title: '单位',width:60}
                 ,{field: 'caigou_danjia', title: '采购单价(元)'}

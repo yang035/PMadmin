@@ -25,6 +25,15 @@
             <div class="layui-form-mid" style="color: red">*</div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label">合作公司</label>
+            <div class="layui-input-inline">
+                <select name="company_id" class="layui-input field-company_id" type="select" lay-filter="company_id" lay-search>
+                    {$company_select}
+                </select>
+            </div>
+            <div class="layui-form-mid" style="color: red">*</div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">规格及名称</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-name" name="name" lay-verify="required" autocomplete="off" placeholder="请输规格及名称">

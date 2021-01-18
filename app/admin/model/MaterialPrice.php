@@ -54,23 +54,29 @@ class MaterialPrice extends Model
         }
     }
 
-    public static function getMaterialList($uid, $id = 0)
+    public static function getMaterialList($project_id,$company_id, $id=0)
     {
         $where = [
-            'user_id' => $uid,
-//            'project_id' => $id,
+            'project_id' => $project_id,
+            'company_id' => $company_id,
         ];
-        $list = self::where($where)->column('name');
-        if ($list) {
-            $str = "<option value=''>选择</option>";
-            foreach ($list as $k => $v) {
-                if ($id == $v) {
-                    $str .= "<option value='".$v."' selected>".$v."</option>";
-                } else {
-                    $str .= "<option value='".$v."'>".$v."</option>";
-                }
+        if ($id){
+            $where['id'] = $id;
+            $list = self::where($where)->find();
+            if ($list) {
+                return $list->toArray();
+            }else{
+                return [];
             }
-            return $str;
+        }else{
+            $list = self::where($where)->column('name','id');
+            if ($list) {
+                $str = "<option value=''>选择</option>";
+                foreach ($list as $k => $v) {
+                    $str .= "<option value='".$k."'>".$v."</option>";
+                }
+                return $str;
+            }
         }
     }
 }

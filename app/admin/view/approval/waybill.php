@@ -22,16 +22,6 @@
                 </select>
             </div>
         </div>
-<!--    <div class="layui-form-item">-->
-<!--        <label class="layui-form-label">选择项目</label>-->
-<!--        <div class="layui-input-inline">-->
-<!--            <div class="layui-input-inline box box1">-->
-<!--            </div>-->
-<!--            <input id="project_name" type="hidden" name="project_name" value="{$Request.param.project_name}">-->
-<!--            <input id="project_id" type="hidden" name="project_id" value="{$Request.param.project_id}">-->
-<!--        </div>-->
-<!--        <div class="layui-form-mid red">*</div>-->
-<!--    </div>-->
     <div class="layui-form-item hide">
         <label class="layui-form-label">开始时间</label>
         <div class="layui-input-inline" style="width: 250px">
@@ -67,22 +57,17 @@
     <div class="layui-form-item">
         <label class="layui-form-label">清单</label>
         <div class="layui-input-inline" style="width: 200px">
-            <select name="content[]" class="field-content" type="select">
-                {$material_p}
+            <select name="content[]" class="field-content" type="select" lay-filter="rid" id="i_id0">
             </select>
         </div>
         <div class="layui-input-inline" style="width: 100px">
             <input type="number" class="layui-input field-num" name="num[]" onblur="amout_sum()" autocomplete="off" placeholder="计量">
         </div>
+        <div class="layui-form-mid" style="color: red" id="danwei0"></div>
         <div class="layui-input-inline" style="width: 100px">
-            <select name="unit[]" class="field-unit" type="select">
-                {$unit_option}
-            </select>
+            <input type="number" class="layui-input field-per_price" name="per_price[]" onblur="amout_sum()" id="per_price0" autocomplete="off" placeholder="单价">
         </div>
-        <div class="layui-input-inline" style="width: 100px">
-            <input type="number" class="layui-input field-per_price" name="per_price[]" onblur="amout_sum()" id="per_price1" autocomplete="off" placeholder="单价">
-        </div>
-        <div class="layui-form-mid" style="color: red">元</div>
+        <div class="layui-form-mid" style="color: red">元 <span id="yuanjia0"></span></div>
     </div>
     <div class="new_task">
         <a href="javascript:void(0);" class="aicon ai-tianjia field-guige-add" style="float: left;margin-left:650px;font-size: 30px;"></a>
@@ -286,6 +271,44 @@
         form.on('select(project_type)', function(data){
             select_union(data.value);
         });
+        function select_union(project_id){
+            $.ajax({
+                type: 'POST',
+                url: "{:url('getMaterialList')}",
+                data: {project_id:project_id},
+                dataType:  'json',
+                success: function(data){
+                    $('.field-content').html(data);
+                    form.render();
+                }
+            });
+        }
+
+        form.on('select(rid)', function(data){
+            select_union1($("select[name='project_id']").val(),data.value);
+        });
+        function select_union1(project_id,id,len){
+            var len=len||0;
+            $.ajax({
+                type: 'POST',
+                url: "{:url('getMaterialList')}",
+                data: {project_id:project_id,id:id},
+                dataType:  'json',
+                success: function(data){
+                    console.log(len);
+                    if (len > 0){
+                        $('#danwei'+len).html(data.unit);
+                        $('#per_price'+len).val(data.caigou_danjia);
+                        $('#yuanjia'+len).html('(原单价：'+data.caigou_danjia+'元)');
+                    } else {
+                        $('#danwei0').html(data.unit);
+                        $('#per_price0').val(data.caigou_danjia);
+                        $('#yuanjia0').html('(原单价：'+data.caigou_danjia+'元)');
+                    }
+                    form.render();
+                }
+            });
+        }
 
         $('#send_user_id').on('click', function(){
             var send_user = $('#send_user').val();
@@ -328,48 +351,28 @@
         });
         // var i=1;
         $(".field-guige-add").click(function(){
-            i++;
+            var len= $('#editForm').children('div').length - 13;
             $(".new_task").before("<div class=\"layui-form-item\">\n" +
                 "        <label class=\"layui-form-label\">清单</label>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 200px\">\n" +
-                "<select name=\"content[]\" class=\"field-content\" type=\"select\">\n" +
-                "                {$material_p}\n" +
-                "            </select>" +
+                "            <select name=\"content[]\" class=\"field-content\" type=\"select\" lay-filter='rid"+len+"' id='i_id"+len+"'>\n" +
+                "            </select>\n" +
                 "        </div>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
                 "            <input type=\"number\" class=\"layui-input field-num\" name=\"num[]\" onblur=\"amout_sum()\" autocomplete=\"off\" placeholder=\"计量\">\n" +
                 "        </div>\n" +
+                "        <div class=\"layui-form-mid\" style=\"color: red\" id='danwei"+len+"'></div>\n" +
                 "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
-                "            <select name=\"unit[]\" class=\"field-unit\" type=\"select\">\n" +
-                "                {$unit_option}\n" +
-                "            </select>\n" +
+                "            <input type=\"number\" class=\"layui-input field-per_price\" name=\"per_price[]\" onblur=\"amout_sum()\" id='per_price"+len+"' autocomplete=\"off\" placeholder=\"单价\">\n" +
                 "        </div>\n" +
-                "        <div class=\"layui-input-inline\" style=\"width: 100px\">\n" +
-                "            <input type=\"number\" class=\"layui-input field-per_price\" name=\"per_price[]\" onblur=\"amout_sum()\" id='per_price"+i+"' autocomplete=\"off\" placeholder=\"单价\">\n" +
-                "        </div>\n" +
-                "        <div class=\"layui-form-mid\" style=\"color: red\">元</div>\n" +
+                "        <div class=\"layui-form-mid\" style=\"color: red\">元 <span id='yuanjia"+len+"'></span></div>\n" +
                 "    </div>");
-            form.render();
-
-            $(".search_input"+i).keyup(function(event){
-                $(".searchDiv"+i).find("dl.layui-anim").show();
-                if(''!=$(this).val().trim()){ //如果输入框的值没有改变就没必要发送ajax请求
-                    //根据用户输入的内容发送ajax请求查询以此内容开头的商品简码，从而查出符合要求的商品名字
-                    $.post("{:url('getBudget')}",{"project_id":$("#project_id").val()},function(data){
-                        if(!!data){
-                            //清除掉以前的值
-                            $(".searchDiv"+i+" dl.layui-anim").html("");
-                            $.each($.parseJSON(data),function(index,item){
-                                // console.log(index);
-                                $(".searchDiv"+i).find("dl.layui-anim").append("<dd lay-value=\""+item.id +"\" onclick=\"changeSearchText(this,i,"+item.caigou_danjia+")\">"+item.name+"</dd>");
-                                $(".searchDiv"+i).find("dl.layui-anim").children("dd:first").addClass("layui-this");
-                            });
-                            //重新渲染select
-                            form.render('select');
-                        }
-                    },'json');
-                }
+            select_union($("#project_id").val());
+            form.on('select(rid'+len+')', function(data){
+                select_union1($("select[name='project_id']").val(),data.value,len);
             });
+            element.render();
+            form.render();
         });
 
         //创建监听函数
@@ -506,17 +509,6 @@
         optionMaxHeight:300//下拉框最大高度
     });
 
-    function select_union(id){
-        $.ajax({
-            type: 'POST',
-            url: "{:url('getFlowUser')}",
-            data: {id:id},
-            dataType:  'json',
-            success: function(data){
-                $('#send_user').val(data.manager_user);
-            }
-        });
-    }
 
     function check_name(){
         var name = $('.field-shigong_select_id').val();
@@ -556,23 +548,5 @@
         $('.field-money').val(total);
     }
 
-    function select_union(id){
-        $.ajax({
-            type: 'POST',
-            url: "{:url('getFlowUser')}",
-            data: {id:id},
-            dataType:  'json',
-            success: function(data){
-                // $("#c_id").html("");
-                // $.each(data, function(key, val) {
-                //     var option1 = $("<option>").val(val.areaId).text(val.fullname);
-                $('#send_select_id').html(data.manager_user_id);
-                $('#send_user').val(data.manager_user);
-                // form.render('select');
-                // });
-                // $("#c_id").get(0).selectedIndex=0;
-            }
-        });
-    }
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>

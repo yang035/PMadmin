@@ -37,4 +37,25 @@ class HezuoCompany extends Model
 
     }
 
+    public static function getOption1($id='')
+    {
+        $cid = session('admin_user.cid');
+        $where = [
+            'cid' => $cid,
+        ];
+        $field = 'hc.company_id,c.name';
+        $rows = Db::table('tb_hezuo_company hc')
+            ->join('tb_admin_company c','hc.company_id=c.id','left')
+            ->field($field)
+            ->where($where)->select();
+        $data = [];
+        if ($rows){
+            foreach ($rows as $k=>$v) {
+                $data[$v['name']] = $v['company_id'];
+            }
+        }
+        return $data;
+
+    }
+
 }

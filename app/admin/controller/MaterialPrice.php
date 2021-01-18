@@ -7,8 +7,10 @@
  */
 
 namespace app\admin\controller;
+use app\admin\model\AdminCompany;
 use app\admin\model\Project as ProjectModel;
 use app\admin\model\MaterialPrice as MaterialPriceModel;
+use app\admin\model\HezuoCompany as HezuoCompanyModel;
 use app\admin\model\Score as ScoreModel;
 use app\admin\model\AdminUser;
 
@@ -43,9 +45,11 @@ class MaterialPrice extends Admin
             }
             $myPro = ProjectModel::getProTask(0, 0);
             $data['data'] = MaterialPriceModel::where($where)->page($page)->limit($limit)->select();
+            $company = AdminCompany::getOption2();
             foreach ($data['data'] as $k => $v) {
                 $data['data'][$k]['project_name'] = $myPro[$v['project_id']];
                 $data['data'][$k]['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
+                $data['data'][$k]['company_name'] = $company[$v['company_id']];
             }
             $data['count'] = MaterialPriceModel::where($where)->count('id');
             $data['code'] = 0;
@@ -67,6 +71,13 @@ class MaterialPrice extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
 
+            if (!$data['project_id']) {
+                return $this->error('请选择项目');
+            }
+            if (!$data['company_id']) {
+                return $this->error('请选择合作公司');
+            }
+
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
             unset($data['id']);
@@ -81,6 +92,7 @@ class MaterialPrice extends Admin
             return $this->success("操作成功{$this->score_value}");
         }
         $this->assign('unit_option', MaterialPriceModel::getUnitOption());
+        $this->assign('company_select', HezuoCompanyModel::getOption());
         return $this->fetch('itemform');
     }
 
@@ -88,6 +100,14 @@ class MaterialPrice extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            if (!$data['project_id']) {
+                return $this->error('请选择项目');
+            }
+            if (!$data['company_id']) {
+                return $this->error('请选择合作公司');
+            }
+
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
             // 验证
@@ -104,6 +124,7 @@ class MaterialPrice extends Admin
         $row = MaterialPriceModel::where('id', $id)->find();
         $this->assign('data_info', $row);
         $this->assign('unit_option', MaterialPriceModel::getUnitOption($row['unit']));
+        $this->assign('company_select', HezuoCompanyModel::getOption($row['company_id']));
         return $this->fetch('itemform');
     }
 
@@ -128,8 +149,8 @@ class MaterialPrice extends Admin
 //            print_r($file_name);exit();
             set_time_limit(0);
             $excel = \service('Excel');
-            $format = array('A' => 'line', 'B' => 'name', 'C' => 'unit', 'D' => 'caigou_shuliang', 'E' => 'caigou_danjia', 'F' => 'caigou_zongjia');
-            $checkformat = array('A' => '序号', 'B' => '名称及规格', 'C' => '单位', 'D' => '数量', 'E' => '单价(元)', 'F' => '总价(元)');
+            $format = array('A' => 'line', 'B' => 'name', 'C' => 'unit', 'D' => 'caigou_shuliang', 'E' => 'caigou_danjia', 'F' => 'caigou_zongjia', 'G' => 'company_name');
+            $checkformat = array('A' => '序号', 'B' => '名称及规格', 'C' => '单位', 'D' => '数量', 'E' => '单价(元)', 'F' => '总价(元)', 'G' => '合作公司');
             $res = $excel->readUploadFile($file_name, $format, 8050, $checkformat);
             $cid = session('admin_user.cid');
             if ($res['status'] == 0) {
@@ -141,6 +162,18 @@ class MaterialPrice extends Admin
                     return $this->error("名称不能有重复的或空值");
                 }
                 $i = 0;
+                $company = HezuoCompanyModel::getOption1();
+                $g0 = array_column($res['data'], 'G');
+                $g1 = array_unique(array_filter($g0));
+                if (count($g1) != 1){
+                    return $this->error("合作公司只能填写一个");
+                }
+                if (key_exists($g1[0],$company)){
+                    $company_id = $company[$g1[0]];
+                }else{
+                    return $this->error("合作公司不存在");
+                }
+
                 foreach ($res['data'] as $k => $v) {
                     $where = [
                         'cid' => $cid,
@@ -157,6 +190,7 @@ class MaterialPrice extends Admin
                             'caigou_shuliang' => $v['D'],
                             'caigou_danjia' => $v['E'],
                             'caigou_zongjia' => $v['F'],
+                            'company_id' => $company_id,
                             'user_id' => session('admin_user.uid'),
                         ];
                         $f1 = MaterialPriceModel::create($tmp);
@@ -170,6 +204,7 @@ class MaterialPrice extends Admin
                             'caigou_shuliang' => $v['D'],
                             'caigou_danjia' => $v['E'],
                             'caigou_zongjia' => $v['F'],
+                            'company_id' => $company_id,
                             'user_id' => session('admin_user.uid'),
                         ];
                         $f1 = MaterialPriceModel::update($tmp);

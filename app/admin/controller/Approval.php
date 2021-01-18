@@ -1999,8 +1999,13 @@ class Approval extends Admin
         }
         $this->assign('mytask', MaterialPrice::getP($uid));
         $this->assign('unit_option', ApprovalWaybill::getUnitOption());
-        $this->assign('material_p', MaterialPrice::getMaterialList($uid,776));
         return $this->fetch();
+    }
+
+    public function getMaterialList($project_id,$id = 0){
+        $company_id = session('admin_user.cid');
+        $list = MaterialPrice::getMaterialList($project_id,$company_id,$id);
+        return json($list);
     }
 
     public function applyPay()
