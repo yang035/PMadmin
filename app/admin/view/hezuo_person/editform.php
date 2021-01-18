@@ -18,8 +18,17 @@
         <div class="layui-form-item">
             <label class="layui-form-label">选择公司</label>
             <div class="layui-input-inline">
-                <select name="company_id" class="layui-input field-company_id" type="select" lay-filter="project" lay-search>
+                <select name="company_id" class="layui-input field-company_id" type="select" disabled lay-filter="company_id" lay-search>
                     {$company_select}
+                </select>
+            </div>
+            <div class="layui-form-mid" style="color: red">*</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择人员</label>
+            <div class="layui-input-inline">
+                <select name="person_id" class="layui-input field-person_id" type="select" id="person_id" lay-search>
+                    {$person_select}
                 </select>
             </div>
             <div class="layui-form-mid" style="color: red">*</div>
@@ -52,6 +61,7 @@
 
     layui.use(['jquery', 'laydate','upload','form'], function() {
         var $ = layui.jquery, laydate = layui.laydate,upload = layui.upload,form = layui.form;
+
         //多文件列表示例
         var demoListView = $('#demoList'),uploadListIns = upload.render({
             elem: '#testList',

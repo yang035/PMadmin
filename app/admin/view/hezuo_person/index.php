@@ -13,9 +13,10 @@
     <div class="page-filter">
         <form class="layui-form layui-form-pane" action="{:url()}" method="get" id="hisi-table-search">
             <div class="layui-form-item">
-                <label class="layui-form-label">项目名</label>
+                <label class="layui-form-label">选择公司</label>
                 <div class="layui-input-inline">
-                    <select name="project_id" class="layui-input field-project_id" type="select" lay-filter="project" lay-search>
+                    <select name="company_id" class="layui-input field-company_id" type="select" lay-filter="project" lay-search>
+                        {$company_select}
                     </select>
                 </div>
                 <input type="hidden" class="field-cat_id" name="cat_id">

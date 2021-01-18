@@ -14,7 +14,7 @@
     <div class="page-filter">
         <form class="layui-form layui-form-pane" action="{:url()}" method="get" id="hisi-table-search">
             <div class="layui-form-item">
-                <label class="layui-form-label">公司名称</label>
+                <label class="layui-form-label">选择公司</label>
                 <div class="layui-input-inline">
                     <select name="company_id" class="layui-input field-company_id" type="select" lay-filter="project" lay-search>
                         {$company_select}

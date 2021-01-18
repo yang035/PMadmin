@@ -426,6 +426,26 @@ class AdminUser extends Model
         return $str;
     }
 
+    public static function selectUser1($company_id,$type = 0){
+        $where = [
+            'status' => 1,
+            'is_show' => 0,
+            'company_id' => $company_id,
+        ];
+        $data = self::where($where)->field('id,id_card')->select();
+        $str = '<option value="">选择</option>';
+        if ($data){
+            foreach ($data as $k => $v) {
+                if ($type == $k) {
+                    $str .= "<option value='".$v['id']."'>".$v['id_card']."</option>";
+                } else {
+                    $str .= "<option value='".$v['id']."'>".$v['id_card']."</option>";
+                }
+            }
+        }
+        return $str;
+    }
+
     public static function inputSearchUser(){
         $where = [
             'status' => 1,

@@ -16,10 +16,18 @@
 <form class="layui-form" action="{:url()}" method="post">
     <div class="layui-tab-item layui-show layui-form-pane">
         <div class="layui-form-item">
-            <label class="layui-form-label">项目名</label>
+            <label class="layui-form-label">选择公司</label>
             <div class="layui-input-inline">
-                <select name="company_id" class="layui-input field-company_id" type="select" lay-filter="project" lay-search>
+                <select name="company_id" class="layui-input field-company_id" type="select" lay-filter="company_id" lay-search>
                     {$company_select}
+                </select>
+            </div>
+            <div class="layui-form-mid" style="color: red">*</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择人员</label>
+            <div class="layui-input-inline">
+                <select name="person_id" class="layui-input field-person_id" type="select" id="person_id" lay-search>
                 </select>
             </div>
             <div class="layui-form-mid" style="color: red">*</div>
@@ -52,6 +60,23 @@
 
     layui.use(['jquery', 'laydate','upload','form'], function() {
         var $ = layui.jquery, laydate = layui.laydate,upload = layui.upload,form = layui.form;
+
+        form.on('select(company_id)', function(data){
+            select_union(data.value);
+        });
+
+        function select_union(company_id){
+            $.ajax({
+                type: 'POST',
+                url: "{:url('personSelect')}",
+                data: {company_id:company_id},
+                dataType:  'json',
+                success: function(data){
+                    $('#person_id').html(data);
+                    form.render('select');
+                }
+            });
+        }
         //多文件列表示例
         var demoListView = $('#demoList'),uploadListIns = upload.render({
             elem: '#testList',

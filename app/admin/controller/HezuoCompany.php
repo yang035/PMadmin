@@ -38,6 +38,10 @@ class HezuoCompany extends Admin
             $page = input('param.page/d', 1);
             $limit = input('param.limit/d', 30);
 
+            if (isset($params['company_id'])){
+                $where['company_id'] = $params['company_id'];
+            }
+
             $where['cid'] = session('admin_user.cid');
             $data['data'] = HezuoCompanyModel::where($where)->page($page)->limit($limit)->select();
             $company = AdminCompany::getOption2();
