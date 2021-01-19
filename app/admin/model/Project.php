@@ -672,4 +672,25 @@ class Project extends Model
         }
         return $str;
     }
+
+    public static function getShigongUser($project_id){
+        $map = [
+            'id'=>$project_id,
+        ];
+        $row = self::field('id,partner_user')->where($map)->find();
+        $str = '<option value="">请选择</option>';
+        if ($row) {
+            $row['partner_user'] = json_decode($row['partner_user'],true);
+            if ($row['partner_user']) {
+                $where = [
+                    'id'=>['in',array_keys($row['partner_user'])]
+                ];
+                $user_data = AdminUser::where($where)->column('realname','id');
+                foreach ($user_data as $k => $v) {
+                    $str .= '<option value="'.$k.'">'.$v.'</option>';
+                }
+            }
+        }
+        return $str;
+    }
 }

@@ -247,7 +247,7 @@
                 送货日期：{$list1['date']}<br>
                 清单明细：<br>
                 {volist name="$list1['detail']" id="vo"}
-                说明：{$vo['content']}&nbsp;&nbsp;|&nbsp;&nbsp;计量：{$vo['num']}{$unit_type[$vo['unit']]}&nbsp;&nbsp;|&nbsp;&nbsp;单价：{$vo['per_price']}元（合计：{$vo['num']*$vo['per_price']}元）<br>
+                说明：{$vo['content']}&nbsp;&nbsp;|&nbsp;&nbsp;计量：{$vo['num']}{$vo['unit']}&nbsp;&nbsp;|&nbsp;&nbsp;单价：{$vo['per_price']}元（合计：{$vo['num']*$vo['per_price']}元）（协议单价：{$vo['caigou_danjia']}元）<br>
                 {/volist}
                 <br>
                 总计：{$list1['money']}元<br>
@@ -417,7 +417,7 @@
                 送货日期：{$data_list['date']}<br>
                 清单明细：<br>
                 {volist name="$data_list['detail']" id="vo"}
-                说明：{$vo['content']}&nbsp;&nbsp;|&nbsp;&nbsp;计量：{$vo['num']}{$unit_type[$vo['unit']]}&nbsp;&nbsp;|&nbsp;&nbsp;单价：{$vo['per_price']}元（合计：{$vo['num']*$vo['per_price']}元）<br>
+                说明：{$vo['content']}&nbsp;&nbsp;|&nbsp;&nbsp;计量：{$vo['num']}{$vo['unit']}&nbsp;&nbsp;|&nbsp;&nbsp;单价：{$vo['per_price']}元（合计：{$vo['num']*$vo['per_price']}元）（协议单价：{$vo['caigou_danjia']}元）<br>
                 {/volist}
                 <br>
                 总计：{$data_list['money']}元<br>

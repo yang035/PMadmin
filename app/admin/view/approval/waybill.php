@@ -114,11 +114,11 @@
     </div>
     <div class="layui-form-item">
     <label class="layui-form-label">施工员</label>
-    <div class="layui-input-inline">
-        <input type="text" class="layui-input field-shigong_select_id" name="shigong_select_id" onblur="check_name()" autocomplete="off" placeholder="姓名">
-        <input type="hidden" name="shigong_user" id="shigong_user" value="" lay-verify="required">
-    </div>
-    <div class="layui-form-mid" style="color: red">*</div>
+        <div class="layui-input-inline">
+            <select name="shigong_user" class="field-shigong_user" type="select">
+            </select>
+        </div>
+        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">审批人</label>
@@ -270,6 +270,8 @@
         });
         form.on('select(project_type)', function(data){
             select_union(data.value);
+            getPartner(data.value);
+            select_union2(data.value);
         });
         function select_union(project_id){
             $.ajax({
@@ -279,6 +281,19 @@
                 dataType:  'json',
                 success: function(data){
                     $('.field-content').html(data);
+                    form.render();
+                }
+            });
+        }
+
+        function getPartner(project_id){
+            $.ajax({
+                type: 'POST',
+                url: "{:url('getShigongUser')}",
+                data: {project_id:project_id},
+                dataType:  'json',
+                success: function(data){
+                    $('.field-shigong_user').html(data);
                     form.render();
                 }
             });
@@ -303,9 +318,29 @@
                     } else {
                         $('#danwei0').html(data.unit);
                         $('#per_price0').val(data.caigou_danjia);
-                        $('#yuanjia0').html('(原单价：'+data.caigou_danjia+'元)');
+                        $('#yuanjia0').html('(协议价：'+data.caigou_danjia+'元)');
                     }
                     form.render();
+                }
+            });
+        }
+
+
+        function select_union2(id){
+            $.ajax({
+                type: 'POST',
+                url: "{:url('getFlowUser')}",
+                data: {id:id},
+                dataType:  'json',
+                success: function(data){
+                    // $("#c_id").html("");
+                    // $.each(data, function(key, val) {
+                    //     var option1 = $("<option>").val(val.areaId).text(val.fullname);
+                    $('#send_select_id').html(data.manager_user_id);
+                    $('#send_user').val(data.manager_user);
+                    // form.render('select');
+                    // });
+                    // $("#c_id").get(0).selectedIndex=0;
                 }
             });
         }

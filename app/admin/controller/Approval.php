@@ -1916,6 +1916,26 @@ class Approval extends Admin
             }
 //            $data['content'] = array_unique(array_filter($data['content']));
             $data['content'] = array_filter($data['content']);
+            $w = [
+                'id' => ['in',$data['content']]
+            ];
+            $m_p = MaterialPrice::where($w)->select();
+            $m_p_arr = $detail = [];
+            if ($m_p){
+                foreach ($m_p as $k=>$v){
+                    $m_p_arr[$v['id']] = $v;
+                }
+            }
+            if ($data['content']) {
+                foreach ($data['content'] as $k => $v) {
+                    $detail[$k]['m_id'] = $v;
+                    $detail[$k]['content'] = $m_p_arr[$v]['name'];
+                    $detail[$k]['num'] = !empty($data['num'][$k]) ? $data['num'][$k] : 0;
+                    $detail[$k]['unit'] = $m_p_arr[$v]['unit'];
+                    $detail[$k]['per_price'] = !empty($data['per_price'][$k]) ? $data['per_price'][$k] : 0;
+                    $detail[$k]['caigou_danjia'] = $m_p_arr[$v]['caigou_danjia'];
+                }
+            }
             // 验证
             $result = $this->validate($data, 'ApprovalWaybill');
             if ($result !== true) {
@@ -1972,18 +1992,8 @@ class Approval extends Admin
                     'shigong_user' => $data['shigong_user'],
                     'reason' => $data['reason'],
                     'attachment' => $data['attachment'],
+                    'detail' => json_encode($detail),
                 ];
-//                $leave['money'] = 0;
-                if ($data['content']) {
-                    foreach ($data['content'] as $k => $v) {
-                        $leave['detail'][$k]['content'] = $v;
-                        $leave['detail'][$k]['num'] = !empty($data['num'][$k]) ? $data['num'][$k] : 0;
-                        $leave['detail'][$k]['unit'] = !empty($data['unit'][$k]) ? $data['unit'][$k] : 1;
-                        $leave['detail'][$k]['per_price'] = !empty($data['per_price'][$k]) ? $data['per_price'][$k] : 0;
-//                        $leave['money'] += $leave['detail'][$k]['num']*$leave['detail'][$k]['per_price'];
-                    }
-                }
-                $leave['detail'] = json_encode($leave['detail']);
                 $flag = ApprovalWaybill::create($leave);
                 // 提交事务
                 Db::commit();
@@ -2005,6 +2015,11 @@ class Approval extends Admin
     public function getMaterialList($project_id,$id = 0){
         $company_id = session('admin_user.cid');
         $list = MaterialPrice::getMaterialList($project_id,$company_id,$id);
+        return json($list);
+    }
+
+    public function getShigongUser($project_id){
+        $list = ProjectModel::getShigongUser($project_id);
         return json($list);
     }
 
@@ -2873,6 +2888,31 @@ class Approval extends Admin
                                     \db('project_budgetcaigou')->insertAll($budgetcaigou);
                                 }
                             }
+
+                            if (20 == $data['class_type'] && 2 == $data['status']){
+                                $detail = json_decode($list['detail'], true);
+                                if ($detail){
+                                    $material_dan = [];
+                                    foreach ($detail as $k=>$v){
+                                        $material_dan[$k] = [
+                                            'cid' => session('admin_user.cid'),
+                                            'project_id' => $list['project_id'],
+                                            'm_p_id' => $v['m_id'],
+                                            'name' => $v['content'],
+                                            'unit' => $v['unit'],
+                                            'per_price' => $v['per_price'],
+                                            'caigou_danjia' => $v['caigou_danjia'],
+                                            'caigou_shuliang' => $v['num'],
+                                            'caigou_zongjia' => round($v['per_price']*$v['num'],2),
+                                            'user' => $list['user_id'],
+                                            'user_id' => session('admin_user.uid'),
+                                            'create_time' => time(),
+                                            'update_time' => time(),
+                                        ];
+                                    }
+                                    \db('material_dan')->insertAll($material_dan);
+                                }
+                            }
                         }
                     }else{
                         ApprovalModel::update($ap);
@@ -2962,6 +3002,31 @@ class Approval extends Admin
                                     ];
                                 }
                                 \db('project_budgetcaigou')->insertAll($budgetcaigou);
+                            }
+                        }
+
+                        if (20 == $data['class_type'] && 2 == $data['status']){
+                            $detail = json_decode($list['detail'], true);
+                            if ($detail){
+                                $material_dan = [];
+                                foreach ($detail as $k=>$v){
+                                    $material_dan[$k] = [
+                                        'cid' => session('admin_user.cid'),
+                                        'project_id' => $list['project_id'],
+                                        'm_p_id' => $v['m_id'],
+                                        'name' => $v['content'],
+                                        'unit' => $v['unit'],
+                                        'per_price' => $v['per_price'],
+                                        'caigou_danjia' => $v['caigou_danjia'],
+                                        'caigou_shuliang' => $v['num'],
+                                        'caigou_zongjia' => round($v['per_price']*$v['num'],2),
+                                        'user' => $list['user_id'],
+                                        'user_id' => session('admin_user.uid'),
+                                        'create_time' => time(),
+                                        'update_time' => time(),
+                                    ];
+                                }
+                                \db('material_dan')->insertAll($material_dan);
                             }
                         }
                     }
