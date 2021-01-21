@@ -147,7 +147,7 @@
                 </div>
                 {/in}
                 {/if}
-                {if condition="($vo['status'] eq 2) && ($Request.param.atype == 2 or $Request.param.atype == 7) && ($vo['class_type'] == 20 or $vo['class_type'] == 21)"}
+                {if condition="($vo['status'] eq 2) && ($Request.param.atype == 2 or $Request.param.atype == 7) && ($vo['class_type'] == 22 or $vo['class_type'] == 23)"}
                 <div class="layui-btn-group" onclick="applyPay({$vo['id']},'{$vo['class_type']}')">
                     <a class="layui-btn layui-btn-danger layui-btn-xs">申请支付</a>
                 </div>
@@ -275,7 +275,7 @@
     }
 
     function applyPay(id,ct){
-        var open_url = "{:url('ApprovalMaterial/applyPay')}?id="+id+"&class_type=21&ct="+ct;
+        var open_url = "{:url('ApprovalMaterial/applyPay')}?id="+id+"&class_type=23&ct="+ct;
         window.location.href = open_url;
     }
 </script>

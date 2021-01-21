@@ -20,10 +20,51 @@
     }
 </style>
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <blockquote class="layui-elem-quote" style="color: grey">
+                {if condition="($Request.param.ct eq 22) && $list1" /}
+                    申请时间：{$list1['create_time']|date='Y-m-d H:i:s',###}<br>
+                    姓名：{$list1['real_name']}<br>
+                    开始时间：{$list1['start_time']}<br>
+                    结束时间：{$list1['end_time']}<br>
+                    项目名称：{$list1['project_name']}<br>
+                    送货日期：{$list1['date']}<br>
+                    清单明细：<br>
+                    {volist name="$list1['detail']" id="vo"}
+                    说明：{$vo['content']}&nbsp;&nbsp;|&nbsp;&nbsp;计量：{$vo['num']}{$vo['unit']}&nbsp;&nbsp;|&nbsp;&nbsp;单价：{$vo['per_price']}元（合计：{$vo['num']*$vo['per_price']}元）<br>
+                    {/volist}
+                    <br>
+                    总计：{$list1['money']}元<br>
+                    施工员：{$list1['shigong_user']}<br>
+                    事由：{$list1['reason']}<br>
+                    附件说明：
+                    {notempty name="list1['attachment'][0]"}
+                    <!--            <div class="image-list">-->
+                    <ul>
+                        {volist name="list1['attachment']" id="vo"}
+                        <!--                <div class="cover"><img src="{$vo}" style="height: 30px;width: 30px;"></div>-->
+                        <li>&nbsp;&nbsp;&nbsp;&nbsp;<a target="_blank" href="{$vo}" style="color: #5c90d2">附件{$i}</a></li>
+                        {/volist}
+                    </ul>
+                    <!--            </div>-->
+                    {else/}
+                    <span>无</span>
+                    {/notempty}
+                    <br>
+                    审批人：{$list1['send_user']}<br>
+                    抄送人：{$list1['copy_user']}<br>
+                    结果：{$approval_status[$list1['status']]}<br>
+                    备注：{$list1['mark']}<br>
+                    批示时间：{$list1['update_time']|date='Y-m-d H:i:s',###}<br>
+                {/if}
+            </blockquote>
+        </div>
+    </div>
     <div class="layui-form-item">
         <label class="layui-form-label">支付金额</label>
         <div class="layui-input-inline" style="width: 200px;">
-            <input type="text" class="layui-input field-total" name="total" value="0" readonly>
+            <input type="text" class="layui-input field-total" name="total" value="{$list1['money']}" readonly>
         </div>
         <div class="layui-form-mid">元</div>
     </div>
@@ -330,6 +371,7 @@
         $('.field-total').val(total.toFixed(2));
     }
 
+    select_union({$list1['project_id']});
 
     new SelectBox($('.box1'),{$project_select},function(result){
         if ('' != result.id){

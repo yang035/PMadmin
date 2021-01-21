@@ -159,7 +159,7 @@ class ApprovalMaterial extends Admin
         $map['class_type'] = ['in',$this->class_type];
         $panel_type1 = $panel_type = config('other.panel_type');
         foreach ($panel_type1 as $k=>$v){
-            if (!in_array($k,[22])){
+            if (!in_array($k,$this->class_type)){
                 unset($panel_type1[$k]);
             }
         }
@@ -2044,7 +2044,7 @@ class ApprovalMaterial extends Admin
         $params = $this->request->param();
         if (isset($params['id']) && !empty($params['id'])) {
             $list1 = [];
-            if (20 == $params['ct']) {
+            if (22 == $params['ct']) {
                 $table = 'tb_approval_waybill';
                 $f = 'b.reason,b.date,b.detail,b.money,b.shigong_user,b.attachment';
                 $map = [
@@ -2158,7 +2158,7 @@ class ApprovalMaterial extends Admin
                     return $this->error('添加失败！');
                 }
             }
-            return $this->fetch('apply_pay');
+            return $this->fetch('apply_pay1');
         } else {
             if ($this->request->isPost()) {
                 $data = $this->request->post();
@@ -2602,6 +2602,14 @@ class ApprovalMaterial extends Admin
             case 19:
                 $table = 'tb_approval_invoice';
                 $f = 'b.reason,b.name,b.identity_number,b.address,b.bank,b.card_num,b.type,b.money,b.contract_number,b.total_money,b.has_money,b.infomation,b.attachment';
+                break;
+            case 20:
+                $table = 'tb_approval_waybill';
+                $f = 'b.reason,b.date,b.detail,b.money,b.shigong_user,b.attachment';
+                break;
+            case 21:
+                $table = 'tb_approval_applypay';
+                $f = 'b.a_aid,b.type,b.reason,b.detail,b.total,b.attachment';
                 break;
             case 22:
                 $table = 'tb_approval_waybill';
@@ -3440,13 +3448,13 @@ class ApprovalMaterial extends Admin
                 $cost_type = config('other.invoice_type');
                 $this->assign('invoice_type', $cost_type);
                 break;
-            case 22:
+            case 20:
                 $list['detail'] = json_decode($list['detail'], true);
                 $list['shigong_user'] = AdminUser::getUserById($list['shigong_user'])['realname'];
                 $unit2_type = config('other.unit2');
                 $this->assign('unit_type', $unit2_type);
                 break;
-            case 23:
+            case 21:
                 $ct = ApprovalModel::where('id',$list['a_aid'])->column('class_type');
                 if ($ct){
                     if (!empty($list['a_aid']) && $ct[0] == 20){
@@ -3459,6 +3467,51 @@ class ApprovalMaterial extends Admin
                         $list1 = db('approval')->alias('a')->field($fields)
                             ->join("{$table} b", 'a.id = b.aid', 'left')
                             ->where($map)->find();
+                        $list1['attachment'] = explode(',', substr($list1['attachment'], 0, -1));
+                        $list1['real_name'] = AdminUser::getUserById($list1['user_id'])['realname'];
+                        $list1['shigong_user'] = AdminUser::getUserById($list1['shigong_user'])['realname'];
+                        $list1['deal_user'] = $this->deal_data($list1['deal_user']);
+                        $list1['send_user'] = $this->deal_data($list1['send_user']);
+                        $list1['copy_user'] = $this->deal_data($list1['copy_user']);
+                        if ($list1['project_id']){
+                            $project_data = ProjectModel::getRowById($list1['project_id']);
+                        }else{
+                            $project_data = [
+                                'name'=>'其他',
+                            ];
+                        }
+                        $list1['project_name'] = $project_data['name'];
+                    }else{
+                        $list1 = [];
+                    }
+                }else{
+                    $ct[0] = 0;
+                    $list1 = [];
+                }
+
+                $this->assign('ct', $ct[0]);
+                $this->assign('list1', $list1);
+                break;
+            case 22:
+                $list['detail'] = json_decode($list['detail'], true);
+                $list['shigong_user'] = AdminUser::getUserById($list['shigong_user'])['realname'];
+                $unit2_type = config('other.unit2');
+                $this->assign('unit_type', $unit2_type);
+                break;
+            case 23:
+                $ct = ApprovalModel::where('id',$list['a_aid'])->column('class_type');
+                if ($ct){
+                    if (!empty($list['a_aid']) && $ct[0] == 22){
+                        $table = 'tb_approval_waybill';
+                        $f = 'b.reason,b.date,b.detail,b.money,b.shigong_user,b.attachment';
+                        $map = [
+                            'a.id' => $list['a_aid']
+                        ];
+                        $fields = 'a.*,' . $f;
+                        $list1 = db('approval')->alias('a')->field($fields)
+                            ->join("{$table} b", 'a.id = b.aid', 'left')
+                            ->where($map)->find();
+
                         $list1['attachment'] = explode(',', substr($list1['attachment'], 0, -1));
                         $list1['real_name'] = AdminUser::getUserById($list1['user_id'])['realname'];
                         $list1['shigong_user'] = AdminUser::getUserById($list1['shigong_user'])['realname'];
