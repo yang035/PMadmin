@@ -44,10 +44,12 @@ class HezuoCompany extends Admin
 
             $where['cid'] = session('admin_user.cid');
             $data['data'] = HezuoCompanyModel::where($where)->page($page)->limit($limit)->select();
-            $company = AdminCompany::getOption2();
+            $company = AdminCompany::getOption3();
+            $sys_type = config('tb_system.sys_type');
             foreach ($data['data'] as $k => $v) {
                 $data['data'][$k]['user_id'] = AdminUser::getUserById($v['user_id'])['realname'];
-                $data['data'][$k]['company_name'] = $company[$v['company_id']];
+                $data['data'][$k]['company_name'] = $company[$v['company_id']]['name'];
+                $data['data'][$k]['company_type'] = $sys_type[$company[$v['company_id']]['sys_type']];
             }
             $data['count'] = HezuoCompanyModel::where($where)->count('id');
             $data['code'] = 0;

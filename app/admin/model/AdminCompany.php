@@ -59,7 +59,13 @@ class AdminCompany extends Model
 
     public static function getOption2($id = 0)
     {
-        $rows = self::column('id,name');
+        $rows = self::column('name','id');
+        return $rows;
+    }
+
+    public static function getOption3($id = 0)
+    {
+        $rows = self::column('name,sys_type','id');
         return $rows;
     }
 

@@ -47,18 +47,24 @@
         var table = layui.table;
         table.render({
             elem: '#dataTable'
-            ,url: _url //数据接口
-            ,page: true //开启分页
-            ,limit: 30
-            ,text: {
-                none : '暂无相关数据'
+            , url: _url //数据接口
+            , page: true //开启分页
+            , limit: 30
+            , text: {
+                none: '暂无相关数据'
             }
-            ,cols: [[ //表头
-                {type:'checkbox'}
-                ,{field: 'company_name', title: '公司'}
-                ,{field: 'user_id',  title: '操作员'}
-                ,{field: 'create_time', title: '入库时间',width: 170}
-                ,{title: '操作', templet: '#buttonTpl'}
+            , cols: [[ //表头
+                {type: 'checkbox'}
+                , {
+                    field: 'company_name', title: '公司', templet: function (d) {
+                        return "<a class='mcolor' onclick='read_company(" + d.company_id + ")'>" + d.company_name + "</a>";
+                    }
+                }
+                , {field: 'company_type', title: '所属类型'}
+                , {field: 'remark', title: '备注'}
+                , {field: 'user_id', title: '操作员'}
+                , {field: 'create_time', title: '入库时间', width: 170}
+                , {title: '操作', templet: '#buttonTpl'}
             ]]
         });
         //监听单元格编辑
@@ -87,6 +93,24 @@
 
     function import_excel() {
         var open_url = "{:url('doimport')}";
+        if (open_url.indexOf('?') >= 0) {
+            open_url += '&hisi_iframe=yes';
+        } else {
+            open_url += '?hisi_iframe=yes';
+        }
+        layer.open({
+            type:2,
+            title :'导入',
+            maxmin: true,
+            area: ['800px', '500px'],
+            content: open_url,
+            success:function (layero, index) {
+            }
+        });
+    }
+
+    function read_company() {
+        var open_url = "{:url('Company/read')}";
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {

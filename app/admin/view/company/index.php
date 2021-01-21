@@ -45,6 +45,7 @@
                 <td><input type="checkbox" name="status" {if condition="$vo['status'] eq 1"}checked=""{/if} value="{$vo['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="{:url('status?table=admin_company&ids='.$vo['id'])}"></td>
                 <td class="font12">{$vo['create_time']}</td>
                 <td>
+                    <a href="{:url('read?id='.$vo['id'])}" class="layui-btn layui-btn-normal layui-btn-xs">查看</a>
                     {if condition="($Think.session.admin_user.role_id <= 3)"}
                     <a href="{:url('edit?id='.$vo['id'])}" class="layui-btn layui-btn-normal layui-btn-xs">编辑</a>
                     {/if}

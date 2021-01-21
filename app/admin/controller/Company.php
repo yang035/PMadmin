@@ -177,4 +177,11 @@ class Company extends Admin
         $this->assign('tab_type', 2);
         return $this->fetch();
     }
+
+    public function read($id = 0)
+    {
+        $row = AdminCompany::where('id', $id)->find()->toArray();
+        $this->assign('data_list', $row);
+        return $this->fetch();
+    }
 }
