@@ -38,14 +38,14 @@
             <tr>
                 <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
                 <td class="font12">
-                    <strong class="mcolor">{$vo['name']}</strong>
+                    <a href="#" onclick="read_company({$vo['id']})"><strong class="mcolor">{$vo['name']}</strong></a>
                 </td>
                 <td class="font12">{$vo['legal_person']}</td>
                 <td class="font12">{$vo['cellphone']}</td>
                 <td><input type="checkbox" name="status" {if condition="$vo['status'] eq 1"}checked=""{/if} value="{$vo['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="{:url('status?table=admin_company&ids='.$vo['id'])}"></td>
                 <td class="font12">{$vo['create_time']}</td>
                 <td>
-                    <a href="{:url('read?id='.$vo['id'])}" class="layui-btn layui-btn-normal layui-btn-xs">查看</a>
+                    <a href="#" onclick="read_company({$vo['id']})" class="layui-btn layui-btn-normal layui-btn-xs">查看</a>
                     {if condition="($Think.session.admin_user.role_id <= 3)"}
                     <a href="{:url('edit?id='.$vo['id'])}" class="layui-btn layui-btn-normal layui-btn-xs">编辑</a>
                     {/if}
@@ -70,5 +70,23 @@
     function com_auth(id) {
         var open_url = "{:url('comAuth')}?id=" + id;
         window.location.href = open_url;
+    }
+
+    function read_company(id) {
+        var open_url = "{:url('Company/read')}?id="+id;
+        if (open_url.indexOf('?') >= 0) {
+            open_url += '&hisi_iframe=yes';
+        } else {
+            open_url += '?hisi_iframe=yes';
+        }
+        layer.open({
+            type:2,
+            title :'导入',
+            maxmin: true,
+            area: ['800px', '500px'],
+            content: open_url,
+            success:function (layero, index) {
+            }
+        });
     }
 </script>

@@ -109,8 +109,8 @@
         });
     }
 
-    function read_company() {
-        var open_url = "{:url('Company/read')}";
+    function read_company(id) {
+        var open_url = "{:url('Company/read')}?id="+id;
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {
