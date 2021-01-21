@@ -23,7 +23,7 @@
     <div class="layui-card">
         <div class="layui-card-body">
             <blockquote class="layui-elem-quote" style="color: grey">
-                {if condition="($Request.param.ct eq 20) && $list1" /}
+                {if condition="($Request.param.ct eq 22) && $list1" /}
                     申请时间：{$list1['create_time']|date='Y-m-d H:i:s',###}<br>
                     姓名：{$list1['real_name']}<br>
                     开始时间：{$list1['start_time']}<br>

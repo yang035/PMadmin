@@ -196,7 +196,7 @@ class Project extends Model
 
     public static function getRowById($id=1,$fields='*')
     {
-        $map['cid'] = session('admin_user.cid');
+//        $map['cid'] = session('admin_user.cid');
         $map['id'] = $id;
         $data = self::where($map)->field($fields)->find()->toArray();
         return $data;
@@ -338,6 +338,18 @@ class Project extends Model
             ->join('subject_item s','p.subject_id=s.id','left')
             ->where('p.id',$id)
             ->where('p.cid',session('admin_user.cid'))
+            ->field('s.*')
+            ->find();
+
+        return $data;
+    }
+
+    public static function getRowJoinSubject1($id=1)
+    {
+        $data = db('project')
+            ->alias('p')
+            ->join('subject_item s','p.subject_id=s.id','left')
+            ->where('p.id',$id)
             ->field('s.*')
             ->find();
 

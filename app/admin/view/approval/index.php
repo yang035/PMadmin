@@ -105,7 +105,7 @@
             <td class="font12">{$vo['send_user']}</td>
             <td class="font12">{$vo['fellow_user']}</td>
             <td class="font12">{$vo['create_time']}</td>
-            <td class="font12">{$approval_status[$vo['status']]}</td>
+            <td class="font12 mcolor">{$approval_status[$vo['status']]}</td>
             <td class="font12">{$vo['mark']}</td>
             {if condition="$vo['create_time'] neq $vo['update_time']"}
             <td class="font12">{$vo['update_time']}</td>

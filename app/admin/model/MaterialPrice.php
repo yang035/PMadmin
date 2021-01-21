@@ -79,4 +79,28 @@ class MaterialPrice extends Model
             }
         }
     }
+
+    public static function getProjectByCompany($company_id)
+    {
+        $where = [
+            'm.company_id' => $company_id,
+            'p.pid' => 0,
+            'p.status' => 1,
+        ];
+        $fields = 'distinct m.project_id id,p.name';
+        $list = Db::table('tb_material_price m')
+            ->join('tb_project p', 'm.project_id = p.id', 'left')
+            ->field($fields)
+            ->where($where)
+            ->select();
+        if ($list) {
+            $str = "<option value=''>选择</option>";
+            foreach ($list as $k => $v) {
+                $str .= "<option value='" . $v['id'] . "'>" . $v['name'] . "</option>";
+            }
+            return $str;
+        }else{
+            return [];
+        }
+    }
 }

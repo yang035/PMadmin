@@ -236,6 +236,14 @@ return [
             'title'=>'支付申请',
             'href'=>'admin/Approval/applyPay'
         ],
+        22=>[
+            'title'=>'送货单',
+            'href'=>'admin/ApprovalMaterial/waybill'
+        ],
+        23=>[
+            'title'=>'支付申请',
+            'href'=>'admin/ApprovalMaterial/applyPay'
+        ],
     ],
     //根据上面panel_type 与财务支付相关的
     'money_relation' => [2,17,21],

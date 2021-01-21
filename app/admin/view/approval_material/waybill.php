@@ -269,15 +269,15 @@
             }
         });
         form.on('select(project_type)', function(data){
-            select_union(data.value);
-            getPartner(data.value);
+            select_union(data.value,{$Think.session.admin_user.cid});
+            getPartner(data.value,{$Think.session.admin_user.cid});
             select_union2(data.value);
         });
-        function select_union(project_id){
+        function select_union(project_id,company_id){
             $.ajax({
                 type: 'POST',
                 url: "{:url('getMaterialList')}",
-                data: {project_id:project_id},
+                data: {project_id:project_id,company_id:company_id},
                 dataType:  'json',
                 success: function(data){
                     $('.field-content').html(data);

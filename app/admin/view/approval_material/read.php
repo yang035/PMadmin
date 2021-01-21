@@ -237,7 +237,7 @@
                 批示时间：{$list1['update_time']|date='Y-m-d H:i:s',###}<br>
             </blockquote>
             {/if}
-            {if condition="$class_type eq 21"}
+            {if condition="$class_type eq 23"}
             <blockquote class="layui-elem-quote" style="color: grey">
                 申请时间：{$list1['create_time']|date='Y-m-d H:i:s',###}<br>
                 姓名：{$list1['real_name']}<br>
@@ -413,7 +413,7 @@
                 已支付金额：{$data_list['has_money']}<br>
                 发票备注栏信息：{$data_list['infomation']}<br>
                 {/case}
-                {case value="20"}
+                {case value="22"}
                 送货日期：{$data_list['date']}<br>
                 清单明细：<br>
                 {volist name="$data_list['detail']" id="vo"}
@@ -423,7 +423,7 @@
                 总计：{$data_list['money']}元<br>
                 施工员：{$data_list['shigong_user']}<br>
                 {/case}
-                {case value="21"}
+                {case value="23"}
                 支付金额：{$data_list['total']} 元<br>
                 {/case}
             {/switch}
@@ -459,8 +459,8 @@
                             {if condition="($vo['status'] eq 1) && ($status[$vo['flow_num']-1] eq 2) && $vo['cunzai'] && ($Request.param.atype eq 3)"}
                             <div class="layui-form-item">
                                 <div class="layui-input-block">
-                                    <input type="radio" name="status" value="2" title="同意" checked>
-                                    <input type="radio" name="status" value="4" title="驳回">
+                                    <input type="radio" name="status" value="2" title="同意" checked lay-filter="status">
+                                    <input type="radio" name="status" value="4" title="驳回" lay-filter="status">
                                 </div>
                             </div>
                             <div class="layui-form-item">
@@ -469,6 +469,21 @@
                                     <textarea type="text" class="layui-textarea field-mark" name="mark" autocomplete="off" placeholder=""></textarea>
                                 </div>
                             </div>
+                                <div class="layui-form-item" id="is_verify">
+                                    <label class="layui-form-label">是否转审</label>
+                                    <div class="layui-input-block">
+                                        <input type="radio" name="is_verify" value="1" title="是" lay-filter="is_verify">
+                                        <input type="radio" name="is_verify" value="0" title="否" checked lay-filter="is_verify">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item hide" id="verify_user">
+                                    <label class="layui-form-label">是否转审</label>
+                                    <div class="layui-input-inline">
+                                        <select name="verify_user" class="layui-input field-verify_user" type="select" lay-filter="verify_user" lay-search>
+                                            {$select_user}
+                                        </select>
+                                    </div>
+                                </div>
                             <br>
                             <div class="layui-form-item">
                                 <div class="layui-input-block">
@@ -768,12 +783,28 @@
 <script>
     var formData = {:json_encode($data_list)};
 
-    layui.use(['jquery', 'laydate','flow', 'upload'], function () {
-        var $ = layui.jquery, laydate = layui.laydate, upload = layui.upload,flow = layui.flow;
+    layui.use(['jquery', 'laydate','flow', 'upload', 'form'], function () {
+        var $ = layui.jquery, laydate = layui.laydate, upload = layui.upload,form = layui.form,flow = layui.flow;
         laydate.render({
             elem: '.field-expire_time',
             min:'0'
         });
+
+        form.on('radio(status)', function(data){
+            if (2 == data.value) {
+                $('#is_verify').show();
+            }else {
+                $('#is_verify').hide();
+            }
+        });
+        form.on('radio(is_verify)', function(data){
+            if (1 == data.value) {
+                $('#verify_user').show();
+            }else {
+                $('#verify_user').hide();
+            }
+        });
+        
         $('.image-list').on('click', '.cover', function () {
             var this_ = $(this);
             var images = this_.parents('.image-list').find('.cover');

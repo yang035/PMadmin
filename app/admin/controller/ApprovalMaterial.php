@@ -57,7 +57,7 @@ class ApprovalMaterial extends Admin
     protected function _initialize()
     {
         parent::_initialize();
-        $this->class_type = [20,21];
+        $this->class_type = [22,23];
         $sta_count = $this->getApprovalCount();
         $tab_data['menu'] = [
             [
@@ -134,7 +134,7 @@ class ApprovalMaterial extends Admin
 
     public function getApprovalCount()
     {
-        $map['cid'] = session('admin_user.cid');
+//        $map['cid'] = session('admin_user.cid');
         $map['class_type'] = ['in',$this->class_type];
         $uid = session('admin_user.uid');
         $fields = "SUM(IF(user_id='{$uid}',1,0)) user_num,
@@ -155,11 +155,11 @@ class ApprovalMaterial extends Admin
         $map = [];
         $d = '';
         $cid = session('admin_user.cid');
-        $map['cid'] = $cid;
+//        $map['cid'] = $cid;
         $map['class_type'] = ['in',$this->class_type];
         $panel_type1 = $panel_type = config('other.panel_type');
         foreach ($panel_type1 as $k=>$v){
-            if (!in_array($k,[20])){
+            if (!in_array($k,[22])){
                 unset($panel_type1[$k]);
             }
         }
@@ -1914,6 +1914,12 @@ class ApprovalMaterial extends Admin
     public function waybill()
     {
         $uid = session('admin_user.uid');
+        $cid = session('admin_user.cid');
+        $mytask = MaterialPrice::getProjectByCompany($cid);
+        if (!$mytask){
+            return $this->error('请联系对方项目部或公司进行入库操作');
+        }
+
         if ($this->request->isPost()) {
             $data = $this->request->post();
             if ('' == $data['project_id']){
@@ -2015,13 +2021,15 @@ class ApprovalMaterial extends Admin
                 return $this->error('添加失败！');
             }
         }
-        $this->assign('mytask', MaterialPrice::getP($uid));
+        $this->assign('mytask', $mytask);
         $this->assign('unit_option', ApprovalWaybill::getUnitOption());
         return $this->fetch();
     }
 
-    public function getMaterialList($project_id,$id = 0){
-        $company_id = session('admin_user.cid');
+    public function getMaterialList($project_id,$company_id=0,$id = 0){
+        if (!$company_id){
+            $company_id = session('admin_user.cid');
+        }
         $list = MaterialPrice::getMaterialList($project_id,$company_id,$id);
         return json($list);
     }
@@ -2595,11 +2603,11 @@ class ApprovalMaterial extends Admin
                 $table = 'tb_approval_invoice';
                 $f = 'b.reason,b.name,b.identity_number,b.address,b.bank,b.card_num,b.type,b.money,b.contract_number,b.total_money,b.has_money,b.infomation,b.attachment';
                 break;
-            case 20:
+            case 22:
                 $table = 'tb_approval_waybill';
                 $f = 'b.reason,b.date,b.detail,b.money,b.shigong_user,b.attachment';
                 break;
-            case 21:
+            case 23:
                 $table = 'tb_approval_applypay';
                 $f = 'b.a_aid,b.type,b.reason,b.detail,b.total,b.attachment';
                 break;
@@ -2807,6 +2815,32 @@ class ApprovalMaterial extends Admin
 
                         $last = ApprovalSenduser::where($map1)->order('id desc')->limit(1)->find();
 //                    print_r($last);exit();
+                        if (in_array($data['class_type'],$this->class_type) && 1 == $data['is_verify']){
+                            $last['status'] = 1;
+
+                            $s_u = [
+                                'aid' => $data['id'],
+                                'flow_num' => $last['flow_num']+1,
+                                'send_user' => json_encode([$data['verify_user']=>'']),
+                            ];
+                            ApprovalSenduser::create($s_u);
+                            $d = [
+                                'id' => $data['id'],
+                                'is_verify' => $data['is_verify'],
+                            ];
+                            $send_user = json_decode($list['send_user'],true);
+                            $send_user[$uid] = 'a';
+                            $send_user[$data['verify_user']] = '';
+                            $d['send_user'] = json_encode($send_user);
+                            if (1 == $list['is_verify']){
+                                $verify_user = json_decode($list['verify_user'],true);
+                                array_push($verify_user,$data['verify_user']);
+                                $d['verify_user'] = json_encode($verify_user);
+                            }else{
+                                $d['verify_user'] = json_encode([$data['verify_user']]);
+                            }
+                            ApprovalModel::update($d);
+                        }
                         if (2 == $last['status'] || 2 != $data['status']){
                             $res = ApprovalModel::update($ap);
                         }
@@ -2897,7 +2931,7 @@ class ApprovalMaterial extends Admin
                                 }
                             }
 
-                            if (20 == $data['class_type'] && 2 == $data['status']){
+                            if (22 == $data['class_type'] && 2 == $data['status'] && 0 == $data['is_verify']){
                                 $detail = json_decode($list['detail'], true);
                                 if ($detail){
                                     $material_dan = [];
@@ -3013,7 +3047,7 @@ class ApprovalMaterial extends Admin
                             }
                         }
 
-                        if (20 == $data['class_type'] && 2 == $data['status']){
+                        if (22 == $data['class_type'] && 2 == $data['status'] && 0 == $data['is_verify']){
                             $detail = json_decode($list['detail'], true);
                             if ($detail){
                                 $material_dan = [];
@@ -3406,13 +3440,13 @@ class ApprovalMaterial extends Admin
                 $cost_type = config('other.invoice_type');
                 $this->assign('invoice_type', $cost_type);
                 break;
-            case 20:
+            case 22:
                 $list['detail'] = json_decode($list['detail'], true);
                 $list['shigong_user'] = AdminUser::getUserById($list['shigong_user'])['realname'];
                 $unit2_type = config('other.unit2');
                 $this->assign('unit_type', $unit2_type);
                 break;
-            case 21:
+            case 23:
                 $ct = ApprovalModel::where('id',$list['a_aid'])->column('class_type');
                 if ($ct){
                     if (!empty($list['a_aid']) && $ct[0] == 20){
@@ -3468,6 +3502,7 @@ class ApprovalMaterial extends Admin
         $this->assign('finance_status1', $finance_status1);
         $this->assign('class_type', $params['class_type']);
         $this->assign('project_name', $project_data);
+        $this->assign('select_user', AdminUser::selectUser());
         return $this->fetch();
     }
 

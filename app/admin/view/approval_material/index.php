@@ -105,7 +105,7 @@
             <td class="font12">{$vo['send_user']}</td>
             <td class="font12">{$vo['fellow_user']}</td>
             <td class="font12">{$vo['create_time']}</td>
-            <td class="font12">{$approval_status[$vo['status']]}</td>
+            <td class="font12 mcolor">{$approval_status[$vo['status']]}</td>
             <td class="font12">{$vo['mark']}</td>
             {if condition="$vo['create_time'] neq $vo['update_time']"}
             <td class="font12">{$vo['update_time']}</td>
@@ -220,7 +220,7 @@
     });
 
     function approval_read(id,atype,class_type,cls_name){
-        var open_url = "{:url('Approval/read')}?id="+id+"&atype="+atype+"&class_type="+class_type;
+        var open_url = "{:url('ApprovalMaterial/read')}?id="+id+"&atype="+atype+"&class_type="+class_type;
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {
@@ -238,17 +238,17 @@
     }
 
     function approval_report(id,atype,class_type,cls_name){
-        var open_url = "{:url('Approval/read')}?id="+id+"&atype="+atype+"&class_type="+class_type;
+        var open_url = "{:url('ApprovalMaterial/read')}?id="+id+"&atype="+atype+"&class_type="+class_type;
         window.location.href = open_url;
     }
 
     function certificate(id){
-        var open_url = "{:url('Approval/certificate')}?id="+id;
+        var open_url = "{:url('ApprovalMaterial/certificate')}?id="+id;
         window.location.href = open_url;
     }
 
     function leave_file(user_id,id){
-        var open_url = "{:url('Approval/leaveFile')}?user="+user_id+"&approval_id="+id;
+        var open_url = "{:url('ApprovalMaterial/leaveFile')}?user="+user_id+"&approval_id="+id;
         window.location.href = open_url;
     }
 
@@ -270,12 +270,12 @@
     }
 
     function expense(id,ct){
-        var open_url = "{:url('Approval/expense')}?id="+id+"&class_type=2&ct="+ct;
+        var open_url = "{:url('ApprovalMaterial/expense')}?id="+id+"&class_type=2&ct="+ct;
         window.location.href = open_url;
     }
 
     function applyPay(id,ct){
-        var open_url = "{:url('Approval/applyPay')}?id="+id+"&class_type=21&ct="+ct;
+        var open_url = "{:url('ApprovalMaterial/applyPay')}?id="+id+"&class_type=21&ct="+ct;
         window.location.href = open_url;
     }
 </script>

@@ -56,6 +56,7 @@ class Approval extends Admin
     protected function _initialize()
     {
         parent::_initialize();
+        $this->class_type = [22,23];
         $sta_count = $this->getApprovalCount();
         $tab_data['menu'] = [
             [
@@ -133,6 +134,7 @@ class Approval extends Admin
     public function getApprovalCount()
     {
         $map['cid'] = session('admin_user.cid');
+        $map['class_type'] = ['notin',$this->class_type];
         $uid = session('admin_user.uid');
         $fields = "SUM(IF(user_id='{$uid}',1,0)) user_num,
         SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status=1 and class_type <> 11,1,0)) send_num,
@@ -153,8 +155,9 @@ class Approval extends Admin
         $d = '';
         $cid = session('admin_user.cid');
         $map['cid'] = $cid;
+        $map['class_type'] = ['notin',$this->class_type];
         $panel_type1 = $panel_type = config('other.panel_type');
-        unset($panel_type1[2],$panel_type1[21]);
+        unset($panel_type1[2],$panel_type1[20],$panel_type1[21],$panel_type1[22],$panel_type1[23]);
         $approval_status = config('other.approval_status');
         $finance_status1 = config('other.finance_status');
         $params['atype'] = isset($params['atype']) ? $params['atype'] : 1;
