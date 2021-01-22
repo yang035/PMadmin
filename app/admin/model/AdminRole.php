@@ -14,7 +14,7 @@ class AdminRole extends Model
     public static function getOption($id = 0)
     {
         $rows = self::where('status',1)->column('id,name');
-        $str = '';
+        $str = $str = '<option value="">选择</option>';
         foreach ($rows as $k => $v) {
             if ($k == 1) {// 过滤超级管理员角色
                 continue;

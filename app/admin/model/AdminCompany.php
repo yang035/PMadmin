@@ -86,7 +86,7 @@ class AdminCompany extends Model
     public static function getSysType1($type = 0)
     {
         $leaveType = config('tb_system.sys_type');
-        $str = '<option value="">全部</option>';
+        $str = '<option value="">选择</option>';
         foreach ($leaveType as $k => $v) {
             if ($type == $k) {
                 $str .= '<option value="'.$k.'" selected>'.$v.'</option>';

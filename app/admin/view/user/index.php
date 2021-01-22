@@ -1,12 +1,30 @@
 <div class="page-toolbar">
-    <div class="page-filter fr">
+    <div class="page-filter">
         <form class="layui-form layui-form-pane" action="{:url()}" method="get" id="hisi-table-search">
-        <div class="layui-form-item">
-            <label class="layui-form-label">搜索</label>
-            <div class="layui-input-inline">
-                <input type="text" name="q" value="{:input('get.q')}" lay-verify="required" placeholder="用户名、邮箱、手机、昵称" autocomplete="off" class="layui-input">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">类型</label>
+                    <div class="layui-input-inline">
+                        <select name="role_id" class="field-role_id" type="select">
+                            {$role_option}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">真实姓名</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="realname" value="{:input('get.realname')}" placeholder="真实姓名" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">手机号码</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input field-cellphone" name="cellphone" onkeyup="value=value.replace(/[^\d]/g,'')" maxlength="11"
+                               autocomplete="off" placeholder="请输入手机号码">
+                    </div>
+                </div>
+                <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
             </div>
-        </div>
         </form>
     </div>
     <div class="layui-btn-group fl">

@@ -49,14 +49,18 @@ class User extends Admin
             $where = $data = [];
             $page = input('param.page/d', 1);
             $limit = input('param.limit/d', 15);
-            if ($q) {
-                if (preg_match("/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/", $q)) {// 邮箱
-                    $where['email'] = $q;
-                } elseif (preg_match("/^1\d{10}$/", $q)) {// 手机号
-                    $where['mobile'] = $q;
-                } else {// 用户名、昵称
-                    $where['username'] = ['like', '%'.$q.'%'];
-                }
+
+            $role_id = input('param.role_id/d');
+            if ($role_id) {
+                $where['role_id'] = $role_id;
+            }
+            $name = input('param.realname');
+            if ($name) {
+                $where['realname'] = ['like', "%{$name}%"];
+            }
+            $cellphone = input('param.cellphone');
+            if ($cellphone) {
+                $where['mobile'] = $cellphone;
             }
             $where['id'] = ['neq', 1];
             $where['is_show'] = ['eq', 0];
@@ -95,6 +99,8 @@ class User extends Admin
 
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 1);
+        $this->assign('role_option', RoleModel::getOption());
+        $this->assign('systype_option', AdminCompany::getSysType1());
         return $this->fetch();
     }
 
@@ -178,6 +184,10 @@ class User extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
 
+            if (empty($data['role_id'])){
+                return $this->error('请选择角色');
+            }
+
             if (empty($data['department_id'])){
                 return $this->error('请选择部门');
             }else{
@@ -256,6 +266,9 @@ class User extends Admin
                 return $this->error('请选择部门');
             }else{
                 $dep_id = implode(',',array_filter(explode(',',$data['department_id'])));
+            }
+            if (empty($data['role_id'])){
+                return $this->error('请选择角色');
             }
             if (!is_numeric($dep_id)){
                 return $this->error('请重新选择部门');

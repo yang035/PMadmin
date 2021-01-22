@@ -1,12 +1,29 @@
-<div class="page-toolbar">
-    <div class="page-filter fr">
-        <form class="layui-form layui-form-pane" action="{:url()}" method="get">
-        <div class="layui-form-item">
-            <label class="layui-form-label">搜索</label>
-            <div class="layui-input-inline">
-                <input type="text" name="q" value="{:input('get.q')}" lay-verify="required" placeholder="公司名称、法人手机号码" autocomplete="off" class="layui-input">
+<div>
+    <form class="layui-form layui-form-pane" action="{:url()}" method="get" id="search_form">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">类型</label>
+                    <div class="layui-input-inline">
+                        <select name="sys_type" class="field-sys_type" type="select">
+                            {$systype_option}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">名称关键字</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="name" value="{:input('get.name')}" placeholder="名称关键字" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">手机号码</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input field-cellphone" name="cellphone" onkeyup="value=value.replace(/[^\d]/g,'')" maxlength="11"
+                               autocomplete="off" placeholder="请输入手机号码">
+                    </div>
+                </div>
+                <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
             </div>
-        </div>
         </form>
     </div>
 <!--    <div class="layui-btn-group fl">-->
@@ -15,8 +32,6 @@
 <!--        <a data-href="{:url('status?table=admin_company&val=0')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-pause" data-table="dataTable">&nbsp;禁用</a>-->
 <!--        <a data-href="{:url('del?table=admin_company')}" class="layui-btn layui-btn-primary j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>-->
 <!--    </div>-->
-</div>
-<form id="pageListForm">
 <div class="layui-form">
     <table class="layui-table mt10" lay-even="" lay-skin="row">
         <colgroup>
@@ -59,13 +74,12 @@
     </table>
     {$pages}
 </div>
-</form>
 {include file="block/layui" /}
 <script>
     var formData = {:json_encode($data_info)};
 
-    layui.use(['jquery', 'laydate'], function() {
-        var $ = layui.jquery, laydate = layui.laydate;
+    layui.use(['jquery', 'laydate', 'form'], function() {
+        var $ = layui.jquery, laydate = layui.laydate, form = layui.form;
     });
     function com_auth(id) {
         var open_url = "{:url('comAuth')}?id=" + id;

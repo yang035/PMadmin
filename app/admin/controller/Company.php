@@ -20,22 +20,31 @@ class Company extends Admin
     public function index($q = '')
     {
         $map = [];
-        if (1 != session('admin_user.role_id')){
+        $cid = session('admin_user.cid');
+        if (6 != $cid){
             $map['id'] = session('admin_user.cid');
         }
-        if ($q) {
-            if (preg_match("/^1\d{10}$/", $q)) {// 手机号
-                $map['cellphone'] = $q;
-            } else {// 用户名、昵称
-                $map['name'] = ['like', '%'.$q.'%'];
-            }
+        $limit = input('param.limit/d', 20);
+
+        $sys_type = input('param.sys_type/d');
+        if ($sys_type) {
+            $map['sys_type'] = $sys_type;
+        }
+        $name = input('param.name');
+        if ($name) {
+            $map['name'] = ['like', "%{$name}%"];
+        }
+        $cellphone = input('param.cellphone');
+        if ($cellphone) {
+            $map['cellphone'] = $cellphone;
         }
 
-        $data_list = AdminCompany::where($map)->paginate(20, false, ['query' => input('get.')]);
+        $data_list = AdminCompany::where($map)->paginate($limit, false, ['query' => input('get.')]);
         // 分页
         $pages = $data_list->render();
         $this->assign('data_list', $data_list);
         $this->assign('pages', $pages);
+        $this->assign('systype_option', AdminCompany::getSysType1());
         return $this->fetch();
     }
 
