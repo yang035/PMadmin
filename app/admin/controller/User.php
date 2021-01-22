@@ -60,7 +60,7 @@ class User extends Admin
             }
             $cellphone = input('param.cellphone');
             if ($cellphone) {
-                $where['mobile'] = $cellphone;
+                $where['mobile'] = trim($cellphone);
             }
             $where['id'] = ['neq', 1];
             $where['is_show'] = ['eq', 0];

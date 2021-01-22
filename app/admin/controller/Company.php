@@ -36,7 +36,7 @@ class Company extends Admin
         }
         $cellphone = input('param.cellphone');
         if ($cellphone) {
-            $map['cellphone'] = $cellphone;
+            $map['register_mobile'] = trim($cellphone);
         }
 
         $data_list = AdminCompany::where($map)->paginate($limit, false, ['query' => input('get.')]);

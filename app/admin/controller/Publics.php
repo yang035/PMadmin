@@ -115,6 +115,7 @@ class Publics extends Common
                     if (!$f1) {
                         $tmp1 = [
                             'name' => $data['name'],
+                            'register_mobile' => $data['mobile'],
                             'sys_type' => $data['sys_type'],
                             'gys_type' => (2 == $data['sys_type']) ? $data['gys_type'] : 1,
                         ];

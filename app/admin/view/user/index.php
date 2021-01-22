@@ -19,7 +19,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">手机号码</label>
                     <div class="layui-input-inline">
-                        <input type="text" class="layui-input field-cellphone" name="cellphone" onkeyup="value=value.replace(/[^\d]/g,'')" maxlength="11"
+                        <input type="text" class="layui-input field-cellphone" name="cellphone" value="{:input('get.cellphone')}" onkeyup="value=value.replace(/[^\d]/g,'')" maxlength="11"
                                autocomplete="off" placeholder="请输入手机号码">
                     </div>
                 </div>
