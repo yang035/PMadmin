@@ -20,7 +20,7 @@ class Taocan extends Model
             'cid'=>session('admin_user.cid'),
             'status'=>1,
         ];
-        $data = self::where($map)->column('name','id');
+        $data = self::where($map)->column('name,money,ser_level','id');
         return $data;
     }
 

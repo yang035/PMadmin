@@ -44,13 +44,13 @@
                 <textarea  class="layui-textarea field-remark" name="remark" lay-verify="" autocomplete="off" placeholder="[选填]分类简介"></textarea>
             </div>
         </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">分类状态</label>
-            <div class="layui-input-inline">
-                <input type="radio" class="field-status" name="status" value="1" title="启用" checked>
-                <input type="radio" class="field-status" name="status" value="0" title="禁用">
-            </div>
-        </div>
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">分类状态</label>-->
+<!--            <div class="layui-input-inline">-->
+<!--                <input type="radio" class="field-status" name="status" value="1" title="启用" checked>-->
+<!--                <input type="radio" class="field-status" name="status" value="0" title="禁用">-->
+<!--            </div>-->
+<!--        </div>-->
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">

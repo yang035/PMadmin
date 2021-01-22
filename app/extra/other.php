@@ -496,11 +496,11 @@ return [
         5=>'终身定制服务',
     ],
     'taocan_config' => [
-        'taocan_1'=>'套餐A',
-        'taocan_2'=>'套餐B',
-        'taocan_3'=>'套餐C',
-        'taocan_4'=>'套餐D',
-        'taocan_5'=>'套餐E',
+        'taocan_1'=>'麦客免费试用版',
+        'taocan_2'=>'麦客V级',
+        'taocan_3'=>'麦客VV级',
+        'taocan_4'=>'麦客VVV级',
+        'taocan_5'=>'麦客黑金级',
     ],
     'meal_type' => [
         1=>'按钮',

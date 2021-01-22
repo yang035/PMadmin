@@ -11,7 +11,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">金额</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input field-other_price" name="other_price" value="{$data_list[16][$p]}" readonly lay-verify="required" autocomplete="off" placeholder="">
+                <input type="text" class="layui-input field-other_price" name="other_price" value="{$taocan_money}" readonly lay-verify="required" autocomplete="off" placeholder="">
             </div>
             <div class="layui-form-mid">元</div>
         </div>

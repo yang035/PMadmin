@@ -12,6 +12,7 @@ use app\admin\model\MealCat;
 use app\admin\model\MealItem as ItemModel;
 use app\admin\model\MealOrder as OrderModel;
 use app\admin\model\MealItem;
+use app\admin\model\Taocan;
 use Payment\Client;
 use think\Db;
 
@@ -19,6 +20,8 @@ use think\Db;
 class Meal extends Admin
 {
     public $tab_data = [];
+    public $taocan_config = [];
+    public $taocan_other = [];
     protected function _initialize()
     {
         parent::_initialize();
@@ -47,6 +50,20 @@ class Meal extends Admin
         ];
         $tab_data['current'] = url('index', ['qu_type' => 1]);
         $this->tab_data = $tab_data;
+        $taocan = Taocan::getItem();
+        if ($taocan){
+            foreach ($taocan as $k=>$v){
+                $taocan_config['taocan_'.$k] = $v['name'];
+                $taocan_other['taocan_'.$k] = $v;
+            }
+
+        }else{
+            $taocan_config = config('other.taocan_config');
+        }
+        $this->taocan_config = $taocan_config;
+        $this->taocan_other = $taocan_other;
+        $this->assign('taocan_config',$taocan_config);
+        $this->assign('taocan_other',$taocan_other);
     }
 
     public function index($q = '')
@@ -88,7 +105,6 @@ class Meal extends Admin
         }
 
         // 分页
-        $taocan_config = config('other.taocan_config');
 
         $this->assign('tab_data', $this->tab_data);
         $this->assign('tab_type', 1);
@@ -96,7 +112,6 @@ class Meal extends Admin
         $this->assign('qu_type', $params['qu_type']);
         $this->assign('tab_url', url('index', ['qu_type' => $params['qu_type']]));
         $this->assign('cat_option',ItemModel::getOption());
-        $this->assign('taocan_config',$taocan_config);
         return $this->fetch('item');
     }
     public function addItem()
@@ -147,7 +162,6 @@ class Meal extends Admin
         }
 
         $row = ItemModel::where('id', $id)->find()->toArray();
-
         $this->assign('data_info', $row);
         $this->assign('cat_option',ItemModel::getOption($row['cat_id']));
         $this->assign('meal_type',ItemModel::getMealType($row['meal_type']));
@@ -315,7 +329,6 @@ class Meal extends Admin
         }
 
         // 分页
-        $taocan_config = config('other.taocan_config');
 
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 1);
@@ -323,7 +336,6 @@ class Meal extends Admin
         $this->assign('qu_type', $params['qu_type']);
         $this->assign('tab_url', url('mealList', ['qu_type' => $params['qu_type']]));
         $this->assign('cat_option',ItemModel::getOption());
-        $this->assign('taocan_config',$taocan_config);
         return $this->fetch();
     }
 
@@ -359,12 +371,12 @@ class Meal extends Admin
         $fields = "id,cat_id,qu_type,meal_type,name,{$param['p']}";
         $row = ItemModel::field($fields)->where($w)->select();
 
-        $taocan_config = config('other.taocan_config');
         $qu_type = config('other.qu_type');
         $this->assign('data_list', $row);
         $this->assign('p', $param['p']);
         $this->assign('cat_option',ItemModel::getOption());
-        $this->assign('taocan',$taocan_config[$param['p']]);
+        $this->assign('taocan',$this->taocan_config[$param['p']]);
+        $this->assign('taocan_money',$this->taocan_other[$param['p']]['money']);
         $this->assign('qu',$qu_type[$param['qu_type']]);
         return $this->fetch();
     }
@@ -372,11 +384,10 @@ class Meal extends Admin
     public function payDetail($trade_no=0){
         $data = OrderModel::where(['trade_no'=>$trade_no])->find();
         $uid = session('admin_user.uid');
-        $taocan_config = config('other.taocan_config');
         $qu_type = config('other.qu_type');
         $payData = [
             'body'         => 'meal',
-            'subject'      => $qu_type[$data['qu_type']].'['.$taocan_config[$data['p']].']',
+            'subject'      => $qu_type[$data['qu_type']].'['.$this->taocan_config[$data['p']].']',
             'trade_no'     => $trade_no,
             'time_expire'  => time() + 600, // 表示必须 600s 内付款
             'amount'       => $data['other_price'], // 单位为元 ,最小为0.01

@@ -49,35 +49,35 @@
         </div>
         <div id="anniu">
             <div class="layui-form-item">
-                <label class="layui-form-label">套餐A</label>
+                <label class="layui-form-label">{$taocan_config['taocan_1']}</label>
                 <div class="layui-input-inline">
                     <input type="radio" class="field-taocan_1" name="taocan_1" value="1" title="有" checked>
                     <input type="radio" class="field-taocan_1" name="taocan_1" value="0" title="无">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">套餐B</label>
+                <label class="layui-form-label">{$taocan_config['taocan_2']}</label>
                 <div class="layui-input-inline">
                     <input type="radio" class="field-taocan_2" name="taocan_2" value="1" title="有" checked>
                     <input type="radio" class="field-taocan_2" name="taocan_2" value="0" title="无">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">套餐C</label>
+                <label class="layui-form-label">{$taocan_config['taocan_3']}</label>
                 <div class="layui-input-inline">
                     <input type="radio" class="field-taocan_3" name="taocan_3" value="1" title="有" checked>
                     <input type="radio" class="field-taocan_3" name="taocan_3" value="0" title="无">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">套餐D</label>
+                <label class="layui-form-label">{$taocan_config['taocan_4']}</label>
                 <div class="layui-input-inline">
                     <input type="radio" class="field-taocan_4" name="taocan_4" value="1" title="有" checked>
                     <input type="radio" class="field-taocan_4" name="taocan_4" value="0" title="无">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">套餐E</label>
+                <label class="layui-form-label">{$taocan_config['taocan_5']}</label>
                 <div class="layui-input-inline">
                     <input type="radio" class="field-taocan_5" name="taocan_5" value="1" title="有" checked>
                     <input type="radio" class="field-taocan_5" name="taocan_5" value="0" title="无">
@@ -86,31 +86,31 @@
         </div>
         <div id="shuru" class="hide">
             <div class="layui-form-item">
-                <label class="layui-form-label">套餐A</label>
+                <label class="layui-form-label">{$taocan_config['taocan_1']}</label>
                 <div class="layui-input-inline">
                     <input type="text" class="layui-input field-taocan_1" name="taocan_1" autocomplete="off" placeholder="优惠百分比" value="1">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">套餐B</label>
+                <label class="layui-form-label">{$taocan_config['taocan_2']}</label>
                 <div class="layui-input-inline">
                     <input type="text" class="layui-input field-taocan_2" name="taocan_2" autocomplete="off" placeholder="优惠百分比" value="1">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">套餐C</label>
+                <label class="layui-form-label">{$taocan_config['taocan_3']}</label>
                 <div class="layui-input-inline">
                     <input type="text" class="layui-input field-taocan_3" name="taocan_3" autocomplete="off" placeholder="优惠百分比" value="1">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">套餐D</label>
+                <label class="layui-form-label">{$taocan_config['taocan_4']}</label>
                 <div class="layui-input-inline">
                     <input type="text" class="layui-input field-taocan_4" name="taocan_4" autocomplete="off" placeholder="优惠百分比" value="1">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">套餐E</label>
+                <label class="layui-form-label">{$taocan_config['taocan_5']}</label>
                 <div class="layui-input-inline">
                     <input type="text" class="layui-input field-taocan_5" name="taocan_5" autocomplete="off" placeholder="优惠百分比" value="1">
                 </div>
