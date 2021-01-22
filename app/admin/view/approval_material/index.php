@@ -141,11 +141,11 @@
                 </div>
                 {/in}
                 {/if}
-                {if condition="($vo['status'] eq 2) && ($Request.param.atype == 2 or $Request.param.atype == 7) && ($vo['class_type'] == 22 or $vo['class_type'] == 23)"}
-                <div class="layui-btn-group" onclick="applyPay({$vo['id']},'{$vo['class_type']}')">
-                    <a class="layui-btn layui-btn-danger layui-btn-xs">申请支付</a>
-                </div>
-                {/if}
+<!--                {if condition="($vo['status'] eq 2) && ($Request.param.atype == 2 or $Request.param.atype == 7) && ($vo['class_type'] == 22)"}-->
+<!--                <div class="layui-btn-group" onclick="applyPay({$vo['id']},'{$vo['class_type']}')">-->
+<!--                    <a class="layui-btn layui-btn-danger layui-btn-xs">申请支付</a>-->
+<!--                </div>-->
+<!--                {/if}-->
                 {if condition="$vo['class_type'] eq 4 "}
                 <div class="layui-btn-group" onclick="approval_report({$vo['id']},{$atype},{$vo['class_type']},'{$panel_type[$vo['class_type']]['title']}')">
                     <a class="layui-btn layui-btn-normal layui-btn-xs">出差报告</a>

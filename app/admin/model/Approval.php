@@ -62,7 +62,7 @@ class Approval extends Model
             $map = [
                 'a.project_id'=>$project_id,
                 'a.class_type'=>23,
-                'a.status'=>2,
+                'a.status'=>['in',[1,2]],
             ];
             $applypay = db('approval')->alias('a')->field($fields)
                 ->join("tb_approval_applypay b", 'a.id = b.aid', 'right')
