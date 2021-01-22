@@ -36,7 +36,7 @@
                     {/volist}
                     <br>
                     总计：{$list1['money']}元<br>
-                    施工员：{$list1['shigong_user']}<br>
+                    采购员：{$list1['shigong_user']}<br>
                     事由：{$list1['reason']}<br>
                     附件说明：
                     {notempty name="list1['attachment'][0]"}

@@ -17,7 +17,7 @@ class Taocan extends Model
     public static function getItem()
     {
         $map = [
-            'cid'=>session('admin_user.cid'),
+            'cid'=>6,
             'status'=>1,
         ];
         $data = self::where($map)->column('name,money,ser_level','id');

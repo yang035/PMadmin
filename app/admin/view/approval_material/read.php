@@ -250,7 +250,7 @@
                 {/volist}
                 <br>
                 总计：{$list1['money']}元<br>
-                施工员：{$list1['shigong_user']}<br>
+                采购员：{$list1['shigong_user']}<br>
                 事由：{$list1['reason']}<br>
                 附件说明：
                 {notempty name="list1['attachment'][0]"}
@@ -421,7 +421,7 @@
                 {/volist}
                 <br>
                 总计：{$data_list['money']}元<br>
-                施工员：{$data_list['shigong_user']}<br>
+                采购员：{$data_list['shigong_user']}<br>
                 {/case}
                 {case value="23"}
                 支付金额：{$data_list['money']} 元<br>

@@ -113,7 +113,7 @@
         </div>
     </div>
     <div class="layui-form-item">
-    <label class="layui-form-label">施工员</label>
+    <label class="layui-form-label">采购员</label>
         <div class="layui-input-inline">
             <select name="shigong_user" class="field-shigong_user" type="select">
             </select>
@@ -556,7 +556,7 @@
                 if (data) {
                     $('#shigong_user').val(data);
                 }else {
-                    layer.alert('施工员不存在');
+                    layer.alert('采购员不存在');
                 }
             }
         });
