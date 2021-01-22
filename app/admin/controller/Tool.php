@@ -12,6 +12,7 @@ namespace app\admin\controller;
 use app\admin\model\AdminDepartment;
 use app\admin\model\Category;
 use think\Controller;
+use think\Db;
 
 class Tool extends Admin
 {
@@ -42,6 +43,36 @@ class Tool extends Admin
             return $this->fetch('get_tree_user2');
         }
 
+    }
+
+    public function getThirdUser(){
+        $params = $this->request->param();
+        if ($this->request->isPost()){
+            $data = $this->request->post();
+            $map = [
+                'p.cid' => session('admin_user.cid'),
+                'p.status' => 1,
+                'u.id'=>['<>','']
+            ];
+            $fields = "u.id,u.username,c.name";
+            $user = Db('hezuo_person p')
+                ->join('admin_user u','p.person_id = u.id','left')
+                ->join('admin_company c','p.company_id = c.id','left')
+                ->field($fields)
+                ->where($map)
+                ->select();
+            $result = [];
+            if ($user){
+                foreach ($user as $k => $v) {
+                    if ($v['id']){
+                        $result[$k] = $v;
+                        $result[$k]['uid'] = '10000' . $v['id'];
+                    }
+                }
+            }
+            return json($result);
+        }
+        return $this->fetch();
     }
 
     public function getTreeDepartment(){

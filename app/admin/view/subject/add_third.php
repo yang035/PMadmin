@@ -52,7 +52,7 @@
 
         $('#third_user_id').on('click', function(){
             var third_user = $('#third_user').val();
-            var open_url = "{:url('Tool/getTreeUser')}?m=third&u="+third_user;
+            var open_url = "{:url('Tool/getThirdUser')}?m=third&u="+third_user;
             if (open_url.indexOf('?') >= 0) {
                 open_url += '&hisi_iframe=yes';
             } else {

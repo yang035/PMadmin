@@ -231,6 +231,12 @@ class Project extends Model
         return $data;
     }
 
+    public static function getColumn2($column){
+        $map['pid'] = 0;
+        $data = self::where($map)->column($column,'id');
+        return $data;
+    }
+
     public static function getMyTask($id=0,$option=1){
         $cid = session('admin_user.cid');
         $map['cid'] = $cid;

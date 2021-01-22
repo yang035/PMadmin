@@ -194,6 +194,7 @@ class Subject extends Admin
             $con = '';
             if ($param['pram']){
                 $con = "JSON_CONTAINS_PATH(third_user,'one', '$.\"$uid\"')";
+                unset($where['cid']);
             }
             $data['data'] = ItemModel::with('cat')->where($where)->where($con)->page($page)->order($order)->limit($limit)->select();
 //            $carType = config('other.car_color');
@@ -204,12 +205,18 @@ class Subject extends Admin
                     'cid'=>session('admin_user.cid'),
                     'update_time'=>['between',[strtotime($begin_date),strtotime($end_date)]],
                 ];
+                if ($param['pram']){
+                    unset($w['cid']);
+                }
                 $subject_id_arr = SubjectFlowModel::where($w)->column('step','subject_id');
                 if (!$subject_id_arr){
                     $subject_id_arr = [];
                 }
-
-                $s = \app\admin\model\Project::getColumn1('subject_id');
+                if ($param['pram']){
+                    $s = \app\admin\model\Project::getColumn2('subject_id');
+                }else{
+                    $s = \app\admin\model\Project::getColumn1('subject_id');
+                }
                 $p = array_flip($s);
                 foreach ($data['data'] as $k=>$v){
                     $v['s_status'] = $p_status[$v['s_status']];
@@ -1093,6 +1100,7 @@ class Subject extends Admin
             ];
             if (isset($p['pp']) && $p['pp']){
                 $map['share_flag'] = 1;
+                unset($map['cid']);
             }
             $s_flow = SubjectFlow::getOption2($map);
             if ($s_flow) {
@@ -1547,7 +1555,7 @@ class Subject extends Admin
             return $this->success('操作成功');
         }
         $row = ItemModel::where('id', $id)->find()->toArray();
-        $row['third_user_id'] = $this->deal_data($row['third_user']);
+        $row['third_user_id'] = $this->deal_data1($row['third_user']);
         $row['third_user'] = $this->deal_data_id($row['third_user']);
         $this->assign('data_info', $row);
         return $this->fetch();
@@ -1835,6 +1843,22 @@ class Subject extends Admin
         $this->assign('data_info', $row);
         return $this->fetch();
 
+    }
+
+    public function deal_data1($x_user)
+    {
+        $x_user_arr = json_decode($x_user, true);
+        $x_user = [];
+        if ($x_user_arr) {
+            foreach ($x_user_arr as $key => $val) {
+                $real_name = AdminUser::getUserById($key)['username'];
+                if ('a' == $val) {
+                    $real_name = "<font style='color: blue'>" . $real_name . "</font>";
+                }
+                $x_user[] = $real_name;
+            }
+            return implode(',', $x_user);
+        }
     }
 
     public function deal_data($x_user)
