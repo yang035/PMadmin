@@ -379,6 +379,18 @@ class ApprovalMaterial extends Admin
                         $list[$k]['money'] = $child['money'];
                     }
                     break;
+                case 22://费用
+                    $child = ApprovalWaybill::where('aid',$v['id'])->find();
+                    if ($child){
+                        $list[$k]['money'] = $child['money'];
+                    }
+                    break;
+                case 23://费用
+                    $child = ApprovalApplypay::where('aid',$v['id'])->find();
+                    if ($child){
+                        $list[$k]['money'] = $child['money'];
+                    }
+                    break;
             }
             if ($v['project_id']){
                 $project_data = ProjectModel::getRowById($v['project_id']);
@@ -2141,9 +2153,11 @@ class ApprovalMaterial extends Admin
                     $leave = [
                         'aid' => $res['id'],
                         'a_aid' => $list1['id'],
+                        'total' => $data['total'],
+                        'per' => $data['per'],
+                        'money' => round($data['total']*$data['per']/100,2),
                         'reason' => $list1['reason'],
                         'attachment' => $data['attachment'],
-                        'total' => $data['total'],
                     ];
                     $flag = ApprovalApplypay::create($leave);
                     // 提交事务
@@ -2160,6 +2174,8 @@ class ApprovalMaterial extends Admin
             }
             return $this->fetch('apply_pay1');
         } else {
+            $cid = session('admin_user.cid');
+            $mytask = MaterialPrice::getProjectByCompany($cid);
             if ($this->request->isPost()) {
                 $data = $this->request->post();
                 if ('' == $data['project_id']) {
@@ -2168,7 +2184,6 @@ class ApprovalMaterial extends Admin
                 if (empty($data['attachment'])) {
                     return $this->error('请上传附件');
                 }
-                $data['amount'] = array_filter($data['amount']);
                 // 验证
                 $result = $this->validate($data, 'ApprovalExpense');
                 if ($result !== true) {
@@ -2194,9 +2209,9 @@ class ApprovalMaterial extends Admin
                         'project_id' => $data['project_id'],
                         'class_type' => $data['class_type'],
                         'cid' => session('admin_user.cid'),
-                        'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
-                        'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
-                        'time_long' => $data['time_long'],
+                        'start_time' => date('Y-m-d H:i:s'),
+                        'end_time' => date('Y-m-d H:i:s'),
+                        'time_long' => 0,
                         'user_id' => session('admin_user.uid'),
                         'send_user' => json_encode($send_user2),
                         'copy_user' => user_array($data['copy_user']),
@@ -2235,10 +2250,11 @@ class ApprovalMaterial extends Admin
 
                     $leave = [
                         'aid' => $res['id'],
-//                        'type' => $data['type'],
+                        'total' => $data['total'],
+                        'per' => $data['per'],
+                        'money' => round($data['total']*$data['per']/100,2),
                         'reason' => $data['reason'],
                         'attachment' => $data['attachment'],
-                        'total' => $data['total'],
                     ];
                     $flag = ApprovalApplypay::create($leave);
                     // 提交事务
@@ -2253,8 +2269,14 @@ class ApprovalMaterial extends Admin
                     return $this->error('添加失败！');
                 }
             }
+            $this->assign('mytask', $mytask);
             return $this->fetch();
         }
+    }
+
+    public function getMoneyByProject($project_id){
+         $money = ApprovalModel::getMoneyByProject($project_id);
+         return json($money);
     }
 
     public function tixian()
@@ -2609,7 +2631,7 @@ class ApprovalMaterial extends Admin
                 break;
             case 21:
                 $table = 'tb_approval_applypay';
-                $f = 'b.a_aid,b.type,b.reason,b.detail,b.total,b.attachment';
+                $f = 'b.a_aid,b.per,b.reason,b.money,b.total,b.attachment';
                 break;
             case 22:
                 $table = 'tb_approval_waybill';
@@ -2617,7 +2639,7 @@ class ApprovalMaterial extends Admin
                 break;
             case 23:
                 $table = 'tb_approval_applypay';
-                $f = 'b.a_aid,b.type,b.reason,b.detail,b.total,b.attachment';
+                $f = 'b.a_aid,b.per,b.reason,b.money,b.total,b.attachment';
                 break;
             default:
                 $table = 'tb_approval_leave';

@@ -69,6 +69,13 @@
         <div class="layui-form-mid">元</div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">支付比例</label>
+        <div class="layui-input-inline" style="width: 200px;">
+            <input type="text" class="layui-input field-per" name="per" value="100">
+        </div>
+        <div class="layui-form-mid">% *</div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">备注</label>
         <div class="layui-input-inline">
             <textarea type="text" class="layui-textarea field-reason" name="reason" autocomplete="off" placeholder="请输入备注"></textarea>

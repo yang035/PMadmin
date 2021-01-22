@@ -206,7 +206,6 @@
                 批示时间：{$list1['update_time']|date='Y-m-d H:i:s',###}<br>
             </blockquote>
             {/eq}
-            {/if}
             {if condition="$class_type eq 15"}
             <blockquote class="layui-elem-quote" style="color: grey">
                 申请时间：{$list1['create_time']|date='Y-m-d H:i:s',###}<br>
@@ -273,6 +272,7 @@
                 备注：{$list1['mark']}<br>
                 批示时间：{$list1['update_time']|date='Y-m-d H:i:s',###}<br>
             </blockquote>
+            {/if}
             {/if}
             审批编号：{$data_list['id']}<br>
             申请时间：{$data_list['create_time']|date='Y-m-d H:i:s',###}<br>
@@ -424,7 +424,7 @@
                 施工员：{$data_list['shigong_user']}<br>
                 {/case}
                 {case value="23"}
-                支付金额：{$data_list['total']} 元<br>
+                支付金额：{$data_list['money']} 元<br>
                 {/case}
             {/switch}
             事由：{$data_list['reason']}<br>

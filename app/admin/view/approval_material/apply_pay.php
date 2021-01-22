@@ -21,11 +21,26 @@
 </style>
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-form-item">
-        <label class="layui-form-label">支付金额</label>
-        <div class="layui-input-inline" style="width: 200px;">
-            <input type="text" class="layui-input field-total" name="total" value="0" readonly>
+        <label class="layui-form-label">选择项目</label>
+        <div class="layui-input-inline">
+            <select name="project_id" id='project_id' class="field-project_id" type="select" lay-filter="project_type" lay-search="">
+                {$mytask}
+            </select>
         </div>
-        <div class="layui-form-mid">元</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">剩余金额</label>
+        <div class="layui-input-inline" style="width: 200px;">
+            <input type="text" class="layui-input field-total" name="total" value="0" id="total" readonly>
+        </div>
+        <div class="layui-form-mid red">元</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">支付比例</label>
+        <div class="layui-input-inline" style="width: 200px;">
+            <input type="text" class="layui-input field-per" name="per" value="">
+        </div>
+        <div class="layui-form-mid red">% *</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">备注</label>
@@ -59,6 +74,7 @@
                 </div>
             </div>
         </div>
+        <div class="layui-form-mid red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">审批人</label>
@@ -176,6 +192,11 @@
                     uploadInst.upload();
                 });
             }
+        });
+
+        form.on('select(project_type)', function(data){
+            select_union1(data.value);
+            select_union(data.value);
         });
 
 
@@ -375,6 +396,18 @@
                 // form.render('select');
                 // });
                 // $("#c_id").get(0).selectedIndex=0;
+            }
+        });
+    }
+
+    function select_union1(id){
+        $.ajax({
+            type: 'POST',
+            url: "{:url('getMoneyByProject')}",
+            data: {project_id:id},
+            dataType:  'json',
+            success: function(data){
+                $('#total').val(data);
             }
         });
     }

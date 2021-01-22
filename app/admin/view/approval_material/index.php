@@ -66,13 +66,10 @@
             <th>编号</th>
             <th>姓名</th>
             <th>类型</th>
-            <th>归属于</th>
-            <th>时间段</th>
             <th>项目名称</th>
             <th>金额(元)</th>
             {notin name="$Request.param.atype" value="8,9"}
             <th>审批人</th>
-            <th>同行人</th>
             <th>添加时间</th>
             <th>状态</th>
             <th>审批意见</th>
@@ -97,13 +94,10 @@
                 <strong class="mcolor">{$vo['realname']}</strong>
             </td>
             <td class="font12">{$panel_type[$vo['class_type']]['title']}</td>
-            <td class="font12">{$vo['leave_type']}</td>
-            <td class="font12">始:{$vo['start_time']}<br>止:{$vo['end_time']}</td>
             <td class="font12">{$vo['project_name']}</td>
             <td class="font12">{$vo['money']}</td>
             {notin name="$Request.param.atype" value="8,9"}
             <td class="font12">{$vo['send_user']}</td>
-            <td class="font12">{$vo['fellow_user']}</td>
             <td class="font12">{$vo['create_time']}</td>
             <td class="font12 mcolor">{$approval_status[$vo['status']]}</td>
             <td class="font12">{$vo['mark']}</td>

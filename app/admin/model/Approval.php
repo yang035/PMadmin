@@ -45,4 +45,32 @@ class Approval extends Model
         }
         return !empty($str) ? $str : '无';
     }
+
+    public static function getMoneyByProject($project_id){
+        $where = [
+            'a.project_id'=>$project_id,
+            'a.class_type'=>22,
+            'a.status'=>2,
+        ];
+        $fields = 'sum(b.money) money';
+        $waybill = db('approval')->alias('a')->field($fields)
+            ->join("tb_approval_waybill b", 'a.id = b.aid', 'right')
+            ->where($where)->find();
+        $left_money = 0;
+        if ($waybill){
+            $left_money = $waybill['money'];
+            $map = [
+                'a.project_id'=>$project_id,
+                'a.class_type'=>23,
+                'a.status'=>2,
+            ];
+            $applypay = db('approval')->alias('a')->field($fields)
+                ->join("tb_approval_applypay b", 'a.id = b.aid', 'right')
+                ->where($map)->find();
+            if ($applypay){
+                $left_money = $waybill['money'] - $applypay['money'];
+            }
+        }
+        return $left_money;
+    }
 }

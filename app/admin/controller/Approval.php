@@ -2596,7 +2596,7 @@ class Approval extends Admin
                 break;
             case 21:
                 $table = 'tb_approval_applypay';
-                $f = 'b.a_aid,b.type,b.reason,b.detail,b.total,b.attachment';
+                $f = 'b.a_aid,b.per,b.reason,b.money,b.total,b.attachment';
                 break;
             default:
                 $table = 'tb_approval_leave';
