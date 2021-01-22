@@ -21,7 +21,7 @@ class Company extends Admin
     {
         $map = [];
         $cid = session('admin_user.cid');
-        if (6 != $cid){
+        if (!in_array($cid,[1,6])){
             $map['id'] = session('admin_user.cid');
         }
         $limit = input('param.limit/d', 20);
