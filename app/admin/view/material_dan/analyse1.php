@@ -10,29 +10,16 @@
         cursor: pointer;
     }
 </style>
-<div class="page-toolbar">
-    <div class="page-filter">
-        <form class="layui-form layui-form-pane" action="{:url()}" method="get" id="hisi-table-search">
-            <div class="layui-form-item">
-                <label class="layui-form-label">材料名</label>
-                <div class="layui-input-inline">
-                    <input name="name" class="layui-input field-name" placeholder="输入关键词" class="layui-input">
-                </div>
-                <input type="hidden" class="field-project_id" name="project_id" value="{$Request.param.project_id}">
-                <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
-            </div>
-        </form>
-    </div>
-</div>
 <table id="dataTable" class="layui-table" lay-filter="table1"></table>
 <script type="text/html" id="statusTpl">
     <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=shopping_record&id={{ d.id }}">
 </script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
-    <a href="{:url('analyse')}?project_id={{ d.project_id }}&m_p_id={{ d.m_p_id }}&p=1" class="layui-btn layui-btn-xs layui-btn-normal">明细</a>
+    <a href="{:url('edit')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a>
+<!--    <a href="{:url('del')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
 </script>
 <script type="text/javascript">
-    var _url = "{:url()}?project_id={$Request.param.project_id}";
+    var _url = "{:url()}?project_id={$Request.param.project_id}&m_p_id={$Request.param.m_p_id}&p=1";
     layui.use(['table'], function() {
         var table = layui.table;
         table.render({
@@ -47,11 +34,14 @@
                 {type:'checkbox'}
                 ,{field: 'project_name', title: '项目'}
                 ,{field: 'name', title: '名称及规格'}
+                ,{field: 'per_price', title: '单价(元)'}
                 ,{field: 'caigou_shuliang', title: '数量',templet:function (d) {
                         return d.caigou_shuliang+"("+d.unit+")";
                     }}
                 ,{field: 'caigou_zongjia',  title: '总价(元)'}
-                ,{title: '操作', templet: '#buttonTpl'}
+                ,{field: 'user',  title: '提交人员'}
+                ,{field: 'user_id',  title: '审核人员'}
+                ,{field: 'create_time',  title: '添加时间'}
             ]]
         });
     });
