@@ -60,6 +60,7 @@
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
     <a href="{:url('flow')}?id={{ d.id }}&pp=1" class="layui-btn layui-btn-xs layui-btn-normal">下载区</a>
     <a href="{:url('upqu')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">上传区</a>
+    <a href="#" onclick="read_down({{ d.id }})" class="mcolor">下载记录</a>
 </script>
 {/empty}
 <script type="text/javascript">
@@ -207,6 +208,24 @@
 
     function read(id){
         var open_url = "{:url('flow')}?id="+id+"&pp=1";
+        if (open_url.indexOf('?') >= 0) {
+            open_url += '&hisi_iframe=yes';
+        } else {
+            open_url += '?hisi_iframe=yes';
+        }
+        layer.open({
+            type:2,
+            title :'详情',
+            maxmin: true,
+            area: ['800px', '600px'],
+            content: open_url,
+            success:function (layero, index) {
+            }
+        });
+    }
+
+    function read_down(subject_id) {
+        var open_url = "{:url('Log/setDownLog')}?subject_id="+subject_id+"&p=1";
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {

@@ -19,7 +19,7 @@
                                 {$f2['create_time']}--
                                 {$f2['remark']}--
                                 {volist name="f2['attachment']" id='f3'}
-                                <a href="{$f3}" target="_blank">附件{$i}</a>
+                                <a href="{$f3}" target="_blank" onclick="down_click('{$f3}','{$Request.param.id}');">附件{$i}</a>
                                 {/volist}
                             </div>
                         </div>
@@ -99,6 +99,12 @@
             content: open_url,
             success:function (layero, index) {
             }
+        });
+    }
+
+    function down_click(url,subject_id) {
+        var open_url = "{:url('Log/setDownLog')}";
+        $.post(open_url,{'url':url,'subject_id':subject_id},function(res) {
         });
     }
 </script>
