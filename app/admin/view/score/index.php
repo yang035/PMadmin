@@ -64,6 +64,7 @@
             <th>GL+</th>
             <th>GL-</th>
             <th>剩余GL</th>
+            <th>GL排名(系数)</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -81,6 +82,7 @@
             <td class="font12">{$vo['gl_add_sum']}</td>
             <td class="font12">{$vo['gl_sub_sum']}</td>
             <td class="font12">{$vo['unused_gl']}</td>
+            <td class="font12">{$vo['rank']}</td>
             <td>
                 <div class="layui-btn-group">
                     <div class="layui-btn-group">

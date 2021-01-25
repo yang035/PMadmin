@@ -58,6 +58,9 @@ class Score extends Admin
                 $d0 = strtotime($d_arr[0] . ' 00:00:00');
                 $d1 = strtotime($d_arr[1] . ' 23:59:59');
                 $map['Score.create_time'] = ['between', ["$d0", "$d1"]];
+                $rank = ScoreModel::dealRank($d0,$d1);
+            }else{
+                $rank = ScoreModel::dealRank();
             }
             if (!empty($params['sort_table'])) {
                 switch ($params['sort_table']) {
@@ -72,6 +75,8 @@ class Score extends Admin
                         break;
                 }
             }
+        }else{
+            $rank = ScoreModel::dealRank();
         }
 
         $map['cid'] = session('admin_user.cid');
@@ -83,7 +88,7 @@ class Score extends Admin
             $map1['id'] = session('admin_user.uid');
         }
 //        $map['Score.create_time'] = ['<',1556726399];
-//print_r($map);
+
         $fields = "`Score`.id,`Score`.subject_id,`Score`.user,sum(`Score`.ml_add_score) as ml_add_sum,sum(`Score`.ml_sub_score) as ml_sub_sum,sum(`Score`.gl_add_score) as gl_add_sum,sum(`Score`.gl_sub_score) as gl_sub_sum,`AdminUser`.realname";
 
         if (isset($params['export']) && 1 == $params['export']) {
@@ -95,6 +100,10 @@ class Score extends Admin
                 $data_list[$k]['pname'] = $v['project_id'] ? $name_arr[$v['project_id']] : '系统';
                 $data_list[$k]['unused_ml'] = $v['ml_add_sum'] - $v['ml_sub_sum'];
                 $data_list[$k]['unused_gl'] = $v['gl_add_sum'] - $v['gl_sub_sum'];
+
+                $rank_rank = isset($rank[$v['user']]['rank']) ? $rank[$v['user']]['rank'] : 0;
+                $rank_ratio = isset($rank[$v['user']]['rank_ratio']) ? $rank[$v['user']]['rank_ratio'] : 1;
+                $data_list[$k]['rank'] = $rank_rank.'('.$rank_ratio.')';
             }
             vendor('PHPExcel.PHPExcel');
             $objPHPExcel = new \PHPExcel();
@@ -105,6 +114,7 @@ class Score extends Admin
             $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(10);
             $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(10);
             $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(10);
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A1', '姓名')
                 ->setCellValue('B1', 'ML+')
@@ -112,7 +122,8 @@ class Score extends Admin
                 ->setCellValue('D1', '剩余ML')
                 ->setCellValue('E1', 'GL+')
                 ->setCellValue('F1', 'GL-')
-                ->setCellValue('G1', '剩余GL');
+                ->setCellValue('G1', '剩余GL')
+                ->setCellValue('H1', 'GL排名(系数)');
 //            print_r($data_list);exit();
             foreach ($data_list as $k => $v) {
                 $num = $k + 2;
@@ -124,7 +135,8 @@ class Score extends Admin
                     ->setCellValue('D' . $num, $v['unused_ml'])
                     ->setCellValue('E' . $num, $v['gl_add_sum'])
                     ->setCellValue('F' . $num, $v['gl_sub_sum'])
-                    ->setCellValue('G' . $num, $v['unused_gl']);
+                    ->setCellValue('G' . $num, $v['unused_gl'])
+                    ->setCellValue('H' . $num, $v['rank']);
             }
             $d = !empty($d) ? $d : '全部日期';
             $p = !empty($params['project_name']) ? $params['project_name'] : '';
@@ -149,12 +161,17 @@ class Score extends Admin
             'is_lock' => 1
         ];
         $u = ScoreModel::where($w)->field('id,user')->find();
-//    print_r($data_list);
+
         foreach ($data_list as $k => $v) {
             $data_list[$k]['pname'] = $v['project_id'] ? $name_arr[$v['project_id']] : '系统';
             $data_list[$k]['unused_ml'] = $v['ml_add_sum'] - $v['ml_sub_sum'];
             $data_list[$k]['unused_gl'] = $v['gl_add_sum'] - $v['gl_sub_sum'];
             $data_list[$k]['subject_name'] = $v['subject_id'] ? $myPro[$v['subject_id']] : '其他';
+
+            $rank_rank = isset($rank[$v['user']]['rank']) ? $rank[$v['user']]['rank'] : 0;
+            $rank_ratio = isset($rank[$v['user']]['rank_ratio']) ? $rank[$v['user']]['rank_ratio'] : 1;
+            $data_list[$k]['rank'] = $rank_rank.'('.$rank_ratio.')';
+
             if ($u) {
                 //当GL超过10000时，送的GL才可用
                 if ($u['user'] == $v['user'] && $v['gl_add_sum'] > 10000 + config('other.gl_give')) {
