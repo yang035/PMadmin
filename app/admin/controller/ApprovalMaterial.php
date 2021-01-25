@@ -305,6 +305,8 @@ class ApprovalMaterial extends Admin
             $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(10);
             $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(30);
             $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(30);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(30);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(30);
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A1', '姓名')
                 ->setCellValue('B1', '类型')
@@ -319,7 +321,9 @@ class ApprovalMaterial extends Admin
                 ->setCellValue('K1', '审批意见')
                 ->setCellValue('L1', '审批时间')
                 ->setCellValue('M1', '支付结果')
-                ->setCellValue('N1', '同行人');
+                ->setCellValue('N1', '同行人')
+                ->setCellValue('O1', '审批编号')
+                ->setCellValue('P1', '事由');
 //            print_r($data_list);exit();
             foreach ($list as $k => $v) {
                 $num = $k + 2;
@@ -338,7 +342,9 @@ class ApprovalMaterial extends Admin
                     ->setCellValue('K' . $num, $v['mark'])
                     ->setCellValue('L' . $num, $v['update_time'])
                     ->setCellValue('M' . $num, $v['deal_mark'])
-                    ->setCellValue('N' . $num, $v['fellow_user']);
+                    ->setCellValue('N' . $num, $v['fellow_user'])
+                    ->setCellValue('O' . $num, $v['id'])
+                    ->setCellValue('P' . $num, $v['reason']);
             }
             $d = !empty($d) ? $d : '全部';
             $name = $d.'日常审批统计';
@@ -485,6 +491,7 @@ class ApprovalMaterial extends Admin
                     'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
+                    'reason' => $data['reason'],
                     'user_id' => session('admin_user.uid'),
                     'send_user' => json_encode($send_user2),
                     'copy_user' => user_array($data['copy_user']),
@@ -792,6 +799,7 @@ class ApprovalMaterial extends Admin
                         'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
                         'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                         'time_long' => $data['time_long'],
+                        'reason' => $data['reason'],
                         'user_id' => session('admin_user.uid'),
                         'send_user' => json_encode($send_user2),
                         'copy_user' => user_array($data['copy_user']),
@@ -896,6 +904,7 @@ class ApprovalMaterial extends Admin
                     'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
+                    'reason' => $data['reason'],
                     'user_id' => session('admin_user.uid'),
                     'send_user' => json_encode($send_user2),
                     'copy_user' => user_array($data['copy_user']),
@@ -998,6 +1007,7 @@ class ApprovalMaterial extends Admin
                     'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
+                    'reason' => $data['reason'],
                     'user_id' => session('admin_user.uid'),
                     'fellow_user' => user_array($data['fellow_user']),
                     'send_user' => json_encode($send_user2),
@@ -1074,6 +1084,7 @@ class ApprovalMaterial extends Admin
                     'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
+                    'reason' => $data['reason'],
                     'user_id' => session('admin_user.uid'),
 //                    'send_user' => user_array($data['send_user']),
                     'send_user' => json_encode($send_user2),
@@ -1246,6 +1257,7 @@ class ApprovalMaterial extends Admin
                     'start_time' => $a,
                     'end_time' => $b,
                     'time_long' => $data['time_long'],
+                    'reason' => $data['reason'],
                     'user_id' => session('admin_user.uid'),
 //                    'send_user' => user_array($data['send_user']),
                     'send_user' => json_encode($send_user2),
@@ -1311,6 +1323,7 @@ class ApprovalMaterial extends Admin
                     'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
+                    'reason' => $data['reason'],
                     'user_id' => session('admin_user.uid'),
                     'fellow_user' => user_array($data['fellow_user']),
                     'send_user' => user_array($data['send_user']),
@@ -1363,6 +1376,7 @@ class ApprovalMaterial extends Admin
                     'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
+                    'reason' => $data['reason'],
                     'user_id' => session('admin_user.uid'),
                     'deal_user' => user_array($data['deal_user']),
                     'send_user' => user_array($data['send_user']),
@@ -1436,6 +1450,7 @@ class ApprovalMaterial extends Admin
                     'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
+                    'reason' => $data['reason'],
                     'user_id' => session('admin_user.uid'),
                     'send_user' => user_array($data['send_user']),
                     'copy_user' => user_array($data['copy_user']),
@@ -1497,6 +1512,7 @@ class ApprovalMaterial extends Admin
                     'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
+                    'reason' => $data['reason'],
                     'user_id' => session('admin_user.uid'),
                     'send_user' => user_array($data['send_user']),
                     'copy_user' => user_array($data['copy_user']),
@@ -1568,6 +1584,7 @@ class ApprovalMaterial extends Admin
                     'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
+                    'reason' => $data['reason'],
                     'user_id' => session('admin_user.uid'),
 //                    'send_user' => user_array($data['send_user']),
                     'send_user' => json_encode($send_user2),
@@ -1642,6 +1659,7 @@ class ApprovalMaterial extends Admin
                     'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
+                    'reason' => $data['reason'],
                     'user_id' => session('admin_user.uid'),
                     'deal_user' => user_array($data['deal_user']),
                     'send_user' => user_array($data['send_user']),
@@ -1787,6 +1805,7 @@ class ApprovalMaterial extends Admin
                     'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
+                    'reason' => $data['reason'],
                     'user_id' => session('admin_user.uid'),
                     'send_user' => user_array($data['send_user']),
                     'copy_user' => user_array($data['copy_user']),
@@ -1867,6 +1886,7 @@ class ApprovalMaterial extends Admin
                     'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
+                    'reason' => $data['reason'],
                     'user_id' => session('admin_user.uid'),
 //                    'send_user' => user_array($data['send_user']),
                     'send_user' => json_encode($send_user2),
@@ -1992,6 +2012,7 @@ class ApprovalMaterial extends Admin
                     'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
+                    'reason' => $data['reason'],
                     'user_id' => $uid,
 //                    'send_user' => user_array($data['send_user']),
                     'send_user' => json_encode($send_user2),
@@ -2324,6 +2345,7 @@ class ApprovalMaterial extends Admin
                     'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
+                    'reason' => $data['reason'],
                     'user_id' => session('admin_user.uid'),
                     'send_user' => json_encode($send_user2),
                     'copy_user' => user_array($data['copy_user']),
@@ -2422,6 +2444,7 @@ class ApprovalMaterial extends Admin
                     'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
+                    'reason' => $data['reason'],
                     'user_id' => session('admin_user.uid'),
                     'send_user' => json_encode($send_user2),
                     'copy_user' => user_array($data['copy_user']),
@@ -2497,6 +2520,7 @@ class ApprovalMaterial extends Admin
                     'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
                     'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
                     'time_long' => $data['time_long'],
+                    'reason' => $data['reason'],
                     'user_id' => session('admin_user.uid'),
                     'send_user' => json_encode($send_user2),
                     'copy_user' => user_array($data['copy_user']),
