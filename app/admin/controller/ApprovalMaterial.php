@@ -1958,7 +1958,7 @@ class ApprovalMaterial extends Admin
                 return $this->error('请选择项目');
             }
             if (empty($data['shigong_user'])){
-                return $this->error('施工员不存在，请输入正确姓名');
+                return $this->error('请选择采购员');
             }
 //            $data['content'] = array_unique(array_filter($data['content']));
             $data['content'] = array_filter($data['content']);
@@ -2205,6 +2205,16 @@ class ApprovalMaterial extends Admin
                 if (empty($data['attachment'])) {
                     return $this->error('请上传附件');
                 }
+                $money = round($data['total']*$data['per']/100,2);
+                if ($money > $data['total']){
+                    return $this->error('支付金额不能超过剩余金额');
+                }
+                if ($data['money'] > $money || $data['money'] > $data['total']){
+                    return $this->error('支付金额有误');
+                }
+                if (empty($data['shigong_user'])){
+                    return $this->error('请选择采购');
+                }
                 // 验证
                 $result = $this->validate($data, 'ApprovalExpense');
                 if ($result !== true) {
@@ -2214,7 +2224,8 @@ class ApprovalMaterial extends Admin
 
                 $send_user = html_entity_decode($data['send_user']);
                 $send_user1 = json_decode($send_user, true);
-                $send_user1 = array_values(array_unique($send_user1, SORT_REGULAR));
+                array_unshift($send_user1,[$data['shigong_user']=>'']);//在头部插入元素
+//                $send_user1 = array_values(array_unique($send_user1, SORT_REGULAR));
                 $send_user2 = [];
                 foreach ($send_user1 as $k => $v) {
                     $send_user2 += $v;
@@ -2273,7 +2284,8 @@ class ApprovalMaterial extends Admin
                         'aid' => $res['id'],
                         'total' => $data['total'],
                         'per' => $data['per'],
-                        'money' => round($data['total']*$data['per']/100,2),
+                        'shigong_user' => $data['shigong_user'],
+                        'money' => $money,
                         'reason' => $data['reason'],
                         'attachment' => $data['attachment'],
                     ];

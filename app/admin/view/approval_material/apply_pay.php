@@ -43,6 +43,13 @@
         <div class="layui-form-mid red">% *</div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">支付金额</label>
+        <div class="layui-input-inline" style="width: 200px;">
+            <input type="text" class="layui-input field-money" name="money" id="money">
+        </div>
+        <div class="layui-form-mid red">元</div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">备注</label>
         <div class="layui-input-inline">
             <textarea type="text" class="layui-textarea field-reason" name="reason" autocomplete="off" placeholder="请输入备注"></textarea>
@@ -75,6 +82,14 @@
             </div>
         </div>
         <div class="layui-form-mid red">*</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">采购员</label>
+        <div class="layui-input-inline">
+            <select name="shigong_user" class="field-shigong_user" type="select">
+            </select>
+        </div>
+        <div class="layui-form-mid" style="color: red">*</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">审批人</label>
@@ -112,6 +127,21 @@
 
     layui.use(['jquery', 'laydate','element','upload','form'], function() {
         var $ = layui.jquery, laydate = layui.laydate,element = layui.element,upload = layui.upload,form = layui.form;
+
+        $(".field-per").blur(function () {
+            var total = parseFloat($('.field-total').val()), per= parseFloat($(this).val()),money=0;
+            money = parseFloat(total*per/100);
+            $('.field-money').val(money.toFixed(2));
+        });
+
+        $(".field-money").blur(function () {
+            var total = parseFloat($('.field-total').val()), money= parseFloat($(this).val()),per=0;
+            if (total > 0){
+                per = money/total*100;
+                $('.field-per').val(per.toFixed(2));
+            }
+        });
+
         laydate.render({
             elem: '.field-start_time',
             type: 'date',
@@ -196,8 +226,22 @@
 
         form.on('select(project_type)', function(data){
             select_union1(data.value);
-            select_union(data.value);
+            select_union2(data.value);
+            getPartner(data.value);
         });
+
+        function getPartner(project_id){
+            $.ajax({
+                type: 'POST',
+                url: "{:url('getShigongUser')}",
+                data: {project_id:project_id},
+                dataType:  'json',
+                success: function(data){
+                    $('.field-shigong_user').html(data);
+                    form.render();
+                }
+            });
+        }
 
 
         $('#reset_expire').on('click', function(){
@@ -381,7 +425,7 @@
         optionMaxHeight:300//下拉框最大高度
     });
 
-    function select_union(id){
+    function select_union2(id){
         $.ajax({
             type: 'POST',
             url: "{:url('getFlowUser')}",
