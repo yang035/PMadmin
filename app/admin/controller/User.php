@@ -107,34 +107,33 @@ class User extends Admin
     public function other($q = '')
     {
         if ($this->request->isAjax()) {
-            if (!in_array(session('admin_user.uid'),[21,31])){
+            if (!in_array(session('admin_user.cid'),[6])){
                 return $this->error('暂无相关数据');
             }
             $where = $data = [];
             $page = input('param.page/d', 1);
             $limit = input('param.limit/d', 15);
-            if ($q) {
-                if (preg_match("/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/", $q)) {// 邮箱
-                    $where['email'] = $q;
-                } elseif (preg_match("/^1\d{10}$/", $q)) {// 手机号
-                    $where['mobile'] = $q;
-                } else {// 用户名、昵称
-                    $where['username'] = ['like', '%'.$q.'%'];
-                }
+            $name = input('param.realname');
+            if ($name) {
+                $where['realname'] = ['like', "%{$name}%"];
+            }
+            $cellphone = input('param.cellphone');
+            if ($cellphone) {
+                $where['mobile'] = trim($cellphone);
             }
             $where['id'] = ['neq', 1];
 //            $where['is_show'] = ['eq', 0];
-            $where['company_id'] = ['neq', 2];
+            $where['company_id'] = ['neq', 6];
 
             $order = 'times desc,status desc,id desc';
 
             $data['data'] = UserModel::with('role')->with('dep')->where($where)->order($order)->page($page)->limit($limit)->select();
-            if ($data['data']){
-                foreach ($data['data'] as $k=>$v){
-                    $data['data'][$k]['job_item'] = !empty($v['job_item']) ? JobItemModel::getItem()[$v['job_item']] : '无';
-                    $data['data'][$k]['work_cat'] = !empty($v['work_cat']) ? WorkCat::getItem()[$v['work_cat']] : '无';
-                }
-            }
+//            if ($data['data']){
+//                foreach ($data['data'] as $k=>$v){
+//                    $data['data'][$k]['job_item'] = !empty($v['job_item']) ? JobItemModel::getItem()[$v['job_item']] : '无';
+//                    $data['data'][$k]['work_cat'] = !empty($v['work_cat']) ? WorkCat::getItem()[$v['work_cat']] : '无';
+//                }
+//            }
             $data['count'] = UserModel::where($where)->count('id');
             $data['code'] = 0;
             $data['msg'] = '';

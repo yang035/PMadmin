@@ -1,3 +1,8 @@
+<style>
+    a{
+        cursor:pointer
+    }
+</style>
 <div class="page-toolbar">
     <div class="page-filter">
         <form class="layui-form layui-form-pane" action="{:url()}" method="get" id="hisi-table-search">
@@ -85,6 +90,13 @@
                 ,{field: 'work_cat', title: '日常工作'}
                 ,{field: 'mobile', title: '手机号码',edit: 'text'}
                 ,{field: 'last_login_time', width: 150, title: '最后登陆时间'}
+                ,{field: 'times', title: '登录次数', templet:function(d){
+                        if (d.times > 0){
+                            return "<a class='mcolor' onclick='read_log("+d.id+")'>"+d.times+"</a>";
+                        }else {
+                            return d.times;
+                        }
+                    }}
                 ,{field: 'status', title: '状态', templet: '#statusTpl'}
                 ,{title: '操作', templet: '#buttonTpl'}
             ]]
@@ -112,4 +124,9 @@
                 });
             });
     });
+
+    function read_log(id){
+        var open_url = "{:url('UserLogin/index')}?user_id="+id;
+        window.location.href = open_url;
+    }
 </script>

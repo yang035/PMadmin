@@ -1,12 +1,27 @@
+<style>
+    a{
+        cursor:pointer
+    }
+</style>
 <div class="page-toolbar">
-    <div class="page-filter fr">
+    <div class="page-filter">
         <form class="layui-form layui-form-pane" action="{:url()}" method="get" id="hisi-table-search">
-        <div class="layui-form-item">
-            <label class="layui-form-label">搜索</label>
-            <div class="layui-input-inline">
-                <input type="text" name="q" value="{:input('get.q')}" lay-verify="required" placeholder="用户名、邮箱、手机、昵称" autocomplete="off" class="layui-input">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">真实姓名</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="realname" value="{:input('get.realname')}" placeholder="真实姓名" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">手机号码</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input field-cellphone" name="cellphone" value="{:input('get.cellphone')}" onkeyup="value=value.replace(/[^\d]/g,'')" maxlength="11"
+                               autocomplete="off" placeholder="请输入手机号码">
+                    </div>
+                </div>
+                <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
             </div>
-        </div>
         </form>
     </div>
     <div class="layui-btn-group fl">
@@ -63,10 +78,16 @@
                             return '无'
                         }
                     }}
-                ,{field: 'job_item', title: '岗位'}
-                ,{field: 'work_cat', title: '日常工作'}
+                // ,{field: 'job_item', title: '岗位'}
+                // ,{field: 'work_cat', title: '日常工作'}
                 ,{field: 'mobile', title: '手机号码',edit: 'text'}
-                ,{field: 'times', title: '登录次数'}
+                ,{field: 'times', title: '登录次数', templet:function(d){
+                        if (d.times > 0){
+                            return "<a class='mcolor' onclick='read_log("+d.id+")'>"+d.times+"</a>";
+                        }else {
+                            return d.times;
+                        }
+                    }}
                 ,{field: 'last_login_time', width: 150, title: '最后登陆时间'}
                 ,{field: 'status', title: '状态', templet: '#statusTpl'}
             ]]
@@ -94,4 +115,9 @@
                 });
             });
     });
+
+    function read_log(id){
+        var open_url = "{:url('UserLogin/index')}?user_id="+id;
+        window.location.href = open_url;
+    }
 </script>
