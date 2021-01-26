@@ -39,11 +39,14 @@
         </colgroup>
         <thead>
             <tr>
-                <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
+<!--                <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>-->
+                <th>编号</th>
                 <th>名称</th>
                 <th>法人</th>
                 <th>手机号码</th>
                 <th>状态</th>
+                <th>注册手机号</th>
+                <th>推荐人</th>
                 <th>添加时间</th>
                 <th>操作</th>
             </tr> 
@@ -51,13 +54,16 @@
         <tbody>
             {volist name="data_list" id="vo"}
             <tr>
-                <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>
+<!--                <td><input type="checkbox" name="ids[]" class="layui-checkbox checkbox-ids" value="{$vo['id']}" lay-skin="primary"></td>-->
+                <td class="font12">{$vo['id']}</td>
                 <td class="font12">
                     <a href="#" onclick="read_company({$vo['id']})"><strong class="mcolor">{$vo['name']}</strong></a>
                 </td>
                 <td class="font12">{$vo['legal_person']}</td>
                 <td class="font12">{$vo['cellphone']}</td>
                 <td><input type="checkbox" name="status" {if condition="$vo['status'] eq 1"}checked=""{/if} value="{$vo['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="{:url('status?table=admin_company&ids='.$vo['id'])}"></td>
+                <td class="font12">{$vo['register_mobile']}</td>
+                <td class="font12">{$vo['tuijianren']}</td>
                 <td class="font12">{$vo['create_time']}</td>
                 <td>
                     <a href="#" onclick="read_company({$vo['id']})" class="layui-btn layui-btn-normal layui-btn-xs">查看</a>

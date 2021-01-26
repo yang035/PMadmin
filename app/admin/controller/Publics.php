@@ -116,6 +116,7 @@ class Publics extends Common
                         $tmp1 = [
                             'name' => $data['name'],
                             'register_mobile' => $data['mobile'],
+                            'tuijianren' => $data['tuijianren'],
                             'sys_type' => $data['sys_type'],
                             'gys_type' => (2 == $data['sys_type']) ? $data['gys_type'] : 1,
                         ];
