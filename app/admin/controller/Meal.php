@@ -155,7 +155,7 @@ class Meal extends Admin
             if($result !== true) {
                 return $this->error($result);
             }
-            if (!ItemModel::update($data)) {
+            if (!ItemModel::where(['id'=>$id])->update($data)) {
                 return $this->error('修改失败');
             }
             return $this->success('修改成功');
@@ -312,6 +312,8 @@ class Meal extends Admin
                     $where['qu_type'] = 1;
                     break;
             }
+
+            $where['status'] = 1;
             $cat_id = input('param.cat_id/d');
             if ($cat_id){
                 $where['cat_id'] = $cat_id;
@@ -378,6 +380,7 @@ class Meal extends Admin
         $this->assign('taocan',$this->taocan_config[$param['p']]);
         $this->assign('taocan_money',$this->taocan_other[$param['p']]['money']);
         $this->assign('qu',$qu_type[$param['qu_type']]);
+        $this->assign('taocan_year',ItemModel::getTaocanYear());
         return $this->fetch();
     }
 

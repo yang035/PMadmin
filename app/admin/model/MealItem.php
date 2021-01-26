@@ -70,6 +70,21 @@ class MealItem extends Model
         }
         return $str;
     }
+    public static function getTaocanYear($type = 0)
+    {
+        $data = config('tb_system.taocan_year');
+        $str = '';
+        if ($data){
+            foreach ($data as $k => $v) {
+                if ($type == $k) {
+                    $str .= "<option value='".$k."' selected>".$v."</option>";
+                } else {
+                    $str .= "<option value='".$k."'>".$v."</option>";
+                }
+            }
+        }
+        return $str;
+    }
     public static function getOption($type = 0)
     {
         $map = [

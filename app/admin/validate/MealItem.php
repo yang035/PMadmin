@@ -15,7 +15,7 @@ class MealItem extends Validate
 {
     //定义验证规则
     protected $rule = [
-        'name|名称' => 'require|unique:meal_item,cid^name',
+        'name|名称' => 'require',
         'status|状态设置'  => 'require|in:0,1',
     ];
 

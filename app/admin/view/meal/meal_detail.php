@@ -9,6 +9,14 @@
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-card">
         <div class="layui-form-item">
+            <label class="layui-form-label">套餐年限</label>
+            <div class="layui-input-inline">
+                <select name="taocan_year" class="field-taocan_year" type="select" lay-filter="taocan_year">
+                    {$taocan_year}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">金额</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-other_price" name="other_price" value="{$taocan_money}" readonly lay-verify="required" autocomplete="off" placeholder="">
@@ -30,17 +38,17 @@
             您购买的套餐为：{$qu}【{$taocan}】<br><br>
             包含以下内容项：<br>
             {volist name="data_list" id="vo"}
-            {$vo['name']}[
-            {eq name="vo['meal_type']" value="1"}
-                {eq name="vo[$p]" value="1"}
-            &#10003
+            {$vo['name']} [
+                {eq name="vo['meal_type']" value="1"}
+                    {eq name="vo[$p]" value="1"}
+                &#10003
+                    {else/}
+                &#10005
+                    {/eq}
                 {else/}
-            &#10005
+            <span class="mcolor" style="font-size: x-large"><strong>{$vo[$p]}</strong></span>
                 {/eq}
-            {else/}
-            {$vo[$p]}
-            {/eq}
-            ]<br>
+            ] <br>
             {/volist}
         </div>
     </div>
@@ -49,5 +57,13 @@
 {include file="block/layui" /}
 <script>
     var formData = {:json_encode($data_info)};
+    layui.use(['jquery', 'laydate','element','upload','form'], function() {
+        var $ = layui.jquery, laydate = layui.laydate, upload = layui.upload, element = layui.element,
+            form = layui.form;
+        form.on('select(taocan_year)', function (data) {
+            var money = '{$taocan_money}' * data.value;
+            $('.field-other_price').val(money);
+        });
+    });
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>
