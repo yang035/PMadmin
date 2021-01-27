@@ -832,6 +832,18 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
             ];
         }
 
+        if ($this->request->isAjax() && 1 == $p){
+            $a_j = array_values($tmp2);
+            $a_j = $a_j[0];
+            $a = [
+                'id_card' => $user[$a_j['uid']]['id_card'],
+                'ml'=>$a_j['ml'],
+                'gl'=>$gl[$a_j['uid']]['gl_add_sum'],
+                'rank'=>$a_j['rank'],
+            ];
+            return json($a);
+        }
+
         $this->assign('tmp', $tmp2);
         $this->assign('user', $user);
         $this->assign('rank', $rank);

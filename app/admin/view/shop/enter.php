@@ -6,7 +6,7 @@
 </style>
 <div style="padding: 20px; background-color: #F2F2F2;">
     <div class="layui-row layui-col-space15">
-        <div class="layui-col-md12">
+        <div class="layui-col-md12" id="div_1">
             <div class="layui-card">
                 <div class="layui-card-header">福利销购</div>
                 <div class="layui-card-body">
@@ -21,47 +21,9 @@
                     </ul>
                     {/notempty}
                     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-                        <legend>商品展示区</legend>
+                        <legend>MLGL特惠</legend>
                     </fieldset>
                     <div class="flow-default layui-row layui-col-space2" id="LAY_demo1"></div>
-                </div>
-            </div>
-        </div>
-        <div class="layui-col-md4">
-            <div class="layui-card">
-                <div class="layui-card-header">个人业绩</div>
-                <div class="layui-card-body">
-                    {notempty name="tmp"}
-                    {volist name="tmp" id="vo"}
-                    <b>员工编号：</b>{$user[$vo['uid']]['id_card']}<br>
-                    <b>累计ML：</b>{$vo['ml']}<br>
-                    <b>已完成ML：</b>{$vo['finish_ml']}<br>
-                    <b>未完成ML：</b>{$vo['finish_ml_no']}<br>
-                    <b>已发放ML：</b>{$vo['finish_ml_fafang']}<br>
-                    <b>累计GL：</b>{$gl[$vo['uid']]['gl_add_sum']}<br>
-                    <b>GL排名：</b>{$vo['rank']}<br>
-                    {/volist}
-                    {else/}
-                    暂无发放ML
-                    {/notempty}
-                </div>
-            </div>
-        </div>
-        <div class="layui-col-md4">
-            <div class="layui-card">
-                <div class="layui-card-header">我的任务</div>
-                <div class="layui-card-body">
-<!--                    结合 layui 的栅格系统<br>-->
-<!--                    轻松实现响应式布局-->
-                </div>
-            </div>
-        </div>
-        <div class="layui-col-md4">
-            <div class="layui-card">
-                <div class="layui-card-header">文件库</div>
-                <div class="layui-card-body">
-<!--                    结合 layui 的栅格系统<br>-->
-<!--                    轻松实现响应式布局-->
                 </div>
             </div>
         </div>
@@ -104,8 +66,97 @@
         var open_url = "{:url('shopDetail')}?id="+id;
         window.location.href = open_url;
     }
+    // getActivity();
     
     function getYeji() {
-        
+        var h_t_1 = "<div class=\"layui-col-md3\">\n" +
+            "            <div class=\"layui-card\">\n" +
+            "                <div class=\"layui-card-header\">我的IP</div>\n" +
+            "                <div class=\"layui-card-body\">";
+        var h_t_2 = "</div>\n" +
+            "            </div>\n" +
+            "        </div>";
+        $.ajax({
+            type: 'POST',
+            url: "{:url('score/listpeople')}",
+            data: {p:1},
+            dataType:  'json',
+            success: function(data){
+                if (data){
+                    var h_t = "<b>员工编号：</b>"+data.id_card+"<br>\n" +
+                        "            <b>累计ML：</b>"+data.ml+"<br>\n" +
+                        "            <b>累计GL：</b>"+data.gl+"<br>\n" +
+                        "            <b>排名：</b>"+data.rank+"<br>";
+                    $("#div_1").append(h_t_1+h_t+h_t_2);
+                }
+            }
+        });
     }
+
+    function getFile() {
+        var h_t_1 = "<div class=\"layui-col-md3\">\n" +
+            "            <div class=\"layui-card\">\n" +
+            "                <div class=\"layui-card-header\">提取共享文件</div>\n" +
+            "                <div class=\"layui-card-body\">";
+        var h_t_2 = "</div>\n" +
+            "            </div>\n" +
+            "        </div>";
+        var _url = "{:url('Subject/chengguo')}?pram=2";
+        $.ajax({
+            type: 'POST',
+            url: _url,
+            dataType:  'json',
+            success: function(data){
+                if (data){
+                    var h_t = "<a class='mcolor' href='"+_url+"'>有项目资料提取</a>";
+                    $("#div_1").append(h_t_1+h_t+h_t_2);
+                }
+            }
+        });
+    }
+
+    function getWork() {
+        var h_t_1 = "<div class=\"layui-col-md3\">\n" +
+            "            <div class=\"layui-card\">\n" +
+            "                <div class=\"layui-card-header\">我的工作</div>\n" +
+            "                <div class=\"layui-card-body\">";
+        var h_t_2 = "</div>\n" +
+            "            </div>\n" +
+            "        </div>";
+        var _url = "{:url('Index/getWork')}";
+        var u1 = "{:url('approval/index',['atype'=>3])}",u2 = "{:url('daily_report/index',['atype'=>3])}",
+            u3 = "{:url('score_deal/index',['atype'=>2])}",u4 = "{:url('project/mytask',['type'=>1])}",
+            u5 = "{:url('project/mytask',['type'=>2])}";
+        $.ajax({
+            type: 'POST',
+            url: _url,
+            dataType:  'json',
+            success: function(data){
+                if (data){
+                    var h_t = "<b>审批待处理：</b><a class='mcolor' style='font-size: larger;' href='"+u1+"'>"+data.approval_daishen+"</a><br>\n" +
+                        "            <b>汇报待处理：</b><a class='mcolor' style='font-size: larger;' href='"+u2+"'>"+data.report_daishen+"</a><br>\n" +
+                        "            <b>奖扣待处理：</b><a class='mcolor' style='font-size: larger;' href='"+u3+"'>"+data.jiangkou_daishen+"</a><br>\n" +
+                        "            <b>任务待完成：</b><a class='mcolor' style='font-size: larger;' href='"+u4+"'>"+data.project_deal+"</a><br>\n" +
+                        "            <b>任务待处理：</b><a class='mcolor' style='font-size: larger;' href='"+u5+"'>"+data.project_manager+"</a><br>";
+                    $("#div_1").append(h_t_1+h_t+h_t_2);
+                }
+            }
+        });
+    }
+
+    function getActivity() {
+        var h_t_1 = "<div class=\"layui-col-md3\">\n" +
+            "            <div class=\"layui-card\">\n" +
+            "                <div class=\"layui-card-header\">我的活动</div>\n" +
+            "                <div class=\"layui-card-body\">";
+        var h_t_2 = "</div>\n" +
+            "            </div>\n" +
+            "        </div>";
+        $("#div_1").append(h_t_1+h_t_2);
+    }
+
+    getFile();
+    getWork();
+    getYeji();
+    // getActivity();
 </script>

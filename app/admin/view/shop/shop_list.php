@@ -39,7 +39,7 @@
 </ul>
 {/notempty}
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-    <legend>商品展示区</legend>
+    <legend>MLGL特惠</legend>
 </fieldset>
 <div class="flow-default layui-row layui-col-space2" id="LAY_demo1"></div>
 
