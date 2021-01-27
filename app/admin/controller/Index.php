@@ -160,6 +160,7 @@ class Index extends Admin
         $cid = session('admin_user.cid');
         $uid = session('admin_user.uid');
         $map['cid'] = $cid;
+        $map['class_type'] = ['notin',[22,23]];
 
         $fields = "SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status=1 and class_type <> 11,1,0)) send_num";
         $approval_count = ApprovalModel::field($fields)->where($map)->find()->toArray();
@@ -170,8 +171,8 @@ class Index extends Admin
         }
 
         $map1['cid'] = $cid;
-        $map1['create_time'] = ['>','2019-02-01 00:00:00'];
-        $fields = "SUM(IF(JSON_EXTRACT(send_user,'$.\"$uid\"') = '',1,0)) send_num";
+        $map1['create_time'] = ['>','2019-10-01 00:00:00'];
+        $fields = "SUM(IF(JSON_EXTRACT(send_user,'$.\"$uid\"') = '' and status=1,1,0)) send_num";
         $report_count = DailyReportModel::field($fields)->where($map1)->find()->toArray();
         if ($report_count){
             $work['report_daishen'] = $report_count['send_num'];
@@ -181,6 +182,7 @@ class Index extends Admin
 
         $map2['cid'] = $cid;
         $map2['t_type'] = 1;
+        $map2['pid'] = ['<>', 0];
         $fields = "SUM(IF(JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"') AND send_user LIKE '%a%',1,0)) deal_num,
         SUM(IF(JSON_CONTAINS_PATH(manager_user,'one', '$.\"$uid\"'),1,0)) manager_num";
         $project_count = ProjectModel::field($fields)->where($map2)->find()->toArray();

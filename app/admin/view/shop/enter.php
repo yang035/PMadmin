@@ -107,8 +107,8 @@
             url: _url,
             dataType:  'json',
             success: function(data){
-                if (data){
-                    var h_t = "<a class='mcolor' href='"+_url+"'>有项目资料提取</a>";
+                if (data.data){
+                    var h_t = "<a class='mcolor' href='"+_url+"'>提取项目资料</a>";
                     $("#div_1").append(h_t_1+h_t+h_t_2);
                 }
             }
@@ -133,11 +133,11 @@
             dataType:  'json',
             success: function(data){
                 if (data){
-                    var h_t = "<b>审批待处理：</b><a class='mcolor' style='font-size: larger;' href='"+u1+"'>"+data.approval_daishen+"</a><br>\n" +
-                        "            <b>汇报待处理：</b><a class='mcolor' style='font-size: larger;' href='"+u2+"'>"+data.report_daishen+"</a><br>\n" +
-                        "            <b>奖扣待处理：</b><a class='mcolor' style='font-size: larger;' href='"+u3+"'>"+data.jiangkou_daishen+"</a><br>\n" +
-                        "            <b>任务待完成：</b><a class='mcolor' style='font-size: larger;' href='"+u4+"'>"+data.project_deal+"</a><br>\n" +
-                        "            <b>任务待处理：</b><a class='mcolor' style='font-size: larger;' href='"+u5+"'>"+data.project_manager+"</a><br>";
+                    var h_t = "<b>审批待处理：</b><a class='mcolor' style='font-size: x-large;' href='"+u1+"'>"+data.approval_daishen+"</a><br>\n" +
+                        "            <b>汇报待处理：</b><a class='mcolor' style='font-size: x-large;' href='"+u2+"'>"+data.report_daishen+"</a><br>\n" +
+                        "            <b>奖扣待处理：</b><a class='mcolor' style='font-size: x-large;' href='"+u3+"'>"+data.jiangkou_daishen+"</a><br>\n" +
+                        "            <b>任务待完成：</b><a class='mcolor' style='font-size: x-large;' href='"+u4+"'>"+data.project_deal+"</a><br>\n" +
+                        "            <b>任务待处理：</b><a class='mcolor' style='font-size: x-large;' href='"+u5+"'>"+data.project_manager+"</a><br>";
                     $("#div_1").append(h_t_1+h_t+h_t_2);
                 }
             }
