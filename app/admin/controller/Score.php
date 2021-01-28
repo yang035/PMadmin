@@ -41,7 +41,7 @@ class Score extends Admin
         $map1 = [];
         $params = $this->request->param();
         $d = '';
-        $order = 'ml_add_sum desc';
+        $order = 'gl_add_sum desc';
         if ($params) {
             if (!empty($params['realname'])) {
                 $map1['realname'] = ['like', '%' . $params['realname'] . '%'];
@@ -71,7 +71,7 @@ class Score extends Admin
                         $order = 'gl_add_sum desc';
                         break;
                     default:
-                        $order = 'ml_add_sum desc';
+                        $order = 'gl_add_sum desc';
                         break;
                 }
             }

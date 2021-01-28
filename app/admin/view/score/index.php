@@ -36,8 +36,8 @@
                 <label class="layui-form-label">排序</label>
                 <div class="layui-input-inline">
                     <select name="sort_table">
-                        <option value="1" {if condition="$Request.param.sort_table eq '1' "}selected{/if} >ML+</option>
                         <option value="2" {if condition="$Request.param.sort_table eq '2' "}selected{/if} >GL+</option>
+                        <option value="1" {if condition="$Request.param.sort_table eq '1' "}selected{/if} >ML+</option>
                     </select>
                 </div>
             </div>
