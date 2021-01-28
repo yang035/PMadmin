@@ -78,7 +78,8 @@ class Score extends Admin
         }else{
             $rank = ScoreModel::dealRank();
         }
-
+        $ext_user = config('other.ext_user');
+        $map['user'] = ['notin',$ext_user];
         $map['cid'] = session('admin_user.cid');
         $map1['id'] = ['neq', 1];
         $map1['is_show'] = ['eq', 0];

@@ -60,7 +60,8 @@ class Score extends Model
     public static function dealRank($start_time=0,$end_time=0)
     {
         $map['cid'] = session('admin_user.cid');
-//        $map['user'] = ['notin',[21,31]];
+        $ext_user = config('other.ext_user');
+        $map['user'] = ['notin',$ext_user];
         if ($start_time && $end_time){
             $map['Score.create_time'] = ['between',[$start_time,$end_time]];
         }
