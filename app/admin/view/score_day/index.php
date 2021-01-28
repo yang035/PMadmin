@@ -20,24 +20,24 @@
                 <input id="project_name" type="hidden" name="project_name" value="{$Request.param.project_name}">
                 <input id="project_id" type="hidden" name="project_id" value="{$Request.param.project_id}">
             </div>
-<!--                <div class="layui-inline">-->
-<!--                    <label class="layui-form-label">任务代码</label>-->
-<!--                    <div class="layui-input-inline">-->
-<!--                        <input type="text" name="project_code" value="{:input('get.project_code')}" placeholder="任务代码" autocomplete="off" class="layui-input">-->
-<!--                    </div>-->
-<!--                </div>-->
+            <!--                <div class="layui-inline">-->
+            <!--                    <label class="layui-form-label">任务代码</label>-->
+            <!--                    <div class="layui-input-inline">-->
+            <!--                        <input type="text" name="project_code" value="{:input('get.project_code')}" placeholder="任务代码" autocomplete="off" class="layui-input">-->
+            <!--                    </div>-->
+            <!--                </div>-->
             <div class="layui-inline">
-                <label class="layui-form-label">日期</label>
+                <label class="layui-form-label">年月</label>
                 <div class="layui-input-inline">
-                    <input type="text" class="layui-input" id="test2" name="search_date" placeholder="选择日期" readonly value="{$d|default=''}">
+                    <input type="text" class="layui-input" id="test2" name="search_date" placeholder="yyyy-mm" readonly value="{$d|default=''}">
                 </div>
             </div>
             <div class="layui-inline">
                 <label class="layui-form-label">排序</label>
                 <div class="layui-input-inline">
                     <select name="sort_table">
-                        <option value="1" {if condition="$Request.param.sort_table eq '1' "}selected{/if} >ML+</option>
                         <option value="2" {if condition="$Request.param.sort_table eq '2' "}selected{/if} >GL+</option>
+                        <option value="1" {if condition="$Request.param.sort_table eq '1' "}selected{/if} >ML+</option>
                     </select>
                 </div>
             </div>
@@ -64,6 +64,7 @@
             <th>GL+</th>
             <th>GL-</th>
             <th>剩余GL</th>
+            <th>GL排名(系数)</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -81,11 +82,12 @@
             <td class="font12">{$vo['gl_add_sum']}</td>
             <td class="font12">{$vo['gl_sub_sum']}</td>
             <td class="font12">{$vo['unused_gl']}</td>
+                        <td class="font12">{$vo['rank']}</td>
             <td>
                 <div class="layui-btn-group">
                     <div class="layui-btn-group">
-                        <a href="{:url('score/detail',['user'=>$vo['user'],'project_id'=>$Request.param.project_id])}" class="layui-btn layui-btn-primary layui-btn-sm">明细</a>
-                        <a href="{:url('score/tubiao',['user'=>$vo['user'],'project_id'=>$Request.param.project_id])}" class="layui-btn layui-btn-primary layui-btn-sm">图表</a>
+                        <a href="{:url('detail',['user'=>$vo['user'],'project_id'=>$Request.param.project_id])}" class="layui-btn layui-btn-primary layui-btn-sm">明细</a>
+                        <a href="{:url('tubiao',['user'=>$vo['user'],'project_id'=>$Request.param.project_id])}" class="layui-btn layui-btn-primary layui-btn-sm">图表</a>
                         <!--                                <a href="{:url('edit?id='.$vo['id'])}" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe642;</i></a>-->
                         <!--                                <a data-href="{:url('del?table=admin_company&ids='.$vo['id'])}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>-->
                     </div>
@@ -107,6 +109,7 @@
         //年选择器
         laydate.render({
             elem: '#test2',
+            type: 'month',
         });
 
         $('.export_btn').click(function () {

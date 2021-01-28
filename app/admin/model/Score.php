@@ -57,11 +57,14 @@ class Score extends Model
      * @throws \think\exception\DbException
      * 计算排名系数
      */
-    public static function dealRank($start_time=0,$end_time=0)
+    public static function dealRank($start_time=0,$end_time=0,$p=0)
     {
         $map['cid'] = session('admin_user.cid');
         $ext_user = config('other.ext_user');
         $map['user'] = ['notin',$ext_user];
+        if ($p){
+            unset($map['user']);
+        }
         if ($start_time && $end_time){
             $map['Score.create_time'] = ['between',[$start_time,$end_time]];
         }
