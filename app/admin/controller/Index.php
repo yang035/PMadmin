@@ -164,21 +164,13 @@ class Index extends Admin
 
         $fields = "SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status=1 and class_type <> 11,1,0)) send_num";
         $approval_count = ApprovalModel::field($fields)->where($map)->find()->toArray();
-        if ($approval_count){
-            $work['approval_daishen'] = $approval_count['send_num'];
-        }else{
-            $work['approval_daishen'] = 0;
-        }
+        $work['approval_daishen'] = $approval_count['send_num'] ? $approval_count['send_num'] : 0;
 
         $map1['cid'] = $cid;
         $map1['create_time'] = ['>','2019-10-01 00:00:00'];
         $fields = "SUM(IF(JSON_EXTRACT(send_user,'$.\"$uid\"') = '' and status=1,1,0)) send_num";
         $report_count = DailyReportModel::field($fields)->where($map1)->find()->toArray();
-        if ($report_count){
-            $work['report_daishen'] = $report_count['send_num'];
-        }else{
-            $work['report_daishen'] = 0;
-        }
+        $work['report_daishen'] = $report_count['send_num'] ? $report_count['send_num'] : 0;
 
         $map2['cid'] = $cid;
         $map2['t_type'] = 1;
@@ -186,22 +178,14 @@ class Index extends Admin
         $fields = "SUM(IF(JSON_CONTAINS_PATH(deal_user,'one', '$.\"$uid\"') AND send_user LIKE '%a%',1,0)) deal_num,
         SUM(IF(JSON_CONTAINS_PATH(manager_user,'one', '$.\"$uid\"'),1,0)) manager_num";
         $project_count = ProjectModel::field($fields)->where($map2)->find()->toArray();
-        if ($project_count){
-            $work['project_deal'] = $project_count['deal_num'];
-            $work['project_manager'] = $project_count['manager_num'];
-        }else{
-            $work['project_deal'] = 0;
-            $work['project_manager'] = 0;
-        }
+        $work['project_deal'] = $project_count['deal_num'] ? $project_count['deal_num'] : 0;
+        $work['project_manager'] = $project_count['manager_num'] ? $project_count['manager_num'] : 0;
 
         $map3['cid'] = $cid;
         $fields = "SUM(IF(JSON_CONTAINS_PATH(send_user,'one', '$.\"$uid\"') and status = 1,1,0)) send_num";
         $jiangkou_count = DealModel::field($fields)->where($map3)->find()->toArray();
-        if ($jiangkou_count){
-            $work['jiangkou_daishen'] = $jiangkou_count['send_num'];
-        }else{
-            $work['jiangkou_daishen'] = 0;
-        }
+        $work['jiangkou_daishen'] = $jiangkou_count['send_num'] ? $jiangkou_count['send_num'] : 0;
+
         return json($work);
     }
 

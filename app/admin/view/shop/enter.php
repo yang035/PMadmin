@@ -123,7 +123,7 @@
         var h_t_2 = "</div>\n" +
             "            </div>\n" +
             "        </div>";
-        var _url = "{:url('Index/getWork')}";
+        var _url = "{:url('Index/getWork')}",h_t='';
         var u1 = "{:url('approval/index',['atype'=>3])}",u2 = "{:url('daily_report/index',['atype'=>3])}",
             u3 = "{:url('score_deal/index',['atype'=>2])}",u4 = "{:url('project/mytask',['type'=>1])}",
             u5 = "{:url('project/mytask',['type'=>2])}";
@@ -132,12 +132,22 @@
             url: _url,
             dataType:  'json',
             success: function(data){
-                if (data){
-                    var h_t = "<b>审批待处理：</b><a class='mcolor' style='font-size: x-large;' href='"+u1+"'>"+data.approval_daishen+"</a><br>\n" +
-                        "            <b>汇报待处理：</b><a class='mcolor' style='font-size: x-large;' href='"+u2+"'>"+data.report_daishen+"</a><br>\n" +
-                        "            <b>奖扣待处理：</b><a class='mcolor' style='font-size: x-large;' href='"+u3+"'>"+data.jiangkou_daishen+"</a><br>\n" +
-                        "            <b>任务待完成：</b><a class='mcolor' style='font-size: x-large;' href='"+u4+"'>"+data.project_deal+"</a><br>\n" +
-                        "            <b>任务待处理：</b><a class='mcolor' style='font-size: x-large;' href='"+u5+"'>"+data.project_manager+"</a><br>";
+                if (data.approval_daishen){
+                    h_t += "<b>审批待处理：</b><a class='mcolor' style='font-size: x-large;' href='"+u1+"'>"+data.approval_daishen+"</a><br>";
+                }
+                if (data.report_daishen){
+                    h_t += "<b>汇报待处理：</b><a class='mcolor' style='font-size: x-large;' href='"+u2+"'>"+data.report_daishen+"</a><br>";
+                }
+                if (data.jiangkou_daishen){
+                    h_t += "<b>奖扣待处理：</b><a class='mcolor' style='font-size: x-large;' href='"+u3+"'>"+data.jiangkou_daishen+"</a><br>";
+                }
+                if (data.project_deal){
+                    h_t += "<b>任务待完成：</b><a class='mcolor' style='font-size: x-large;' href='"+u4+"'>"+data.project_deal+"</a><br>";
+                }
+                if (data.project_manager){
+                    h_t += "<b>任务待处理：</b><a class='mcolor' style='font-size: x-large;' href='"+u5+"'>"+data.project_manager+"</a><br>";
+                }
+                if (h_t){
                     $("#div_1").append(h_t_1+h_t+h_t_2);
                 }
             }
