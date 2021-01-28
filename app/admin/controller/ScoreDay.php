@@ -36,7 +36,7 @@ class ScoreDay extends Admin
         $map = [];
         $map1 = [];
         $params = $this->request->param();
-        $d = '';
+        $d = date('Y-m',strtotime('-1 month'));
         $order = 'gl_add_sum desc';
         if ($params) {
             if (!empty($params['realname'])) {
@@ -50,12 +50,6 @@ class ScoreDay extends Admin
             }
             if (isset($params['search_date']) && !empty($params['search_date'])) {
                 $d = urldecode($params['search_date']);
-                $d0 = strtotime($d);
-                $d1 = strtotime("+1 month",strtotime($d));
-                $map['Score.create_time'] = ['between', ["$d0", "$d1"]];
-                $rank = ScoreModel::dealRank($d0,$d1);
-            }else{
-                $rank = ScoreModel::dealRank();
             }
             if (!empty($params['sort_table'])) {
                 switch ($params['sort_table']) {
@@ -70,9 +64,12 @@ class ScoreDay extends Admin
                         break;
                 }
             }
-        }else{
-            $rank = ScoreModel::dealRank();
         }
+        $d0 = strtotime($d);
+        $d1 = strtotime("+1 month",strtotime($d));
+        $map['Score.create_time'] = ['between', ["$d0", "$d1"]];
+        $rank = ScoreModel::dealRank($d0,$d1);
+
         $ext_user = config('other.ext_user');
         $map['user'] = ['notin',$ext_user];
         $map['cid'] = session('admin_user.cid');
