@@ -107,7 +107,7 @@
             url: _url,
             dataType:  'json',
             success: function(data){
-                if (data.data){
+                if (data.data.length){
                     var h_t = "<a class='mcolor' href='"+_url+"'>提取项目资料</a>";
                     $("#div_1").append(h_t_1+h_t+h_t_2);
                 }
