@@ -242,8 +242,9 @@ class Approval extends Admin
                 $list[$k]['fellow_user'] = strip_tags($this->deal_data($v['fellow_user']));
                 $list[$k]['realname'] = AdminUser::getUserById($v['user_id'])['realname'];
 
-                $list[$k]['money'] = '#';
-                $list[$k]['leave_type'] = '#';
+                $list[$k]['leave_type'] = null;
+                $list[$k]['payee'] = null;
+                $list[$k]['money'] = null;
                 switch ($v['class_type']){
                     case 1://报销
                         $child = LeaveModel::where('aid',$v['id'])->find();
@@ -335,7 +336,7 @@ class Approval extends Admin
                     ->setCellValue('E' . $num, $v['start_time'])
                     ->setCellValue('F' . $num, $v['end_time'])
                     ->setCellValue('G' . $num, $v['project_name'])
-                    ->setCellValue('H' . $num, null)
+                    ->setCellValue('H' . $num, $v['payee'])
                     ->setCellValue('I' . $num, $v['money'])
                     ->setCellValue('J' . $num, $v['reason'])
                     ->setCellValue('K' . $num, $v['send_user'])
@@ -345,9 +346,6 @@ class Approval extends Admin
                     ->setCellValue('O' . $num, $v['update_time'])
                     ->setCellValue('P' . $num, $v['deal_mark'])
                     ->setCellValue('Q' . $num, $v['fellow_user']);
-                if ($v['class_type'] == 3){
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H' . $num, $v['payee']);
-                }
             }
             $d = !empty($d) ? $d : '全部';
             $name = $d.'日常审批统计';
