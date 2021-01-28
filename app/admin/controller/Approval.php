@@ -261,6 +261,7 @@ class Approval extends Admin
                         $child = CostModel::where('aid',$v['id'])->find();
                         if ($child){
                             $list[$k]['money'] = $child['money'];
+                            $list[$k]['payee'] = $child['payee'];
                         }
                         break;
                 }
@@ -302,44 +303,51 @@ class Approval extends Admin
             $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(30);
             $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(30);
             $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(30);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(30);
             $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A1', '姓名')
-                ->setCellValue('B1', '类型')
-                ->setCellValue('C1', '归属于')
-                ->setCellValue('D1', '开始时间')
-                ->setCellValue('E1', '结束时间')
-                ->setCellValue('F1', '项目名称')
-                ->setCellValue('G1', '金额(元)')
-                ->setCellValue('H1', '审批人')
-                ->setCellValue('I1', '添加时间')
-                ->setCellValue('J1', '状态')
-                ->setCellValue('K1', '审批意见')
-                ->setCellValue('L1', '审批时间')
-                ->setCellValue('M1', '支付结果')
-                ->setCellValue('N1', '同行人')
-                ->setCellValue('O1', '审批编号')
-                ->setCellValue('P1', '事由');
+                ->setCellValue('A1', '编号')
+                ->setCellValue('B1', '姓名')
+                ->setCellValue('C1', '类型')
+                ->setCellValue('D1', '归属于')
+                ->setCellValue('E1', '开始时间')
+                ->setCellValue('F1', '结束时间')
+                ->setCellValue('G1', '项目名称')
+                ->setCellValue('H1', '收款单位')
+                ->setCellValue('I1', '金额(元)')
+                ->setCellValue('J1', '事由')
+                ->setCellValue('K1', '审批人')
+                ->setCellValue('L1', '添加时间')
+                ->setCellValue('M1', '状态')
+                ->setCellValue('N1', '审批意见')
+                ->setCellValue('O1', '审批时间')
+                ->setCellValue('P1', '支付结果')
+                ->setCellValue('Q1', '同行人');
+
 //            print_r($data_list);exit();
             foreach ($list as $k => $v) {
                 $num = $k + 2;
                 $objPHPExcel->setActiveSheetIndex(0)
                     //Excel的第A列，uid是你查出数组的键值，下面以此类推
-                    ->setCellValue('A' . $num, $v['realname'])
-                    ->setCellValue('B' . $num, $panel_type[$v['class_type']]['title'])
-                    ->setCellValue('C' . $num, $v['leave_type'])
-                    ->setCellValue('D' . $num, $v['start_time'])
-                    ->setCellValue('E' . $num, $v['end_time'])
-                    ->setCellValue('F' . $num, $v['project_name'])
-                    ->setCellValue('G' . $num, $v['money'])
-                    ->setCellValue('H' . $num, $v['send_user'])
-                    ->setCellValue('I' . $num, $v['create_time'])
-                    ->setCellValue('J' . $num, $approval_status[$v['status']])
-                    ->setCellValue('K' . $num, $v['mark'])
-                    ->setCellValue('L' . $num, $v['update_time'])
-                    ->setCellValue('M' . $num, $v['deal_mark'])
-                    ->setCellValue('N' . $num, $v['fellow_user'])
-                    ->setCellValue('O' . $num, $v['id'])
-                    ->setCellValue('P' . $num, $v['reason']);
+                    ->setCellValue('A' . $num, $v['id'])
+                    ->setCellValue('B' . $num, $v['realname'])
+                    ->setCellValue('C' . $num, $panel_type[$v['class_type']]['title'])
+                    ->setCellValue('D' . $num, $v['leave_type'])
+                    ->setCellValue('E' . $num, $v['start_time'])
+                    ->setCellValue('F' . $num, $v['end_time'])
+                    ->setCellValue('G' . $num, $v['project_name'])
+                    ->setCellValue('H' . $num, null)
+                    ->setCellValue('I' . $num, $v['money'])
+                    ->setCellValue('J' . $num, $v['reason'])
+                    ->setCellValue('K' . $num, $v['send_user'])
+                    ->setCellValue('L' . $num, $v['create_time'])
+                    ->setCellValue('M' . $num, $approval_status[$v['status']])
+                    ->setCellValue('N' . $num, $v['mark'])
+                    ->setCellValue('O' . $num, $v['update_time'])
+                    ->setCellValue('P' . $num, $v['deal_mark'])
+                    ->setCellValue('Q' . $num, $v['fellow_user']);
+                if ($v['class_type'] == 3){
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H' . $num, $v['payee']);
+                }
             }
             $d = !empty($d) ? $d : '全部';
             $name = $d.'日常审批统计';
