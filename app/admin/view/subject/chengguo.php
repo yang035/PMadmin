@@ -79,6 +79,7 @@
                         return d.cat.name;
                     }},
                 {field: 'leader_user', title: '总负责人',width:150},
+                {field: 's_status', title: '项目状态',width:150},
                 {title: '操作', templet: '#buttonTpl',minWidth:600}
             ]]
         });
