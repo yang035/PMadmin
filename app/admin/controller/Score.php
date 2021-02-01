@@ -731,6 +731,15 @@ SELECT (SUM(ml_add_score)-SUM(ml_sub_score)) AS ml_sum,(SUM(gl_add_score)-SUM(gl
     }
 
     public function listPeople($p=0){
+        if ($this->request->isAjax() && 1 == $p){
+            $uid = session('admin_user.uid');
+            $rank = ScoreModel::dealRank(0,0,1);
+            if (isset($rank[$uid])){
+                return json($rank[$uid]);
+            }else{
+                return null;
+            }
+        }
         $rank = ScoreModel::dealRank();
         $cid = session('admin_user.cid');
         $role_id = session('admin_user.role_id');
