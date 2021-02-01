@@ -59,9 +59,9 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">原因</label>
+        <label class="layui-form-label">申请原因</label>
         <div class="layui-input-block">
-            <textarea type="text" class="layui-textarea field-reason" name="reason" autocomplete="off" placeholder="请输入原因" lay-verify="required"></textarea>
+            <textarea type="text" class="layui-textarea field-reason" name="reason" autocomplete="off" placeholder="请输入申请原因" lay-verify="required"></textarea>
         </div>
         <div class="layui-form-mid" style="color: red">*</div>
     </div>

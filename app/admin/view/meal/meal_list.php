@@ -25,7 +25,7 @@
                 //         return d.cat.name;
                 //     }},
                 {field: 'name', title: '内容',width:150},
-                {field: 'taocan_1', title: "{$taocan_config['taocan_1']} <a class='layui-btn layui-btn-xs layui-btn-normal' onclick=\"read('taocan_1',{$Request.param.qu_type})\">购买</a><br><span class='mcolor' style='font-size: larger'><strong>0</strong></span> 元/天(起)", templet:function(d){
+                {field: 'taocan_1', title: "{$taocan_config['taocan_1']} <a class='layui-btn layui-btn-xs layui-btn-normal' onclick=\"read('taocan_1',{$Request.param.qu_type})\">选用</a><br><span class='mcolor' style='font-size: larger'><strong>0</strong></span> 元/天(起)", templet:function(d){
                     if (d.meal_type == 1){
                         return d.taocan_1 == 1 ? '&#10003' : '&#10005';
                     }else {
