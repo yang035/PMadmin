@@ -1578,7 +1578,7 @@ class Project extends Admin
         $map['t_type'] = 1;
         $subject_id = 0;
         $map['pid'] = ['<>', 0];
-        $p_status = '';
+        $p_status = 3;
         $mm = '';
 
         if (!empty($params['project_id']) && is_numeric($params['project_id'])) {
@@ -1684,12 +1684,16 @@ class Project extends Admin
                         $w = " realper < 100 and DATEDIFF(end_time,NOW()) < 0";
                         break;
                     case 3:
-                        $w = " realper < 100 and DATEDIFF(end_time,NOW()) > 0";
+                        $w = " realper < 100";
                         break;
                     case 4:
                         $w = " realper >= 100 and real_score = 0";
                         break;
+                    case 5:
+                        $w = " realper >= 100 and real_score > 0";
+                        break;
                     default :
+                        $w = ' realper < 100';
                         break;
                 }
             }

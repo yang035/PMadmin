@@ -69,6 +69,7 @@
         <button onclick="ajax_send(2)" type="button" class="layui-btn layui-btn-danger layui-btn-radius">逾期</button>
         <button onclick="ajax_send(3)" type="button" class="layui-btn layui-btn-normal layui-btn-radius">待完成</button>
         <button onclick="ajax_send(4)" type="button" class="layui-btn layui-btn-warm layui-btn-radius">待评定</button>
+        <button onclick="ajax_send(5)" type="button" class="layui-btn layui-btn-primary layui-btn-radius">已完成</button>
     </div>
     {if condition="$Request.param.type eq 2"}
     <div class="layui-btn-group fl">

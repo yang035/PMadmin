@@ -126,8 +126,8 @@
             "        </div>";
         var _url = "{:url('Index/getWork')}",h_t='';
         var u1 = "{:url('approval/index',['atype'=>3])}",u2 = "{:url('daily_report/index',['atype'=>3])}",
-            u3 = "{:url('score_deal/index',['atype'=>2])}",u4 = "{:url('project/mytask',['type'=>1])}",
-            u5 = "{:url('project/mytask',['type'=>2])}";
+            u3 = "{:url('score_deal/index',['atype'=>2])}",u4 = "{:url('project/mytask',['type'=>1,'p_status'=>3])}",
+            u5 = "{:url('project/mytask',['type'=>2,'p_status'=>4])}";
         $.ajax({
             type: 'POST',
             url: _url,
