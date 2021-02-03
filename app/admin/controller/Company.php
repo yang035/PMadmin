@@ -60,6 +60,16 @@ class Company extends Admin
             if($result !== true) {
                 return $this->error($result);
             }
+            if ($data['piao_name'] && $data['identity_number']){
+                $content = <<<EOF
+开票名称：{$data['piao_name']}<br>
+开票税号：{$data['identity_number']}<br>
+地址电话：{$data['piao_address']}<br>
+开户银行：{$data['bank']}<br>
+银行账号：{$data['card_num']}<br>
+EOF;
+                $data['code_path'] = scerweima1($content);
+            }
             $result = AdminCompany::create($data);
             $result_arr =$result->toArray();
             $cid = $result_arr['id'];
@@ -109,16 +119,26 @@ class Company extends Admin
             if($result !== true) {
                 return $this->error($result);
             }
+            if ($data['piao_name'] && $data['identity_number']){
+                $content = <<<EOF
+开票名称：{$data['piao_name']}
+开票税号：{$data['identity_number']}
+地址电话：{$data['piao_address']}
+开户银行：{$data['bank']}
+银行账号：{$data['card_num']}
+EOF;
+                $data['code_path'] = scerweima1($content);
+            }
             $flag = false;
             Db::startTrans();
             try{
-                AdminCompany::update($data);
                 $w = [
                     'pid' => 0,
                     'cid' => $data['id'],
                 ];
                 AdminDepartment::where($w)->update(['name'=>$data['name']]);
-                $flag = \app\admin\model\ScoreRule::where($w)->update(['name'=>$data['name']]);
+                \app\admin\model\ScoreRule::where($w)->update(['name'=>$data['name']]);
+                $flag = AdminCompany::update($data);
                 //事务提交
                 Db::commit();
             } catch (\Exception $e) {

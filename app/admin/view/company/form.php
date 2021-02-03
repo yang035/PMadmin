@@ -49,24 +49,6 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">统一社会信用代码</label>
-        <div class="layui-input-inline">
-            <input type="text" class="layui-input field-business_license" name="business_license" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" maxlength="18" autocomplete="off" placeholder="请输入统一社会信用代码">
-        </div>
-    </div>
-<!--    <div class="layui-form-item">-->
-<!--        <label class="layui-form-label">营业许可证</label>-->
-<!--        <div class="layui-input-inline">-->
-<!--            <input type="text" class="layui-input field-license" name="license" autocomplete="off" placeholder="请输入营业许可证">-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    <div class="layui-form-item">-->
-<!--        <label class="layui-form-label">社会信用代码</label>-->
-<!--        <div class="layui-input-inline">-->
-<!--            <input type="text" class="layui-input field-credit_code" name="credit_code" autocomplete="off" placeholder="请输入社会信用代码">-->
-<!--        </div>-->
-<!--    </div>-->
-    <div class="layui-form-item">
         <label class="layui-form-label">网站域名</label>
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-domain_name" name="domain_name" autocomplete="off" placeholder="请输入网站域名">
@@ -88,6 +70,38 @@
         <label class="layui-form-label">GL排名系数最小值</label>
         <div class="layui-input-inline">
             <input type="text" class="layui-input field-min_rankratio" name="min_rankratio" oninput="value=moneyInput(value)" autocomplete="off" placeholder="GL排名系数最小值" maxlength="6" value="1.00">
+        </div>
+    </div>
+    <hr>
+    <div class="layui-form-item">
+        <label class="layui-form-label">开票名称</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-piao_name" name="piao_name" autocomplete="off" placeholder="请输入开票名称">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">纳税人识别号</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-identity_number" name="identity_number" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" maxlength="18" autocomplete="off" placeholder="请输入统一社会信用代码">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">开票地址和电话</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-piao_address" name="piao_address" autocomplete="off" placeholder="请输入地址和电话">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">开户银行</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-bank" name="bank" autocomplete="off" placeholder="请输入开户银行">
+        </div>
+        <div class="layui-form-mid" style="color: red">(精确到支行)</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">开户账号</label>
+        <div class="layui-input-inline">
+            <input type="number" class="layui-input field-card_num" name="card_num" autocomplete="off" placeholder="请输入开户账号">
         </div>
     </div>
     <div class="layui-form-item">
