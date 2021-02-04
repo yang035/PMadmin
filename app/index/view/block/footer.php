@@ -1,6 +1,6 @@
 <footer id="gtco-footer" role="contentinfo">
     <div class="gtco-container">
-
+        <div class="laykefu-min">咨询客服</div>
         <div class="row copyright">
             <div class="col-md-12">
                 <p class="pull-left">
@@ -50,6 +50,9 @@
 <!--[if lt IE 9]>
 <script src="__PUBLIC_JS__/index/js/respond.min.js"></script>
 <![endif]-->
+<link href="http://laykefu.local.com/static/customer/css/laykefu.css" rel="stylesheet" type="text/css" />
+<script src="http://laykefu.local.com/static/customer/js/reconnecting-websocket.js"></script>
+<script src="http://laykefu.local.com/static/customer/js/laykefu.js"></script>
 <script>
     $("#div1").waterfall({
         itemClass: ".box",
@@ -71,6 +74,14 @@
             success();
             end();
         }
+    });
+
+    laykefu.init({
+        group: 1,//客服分组
+        socket: 'kefu.imlgl.com:7272',//聊天服务器地址 本地测试可以设置为127.0.0.1：7272
+        // avatar: 'http://kefu.imlgl.com//uploads/20190419/4eb84234138339f27018e1e3625afd15.jpg',//客户头像
+        face_path:'http://kefu.imlgl.com/static/customer/images/face',//表情包路径
+        uploadUrl:'http://kefu.imlgl.com/index/upload/uploadImg',//图片上传路径
     });
 
     var _hmt = _hmt || [];
