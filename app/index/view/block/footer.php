@@ -50,9 +50,9 @@
 <!--[if lt IE 9]>
 <script src="__PUBLIC_JS__/index/js/respond.min.js"></script>
 <![endif]-->
-<link href="http://laykefu.local.com/static/customer/css/laykefu.css" rel="stylesheet" type="text/css" />
-<script src="http://laykefu.local.com/static/customer/js/reconnecting-websocket.js"></script>
-<script src="http://laykefu.local.com/static/customer/js/laykefu.js"></script>
+<link href="http://kefu.imlgl.com/static/customer/css/laykefu.css" rel="stylesheet" type="text/css" />
+<script src="http://kefu.imlgl.com/static/customer/js/reconnecting-websocket.js"></script>
+<script src="http://kefu.imlgl.com/static/customer/js/laykefu.js"></script>
 <script>
     $("#div1").waterfall({
         itemClass: ".box",
