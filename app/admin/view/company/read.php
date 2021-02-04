@@ -14,7 +14,6 @@
             <b>开票地址和电话：</b>{$data_list['piao_address']}<br>
             <b>开户银行：</b>{$data_list['bank']}<br>
             <b>开户账号：</b>{$data_list['card_num']}<br>
-            <b>开户账号：</b>{$data_list['card_num']}<br>
             {notempty name="$data_list['code_path']"}
             <b>开票二维码：</b><img src="/{$data_list['code_path']}" style="height: 150px;width: 150px"><br>
             {/notempty}
