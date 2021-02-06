@@ -9,9 +9,14 @@
 namespace app\index\controller;
 
 
+use app\admin\model\ResumeItem;
 use think\Controller;
 use app\admin\model\HomeItem as ItemModel;
 use app\admin\model\ShopItem;
+use app\admin\model\ZhaopinItem;
+use app\admin\model\ZhaopinCat;
+use app\admin\model\AdminCompany;
+use app\admin\model\Region;
 
 class Index extends Controller
 {
@@ -87,6 +92,72 @@ class Index extends Controller
         $sub_date= explode(' ',$row['update_time'])[0];
         $row['sub_date'] = $sub_date;
         $this->assign('data_list', $row);
+        return $this->fetch();
+    }
+
+    public function zhaopin_lists()
+    {
+        $map['status'] = 1;
+        $data_list = ZhaopinItem::where($map)->order('id desc')->paginate(20, false, ['query' => input('get.')]);
+        if ($data_list) {
+            $education = config('develop.education');
+            $experience = config('tb_system.experience');
+            foreach ($data_list as $k => $v) {
+                $data_list[$k]['company_name'] = AdminCompany::getCompanyById($v['cid'])['name'];
+                $data_list[$k]['content'] = htmlspecialchars_decode($v['content']);
+                $data_list[$k]['region_name'] = Region::getCityName($v['region_code']);
+                $data_list[$k]['education'] = $education[$v['education']];
+                $data_list[$k]['experience'] = $experience[$v['experience']];
+            }
+        }
+        $this->assign('data_list', $data_list);
+        $page = $data_list->render();
+        $this->assign('page', $page);
+        return $this->fetch();
+    }
+
+    public function zhaopin_detail($id)
+    {
+        $params = $this->request->param();
+        $education = config('develop.education');
+        $experience = config('tb_system.experience');
+        $map['id'] = $id;
+        $row = ZhaopinItem::where($map)->find();
+        $row['content'] = htmlspecialchars_decode($row['content']);
+        $row['company_name'] = AdminCompany::getCompanyById($row['cid'])['name'];
+        $row['region_name'] = Region::getCityName($row['region_code']);
+        $row['education'] = $education[$row['education']];
+        $row['experience'] = $experience[$row['experience']];
+        $this->assign('data_list', $row);
+        return $this->fetch();
+    }
+
+    public function jianli()
+    {
+        if ($this->request->isPost()){
+            $data = $this->request->post();
+            if (empty($data['mobile'])){
+                return $this->error('手机号码未填');
+            }
+            if (empty($data['attachment'])){
+                return $this->error('请上传简历');
+            }
+            $d = [
+                'cid' => $data['cid'],
+                'name' => $data['mobile'],
+                'job' => $data['job'],
+                'mobile' => $data['mobile'],
+                'attachment' => $data['attachment'],
+                'remark' => $data['remark'],
+                'source' => '官网直投',
+                'zhaopin_id' => $data['zhaopin_id'],
+            ];
+            if (!ResumeItem::create($d)){
+                return $this->error('提交失败');
+            }else{
+                return $this->error('提交成功');
+            }
+        }
         return $this->fetch();
     }
 

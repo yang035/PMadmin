@@ -69,6 +69,20 @@ class UserInfo extends Model
         return $str;
     }
 
+    public static function getExperienceOption($type = 0)
+    {
+        $leaveType = config('tb_system.experience');
+        $str = '<option value=""></option>';
+        foreach ($leaveType as $k => $v) {
+            if ($type == $k) {
+                $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+            } else {
+                $str .= '<option value="'.$k.'">'.$v.'</option>';
+            }
+        }
+        return $str;
+    }
+
     public static function getMaritalOption($type = 0)
     {
         $leaveType = config('develop.marital');
