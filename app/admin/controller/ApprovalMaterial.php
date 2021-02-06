@@ -2197,6 +2197,9 @@ class ApprovalMaterial extends Admin
         } else {
             $cid = session('admin_user.cid');
             $mytask = MaterialPrice::getProjectByCompany($cid);
+            if (!$mytask){
+                return $this->error('暂没有合作项目');
+            }
             if ($this->request->isPost()) {
                 $data = $this->request->post();
                 if ('' == $data['project_id']) {
