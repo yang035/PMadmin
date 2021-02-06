@@ -170,6 +170,9 @@
                 </div>
 <!--                <div class="layui-form-mid">202036</div>-->
             </div>
+            <div class="layui-form-item">
+                <a href="#" onclick="xieyi()" style="color: grey"><input type="checkbox" lay-skin="primary" disabled="" checked="">用户注册协议</a>
+            </div>
 <!--            <div class="layui-form-item">-->
 <!--                <label class="layui-form-label">联系邮箱</label>-->
 <!--                <div class="layui-input-inline">-->
@@ -236,6 +239,23 @@
             return false;
         });
     });
+    function xieyi() {
+        var open_url = "/xieyi1.html";
+        if (open_url.indexOf('?') >= 0) {
+            open_url += '&hisi_iframe=yes';
+        } else {
+            open_url += '?hisi_iframe=yes';
+        }
+        layer.open({
+            type:2,
+            title :'用户注册协议',
+            maxmin: true,
+            area: ['800px', '600px'],
+            content: open_url,
+            success:function (layero, index) {
+            }
+        });
+    }
     // window.onload = function () {
     //     //配置
     //     var config = {

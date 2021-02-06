@@ -156,6 +156,9 @@
                 <input type="radio" class="field-status" name="status" value="0" title="禁用">
             </div>
         </div>
+        <div class="layui-form-item">
+            <a href="#" onclick="xieyi()" style="color: grey"><input type="checkbox" lay-skin="primary" disabled="" checked="">商品服务协议</a>
+        </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
@@ -271,5 +274,22 @@
             }
         });
     });
+    function xieyi() {
+        var open_url = "/xieyi2.html";
+        if (open_url.indexOf('?') >= 0) {
+            open_url += '&hisi_iframe=yes';
+        } else {
+            open_url += '?hisi_iframe=yes';
+        }
+        layer.open({
+            type:2,
+            title :'商品服务协议',
+            maxmin: true,
+            area: ['800px', '600px'],
+            content: open_url,
+            success:function (layero, index) {
+            }
+        });
+    }
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>
