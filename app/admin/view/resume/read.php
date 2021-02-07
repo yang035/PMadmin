@@ -5,6 +5,9 @@
             <b>面试岗位：</b>{$data_list['job']}<br>
             <b>名称：</b>{$data_list['name']}<br>
             <b>手机号码：</b>{$data_list['mobile']}<br>
+            <b>学历：</b>{$data_list['education']}<br>
+            <b>所学专业：</b>{$data_list['major']}<br>
+            <b>工作经验：</b>{$data_list['experience']}<br>
             <b>招聘来源：</b>{$data_list['source']}<br>
             <b>面试时间：</b>{$data_list['resume_time']}<br>
             <b>是否面试：</b>{$data_list['is_resume']}<br>

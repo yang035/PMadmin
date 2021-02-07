@@ -17,6 +17,7 @@ use app\admin\model\ZhaopinItem;
 use app\admin\model\ZhaopinCat;
 use app\admin\model\AdminCompany;
 use app\admin\model\Region;
+use app\admin\model\UserInfo as UserInfoModel;
 
 class Index extends Controller
 {
@@ -144,9 +145,12 @@ class Index extends Controller
             }
             $d = [
                 'cid' => $data['cid'],
-                'name' => $data['mobile'],
+                'name' => $data['name'],
                 'job' => $data['job'],
                 'mobile' => $data['mobile'],
+                'education' => $data['education'],
+                'major' => $data['major'],
+                'experience' => $data['experience'],
                 'attachment' => $data['attachment'],
                 'remark' => $data['remark'],
                 'source' => '官网直投',
@@ -158,6 +162,8 @@ class Index extends Controller
                 return $this->error('提交成功');
             }
         }
+        $this->assign('education_type', UserInfoModel::getEducationOption());
+        $this->assign('experience_type', UserInfoModel::getExperienceOption());
         return $this->fetch();
     }
 

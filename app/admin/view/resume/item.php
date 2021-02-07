@@ -68,30 +68,33 @@
                 // {field: 'cat_id', title: '类别',width:80, templet:function(d){
                 //         return d.cat.name;
                 //     }},
-                {field: 'job', title: '面试岗位',width:100},
+                {field: 'job', title: '面试岗位',width:150},
                 {field: 'name', title: '姓名',width:80,templet:function(d){
                         return "<a class='mcolor' onclick='read("+d.id+")'>"+d.name+"</a>";
                     }},
                 {field: 'mobile', title: '手机号码',width:120},
-                {field: 'qq', title: 'QQ',width:80},
-                {field: 'wechat', title: '微信',width:80},
+                {field: 'education', title: '学历',width:100},
+                {field: 'major', title: '所学专业',width:100},
+                {field: 'experience', title: '工作经验',width:100},
                 {field: 'attachment', title: '简历附件',width:90, templet:function(d){
                         return "<a target='_blank' class='mcolor' href='"+d.attachment+"' >附件</a>";
                     }},
-                {field: 'last_company', title: '所在公司',width:120},
-                {field: 'legalman', title: '法人/负责人',width:120},
-                {field: 'legalman_contact', title: '联系方式',width:120},
-                {field: 'com_address', title: '公司地址',width:120},
-                {field: 'source', title: '来源',width:80},
+                // {field: 'last_company', title: '所在公司',width:120},
+                // {field: 'legalman', title: '法人/负责人',width:120},
+                // {field: 'legalman_contact', title: '联系方式',width:120},
+                // {field: 'com_address', title: '公司地址',width:120},
+                {field: 'source', title: '来源',width:100},
+                {field: 'remark', title: '面试备注',width:150},
+                {title: '操作', templet: '#buttonTpl',width:160},
+                {field: 'qq', title: 'QQ',width:80},
+                {field: 'wechat', title: '微信',width:80},
                 {field: 'resume_time', title: '面试时间',width:150},
                 {field: 'is_resume', title: '是否面试',width:100},
                 {field: 'is_pass', title: '是否通过',width:100},
                 {field: 'is_duty', title: '是否到岗',width:100},
-                {field: 'remark', title: '面试备注',width:150},
                 {field: 'status', title: '状态',width:120, templet: '#statusTpl'},
                 {field: 'user_name', title: '操作员',width:80},
-                {field: 'create_time', title: '添加时间',width:160},
-                {title: '操作', templet: '#buttonTpl',width:160}
+                {field: 'create_time', title: '添加时间',width:160}
             ]]
         });
 

@@ -1,5 +1,6 @@
 <footer id="gtco-footer" role="contentinfo">
     <div class="gtco-container">
+        <a href="{:url('zhaopin_lists')}"><div class="laykefu-min1">招聘</div></a>
         <div class="laykefu-min">咨询客服</div>
         <div class="row copyright">
             <div class="col-md-12">

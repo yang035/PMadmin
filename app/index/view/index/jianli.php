@@ -7,10 +7,42 @@
 <form class="layui-form" action="{:url()}" method="post">
     <div class="layui-tab-item layui-show layui-form-pane">
         <div class="layui-form-item">
+            <label class="layui-form-label">姓名</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input field-name" name="name" lay-verify="required" autocomplete="off" placeholder="请输入姓名">
+            </div>
+            <div class="layui-form-mid red">*</div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">手机号码</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input field-mobile" name="mobile" lay-verify="required" onkeyup="value=value.replace(/[^\d]/g,'')" lay-verify="phone" maxlength="11"
                        autocomplete="off" placeholder="请输入手机号码">
+            </div>
+            <div class="layui-form-mid red">*</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">学历</label>
+            <div class="layui-input-inline">
+                <select name="education" class="field-education" type="select">
+                    {$education_type}
+                </select>
+            </div>
+            <div class="layui-form-mid red">*</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">所学专业</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input field-major" name="major" lay-verify="required" autocomplete="off" placeholder="请输入专业">
+            </div>
+            <div class="layui-form-mid red">*</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">工作经验</label>
+            <div class="layui-input-inline">
+                <select name="experience" class="field-experience" type="select">
+                    {$experience_type}
+                </select>
             </div>
             <div class="layui-form-mid red">*</div>
         </div>
@@ -42,8 +74,8 @@
 </form>
 <script>
 
-    layui.use(['jquery', 'laydate','upload'], function() {
-        var $ = layui.jquery, laydate = layui.laydate, upload = layui.upload;
+    layui.use(['jquery', 'laydate','upload','form'], function() {
+        var $ = layui.jquery, laydate = layui.laydate, upload = layui.upload,form = layui.form;
 
         upload.render({
             elem: '#test3',

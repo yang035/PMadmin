@@ -10,6 +10,7 @@ namespace app\admin\controller;
 use app\admin\model\AdminUser;
 use app\admin\model\ResumeCat as CatModel;
 use app\admin\model\ResumeItem as ItemModel;
+use app\admin\model\UserInfo as UserInfoModel;
 
 
 class Resume extends Admin
@@ -54,6 +55,8 @@ class Resume extends Admin
             $where['cid'] = session('admin_user.cid');
             $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->order('id desc')->select();
             if ($data['data']){
+                $education = config('develop.education');
+                $experience = config('tb_system.experience');
                 foreach ($data['data'] as $k=>$v){
                     $data['data'][$k]['remark'] = htmlspecialchars_decode($v['remark']);
                     if ($v['attachment']){
@@ -61,6 +64,8 @@ class Resume extends Admin
                         $data['data'][$k]['attachment'] = $t[0];
                     }
                     $data['data'][$k]['user_name'] = AdminUser::getUserById($v['user_id'])['realname'];
+                    $data['data'][$k]['education'] = $education[$v['education']];
+                    $data['data'][$k]['experience'] = $experience[$v['experience']];
                 }
             }
             $data['count'] = ItemModel::where($where)->count('id');
@@ -97,6 +102,8 @@ class Resume extends Admin
             return $this->success("操作成功{$this->score_value}");
         }
         $this->assign('cat_option',ItemModel::getOption(1));
+        $this->assign('education_type', UserInfoModel::getEducationOption());
+        $this->assign('experience_type', UserInfoModel::getExperienceOption());
         return $this->fetch('itemform');
     }
 
@@ -122,6 +129,8 @@ class Resume extends Admin
         $row['remark'] = htmlspecialchars_decode($row['remark']);
         $this->assign('data_info', $row);
         $this->assign('cat_option',ItemModel::getOption(1));
+        $this->assign('education_type', UserInfoModel::getEducationOption());
+        $this->assign('experience_type', UserInfoModel::getExperienceOption());
         return $this->fetch('itemform');
     }
 
@@ -133,6 +142,11 @@ class Resume extends Admin
             $t = array_filter(explode(',',$row['attachment']));
             $row['attachment'] = $t[0];
         }
+        $education = config('develop.education');
+        $experience = config('tb_system.experience');
+        $row['education'] = $education[$row['education']];
+        $row['experience'] = $experience[$row['experience']];
+
         $this->assign('data_list', $row);
         $this->assign('cat_option',ItemModel::getCat());
         return $this->fetch();

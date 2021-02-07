@@ -66,29 +66,54 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">所在公司</label>
+            <label class="layui-form-label">学历</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input field-last_company" name="last_company" autocomplete="off" placeholder="所在公司/上家公司名称">
+                <select name="education" class="field-education" type="select">
+                    {$education_type}
+                </select>
             </div>
+            <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">法人/负责人</label>
+            <label class="layui-form-label">所学专业</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input field-legalman" name="legalman" autocomplete="off" placeholder="法人/负责人姓名">
+                <input type="text" class="layui-input field-major" name="major" lay-verify="required" autocomplete="off" placeholder="请输入专业">
             </div>
+            <div class="layui-form-mid red">*</div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">联系方式</label>
+            <label class="layui-form-label">工作经验</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input field-legalman_contact" name="legalman_contact" autocomplete="off" placeholder="手机,微信,QQ等联系方式">
+                <select name="experience" class="field-experience" type="select">
+                    {$experience_type}
+                </select>
             </div>
+            <div class="layui-form-mid red">*</div>
         </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">公司地址</label>
-            <div class="layui-input-inline">
-                <input type="text" class="layui-input field-com_address" name="com_address" autocomplete="off" placeholder="公司地址">
-            </div>
-        </div>
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">所在公司</label>-->
+<!--            <div class="layui-input-inline">-->
+<!--                <input type="text" class="layui-input field-last_company" name="last_company" autocomplete="off" placeholder="所在公司/上家公司名称">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">法人/负责人</label>-->
+<!--            <div class="layui-input-inline">-->
+<!--                <input type="text" class="layui-input field-legalman" name="legalman" autocomplete="off" placeholder="法人/负责人姓名">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">联系方式</label>-->
+<!--            <div class="layui-input-inline">-->
+<!--                <input type="text" class="layui-input field-legalman_contact" name="legalman_contact" autocomplete="off" placeholder="手机,微信,QQ等联系方式">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">公司地址</label>-->
+<!--            <div class="layui-input-inline">-->
+<!--                <input type="text" class="layui-input field-com_address" name="com_address" autocomplete="off" placeholder="公司地址">-->
+<!--            </div>-->
+<!--        </div>-->
         <div class="layui-form-item">
             <label class="layui-form-label">招聘来源</label>
             <div class="layui-input-inline">

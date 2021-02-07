@@ -76,20 +76,20 @@
         .box img {
             width: 240px;
         }
-         .zhaopin {
-             /*position: fixed;*/
-             bottom: 20px;
-             right: 20px;
-             width: 100px;
-             height: 40px;
-             border-radius: 100px;
-             box-shadow: 0 6px 12px 0 rgba(0, 0, 0, .15);
-             /* background-color: #33cde5; */
-             text-align: center;
-             line-height: 40px;
-             font-size: 20px;
-             color: #fe9900;
-         }
+        .laykefu-min1 {
+            position: fixed;
+            bottom: 20px;
+            right: 100px;
+            width: 100px;
+            height: 40px;
+            border-radius: 100px;
+            box-shadow: 0 6px 12px 0 rgba(0,0,0,.15);
+            /* background-color: #33cde5; */
+            text-align: center;
+            line-height: 40px;
+            font-size: 20px;
+            color: #fe9900;
+        }
     </style>
 </head>
 <body style="background-color: black">
@@ -99,8 +99,10 @@
 <div id="page">
     <nav class="gtco-nav" role="navigation" style="background-color: black">
         <div class="row">
+            <div class="col-sm-6 col-xs-12">
+                <marquee behavior=alternate direction=left align=middle><span style="color: #fe9900;margin-left: 100px;font-size: 15px">{$signword}</span></marquee>
+            </div>
             <div class="col-sm-6 col-xs-12" style="float: right;">
-                <a href="{:url('zhaopin_lists')}" class="btn btn-xs"><span class="zhaopin">招聘</span></a>
                 <a href="{:url('show',['t'=>3])}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">项目合作入口</span></a>
                 <a href="{:url('show',['t'=>1])}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">设计企业入口</span></a>
                 <a href="{:url('show',['t'=>1])}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">设计师入口</span></a>
