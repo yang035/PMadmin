@@ -99,7 +99,7 @@ class Index extends Controller
     public function zhaopin_lists()
     {
         $map['status'] = 1;
-        $data_list = ZhaopinItem::where($map)->order('id desc')->paginate(20, false, ['query' => input('get.')]);
+        $data_list = ZhaopinItem::where($map)->order('sort asc')->paginate(20, false, ['query' => input('get.')]);
         if ($data_list) {
             $education = config('develop.education');
             $experience = config('tb_system.experience');

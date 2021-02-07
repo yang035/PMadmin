@@ -57,7 +57,8 @@ class Zhaopin extends Admin
             }
 
             $where['cid'] = session('admin_user.cid');
-            $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->order('id desc')->select();
+            $order = "status desc,sort asc";
+            $data['data'] = ItemModel::with('cat')->where($where)->order($order)->page($page)->limit($limit)->order('id desc')->select();
             if ($data['data']){
                 $education = config('develop.education');
                 $experience = config('tb_system.experience');
