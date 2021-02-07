@@ -145,7 +145,7 @@
             // layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
             var open_url = "{:url('setKV')}";
             $.post(open_url, {
-                t:'resume_item',
+                t:'zhaopin_item',
                 id:data.id,
                 k:field,
                 v:value,
