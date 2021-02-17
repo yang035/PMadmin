@@ -60,12 +60,12 @@
         <div class="layui-input-inline" style="width: 100px">
             <input type="text" class="layui-input field-min_money" name="min_money" autocomplete="off">
         </div>
-        <div class="layui-form-mid">元</div>
+        <div class="layui-form-mid">万元</div>
         <div class="layui-form-mid"> ~ </div>
         <div class="layui-input-inline" style="width: 100px">
             <input type="text" class="layui-input field-max_money" name="max_money" autocomplete="off">
         </div>
-        <div class="layui-form-mid">元</div>
+        <div class="layui-form-mid">万元</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">内容</label>
