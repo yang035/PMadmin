@@ -19,7 +19,7 @@
                                         <div style="float: left;width: 200px">
                                             <a href="{:url('zhaopin_detail',['id'=>$vo['id'],'cid'=>$vo['cid']])}">
                                                 <span style="font-size: 20px;color:#fe9900;">{$vo['title']}</span><br>
-                                                <span>{$vo['min_money']}-{$vo['max_money']}元/月</span><br>
+                                                <span>{$vo['min_money']}-{$vo['max_money']}元/年</span><br>
                                             </a>
                                             <span>{$vo['tags']}</span>
                                         </div>

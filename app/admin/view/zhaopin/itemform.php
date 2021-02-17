@@ -56,7 +56,7 @@
             <div class="layui-form-mid red">*</div>
         </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">月薪范围</label>
+        <label class="layui-form-label">年薪范围</label>
         <div class="layui-input-inline" style="width: 100px">
             <input type="text" class="layui-input field-min_money" name="min_money" autocomplete="off">
         </div>

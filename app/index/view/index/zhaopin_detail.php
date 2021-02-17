@@ -19,7 +19,7 @@
                                 <div class="panel-body">
                                     <span style="color: #fe9900">
                                     <h2 style="color: #fe9900">{$data_list['title']}&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" class="btn btn-xs" style="border: 1px solid grey;" onclick="jianli()"><span style="color: #fe9900">投递简历</span></a></h2>
-                                    <h3 style="color: #fe9900">{$data_list['min_money']}-{$data_list['max_money']}元/月</h3>
+                                    <h3 style="color: #fe9900">{$data_list['min_money']}-{$data_list['max_money']}元/年</h3>
                                     {$data_list['tags']}<br>
                                     {$data_list['company_name']}<br>
                                     {$data_list['region_name']} | {$data_list['education']} | {$data_list['experience']}<br>

@@ -3,7 +3,7 @@
         <div class="layui-card-body">
             <b>类型：</b>{$cat_option[$data_list['cat_id']]}<br>
             <b>岗位：</b>{$data_list['title']}<br>
-            <b>月薪(元)：</b>{$data_list['min_money']} ~ {$data_list['max_money']}<br>
+            <b>年薪(元)：</b>{$data_list['min_money']} ~ {$data_list['max_money']}<br>
             <b>标签：</b>{$data_list['tags']}<br>
             <b>招聘内容：</b><br>{$data_list['content']}<br>
             <b>发布公司：</b>{$data_list['company_name']}<br>
