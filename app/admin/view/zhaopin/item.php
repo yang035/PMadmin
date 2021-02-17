@@ -78,7 +78,7 @@
                         return "<a class='mcolor' onclick='read("+d.id+")'>"+d.title+"</a>";
                     }},
                 {field: 'sort', title: '排序',width:80,edit:true},
-                {field: 'money', title: '月薪(元)',width:150,templet:function(d){
+                {field: 'money', title: '年薪(万元)',width:150,templet:function(d){
                         return d.min_money+"~"+d.max_money;
                     }},
                 {field: 'region_name', title: '工作城市',width:100},
