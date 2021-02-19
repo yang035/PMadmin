@@ -448,4 +448,19 @@ class Admin extends Controller
     public function getCity($province,$type=0){
         return Region::getCity($province,$type);
     }
+
+    public function insertScore($remark)
+    {
+        $sc = [
+            'project_id' => 0,
+            'cid' => session('admin_user.cid'),
+            'user' => session('admin_user.uid'),
+            'ml_add_score' => 0,
+            'ml_sub_score' => 0,
+            'gl_add_score' => 5,
+            'gl_sub_score' => 0,
+            'remark' => $remark,
+        ];
+        ScoreModel::addScore($sc);
+    }
 }

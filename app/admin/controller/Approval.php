@@ -499,6 +499,8 @@ class Approval extends Admin
                 $send_user_model = new ApprovalSenduser();
                 $send_user_model->saveAll($su);
 
+                $this->insertScore('日常审批[请假调休]填写');
+
                 $leave = [
                     'aid' => $res['id'],
                     'type' => $data['type'],
@@ -735,6 +737,7 @@ class Approval extends Admin
                     }
                     $leave['detail'] = json_encode($leave['detail']);
                     $flag = ExpenseModel::create($leave);
+                    $this->insertScore('日常审批[报销]填写');
                     // 提交事务
                     Db::commit();
                 } catch (\Exception $e) {
@@ -841,6 +844,7 @@ class Approval extends Admin
                     }
                     $leave['detail'] = json_encode($leave['detail']);
                     $flag = ExpenseModel::create($leave);
+                    $this->insertScore('日常审批[报销]填写');
                     // 提交事务
                     Db::commit();
                 } catch (\Exception $e) {
@@ -940,6 +944,7 @@ class Approval extends Admin
                     'card_num' => $data['card_num'],
                 ];
                 $flag = CostModel::create($leave);
+                $this->insertScore('日常审批[费用申请]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -1022,6 +1027,7 @@ class Approval extends Admin
                     'attachment' => $data['attachment'],
                 ];
                 $flag = BusinessModel::create($leave);
+                $this->insertScore('日常审批[出差]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -1104,6 +1110,7 @@ class Approval extends Admin
                     'attachment' => $data['attachment'],
                 ];
                 $flag = ProcurementModel::create($leave);
+                $this->insertScore('日常审批[采购]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -1273,6 +1280,7 @@ class Approval extends Admin
                     'overtime_type' => $data['overtime_type'],
                 ];
                 $flag = OvertimeModel::create($leave);
+                $this->insertScore('日常审批[加班]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -1327,6 +1335,7 @@ class Approval extends Admin
                     'attachment' => $data['attachment'],
                 ];
                 $flag = GooutModel::create($leave);
+                $this->insertScore('日常审批[外出]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -1381,6 +1390,7 @@ class Approval extends Admin
                     'attachment' => $data['attachment'],
                 ];
                 $flag = CarModel::create($leave);
+                $this->insertScore('日常审批[用车]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -1452,6 +1462,7 @@ class Approval extends Admin
                     'attachment' => $data['attachment'],
                 ];
                 $flag = ApprovalGoods::create($leave);
+                $this->insertScore('日常审批[申领用品]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -1514,6 +1525,7 @@ class Approval extends Admin
                     'attachment' => $data['attachment'],
                 ];
                 $flag = ApprovalBorrow::create($leave);
+                $this->insertScore('日常审批[物品借用]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -1606,6 +1618,7 @@ class Approval extends Admin
 //                    'money' => $data['money'],
                 ];
                 $flag = ApprovalPrint::create($leave);
+                $this->insertScore('日常审批[出图]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -1665,6 +1678,7 @@ class Approval extends Admin
                     'attachment' => $data['attachment'],
                 ];
                 $flag = DispatchModel::create($leave);
+                $this->insertScore('日常审批[派遣]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -1808,6 +1822,7 @@ class Approval extends Admin
                     'attachment' => $data['attachment'],
                 ];
                 $flag = BackleaveModel::create($leave);
+                $this->insertScore('日常审批[销假]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -1915,6 +1930,7 @@ class Approval extends Admin
                 }
                 $leave['detail'] = json_encode($leave['detail']);
                 $flag = ApprovalBills::create($leave);
+                $this->insertScore('日常审批[工作清单]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -2025,6 +2041,7 @@ class Approval extends Admin
                     'detail' => json_encode($detail),
                 ];
                 $flag = ApprovalWaybill::create($leave);
+                $this->insertScore('日常审批[送货单]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -2160,6 +2177,7 @@ class Approval extends Admin
                         'total' => $data['total'],
                     ];
                     $flag = ApprovalApplypay::create($leave);
+                    $this->insertScore('日常审批[申请支付]填写');
                     // 提交事务
                     Db::commit();
                 } catch (\Exception $e) {
@@ -2256,6 +2274,7 @@ class Approval extends Admin
                         'total' => $data['total'],
                     ];
                     $flag = ApprovalApplypay::create($leave);
+                    $this->insertScore('日常审批[申请支付]填写');
                     // 提交事务
                     Db::commit();
                 } catch (\Exception $e) {
@@ -2360,6 +2379,7 @@ class Approval extends Admin
                     'attachment' => $data['attachment'],
                 ];
                 $flag = TixianModel::create($leave);
+                $this->insertScore('日常审批[提现]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -2441,6 +2461,7 @@ class Approval extends Admin
                     'attachment' => $data['attachment'],
                 ];
                 $flag = LeaveofficeModel::create($leave);
+                $this->insertScore('日常审批[推荐信]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -2527,6 +2548,7 @@ class Approval extends Admin
                     'attachment' => $data['attachment'],
                 ];
                 $flag = InvoiceModel::create($invoice);
+                $this->insertScore('日常审批[申请开票]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
