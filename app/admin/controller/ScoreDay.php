@@ -12,6 +12,7 @@ use app\admin\model\Project as ProjectModel;
 use app\admin\model\AdminUser;
 use app\admin\model\Score as ScoreModel;
 use app\admin\model\ScoreDay as ScoreDayModel;
+use app\admin\model\Sms;
 use think\Db;
 
 class ScoreDay extends Admin
@@ -33,6 +34,23 @@ class ScoreDay extends Admin
 
     public function index($q = '')
     {
+        $code = mt_rand(100000,999999);
+        $p = [
+            'cid'=>session('admin_user.cid'),
+            'code'=>$code,
+            'content'=>"【创信】你的验证码是：{$code}，3分钟内有效！",
+            'mobile'=>'15927073876',
+            'code'=>1,
+            'user_id'=>session('admin_user.uid'),
+        ];
+        $res = aliSMS($p['content'],$p['mobile']);
+        $p['return'] = $res;
+        if ('Success' == $res['ReturnStatus']){
+        }else{
+            $p['status'] = 0;
+        }
+        Sms::create($p);
+
         $map = [];
         $map1 = [];
         $params = $this->request->param();

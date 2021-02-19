@@ -1144,3 +1144,15 @@ function get_spec_disk($type = 'system')
     }
     return $disk;
 }
+
+function aliSMS($content,$mobile){
+    $url = "https://cdcxdxjk.market.alicloudapi.com/chuangxin/dxjk";
+    $appcode = "774351edb63d4d2188a77aee5e3af630";//开通服务后 买家中心-查看AppCode
+    $headers = array();
+    array_push($headers, "Authorization:APPCODE " . $appcode);
+    $params = [
+        'content'=>$content,
+        'mobile'=>$mobile,
+    ];
+    curlInfo($url,$params);
+}
