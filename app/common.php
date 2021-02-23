@@ -1146,13 +1146,26 @@ function get_spec_disk($type = 'system')
 }
 
 function aliSMS($content,$mobile){
-    $url = "https://cdcxdxjk.market.alicloudapi.com/chuangxin/dxjk";
+    $host = "https://cdcxdxjk.market.alicloudapi.com";
+    $path = "/chuangxin/dxjk";
+    $method = "POST";
     $appcode = "774351edb63d4d2188a77aee5e3af630";//开通服务后 买家中心-查看AppCode
     $headers = array();
     array_push($headers, "Authorization:APPCODE " . $appcode);
-    $params = [
-        'content'=>$content,
-        'mobile'=>$mobile,
-    ];
-    curlInfo($url,$params);
+    $querys = "content={$content}&mobile={$mobile}";
+    $url = $host . $path . "?" . $querys;
+
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($curl, CURLOPT_FAILONERROR, false);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_HEADER, true);
+    if (1 == strpos("$".$host, "https://"))
+    {
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+    }
+    curl_exec($curl);
 }

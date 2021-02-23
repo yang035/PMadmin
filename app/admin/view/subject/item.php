@@ -55,9 +55,9 @@
     {eq name="Request.param.param" value="1"}
     <a href="#" onclick="zujian_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">组建项目组</a>
     <a href="#" onclick="partner_user({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">合伙配置</a>
-    <a href="#" onclick="edit_x({{ d.id }},'{{ d.name }}')" class="layui-btn layui-btn-xs layui-btn-normal">方案协议</a>
+<!--    <a href="#" onclick="edit_x({{ d.id }},'{{ d.name }}')" class="layui-btn layui-btn-xs layui-btn-normal">方案协议</a>-->
 <!--    <a href="#" onclick="sign_xieyi({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">签署协议</a>-->
-    <a href="#" onclick="edit_x({{ d.id }},'{{ d.name }}')" class="layui-btn layui-btn-xs layui-btn-warm">施工图协议</a>
+<!--    <a href="#" onclick="edit_x({{ d.id }},'{{ d.name }}')" class="layui-btn layui-btn-xs layui-btn-warm">施工图协议</a>-->
 <!--    <a href="#" onclick="sign_xieyi({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-warm">签署协议</a>-->
     {else/}
     <!--    <a href="{:url('flow')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-warm">设计流程</a>-->
