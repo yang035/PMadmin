@@ -346,6 +346,11 @@
                     <br>
                 {/case}
                 {case value="9"}
+            司机：{$data_list['deal_user']}<br>
+            车牌号：{$car_type[$data_list['car_type']]}<br>
+            地点：{$data_list['start_address']}<br>
+            终点：{$data_list['end_address']}<br>
+            行驶里程：{$data_list['mileage']} 公里<br>
                 {/case}
                 {case value="10"}
                 {/case}

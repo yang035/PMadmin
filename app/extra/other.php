@@ -181,13 +181,13 @@ return [
             'href'=>'admin/Approval/goout'
         ],
         8=>[
-            'title'=>'用车',
+            'title'=>'申请用车',
             'href'=>'admin/Approval/useCar'
         ],
-//        9=>[
-//            'title'=>'用章',
-//            'href'=>'admin/Approval/useSeal'
-//        ],
+        9=>[
+            'title'=>'行驶记录',
+            'href'=>'admin/Approval/carRecord'
+        ],
 //        10=>[
 //            'title'=>'打卡补卡',
 //            'href'=>'admin/Approval/clockIn'

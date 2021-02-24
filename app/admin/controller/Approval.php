@@ -22,6 +22,7 @@ use app\admin\model\ApprovalGoout as GooutModel;
 use app\admin\model\ApprovalSenduser;
 use app\admin\model\ApprovalFinanceuser;
 use app\admin\model\ApprovalUsecar as CarModel;
+use app\admin\model\ApprovalCarrecord as CarrecordModel;
 use app\admin\model\ApprovalCost as CostModel;
 use app\admin\model\ApprovalDispatch as DispatchModel;
 use app\admin\model\ApprovalBorrow;
@@ -1408,9 +1409,62 @@ class Approval extends Admin
         return $this->fetch();
     }
 
-    public function useSeal()
+    public function carRecord()
     {
-
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            if ('' == $data['project_id']){
+                return $this->error('请选择项目');
+            }
+            // 验证
+            $result = $this->validate($data, 'ApprovalCarrecord');
+            if ($result !== true) {
+                return $this->error($result);
+            }
+            unset($data['id']);
+            Db::startTrans();
+            try {
+                $approve = [
+                    'project_id' => $data['project_id'],
+                    'class_type' => $data['class_type'],
+                    'cid' => session('admin_user.cid'),
+                    'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
+                    'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
+                    'time_long' => $data['time_long'],
+                    'reason' => $data['reason'],
+                    'user_id' => session('admin_user.uid'),
+//                    'deal_user' => user_array($data['deal_user']),
+                    'send_user' => user_array($data['send_user']),
+                    'copy_user' => user_array($data['copy_user']),
+                ];
+                $res = ApprovalModel::create($approve);
+                $leave = [
+                    'aid' => $res['id'],
+                    'start_address' => $data['start_address'],
+                    'end_address' => $data['end_address'],
+                    'mileage' => $data['mileage'],
+                    'reason' => $data['reason'],
+                    'car_type' => $data['car_type'],
+                    'time_long1' => $data['time_long1'],
+                    'attachment' => $data['attachment'],
+                ];
+                $flag = CarrecordModel::create($leave);
+                $this->insertScore('日常审批[用车]填写');
+                // 提交事务
+                Db::commit();
+            } catch (\Exception $e) {
+                // 回滚事务
+                Db::rollback();
+            }
+            if ($flag) {
+                return $this->success("操作成功{$this->score_value}", 'index');
+            } else {
+                return $this->error('添加失败！');
+            }
+        }
+        $this->assign('car_type', CarrecordModel::getOption());
+        $this->assign('mytask', ProjectModel::getMyTask(0));
+        return $this->fetch();
     }
 
     public function clockIn()
@@ -2604,6 +2658,8 @@ class Approval extends Admin
                 $f = 'b.reason,b.address,b.time_long1,b.attachment,b.car_type,b.before_img,b.after_img';
                 break;
             case 9:
+                $table = 'tb_approval_carrecord';
+                $f = 'b.reason,b.start_address,b.end_address,b.mileage,b.time_long1,b.attachment,b.car_type,b.before_img,b.after_img';
                 break;
             case 10:
                 break;
@@ -3386,6 +3442,7 @@ class Approval extends Admin
                 $this->assign('car_type', CarModel::getCarItem());
                 break;
             case 9:
+                $this->assign('car_type', CarrecordModel::getCarItem());
                 break;
             case 10:
                 break;
