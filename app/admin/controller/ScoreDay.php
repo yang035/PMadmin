@@ -14,6 +14,7 @@ use app\admin\model\Score as ScoreModel;
 use app\admin\model\ScoreDay as ScoreDayModel;
 use app\admin\model\Sms;
 use think\Db;
+use app\common\ali\AliSms;
 
 class ScoreDay extends Admin
 {
@@ -34,24 +35,27 @@ class ScoreDay extends Admin
 
     public function index($q = '')
     {
-//        if (session('admin_user.uid') == 31){
-//            $code = mt_rand(100000,999999);
-//            $p = [
-//                'cid'=>session('admin_user.cid'),
-//                'code'=>$code,
-//                'content'=>"【创信】你的验证码是：{$code}，3分钟内有效！",
-//                'mobile'=>'15927073876',
-//                'code'=>1,
-//                'user_id'=>session('admin_user.uid'),
-//            ];
-//            $res = aliSMS($p['content'],$p['mobile']);
-//            $p['return'] = $res;
-//            if ('Success' == $res['ReturnStatus']){
-//            }else{
-//                $p['status'] = 0;
-//            }
-//            Sms::create($p);
-//        }
+        if (session('admin_user.uid') == 31){
+            $code = mt_rand(100000,999999);
+            $args = [
+                'phoneNumbers'=>'1527073876',
+                'signName'=>'麦粒谷粒',
+                'templateCode'=>'SMS_212135092',
+                'templateParam'=>json_encode(['code'=>$code]),
+            ];
+            $res = AliSms::sample($args);
+            $args['cid'] = session('admin_user.cid');
+            $args['code'] = 1;
+            $args['user_id'] = session('admin_user.uid');
+            $args['BizId'] = $res['BizId'];
+            $args['Code'] = $res['Code'];
+            $args['Message'] = $res['Message'];
+            $args['RequestId'] = $res['RequestId'];
+            if ('OK' !== $args['Code']){
+                $args['status'] = 0;
+            }
+            Sms::create($args);
+        }
 
         $map = [];
         $map1 = [];
