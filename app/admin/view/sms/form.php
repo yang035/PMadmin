@@ -18,9 +18,9 @@
         <div class="layui-form-item">
             <label class="layui-form-label">手机号码</label>
             <div class="layui-input-inline" style="width: 500px">
-                <textarea  class="layui-textarea field-mobile" name="mobile" lay-verify="required" onkeyup="value=value.replace(/[^\d;]/g,'')" autocomplete="off" placeholder="若是多个手机号码，用英文';'隔开"></textarea>
+                <textarea  class="layui-textarea field-mobile" name="mobile" lay-verify="required" onkeyup="value=value.replace(/[^\d,]/g,'')" autocomplete="off" placeholder="多个手机号码之间以英文逗号（,）分隔"></textarea>
             </div>
-            <div class="layui-form-mid red">若是多个手机号码，用英文';'隔开*</div>
+            <div class="layui-form-mid red">多个手机号码之间以英文逗号（,）分隔*</div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">发送内容</label>

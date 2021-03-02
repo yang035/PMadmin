@@ -131,7 +131,7 @@ class Publics extends Common
             $args = [
                 'phoneNumbers'=>$mobile,
                 'signName'=>'麦粒谷粒',
-                'templateCode'=>'SMS_212135092',
+                'templateCode'=>'SMS_212465003',
                 'templateParam'=>json_encode(['code'=>$code]),
             ];
             $c = new Common();

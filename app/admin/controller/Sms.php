@@ -64,10 +64,29 @@ class Sms extends Admin
             if($result !== true) {
                 return $this->error($result);
             }
-            if (!SmsModel::create($data)) {
-                return $this->error('添加失败');
+            $mobile = $data['mobile'];
+            if ($mobile){
+                $m_arr = explode(',',$mobile);
+                $m_arr= array_unique(array_filter($m_arr));
+                foreach ($m_arr as $k=>$v){
+                    if (strlen($v) != 11){
+                        return $this->error("手机号码错误{$v}");
+                    }
+                }
+                $args = [
+                    'phoneNumbers'=>$mobile,
+                    'signName'=>'麦粒谷粒',
+                    'templateCode'=>'SMS_212465003',
+                    'templateParam'=>json_encode(['code'=>$data['content']]),
+                ];
+                $c = new Common();
+                $res = $c->sendSms($args,1);
+                if ($res){
+                    return $this->success("操作成功{$this->score_value}");
+                }else{
+                    return $this->error('添加失败');
+                }
             }
-            return $this->success("操作成功{$this->score_value}");
         }
         return $this->fetch('form');
     }
