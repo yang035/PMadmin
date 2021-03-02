@@ -47,6 +47,101 @@ class Publics extends Common
         return $this->fetch();
     }
 
+    public function pwd1()
+    {
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            $username = $data['username'];
+            $company_id = $data['company_id'];
+            $model = model('AdminUser');
+            $user = $model->getUserRow($username,$company_id);
+            if (!$user) {
+                return false;
+            }
+            $mobile = $user->mobile;
+            $mobile = substr($mobile, 0, 3).'****'.substr($mobile, 7);
+            return $this->redirect('pwd2',['mobile' => $mobile,'username' => $username,'company_id' => $company_id]);
+        }
+        return $this->fetch();
+    }
+
+    public function pwd2()
+    {
+        if ($this->request->isPost()){
+            $model = model('AdminUser');
+            $data = $this->request->post();
+            $username = $data['username'];
+            $company_id = $data['company_id'];
+            $user = $model->getUserRow($username,$company_id);
+            if (!$user) {
+                return $this->error('用户不存在');
+            }
+            $mobile = $user->mobile;
+            $redis = service('Redis');
+            $checkcode = $redis->get("pm:checkcode:{$mobile}");
+            if ($data['checkcode'] == $checkcode){
+                return $this->redirect('pwd3',['username' => $username,'company_id' => $company_id]);
+            }
+        }
+        return $this->fetch();
+    }
+
+    public function pwd3()
+    {
+        if ($this->request->isPost()){
+            $data = $this->request->post();
+            if ($data['password'] != $data['re_password']){
+                return $this->error('两次输入密码不一致');
+            }
+            $model = model('AdminUser');
+            $username = $data['username'];
+            $company_id = $data['company_id'];
+            $user = $model->getUserRow($username,$company_id);
+            if (!$user) {
+                return $this->error('用户不存在');
+            }
+            $res = $model->where(['id'=>$user['id']])->update(['password'=>password_hash($data['password'], PASSWORD_DEFAULT)]);
+            if ($res){
+                return $this->success('修改密码成功,返回登录','index');
+            }else{
+                return $this->error('修改密码失败');
+            }
+        }
+        return $this->fetch();
+    }
+
+    public function sendCode(){
+        if ($this->request->isAjax()){
+            $data = $this->request->post();
+            $model = model('AdminUser');
+            $username = $data['username'];
+            $company_id = $data['company_id'];
+            $user = $model->getUserRow($username,$company_id);
+            if (!$user) {
+                return false;
+            }
+            $mobile = $user->mobile;
+            $code = mt_rand(100000,999999);
+
+            $redis = service('Redis');
+            $redis->set("pm:checkcode:{$mobile}",300);
+
+            $args = [
+                'phoneNumbers'=>$mobile,
+                'signName'=>'麦粒谷粒',
+                'templateCode'=>'SMS_212135092',
+                'templateParam'=>json_encode(['code'=>$code]),
+            ];
+            $c = new Common();
+            $res = $c->sendSms($args,1);
+            if ($res){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
+
     public function logout(){
         model('AdminUser')->logout();
         return $this->success('退出成功', url('publics/index', '', true, true),'',1);

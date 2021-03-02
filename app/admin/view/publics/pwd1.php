@@ -62,20 +62,11 @@
                     <input type="text" name="username" class="layui-input" lay-verify="required" placeholder="手机号码或用户名" autofocus="autofocus" value="" onblur="checkuser(this.value)">
             </div>
             <div class="layui-form-item">
-                    <input type="password" name="password" class="layui-input" lay-verify="required" placeholder="******" value="">
-            </div>
-            <div class="layui-form-item">
                 <select type="select" name="company_id" class="layui-input" id="company_id">
                 </select>
             </div>
             {:token('__token__', 'sha1')}
-            <input type="submit" value="登陆" lay-submit="" lay-filter="formLogin" class="layui-btn layui-btn-warm" style="background-color: #fe9900">
-            <div class="layui-form-item">
-                <div style="margin:10px 20px 10px 20px;font-size: 20px">
-                    <a href="{:url('register')}" class="login-qq-a" style="float: left">注册</a>
-                    <a style="float: right" href="{:url('pwd1')}">忘记密码?</a>
-                </div>
-            </div>
+            <input type="submit" value="下一步" class="layui-btn layui-btn-warm" style="background-color: #fe9900">
             <div>
                 <!--            <a href="{:url('Qqlogin/index')}" title="QQ"><img src="__ADMIN_IMG__/qq.png"/></a>-->
                 <!--            <a href="{:url('Wxlogin/index')}" title="微信"><img src="__ADMIN_IMG__/wx.png"/></a>-->
@@ -96,29 +87,6 @@
 <script type="text/javascript">
     layui.define('form','jquery', function(exports) {
         var $ = layui.jquery, layer = layui.layer, form = layui.form;
-        form.on('submit(formLogin)', function(data) {
-            var _form = $(this).parents('form');
-            layer.msg('数据提交中...',{time:3000});
-            $.ajax({
-                type: "POST",
-                url: _form.attr('action'),
-                data: _form.serialize(),
-                success: function(res) {
-                    layer.msg(res.msg, {},function() {
-                        if (res.code == 1) {
-                            if (typeof(res.url) != 'undefined' && res.url != null && res.url != '') {
-                                location.href = res.url;
-                            } else {
-                                location.reload();
-                            }
-                        } else {
-                            location.reload();
-                        }
-                    });
-                }
-            });
-            return false;
-        });
     });
 
     function checkuser(username) {
