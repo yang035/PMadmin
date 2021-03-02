@@ -81,6 +81,8 @@ class Publics extends Common
             $checkcode = $redis->get("pm:checkcode:{$mobile}");
             if ($data['checkcode'] == $checkcode){
                 return $this->redirect('pwd3',['username' => $username,'company_id' => $company_id]);
+            }else{
+                return $this->error('验证码错误');
             }
         }
         return $this->fetch();
