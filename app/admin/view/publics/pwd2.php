@@ -70,7 +70,7 @@
                         <input style="width: 100px" type="text" class="layui-input field-checkcode" name="checkcode" lay-verify="required" maxlength="6" autocomplete="off">
                     </div>
                     <div class="layui-input-inline" style="width: 120px;">
-                        <input class="layui-btn layui-btn-warm" onclick="send_code()" value="发送验证码">
+                        <input id="code_id" class="layui-btn layui-btn-warm" onclick="send_code(this)" value="发送验证码">
                     </div>
                 </div>
             </div>
@@ -100,19 +100,38 @@
         var $ = layui.jquery, layer = layui.layer, form = layui.form;
     });
 
-    function send_code() {
-        var username='{$Request.param.username}',company_id='{$Request.param.company_id}';
-        $.ajax({
-            type: 'POST',
-            url: "{:url('sendCode')}",
-            data: {username: username,company_id: company_id},
-            dataType: 'json',
-            success: function (data) {
-                if (data){
-                    layer.msg('发送成功');
+    var countdown = 60;
+    var opr = 0;//判断标识
+    function send_code(val) {
+        if (opr == 0) {
+            var username='{$Request.param.username}',company_id='{$Request.param.company_id}';
+            $.ajax({
+                type: 'POST',
+                url: "{:url('sendCode')}",
+                data: {username: username,company_id: company_id},
+                dataType: 'json',
+                success: function (data) {
+                    if (data){
+                        layer.msg('发送成功');
+                    }
                 }
-            }
-        });
+            });
+        }
+        if (countdown == 0) {
+            opr = 0;
+            val.removeAttribute("disabled");
+            val.value = "发送验证码";
+            countdown = 60;
+        } else {
+            opr = 1;
+            val.setAttribute("disabled", true);
+            val.value = "重新发送(" + countdown + ")";
+            countdown--;
+            setTimeout(function () {
+                send_code(val);
+            }, 1000);
+        }
+
     }
 
     // window.onload = function() {

@@ -126,7 +126,7 @@ class Publics extends Common
             $code = mt_rand(100000,999999);
 
             $redis = service('Redis');
-            $redis->set("pm:checkcode:{$mobile}",300);
+            $redis->set("pm:checkcode:{$mobile}",$code,300);
 
             $args = [
                 'phoneNumbers'=>$mobile,
