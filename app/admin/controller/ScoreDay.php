@@ -36,7 +36,7 @@ class ScoreDay extends Admin
         $map1 = [];
         $params = $this->request->param();
         $d = date('Y-m',strtotime('-1 month'));
-        $order = 'gl_add_sum desc';
+        $order = 'gl_left_sum desc';
         if ($params) {
             if (!empty($params['realname'])) {
                 $map1['realname'] = ['like', '%' . $params['realname'] . '%'];
@@ -56,10 +56,10 @@ class ScoreDay extends Admin
                         $order = 'ml_add_sum desc';
                         break;
                     case 2:
-                        $order = 'gl_add_sum desc';
+                        $order = 'gl_left_sum desc';
                         break;
                     default:
-                        $order = 'gl_add_sum desc';
+                        $order = 'gl_left_sum desc';
                         break;
                 }
             }
@@ -81,7 +81,7 @@ class ScoreDay extends Admin
         }
 //        $map['Score.create_time'] = ['<',1556726399];
 
-        $fields = "`Score`.id,`Score`.subject_id,`Score`.user,sum(`Score`.ml_add_score) as ml_add_sum,sum(`Score`.ml_sub_score) as ml_sub_sum,sum(`Score`.gl_add_score) as gl_add_sum,sum(`Score`.gl_sub_score) as gl_sub_sum,`AdminUser`.realname";
+        $fields = "`Score`.id,`Score`.subject_id,`Score`.user,sum(`Score`.ml_add_score) as ml_add_sum,sum(`Score`.ml_sub_score) as ml_sub_sum,sum(`Score`.gl_add_score) as gl_add_sum,sum(`Score`.gl_sub_score) as gl_sub_sum,(sum(`Score`.gl_add_score) - sum(`Score`.gl_sub_score)) as gl_left_sum,`AdminUser`.realname";
 
         if (isset($params['export']) && 1 == $params['export']) {
             set_time_limit(0);
