@@ -26,7 +26,7 @@ class Edustudy extends Admin
                 'url' => 'admin/Edustudy/cat',
             ],
             [
-                'title' => '小组配置',
+                'title' => '班级设置',
                 'url' => 'admin/Edustudy/index',
             ],
         ];

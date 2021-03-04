@@ -25,7 +25,7 @@ class Edubook extends Admin
                 'url' => 'admin/Edubook/cat',
             ],
             [
-                'title' => '课程书籍',
+                'title' => '课程设置',
                 'url' => 'admin/Edubook/index',
             ],
         ];
