@@ -100,13 +100,14 @@
     <nav class="gtco-nav" role="navigation" style="background-color: black">
         <div class="row">
             <div class="col-sm-6 col-xs-12">
-                <marquee behavior=alternate direction=left align=middle><span style="color: #fe9900;margin-left: 100px;font-size: 15px">{$signword}</span></marquee>
+                <marquee direction=left align=middle><span style="color: #fe9900;margin-left: 100px;font-size: 15px">{$signword}</span></marquee>
             </div>
-            <div class="col-sm-6 col-xs-12" style="float: right;">
-                <a href="{:url('show',['t'=>3])}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">项目合作入口</span></a>
-                <a href="{:url('show',['t'=>1])}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">设计企业入口</span></a>
-                <a href="{:url('show',['t'=>1])}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">设计师入口</span></a>
-                <a href="{:url('show',['t'=>2])}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">供应商入口</span></a>
+            <div class="col-sm-4 col-xs-6" style="float: right;">
+<!--                <a href="{:url('show',['t'=>3])}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">项目合作入口</span></a>-->
+<!--                <a href="{:url('show',['t'=>1])}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">设计企业入口</span></a>-->
+<!--                <a href="{:url('show',['t'=>1])}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">设计师入口</span></a>-->
+<!--                <a href="{:url('show',['t'=>2])}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">供应商入口</span></a>-->
+                <a href="{:url('show')}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">注册</span></a>
                 <a href="{:url('admin.php/publics/index')}" class="btn btn-xs" style="border: 1px solid grey;"><span style="color: grey">登录</span></a>
             </div>
         </div>
