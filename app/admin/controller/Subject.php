@@ -367,12 +367,72 @@ class Subject extends Admin
         return $this->fetch();
     }
 
+    public function xieyi()
+    {
+        $subject_name = '';
+        if ($this->request->isAjax()) {
+            $where = $data = [];
+            $page = input('param.page/d', 1);
+            $limit = input('param.limit/d', 20);
+            $params = $this->request->param();
+            $cat_id = input('param.cat_id/d');
+            if ($cat_id) {
+                $where['cat_id'] = $cat_id;
+            }
+//            $name = input('param.name');
+//            if ($name) {
+//                $where['content'] = ['like', "%{$name}%"];
+//            }
+            if ($params['subject_id']) {
+                $where['subject_id'] = $params['subject_id'];
+                $subject_name = empty($params['subject_name']) ? ItemModel::getItem()[$params['subject_id']] : $params['subject_name'];
+            }
+            $where['cid'] = session('admin_user.cid');
+            $data['data'] = Xieyi::with('cat')->where($where)->page($page)->order('id desc')->limit($limit)->select();
+            if ($data['data']){
+                foreach ($data['data'] as $k=>$v) {
+                    switch ($v['part']){
+                        case 1:
+                            $jieduan = '方案';
+                            break;
+                        case 2:
+                            $jieduan = '施工图';
+                            break;
+                        case 3:
+                            $jieduan = '工程';
+                            break;
+                        case 0:
+                            $jieduan = '项目整体';
+                            break;
+                        default:
+                            $jieduan = '方案';
+                    }
+                    $data['data'][$k]['jieduan'] = $jieduan;
+                }
+            }
+            $data['count'] = Xieyi::where($where)->count('id');
+            $data['code'] = 0;
+            $data['msg'] = '';
+            return json($data);
+        }
+
+        // 分页
+        $tab_data = $this->tab_data;
+        $tab_data['current'] = url('');
+        $this->assign('subject_name', $subject_name);
+        $this->assign('tab_data', $tab_data);
+        $this->assign('project_select', ItemModel::inputSearchSubject());
+        return $this->fetch();
+    }
+
     public function editX()
     {
         $data = $this->request->param();
         if ($this->request->isAjax()) {
             $data['cid'] = session('admin_user.cid');
             $data['user_id'] = session('admin_user.uid');
+            $data['att1'] = htmlentities($data['att1']);
+            $data['att2'] = htmlentities($data['att2']);
             unset($data['id']);
             // 验证
             $result = $this->validate($data, 'Xieyi');
@@ -380,6 +440,9 @@ class Subject extends Admin
                 return $this->error($result);
             }
 
+            if (empty($data['part'])){
+                return $this->error("请选择专业");
+            }
             $map = [
                 'cid'=>session('admin_user.cid'),
                 'subject_id'=>$data['subject_id'],
@@ -405,16 +468,26 @@ class Subject extends Admin
                 return $this->error('预览出错');
             }
         }
-        $row = ItemModel::where('id', $data['id'])->find()->toArray();
-        $time = [
-            'start_time'=>date('Y-m-d',strtotime($row['start_time'])),
-            'end_time'=>date('Y-m-d',strtotime($row['end_time'])),
-        ];
-        $big_major_arr = ItemModel::getOption1($data['id']);
-        $this->assign('time', $time);
+        $row = Xieyi::where('id', $data['id'])->find()->toArray();
+        if ($row){
+            $row['att1'] = html_entity_decode($row['att1']);
+            $row['att2'] = html_entity_decode($row['att2']);
+        }
+//        $time = [
+//            'start_time'=>date('Y-m-d',strtotime($row['start_time'])),
+//            'end_time'=>date('Y-m-d',strtotime($row['end_time'])),
+//        ];
+//        $big_major_arr = ItemModel::getOption1($data['id']);
+        $this->assign('project_select', ItemModel::getItemOption());
+//        $this->assign('time', $time);
         $this->assign('part_option', ItemModel::getPart());
-        $this->assign('big_major_arr', $big_major_arr);
+        $this->assign('data_info', $row);
         return $this->fetch();
+    }
+
+    public function getBigMajor($subject_id){
+        $big_major_arr = ItemModel::getOption1($subject_id);
+        echo $big_major_arr;
     }
 
     public function peibiBiao($xieyi_id,$part)
@@ -506,7 +579,7 @@ class Subject extends Admin
 
     public function signXieyi($id,$part)
     {
-        $data = Xieyi::where(['subject_id'=>$id,'part'=>$part])->order('id desc')->limit(1)->find();
+        $data = Xieyi::where(['id'=>$id,'part'=>$part])->order('id desc')->limit(1)->find();
         if (!$data){
             return $this->error('协议不存在');
         }else{
@@ -766,13 +839,13 @@ class Subject extends Admin
                 return $this->error('专业不能为空，请联系管理员');
             }
             $partner_user = json_decode($row['partner_user'],true);
-            if (empty($partner_user)){
+//            if (empty($partner_user)){
                 $major = $this->deal_major($data['cat_name'],$data['item_name']);
                 $data['big_major'] = $major['big_major'];
                 $data['small_major'] = $major['small_major'];
                 $data['big_major_deal'] = $major['big_major_deal'];
                 $data['small_major_deal'] = $major['small_major_deal'];
-            }
+//            }
             unset($data['cat_name'],$data['item_name']);
 
 //            $res = [];

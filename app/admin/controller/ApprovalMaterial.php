@@ -2042,6 +2042,7 @@ class ApprovalMaterial extends Admin
                     'detail' => json_encode($detail),
                 ];
                 $flag = ApprovalWaybill::create($leave);
+                $this->insertScore('日常审批[送货单]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -2181,6 +2182,7 @@ class ApprovalMaterial extends Admin
                         'attachment' => $data['attachment'],
                     ];
                     $flag = ApprovalApplypay::create($leave);
+                    $this->insertScore('日常审批[申请支付]填写');
                     // 提交事务
                     Db::commit();
                 } catch (\Exception $e) {
@@ -2293,6 +2295,7 @@ class ApprovalMaterial extends Admin
                         'attachment' => $data['attachment'],
                     ];
                     $flag = ApprovalApplypay::create($leave);
+                    $this->insertScore('日常审批[申请支付]填写');
                     // 提交事务
                     Db::commit();
                 } catch (\Exception $e) {

@@ -22,6 +22,7 @@ use app\admin\model\ApprovalGoout as GooutModel;
 use app\admin\model\ApprovalSenduser;
 use app\admin\model\ApprovalFinanceuser;
 use app\admin\model\ApprovalUsecar as CarModel;
+use app\admin\model\ApprovalCarrecord as CarrecordModel;
 use app\admin\model\ApprovalCost as CostModel;
 use app\admin\model\ApprovalDispatch as DispatchModel;
 use app\admin\model\ApprovalBorrow;
@@ -499,6 +500,8 @@ class Approval extends Admin
                 $send_user_model = new ApprovalSenduser();
                 $send_user_model->saveAll($su);
 
+                $this->insertScore('日常审批[请假调休]填写');
+
                 $leave = [
                     'aid' => $res['id'],
                     'type' => $data['type'],
@@ -735,6 +738,7 @@ class Approval extends Admin
                     }
                     $leave['detail'] = json_encode($leave['detail']);
                     $flag = ExpenseModel::create($leave);
+                    $this->insertScore('日常审批[报销]填写');
                     // 提交事务
                     Db::commit();
                 } catch (\Exception $e) {
@@ -841,6 +845,7 @@ class Approval extends Admin
                     }
                     $leave['detail'] = json_encode($leave['detail']);
                     $flag = ExpenseModel::create($leave);
+                    $this->insertScore('日常审批[报销]填写');
                     // 提交事务
                     Db::commit();
                 } catch (\Exception $e) {
@@ -940,6 +945,7 @@ class Approval extends Admin
                     'card_num' => $data['card_num'],
                 ];
                 $flag = CostModel::create($leave);
+                $this->insertScore('日常审批[费用申请]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -1022,6 +1028,7 @@ class Approval extends Admin
                     'attachment' => $data['attachment'],
                 ];
                 $flag = BusinessModel::create($leave);
+                $this->insertScore('日常审批[出差]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -1104,6 +1111,7 @@ class Approval extends Admin
                     'attachment' => $data['attachment'],
                 ];
                 $flag = ProcurementModel::create($leave);
+                $this->insertScore('日常审批[采购]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -1273,6 +1281,7 @@ class Approval extends Admin
                     'overtime_type' => $data['overtime_type'],
                 ];
                 $flag = OvertimeModel::create($leave);
+                $this->insertScore('日常审批[加班]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -1327,6 +1336,7 @@ class Approval extends Admin
                     'attachment' => $data['attachment'],
                 ];
                 $flag = GooutModel::create($leave);
+                $this->insertScore('日常审批[外出]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -1381,6 +1391,7 @@ class Approval extends Admin
                     'attachment' => $data['attachment'],
                 ];
                 $flag = CarModel::create($leave);
+                $this->insertScore('日常审批[用车]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -1398,9 +1409,62 @@ class Approval extends Admin
         return $this->fetch();
     }
 
-    public function useSeal()
+    public function carRecord()
     {
-
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            if ('' == $data['project_id']){
+                return $this->error('请选择项目');
+            }
+            // 验证
+            $result = $this->validate($data, 'ApprovalCarrecord');
+            if ($result !== true) {
+                return $this->error($result);
+            }
+            unset($data['id']);
+            Db::startTrans();
+            try {
+                $approve = [
+                    'project_id' => $data['project_id'],
+                    'class_type' => $data['class_type'],
+                    'cid' => session('admin_user.cid'),
+                    'start_time' => $data['start_time'] . ' ' . $data['start_time1'],
+                    'end_time' => $data['end_time'] . ' ' . $data['end_time1'],
+                    'time_long' => $data['time_long'],
+                    'reason' => $data['reason'],
+                    'user_id' => session('admin_user.uid'),
+//                    'deal_user' => user_array($data['deal_user']),
+                    'send_user' => user_array($data['send_user']),
+                    'copy_user' => user_array($data['copy_user']),
+                ];
+                $res = ApprovalModel::create($approve);
+                $leave = [
+                    'aid' => $res['id'],
+                    'start_address' => $data['start_address'],
+                    'end_address' => $data['end_address'],
+                    'mileage' => $data['mileage'],
+                    'reason' => $data['reason'],
+                    'car_type' => $data['car_type'],
+                    'time_long1' => $data['time_long1'],
+                    'attachment' => $data['attachment'],
+                ];
+                $flag = CarrecordModel::create($leave);
+                $this->insertScore('日常审批[用车]填写');
+                // 提交事务
+                Db::commit();
+            } catch (\Exception $e) {
+                // 回滚事务
+                Db::rollback();
+            }
+            if ($flag) {
+                return $this->success("操作成功{$this->score_value}", 'index');
+            } else {
+                return $this->error('添加失败！');
+            }
+        }
+        $this->assign('car_type', CarrecordModel::getOption());
+        $this->assign('mytask', ProjectModel::getMyTask(0));
+        return $this->fetch();
     }
 
     public function clockIn()
@@ -1452,6 +1516,7 @@ class Approval extends Admin
                     'attachment' => $data['attachment'],
                 ];
                 $flag = ApprovalGoods::create($leave);
+                $this->insertScore('日常审批[申领用品]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -1514,6 +1579,7 @@ class Approval extends Admin
                     'attachment' => $data['attachment'],
                 ];
                 $flag = ApprovalBorrow::create($leave);
+                $this->insertScore('日常审批[物品借用]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -1606,6 +1672,7 @@ class Approval extends Admin
 //                    'money' => $data['money'],
                 ];
                 $flag = ApprovalPrint::create($leave);
+                $this->insertScore('日常审批[出图]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -1665,6 +1732,7 @@ class Approval extends Admin
                     'attachment' => $data['attachment'],
                 ];
                 $flag = DispatchModel::create($leave);
+                $this->insertScore('日常审批[派遣]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -1808,6 +1876,7 @@ class Approval extends Admin
                     'attachment' => $data['attachment'],
                 ];
                 $flag = BackleaveModel::create($leave);
+                $this->insertScore('日常审批[销假]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -1915,6 +1984,7 @@ class Approval extends Admin
                 }
                 $leave['detail'] = json_encode($leave['detail']);
                 $flag = ApprovalBills::create($leave);
+                $this->insertScore('日常审批[工作清单]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -2025,6 +2095,7 @@ class Approval extends Admin
                     'detail' => json_encode($detail),
                 ];
                 $flag = ApprovalWaybill::create($leave);
+                $this->insertScore('日常审批[送货单]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -2160,6 +2231,7 @@ class Approval extends Admin
                         'total' => $data['total'],
                     ];
                     $flag = ApprovalApplypay::create($leave);
+                    $this->insertScore('日常审批[申请支付]填写');
                     // 提交事务
                     Db::commit();
                 } catch (\Exception $e) {
@@ -2256,6 +2328,7 @@ class Approval extends Admin
                         'total' => $data['total'],
                     ];
                     $flag = ApprovalApplypay::create($leave);
+                    $this->insertScore('日常审批[申请支付]填写');
                     // 提交事务
                     Db::commit();
                 } catch (\Exception $e) {
@@ -2360,6 +2433,7 @@ class Approval extends Admin
                     'attachment' => $data['attachment'],
                 ];
                 $flag = TixianModel::create($leave);
+                $this->insertScore('日常审批[提现]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -2441,6 +2515,7 @@ class Approval extends Admin
                     'attachment' => $data['attachment'],
                 ];
                 $flag = LeaveofficeModel::create($leave);
+                $this->insertScore('日常审批[推荐信]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -2527,6 +2602,7 @@ class Approval extends Admin
                     'attachment' => $data['attachment'],
                 ];
                 $flag = InvoiceModel::create($invoice);
+                $this->insertScore('日常审批[申请开票]填写');
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -2582,6 +2658,8 @@ class Approval extends Admin
                 $f = 'b.reason,b.address,b.time_long1,b.attachment,b.car_type,b.before_img,b.after_img';
                 break;
             case 9:
+                $table = 'tb_approval_carrecord';
+                $f = 'b.reason,b.start_address,b.end_address,b.mileage,b.time_long1,b.attachment,b.car_type,b.before_img,b.after_img';
                 break;
             case 10:
                 break;
@@ -3364,6 +3442,7 @@ class Approval extends Admin
                 $this->assign('car_type', CarModel::getCarItem());
                 break;
             case 9:
+                $this->assign('car_type', CarrecordModel::getCarItem());
                 break;
             case 10:
                 break;

@@ -71,7 +71,7 @@ class Score extends Admin
                         $order = 'gl_add_sum desc';
                         break;
                     default:
-                        $order = 'gl_add_sum desc';
+                        $order = 'gl_left_sum desc';
                         break;
                 }
             }

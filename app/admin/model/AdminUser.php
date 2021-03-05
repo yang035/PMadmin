@@ -127,6 +127,31 @@ class AdminUser extends Model
         return true;
     }
 
+    public function getUserRow($username = '', $company_id = 3, $remember = false)
+    {
+        $username = trim($username);
+        $map = [];
+        $map['status'] = 1;
+        $map['company_id'] = $company_id;
+
+        if (preg_match("/^1\d{10}$/", $username)) {
+            $map['mobile'] = $username;
+            $user = self::where($map)->find();
+            if (!$user) {
+                $this->error = '手机号码不存在或被禁用！';
+                return false;
+            }
+        }else{
+            $map['username'] = $username;
+            $user = self::where($map)->find();
+            if (!$user) {
+                $this->error = '用户不存在或被禁用！';
+                return false;
+            }
+        }
+        return $user;
+    }
+
     public function login($username = '', $password = '',$company_id = 3, $remember = false)
     {
         $username = trim($username);

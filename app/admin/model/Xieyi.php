@@ -13,4 +13,8 @@ use think\Model;
 
 class Xieyi extends Model
 {
+    public function cat()
+    {
+        return $this->hasOne('SubjectItem', 'id', 'subject_id');
+    }
 }

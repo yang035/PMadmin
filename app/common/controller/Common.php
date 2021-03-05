@@ -3,6 +3,8 @@
 namespace app\common\controller;
 use think\View;
 use think\Controller;
+use app\admin\model\Sms;
+use app\common\behavior\Sample;
 
 /**
  * 框架公共控制器
@@ -59,5 +61,27 @@ class Common extends Controller
 
         $template_path = strtolower("plugins/{$plugin}/view/{$template}.".config('template.view_suffix'));
         return parent::fetch($template_path, $vars, $replace, $config, $renderContent);
+    }
+
+    function sendSms($args,$type=1){
+        $res = Sample::main($args);
+        if (session('admin_user.cid')){
+            $args['cid'] = session('admin_user.cid');
+        }
+        if (session('admin_user.uid')){
+            $args['user_id'] = session('admin_user.uid');
+        }
+        $args['type'] = $type;
+        $args['bizId'] = $res['BizId'];
+        $args['code'] = $res['Code'];
+        $args['message'] = $res['Message'];
+        $args['requestId'] = $res['RequestId'];
+        if ('OK' !== $args['code']){
+            $args['status'] = 0;
+            $res = Sms::create($args);
+        }else{
+            $res = Sms::create($args);
+        }
+        return $res;
     }
 }

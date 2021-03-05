@@ -19,7 +19,7 @@
                                 {$f2['create_time']}--
                                 {$f2['remark']}--
                                 {volist name="f2['attachment']" id='f3'}
-                                <a href="{$f3}" target="_blank" onclick="down_click('{$f3}','{$Request.param.id}');">附件{$i}</a>
+                                <a href='{$f3}' download="{$f3}" target="_blank" onclick="down_click('{$f3}','{$Request.param.id}');">附件{$i}</a>
                                 {/volist}
                             </div>
                         </div>

@@ -87,7 +87,7 @@
                         // "<b>员工编号：</b>"+data.id_card+"<br>\n" +
                         // "            <b>累计ML：</b>"+data.ml+"<br>\n" +
                         // "            <b>累计GL：</b>"+data.gl+"<br>\n" +
-                        "            <b>排名：</b>"+data.rank+"<br>";
+                        "            <b>累计排名：</b>"+data.rank+"<br>";
                     $("#div_1").append(h_t_1+h_t+h_t_2);
                 }
             }

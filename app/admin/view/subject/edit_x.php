@@ -15,16 +15,17 @@
 </style>
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-form-item">
-        <label class="layui-form-label">项目名</label>
-        <div class="layui-form-mid" style="color: red">{$Request.param.name}</div>
-        <input type="hidden" name="subject_id" value="{$Request.param.id}">
-        <input type="hidden" name="part" value="{$Request.param.part}">
+        <label class="layui-form-label">选择项目</label>
+        <div class="layui-inline">
+            <select name="subject_id" class="layui-input field-subject_id" type="select" lay-filter="project" lay-search>
+                {$project_select}
+            </select>
+        </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">专业类型</label>
         <div class="layui-input-inline">
-            <select name="part" class="field-part" type="select">
-                {$big_major_arr}
+            <select name="part" class="field-part" type="select" id="big_major">
             </select>
         </div>
     </div>
@@ -87,8 +88,8 @@
     {:editor(['ckeditor', 'ckeditor2'],'kindeditor')}
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <a href="javascript:history.back();" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
-            <a href="#" onclick="yulan()" class="layui-btn layui-btn-normal">提交</a>
+            <a href="javascript:history.back();" class="layui-btn layui-btn-primary ml10">关闭</a>
+            <a href="#" onclick="yulan()" class="layui-btn layui-btn-normal">预览并提交</a>
 <!--            <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>-->
         </div>
     </div>
@@ -103,15 +104,31 @@ layui.use(['jquery', 'laydate','upload','form','element'], function() {
         elem: '.field-begin_date',
         type: 'date',
         trigger: 'click',
-        value: "{$time['start_time']}",
+        value: new Date(),
     });
 
     laydate.render({
         elem: '.field-end_date',
         type: 'date',
         trigger: 'click',
-        value: "{$time['end_time']}",
+        value: new Date(),
     });
+    var subject_id = '{$Request.param.subject_id}',part = '{$Request.param.part}';
+    if (subject_id){
+        getBigMajor(subject_id);
+    }
+
+    form.on('select(project)', function(data){
+        getBigMajor(data.value);
+    });
+
+    function getBigMajor(id) {
+        var open_url = "{:url('getBigMajor')}?subject_id="+id;
+        $.post(open_url, function(res) {
+            $('#big_major').html(res);
+            form.render('select');
+        });
+    }
 
     element.render();
     form.render();
@@ -145,5 +162,7 @@ function xieyi(xieyi_id){
         }
     });
 }
+
+
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>

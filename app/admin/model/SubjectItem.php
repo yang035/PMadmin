@@ -62,7 +62,7 @@ class SubjectItem extends Model
             $map['cat_id'] = $type;
         }
         $data = self::where($map)->column('name','id');
-        $str = '<option value="0">全部</option>';
+        $str = '<option value="">选择</option>';
         if ($data){
             foreach ($data as $k => $v) {
                 if ($id == $k) {

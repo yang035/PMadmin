@@ -73,7 +73,7 @@
             <div class="layui-form-item">
                 <div style="margin:10px 20px 10px 20px;font-size: 20px">
                     <a href="{:url('register')}" class="login-qq-a" style="float: left">注册</a>
-                    <a style="float: right" href="{:url()}">忘记密码?</a>
+                    <a style="float: right" href="{:url('pwd1')}">忘记密码?</a>
                 </div>
             </div>
             <div>
