@@ -77,6 +77,10 @@
             $('#cost').text('消耗谷粒：'+total_score+'斗');
             $("input[name='other_price']").val(other_price*num);
         })
+
+        $('.btn_sub').on('click', function () {
+            $('.btn_sub').setAttribute("disabled", true);
+        });
     });
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>

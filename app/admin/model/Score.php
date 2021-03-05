@@ -60,7 +60,7 @@ class Score extends Model
     public static function dealRank($start_time=0,$end_time=0,$p=0)
     {
         $map['cid'] = session('admin_user.cid');
-        $map1['is_change'] = 0;
+        $map['is_change'] = 0;
         $ext_user = config('other.ext_user');
         $map['user'] = ['notin',$ext_user];
         if ($p){
