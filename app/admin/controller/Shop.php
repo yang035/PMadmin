@@ -479,6 +479,7 @@ class Shop extends Admin
                     'cid' => session('admin_user.cid'),
                     'user' => session('admin_user.uid'),
                     'gl_sub_score' => $data['total_score'],
+                    'is_change' => 1,
                     'remark' => date('Y-m-d H:i:s').'兑换消耗,订单编号为:'.$res['id'],
                 ];
                 $flag = ScoreModel::addScore($sc);
