@@ -48,7 +48,7 @@
     {{#  } }}
     <a href="#" onclick="addBook({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">添加课程</a>
     <a href="#" onclick="addUser({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">添加组员</a>
-    <a href="#" onclick="addCode({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">扫码加入</a>
+    <a href="#" onclick="read({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">扫码加入</a>
 <!--    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
 </script>
 <script type="text/javascript">
@@ -68,6 +68,7 @@
                         return "<a class='mcolor' onclick='read("+d.id+")'>"+d.name+"</a>";
                     }},
                 {field: 'user_count', title: '成员数',width:100},
+                {field: 'book_count', title: '课程数',width:100},
                 {field: 'cat_id', title: '类别',width:100, templet:function(d){
                         return d.cat.name;
                     }},

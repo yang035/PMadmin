@@ -10,6 +10,8 @@ namespace app\admin\controller;
 use app\admin\model\EdubookCat as CatModel;
 use app\admin\model\EdubookItem as ItemModel;
 use app\admin\model\EdubookXinde as XindeModel;
+use app\admin\model\EdustudyBook;
+use think\Db;
 
 
 class Edubook extends Admin
@@ -229,6 +231,64 @@ class Edubook extends Admin
             return $this->error('此类别下有检查项，不能删除');
         }
         return $this->success('删除成功');
+    }
+
+    public function myBook(){
+        if ($this->request->isAjax()) {
+            $where = $data = [];
+            $page = input('param.page/d', 1);
+            $limit = input('param.limit/d', 20);
+
+//            $cat_id = input('param.cat_id/d');
+//            if ($cat_id){
+//                $where['cat_id'] = $cat_id;
+//            }
+//            $name = input('param.name');
+//            if ($name) {
+//                $where['name'] = ['like', "%{$name}%"];
+//            }
+//            $where = [
+//                'sb.cid'=>session('admin_user.cid'),
+//            ];
+            $fields = 'sb.*,b.name bname,s.name sname';
+            $data['data'] = Db::table('tb_edustudy_book sb')->field($fields)
+                ->join('tb_edubook_item b','sb.book_id = b.id','left')
+                ->join('tb_edustudy_item s','sb.study_id = s.id','left')
+                ->where($where)
+                ->page($page)
+                ->limit($limit)
+                ->select();
+//            print_r($data['data']);exit();
+//            if ($data['data']){
+//                foreach ($data['data'] as $k=>$v){
+//                    $data['data'][$k]['s_uid'] = session('admin_user.uid');
+//                    $data['data'][$k]['remark'] = htmlspecialchars_decode($v['remark']);
+//                    $user_count = $v['user'] ? count(explode(',',$v['user'])) : 0;
+//                    $data['data'][$k]['user_count'] = $user_count;
+//                    $data['data'][$k]['book_count'] = $user_count;
+//                }
+//            }
+            $data['count'] = Db::table('tb_edustudy_book sb')->field($fields)
+                ->join('tb_edubook_item b','sb.book_id = b.id','left')
+                ->join('tb_edustudy_item s','sb.study_id = s.id','left')
+                ->where($where)->count('sb.id');
+            $data['code'] = 0;
+            $data['msg'] = '';
+            return json($data);
+        }
+//        $where = [
+//            'sb.cid'=>session('admin_user.cid'),
+//        ];
+//        $fields = 'sb.*,b.name bname,s.name sname';
+//        $res = Db::table('tb_edustudy_book sb')->field($fields)
+//            ->join('tb_edubook_item b','sb.book_id = b.id','left')
+//            ->join('tb_edustudy_item s','sb.study_id = s.id','left')
+//            ->where($where)
+//            ->select();
+//        print_r($res);exit();
+
+        $this->assign('cat_option',ItemModel::getOption());
+        return $this->fetch();
     }
 
 }

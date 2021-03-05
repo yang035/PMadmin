@@ -46,7 +46,7 @@
     {{#  if(d.user_id == d.s_uid){ }}
     <a href="{:url('editItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
     {{#  } }}
-<!--    <a href="#" onclick="xinde({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">提交心得</a>-->
+    <a href="#" onclick="xinde({{ d.book_id }})" class="layui-btn layui-btn-xs layui-btn-normal">提交心得</a>
 <!--    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
 </script>
 <script type="text/javascript">
@@ -62,12 +62,11 @@
             }
             ,cols: [[ //表头
                 {type:'checkbox'},
-                {field: 'name', title: '名称', templet:function(d){
-                        return "<a class='mcolor' onclick='read("+d.id+")'>"+d.name+"</a>";
+                {field: 'bname', title: '课程名称', templet:function(d){
+                        return "<a class='mcolor' onclick='read("+d.book_id+")'>"+d.bname+"</a>";
                     }},
-                {field: 'xinde_count', title: '心得数'},
-                {field: 'cat_id', title: '类别', templet:function(d){
-                        return d.cat.name;
+                {field: 'sname', title: '班级名称', templet:function(d){
+                        return "<a class='mcolor' onclick='read("+d.study_id+")'>"+d.sname+"</a>";
                     }},
                 {field: 'status', title: '状态', templet: '#statusTpl'},
                 {title: '操作', templet: '#buttonTpl'}

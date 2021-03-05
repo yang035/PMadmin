@@ -8,7 +8,7 @@
             <div class="layui-form-mid red">小时</div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">简介</label>
+            <label class="layui-form-label">心得体会</label>
             <div class="layui-input-block">
                 <textarea id="ckeditor" name="remark" class="field-remark"></textarea>
             </div>

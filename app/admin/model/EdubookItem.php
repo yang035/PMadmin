@@ -21,11 +21,11 @@ class EdubookItem extends Model
             'status'=>1,
         ];
         $data = CatModel::where($map)->select();
-        $str = '';
+        $str = '<option value="">选择</option>';
         if ($data){
             foreach ($data as $k => $v) {
                 if ($type == $k) {
-                    $str .= '<option value="'.$v['id'].'" selected>'.$v['name'].'</option>';
+                    $str .= '<option value="'.$v['id'].'">'.$v['name'].'</option>';
                 } else {
                     $str .= '<option value="'.$v['id'].'">'.$v['name'].'</option>';
                 }
@@ -69,6 +69,27 @@ class EdubookItem extends Model
         ];
         $data = self::where($map)->column('name','id');
         return $data;
+    }
+
+    public static function getItem1($cat_id,$type=0)
+    {
+        $map = [
+            'cid'=>session('admin_user.cid'),
+            'status'=>1,
+            'cat_id'=>$cat_id,
+        ];
+        $data = self::where($map)->select();
+        $str = '';
+        if ($data){
+            foreach ($data as $k => $v) {
+                if ($type == $k) {
+                    $str .= '<option value="'.$v['id'].'" selected>'.$v['name'].'</option>';
+                } else {
+                    $str .= '<option value="'.$v['id'].'">'.$v['name'].'</option>';
+                }
+            }
+        }
+        return $str;
     }
 
     public function del($id){
