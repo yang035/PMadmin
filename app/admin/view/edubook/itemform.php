@@ -67,7 +67,7 @@
 <script>
     var formData = {:json_encode($data_info)};
 
-    layui.use(['jquery', 'laydate'], function() {
+    layui.use(['jquery', 'laydate','upload','form'], function() {
         var $ = layui.jquery, laydate = layui.laydate,upload = layui.upload,form = layui.form;
         var demoListView = $('#demoList'),uploadListIns = upload.render({
             elem: '#testList',

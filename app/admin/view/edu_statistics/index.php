@@ -11,29 +11,29 @@
     <div class="page-filter">
         <form class="layui-form layui-form-pane" action="{:url()}" method="get" id="hisi-table-search">
             <div class="layui-form-item">
-            <div class="layui-inline">
-                <label class="layui-form-label">类型</label>
-                <div class="layui-input-inline">
-                    <select name="cat_id" class="field-cat_id" type="select">
-                        {$cat_option}
-                    </select>
+                <div class="layui-inline">
+                    <label class="layui-form-label">类型</label>
+                    <div class="layui-input-inline">
+                        <select name="cat_id" class="field-cat_id" type="select">
+                            {$cat_option}
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">名称</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="name" value="{:input('get.name')}" placeholder="关键字" autocomplete="off" class="layui-input">
+                <div class="layui-inline">
+                    <label class="layui-form-label">名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="name" value="{:input('get.name')}" placeholder="关键字" autocomplete="off" class="layui-input">
+                    </div>
                 </div>
-            </div>
-            <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
+                <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
             </div>
         </form>
     </div>
     <div class="layui-btn-group fl">
-        <a href="{:url('addItem')}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加</a>
-        <a data-href="{:url('status?table=edubook_item&val=1')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-play" data-table="dataTable">&nbsp;启用</a>
-        <a data-href="{:url('status?table=edubook_item&val=0')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-pause" data-table="dataTable">&nbsp;禁用</a>
-<!--        <a data-href="{:url('delItem')}" class="layui-btn layui-btn-primary j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>-->
+<!--        <a href="{:url('addItem')}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加</a>-->
+<!--        <a data-href="{:url('status?table=edubook_item&val=1')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-play" data-table="dataTable">&nbsp;启用</a>-->
+<!--        <a data-href="{:url('status?table=edubook_item&val=0')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-pause" data-table="dataTable">&nbsp;禁用</a>-->
+        <!--        <a data-href="{:url('delItem')}" class="layui-btn layui-btn-primary j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>-->
     </div>
 </div>
 <table id="dataTable" class="layui-table" lay-filter="table1"></table>
@@ -44,10 +44,10 @@
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
     <a onclick="read({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">查看</a>
     {{#  if(d.user_id == d.s_uid){ }}
-    <a href="{:url('editItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
+<!--    <a href="{:url('editItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>-->
     {{#  } }}
-    <a href="#" onclick="xinde({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">提交心得</a>
-<!--    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
+    <!--    <a href="#" onclick="xinde({{ d.id }})" class="layui-btn layui-btn-xs layui-btn-normal">提交心得</a>-->
+    <!--    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
 </script>
 <script type="text/javascript">
     layui.use(['table'], function() {

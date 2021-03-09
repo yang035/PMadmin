@@ -11,6 +11,7 @@ use app\admin\model\EdustudyCat as CatModel;
 use app\admin\model\EdustudyItem as ItemModel;
 use app\admin\model\AdminUser;
 use app\admin\model\EdubookItem as BookItemModel;
+use app\admin\model\EdubookXinde as XindeModel;
 
 
 class EduStatistics extends Admin
@@ -49,16 +50,15 @@ class EduStatistics extends Admin
                 $where['name'] = ['like', "%{$name}%"];
             }
             $where['cid'] = session('admin_user.cid');
-            $data['data'] = ItemModel::with('cat')->where($where)->page($page)->limit($limit)->select();
+            $data['data'] = BookItemModel::with('cat')->where($where)->page($page)->limit($limit)->select();
             if ($data['data']){
                 foreach ($data['data'] as $k=>$v){
                     $data['data'][$k]['s_uid'] = session('admin_user.uid');
                     $data['data'][$k]['remark'] = htmlspecialchars_decode($v['remark']);
-                    $user_count = $v['user'] ? count(explode(',',$v['user'])) : 0;
-                    $data['data'][$k]['user_count'] = $user_count;
+                    $data['data'][$k]['xinde_count'] = XindeModel::getXindeCount(0,$v['id'],0);
                 }
             }
-            $data['count'] = ItemModel::where($where)->count('id');
+            $data['count'] = BookItemModel::where($where)->count('id');
             $data['code'] = 0;
             $data['msg'] = '';
             return json($data);
@@ -97,6 +97,7 @@ class EduStatistics extends Admin
                     $data['data'][$k]['remark'] = htmlspecialchars_decode($v['remark']);
                     $user_count = $v['user'] ? count(explode(',',$v['user'])) : 0;
                     $data['data'][$k]['user_count'] = $user_count;
+                    $data['data'][$k]['xinde_count'] = XindeModel::getXindeCount(0,$v['id'],0);
                 }
             }
             $data['count'] = ItemModel::where($where)->count('id');

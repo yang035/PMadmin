@@ -71,6 +71,22 @@ class EdubookXinde extends Model
         return $data;
     }
 
+    public static function getXindeCount($study_id=0,$book_id=0,$is_my=1)
+    {
+        if ($study_id){
+            $where['study_id'] = $study_id;
+        }
+        if ($book_id){
+            $where['book_id'] = $book_id;
+        }
+        if ($is_my){
+            $where['user_id'] = session('admin_user.uid');
+        }
+        $fields = 'count(id) count';
+        $res = self::field($fields)->where($where)->find();
+        return $res['count'];
+    }
+
     public function del($id){
         if (is_array($id)) {
             $error = '';

@@ -30,9 +30,9 @@
         </form>
     </div>
     <div class="layui-btn-group fl">
-        <a href="{:url('addItem')}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加</a>
-        <a data-href="{:url('status?table=edubook_item&val=1')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-play" data-table="dataTable">&nbsp;启用</a>
-        <a data-href="{:url('status?table=edubook_item&val=0')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-pause" data-table="dataTable">&nbsp;禁用</a>
+<!--        <a href="{:url('addItem')}" class="layui-btn layui-btn-primary layui-icon layui-icon-add-circle-fine">&nbsp;添加</a>-->
+<!--        <a data-href="{:url('status?table=edubook_item&val=1')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-play" data-table="dataTable">&nbsp;启用</a>-->
+<!--        <a data-href="{:url('status?table=edubook_item&val=0')}" class="layui-btn layui-btn-primary j-page-btns layui-icon layui-icon-pause" data-table="dataTable">&nbsp;禁用</a>-->
 <!--        <a data-href="{:url('delItem')}" class="layui-btn layui-btn-primary j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>-->
     </div>
 </div>
@@ -46,7 +46,7 @@
     {{#  if(d.user_id == d.s_uid){ }}
     <a href="{:url('editItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
     {{#  } }}
-    <a href="#" onclick="xinde({{ d.book_id }})" class="layui-btn layui-btn-xs layui-btn-normal">提交心得</a>
+    <a href="#" onclick="xinde({{ d.study_id }},{{ d.book_id }})" class="layui-btn layui-btn-xs layui-btn-normal">提交心得</a>
 <!--    <a href="{:url('delItem')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>-->
 </script>
 <script type="text/javascript">
@@ -65,6 +65,7 @@
                 {field: 'bname', title: '课程名称', templet:function(d){
                         return "<a class='mcolor' onclick='read("+d.book_id+")'>"+d.bname+"</a>";
                     }},
+                {field: 'xinde_count', title: '心得数'},
                 {field: 'sname', title: '班级名称', templet:function(d){
                         return "<a class='mcolor' onclick='read("+d.study_id+")'>"+d.sname+"</a>";
                     }},
@@ -74,8 +75,8 @@
         });
     });
 
-    function xinde(id){
-        var open_url = "{:url('xinde')}?id="+id;
+    function xinde(study_id,book_id){
+        var open_url = "{:url('xinde')}?study_id="+study_id+"&book_id="+book_id;
         if (open_url.indexOf('?') >= 0) {
             open_url += '&hisi_iframe=yes';
         } else {

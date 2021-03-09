@@ -71,7 +71,7 @@ class Score extends Model
         }
         $map1['id'] = ['neq', 1];
         $map1['is_show'] = ['eq', 0];
-        $map1['status'] = 1;
+//        $map1['status'] = 1;
 
         $fields = "`Score`.id,`Score`.subject_id,`Score`.user,(sum(`Score`.gl_add_score) - sum(`Score`.gl_sub_score)) as gl_left_sum,`AdminUser`.realname";
         $data_list = self::hasWhere('adminUser',$map1)->field($fields)->where($map)->group('`Score`.user')->order('gl_left_sum desc')->select();

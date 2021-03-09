@@ -65,7 +65,6 @@
                 {field: 'name', title: '名称', templet:function(d){
                         return "<a class='mcolor' onclick='read("+d.id+")'>"+d.name+"</a>";
                     }},
-                {field: 'xinde_count', title: '心得数'},
                 {field: 'cat_id', title: '类别', templet:function(d){
                         return d.cat.name;
                     }},

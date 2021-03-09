@@ -55,7 +55,6 @@ class Edubook extends Admin
                 foreach ($data['data'] as $k=>$v){
                     $data['data'][$k]['s_uid'] = session('admin_user.uid');
                     $data['data'][$k]['remark'] = htmlspecialchars_decode($v['remark']);
-                    $data['data'][$k]['xinde_count'] = 0;
                 }
             }
             $data['count'] = ItemModel::where($where)->count('id');
@@ -101,6 +100,7 @@ class Edubook extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
             $data['remark'] = htmlspecialchars($data['remark']);
+            $data['user_id'] = session('admin_user.uid');
             // 验证
             if (!XindeModel::create($data)) {
                 return $this->error('添加失败');
@@ -259,15 +259,16 @@ class Edubook extends Admin
                 ->limit($limit)
                 ->select();
 //            print_r($data['data']);exit();
-//            if ($data['data']){
-//                foreach ($data['data'] as $k=>$v){
+            if ($data['data']){
+                foreach ($data['data'] as $k=>$v){
+                    $data['data'][$k]['xinde_count'] = XindeModel::getXindeCount($v['study_id'],$v['book_id']);
 //                    $data['data'][$k]['s_uid'] = session('admin_user.uid');
 //                    $data['data'][$k]['remark'] = htmlspecialchars_decode($v['remark']);
 //                    $user_count = $v['user'] ? count(explode(',',$v['user'])) : 0;
 //                    $data['data'][$k]['user_count'] = $user_count;
 //                    $data['data'][$k]['book_count'] = $user_count;
-//                }
-//            }
+                }
+            }
             $data['count'] = Db::table('tb_edustudy_book sb')->field($fields)
                 ->join('tb_edubook_item b','sb.book_id = b.id','left')
                 ->join('tb_edustudy_item s','sb.study_id = s.id','left')
