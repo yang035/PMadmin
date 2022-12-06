@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "topthink/framework": "5.0.*",
+        "topthink/framework": "5.1.*",
         "php-amqplib/php-amqplib": ">=2.6.1",
         "riverslei/payment": "*",
         "alibabacloud/dysmsapi-20170525": "^1.0"
